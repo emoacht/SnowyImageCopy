@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="SnowyImageCopy.Views.Controls.CircularProgressBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="200" d:DesignWidth="200"
+             x:Name="CircleRoot">
+
+    <Grid>
+        <!-- Background ring -->
+        <Ellipse Width="{Binding Width, ElementName=CirclePathBox}"
+                 Height="{Binding Height, ElementName=CirclePathBox}"
+                 Stroke="{Binding RingSegmentColor, ElementName=CircleRoot}"
+                 Opacity="{Binding RingSegmentOpacity, ElementName=CircleRoot}"
+                 StrokeThickness="{Binding StrokeThickness, ElementName=CircleRoot}"/>
+
+        <!-- Foreground arc -->
+        <Path x:Name="CirclePathBox"
+              Stroke="{Binding ArcSegmentColor, ElementName=CircleRoot}"
+              StrokeThickness="{Binding StrokeThickness, ElementName=CircleRoot}">
+            <Path.Data>
+                <PathGeometry>
+                    <PathGeometry.Figures>
+                        <PathFigureCollection>
+                            <PathFigure x:Name="CirclePathFigure">
+                                <PathFigure.Segments>
+                                    <PathSegmentCollection>
+                                        <ArcSegment x:Name="CircleArcSegment"
+                                                    SweepDirection="Clockwise"/>
+                                    </PathSegmentCollection>
+                                </PathFigure.Segments>
+                            </PathFigure>
+                        </PathFigureCollection>
+                    </PathGeometry.Figures>
+                </PathGeometry>
+            </Path.Data>
+            <Path.RenderTransform>
+                <TranslateTransform x:Name="CirclePathTransform"/>
+            </Path.RenderTransform>
+        </Path>
+    </Grid>
+</UserControl>

@@ -1,0 +1,86 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Main colors (BaseColor = SkyBlue) -->
+    <Color x:Key="SnowBlue.LightestColor">#FFf7fdff</Color>
+    <Color x:Key="SnowBlue.LighterColor">#FFd0ecf7</Color>
+    <Color x:Key="SnowBlue.LightColor">#FFa2d9ef</Color>
+    <Color x:Key="SnowBlue.BaseColor">#FF87ceeb</Color>
+    <Color x:Key="SnowBlue.DeepColor">#FF47caff</Color>
+    <Color x:Key="SnowBlue.DarkColor">#FF00a1e0</Color>
+
+    <!-- Button -->
+    <Color x:Key="SnowBlue.Normal.BorderColor">Transparent</Color>
+    <Color x:Key="SnowBlue.Normal.BackgroundColor">#FFd0ecf7</Color>
+    <Color x:Key="SnowBlue.Normal.ForegroundColor">Navy</Color>
+    <Color x:Key="SnowBlue.Normal.BlurColor">SteelBlue</Color>
+
+    <Color x:Key="SnowBlue.MouseOver.BorderColor">Transparent</Color>
+    <Color x:Key="SnowBlue.MouseOver.BackgroundColor">#FFa2d9ef</Color>
+    <Color x:Key="SnowBlue.MouseOver.ForegroundColor"></Color>
+    <Color x:Key="SnowBlue.MouseOver.BlurColor"></Color>
+
+    <Color x:Key="SnowBlue.Pressed.BorderColor">Transparent</Color>
+    <Color x:Key="SnowBlue.Pressed.BackgroundColor">#FF47caff</Color>
+    <Color x:Key="SnowBlue.Pressed.ForegroundColor"></Color>
+    <Color x:Key="SnowBlue.Pressed.BlurColor"></Color>
+
+    <Color x:Key="SnowBlue.Disabled.BorderColor">Transparent</Color>
+    <Color x:Key="SnowBlue.Disabled.BackgroundColor">WhiteSmoke</Color>
+    <Color x:Key="SnowBlue.Disabled.ForegroundColor">DarkGray</Color>
+    <Color x:Key="SnowBlue.Disabled.BlurColor">Gray</Color>
+
+    <SolidColorBrush x:Key="SnowBlue.Normal.Border" Color="{StaticResource SnowBlue.Normal.BorderColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.Normal.Background" Color="{StaticResource SnowBlue.Normal.BackgroundColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.Normal.Foreground" Color="{StaticResource SnowBlue.Normal.ForegroundColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.Normal.Blur" Color="{StaticResource SnowBlue.Normal.BlurColor}"/>
+
+    <SolidColorBrush x:Key="SnowBlue.MouseOver.Border" Color="{StaticResource SnowBlue.MouseOver.BorderColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.MouseOver.Background" Color="{StaticResource SnowBlue.MouseOver.BackgroundColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.MouseOver.Foreground" Color="{StaticResource SnowBlue.MouseOver.ForegroundColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.MouseOver.Blur" Color="{StaticResource SnowBlue.MouseOver.BlurColor}"/>
+
+    <SolidColorBrush x:Key="SnowBlue.Pressed.Border" Color="{StaticResource SnowBlue.Pressed.BorderColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.Pressed.Background" Color="{StaticResource SnowBlue.Pressed.BackgroundColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.Pressed.Foreground" Color="{StaticResource SnowBlue.Pressed.ForegroundColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.Pressed.Blur" Color="{StaticResource SnowBlue.Pressed.BlurColor}"/>
+
+    <SolidColorBrush x:Key="SnowBlue.Disabled.Border" Color="{StaticResource SnowBlue.Disabled.BorderColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.Disabled.Background" Color="{StaticResource SnowBlue.Disabled.BackgroundColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.Disabled.Foreground" Color="{StaticResource SnowBlue.Disabled.ForegroundColor}"/>
+    <SolidColorBrush x:Key="SnowBlue.Disabled.Blur" Color="{StaticResource SnowBlue.Disabled.BlurColor}"/>
+
+    <SolidColorBrush x:Key="Sliding.Checked.Background" Color="{StaticResource SnowBlue.Normal.BackgroundColor}"/>
+    <SolidColorBrush x:Key="Sliding.Checked.Foreground" Color="{StaticResource SnowBlue.Normal.ForegroundColor}"/>
+
+    <SolidColorBrush x:Key="Sliding.Unchecked.Background" Color="LightGray"/>
+    <SolidColorBrush x:Key="Sliding.Unchecked.Foreground" Color="DimGray"/>
+
+    <!-- FileItem -->
+    <Color x:Key="FileItemStatus.ForegroundColor">White</Color>
+    
+    <Color x:Key="FileItemStatus.UnknownColor">LightGray</Color>
+    <Color x:Key="FileItemStatus.NotCopiedColor">YellowGreen</Color>
+    <Color x:Key="FileItemStatus.ToBeCopiedColor">Orange</Color>
+    <Color x:Key="FileItemStatus.CopyingColor">Violet</Color>
+    <Color x:Key="FileItemStatus.CopiedColor">SkyBlue</Color>
+    <Color x:Key="FileItemStatus.WeirdColor">Turquoise</Color>
+    <Color x:Key="FileItemStatus.RecycledColor">DarkGray</Color>
+
+    <SolidColorBrush x:Key="FileItemStatus.Foreground" Color="{StaticResource FileItemStatus.ForegroundColor}"/>
+
+    <SolidColorBrush x:Key="Progress.ArcSegment.All" Color="{StaticResource FileItemStatus.CopiedColor}"/>
+    <SolidColorBrush x:Key="Progress.ArcSegment.Current" Color="{StaticResource FileItemStatus.CopyingColor}"/>
+    <SolidColorBrush x:Key="Progress.RingSegment" Color="Gray"/>
+
+    <!-- Other -->
+    <SolidColorBrush x:Key="Window.Background" Color="White"/>
+    <SolidColorBrush x:Key="ImageListBox.Background" Color="{StaticResource SnowBlue.LightestColor}"/>
+
+    <SolidColorBrush x:Key="BorderLine.Strong" Color="#FFd9d9d9"/>
+    <SolidColorBrush x:Key="BorderLine.Weak" Color="#FFeeeeee"/>
+
+    <SolidColorBrush x:Key="OptionHeader.Foreground" Color="Navy"/>
+    <SolidColorBrush x:Key="OptionHeader.Border" Color="{StaticResource SnowBlue.LightColor}"/>
+
+</ResourceDictionary>

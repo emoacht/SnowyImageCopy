@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Command_Check" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="Command_CheckCopy" xml:space="preserve">
+    <value>Check &amp; Copy</value>
+  </data>
+  <data name="Command_CheckCopyAuto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="Command_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Command_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="CurrentImage" xml:space="preserve">
+    <value>Current Image</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Feather" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Feather.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FileStatus_Copied" xml:space="preserve">
+    <value>Copied</value>
+  </data>
+  <data name="FileStatus_Copying" xml:space="preserve">
+    <value>Copying</value>
+  </data>
+  <data name="FileStatus_NotCopied" xml:space="preserve">
+    <value>Not Copied</value>
+  </data>
+  <data name="FileStatus_Recycled" xml:space="preserve">
+    <value>Recycled</value>
+  </data>
+  <data name="FileStatus_ToBeCopied" xml:space="preserve">
+    <value>To Be Copied</value>
+  </data>
+  <data name="FileStatus_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="FileStatus_Weird" xml:space="preserve">
+    <value>Weird</value>
+  </data>
+  <data name="OperationStatus_CheckCompleted" xml:space="preserve">
+    <value>Check completed.</value>
+  </data>
+  <data name="OperationStatus_Checking" xml:space="preserve">
+    <value>Checking FlashAir.</value>
+  </data>
+  <data name="OperationStatus_Completed" xml:space="preserve">
+    <value>Completed.</value>
+  </data>
+  <data name="OperationStatus_ConnectionLost" xml:space="preserve">
+    <value>Lost connection to FlashAir.</value>
+  </data>
+  <data name="OperationStatus_ConnectionUnable" xml:space="preserve">
+    <value>Cannot connect to FlashAir.</value>
+  </data>
+  <data name="OperationStatus_CopyCompleted" xml:space="preserve">
+    <value>Copy completed. ({0} images, {1} seconds)</value>
+  </data>
+  <data name="OperationStatus_Copying" xml:space="preserve">
+    <value>Copying from FlashAir.</value>
+  </data>
+  <data name="OperationStatus_Error" xml:space="preserve">
+    <value>An error happened.</value>
+  </data>
+  <data name="OperationStatus_NoDateCalender" xml:space="preserve">
+    <value>No date is selected in calendar.</value>
+  </data>
+  <data name="OperationStatus_NoFileToBeCopied" xml:space="preserve">
+    <value>No file to be copied.</value>
+  </data>
+  <data name="OperationStatus_NoNetwork" xml:space="preserve">
+    <value>PC is not connected to network.</value>
+  </data>
+  <data name="OperationStatus_NotSameFlashAir" xml:space="preserve">
+    <value>FlashAir is changed.</value>
+  </data>
+  <data name="OperationStatus_Stopped" xml:space="preserve">
+    <value>Stopped.</value>
+  </data>
+  <data name="OperationStatus_TimedOut" xml:space="preserve">
+    <value>Connection timed out.</value>
+  </data>
+  <data name="OperationStatus_WaitingAutoCheck" xml:space="preserve">
+    <value>Waiting for auto check time.</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="Options_AutoCheck" xml:space="preserve">
+    <value>Auto Check</value>
+  </data>
+  <data name="Options_AutoCheckInterval" xml:space="preserve">
+    <value>Auto Check Interval</value>
+  </data>
+  <data name="Options_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="Options_Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Options_DateAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Options_DateSelect" xml:space="preserve">
+    <value>Select from calendar</value>
+  </data>
+  <data name="Options_DateToday" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Options_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Options_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Options_InstantCopy" xml:space="preserve">
+    <value>Instant Copy</value>
+  </data>
+  <data name="Options_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Options_LocalFolder" xml:space="preserve">
+    <value>Local Folder (Copy Destination)</value>
+  </data>
+  <data name="Options_LocalFolderExplanation" xml:space="preserve">
+    <value>Specify a folder to copy images.</value>
+  </data>
+  <data name="Options_LowerCase" xml:space="preserve">
+    <value>Make file extension lowercase</value>
+  </data>
+  <data name="Options_OpenByExplorer" xml:space="preserve">
+    <value>Open by Explorer</value>
+  </data>
+  <data name="Options_Path" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="Options_Recycle" xml:space="preserve">
+    <value>Move to Recycle if deleted from FlashAir</value>
+  </data>
+  <data name="Options_RemoteRoot" xml:space="preserve">
+    <value>FlashAir Address (Copy Source)</value>
+  </data>
+  <data name="ToastBody_CopyCompleted1st" xml:space="preserve">
+    <value>Copy from FlashAir completed.</value>
+  </data>
+  <data name="ToastBody_CopyCompleted2nd" xml:space="preserve">
+    <value>({0} images, {1} seconds)</value>
+  </data>
+  <data name="ToastHeadline_CopyCompleted" xml:space="preserve">
+    <value>Copy Completed</value>
+  </data>
+</root>

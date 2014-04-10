@@ -1,0 +1,232 @@
+﻿<UserControl x:Class="SnowyImageCopy.Views.Options"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+			 xmlns:properties="clr-namespace:SnowyImageCopy.Properties"
+			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
+			 xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
+			 xmlns:models="clr-namespace:SnowyImageCopy.Models"
+			 xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
+			 xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
+			 mc:Ignorable="d"
+			 d:DesignHeight="800" d:DesignWidth="250"
+			 Loaded="OnLoaded">
+	<!--<UserControl.DataContext>
+		<viewModels:OptionsViewModel/>
+	</UserControl.DataContext>-->
+
+	<UserControl.Resources>
+		<ControlTemplate x:Key="ItemGroupTemplate" TargetType="{x:Type GroupBox}">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<Border BorderThickness="0,0,0,1"
+						BorderBrush="{StaticResource OptionHeader.Border}"
+						SnapsToDevicePixels="True">
+					<TextBlock Margin="6,2,0,2"
+							   FontSize="15"
+							   Foreground="{StaticResource OptionHeader.Foreground}"
+							   Text="{Binding Header, RelativeSource={RelativeSource AncestorType={x:Type GroupBox}}}"/>
+				</Border>
+				<Grid Grid.Row="1">
+					<ContentPresenter/>
+				</Grid>
+			</Grid>
+		</ControlTemplate>
+	</UserControl.Resources>
+
+	<Grid x:Name="LayoutRoot">
+		<StackPanel Width="234"
+					Margin="8,2,8,0">
+
+			<!-- Path -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_Path, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<TextBlock Text="{Binding Resources.Options_RemoteRoot, Source={x:Static models:ResourceService.Current}}"/>
+					<TextBox HorizontalAlignment="Stretch"
+							 Margin="0,4,0,6" Padding="2"
+							 VerticalContentAlignment="Center"
+							 Text="{Binding SettingsCurrent.RemoteRoot, Mode=TwoWay}"
+							 IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
+
+					<TextBlock Text="{Binding Resources.Options_LocalFolder, Source={x:Static models:ResourceService.Current}}"/>
+					<TextBox x:Name="LocalFolderPath"
+							 HorizontalAlignment="Stretch"
+							 Margin="0,4,0,4" Padding="2"
+							 VerticalContentAlignment="Center"
+							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay}"
+							 IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+						<Button	Margin="0,0,4,0"
+								Padding="8,2,8,2"
+								Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}"
+								IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"
+								Style="{StaticResource ButtonBaseStyle}">
+							<i:Interaction.Triggers>
+								<i:EventTrigger EventName="Click">
+									<behaviors:FolderBrowserAction
+										Explanation="{Binding Resources.Options_LocalFolderExplanation, Source={x:Static models:ResourceService.Current}}"
+										FolderPath="{Binding Text, ElementName=LocalFolderPath}"/>
+								</i:EventTrigger>
+							</i:Interaction.Triggers>
+						</Button>
+						<Button	Padding="8,2,8,2"
+								Content="{Binding Resources.Options_OpenByExplorer, Source={x:Static models:ResourceService.Current}}"
+								Style="{StaticResource ButtonBaseStyle}">
+							<i:Interaction.Triggers>
+								<i:EventTrigger EventName="Click">
+									<behaviors:ExplorerAction
+										FolderPath="{Binding Text, ElementName=LocalFolderPath}"/>
+								</i:EventTrigger>
+							</i:Interaction.Triggers>
+						</Button>
+					</StackPanel>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- Date -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_Date, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<ListBox HorizontalAlignment="Left"
+							 BorderThickness="0"
+							 Background="{x:Null}"
+							 ItemsSource="{Binding FilePeriodList, Mode=OneWay}"
+							 SelectedItem="{Binding FilePeriodSelected, Mode=TwoWay}">
+						<ListBox.Resources>
+							<Style TargetType="{x:Type ListBoxItem}" >
+								<Setter Property="Template">
+									<Setter.Value>
+										<ControlTemplate>
+											<RadioButton
+												Margin="0,4,0,4"
+												Content="{Binding Description, Mode=OneWay}"
+												IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+							</Style>
+						</ListBox.Resources>
+					</ListBox>
+					<Grid Height="216"
+						  Margin="-4,0,0,2"
+						  Visibility="{Binding SettingsCurrent.TargetPeriod, Converter={StaticResource EnumToVisibilityConverterKey}, ConverterParameter=Select, Mode=OneWay}">
+						<Calendar
+							x:Name="DateCalendar"
+							HorizontalAlignment="Left" VerticalAlignment="Stretch"
+							SelectionMode="MultipleRange" IsTodayHighlighted="False"
+							DisplayDateEnd="{Binding Source={x:Static sys:DateTime.Today}, Mode=OneWay}"
+							IsEnabled="{Binding SettingsCurrent.TargetPeriod, Converter={StaticResource EnumToBooleanConverterKey}, ConverterParameter=Select, Mode=OneWay}">
+							<Calendar.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform ScaleX="1.3" ScaleY="1.3" CenterX="0" CenterY="0"/>
+								</TransformGroup>
+							</Calendar.RenderTransform>
+
+							<i:Interaction.Behaviors>
+								<behaviors:CalendarSelectedDatesBehavior SelectedDates="{Binding SettingsCurrent.TargetDates}"/>
+								<behaviors:FrameworkElementCultureBehavior IetfLanguageTag="{Binding SettingsCurrent.CultureName}"/>
+							</i:Interaction.Behaviors>
+						</Calendar>
+					</Grid>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- Auto Check -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_AutoCheck, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<StackPanel
+						Height="24"
+						Margin="0,4,0,4"
+						Orientation="Horizontal">
+						<Label
+							VerticalAlignment="Center"
+							Content="{Binding Resources.Options_AutoCheckInterval, Source={x:Static models:ResourceService.Current}}"/>
+						<controls:NumericUpDown
+							Width="90" Height="24"
+							Minimum="10" Maximum="180" Frequency="10"
+							Value="{Binding SettingsCurrent.AutoCheckInterval}"/>
+					</StackPanel>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- File -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_File, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<WrapPanel>
+						<TextBlock
+							VerticalAlignment="Center"
+							TextWrapping="Wrap"
+							Text="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}"/>
+						<controls:SlidingToggleButton
+							Width="60" Height="24" HorizontalAlignment="Left"
+							Margin="4"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.WillMoveFileToRecycle, Mode=TwoWay}"/>
+					</WrapPanel>
+
+					<WrapPanel>
+						<TextBlock
+							VerticalAlignment="Center"
+							TextWrapping="Wrap"
+							Text="{Binding Resources.Options_LowerCase, Source={x:Static models:ResourceService.Current}}"/>
+						<controls:SlidingToggleButton
+							Width="60" Height="24" HorizontalAlignment="Left"
+							Margin="4"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.WillMakeFileExtensionLowerCase, Mode=TwoWay}"/>
+					</WrapPanel>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- Language -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_Language, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<ComboBox Margin="0,4,0,4"
+							  ItemsSource="{Binding Cultures}"
+							  SelectedIndex="{Binding CultureSeletedIndex}"
+							  IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- Info -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_Info, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<TextBlock Margin="0,0,0,4">
+						<Run Text="{Binding Source={x:Static views:ProductInfo.Title}, Mode=OneWay}"
+							 TextDecorations="Underline" Cursor="Hand">
+							<i:Interaction.Triggers>
+								<i:EventTrigger EventName="MouseDown">
+									<ei:LaunchUriOrFileAction Path="{Binding ProjectSite, Source={x:Static properties:Settings.Default}, Mode=OneWay}"/>
+								</i:EventTrigger>
+							</i:Interaction.Triggers>
+						</Run>
+						<Run Text="{Binding Source={x:Static views:ProductInfo.Version}, Mode=OneWay}"/>
+					</TextBlock>
+				</StackPanel>
+			</GroupBox>
+		</StackPanel>
+	</Grid>
+</UserControl>
