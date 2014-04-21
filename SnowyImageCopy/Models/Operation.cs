@@ -429,17 +429,16 @@ namespace SnowyImageCopy.Models
 		{
 			StopAutoTimer();
 
-			if ((tokenSourceWorking != null) && (!tokenSourceWorking.IsCancellationRequested))
+			if ((tokenSourceWorking == null) || (tokenSourceWorking.IsCancellationRequested))
+				return;
+
+			try
 			{
-				try
-				{
-					tokenSourceWorking.Cancel();
-				}
-				catch (ObjectDisposedException ode)
-				{
-					Debug.WriteLine("CancellationTokenSource has been disposed when tried to cancel operation. {0}", ode);
-					throw;
-				}
+				tokenSourceWorking.Cancel();
+			}
+			catch (ObjectDisposedException ode)
+			{
+				Debug.WriteLine("CancellationTokenSource has been disposed when tried to cancel operation. {0}", ode);
 			}
 		}
 

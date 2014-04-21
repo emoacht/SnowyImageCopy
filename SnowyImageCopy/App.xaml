@@ -4,12 +4,12 @@
 			 xmlns:converters="clr-namespace:SnowyImageCopy.Views.Converters">
 
 	<Application.Resources>
-		<ResourceDictionary>            
+		<ResourceDictionary>
 			<!-- Converters -->
 			<converters:BooleanInverseConverter x:Key="BooleanInverseConverterKey"/>
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
 			<converters:BooleanInverseToThicknessConverter x:Key="BooleanInverseToThicknessConverterKey"/>
-			<converters:BooleanInverseToVisibilityConverter x:Key="BooleanInverseToVisibilityConverterKey"/>			
+			<converters:BooleanInverseToVisibilityConverter x:Key="BooleanInverseToVisibilityConverterKey"/>
 
 			<converters:EnumToBooleanConverter x:Key="EnumToBooleanConverterKey"/>
 			<converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverterKey"/>
@@ -23,8 +23,9 @@
 
 			<!-- Styles, Templates -->
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Views/Styles/DefaultTheme.xaml"/>
+				<ResourceDictionary Source="Views/Styles/CustomTheme.xaml"/>
 				<ResourceDictionary Source="Views/Styles/Controls.xaml"/>
-				<ResourceDictionary Source="Views/Styles/Themes.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
 		</ResourceDictionary>

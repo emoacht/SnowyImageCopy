@@ -1,6 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+<!--==================
+     Customs Theme
+===================-->
+
     <!-- Main colors (BaseColor = SkyBlue) -->
     <Color x:Key="SnowBlue.LightestColor">#FFf7fdff</Color>
     <Color x:Key="SnowBlue.LighterColor">#FFd0ecf7</Color>

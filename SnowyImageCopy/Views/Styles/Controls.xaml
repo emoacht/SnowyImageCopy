@@ -2,9 +2,13 @@
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="Themes.xaml"/>
+		<ResourceDictionary Source="CustomTheme.xaml"/>
 	</ResourceDictionary.MergedDictionaries>
-	
+
+<!--=============================
+	 Custom styles, Templates 
+==============================-->
+
 	<!-- Focus Visual for Button -->
 	<Style x:Key="ButtonFocusVisual">
 		<Setter Property="Control.Template">

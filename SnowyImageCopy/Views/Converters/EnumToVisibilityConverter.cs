@@ -16,11 +16,11 @@ namespace SnowyImageCopy.Views.Converters
 	public class EnumToVisibilityConverter : IValueConverter
 	{
 		/// <summary>
-		/// Return Visibility.Visible when source Enum value matches target Enum value string.
+		/// Return Visibility.Visible when source Enum name matches target Enum name string.
 		/// </summary>
-		/// <param name="value">Source Enum value</param>
+		/// <param name="value">Source Enum</param>
 		/// <param name="targetType"></param>
-		/// <param name="parameter">Target Enum value string</param>
+		/// <param name="parameter">Target Enum name string</param>
 		/// <param name="culture"></param>
 		/// <returns>Visibility</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

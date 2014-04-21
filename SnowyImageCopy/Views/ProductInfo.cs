@@ -19,13 +19,13 @@ namespace SnowyImageCopy.Views
 		{
 			get
 			{
-				if (String.IsNullOrEmpty(_productTitle))
-					_productTitle = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTitleAttribute))).Title;
+				if (String.IsNullOrEmpty(_title))
+					_title = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTitleAttribute))).Title;
 
-				return _productTitle;
+				return _title;
 			}
 		}
-		private static string _productTitle;
+		private static string _title;
 
 		public static string Description
 		{
