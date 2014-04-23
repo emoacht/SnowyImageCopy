@@ -314,6 +314,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Cannot access local folder. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string OperationStatus_UnauthorizedAccess {
+            get {
+                return ResourceManager.GetString("OperationStatus_UnauthorizedAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Waiting for auto check time. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string OperationStatus_WaitingAutoCheck {
@@ -490,6 +499,15 @@ namespace SnowyImageCopy.Properties {
         public static string Options_RemoteRoot {
             get {
                 return ResourceManager.GetString("Options_RemoteRoot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   http://emoacht.github.io/SnowyImageCopy/index.html に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string ProjectSite {
+            get {
+                return ResourceManager.GetString("ProjectSite", resourceCulture);
             }
         }
         

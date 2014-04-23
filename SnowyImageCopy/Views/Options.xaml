@@ -215,15 +215,16 @@
 					  Header="{Binding Resources.Options_Info, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
 					<TextBlock Margin="0,0,0,4">
-						<Run Text="{Binding Source={x:Static views:ProductInfo.Title}, Mode=OneWay}"
+						<Run Text="{Binding Source={x:Static views:ProductInfo.Title}, Mode=OneWay}"/>
+						<Run Text="{Binding Source={x:Static views:ProductInfo.Version}, Mode=OneWay}"/>
+						<Run Text="("/><Run Text="Project Site"
 							 TextDecorations="Underline" Cursor="Hand">
 							<i:Interaction.Triggers>
 								<i:EventTrigger EventName="MouseDown">
-									<ei:LaunchUriOrFileAction Path="{Binding ProjectSite, Source={x:Static properties:Settings.Default}, Mode=OneWay}"/>
+									<ei:LaunchUriOrFileAction Path="{Binding Resources.ProjectSite, Source={x:Static models:ResourceService.Current}}"/>
 								</i:EventTrigger>
 							</i:Interaction.Triggers>
-						</Run>
-						<Run Text="{Binding Source={x:Static views:ProductInfo.Version}, Mode=OneWay}"/>
+						</Run><Run Text=")"/>
 					</TextBlock>
 				</StackPanel>
 			</GroupBox>

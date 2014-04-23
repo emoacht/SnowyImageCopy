@@ -198,6 +198,9 @@
   <data name="OperationStatus_TimedOut" xml:space="preserve">
     <value>接続がタイムアウトしました。</value>
   </data>
+  <data name="OperationStatus_UnauthorizedAccess" xml:space="preserve">
+    <value>ローカルフォルダーにアクセスできません。</value>
+  </data>
   <data name="OperationStatus_WaitingAutoCheck" xml:space="preserve">
     <value>自動チェック時間まで待機中です。</value>
   </data>
@@ -257,6 +260,9 @@
   </data>
   <data name="Options_RemoteRoot" xml:space="preserve">
     <value>FlashAirアドレス (コピー元)</value>
+  </data>
+  <data name="ProjectSite" xml:space="preserve">
+    <value>http://emoacht.github.io/SnowyImageCopy/index_jp.html</value>
   </data>
   <data name="ToastBody_CopyCompleted1st" xml:space="preserve">
     <value>FlashAirからのコピーが完了しました。</value>

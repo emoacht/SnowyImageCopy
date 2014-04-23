@@ -202,6 +202,9 @@
   <data name="OperationStatus_TimedOut" xml:space="preserve">
     <value>Connection timed out.</value>
   </data>
+  <data name="OperationStatus_UnauthorizedAccess" xml:space="preserve">
+    <value>Cannot access local folder.</value>
+  </data>
   <data name="OperationStatus_WaitingAutoCheck" xml:space="preserve">
     <value>Waiting for auto check time.</value>
   </data>
@@ -261,6 +264,9 @@
   </data>
   <data name="Options_RemoteRoot" xml:space="preserve">
     <value>FlashAir Address (Copy Source)</value>
+  </data>
+  <data name="ProjectSite" xml:space="preserve">
+    <value>http://emoacht.github.io/SnowyImageCopy/index.html</value>
   </data>
   <data name="ToastBody_CopyCompleted1st" xml:space="preserve">
     <value>Copy from FlashAir completed.</value>

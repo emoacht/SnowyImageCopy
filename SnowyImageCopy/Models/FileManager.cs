@@ -371,6 +371,8 @@ namespace SnowyImageCopy.Models
 									break;
 								case HttpStatusCode.Unauthorized:
 									throw new RemoteConnectionUnableException(HttpStatusCode.Unauthorized);
+								case HttpStatusCode.InternalServerError:
+									throw new RemoteConnectionUnableException(HttpStatusCode.InternalServerError);
 								case HttpStatusCode.NotFound:
 									// This exception does not always mean that the file does not exist.
 									throw new RemoteFileNotFoundException("File not found!", path);

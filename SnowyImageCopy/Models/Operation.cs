@@ -299,6 +299,10 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_TimedOut;
 				}
+				else if (ex.GetType() == typeof(UnauthorizedAccessException))
+				{
+					OperationStatus = Resources.OperationStatus_UnauthorizedAccess;
+				}
 				else
 				{
 					OperationStatus = Resources.OperationStatus_Error;
@@ -406,6 +410,10 @@ namespace SnowyImageCopy.Models
 				else if (ex.GetType() == typeof(TimeoutException))
 				{
 					OperationStatus = Resources.OperationStatus_TimedOut;
+				}
+				else if (ex.GetType() == typeof(UnauthorizedAccessException))
+				{
+					OperationStatus = Resources.OperationStatus_UnauthorizedAccess;
 				}
 				else
 				{
@@ -829,6 +837,11 @@ namespace SnowyImageCopy.Models
 
 				CurrentItem = item;
 				CurrentImageData = data;
+			}
+			catch (FileNotFoundException)
+			{
+				item.Status = FileStatus.NotCopied;
+				item.IsLocalAlive = false;
 			}
 			finally
 			{

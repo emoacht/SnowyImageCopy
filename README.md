@@ -18,19 +18,18 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
-0.9.0 2014-04-10
+Ver 0.9.1 2014-04-23
+
+ - Improved exceptions handling
+
+Ver 0.9.0 2014-04-10
 
  - Initial release
 
-##About Feather
-
-Feather comes from FlashAir's unofficial mascot character, [Hirameki Sora][2].
-
 ##Other
 
- - Libraries: [Reactive Extensions][3]
+ - Libraries: [Reactive Extensions][2]
  - License: MIT License
 
 [1]: https://www.flashair-developers.com/en/
-[2]: https://www.flashair-developers.com/ja/about/sora/
-[3]: http://rx.codeplex.com/
+[2]: http://rx.codeplex.com/
