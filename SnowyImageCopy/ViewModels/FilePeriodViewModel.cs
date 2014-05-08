@@ -16,7 +16,7 @@ namespace SnowyImageCopy.ViewModels
 	{
 		public FilePeriodViewModel()
 		{
-			if (!Designer.IsInDesignMode) // AddListner source may be null in Design mode.
+			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
 				resourcesPropertyChangedListener = new PropertyChangedEventListener(ReactResourcesPropertyChanged);
 				PropertyChangedEventManager.AddListener(ResourceService.Current, resourcesPropertyChangedListener, "Resources");
@@ -24,7 +24,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 
-		#region Event Listener
+		#region Event listener
 		
 		private PropertyChangedEventListener resourcesPropertyChangedListener;
 

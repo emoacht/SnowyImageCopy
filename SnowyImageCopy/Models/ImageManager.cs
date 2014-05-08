@@ -25,7 +25,7 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 
-		#region Read or Create Thumbnail (Internal)
+		#region Read/Create Thumbnail (Internal)
 		
 		/// <summary>
 		/// Read a thumbnail in metadata from a specified file.
@@ -152,7 +152,7 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 
-		#region Read or Create Thumbnail (Private)
+		#region Read/Create Thumbnail (Private)
 
 		/// <summary>
 		/// Read a thumbnail in metadata by System.Drawing.

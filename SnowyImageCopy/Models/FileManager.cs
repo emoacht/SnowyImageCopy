@@ -123,7 +123,9 @@ namespace SnowyImageCopy.Models
 			var items = await DownloadStringAsync(client, remotePath, token, card);
 
 			return items.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-				.Select(item => new FileItemViewModel(item, remoteDirectoryPath)).Where(x => x.IsImported).ToList();
+				.Select(item => new FileItemViewModel(item, remoteDirectoryPath))
+				.Where(x => x.IsImported)
+				.ToList();
 		}
 
 		/// <summary>
@@ -147,7 +149,9 @@ namespace SnowyImageCopy.Models
 					var items = await DownloadStringAsync(client, remotePath, token, card);
 
 					return items.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-						.Select(item => new FileItemViewModel(item, remoteDirectoryPath)).Where(x => x.IsImported).ToList();
+						.Select(item => new FileItemViewModel(item, remoteDirectoryPath))
+						.Where(x => x.IsImported)
+						.ToList();
 				}
 			}
 			catch
@@ -325,6 +329,28 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
+		/// <summary>
+		/// Get CID of FlashAir card.
+		/// </summary>
+		/// <param name="token">CancellationToken</param>
+		internal static async Task<string> GetCidAsync(CancellationToken token)
+		{
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetCid, String.Empty);
+
+			try
+			{
+				using (var client = new HttpClient() { Timeout = timeoutLength })
+				{
+					return await DownloadStringAsync(client, remotePath, token, null);
+				}
+			}
+			catch
+			{
+				Debug.WriteLine("Failed to get CID.");
+				throw;
+			}
+		}
+
 		#endregion
 
 
@@ -332,10 +358,14 @@ namespace SnowyImageCopy.Models
 
 		private static async Task<string> DownloadStringAsync(HttpClient client, string path, CancellationToken token, CardInfo card)
 		{
-			var byt = await DownloadBytesAsync(client, path, 0, null, token, card);
+			var bytes = await DownloadBytesAsync(client, path, 0, null, token, card);
+
+#if (DEBUG)
+			await RecordDownloadStringAsync(path, bytes);
+#endif
 
 			// Response from FlashAir card seems to be ASCII encoded. Not certain though.
-			return Encoding.ASCII.GetString(byt);
+			return Encoding.ASCII.GetString(bytes);
 		}
 
 		private static async Task<byte[]> DownloadBytesAsync(HttpClient client, string path, CancellationToken token, CardInfo card)
@@ -565,6 +595,7 @@ namespace SnowyImageCopy.Models
 				{FileManagerCommand.GetThumbnail, @"thumbnail.cgi?/"},
 				{FileManagerCommand.GetUpdateStatus, @"command.cgi?op=102"},
 				{FileManagerCommand.GetSsid, @"command.cgi?op=104"},
+				{FileManagerCommand.GetCid, @"command.cgi?op=120"},
 			};
 
 		/// <summary>
@@ -575,6 +606,40 @@ namespace SnowyImageCopy.Models
 		private static string ComposeRemotePath(FileManagerCommand command, string remotePath)
 		{
 			return Settings.Current.RemoteRoot + commandMap[command] + remotePath.TrimStart('/');
+		}
+
+		/// <summary>
+		/// Record result of DownloadStringAsync method for debug
+		/// </summary>
+		/// <param name="requestPath">Request path</param>
+		/// <param name="responseBytes">Response byte array</param>
+		private static async Task RecordDownloadStringAsync(string requestPath, byte[] responseBytes)
+		{
+			var filePath = Path.Combine(
+				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+				System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
+				"download.log");
+
+			try
+			{
+				if (File.Exists(filePath) &&
+					(File.GetLastWriteTime(filePath) < DateTime.Now.AddHours(-1)))
+					File.Delete(filePath);
+
+				var result = String.Format("[{0:HH:mm:ss fff}]", DateTime.Now) + Environment.NewLine
+					+ "request => " + requestPath + Environment.NewLine
+					+ "response -> " + Environment.NewLine
+					+ Encoding.ASCII.GetString(responseBytes) + Environment.NewLine;
+
+				using (var sw = new StreamWriter(filePath, true, Encoding.UTF8))
+				{
+					await sw.WriteAsync(result);
+				}
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("Failed to record result. {0}", ex);
+			}
 		}
 
 		#endregion

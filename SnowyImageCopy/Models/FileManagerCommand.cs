@@ -37,5 +37,10 @@ namespace SnowyImageCopy.Models
 		/// Get SSID of FlashAir card.
 		/// </summary>
 		GetSsid,
+
+		/// <summary>
+		/// Get CID(Card Identification number register) of FlashAir card.
+		/// </summary>
+		GetCid,
 	}
 }

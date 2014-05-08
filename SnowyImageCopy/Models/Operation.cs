@@ -36,7 +36,7 @@ namespace SnowyImageCopy.Models
 		}
 
 
-		#region Access to MainWindowViewModel property
+		#region Access to MainWindowViewModel member
 
 		private string OperationStatus
 		{
@@ -536,13 +536,20 @@ namespace SnowyImageCopy.Models
 			{
 				tokenSourceWorking = new CancellationTokenSource();
 
-				// Check SSID.
-				var ssid = await FileManager.GetSsidAsync(tokenSourceWorking.Token);
-				if (!String.IsNullOrEmpty(ssid) && (card.Ssid != ssid))
+				// Check CID.
+				var cid = await FileManager.GetCidAsync(tokenSourceWorking.Token);
+				if (!String.IsNullOrEmpty(cid) && (card.Cid != cid))
 				{
+					card.Cid = cid;
+
 					if (FileListCore.Any())
 						FileListCore.Clear();
+				}
 
+				// Check SSID.
+				var ssid = await FileManager.GetSsidAsync(tokenSourceWorking.Token);
+				if (!String.IsNullOrEmpty(ssid))
+				{
 					card.Ssid = ssid;
 
 					// Check if PC is connected to FlashAir card by wireless network.
@@ -716,9 +723,9 @@ namespace SnowyImageCopy.Models
 			{
 				tokenSourceWorking = new CancellationTokenSource();
 
-				// Check SSID.
-				var ssid = await FileManager.GetSsidAsync(tokenSourceWorking.Token);
-				if (!String.IsNullOrEmpty(ssid) && (card.Ssid != ssid))
+				// Check CID.
+				var cid = await FileManager.GetCidAsync(tokenSourceWorking.Token);
+				if (!String.IsNullOrEmpty(cid) && (card.Cid != cid))
 				{
 					OperationStatus = Resources.OperationStatus_NotSameFlashAir;
 					return;

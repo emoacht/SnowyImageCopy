@@ -327,7 +327,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			Import(source, directoryPath);
 
-			if (!Designer.IsInDesignMode) // AddListner source may be null in Design mode.
+			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
 				resourcesPropertyChangedListener = new PropertyChangedEventListener(ReactResourcesPropertyChanged);
 				PropertyChangedEventManager.AddListener(ResourceService.Current, resourcesPropertyChangedListener, "Resources");
@@ -337,7 +337,7 @@ namespace SnowyImageCopy.ViewModels
 		#endregion
 		
 
-		#region IComparable Member
+		#region IComparable member
 
 		public int CompareTo(FileItemViewModel other)
 		{
@@ -353,7 +353,7 @@ namespace SnowyImageCopy.ViewModels
 		#endregion
 
 
-		#region Event Listener
+		#region Event listener
 
 		private PropertyChangedEventListener resourcesPropertyChangedListener;
 
@@ -386,6 +386,10 @@ namespace SnowyImageCopy.ViewModels
 
 			if (!String.IsNullOrEmpty(remoteDirectoryPath))
 			{
+				// Check if source string has enough length (typically in the case of WLANSD_FILELIST).
+				if (source.Length <= remoteDirectoryPath.Length)
+					return;
+
 				if (!source.Substring(0, remoteDirectoryPath.Length).Equals(remoteDirectoryPath, StringComparison.OrdinalIgnoreCase))
 					return;
 

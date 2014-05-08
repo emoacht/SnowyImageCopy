@@ -48,7 +48,7 @@ namespace SnowyImageCopy
 		}
 
 
-		#region Unhandled exception
+		#region Exception handling
 
 		private static void ReportException(object sender, Exception exception)
 		{

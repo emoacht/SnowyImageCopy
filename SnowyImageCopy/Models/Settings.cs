@@ -15,31 +15,35 @@ using SnowyImageCopy.Common;
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// Load/Save this application's settings.
+	/// This application's settings.
 	/// </summary>	
 	public class Settings : NotificationObject
 	{
-		#region Management
+		public static Settings Current { get; set; }
 
+
+		#region Lode/Save
+		
 		private const string settingsFile = "settings.xml";
 
 		private static readonly string settingsPath = Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 			Assembly.GetExecutingAssembly().GetName().Name,
-			settingsFile);
-
-		public static Settings Current { get; set; }
+			settingsFile);		
 
 		public static void Load()
 		{
 			try
 			{
-				// If no previous settings, a FileNotFoundException will be thrown.
 				Current = ReadXmlFile<Settings>(settingsPath);
+			}
+			catch (FileNotFoundException)
+			{
+				// This exception is normal when this application runs the first time and so no previous settings file exists.
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to read a XML file. {0}", ex);
+				throw new Exception("Failed to read a XML file. {0}", ex);
 			}
 
 			if (Current == null)
@@ -54,14 +58,14 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to write a XML file. {0}", ex);
+				throw new Exception("Failed to write a XML file. {0}", ex);
 			}
 		}
 
 		private static T ReadXmlFile<T>(string filePath) where T : new()
 		{
 			if (!File.Exists(filePath))
-				throw new FileNotFoundException("File does not exist.", filePath);
+				throw new FileNotFoundException("File is not found.", filePath);
 
 			using (var fs = new FileStream(filePath, FileMode.Open))
 			{

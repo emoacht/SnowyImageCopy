@@ -18,6 +18,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
+Ver 0.9.2 2014-05-08
+
+ - Fixed exception when a directory name in FlashAir is longer
+
 Ver 0.9.1 2014-04-23
 
  - Improved exceptions handling

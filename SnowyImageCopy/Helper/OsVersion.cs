@@ -11,7 +11,7 @@ namespace SnowyImageCopy.Helper
 		private static readonly OperatingSystem os = Environment.OSVersion;
 
 		/// <summary>
-		/// Check if OS is Windows 8 or newer.
+		/// Whether OS is Windows 8 or newer
 		/// </summary>
 		/// <remarks>Windows 8 = version 6.2</remarks>
 		public static bool IsEightOrNewer
@@ -20,7 +20,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Check if OS is Windows 8.1 or newer.
+		/// Whether OS is Windows 8.1 or newer
 		/// </summary>
 		/// <remarks>Windows 8.1 = version 6.3</remarks>
 		public static bool IsEightOneOrNewer

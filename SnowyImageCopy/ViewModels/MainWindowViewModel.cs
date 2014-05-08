@@ -487,7 +487,7 @@ namespace SnowyImageCopy.ViewModels
 			FileListCore.Insert(GetSampleFileData(-1));
 
 			// Add event listeners.
-			if (!Designer.IsInDesignMode) // AddListner source may be null in Design mode.
+			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
 				fileListPropertyChangedListener = new PropertyChangedEventListener(FileListPropertyChanged);
 				PropertyChangedEventManager.AddListener(FileListCore, fileListPropertyChangedListener, String.Empty);				
@@ -541,7 +541,7 @@ namespace SnowyImageCopy.ViewModels
 		#endregion
 
 
-		#region Event Listener
+		#region Event listener
 
 		#region FileItem
 

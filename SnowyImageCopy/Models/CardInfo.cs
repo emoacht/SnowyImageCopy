@@ -17,6 +17,11 @@ namespace SnowyImageCopy.Models
 		public string Ssid { get; set; }
 
 		/// <summary>
+		/// CID
+		/// </summary>
+		public string Cid { get; set; }
+
+		/// <summary>
 		/// Whether PC is connected to FlashAir card by a wireless connection.  
 		/// </summary>
 		/// <remarks>True: Access Point mode, Internet Pass-Thru mode. False: Station mode.</remarks>
