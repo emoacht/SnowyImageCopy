@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using PerMonitorDpi.Views;
 using SnowyImageCopy.Models;
 
 namespace SnowyImageCopy.Views
@@ -19,7 +20,7 @@ namespace SnowyImageCopy.Views
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow : PerMonitorDpiWindow
 	{
 		public MainWindow()
 		{

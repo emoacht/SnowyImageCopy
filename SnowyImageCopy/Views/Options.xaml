@@ -6,6 +6,7 @@
 			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+			 xmlns:pmd="clr-namespace:PerMonitorDpi.Views;assembly=PerMonitorDpi"
 			 xmlns:properties="clr-namespace:SnowyImageCopy.Properties"
 			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
 			 xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
@@ -225,6 +226,11 @@
 								</i:EventTrigger>
 							</i:Interaction.Triggers>
 						</Run><Run Text=")"/>
+					</TextBlock>
+
+					<TextBlock Margin="0,0,0,4">
+						<Run Text="{Binding SystemDpi.X, RelativeSource={RelativeSource AncestorType={x:Type pmd:PerMonitorDpiWindow}}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
+						<Run Text="{Binding MonitorDpi.X, RelativeSource={RelativeSource AncestorType={x:Type pmd:PerMonitorDpiWindow}}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
 					</TextBlock>
 				</StackPanel>
 			</GroupBox>
