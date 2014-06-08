@@ -18,6 +18,11 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
+Ver 0.9.3 2014-06-08
+
+ - Added Per-Monitor DPI Awareness
+ - Added shorter intervals to Auto Check Interval
+
 Ver 0.9.2 2014-05-08
 
  - Fixed exception when a directory name in FlashAir is longer
@@ -32,8 +37,9 @@ Ver 0.9.0 2014-04-10
 
 ##Other
 
- - Libraries: [Reactive Extensions][2]
+ - Libraries: [Reactive Extensions][2], [WPF Per-Monitor DPI Aware Window][3]
  - License: MIT License
 
 [1]: https://www.flashair-developers.com/en/
 [2]: http://rx.codeplex.com/
+[3]: https://github.com/emoacht/WpfPerMonitorDpi
