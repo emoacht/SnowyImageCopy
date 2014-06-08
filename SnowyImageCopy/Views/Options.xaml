@@ -6,6 +6,7 @@
 			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+			 xmlns:pmd="clr-namespace:PerMonitorDpi.Views;assembly=PerMonitorDpi"
 			 xmlns:properties="clr-namespace:SnowyImageCopy.Properties"
 			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
 			 xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
@@ -153,7 +154,7 @@
 							Content="{Binding Resources.Options_AutoCheckInterval, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:NumericUpDown
 							Width="90" Height="24"
-							Minimum="10" Maximum="180" Frequency="10"
+							Minimum="1" Middle="10" Maximum="180" Frequency="10" LowerFrequency="1" HigherFrequency="10"
 							Value="{Binding SettingsCurrent.AutoCheckInterval}"/>
 					</StackPanel>
 				</StackPanel>
@@ -225,6 +226,11 @@
 								</i:EventTrigger>
 							</i:Interaction.Triggers>
 						</Run><Run Text=")"/>
+					</TextBlock>
+
+					<TextBlock Margin="0,0,0,4">
+						<Run Text="{Binding SystemDpi.X, RelativeSource={RelativeSource AncestorType={x:Type pmd:PerMonitorDpiWindow}}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
+						<Run Text="{Binding MonitorDpi.X, RelativeSource={RelativeSource AncestorType={x:Type pmd:PerMonitorDpiWindow}}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
 					</TextBlock>
 				</StackPanel>
 			</GroupBox>

@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Snowy")]
+[assembly: AssemblyTitle("Config Tool")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Snowy")]
-[assembly: AssemblyCopyright("Copyright © EMO 2014")]
+[assembly: AssemblyProduct("Config Tool")]
+[assembly: AssemblyCopyright("Copyright © 2014 EMO")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -22,7 +22,7 @@ using System.Windows;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("55df0585-a26e-489e-bd94-4e6a50a83e23")]
+[assembly: Guid("bb8a7f03-e29d-4023-bd7b-fe2988ff4d77")]
 
 //In order to begin building localizable applications, set 
 //<UICulture>CultureYouAreCodingWith</UICulture> in your .csproj file
@@ -52,6 +52,6 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.9.3.6")]
-[assembly: AssemblyFileVersion("0.9.3.6")]
+[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyFileVersion("0.1.0.0")]
 

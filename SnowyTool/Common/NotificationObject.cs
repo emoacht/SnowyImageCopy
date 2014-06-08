@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SnowyImageCopy.Common
+namespace SnowyTool.Common
 {
 	public abstract class NotificationObject : INotifyPropertyChanged
 	{

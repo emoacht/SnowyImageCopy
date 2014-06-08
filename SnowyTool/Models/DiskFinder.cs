@@ -1,0 +1,138 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Management;
+using System.Text;
+using System.Threading.Tasks;
+
+using SnowyTool.Helper;
+using SnowyTool.ViewModels;
+
+namespace SnowyTool.Models
+{
+	internal static class DiskFinder
+	{
+		/// <summary>
+		/// Search disks by WMI.
+		/// </summary>
+		internal static DiskInfo[] Search()
+		{
+			var diskGroup = new List<DiskInfo>();
+
+			SearchDiskDrive(ref diskGroup);
+			SearchPhysicalDisk(ref diskGroup);
+
+			return diskGroup.ToArray();
+		}
+
+		/// <summary>
+		/// Search drives by WMI (Win32_DiskDrive, Win32_DiskPartition, Win32_LogicalDisk).
+		/// </summary>
+		private static void SearchDiskDrive(ref List<DiskInfo> diskGroup)
+		{
+			var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive");
+
+			foreach (var drive in searcher.Get())
+			{
+				if (drive["Index"] == null) // Index number of physical drive
+					continue;
+
+				int numIndex;
+				if (!int.TryParse(drive["Index"].ToString(), out numIndex))
+					continue;
+
+				var info = new DiskInfo();
+				info.PhysicalDrive = numIndex;
+
+				if (drive["MediaType"] != null)
+				{
+					info.MediaType = drive["MediaType"].ToString();
+				}
+
+				if (drive["Size"] != null)
+				{
+					ulong numSize;
+					if (ulong.TryParse(drive["Size"].ToString(), out numSize))
+						info.Size = numSize;
+				}
+
+				var driveLetters = new List<string>();
+
+				foreach (var diskPartition in ((ManagementObject)drive).GetRelated("Win32_DiskPartition"))
+				{
+					if ((diskPartition["DiskIndex"] == null) || // Index number of physical drive
+						(diskPartition["DiskIndex"].ToString() != info.PhysicalDrive.ToString()))
+						continue;
+
+					foreach (var logicalDisk in ((ManagementObject)diskPartition).GetRelated("Win32_LogicalDisk"))
+					{
+						if (logicalDisk["DeviceID"] == null) // Drive letter
+							continue;
+
+						var driveLetter = logicalDisk["DeviceID"].ToString().Trim();
+
+						if (String.IsNullOrEmpty(driveLetter) || !driveLetter.EndsWith(':'.ToString()))
+							continue;
+
+						driveLetters.Add(driveLetter);
+
+						if (logicalDisk["DriveType"] != null)
+						{
+							uint numType;
+							if (!uint.TryParse(logicalDisk["DriveType"].ToString(), out numType))
+								continue;
+
+							info.DriveType = numType;
+						}
+					}
+				}
+
+				if (!driveLetters.Any())
+					continue;
+
+				info.DriveLetters = driveLetters.ToArray();
+
+				diskGroup.Add(info);
+			}
+		}
+
+		/// <summary>
+		/// Search drives and supplement information by WMI (MSFT_PhysicalDisk).
+		/// </summary>
+		/// <remarks>Windows Storage Management API is only available for Windows 8 or newer.</remarks>
+		private static void SearchPhysicalDisk(ref List<DiskInfo> diskGroup)
+		{
+			if (!OsVersion.IsEightOrNewer)
+				return;
+
+			var scope = new ManagementScope("\\\\.\\root\\microsoft\\windows\\storage");
+			scope.Connect();
+
+			var searcher = new ManagementObjectSearcher("SELECT * FROM MSFT_PhysicalDisk");
+			searcher.Scope = scope;
+
+			foreach (var drive in searcher.Get())
+			{
+				if (drive["DeviceId"] == null) // Index number of physical drive
+					continue;
+
+				int numId;
+				if (!int.TryParse(drive["DeviceId"].ToString(), out numId))
+					continue;
+
+				var info = diskGroup.FirstOrDefault(x => x.PhysicalDrive == numId);
+				if (info == null)
+					continue;
+
+				if (drive["BusType"] != null)
+				{
+					ushort numType;
+					if (ushort.TryParse(drive["BusType"].ToString(), out numType))
+						info.BusType = numType;
+				}
+			}
+		}
+	}
+}

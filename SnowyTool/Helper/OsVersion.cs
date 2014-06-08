@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SnowyImageCopy.Helper
+namespace SnowyTool.Helper
 {
 	public static class OsVersion
 	{
-		private static readonly Version ver = Environment.OSVersion.Version;
+		private static readonly OperatingSystem os = Environment.OSVersion;
 
 		/// <summary>
 		/// Whether OS is Windows 8 or newer
@@ -16,7 +16,7 @@ namespace SnowyImageCopy.Helper
 		/// <remarks>Windows 8 = version 6.2</remarks>
 		public static bool IsEightOrNewer
 		{
-			get { return ((6 == ver.Major) && (2 <= ver.Minor)) || (7 <= ver.Major); }
+			get { return (6 <= os.Version.Major) && (2 <= os.Version.Minor); }
 		}
 
 		/// <summary>
@@ -25,7 +25,7 @@ namespace SnowyImageCopy.Helper
 		/// <remarks>Windows 8.1 = version 6.3</remarks>
 		public static bool IsEightOneOrNewer
 		{
-			get { return ((6 == ver.Major) && (3 <= ver.Minor)) || (7 <= ver.Major); }
+			get { return (6 <= os.Version.Major) && (3 <= os.Version.Minor); }
 		}
 	}
 }

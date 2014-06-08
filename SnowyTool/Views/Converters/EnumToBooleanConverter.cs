@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace SnowyImageCopy.Views.Converters
+namespace SnowyTool.Views.Converters
 {
 	/// <summary>
 	/// Convert Enum to Boolean.

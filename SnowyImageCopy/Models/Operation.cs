@@ -236,7 +236,10 @@ namespace SnowyImageCopy.Models
 		private readonly CardInfo card = new CardInfo();
 
 		private CancellationTokenSource tokenSourceWorking;
+		private bool isTokenSourceWorkingDisposed;
+
 		private CancellationTokenSource tokenSourceLoading;
+		private bool isTokenSourceLoadingDisposed;
 
 		private DateTime LastCheckTime { get; set; }
 		private readonly TimeSpan checkThresholdTime = TimeSpan.FromMinutes(10);
@@ -437,7 +440,7 @@ namespace SnowyImageCopy.Models
 		{
 			StopAutoTimer();
 
-			if ((tokenSourceWorking == null) || (tokenSourceWorking.IsCancellationRequested))
+			if (isTokenSourceWorkingDisposed || tokenSourceWorking.IsCancellationRequested)
 				return;
 
 			try
@@ -470,7 +473,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="item">Target item</param>
 		internal async Task LoadSetFileAsync(FileItemViewModel item)
 		{
-			if ((tokenSourceLoading != null) && (!tokenSourceLoading.IsCancellationRequested))
+			if (!isTokenSourceLoadingDisposed && !tokenSourceLoading.IsCancellationRequested)
 			{
 				try
 				{
@@ -535,6 +538,7 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				tokenSourceWorking = new CancellationTokenSource();
+				isTokenSourceWorkingDisposed = false;
 
 				// Check CID.
 				var cid = await FileManager.GetCidAsync(tokenSourceWorking.Token);
@@ -678,14 +682,8 @@ namespace SnowyImageCopy.Models
 
 				if (tokenSourceWorking != null)
 				{
-					try
-					{
-						tokenSourceWorking.Dispose();
-					}
-					finally
-					{
-						tokenSourceWorking = null;
-					}
+					isTokenSourceWorkingDisposed = true;
+					tokenSourceWorking.Dispose();
 				}
 			}
 		}
@@ -722,6 +720,7 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				tokenSourceWorking = new CancellationTokenSource();
+				isTokenSourceWorkingDisposed = false;
 
 				// Check CID.
 				var cid = await FileManager.GetCidAsync(tokenSourceWorking.Token);
@@ -793,14 +792,8 @@ namespace SnowyImageCopy.Models
 
 				if (tokenSourceWorking != null)
 				{
-					try
-					{
-						tokenSourceWorking.Dispose();
-					}
-					finally
-					{
-						tokenSourceWorking = null;
-					}
+					isTokenSourceWorkingDisposed = true;
+					tokenSourceWorking.Dispose();
 				}
 			}
 		}
@@ -837,6 +830,7 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				tokenSourceLoading = new CancellationTokenSource();
+				isTokenSourceLoadingDisposed = false;
 
 				byte[] data = null;
 				if (item.CanLoadLocal)
@@ -854,14 +848,8 @@ namespace SnowyImageCopy.Models
 			{
 				if (tokenSourceLoading != null)
 				{
-					try
-					{
-						tokenSourceLoading.Dispose();
-					}
-					finally
-					{
-						tokenSourceLoading = null;
-					}
+					isTokenSourceLoadingDisposed = true;
+					tokenSourceLoading.Dispose();
 				}
 			}
 		}

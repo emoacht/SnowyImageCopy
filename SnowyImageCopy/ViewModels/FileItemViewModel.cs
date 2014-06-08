@@ -115,17 +115,17 @@ namespace SnowyImageCopy.ViewModels
 			var baDate = new BitArray(new int[] { rawDate }).Cast<bool>().ToArray();
 			var baTime = new BitArray(new int[] { rawTime }).Cast<bool>().ToArray();
 
-			var year = ConvertFromBitArrayToInt(baDate.Skip(9)) + 1980;
-			var month = ConvertFromBitArrayToInt(baDate.Skip(5).Take(4));
-			var day = ConvertFromBitArrayToInt(baDate.Take(5));
-			var hour = ConvertFromBitArrayToInt(baTime.Skip(11));
-			var minute = ConvertFromBitArrayToInt(baTime.Skip(5).Take(6));
-			var second = ConvertFromBitArrayToInt(baTime.Take(5)) * 2;
+			var year = ConvertFromBitsToInt(baDate.Skip(9)) + 1980;
+			var month = ConvertFromBitsToInt(baDate.Skip(5).Take(4));
+			var day = ConvertFromBitsToInt(baDate.Take(5));
+			var hour = ConvertFromBitsToInt(baTime.Skip(11));
+			var minute = ConvertFromBitsToInt(baTime.Skip(5).Take(6));
+			var second = ConvertFromBitsToInt(baTime.Take(5)) * 2;
 
 			Date = new DateTime(year, month, day, hour, minute, second);
 		}
 
-		private int ConvertFromBitArrayToInt(IEnumerable<bool> source)
+		private int ConvertFromBitsToInt(IEnumerable<bool> source)
 		{
 			var target = new int[1];
 			new BitArray(source.ToArray()).CopyTo(target, 0);

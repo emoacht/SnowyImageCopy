@@ -57,7 +57,7 @@ namespace SnowyImageCopy.Helper
 					AppUserModelID = appId,
 					IconPath = iconPath,
 					IconIndex = 0, // 1st icon in the file
-					WindowStyle = ShellLink.SW.SW_SHOWMINNOACTIVE,
+					WindowStyle = ShellLink.SW.SW_SHOWNORMAL,
 				})
 				{
 					shortcut.Save(shortcutPath);

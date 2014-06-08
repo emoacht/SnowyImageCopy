@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interactivity;
 
+using PerMonitorDpi.Models;
+
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
@@ -77,6 +79,30 @@ namespace SnowyImageCopy.Views.Behaviors
 				typeof(FrameworkElementIntersectionBehavior),
 				new FrameworkPropertyMetadata(false));
 
+		public Dpi SystemDpi
+		{
+			get { return (Dpi)GetValue(SystemDpiProperty); }
+			set { SetValue(SystemDpiProperty, value); }
+		}
+		public static readonly DependencyProperty SystemDpiProperty =
+			DependencyProperty.Register(
+				"SystemDpi",
+				typeof(Dpi),
+				typeof(FrameworkElementIntersectionBehavior),
+				new FrameworkPropertyMetadata(Dpi.Default));
+
+		public Dpi WindowDpi
+		{
+			get { return (Dpi)GetValue(WindowDpiProperty); }
+			set { SetValue(WindowDpiProperty, value); }
+		}
+		public static readonly DependencyProperty WindowDpiProperty =
+			DependencyProperty.Register(
+				"WindowDpi",
+				typeof(Dpi),
+				typeof(FrameworkElementIntersectionBehavior),
+				new FrameworkPropertyMetadata(Dpi.Default));
+
 		#endregion
 
 
@@ -93,17 +119,23 @@ namespace SnowyImageCopy.Views.Behaviors
 			if (!baseElement.IsVisible) // If not visible, PointToScreen method will fail.
 				return false;
 
+			// Compute factor from default DPI to Window DPI. 
+			var defaultFactor = new { X = (double)WindowDpi.X / Dpi.Default.X, Y = (double)WindowDpi.Y / Dpi.Default.Y };
+
 			var baseElementLocation = baseElement.PointToScreen(new Point(0D, 0D));
 
 			var expandedRect = new Rect(
-					baseElementLocation.X - ExpandedMargin.Left,
-					baseElementLocation.Y - ExpandedMargin.Top,
-					baseElement.ActualWidth + ExpandedMargin.Left + ExpandedMargin.Right,
-					baseElement.ActualHeight + ExpandedMargin.Top + ExpandedMargin.Bottom);
+					baseElementLocation.X - ExpandedMargin.Left * defaultFactor.X,
+					baseElementLocation.Y - ExpandedMargin.Top * defaultFactor.Y,
+					(baseElement.ActualWidth + ExpandedMargin.Left + ExpandedMargin.Right) * defaultFactor.X,
+					(baseElement.ActualHeight + ExpandedMargin.Top + ExpandedMargin.Bottom) * defaultFactor.Y);
+
+			// Compute factor from System DPI to Window DPI.
+			var systemFactor = new { X = (double)WindowDpi.X / SystemDpi.X, Y = (double)WindowDpi.Y / SystemDpi.Y };
 
 			var rects = new Rect[] { expandedRect }.Concat(targetElements
 				.Where(x => x.IsVisible) // If not visible, PointToScreen method will fail.
-				.Select(x => new Rect(x.PointToScreen(new Point(0D, 0D)), new Size(x.ActualWidth, x.ActualHeight))))
+				.Select(x => new Rect(x.PointToScreen(new Point(0D, 0D)), new Size(x.ActualWidth * systemFactor.X, x.ActualHeight * systemFactor.Y))))
 				.ToArray();
 
 			return IsRectIntersected(rects);

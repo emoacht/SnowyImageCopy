@@ -85,9 +85,71 @@ namespace SnowyImageCopy.Views.Controls
 				"Frequency",
 				typeof(double),
 				typeof(NumericUpDown),
-				new FrameworkPropertyMetadata(1D));
+				new FrameworkPropertyMetadata(
+					1D,
+					null,
+					(d, baseValue) => (0 < (double)baseValue) ? (double)baseValue : DependencyProperty.UnsetValue));
+
+		private static object coerceValueCallback(DependencyObject d, object baseValue)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Middle level between Minimum and Maximum
+		/// </summary>
+		/// <remarks>To enable Middle, HigherFrequency and LowerFrequency must be set.</remarks>
+		public double Middle
+		{
+			get { return (double)GetValue(MiddleProperty); }
+			set { SetValue(MiddleProperty, value); }
+		}
+		public static readonly DependencyProperty MiddleProperty =
+			DependencyProperty.Register(
+				"Middle",
+				typeof(double),
+				typeof(NumericUpDown),
+				new FrameworkPropertyMetadata(0D));
+
+		/// <summary>
+		/// Frequency when value is higher than Middle.
+		/// </summary>
+		/// <remarks>Default means invalid.</remarks>
+		public double HigherFrequency
+		{
+			get { return (double)GetValue(HigherFrequencyProperty); }
+			set { SetValue(HigherFrequencyProperty, value); }
+		}
+		public static readonly DependencyProperty HigherFrequencyProperty =
+			DependencyProperty.Register(
+				"HigherFrequency",
+				typeof(double),
+				typeof(NumericUpDown),
+				new FrameworkPropertyMetadata(0D));
+
+		/// <summary>
+		/// Frequency when value is lower than Middle.
+		/// </summary>
+		/// <remarks>Default means invalid.</remarks>
+		public double LowerFrequency
+		{
+			get { return (double)GetValue(LowerFrequencyProperty); }
+			set { SetValue(LowerFrequencyProperty, value); }
+		}
+		public static readonly DependencyProperty LowerFrequencyProperty =
+			DependencyProperty.Register(
+				"LowerFrequency",
+				typeof(double),
+				typeof(NumericUpDown),
+				new FrameworkPropertyMetadata(0D));
 
 		#endregion
+
+
+		private bool IsMiddleEnabled
+		{
+			get { return (Minimum < Middle) && (Middle < Maximum) && (0 < LowerFrequency) && (0 < HigherFrequency); }
+		}
 
 
 		private enum Direction
@@ -114,17 +176,43 @@ namespace SnowyImageCopy.Views.Controls
 			switch (direction)
 			{
 				case Direction.Down:
-					if (Value > Minimum)
+					if (!IsMiddleEnabled)
 					{
 						var num = Value - Frequency;
 						Value = (num > Minimum) ? num : Minimum;
 					}
+					else
+					{
+						if (Value > Middle)
+						{
+							var num = Value - HigherFrequency;
+							Value = (num > Middle) ? num : Middle; // Stop at Middle.
+						}
+						else
+						{
+							var num = Value - LowerFrequency;
+							Value = (num > Minimum) ? num : Minimum;
+						}
+					}
 					break;
 				case Direction.Up:
-					if (Value < Maximum)
+					if (!IsMiddleEnabled)
 					{
 						var num = Value + Frequency;
 						Value = (num < Maximum) ? num : Maximum;
+					}
+					else
+					{
+						if (Value < Middle)
+						{
+							var num = Value + LowerFrequency;
+							Value = (num < Middle) ? num : Middle; // Stop at Middle.
+						}
+						else
+						{
+							var num = Value + HigherFrequency;
+							Value = (num < Maximum) ? num : Maximum;
+						}
 					}
 					break;
 			}
