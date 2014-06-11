@@ -206,21 +206,18 @@ namespace SnowyTool.ViewModels
 			{
 				var drives = await Task.Run(() => DiskFinder.Search());
 
-				var configList = new List<ConfigViewModel>();
-
-				foreach (var drive in drives)
+				foreach (var drive in drives.Where(x => x.CanBeSD).OrderBy(x => x.PhysicalDrive))
 				{
-					var configNew = new ConfigViewModel(drive);
+					var configNew = new ConfigViewModel();
 
-					if (!await configNew.ReadAsync())
+					if (!await configNew.ReadAsync(drive))
 						continue;
 
-					configList.Add(configNew);
+					CurrentConfig = configNew;
+					return;
 				}
 
-				CurrentConfig = configList
-					.OrderBy(x => x.AssociatedDisk.PhysicalDrive)
-					.FirstOrDefault();
+				CurrentConfig = null;
 			}
 			finally
 			{
@@ -235,9 +232,9 @@ namespace SnowyTool.ViewModels
 		{
 			isApplying = true;
 
-			var configNew = new ConfigViewModel(CurrentConfig.AssociatedDisk);
+			var configNew = new ConfigViewModel();
 
-			if (!await configNew.ReadAsync() ||
+			if (!await configNew.ReadAsync(CurrentConfig.AssociatedDisk) ||
 				(configNew.CID != CurrentConfig.CID))
 			{
 				SystemSounds.Hand.Play();

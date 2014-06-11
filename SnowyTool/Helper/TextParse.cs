@@ -26,8 +26,8 @@ namespace SnowyTool.Helper
 				// (String.Split method may mistakenly separate value which includes same char as separator)
 				var indexSeparator = line.IndexOf(separator);
 
-				// Check if separator is found and both key and value have at least one letter.
-				if ((indexSeparator < 1) || (line.Length <= indexSeparator + 1))
+				// Check if separator is found and key has at least one letter.
+				if (indexSeparator < 1)
 					continue;
 
 				content.Add(line.Substring(0, indexSeparator), line.Substring(indexSeparator + 1));

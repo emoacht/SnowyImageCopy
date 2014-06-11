@@ -29,7 +29,7 @@ namespace SnowyTool.ViewModels
 		/// 4: Wireless LAN functionality will be set when the card is turned on. Sets the Wireless LAN to AP mode.
 		/// 5: Wireless LAN functionality will be set when the card is turned on. Sets the Wireless LAN to STA mode.
 		/// 6: Wireless LAN functionality will be set when the card is turned on. Sets the Wireless LAN to Internet pass-thru mode. (FW 2.00.02+)
-		/// Other: Undefined behaviour.
+		/// Other: Undefined behavior.
 		/// </remarks>
 		public int APPMODE
 		{
@@ -42,6 +42,8 @@ namespace SnowyTool.ViewModels
 					APPMODE_IMPORT = _APPMODE;
 				else
 					RaisePropertyChanged(() => IsChanged);
+
+				RaisePropertyChanged(() => IsInternetPassThruEnabled);
 			}
 		}
 		private int _APPMODE = 4; // Default
@@ -99,7 +101,7 @@ namespace SnowyTool.ViewModels
 			set
 			{
 				_APPNETWORKKEY = (value.Length <= 64) ? value : value.Substring(0, 64);
-
+				
 				if (isImporting)
 					APPNETWORKKEY_IMPORT = _APPNETWORKKEY;
 				else
@@ -175,18 +177,18 @@ namespace SnowyTool.ViewModels
 		private uint _APPAUTOTIME = 300000; // Default
 
 		/// <summary>
-		/// Redirect function flag
+		/// DNS operation mode
 		/// </summary>
 		/// <remarks>
-		/// 0: Off
-		/// 1: On 
+		/// 0: Returns the FlashAir's IP Address only if the DNS request is done with the APPNAME or "flashair".
+		/// 1: Returns the FlashAir's IP Address to any DNS requests.
 		/// </remarks>
 		public int DNSMODE
 		{
 			get { return _DNSMODE; }
 			set { _DNSMODE = value; }
 		}
-		private int _DNSMODE = 0;
+		private int _DNSMODE = 1; // Default
 
 		/// <summary>
 		/// Upload operation enabled flag
@@ -201,6 +203,11 @@ namespace SnowyTool.ViewModels
 			set { _UPLOAD = value; }
 		}
 		private int _UPLOAD = 1;
+
+		/// <summary>
+		/// Upload destination directory
+		/// </summary>
+		public string UPDIR { get; set; }
 
 		/// <summary>
 		/// Wireless LAN Boot Screen
@@ -223,12 +230,7 @@ namespace SnowyTool.ViewModels
 		/// Format: 12-digit hexadecimal number
 		/// </remarks>
 		public string MASTERCODE { get; set; }
-
-		/// <summary>
-		/// Application's unique information
-		/// </summary>
-		public string APPINFO { get; set; }
-
+		
 		/// <summary>
 		/// CID (Card Identification number register)
 		/// </summary>
@@ -282,7 +284,7 @@ namespace SnowyTool.ViewModels
 		{
 			get { return _manufacturerID; }
 		}
-		public int _manufacturerID;
+		private int _manufacturerID;
 	
 		/// <summary>
 		/// OEM/Application ID (OID)
@@ -357,28 +359,38 @@ namespace SnowyTool.ViewModels
 		#endregion
 
 
-		#region Supplement
+		#region Supplementary
 
+		/// <summary>
+		/// Disk information of associated disk
+		/// </summary>
 		public DiskInfo AssociatedDisk
 		{
 			get { return _associatedDisk; }
 		}
 		private DiskInfo _associatedDisk;
 
-		public string ConfigPath
+		/// <summary>
+		/// Remaining items in the config file
+		/// </summary>
+		/// <remarks>This is to hold unusable items (LOCK, APPINFO) and unknown items.</remarks>
+		private readonly Dictionary<string, string> Remaining = new Dictionary<string, string>();
+
+		public bool IsChanged
 		{
-			get { return (AssociatedDisk != null) ? Path.Combine(AssociatedDisk.DriveLetters.First(), "SD_WLAN", "CONFIG") : null; }
+			get
+			{
+				return ((APPMODE_IMPORT != APPMODE) ||
+					!IsBothNullOrEmptyOrEquals(APPSSID_IMPORT, APPSSID) ||
+					!IsBothNullOrEmptyOrEquals(APPNETWORKKEY_IMPORT, APPNETWORKKEY) ||
+					!IsBothNullOrEmptyOrEquals(BRGSSID_IMPORT, BRGSSID) ||
+					!IsBothNullOrEmptyOrEquals(BRGNETWORKKEY_IMPORT, BRGNETWORKKEY));
+			}
 		}
 
-		/// <summary>
-		/// Remaining items in config file
-		/// </summary>
-		/// <remarks>This is to hold unusable items (LOCK) and other unknown items.</remarks>
-		private Dictionary<string, string> Remaining = new Dictionary<string, string>();
-		
 		private readonly Regex patternVersion = new Regex(@"[1-9]\.\d{2}\.\d{2}", RegexOptions.Compiled);
 
-		public bool IsReadyInternetPassThru
+		public bool IsInternetPassThruReady
 		{
 			get
 			{
@@ -387,46 +399,30 @@ namespace SnowyTool.ViewModels
 					return false;
 
 				var version = new Version(matchVersion.Value);
-				if (version.Major < 2)
-					return false;
-
-				return true;
+				return (version.Major <= 2);
 			}
 		}
 
-		public bool IsChanged
+		public bool IsInternetPassThruEnabled
 		{
-			get
-			{
-				return ((APPMODE_IMPORT != APPMODE) ||
-					(APPSSID_IMPORT != APPSSID) || (APPNETWORKKEY_IMPORT != APPNETWORKKEY) ||
-					(BRGSSID_IMPORT != BRGSSID) || (BRGNETWORKKEY_IMPORT != BRGNETWORKKEY));
-			}
-		}
-
-		#endregion
-
-
-		#region Constructor
-
-		public ConfigViewModel(DiskInfo info)
-		{
-			_associatedDisk = info;
+			get { return IsInternetPassThruReady && ((APPMODE == 3) || (APPMODE == 6)); }
 		}
 
 		#endregion
 
 
 		#region Import/Export
-
-		private bool isImporting = false;
+				
 		private const Char separator = '=';
-		
+		private bool isImporting = false;
+
 		internal void Import(string configContent)
 		{
 			var contents = TextParse.GetContent(configContent, separator);
 
-			var properties = typeof(ConfigViewModel).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+			var properties = typeof(ConfigViewModel).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
+				.Where(x => x.CanWrite) // CanWrite means not ReadOnly property.
+				.ToArray();
 
 			isImporting = true;
 
@@ -434,30 +430,25 @@ namespace SnowyTool.ViewModels
 			{
 				foreach (var c in contents)
 				{
-					bool isFound = false;
-
-					foreach (var p in properties)
+					var p = properties.FirstOrDefault(x => c.Key == x.Name);
+					if (p == null)
 					{
-						if ((c.Key != p.Name) || string.IsNullOrEmpty(c.Value) || !p.CanWrite) // Not CanWrite means ReadOnly property.
-							continue;
+						if (!Remaining.Keys.Contains(c.Key))
+							Remaining.Add(c.Key, c.Value);
 
-						try
-						{
-							p.SetValue(this, Convert.ChangeType(c.Value, p.PropertyType), null);
-						}
-						catch (Exception ex)
-						{
-							throw new Exception(String.Format("Failed to import value ({0}). ", p.Name), ex);
-						}
-
-						Debug.WriteLine("{0}: {1}", p.Name, p.GetValue(this, null));
-
-						isFound = true;
-						break;
+						continue;
 					}
 
-					if (!isFound && !Remaining.Keys.Contains(c.Key))
-						Remaining.Add(c.Key, c.Value);
+					try
+					{
+						p.SetValue(this, Convert.ChangeType(c.Value, p.PropertyType), null);
+
+						Debug.WriteLine("{0}: {1}", p.Name, p.GetValue(this, null));
+					}
+					catch (Exception ex)
+					{
+						throw new Exception(String.Format("Failed to import value ({0}). ", p.Name), ex);
+					}
 				}
 			}
 			finally
@@ -469,18 +460,34 @@ namespace SnowyTool.ViewModels
 
 		internal string Export()
 		{
-			var outcome = new List<string>();
+			var properties = typeof(ConfigViewModel).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
+				.Where(x => x.CanWrite) // CanWrite means not ReadOnly property.
+				.ToArray();
 
-			var properties = typeof(ConfigViewModel).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
-
+			// Turn empty String value to null.
 			foreach (var p in properties)
 			{
-				if (!p.CanWrite) // Not CanWrite means ReadOnly property.
+				if (p.GetType() != typeof(String))
 					continue;
 
 				var value = p.GetValue(this, null);
 
-				if ((value == null) || ((p.GetType() == typeof(String)) && String.IsNullOrWhiteSpace(value.ToString())))
+				if (String.IsNullOrWhiteSpace(value.ToString()))
+					p.SetValue(this, null, null);
+			}
+
+			// Conform empty String value or null of corresponding SSID and network security key.
+			ConformNullOrEmpty(ref _APPSSID, ref _APPNETWORKKEY);
+			ConformNullOrEmpty(ref _BRGSSID, ref _BRGNETWORKKEY);
+
+			// Compose outcome.
+			var outcome = new List<string>();
+
+			foreach (var p in properties)
+			{
+				var value = p.GetValue(this, null);
+
+				if (value == null)
 					continue;
 
 				outcome.Add(String.Format("{0}{1}{2}", p.Name, separator, value));
@@ -496,7 +503,7 @@ namespace SnowyTool.ViewModels
 
 			return String.Join(Environment.NewLine, outcome);
 		}
-		
+
 		private readonly Regex patternAscii = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
 
 		private void ParseCID(string cid)
@@ -540,25 +547,28 @@ namespace SnowyTool.ViewModels
 		#endregion
 
 
-		#region Read/Apply
+		#region Read/Write
 
 		/// <summary>
 		/// Read Config file.
 		/// </summary>
-		internal async Task<bool> ReadAsync()
+		internal async Task<bool> ReadAsync(DiskInfo info)
 		{
-			if ((AssociatedDisk == null) || !AssociatedDisk.CanBeSD)
-				return false;
+			if (info == null)
+				throw new ArgumentNullException("info");
 
-			if (!File.Exists(ConfigPath))
+			_associatedDisk = info;
+
+			var configPath = ComposeConfigPath();
+			if (!File.Exists(configPath))
 				return false;
 
 			try
 			{
-				using (var sr = new StreamReader(ConfigPath, Encoding.ASCII))
+				using (var sr = new StreamReader(configPath, Encoding.ASCII))
 				{
 					Import(await sr.ReadToEndAsync());
-				}
+				}				
 			}
 			catch (Exception ex)
 			{
@@ -578,11 +588,13 @@ namespace SnowyTool.ViewModels
 			{
 				var content = Export();
 
+				var configPath = ComposeConfigPath();
+
 				// Remove hidden attribute from the config file.
-				var fileInfo = new FileInfo(ConfigPath);
+				var fileInfo = new FileInfo(configPath);
 				fileInfo.Attributes &= ~FileAttributes.Hidden;
 
-				using (var sw = new StreamWriter(ConfigPath, false, Encoding.ASCII))
+				using (var sw = new StreamWriter(configPath, false, Encoding.ASCII))
 				{
 					await sw.WriteAsync(content);
 				}
@@ -596,6 +608,43 @@ namespace SnowyTool.ViewModels
 			{
 				Debug.WriteLine("Failed to write config file. {0}", ex);
 				throw;
+			}
+		}
+
+		#endregion
+
+
+		#region Helper
+
+		private string ComposeConfigPath()
+		{
+			return (AssociatedDisk != null)
+				? Path.Combine(AssociatedDisk.DriveLetters.First(), "SD_WLAN", "CONFIG")
+				: null;
+		}
+
+		private static bool IsBothNullOrEmptyOrEquals(string a, string b, StringComparison comparisonType = StringComparison.Ordinal)
+		{
+			return String.Equals(
+				a == String.Empty ? null : a,
+				b == String.Empty ? null : b,
+				comparisonType);
+		}
+
+		private static void ConformNullOrEmpty(ref string a, ref string b)
+		{
+			if (String.IsNullOrEmpty(a) && String.IsNullOrEmpty(b))
+			{
+				a = null;
+				b = null;
+			}
+			else
+			{
+				if (a == null)
+					a = String.Empty;
+
+				if (b == null)
+					b = String.Empty;
 			}
 		}
 
