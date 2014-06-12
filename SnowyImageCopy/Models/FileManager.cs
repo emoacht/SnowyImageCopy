@@ -61,7 +61,7 @@ namespace SnowyImageCopy.Models
 			{
 				using (var client = new HttpClient() { Timeout = timeoutLength })
 				{
-					return await GetFileListAllAsync(client, String.Empty, token, card);
+					return await GetFileListAllAsync(client, String.Empty, token, card).ConfigureAwait(false);
 				}
 			}
 			catch
@@ -146,7 +146,7 @@ namespace SnowyImageCopy.Models
 			{
 				using (var client = new HttpClient() { Timeout = timeoutLength })
 				{
-					var items = await DownloadStringAsync(client, remotePath, token, card);
+					var items = await DownloadStringAsync(client, remotePath, token, card).ConfigureAwait(false);
 
 					return items.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
 						.Select(item => new FileItemViewModel(item, remoteDirectoryPath))
@@ -179,7 +179,7 @@ namespace SnowyImageCopy.Models
 			{
 				using (var client = new HttpClient() { Timeout = timeoutLength })
 				{
-					var itemNum = await DownloadStringAsync(client, remotePath, token, card);
+					var itemNum = await DownloadStringAsync(client, remotePath, token, card).ConfigureAwait(false);
 
 					int num;
 					return int.TryParse(itemNum, out num) ? num : 0;
@@ -209,9 +209,9 @@ namespace SnowyImageCopy.Models
 			{
 				using (var client = new HttpClient() { Timeout = timeoutLength })
 				{
-					var bytes = await DownloadBytesAsync(client, remotePath, token, card);
+					var bytes = await DownloadBytesAsync(client, remotePath, token, card).ConfigureAwait(false);
 
-					return await ImageManager.ConvertBytesToBitmapImageAsync(bytes);
+					return await ImageManager.ConvertBytesToBitmapImageAsync(bytes).ConfigureAwait(false);
 				}
 			}
 			catch (RemoteFileNotFoundException)
@@ -251,11 +251,11 @@ namespace SnowyImageCopy.Models
 			{
 				using (var client = new HttpClient() { Timeout = timeoutLength })
 				{
-					var bytes = await DownloadBytesAsync(client, remotePath, size, progress, token, card);
+					var bytes = await DownloadBytesAsync(client, remotePath, size, progress, token, card).ConfigureAwait(false);
 
 					using (var fs = new FileStream(localFilePath, FileMode.Create, FileAccess.Write))
 					{
-						await fs.WriteAsync(bytes, 0, bytes.Length, token);
+						await fs.WriteAsync(bytes, 0, bytes.Length, token).ConfigureAwait(false);
 					}
 
 					// Conform date of copied file in local folder to that of original file in FlashAir card
@@ -295,7 +295,7 @@ namespace SnowyImageCopy.Models
 			{
 				using (var client = new HttpClient() { Timeout = timeoutLength })
 				{
-					var updatedStatus = await DownloadStringAsync(client, remotePath, CancellationToken.None, null);
+					var updatedStatus = await DownloadStringAsync(client, remotePath, CancellationToken.None, null).ConfigureAwait(false);
 
 					return (updatedStatus == "1"); // 1:If memory card has been updated, 0:If not
 				}
@@ -319,7 +319,7 @@ namespace SnowyImageCopy.Models
 			{
 				using (var client = new HttpClient() { Timeout = timeoutLength })
 				{
-					return await DownloadStringAsync(client, remotePath, token, null);
+					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 				}
 			}
 			catch
@@ -341,7 +341,7 @@ namespace SnowyImageCopy.Models
 			{
 				using (var client = new HttpClient() { Timeout = timeoutLength })
 				{
-					return await DownloadStringAsync(client, remotePath, token, null);
+					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 				}
 			}
 			catch

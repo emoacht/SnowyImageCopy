@@ -19,8 +19,10 @@ namespace SnowyImageCopy.Models
 	{
 		#region Constant
 
-		public const int ThumbnailWidth = 160; // Width of Exif thumbnail
-		public const int ThumbnailHeight = 120; // Height of Exif thumbnail
+		/// <summary>
+		/// Size of Exif thumbnail
+		/// </summary>
+		public static readonly Size ThumbnailSize = new Size(160D, 120D);
 
 		#endregion
 
@@ -105,7 +107,8 @@ namespace SnowyImageCopy.Models
 				using (var ms = new MemoryStream())
 				{
 					return await fs.CopyToAsync(ms)
-						.ContinueWith(_ => CreateThumbnailFromImageUniform(ms));
+						.ContinueWith(_ => CreateThumbnailFromImageUniform(ms))
+						.ConfigureAwait(false);
 				}
 			}
 			catch (Exception ex)
@@ -218,23 +221,23 @@ namespace SnowyImageCopy.Models
 			if (0 < stream.Position)
 				stream.Seek(0, SeekOrigin.Begin);
 
-			var image = ConvertStreamToBitmapImageUniform(stream, new Size(ThumbnailWidth, ThumbnailHeight));
+			var image = ConvertStreamToBitmapImageUniform(stream, ThumbnailSize);
 
 			var dv = new DrawingVisual();
 			using (var dc = dv.RenderOpen())
 			{
-				dc.DrawRectangle(Brushes.Black, null, new Rect(new Size(ThumbnailWidth, ThumbnailHeight)));
+				dc.DrawRectangle(Brushes.Black, null, new Rect(ThumbnailSize));
 				dc.DrawImage(
 					image,
 					new Rect(
-						(ThumbnailWidth - image.Width) / 2,
-						(ThumbnailHeight - image.Height) / 2,
+						(ThumbnailSize.Width - image.Width) / 2,
+						(ThumbnailSize.Height - image.Height) / 2,
 						image.Width,
 						image.Height));
 			}
 
 			var rtb = new RenderTargetBitmap(
-				ThumbnailWidth, ThumbnailHeight,
+				(int)ThumbnailSize.Width, (int)ThumbnailSize.Height,
 				96, 96,
 				PixelFormats.Pbgra32);
 
@@ -260,7 +263,7 @@ namespace SnowyImageCopy.Models
 				stream.Seek(0, SeekOrigin.Begin);
 
 			var bitmapSource = (BitmapSource)BitmapFrame.Create(stream);
-			CropBitmapSource(ref bitmapSource, new Size(ThumbnailWidth, ThumbnailHeight));
+			CropBitmapSource(ref bitmapSource, ThumbnailSize);
 
 			using (var ms = new MemoryStream())
 			{
@@ -268,7 +271,7 @@ namespace SnowyImageCopy.Models
 				encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
 				encoder.Save(ms);
 
-				return ConvertStreamToBitmapImage(ms, ThumbnailWidth, ThumbnailHeight);
+				return ConvertStreamToBitmapImage(ms, ThumbnailSize);
 			}
 		}
 
@@ -370,7 +373,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="bytes">Source byte array</param>
 		internal static async Task<BitmapImage> ConvertBytesToBitmapImageAsync(byte[] bytes)
 		{
-			return await ConvertBytesToBitmapImageAsync(bytes, 0D, 0D, false);
+			return await ConvertBytesToBitmapImageAsync(bytes, 0D, 0D, false).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -380,7 +383,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="targetWidth">Target width</param>
 		internal static async Task<BitmapImage> ConvertBytesToBitmapImageAsync(byte[] bytes, double targetWidth)
 		{
-			return await ConvertBytesToBitmapImageAsync(bytes, targetWidth, 0D, false);
+			return await ConvertBytesToBitmapImageAsync(bytes, targetWidth, 0D, false).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -391,7 +394,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="willReadExif">Whether Exif metadata will be read from byte array</param>
 		internal static async Task<BitmapImage> ConvertBytesToBitmapImageAsync(byte[] bytes, double targetWidth, bool willReadExif)
 		{
-			return await ConvertBytesToBitmapImageAsync(bytes, targetWidth, 0D, willReadExif);
+			return await ConvertBytesToBitmapImageAsync(bytes, targetWidth, 0D, willReadExif).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -416,7 +419,7 @@ namespace SnowyImageCopy.Models
 					if (willReadExif)
 						await Task.Run(() => ReflectOrientationToStream(ms));
 
-					return await Task.Run(() => ConvertStreamToBitmapImage(ms, targetWidth, targetHeight));
+					return await Task.Run(() => ConvertStreamToBitmapImage(ms, new Size(targetWidth, targetHeight)));
 				}
 			}
 			catch (Exception ex)
@@ -685,7 +688,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="stream">Source stream</param>
 		private static BitmapImage ConvertStreamToBitmapImage(Stream stream)
 		{
-			return ConvertStreamToBitmapImage(stream, 0D, 0D);
+			return ConvertStreamToBitmapImage(stream, Size.Empty);
 		}
 
 		/// <summary>
@@ -694,7 +697,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="stream">Source stream</param>
 		/// <param name="targetWidth">Target width</param>
 		/// <param name="targetHeight">Target height</param>
-		private static BitmapImage ConvertStreamToBitmapImage(Stream stream, double targetWidth, double targetHeight)
+		private static BitmapImage ConvertStreamToBitmapImage(Stream stream, Size targetSize)
 		{
 			if (0 < stream.Position)
 				stream.Seek(0, SeekOrigin.Begin);
@@ -705,10 +708,10 @@ namespace SnowyImageCopy.Models
 			image.StreamSource = stream;
 
 			// When either width or height is not specified, the original aspect ratio will be preserved.
-			if (0 < targetWidth)
-				image.DecodePixelWidth = (int)targetWidth;
-			if (0 < targetHeight)
-				image.DecodePixelHeight = (int)targetHeight;
+			if (0 < targetSize.Width)
+				image.DecodePixelWidth = (int)targetSize.Width;
+			if (0 < targetSize.Height)
+				image.DecodePixelHeight = (int)targetSize.Height;
 
 			image.EndInit();
 			image.Freeze(); // This is necessary for other thread to use the image.
@@ -733,7 +736,7 @@ namespace SnowyImageCopy.Models
 				targetSize = GetSizeUniform(bitmapFrame.Width, bitmapFrame.Height, outerSize);
 			}
 
-			return ConvertStreamToBitmapImage(stream, targetSize.Width, targetSize.Height);
+			return ConvertStreamToBitmapImage(stream, targetSize);
 		}
 
 		/// <summary>

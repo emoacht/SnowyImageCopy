@@ -63,7 +63,7 @@
 							 HorizontalAlignment="Stretch"
 							 Margin="0,4,0,4" Padding="2"
 							 VerticalContentAlignment="Center"
-							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay}"
+							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 							 IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 						<Button	Margin="0,0,4,0"

@@ -10,18 +10,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using PerMonitorDpi.Views;
+
 namespace SnowyTool.Views
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow : PerMonitorDpiWindow
 	{
 		public MainWindow()
 		{
 			this.InitializeComponent();
-
-			// Insert code required on object creation below this point.
 		}
 	}
 }

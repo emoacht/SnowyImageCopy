@@ -213,14 +213,14 @@ namespace SnowyImageCopy.Models
 			get { return _currentImageWidth; }
 			set
 			{
-				if (value < ImageManager.ThumbnailWidth)
+				if (value < ImageManager.ThumbnailSize.Width)
 					return;
 
 				_currentImageWidth = value;
 				RaisePropertyChanged();
 			}
 		}
-		private double _currentImageWidth = ImageManager.ThumbnailWidth;
+		private double _currentImageWidth = ImageManager.ThumbnailSize.Width;
 
 		#endregion
 
