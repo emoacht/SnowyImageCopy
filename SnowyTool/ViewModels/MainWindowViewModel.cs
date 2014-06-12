@@ -184,7 +184,7 @@ namespace SnowyTool.ViewModels
 			InitializeTask = InitializeAsync();
 		}
 
-		public Task InitializeTask { get; private set; }
+		private Task InitializeTask { get; set; }
 
 		private async Task InitializeAsync()
 		{

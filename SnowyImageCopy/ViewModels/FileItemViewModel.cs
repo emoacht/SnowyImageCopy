@@ -361,7 +361,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			//Debug.WriteLine("Resources property changed: {0} {1}", sender, e.PropertyName);
 
-			RaisePropertyChanged("Status");
+			RaisePropertyChanged(() => Status);
 		}
 
 		#endregion

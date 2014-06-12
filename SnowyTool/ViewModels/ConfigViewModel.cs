@@ -412,7 +412,7 @@ namespace SnowyTool.ViewModels
 
 
 		#region Import/Export
-				
+
 		private const Char separator = '=';
 		private bool isImporting = false;
 

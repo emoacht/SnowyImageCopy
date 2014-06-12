@@ -8,6 +8,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+using SnowyImageCopy.Helper;
+
 namespace SnowyImageCopy.ViewModels
 {
 	public class FileItemViewModelCollection : ObservableCollection<FileItemViewModel>
@@ -73,10 +75,27 @@ namespace SnowyImageCopy.ViewModels
 			ItemPropertyChangedSender = sender as FileItemViewModel;
 			ItemPropertyChangedEventArgs = e;
 
-			base.OnPropertyChanged(new PropertyChangedEventArgs("ItemPropertyChangedSender"));
-		}		
+			base.OnPropertyChanged(new PropertyChangedEventArgs(nameItemPropertyChangedSender));
+		}
 
+		private string nameItemPropertyChangedSender
+		{
+			get
+			{
+				return _nameItemPropertyChangedSender ?? (_nameItemPropertyChangedSender =
+					PropertySupport.GetPropertyName(() => ItemPropertyChangedSender));
+			}
+		}
+		private string _nameItemPropertyChangedSender;
+
+		/// <summary>
+		/// Item which fired a PropertyChanged event
+		/// </summary>
 		public FileItemViewModel ItemPropertyChangedSender { get; private set; }
+
+		/// <summary>
+		/// PropertyChangedEventArgs of the PropertyChanged event
+		/// </summary>
 		public PropertyChangedEventArgs ItemPropertyChangedEventArgs { get; private set; }
 
 		#endregion
