@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SnowyImageCopy.Models.Exceptions
 {
 	/// <summary>
-	/// Exception when remote file in FlashAir card is not found.
+	/// Exception when remote file in FlashAir card is not found
 	/// </summary>
 	[Serializable]
 	internal class RemoteFileNotFoundException : Exception

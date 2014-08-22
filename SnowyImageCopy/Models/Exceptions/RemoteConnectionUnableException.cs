@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SnowyImageCopy.Models.Exceptions
 {
 	/// <summary>
-	/// Exception when unable to connect to FlashAir card.
+	/// Exception when unable to connect to FlashAir card
 	/// </summary>
 	[Serializable]
 	internal class RemoteConnectionUnableException : Exception

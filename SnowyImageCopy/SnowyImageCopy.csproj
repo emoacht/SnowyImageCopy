@@ -104,6 +104,7 @@
     <Compile Include="Helper\ShellLink.cs" />
     <Compile Include="Helper\Shortcut.cs" />
     <Compile Include="Models\CardInfo.cs" />
+    <Compile Include="Models\Exceptions\NotEncounteredException.cs" />
     <Compile Include="Models\Exceptions\RemoteConnectionLostException.cs" />
     <Compile Include="Models\Network\NetworkChecker.cs" />
     <Compile Include="Models\Toast\ToastManager.cs" />
@@ -254,7 +255,9 @@
     </Compile>
     <AppDesigner Include="Properties\" />
     <None Include="app.config" />
-    <None Include="Properties\app.manifest" />
+    <None Include="Properties\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Application.ico">
       <Visible>false</Visible>
     </None>

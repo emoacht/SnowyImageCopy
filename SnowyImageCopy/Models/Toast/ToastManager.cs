@@ -32,10 +32,10 @@ namespace SnowyImageCopy.Models.Toast
 		private readonly string appId;
 
 		/// <summary>
-		/// Waiting time before showing a toast after the shortcut file is newly installed.
+		/// Waiting time length before showing a toast after the shortcut file is newly installed.
 		/// </summary>
 		/// <remarks>As far as I observed, roughly 3 seconds are required.</remarks>
-		private readonly TimeSpan waitTime = TimeSpan.FromSeconds(3);
+		private readonly TimeSpan waitingLength = TimeSpan.FromSeconds(3);
 
 		#endregion
 
@@ -82,7 +82,7 @@ namespace SnowyImageCopy.Models.Toast
 				{
 					s.InstallShortcut(shortcutPath, targetPath, String.Empty, appId, targetPath);
 
-					await Task.Delay(waitTime);
+					await Task.Delay(waitingLength);
 				}
 
 				return await ShowBaseAsync(headline, body1st, body2nd);

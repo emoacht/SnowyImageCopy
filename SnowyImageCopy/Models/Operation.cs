@@ -190,37 +190,53 @@ namespace SnowyImageCopy.Models
 
 			autoTimer.Stop();
 
-			var isConnected = await NetworkChecker.IsNetworkConnectedAsync(card);
-			var isUpdated = false;
+			bool? isUpdated = null;
 
-			if (isConnected)
+			try
 			{
-				try
+				if (await NetworkChecker.IsNetworkConnectedAsync(card))
 				{
 					isUpdated = await CheckUpdateStatusAsync();
 				}
-				catch (RemoteConnectionUnableException)
+				else
 				{
-					isConnected = false;
+					OperationStatus = Resources.OperationStatus_ConnectionUnable;
 				}
-				catch (Exception ex)
+			}
+			catch (Exception ex)
+			{
+				SystemSounds.Hand.Play();
+
+				if (ex.GetType() == typeof(RemoteConnectionUnableException))
+				{
+					OperationStatus = Resources.OperationStatus_ConnectionUnable;
+				}
+				else if (ex.GetType() == typeof(RemoteConnectionLostException))
+				{
+					OperationStatus = Resources.OperationStatus_ConnectionLost;
+				}
+				else if (ex.GetType() == typeof(TimeoutException))
+				{
+					OperationStatus = Resources.OperationStatus_TimedOut;
+				}
+				else
 				{
 					OperationStatus = Resources.OperationStatus_Error;
 					Debug.WriteLine("Failed to check update status. {0}", ex);
-					throw;
+					throw new NotEncounteredException("Failed to check update status.", ex);
 				}
 			}
 
-			if (isConnected)
+			if (isUpdated.HasValue)
 			{
-				if (isUpdated || (LastCheckTime.Add(checkThresholdTime) < DateTime.Now))
+				if (isUpdated.Value || (LastCheckTime.Add(checkThresholdLength) < DateTime.Now))
 				{
 					await CheckCopyFileAsync();
 				}
 			}
 			else
 			{
-				OperationStatus = Resources.OperationStatus_ConnectionUnable;
+				await Task.Delay(statusShownLength);
 			}
 
 			if (IsAutoRunning)
@@ -242,12 +258,14 @@ namespace SnowyImageCopy.Models
 		private bool isTokenSourceLoadingDisposed;
 
 		private DateTime LastCheckTime { get; set; }
-		private readonly TimeSpan checkThresholdTime = TimeSpan.FromMinutes(10);
+		private readonly TimeSpan checkThresholdLength = TimeSpan.FromMinutes(10);
 
 		internal DateTime CopyStartTime { get; private set; }
 		private int fileCopiedSum;
 
-		private readonly TimeSpan toastThresholdTime = TimeSpan.FromSeconds(30);
+		private readonly TimeSpan toastThresholdLength = TimeSpan.FromSeconds(30);
+
+		private readonly TimeSpan statusShownLength = TimeSpan.FromSeconds(3);
 
 
 		#region Method (Public or Internal)
@@ -310,7 +328,7 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_Error;
 					Debug.WriteLine("Failed to check & copy files. {0}", ex);
-					throw;
+					throw new NotEncounteredException("Failed to check & copy files.", ex);
 				}
 			}
 			finally
@@ -363,7 +381,7 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_Error;
 					Debug.WriteLine("Failed to check files. {0}", ex);
-					throw;
+					throw new NotEncounteredException("Failed to check files.", ex);
 				}
 			}
 			finally
@@ -422,7 +440,7 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_Error;
 					Debug.WriteLine("Failed to copy files. {0}", ex);
-					throw;
+					throw new NotEncounteredException("Failed to copy files.", ex);
 				}
 			}
 			finally
@@ -440,7 +458,7 @@ namespace SnowyImageCopy.Models
 		{
 			StopAutoTimer();
 
-			if (isTokenSourceWorkingDisposed || tokenSourceWorking.IsCancellationRequested)
+			if (isTokenSourceWorkingDisposed || (tokenSourceWorking == null) || tokenSourceWorking.IsCancellationRequested)
 				return;
 
 			try
@@ -473,7 +491,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="item">Target item</param>
 		internal async Task LoadSetFileAsync(FileItemViewModel item)
 		{
-			if (!isTokenSourceLoadingDisposed && !tokenSourceLoading.IsCancellationRequested)
+			if (!isTokenSourceLoadingDisposed && (tokenSourceLoading != null) && !tokenSourceLoading.IsCancellationRequested)
 			{
 				try
 				{
@@ -482,7 +500,6 @@ namespace SnowyImageCopy.Models
 				catch (ObjectDisposedException ode)
 				{
 					Debug.WriteLine("CancellationTokenSource has been disposed when tried to cancel operation. {0}", ode);
-					throw;
 				}
 			}
 
@@ -497,7 +514,7 @@ namespace SnowyImageCopy.Models
 			catch (Exception ex)
 			{
 				Debug.WriteLine("Failed to load image data from local file. {0}", ex);
-				throw;
+				throw new NotEncounteredException("Failed to load image data from local file.", ex);
 			}
 		}
 
@@ -806,7 +823,7 @@ namespace SnowyImageCopy.Models
 			if (!OsVersion.IsEightOrNewer)
 				return;
 
-			if ((fileCopiedSum <= 0) || (DateTime.Now - CopyStartTime < toastThresholdTime))
+			if ((fileCopiedSum <= 0) || (DateTime.Now - CopyStartTime < toastThresholdLength))
 				return;
 
 			var t = new ToastManager();
