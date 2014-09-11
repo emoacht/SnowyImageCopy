@@ -18,6 +18,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
+Ver 0.9.5 2014-09-12
+
+ - Fixed bugs in auto check
+
 Ver 0.9.4 2014-06-12
 
  - Changed paths in Options pane to be instantly reflected
