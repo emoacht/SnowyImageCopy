@@ -105,7 +105,7 @@ namespace SnowyImageCopy.Views.Controls
 					{
 						var num = (double)baseValue;
 						if ((num < 0D) || (100D < num))
-							throw new ArgumentOutOfRangeException("Percentage");
+							throw new ArgumentOutOfRangeException("Percentage", String.Format("Value: {0}", num));
 
 						return num;
 					}));

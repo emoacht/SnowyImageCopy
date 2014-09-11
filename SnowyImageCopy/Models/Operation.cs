@@ -110,7 +110,7 @@ namespace SnowyImageCopy.Models
 		private bool _isCopying;
 
 		/// <summary>
-		/// Running timer for auto check.
+		/// Running timer for auto check
 		/// </summary>
 		internal bool IsAutoRunning
 		{
@@ -190,54 +190,24 @@ namespace SnowyImageCopy.Models
 
 			autoTimer.Stop();
 
-			bool? isUpdated = null;
+			bool? isUpdated = await CheckUpdateStatusAsync();
 
-			try
-			{
-				if (await NetworkChecker.IsNetworkConnectedAsync(card))
-				{
-					isUpdated = await CheckUpdateStatusAsync();
-				}
-				else
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionUnable;
-				}
-			}
-			catch (Exception ex)
-			{
-				SystemSounds.Hand.Play();
-
-				if (ex.GetType() == typeof(RemoteConnectionUnableException))
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionUnable;
-				}
-				else if (ex.GetType() == typeof(RemoteConnectionLostException))
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionLost;
-				}
-				else if (ex.GetType() == typeof(TimeoutException))
-				{
-					OperationStatus = Resources.OperationStatus_TimedOut;
-				}
-				else
-				{
-					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine("Failed to check update status. {0}", ex);
-					throw new NotEncounteredException("Failed to check update status.", ex);
-				}
-			}
+			bool hasCompleted = false;
 
 			if (isUpdated.HasValue)
 			{
-				if (isUpdated.Value || (LastCheckTime.Add(checkThresholdLength) < DateTime.Now))
+				if (isUpdated.Value || (LastCheckCopyTime.Add(checkCopyIntervalLength) < DateTime.Now))
 				{
-					await CheckCopyFileAsync();
+					hasCompleted = await CheckCopyFileAsync();
+				}
+				else
+				{
+					hasCompleted = true;
 				}
 			}
-			else
-			{
+
+			if (!hasCompleted)
 				await Task.Delay(statusShownLength);
-			}
 
 			if (IsAutoRunning)
 			{
@@ -256,9 +226,9 @@ namespace SnowyImageCopy.Models
 
 		private CancellationTokenSource tokenSourceLoading;
 		private bool isTokenSourceLoadingDisposed;
-
-		private DateTime LastCheckTime { get; set; }
-		private readonly TimeSpan checkThresholdLength = TimeSpan.FromMinutes(10);
+		
+		private DateTime LastCheckCopyTime { get; set; }
+		private readonly TimeSpan checkCopyIntervalLength = TimeSpan.FromMinutes(10);
 
 		internal DateTime CopyStartTime { get; private set; }
 		private int fileCopiedSum;
@@ -273,11 +243,13 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Check & Copy files in FlashAir card.
 		/// </summary>
-		/// <remarks>This method is called by Command.</remarks>
-		public async Task CheckCopyFileAsync()
+		/// <remarks>This method is called by Command or timer.</remarks>
+		public async Task<bool> CheckCopyFileAsync()
 		{
 			if (!IsReady())
-				return;				
+				return false;
+
+			bool hasCompleted = false;
 
 			try
 			{
@@ -288,16 +260,20 @@ namespace SnowyImageCopy.Models
 
 				OperationProgress = null;
 
-				SelectFileBase();
-
-				OperationProgress = null;
+				LastCheckCopyTime = CheckFileToBeCopied(true)
+					? DateTime.MinValue
+					: DateTime.Now;
 
 				await CopyFileBaseAsync(new Progress<ProgressInfo>(x => OperationProgress = x));
+
+				LastCheckCopyTime = DateTime.Now;
 
 				IsChecking = false;
 				IsCopying = false;
 
-				await ShowToast();
+				await ShowToastAsync();
+
+				hasCompleted = true;
 			}
 			catch (OperationCanceledException)
 			{
@@ -328,7 +304,7 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_Error;
 					Debug.WriteLine("Failed to check & copy files. {0}", ex);
-					throw new NotEncounteredException("Failed to check & copy files.", ex);
+					throw new UnexpectedException("Failed to check & copy files.", ex);
 				}
 			}
 			finally
@@ -337,6 +313,8 @@ namespace SnowyImageCopy.Models
 				IsChecking = false;
 				IsCopying = false;
 			}
+
+			return hasCompleted;
 		}
 
 		/// <summary>
@@ -355,6 +333,10 @@ namespace SnowyImageCopy.Models
 				await CheckFileBaseAsync();
 
 				OperationProgress = null;
+
+				LastCheckCopyTime = CheckFileToBeCopied(false)
+					? DateTime.MinValue
+					: DateTime.Now;
 			}
 			catch (OperationCanceledException)
 			{
@@ -381,7 +363,7 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_Error;
 					Debug.WriteLine("Failed to check files. {0}", ex);
-					throw new NotEncounteredException("Failed to check files.", ex);
+					throw new UnexpectedException("Failed to check files.", ex);
 				}
 			}
 			finally
@@ -409,7 +391,7 @@ namespace SnowyImageCopy.Models
 
 				IsCopying = false;
 
-				await ShowToast();
+				await ShowToastAsync();
 			}
 			catch (OperationCanceledException)
 			{
@@ -440,7 +422,7 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_Error;
 					Debug.WriteLine("Failed to copy files. {0}", ex);
-					throw new NotEncounteredException("Failed to copy files.", ex);
+					throw new UnexpectedException("Failed to copy files.", ex);
 				}
 			}
 			finally
@@ -472,20 +454,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check update status of FlashAir card.
-		/// </summary>
-		internal async Task<bool> CheckUpdateStatusAsync()
-		{
-			OperationStatus = Resources.OperationStatus_Checking;
-
-			var isUpdated = await FileManager.CheckUpdateStatusAsync();
-
-			OperationStatus = Resources.OperationStatus_Completed;
-
-			return isUpdated;
-		}
-
-		/// <summary>
 		/// Load image data from local file of a specified item and set it to current image data.
 		/// </summary>
 		/// <param name="item">Target item</param>
@@ -514,7 +482,7 @@ namespace SnowyImageCopy.Models
 			catch (Exception ex)
 			{
 				Debug.WriteLine("Failed to load image data from local file. {0}", ex);
-				throw new NotEncounteredException("Failed to load image data from local file.", ex);
+				throw new UnexpectedException("Failed to load image data from local file.", ex);
 			}
 		}
 
@@ -522,6 +490,58 @@ namespace SnowyImageCopy.Models
 
 
 		#region Method (Private)
+
+		/// <summary>
+		/// Check update status of FlashAir card.
+		/// </summary>
+		/// <returns>True if updated</returns>
+		private async Task<bool?> CheckUpdateStatusAsync()
+		{
+			bool? isUpdated = null;
+
+			try
+			{
+				if (await NetworkChecker.IsNetworkConnectedAsync(card))
+				{
+					OperationStatus = Resources.OperationStatus_Checking;
+
+					isUpdated = await FileManager.CheckUpdateStatusAsync();
+
+					OperationStatus = Resources.OperationStatus_Completed;
+				}
+				else
+				{
+					isUpdated = false;
+
+					OperationStatus = Resources.OperationStatus_ConnectionUnable;
+				}
+			}
+			catch (Exception ex)
+			{
+				SystemSounds.Hand.Play();
+
+				if (ex.GetType() == typeof(RemoteConnectionUnableException))
+				{
+					OperationStatus = Resources.OperationStatus_ConnectionUnable;
+				}
+				else if (ex.GetType() == typeof(RemoteConnectionLostException))
+				{
+					OperationStatus = Resources.OperationStatus_ConnectionLost;
+				}
+				else if (ex.GetType() == typeof(TimeoutException))
+				{
+					OperationStatus = Resources.OperationStatus_TimedOut;
+				}
+				else
+				{
+					OperationStatus = Resources.OperationStatus_Error;
+					Debug.WriteLine("Failed to check update status. {0}", ex);
+					throw new UnexpectedException("Failed to check update status.", ex);
+				}
+			}
+
+			return isUpdated;
+		}
 
 		/// <summary>
 		/// Check if ready for operation.
@@ -691,7 +711,6 @@ namespace SnowyImageCopy.Models
 				}
 
 				OperationStatus = Resources.OperationStatus_CheckCompleted;
-				LastCheckTime = DateTime.Now;
 			}
 			finally
 			{
@@ -706,15 +725,29 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Select files to be copied from FlashAir card.
+		/// Check files to be copied from FlashAir card.
 		/// </summary>
-		private void SelectFileBase()
+		/// <param name="changesToBeCopied">Change file status if a file meets conditions for being copied</param>
+		/// <returns>
+		/// True: Any file to be copied is contained.
+		/// False: No file to be copied is contained. 
+		/// </returns>
+		private bool CheckFileToBeCopied(bool changesToBeCopied)
 		{
+			bool containsToBeCopied = false;
+
 			foreach (var item in FileListCore)
 			{
 				if (item.IsTarget && item.IsRemoteAlive && (item.Status == FileStatus.NotCopied))
-					item.Status = FileStatus.ToBeCopied;
+				{
+					containsToBeCopied = true;
+
+					if (changesToBeCopied)
+						item.Status = FileStatus.ToBeCopied;
+				}
 			}
+
+			return containsToBeCopied;
 		}
 
 		/// <summary>
@@ -753,7 +786,7 @@ namespace SnowyImageCopy.Models
 
 					var item = FileListCore.FirstOrDefault(x => x.Status == FileStatus.ToBeCopied);
 					if (item == null)
-						break; // Completed copying.
+						break; // Copy completed.
 
 					try
 					{
@@ -818,7 +851,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Show a toast to notify copy completed.
 		/// </summary>
-		private async Task ShowToast()
+		private async Task ShowToastAsync()
 		{
 			if (!OsVersion.IsEightOrNewer)
 				return;

@@ -53,7 +53,9 @@ namespace SnowyImageCopy.Models.Network
 
 			var ssids = await GetConnectedSsidAsync();
 
+#if (DEBUG)
 			ssids.ToList().ForEach(x => Debug.WriteLine(String.Format("Found SSID: {0}", x)));
+#endif
 
 			return ssids.Any(x => x.Equals(ssid, StringComparison.Ordinal));
 		}
@@ -118,7 +120,7 @@ namespace SnowyImageCopy.Models.Network
 		}
 
 		/// <summary>
-		/// Get currently connected SSIDs using Netsh
+		/// Get currently connected SSIDs using Netsh.
 		/// </summary>
 		/// <returns>SSIDs</returns>
 		private async static Task<string[]> GetConnectedSsidAsync()

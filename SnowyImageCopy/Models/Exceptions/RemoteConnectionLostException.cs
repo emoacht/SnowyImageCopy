@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SnowyImageCopy.Models.Exceptions
 {
 	/// <summary>
-	/// Exception when lost connection to FlashAir card
+	/// Exception when PC lost connection to FlashAir card
 	/// </summary>
 	[Serializable]
 	internal class RemoteConnectionLostException : Exception

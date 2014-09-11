@@ -528,7 +528,11 @@ namespace SnowyImageCopy.ViewModels
 				)
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
-				.Subscribe(_ => FileListCoreView.Refresh());
+				.Subscribe(_ =>
+					{
+						Op.Stop();
+						FileListCoreView.Refresh();
+					});
 		}
 
 		private FileItemViewModel GetSampleFileData(int fileNumber)

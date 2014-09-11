@@ -124,8 +124,7 @@
 							x:Name="DateCalendar"
 							HorizontalAlignment="Left" VerticalAlignment="Stretch"
 							SelectionMode="MultipleRange" IsTodayHighlighted="False"
-							DisplayDateEnd="{Binding Source={x:Static sys:DateTime.Today}, Mode=OneWay}"
-							IsEnabled="{Binding SettingsCurrent.TargetPeriod, Converter={StaticResource EnumToBooleanConverterKey}, ConverterParameter=Select, Mode=OneWay}">
+							DisplayDateEnd="{Binding Source={x:Static sys:DateTime.Today}, Mode=OneWay}">
 							<Calendar.RenderTransform>
 								<TransformGroup>
 									<ScaleTransform ScaleX="1.3" ScaleY="1.3" CenterX="0" CenterY="0"/>
