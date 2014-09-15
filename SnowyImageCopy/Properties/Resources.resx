@@ -181,6 +181,12 @@
   <data name="OperationStatus_Copying" xml:space="preserve">
     <value>Copying from FlashAir.</value>
   </data>
+  <data name="OperationStatus_DeleteDisabled" xml:space="preserve">
+    <value>Delete in FlashAir (upload.cgi) is disabled.</value>
+  </data>
+  <data name="OperationStatus_DeleteFailed" xml:space="preserve">
+    <value>Failed to delete image in FlashAir.</value>
+  </data>
   <data name="OperationStatus_Error" xml:space="preserve">
     <value>An error happened.</value>
   </data>
@@ -232,6 +238,12 @@
   <data name="Options_DateToday" xml:space="preserve">
     <value>Today</value>
   </data>
+  <data name="Options_DeleteUponCopy" xml:space="preserve">
+    <value>Delete Upon Copy</value>
+  </data>
+  <data name="Options_ExtensionLowerCase" xml:space="preserve">
+    <value>Make file extension lowercase</value>
+  </data>
   <data name="Options_File" xml:space="preserve">
     <value>File</value>
   </data>
@@ -250,17 +262,17 @@
   <data name="Options_LocalFolderExplanation" xml:space="preserve">
     <value>Specify a folder to copy images.</value>
   </data>
-  <data name="Options_LowerCase" xml:space="preserve">
-    <value>Make file extension lowercase</value>
-  </data>
   <data name="Options_OpenByExplorer" xml:space="preserve">
     <value>Open by Explorer</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Path</value>
   </data>
+  <data name="Options_PossibleDeleteUponCopy" xml:space="preserve">
+    <value>Make possible to delete image in FlashAir upon copy</value>
+  </data>
   <data name="Options_Recycle" xml:space="preserve">
-    <value>Move to Recycle if deleted from FlashAir</value>
+    <value>Move to Recycle if image in FlashAir is deleted</value>
   </data>
   <data name="Options_RemoteRoot" xml:space="preserve">
     <value>FlashAir Address (Copy Source)</value>

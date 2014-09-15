@@ -63,6 +63,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Views\ProductInfo.cs" />
+    <Page Include="..\SnowyImageCopy\Views\Styles\Controls.xaml">
+      <Link>Views\Styles\Controls.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\SnowyImageCopy\Views\Styles\CustomTheme.xaml">
+      <Link>Views\Styles\CustomTheme.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\SnowyImageCopy\Views\Styles\DefaultTheme.xaml">
+      <Link>Views\Styles\DefaultTheme.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -75,15 +91,17 @@
     <Compile Include="Common\NotificationObject.cs" />
     <Compile Include="Helper\OsVersion.cs" />
     <Compile Include="Helper\TextParse.cs" />
-    <Compile Include="Models\DiskFinder.cs" />
+    <Compile Include="Models\DiskSearcher.cs" />
     <Compile Include="Models\DiskInfo.cs" />
-    <Compile Include="Models\NetworkModeOption.cs" />
-    <Compile Include="Models\StartupModeOption.cs" />
+    <Compile Include="Models\LanModeOption.cs" />
+    <Compile Include="Models\LanStartupModeOption.cs" />
     <Compile Include="ViewModels\ConfigViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
+    <Compile Include="Views\Controls\FadingTextBox.cs" />
     <Compile Include="Views\Converters\BooleanInverseToBrushConverter.cs" />
     <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="Views\Converters\NullableBooleanToBooleanConverter.cs" />
     <Compile Include="Views\Converters\SextupleDigitConverter.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -101,7 +119,6 @@
       <Visible>false</Visible>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.

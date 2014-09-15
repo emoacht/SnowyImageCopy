@@ -177,6 +177,12 @@
   <data name="OperationStatus_Copying" xml:space="preserve">
     <value>FlashAirからコピーしています。</value>
   </data>
+  <data name="OperationStatus_DeleteDisabled" xml:space="preserve">
+    <value>FlashAir内の削除 (upload.cgi) が無効です。</value>
+  </data>
+  <data name="OperationStatus_DeleteFailed" xml:space="preserve">
+    <value>FlashAir内のイメージの削除に失敗しました。</value>
+  </data>
   <data name="OperationStatus_Error" xml:space="preserve">
     <value>エラーが発生しました。</value>
   </data>
@@ -228,6 +234,12 @@
   <data name="Options_DateToday" xml:space="preserve">
     <value>今日</value>
   </data>
+  <data name="Options_DeleteUponCopy" xml:space="preserve">
+    <value>コピー後に削除</value>
+  </data>
+  <data name="Options_ExtensionLowerCase" xml:space="preserve">
+    <value>ファイル拡張子を小文字にする</value>
+  </data>
   <data name="Options_File" xml:space="preserve">
     <value>ファイル</value>
   </data>
@@ -246,17 +258,17 @@
   <data name="Options_LocalFolderExplanation" xml:space="preserve">
     <value>イメージをコピーするフォルダーを指定してください。</value>
   </data>
-  <data name="Options_LowerCase" xml:space="preserve">
-    <value>ファイル拡張子を小文字にする</value>
-  </data>
   <data name="Options_OpenByExplorer" xml:space="preserve">
     <value>エクスプローラーで開く</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>パス</value>
   </data>
+  <data name="Options_PossibleDeleteUponCopy" xml:space="preserve">
+    <value>コピー後にFlashAir内のイメージの削除を可能にする</value>
+  </data>
   <data name="Options_Recycle" xml:space="preserve">
-    <value>FlashAirから削除されたらごみ箱に移動する</value>
+    <value>FlashAir内のイメージが削除されたらごみ箱に移動する</value>
   </data>
   <data name="Options_RemoteRoot" xml:space="preserve">
     <value>FlashAirアドレス (コピー元)</value>

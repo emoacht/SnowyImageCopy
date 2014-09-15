@@ -106,9 +106,11 @@ namespace SnowyImageCopy.Models
 				TargetPeriod = FilePeriod.All,
 				IsCurrentImageVisible = false,
 				InstantCopy = true,
-				AutoCheckInterval = 30,
-				WillMoveFileToRecycle = false,
-				WillMakeFileExtensionLowerCase = true,
+				DeleteUponCopy = false,
+				AutoCheckInterval = 30,				
+				MakesFileExtensionLowerCase = true,
+				MovesFileToRecycle = false,
+				MakesPossibleDeleteUponCopy = false,
 			};
 		}
 
@@ -225,7 +227,7 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 
-		#region Instant copy
+		#region Dashboard
 
 		public bool InstantCopy
 		{
@@ -240,6 +242,26 @@ namespace SnowyImageCopy.Models
 			}
 		}
 		private bool _instantCopy;
+
+		public bool DeleteUponCopy
+		{
+			get
+			{
+				if (!MakesPossibleDeleteUponCopy)
+					_deleteUponCopy = false;
+
+				return _deleteUponCopy;
+			}
+			set
+			{
+				if (_deleteUponCopy == value)
+					return;
+
+				_deleteUponCopy = value;
+				RaisePropertyChanged();
+			}
+		}
+		private bool _deleteUponCopy;
 
 		#endregion
 
@@ -265,33 +287,50 @@ namespace SnowyImageCopy.Models
 
 		#region File
 
-		public bool WillMoveFileToRecycle
+		public bool MakesFileExtensionLowerCase
 		{
-			get { return _willMoveFileToRecycle; }
+			get { return _makesFileExtensionLowerCase; }
 			set
 			{
-				if (_willMoveFileToRecycle == value)
+				if (_makesFileExtensionLowerCase == value)
 					return;
 
-				_willMoveFileToRecycle = value;
+				_makesFileExtensionLowerCase = value;
 				RaisePropertyChanged();
 			}
 		}
-		private bool _willMoveFileToRecycle;
+		private bool _makesFileExtensionLowerCase;
 
-		public bool WillMakeFileExtensionLowerCase
+		public bool MovesFileToRecycle
 		{
-			get { return _willMakeFileExtensionLowerCase; }
+			get { return _movesFileToRecycle; }
 			set
 			{
-				if (_willMakeFileExtensionLowerCase == value)
+				if (_movesFileToRecycle == value)
 					return;
 
-				_willMakeFileExtensionLowerCase = value;
+				_movesFileToRecycle = value;
 				RaisePropertyChanged();
 			}
 		}
-		private bool _willMakeFileExtensionLowerCase;
+		private bool _movesFileToRecycle;
+
+		public bool MakesPossibleDeleteUponCopy
+		{
+			get { return _makesPossibleDeleteUponCopy; }
+			set
+			{
+				if (_makesPossibleDeleteUponCopy == value)
+					return;
+
+				_makesPossibleDeleteUponCopy = value;
+				RaisePropertyChanged();
+
+				if (!value)
+					DeleteUponCopy = false;
+			}
+		}
+		private bool _makesPossibleDeleteUponCopy;
 
 		#endregion
 

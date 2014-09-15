@@ -10,8 +10,8 @@
 	<Grid Button.Click="OnClick">
 		<TextBox HorizontalAlignment="Stretch"
 				 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-				 Text="{Binding Value, ElementName=NumericRoot, Mode=OneWay}"
-				 IsReadOnly="True" IsUndoEnabled="False"/>
+                 IsReadOnly="True" IsUndoEnabled="False"
+				 Text="{Binding Value, ElementName=NumericRoot, Mode=OneWay}"/>
 		<RepeatButton x:Name="DownButton"
 					  Width="30" HorizontalAlignment="Left"
 					  Style="{StaticResource ButtonBaseStyle}">

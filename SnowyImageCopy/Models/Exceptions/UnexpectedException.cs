@@ -12,7 +12,7 @@ namespace SnowyImageCopy.Models.Exceptions
 	/// </summary>
 	/// <remarks>This exception is for debugging purpose.</remarks>
 	[Serializable]
-	public class UnexpectedException : Exception
+	internal class UnexpectedException : Exception
 	{
 		public UnexpectedException() { }
 		public UnexpectedException(string message) : base(message) { }
