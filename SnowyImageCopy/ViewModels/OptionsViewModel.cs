@@ -155,7 +155,7 @@ namespace SnowyImageCopy.ViewModels
 		#region File
 
 		// Left to View.
-		
+
 		#endregion
 
 
