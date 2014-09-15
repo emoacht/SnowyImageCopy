@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace SnowyImageCopy.Models.Exceptions
 	/// Exception when PC is unable to connect to FlashAir card
 	/// </summary>
 	[Serializable]
-	internal class RemoteConnectionUnableException : Exception
+	internal class RemoteConnectionUnableException : HttpRequestException
 	{
 		public HttpStatusCode Code { get; private set; }
 		public WebExceptionStatus Status { get; private set; }
@@ -23,7 +24,6 @@ namespace SnowyImageCopy.Models.Exceptions
 		public RemoteConnectionUnableException() { }
 		public RemoteConnectionUnableException(string message) : base(message) { }
 		public RemoteConnectionUnableException(string message, Exception inner) : base(message, inner) { }
-		protected RemoteConnectionUnableException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
 		public RemoteConnectionUnableException(HttpStatusCode code)
 		{

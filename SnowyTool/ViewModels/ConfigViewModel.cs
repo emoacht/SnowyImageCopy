@@ -194,15 +194,24 @@ namespace SnowyTool.ViewModels
 		/// Upload operation enabled flag
 		/// </summary>
 		/// <remarks>
-		/// 1: Upload operation enabled
+		/// 1:     Upload operation enabled
 		/// Other: Upload operation disabled
 		/// </remarks>
 		public int UPLOAD
 		{
 			get { return _UPLOAD; }
-			set { _UPLOAD = value; }
+			set
+			{
+				_UPLOAD = value;
+
+				if (isImporting)
+					UPLOAD_IMPORT = _UPLOAD;
+				else
+					RaisePropertyChanged(() => IsChanged);
+			}
 		}
 		private int _UPLOAD = 1;
+		private int UPLOAD_IMPORT = 1;
 
 		/// <summary>
 		/// Upload destination directory
@@ -285,7 +294,7 @@ namespace SnowyTool.ViewModels
 			get { return _manufacturerID; }
 		}
 		private int _manufacturerID;
-	
+
 		/// <summary>
 		/// OEM/Application ID (OID)
 		/// </summary>
@@ -384,7 +393,8 @@ namespace SnowyTool.ViewModels
 					!IsBothNullOrEmptyOrEquals(APPSSID_IMPORT, APPSSID) ||
 					!IsBothNullOrEmptyOrEquals(APPNETWORKKEY_IMPORT, APPNETWORKKEY) ||
 					!IsBothNullOrEmptyOrEquals(BRGSSID_IMPORT, BRGSSID) ||
-					!IsBothNullOrEmptyOrEquals(BRGNETWORKKEY_IMPORT, BRGNETWORKKEY));
+					!IsBothNullOrEmptyOrEquals(BRGNETWORKKEY_IMPORT, BRGNETWORKKEY) ||
+					!IsBothNullOrEmptyOrEquals(UPLOAD_IMPORT.ToString(), UPLOAD.ToString()));
 			}
 		}
 

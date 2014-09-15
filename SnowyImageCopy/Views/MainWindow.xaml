@@ -139,36 +139,55 @@
 						HorizontalAlignment="Center" VerticalAlignment="Center"
 						BorderThickness="0"
 						Background="{x:Null}"
-						Text="{Binding RemainingTime, Converter={StaticResource TimeSpanToStringConverterKey}}"
-						IsUndoEnabled="False"/>
+						IsUndoEnabled="False"
+						Text="{Binding RemainingTime, Converter={StaticResource TimeSpanToStringConverterKey}}"/>
 				</Grid>
 			</Grid>
 
 			<StackPanel Grid.Column="2"
-						Width="260" Height="60" HorizontalAlignment="Left" VerticalAlignment="Top">
+						Height="60" HorizontalAlignment="Stretch" VerticalAlignment="Top">
 				<!-- Status -->
-				<TextBox Height="24" HorizontalAlignment="Stretch" VerticalAlignment="Top"
-						 Margin="4,0,0,4" Padding="2,0,0,0"
+				<TextBox Height="24" Width="256" HorizontalAlignment="Left" VerticalAlignment="Top"
+						 Margin="4,0,0,4" Padding="2,0"
 						 VerticalContentAlignment="Center"
-						 FontSize="13"
-						 Text="{Binding OperationStatus, Mode=OneWay}"
-						 IsReadOnly="True" IsUndoEnabled="False"/>
+						 FontSize="13" IsReadOnly="True" IsUndoEnabled="False"
+						 Text="{Binding OperationStatus, Mode=OneWay}"/>
 
-				<!-- Instant Copy -->
 				<StackPanel Orientation="Horizontal">
-					<Label
-						VerticalAlignment="Center"
-						Content="{Binding Resources.Options_InstantCopy, Source={x:Static models:ResourceService.Current}}"/>
-					<controls:SlidingToggleButton
-						Width="60" Height="24"
-						Margin="0,4"
-						TextChecked="ON"
-						TextUnchecked="OFF"
-						ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
-						ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
-						BackgroundChecked="{StaticResource Sliding.Checked.Background}"
-						BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
-						IsChecked="{Binding InstantCopy, Mode=TwoWay}"/>
+					<!-- Delete Upon Copy -->
+					<StackPanel Orientation="Horizontal"
+								Visibility="{Binding SettingsCurrent.MakesPossibleDeleteUponCopy, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+						<Label
+							VerticalAlignment="Center"
+							Content="{Binding Resources.Options_DeleteUponCopy, Source={x:Static models:ResourceService.Current}}"/>
+						<controls:SlidingToggleButton
+							Width="60" Height="24"
+							Margin="0,4"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.CheckedSecond.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.CheckedSecond.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.DeleteUponCopy, Mode=TwoWay}"/>
+					</StackPanel>
+
+					<!-- Instant Copy -->
+					<StackPanel Orientation="Horizontal">
+						<Label
+							VerticalAlignment="Center"
+							Content="{Binding Resources.Options_InstantCopy, Source={x:Static models:ResourceService.Current}}"/>
+						<controls:SlidingToggleButton
+							Width="60" Height="24"
+							Margin="0,4"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.InstantCopy, Mode=TwoWay}"/>
+					</StackPanel>
 				</StackPanel>
 			</StackPanel>
 		</Grid>
@@ -277,7 +296,7 @@
 				</ToggleButton>
 			</Grid>
 
-			<Grid Grid.Row="1" x:Name="GridTwoTwo">
+			<Grid Grid.Row="1">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition/>
 					<ColumnDefinition Width="Auto"/>

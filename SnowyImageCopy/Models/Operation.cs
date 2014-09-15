@@ -300,6 +300,10 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_UnauthorizedAccess;
 				}
+				else if (ex.GetType() == typeof(RemoteFileDeleteFailedException))
+				{
+					OperationStatus = Resources.OperationStatus_DeleteFailed;
+				}
 				else
 				{
 					OperationStatus = Resources.OperationStatus_Error;
@@ -417,6 +421,10 @@ namespace SnowyImageCopy.Models
 				else if (ex.GetType() == typeof(UnauthorizedAccessException))
 				{
 					OperationStatus = Resources.OperationStatus_UnauthorizedAccess;
+				}
+				else if (ex.GetType() == typeof(RemoteFileDeleteFailedException))
+				{
+					OperationStatus = Resources.OperationStatus_DeleteFailed;
 				}
 				else
 				{
@@ -647,7 +655,7 @@ namespace SnowyImageCopy.Models
 				var itemsDeleted = FileListCore.Where(x => !x.IsRemoteAlive && (x.Status != FileStatus.Recycled)).ToArray();
 				if (itemsDeleted.Any())
 				{
-					if (Settings.Current.WillMoveFileToRecycle)
+					if (Settings.Current.MovesFileToRecycle)
 					{
 						var itemsDeletedCopied = itemsDeleted.Where(x => x.Status == FileStatus.Copied).ToList();
 
@@ -780,6 +788,14 @@ namespace SnowyImageCopy.Models
 					return;
 				}
 
+				// Check if upload.cgi is disabled.
+				if (Settings.Current.DeleteUponCopy &&
+					await FileManager.CheckUploadDisabledAsync(tokenSourceWorking.Token))
+				{
+					OperationStatus = Resources.OperationStatus_DeleteDisabled;
+					return;
+				}
+
 				while (true)
 				{
 					tokenSourceWorking.Token.ThrowIfCancellationRequested();
@@ -831,6 +847,12 @@ namespace SnowyImageCopy.Models
 					{
 						item.Status = FileStatus.ToBeCopied; // Revert to status before copying.
 						throw;
+					}
+
+					if (Settings.Current.DeleteUponCopy &&
+						IsCopiedLocal(item))
+					{
+						await FileManager.DeleteFileAsync(item.FilePath, tokenSourceWorking.Token);
 					}
 				}
 
@@ -920,7 +942,7 @@ namespace SnowyImageCopy.Models
 
 			var fileName = item.FileName;
 
-			if (Settings.Current.WillMakeFileExtensionLowerCase)
+			if (Settings.Current.MakesFileExtensionLowerCase)
 			{
 				var extension = Path.GetExtension(fileName);
 				if (!String.IsNullOrEmpty(extension))

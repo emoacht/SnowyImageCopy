@@ -13,14 +13,7 @@ namespace SnowyImageCopy.Models.Exceptions
 	[Serializable]
 	internal class RemoteFileNotFoundException : Exception
 	{
-		public new string Message
-		{
-			get { return !String.IsNullOrEmpty(base.Message) ? base.Message : this._message; }
-			private set { _message = value; }
-		}
-		private string _message;
-
-		public string FileName { get; private set; }
+		public string FilePath { get; private set; }
 
 
 		#region Constructor
@@ -30,10 +23,10 @@ namespace SnowyImageCopy.Models.Exceptions
 		public RemoteFileNotFoundException(string message, Exception inner) : base(message, inner) { }
 		protected RemoteFileNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-		public RemoteFileNotFoundException(string message, string fileName)
+		public RemoteFileNotFoundException(string message, string filePath)
+			: base(message)
 		{
-			this.Message = message;
-			this.FileName = fileName;
+			this.FilePath = filePath;
 		}
 
 		#endregion

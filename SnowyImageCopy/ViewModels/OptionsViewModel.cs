@@ -101,7 +101,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Path
 
-		// Leave to View.
+		// Left to View.
 
 		#endregion
 
@@ -147,14 +147,14 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Auto Check
 
-		// Leave to View.
+		// Left to View.
 
 		#endregion
 
 
 		#region File
 
-		// Leave to View.
+		// Left to View.
 
 		#endregion
 
@@ -206,7 +206,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Info
 
-		// Leave to View.
+		// Left to View.
 
 		#endregion
 	}

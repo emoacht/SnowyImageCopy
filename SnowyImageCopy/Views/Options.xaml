@@ -55,7 +55,7 @@
 					<TextBox HorizontalAlignment="Stretch"
 							 Margin="0,4,0,6" Padding="2"
 							 VerticalContentAlignment="Center"
-							 Text="{Binding SettingsCurrent.RemoteRoot, Mode=TwoWay}"
+							 Text="{Binding SettingsCurrent.RemoteRoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"
 							 IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
 
 					<TextBlock Text="{Binding Resources.Options_LocalFolder, Source={x:Static models:ResourceService.Current}}"/>
@@ -63,7 +63,7 @@
 							 HorizontalAlignment="Stretch"
 							 Margin="0,4,0,4" Padding="2"
 							 VerticalContentAlignment="Center"
-							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"
 							 IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 						<Button	Margin="0,0,4,0"
@@ -167,7 +167,7 @@
 						<TextBlock
 							VerticalAlignment="Center"
 							TextWrapping="Wrap"
-							Text="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}"/>
+							Text="{Binding Resources.Options_ExtensionLowerCase, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
 							Width="60" Height="24" HorizontalAlignment="Left"
 							Margin="4"
@@ -177,15 +177,16 @@
 							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
 							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
-							IsChecked="{Binding SettingsCurrent.WillMoveFileToRecycle, Mode=TwoWay}"/>
+							IsChecked="{Binding SettingsCurrent.MakesFileExtensionLowerCase, Mode=TwoWay}"/>
 					</WrapPanel>
 
 					<WrapPanel>
 						<TextBlock
 							VerticalAlignment="Center"
 							TextWrapping="Wrap"
-							Text="{Binding Resources.Options_LowerCase, Source={x:Static models:ResourceService.Current}}"/>
+							Text="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
+							x:Name="RecycleButton"
 							Width="60" Height="24" HorizontalAlignment="Left"
 							Margin="4"
 							TextChecked="ON"
@@ -194,7 +195,33 @@
 							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
 							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
-							IsChecked="{Binding SettingsCurrent.WillMakeFileExtensionLowerCase, Mode=TwoWay}"/>
+							IsChecked="{Binding SettingsCurrent.MovesFileToRecycle, Mode=TwoWay}"/>
+					</WrapPanel>
+
+					<WrapPanel>
+						<TextBlock
+							VerticalAlignment="Center"
+							TextWrapping="Wrap"
+							Text="{Binding Resources.Options_PossibleDeleteUponCopy, Source={x:Static models:ResourceService.Current}}"/>
+						<controls:SlidingToggleButton
+							x:Name="PossibleDeleteUponCopyButton"
+							Width="60" Height="24" HorizontalAlignment="Left"
+							Margin="4"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.CheckedSecond.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.CheckedSecond.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding IsChecked, ElementName= RecycleButton, Converter={StaticResource BooleanInverseConverterKey}, ConverterParameter=True}"/>
+						<controls:CheckTextBox
+							Width="80" HorizontalAlignment="Left"
+							Margin="4" Padding="2,0"
+							VerticalContentAlignment="Center"
+							IsUndoEnabled="False"
+							BaseText="DELETE"
+							Visibility="{Binding IsChecked, ElementName=PossibleDeleteUponCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"                         
+							IsChecked="{Binding SettingsCurrent.MakesPossibleDeleteUponCopy, Mode=TwoWay}"/>
 					</WrapPanel>
 				</StackPanel>
 			</GroupBox>

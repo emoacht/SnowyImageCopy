@@ -33,14 +33,9 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private string _operationStatus;
 
-		public bool InstantCopy
+		public Settings SettingsCurrent
 		{
-			get { return Settings.Current.InstantCopy; }
-			set
-			{
-				Settings.Current.InstantCopy = value;
-				RaisePropertyChanged();
-			}
+			get { return Settings.Current; }
 		}
 
 		public bool IsWindowActivateRequested
@@ -621,7 +616,7 @@ namespace SnowyImageCopy.ViewModels
 			}
 			else if (caseInstantCopy == propertyName)
 			{
-				if ((item.Status != FileStatus.ToBeCopied) || Op.IsChecking || Op.IsCopying || !InstantCopy)
+				if ((item.Status != FileStatus.ToBeCopied) || Op.IsChecking || Op.IsCopying || !Settings.Current.InstantCopy)
 					return;
 
 				await Op.CopyFileAsync();
