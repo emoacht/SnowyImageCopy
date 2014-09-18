@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,11 +30,10 @@ namespace SnowyTool.Views.Converters
 		/// <returns>SolidColorBrush of the predefined color</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool) || (bool)value)
+			if (!(value is bool) || (bool)value || (parameter == null))
 				return DependencyProperty.UnsetValue;
 
-			if ((parameter == null) ||
-				!predefinedColorNames.Contains(parameter.ToString()))
+			if (!predefinedColorNames.Contains(parameter.ToString()))
 				return DependencyProperty.UnsetValue;
 
 			return (SolidColorBrush)new BrushConverter().ConvertFromString(parameter.ToString());

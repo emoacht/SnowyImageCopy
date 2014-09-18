@@ -55,7 +55,7 @@ namespace SnowyTool.Views.Controls
 
 		private const double fadingInterval = 0.1; // sec
 		private const double fadingTime = 1.5; // sec
-		private readonly double fadingStep = fadingInterval / fadingTime;
+		private const double fadingStep = fadingInterval / fadingTime;
 		private double remainingTime; // sec
 
 		private void ManageText()

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -94,7 +94,7 @@ namespace SnowyImageCopy.Helper
 		/// <param name="filePaths">Target file paths</param>
 		public static void MoveToRecycle(IEnumerable<string> filePaths)
 		{
-			var filePathCombined = String.Join('\0'.ToString(), filePaths) + '\0' + '\0';
+			var filePathCombined = String.Join('\0'.ToString(CultureInfo.InvariantCulture), filePaths) + '\0' + '\0';
 
 			try
 			{

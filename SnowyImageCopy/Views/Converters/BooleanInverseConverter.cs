@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -34,7 +33,7 @@ namespace SnowyImageCopy.Views.Converters
 			return ConvertBase(value, parameter);
 		}
 
-		private object ConvertBase(object value, object parameter)
+		private static object ConvertBase(object value, object parameter)
 		{
 			if (!(value is bool))
 				return DependencyProperty.UnsetValue;
@@ -48,7 +47,7 @@ namespace SnowyImageCopy.Views.Converters
 			return !sourceValue;
 		}
 
-		private bool? FindBoolean(object parameter)
+		private static bool? FindBoolean(object parameter)
 		{
 			if (parameter == null)
 				return null;

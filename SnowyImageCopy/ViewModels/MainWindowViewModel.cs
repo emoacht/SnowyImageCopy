@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
@@ -47,7 +47,7 @@ namespace SnowyImageCopy.ViewModels
 				RaisePropertyChanged();
 			}
 		}
-		public bool _isWindowActivateRequested;
+		private bool _isWindowActivateRequested;
 
 		#endregion
 
@@ -532,7 +532,7 @@ namespace SnowyImageCopy.ViewModels
 
 		private FileItemViewModel GetSampleFileData(int fileNumber)
 		{
-			var source = String.Format("/DCIM,SAMPLE{0}.JPG,0,0,0,0", ((0 <= fileNumber) ? fileNumber.ToString() : String.Empty));
+			var source = String.Format("/DCIM,SAMPLE{0}.JPG,0,0,0,0", ((0 <= fileNumber) ? fileNumber.ToString(CultureInfo.InvariantCulture) : String.Empty));
 
 			return new FileItemViewModel(source, "/DCIM");
 		}

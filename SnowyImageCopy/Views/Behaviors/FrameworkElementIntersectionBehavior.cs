@@ -79,18 +79,6 @@ namespace SnowyImageCopy.Views.Behaviors
 				typeof(FrameworkElementIntersectionBehavior),
 				new FrameworkPropertyMetadata(false));
 
-		public Dpi SystemDpi
-		{
-			get { return (Dpi)GetValue(SystemDpiProperty); }
-			set { SetValue(SystemDpiProperty, value); }
-		}
-		public static readonly DependencyProperty SystemDpiProperty =
-			DependencyProperty.Register(
-				"SystemDpi",
-				typeof(Dpi),
-				typeof(FrameworkElementIntersectionBehavior),
-				new FrameworkPropertyMetadata(Dpi.Default));
-
 		public Dpi WindowDpi
 		{
 			get { return (Dpi)GetValue(WindowDpiProperty); }
@@ -120,22 +108,20 @@ namespace SnowyImageCopy.Views.Behaviors
 				return false;
 
 			// Compute factor from default DPI to Window DPI. 
-			var defaultFactor = new { X = (double)WindowDpi.X / Dpi.Default.X, Y = (double)WindowDpi.Y / Dpi.Default.Y };
+			var factor = new { X = (double)WindowDpi.X / Dpi.Default.X, Y = (double)WindowDpi.Y / Dpi.Default.Y };
 
 			var baseElementLocation = baseElement.PointToScreen(new Point(0D, 0D));
 
 			var expandedRect = new Rect(
-					baseElementLocation.X - ExpandedMargin.Left * defaultFactor.X,
-					baseElementLocation.Y - ExpandedMargin.Top * defaultFactor.Y,
-					(baseElement.ActualWidth + ExpandedMargin.Left + ExpandedMargin.Right) * defaultFactor.X,
-					(baseElement.ActualHeight + ExpandedMargin.Top + ExpandedMargin.Bottom) * defaultFactor.Y);
+					baseElementLocation.X - ExpandedMargin.Left * factor.X,
+					baseElementLocation.Y - ExpandedMargin.Top * factor.Y,
+					(baseElement.ActualWidth + ExpandedMargin.Left + ExpandedMargin.Right) * factor.X,
+					(baseElement.ActualHeight + ExpandedMargin.Top + ExpandedMargin.Bottom) * factor.Y);
 
-			// Compute factor from System DPI to Window DPI.
-			var systemFactor = new { X = (double)WindowDpi.X / SystemDpi.X, Y = (double)WindowDpi.Y / SystemDpi.Y };
-
-			var rects = new Rect[] { expandedRect }.Concat(targetElements
-				.Where(x => x.IsVisible) // If not visible, PointToScreen method will fail.
-				.Select(x => new Rect(x.PointToScreen(new Point(0D, 0D)), new Size(x.ActualWidth * systemFactor.X, x.ActualHeight * systemFactor.Y))))
+			var rects = new Rect[] { expandedRect }
+				.Concat(targetElements
+					.Where(x => x.IsVisible) // If not visible, PointToScreen method will fail.
+					.Select(x => new Rect(x.PointToScreen(new Point(0D, 0D)), new Size(x.ActualWidth * factor.X, x.ActualHeight * factor.Y))))
 				.ToArray();
 
 			return IsRectIntersected(rects);
@@ -151,7 +137,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			return IsRectIntersected(rects);
 		}
 
-		private bool IsRectIntersected(Rect[] rects)
+		private static bool IsRectIntersected(Rect[] rects)
 		{
 			for (int i = 0; i < rects.Length; i++)
 			{

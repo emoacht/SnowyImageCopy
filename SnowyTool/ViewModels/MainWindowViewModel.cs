@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 using SnowyTool.Common;
 using SnowyTool.Models;
@@ -62,8 +60,7 @@ namespace SnowyTool.ViewModels
 				if (value != null)
 				{
 					currentMode = modeSetMap
-						.Where(x => x.AppMode == value.APPMODE)
-						.SingleOrDefault();
+						.SingleOrDefault(x => x.AppMode == value.APPMODE);
 				}
 
 				if (currentMode != null)
@@ -98,8 +95,7 @@ namespace SnowyTool.ViewModels
 
 				var currentMode = modeSetMap
 					.Where(x => x.LanMode == value)
-					.Where(x => x.LanStartupMode == CurrentLanStartupMode)
-					.SingleOrDefault();
+					.SingleOrDefault(x => x.LanStartupMode == CurrentLanStartupMode);
 
 				if ((CurrentConfig != null) && (currentMode != null))
 					CurrentConfig.APPMODE = currentMode.AppMode;
@@ -121,8 +117,7 @@ namespace SnowyTool.ViewModels
 
 				var currentMode = modeSetMap
 					.Where(x => x.LanStartupMode == value)
-					.Where(x => x.LanMode == CurrentLanMode)
-					.SingleOrDefault();
+					.SingleOrDefault(x => x.LanMode == CurrentLanMode);
 
 				if ((CurrentConfig != null) && (currentMode != null))
 					CurrentConfig.APPMODE = currentMode.AppMode;
@@ -250,7 +245,7 @@ namespace SnowyTool.ViewModels
 				}
 
 				CurrentConfig = null;
-				OperationStatus = "No FlashAir";
+				OperationStatus = "No FlashAir.";
 			}
 			finally
 			{
@@ -279,7 +274,7 @@ namespace SnowyTool.ViewModels
 			{
 				await CurrentConfig.WriteAsync();
 
-				SystemSounds.Exclamation.Play();
+				SystemSounds.Asterisk.Play();
 				OperationStatus = "Applied new config.";
 			}
 			catch (Exception ex)

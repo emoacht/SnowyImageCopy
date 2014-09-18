@@ -61,7 +61,7 @@ namespace SnowyImageCopy.Views
 				return _product;
 			}
 		}
-		public static string _product;
+		private static string _product;
 
 		public static string Copyright
 		{

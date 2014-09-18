@@ -46,9 +46,9 @@ namespace SnowyImageCopy.Models.Network
 			if (String.IsNullOrEmpty(ssid))
 				throw new ArgumentNullException("ssid");
 
-			if (!NetworkInterface.GetAllNetworkInterfaces()
+			if (NetworkInterface.GetAllNetworkInterfaces()
 				.Where(x => x.OperationalStatus == OperationalStatus.Up)
-				.Any(x => x.NetworkInterfaceType == NetworkInterfaceType.Wireless80211))
+				.All(x => x.NetworkInterfaceType != NetworkInterfaceType.Wireless80211))
 				return false;
 
 			var ssids = await GetConnectedSsidAsync();
@@ -175,7 +175,7 @@ namespace SnowyImageCopy.Models.Network
 			{
 				StartInfo = new ProcessStartInfo()
 				{
-					FileName = Environment.GetEnvironmentVariable("ComSpec"),
+					FileName = Environment.GetEnvironmentVariable("ComSpec") ?? String.Empty,
 					CreateNoWindow = true,
 					UseShellExecute = false,
 					RedirectStandardInput = true,

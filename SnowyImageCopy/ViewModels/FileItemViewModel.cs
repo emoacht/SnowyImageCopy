@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -149,7 +148,7 @@ namespace SnowyImageCopy.ViewModels
 				RaisePropertyChanged();
 			}
 		}
-		private BitmapImage _thumbnail = null;
+		private BitmapImage _thumbnail;
 
 		public bool HasThumbnail
 		{
@@ -250,7 +249,7 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 
-		private static readonly string[] flashAirSystemFolders =
+		private static readonly string[] flashAirSystemFolders = 
 			new string[]
 			{
 				"GUPIXINF",
@@ -345,7 +344,7 @@ namespace SnowyImageCopy.ViewModels
 				return 1;
 
 			int comparisonDate = this.Date.CompareTo(other.Date);
-			int comparisonFilePath = this.FilePath.CompareTo(other.FilePath);
+			int comparisonFilePath = String.Compare(this.FilePath, other.FilePath, StringComparison.Ordinal);
 
 			return (comparisonDate != 0) ? comparisonDate : comparisonFilePath;
 		}
@@ -464,7 +463,11 @@ namespace SnowyImageCopy.ViewModels
 			{
 				FileExtension = Enum.GetValues(typeof(FileExtension))
 					.Cast<FileExtension>()
-					.FirstOrDefault(x => Path.GetExtension(FileName).Equals(String.Format(".{0}", x), StringComparison.OrdinalIgnoreCase));
+					.FirstOrDefault(x =>
+					{
+						var extension = Path.GetExtension(FileName);
+						return (extension != null) && extension.Equals(String.Format(".{0}", x), StringComparison.OrdinalIgnoreCase);
+					});
 			}
 
 			IsImported = true;

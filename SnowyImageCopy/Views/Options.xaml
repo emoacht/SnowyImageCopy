@@ -255,8 +255,8 @@
 					</TextBlock>
 
 					<TextBlock Margin="0,0,0,4">
-						<Run Text="{Binding SystemDpi.X, RelativeSource={RelativeSource AncestorType={x:Type pmd:PerMonitorDpiWindow}}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
-						<Run Text="{Binding MonitorDpi.X, RelativeSource={RelativeSource AncestorType={x:Type pmd:PerMonitorDpiWindow}}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
+						<Run Text="{Binding WindowHandler.SystemDpi.X, RelativeSource={RelativeSource AncestorType={x:Type pmd:PerMonitorDpiWindow}}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
+						<Run Text="{Binding WindowHandler.MonitorDpi.X, RelativeSource={RelativeSource AncestorType={x:Type pmd:PerMonitorDpiWindow}}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
 					</TextBlock>
 				</StackPanel>
 			</GroupBox>
