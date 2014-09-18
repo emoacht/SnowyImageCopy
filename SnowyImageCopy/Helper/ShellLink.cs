@@ -416,7 +416,7 @@ namespace SnowyImageCopy.Helper
 			get
 			{
 				var sb = new StringBuilder(MAX_PATH - 1);
-				WIN32_FIND_DATAW data = new WIN32_FIND_DATAW();
+				var data = new WIN32_FIND_DATAW();
 
 				VerifySucceeded(this.shellLink.GetPath(sb, sb.Capacity, ref data, SLGP.SLGP_UNCPRIORITY));
 
@@ -434,9 +434,9 @@ namespace SnowyImageCopy.Helper
 		/// <summary>
 		/// Arguments
 		/// </summary>
-		/// <remarks>According to MSDN, this length should not have a limitation as long as it it 
-		/// in Unicode. In addition, it is recommended to retrieve argument strings though 
-		/// IPropertyStore rather than GetArguments method.</remarks>
+		/// <remarks>According to MSDN, this length should not have a limitation as long as it in Unicode. 
+		/// In addition, it is recommended to retrieve argument strings though IPropertyStore rather than 
+		/// GetArguments method.</remarks>
 		internal string Arguments
 		{
 			get
@@ -591,7 +591,7 @@ namespace SnowyImageCopy.Helper
 				if (128 < value.Length)
 					throw new Exception("AppUserModelID is too long.");
 
-				using (PropVariant pv = new PropVariant(value))
+				using (var pv = new PropVariant(value))
 				{
 					VerifySucceeded(this.propertyStore.SetValue(this.AppUserModelIDKey, pv));
 					VerifySucceeded(this.propertyStore.Commit());
@@ -707,7 +707,7 @@ namespace SnowyImageCopy.Helper
 		/// </summary>
 		/// <param name="hresult">HRESULT</param>
 		/// <remarks>This method is from Sending toast notifications from desktop apps sample.</remarks>
-		private void VerifySucceeded(uint hresult)
+		private static void VerifySucceeded(uint hresult)
 		{
 			if (hresult > 1)
 				throw new Exception("Failed with HRESULT: " + hresult.ToString("X"));

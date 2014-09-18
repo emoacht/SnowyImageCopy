@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 using SnowyTool.Helper;
-using SnowyTool.ViewModels;
 
 namespace SnowyTool.Models
 {
@@ -63,7 +62,7 @@ namespace SnowyTool.Models
 				foreach (var diskPartition in ((ManagementObject)drive).GetRelated("Win32_DiskPartition"))
 				{
 					if ((diskPartition["DiskIndex"] == null) || // Index number of physical drive
-						(diskPartition["DiskIndex"].ToString() != info.PhysicalDrive.ToString()))
+						(diskPartition["DiskIndex"].ToString() != info.PhysicalDrive.ToString(CultureInfo.InvariantCulture)))
 						continue;
 
 					foreach (var logicalDisk in ((ManagementObject)diskPartition).GetRelated("Win32_LogicalDisk"))
@@ -73,7 +72,7 @@ namespace SnowyTool.Models
 
 						var driveLetter = logicalDisk["DeviceID"].ToString().Trim();
 
-						if (String.IsNullOrEmpty(driveLetter) || !driveLetter.EndsWith(':'.ToString()))
+						if (String.IsNullOrEmpty(driveLetter) || !driveLetter.EndsWith(':'.ToString(CultureInfo.InvariantCulture)))
 							continue;
 
 						driveLetters.Add(driveLetter);

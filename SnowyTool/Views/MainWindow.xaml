@@ -215,7 +215,7 @@
 				BorderBrush="{StaticResource BorderLine.Strong}"
 				BorderThickness="1,0,0,1"
 				Visibility="{Binding IsChecked, ElementName=InformationButton, Converter={StaticResource BooleanToVisibilityConverterKey}}">
-				<Grid Margin="12,8,8,8" HorizontalAlignment="Stretch">
+				<Grid Margin="10,8,8,8" HorizontalAlignment="Stretch">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="Auto"/>

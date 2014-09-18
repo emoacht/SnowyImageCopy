@@ -283,8 +283,7 @@
 							x:Name="CurrentImageTabIntersectionBehavior"
 							TargetFrameworkElement ="{Binding ElementName=CommandsAndProgress}"
 							ExpandedMargin="0,24,0,0"
-							SystemDpi="{Binding SystemDpi, ElementName=MainWindowRoot, Mode=OneWay}"
-							WindowDpi="{Binding WindowDpi, ElementName=MainWindowRoot, Mode=OneWay}">
+							WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MainWindowRoot, Mode=OneWay}">
 							<behaviors:FrameworkElementIntersectionBehavior.TriggerObject>
 								<MultiBinding Converter="{StaticResource ObjectArrayConverterKey}">
 									<Binding ElementName="LayoutRoot" Path="ActualWidth" Mode="OneTime"/>

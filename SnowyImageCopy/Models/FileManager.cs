@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -527,9 +526,10 @@ namespace SnowyImageCopy.Models
 							// Register delegate to CancellationToken because CancellationToken can no longer
 							// directly affect HttpClient. Disposing the HttpResponseMessage will make ReadAsStreamAsync
 							// method throw an ObjectDisposedException and so exit this operation.
+							var ctr = new CancellationTokenRegistration();
 							try
 							{
-								token.Register(() => response.Dispose());
+								ctr = token.Register(() => response.Dispose());
 							}
 							catch (ObjectDisposedException ode)
 							{
@@ -537,93 +537,95 @@ namespace SnowyImageCopy.Models
 								// this exception will be thrown.
 								Debug.WriteLine("CancellationTokenSource has been disposed when tried to register delegate. {0}", ode);
 							}
-
-							var tcs = new TaskCompletionSource<bool>();
-
-							// Start timer to monitor network connection.
-							using (var monitorTimer = new Timer(async s =>
+							using (ctr)
 							{
-								if (!await NetworkChecker.IsNetworkConnectedAsync(card))
+								var tcs = new TaskCompletionSource<bool>();
+
+								// Start timer to monitor network connection.
+								using (var monitorTimer = new Timer(async s =>
 								{
-									((TaskCompletionSource<bool>)s).TrySetResult(true);
-								}
-							}, tcs, monitorLength, monitorLength))
-							{
-								var monitorTask = tcs.Task;
-
-								if ((size == 0) || (progress == null))
-								{
-									// Route without progress reporting
-									var readTask = Task.Run(async () => await response.Content.ReadAsByteArrayAsync());
-									var timeoutTask = Task.Delay(timeoutLength);
-
-									var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
-									if (completedTask == timeoutTask)
-										throw new TimeoutException("Reading response content timed out!");
-									if (completedTask == monitorTask)
-										throw new RemoteConnectionLostException("Connection lost!");
-
-									var bytes = await readTask;
-
-									if ((0 < size) && (bytes.Length != size))
-										throw new RemoteFileInvalidException("Data length does not match!", path);
-
-									return bytes;
-								}
-								else
-								{
-									// Route with progress reporting
-									int readLength;
-									int readLengthTotal = 0;
-
-									var buffer = new byte[65536]; // 64KiB
-									var bufferTotal = new byte[size];
-
-									const double stepUint = 524288D; // 512KiB
-									double stepTotal = Math.Ceiling(size / stepUint); // Number of steps to report during downloading
-									if (stepTotal < 6)
-										stepTotal = 6; // Minimum number of steps
-
-									double stepCurrent = 1D;
-									var startTime = DateTime.Now;
-
-									using (var stream = await response.Content.ReadAsStreamAsync())
+									if (!await NetworkChecker.IsNetworkConnectedAsync(card))
 									{
-										while (readLengthTotal != size)
+										((TaskCompletionSource<bool>)s).TrySetResult(true);
+									}
+								}, tcs, monitorLength, monitorLength))
+								{
+									var monitorTask = tcs.Task;
+
+									if ((size == 0) || (progress == null))
+									{
+										// Route without progress reporting
+										var readTask = Task.Run(async () => await response.Content.ReadAsByteArrayAsync());
+										var timeoutTask = Task.Delay(timeoutLength);
+
+										var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
+										if (completedTask == timeoutTask)
+											throw new TimeoutException("Reading response content timed out!");
+										if (completedTask == monitorTask)
+											throw new RemoteConnectionLostException("Connection lost!");
+
+										var bytes = await readTask;
+
+										if ((0 < size) && (bytes.Length != size))
+											throw new RemoteFileInvalidException("Data length does not match!", path);
+
+										return bytes;
+									}
+									else
+									{
+										// Route with progress reporting
+										int readLength;
+										int readLengthTotal = 0;
+
+										var buffer = new byte[65536]; // 64KiB
+										var bufferTotal = new byte[size];
+
+										const double stepUint = 524288D; // 512KiB
+										double stepTotal = Math.Ceiling(size / stepUint); // Number of steps to report during downloading
+										if (stepTotal < 6)
+											stepTotal = 6; // Minimum number of steps
+
+										double stepCurrent = 1D;
+										var startTime = DateTime.Now;
+
+										using (var stream = await response.Content.ReadAsStreamAsync())
 										{
-											// CancellationToken in overload of ReadAsync method will not work for response content.
-											var readTask = Task.Run(async () => await stream.ReadAsync(buffer, 0, buffer.Length));
-											var timeoutTask = Task.Delay(timeoutLength);
-
-											var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
-											if (completedTask == timeoutTask)
-												throw new TimeoutException("Reading response content timed out!");
-											if (completedTask == monitorTask)
-												throw new RemoteConnectionLostException("Connection lost!");
-
-											readLength = await readTask;
-
-											if ((readLength == 0) || (readLengthTotal + readLength > size))
-												throw new RemoteFileInvalidException("Data length does not match!", path);
-
-											Buffer.BlockCopy(buffer, 0, bufferTotal, readLengthTotal, readLength);
-
-											readLengthTotal += readLength;
-
-											monitorTimer.Change(monitorLength, monitorLength);
-
-											// Report if read length in total exceeds stepped length.
-											if (stepCurrent / stepTotal * size <= readLengthTotal)
+											while (readLengthTotal != size)
 											{
-												stepCurrent++;
-												progress.Report(new ProgressInfo(
-													currentValue: readLengthTotal,
-													totalValue: size,
-													elapsedTime: DateTime.Now - startTime));
+												// CancellationToken in overload of ReadAsync method will not work for response content.
+												var readTask = Task.Run(async () => await stream.ReadAsync(buffer, 0, buffer.Length));
+												var timeoutTask = Task.Delay(timeoutLength);
+
+												var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
+												if (completedTask == timeoutTask)
+													throw new TimeoutException("Reading response content timed out!");
+												if (completedTask == monitorTask)
+													throw new RemoteConnectionLostException("Connection lost!");
+
+												readLength = await readTask;
+
+												if ((readLength == 0) || (readLengthTotal + readLength > size))
+													throw new RemoteFileInvalidException("Data length does not match!", path);
+
+												Buffer.BlockCopy(buffer, 0, bufferTotal, readLengthTotal, readLength);
+
+												readLengthTotal += readLength;
+
+												monitorTimer.Change(monitorLength, monitorLength);
+
+												// Report if read length in total exceeds stepped length.
+												if (stepCurrent / stepTotal * size <= readLengthTotal)
+												{
+													stepCurrent++;
+													progress.Report(new ProgressInfo(
+														currentValue: readLengthTotal,
+														totalValue: size,
+														elapsedTime: DateTime.Now - startTime));
+												}
 											}
 										}
+										return bufferTotal;
 									}
-									return bufferTotal;
 								}
 							}
 						}

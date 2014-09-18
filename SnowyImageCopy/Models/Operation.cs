@@ -178,7 +178,7 @@ namespace SnowyImageCopy.Models
 
 				autoTimer.Stop();
 				autoTimer = null;
-				SystemSounds.Exclamation.Play();
+				SystemSounds.Asterisk.Play();
 				OperationStatus = Resources.OperationStatus_Stopped;
 			}
 		}
@@ -277,7 +277,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (OperationCanceledException)
 			{
-				SystemSounds.Exclamation.Play();
+				SystemSounds.Asterisk.Play();
 				OperationStatus = Resources.OperationStatus_Stopped;
 			}
 			catch (Exception ex)
@@ -344,7 +344,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (OperationCanceledException)
 			{
-				SystemSounds.Exclamation.Play();
+				SystemSounds.Asterisk.Play();
 				OperationStatus = Resources.OperationStatus_Stopped;
 			}
 			catch (Exception ex)
@@ -399,7 +399,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (OperationCanceledException)
 			{
-				SystemSounds.Exclamation.Play();
+				SystemSounds.Asterisk.Play();
 				OperationStatus = Resources.OperationStatus_Stopped;
 			}
 			catch (Exception ex)
@@ -935,7 +935,7 @@ namespace SnowyImageCopy.Models
 		/// Compose path to local file of a specified item.
 		/// </summary>
 		/// <param name="item">Target item</param>
-		private string ComposeLocalPath(FileItemViewModel item)
+		private static string ComposeLocalPath(FileItemViewModel item)
 		{
 			if (String.IsNullOrEmpty((item.FileName)))
 				throw new InvalidOperationException("FileName property is empty.");
@@ -956,7 +956,7 @@ namespace SnowyImageCopy.Models
 		/// Check if local file of a specified item exists.
 		/// </summary>
 		/// <param name="item">Target item</param>
-		private bool IsCopiedLocal(FileItemViewModel item)
+		private static bool IsCopiedLocal(FileItemViewModel item)
 		{
 			var localPath = ComposeLocalPath(item);
 

@@ -47,7 +47,7 @@ namespace SnowyTool.ViewModels
 			}
 		}
 		private int _APPMODE = 4; // Default
-		private int APPMODE_IMPORT = 4;
+		private int APPMODE_IMPORT = 1; // Any number other than default
 
 		/// <summary>
 		/// NETBIOS/Bonjour name (Address of FlashAir)
@@ -59,7 +59,7 @@ namespace SnowyTool.ViewModels
 		public string APPNAME
 		{
 			get { return _APPNAME; }
-			set { _APPNAME = (value.Length <= 15) ? value : value.Substring(0, 15); }
+			set { _APPNAME = GetNullOrLimited(value, 15); }
 		}
 		private string _APPNAME;
 
@@ -77,7 +77,7 @@ namespace SnowyTool.ViewModels
 			get { return _APPSSID; }
 			set
 			{
-				_APPSSID = (value.Length <= 32) ? value : value.Substring(0, 32);
+				_APPSSID = GetNullOrLimited(value, 32);
 
 				if (isImporting)
 					APPSSID_IMPORT = _APPSSID;
@@ -100,8 +100,8 @@ namespace SnowyTool.ViewModels
 			get { return _APPNETWORKKEY; }
 			set
 			{
-				_APPNETWORKKEY = (value.Length <= 64) ? value : value.Substring(0, 64);
-				
+				_APPNETWORKKEY = GetNullOrLimited(value, 64);
+
 				if (isImporting)
 					APPNETWORKKEY_IMPORT = _APPNETWORKKEY;
 				else
@@ -122,7 +122,7 @@ namespace SnowyTool.ViewModels
 			get { return _BRGSSID; }
 			set
 			{
-				_BRGSSID = (value.Length <= 32) ? value : value.Substring(0, 32);
+				_BRGSSID = GetNullOrLimited(value, 32);
 
 				if (isImporting)
 					BRGSSID_IMPORT = _BRGSSID;
@@ -144,7 +144,7 @@ namespace SnowyTool.ViewModels
 			get { return _BRGNETWORKKEY; }
 			set
 			{
-				_BRGNETWORKKEY = (value.Length <= 64) ? value : value.Substring(0, 64);
+				_BRGNETWORKKEY = GetNullOrLimited(value, 64);
 
 				if (isImporting)
 					BRGNETWORKKEY_IMPORT = _BRGNETWORKKEY;
@@ -196,6 +196,7 @@ namespace SnowyTool.ViewModels
 		/// <remarks>
 		/// 1:     Upload operation enabled
 		/// Other: Upload operation disabled
+		/// If this parameter does not exist, it will be regarded as disabled.
 		/// </remarks>
 		public int UPLOAD
 		{
@@ -210,8 +211,8 @@ namespace SnowyTool.ViewModels
 					RaisePropertyChanged(() => IsChanged);
 			}
 		}
-		private int _UPLOAD = 1;
-		private int UPLOAD_IMPORT = 1;
+		private int _UPLOAD = 0; // Disabled
+		private int UPLOAD_IMPORT = 0; // Disabled
 
 		/// <summary>
 		/// Upload destination directory
@@ -380,9 +381,9 @@ namespace SnowyTool.ViewModels
 		private DiskInfo _associatedDisk;
 
 		/// <summary>
-		/// Remaining items in the config file
+		/// Remaining parameters in the config file
 		/// </summary>
-		/// <remarks>This is to hold unusable items (LOCK, APPINFO) and unknown items.</remarks>
+		/// <remarks>This is to hold unusable parameters (LOCK, APPINFO) and unknown ones.</remarks>
 		private readonly Dictionary<string, string> Remaining = new Dictionary<string, string>();
 
 		public bool IsChanged
@@ -394,7 +395,7 @@ namespace SnowyTool.ViewModels
 					!IsBothNullOrEmptyOrEquals(APPNETWORKKEY_IMPORT, APPNETWORKKEY) ||
 					!IsBothNullOrEmptyOrEquals(BRGSSID_IMPORT, BRGSSID) ||
 					!IsBothNullOrEmptyOrEquals(BRGNETWORKKEY_IMPORT, BRGNETWORKKEY) ||
-					!IsBothNullOrEmptyOrEquals(UPLOAD_IMPORT.ToString(), UPLOAD.ToString()));
+					(UPLOAD_IMPORT != UPLOAD));
 			}
 		}
 
@@ -421,142 +422,6 @@ namespace SnowyTool.ViewModels
 		#endregion
 
 
-		#region Import/Export
-
-		private const Char separator = '=';
-		private bool isImporting = false;
-
-		internal void Import(string configContent)
-		{
-			var contents = TextParse.GetContent(configContent, separator);
-
-			var properties = typeof(ConfigViewModel).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
-				.Where(x => x.CanWrite) // CanWrite means not ReadOnly property.
-				.ToArray();
-
-			isImporting = true;
-
-			try
-			{
-				foreach (var c in contents)
-				{
-					var p = properties.FirstOrDefault(x => c.Key == x.Name);
-					if (p == null)
-					{
-						if (!Remaining.Keys.Contains(c.Key))
-							Remaining.Add(c.Key, c.Value);
-
-						continue;
-					}
-
-					try
-					{
-						p.SetValue(this, Convert.ChangeType(c.Value, p.PropertyType), null);
-
-						Debug.WriteLine("{0}: {1}", p.Name, p.GetValue(this, null));
-					}
-					catch (Exception ex)
-					{
-						throw new Exception(String.Format("Failed to import value ({0}). ", p.Name), ex);
-					}
-				}
-			}
-			finally
-			{
-				isImporting = false;
-				RaisePropertyChanged(() => IsChanged);
-			}
-		}
-
-		internal string Export()
-		{
-			var properties = typeof(ConfigViewModel).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
-				.Where(x => x.CanWrite) // CanWrite means not ReadOnly property.
-				.ToArray();
-
-			// Turn empty String value to null.
-			foreach (var p in properties)
-			{
-				if (p.GetType() != typeof(String))
-					continue;
-
-				var value = p.GetValue(this, null);
-
-				if (String.IsNullOrWhiteSpace(value.ToString()))
-					p.SetValue(this, null, null);
-			}
-
-			// Conform empty String value or null of corresponding SSID and network security key.
-			ConformNullOrEmpty(ref _APPSSID, ref _APPNETWORKKEY);
-			ConformNullOrEmpty(ref _BRGSSID, ref _BRGNETWORKKEY);
-
-			// Compose outcome.
-			var outcome = new List<string>();
-
-			foreach (var p in properties)
-			{
-				var value = p.GetValue(this, null);
-
-				if (value == null)
-					continue;
-
-				outcome.Add(String.Format("{0}{1}{2}", p.Name, separator, value));
-			}
-
-			if (Remaining.Any())
-				outcome.AddRange(Remaining.Select(x => String.Format("{0}{1}{2}", x.Key, separator, x.Value)));
-
-			outcome.Sort();
-
-			outcome.Insert(0, "[Vendor]");
-			outcome.Insert(1, String.Empty);
-
-			return String.Join(Environment.NewLine, outcome);
-		}
-
-		private readonly Regex patternAscii = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
-
-		private void ParseCID(string cid)
-		{
-			if (!patternAscii.IsMatch(cid))
-				return;
-
-			var bytes = SoapHexBinary.Parse(cid).Value;
-
-			_manufacturerID = bytes[0]; // Bytes 0
-			_oemApplicationID = Encoding.ASCII.GetString(bytes.Skip(1).Take(2).ToArray()); // Bytes 1-2
-			_productName = Encoding.ASCII.GetString(bytes.Skip(3).Take(5).ToArray()); // Bytes 3-7
-
-			var productRevisionBits = new BitArray(new Byte[] { bytes[8] }).Cast<bool>().Reverse().ToArray(); // Bytes 8
-			var major = ConvertFromBitsToInt(productRevisionBits.Take(4).Reverse());
-			var minor = ConvertFromBitsToInt(productRevisionBits.Skip(4).Take(4).Reverse());
-			_productRevision = String.Format("{0}.{1}", major, minor);
-
-			_productSerialNumber = BitConverter.ToUInt32(bytes, 9); // Bytes 9-12
-
-			var manufacturingDateBits = bytes.Skip(13).Take(2) // Bytes 13-14
-				.SelectMany(x => new BitArray(new Byte[] { x }).Cast<bool>().Reverse())
-				.Skip(4) // Skip reserved field.
-				.ToArray();
-
-			var year = ConvertFromBitsToInt(manufacturingDateBits.Take(8).Reverse());
-			var month = ConvertFromBitsToInt(manufacturingDateBits.Skip(8).Take(4).Reverse());
-			if ((year <= 1000) && (month <= 12))
-			{
-				_manufacturingDate = new DateTime(year + 2000, month, 1);
-			}
-		}
-
-		private int ConvertFromBitsToInt(IEnumerable<bool> source)
-		{
-			var target = new int[1];
-			new BitArray(source.ToArray()).CopyTo(target, 0);
-			return target[0];
-		}
-
-		#endregion
-
-
 		#region Read/Write
 
 		/// <summary>
@@ -578,7 +443,7 @@ namespace SnowyTool.ViewModels
 				using (var sr = new StreamReader(configPath, Encoding.ASCII))
 				{
 					Import(await sr.ReadToEndAsync());
-				}				
+				}
 			}
 			catch (Exception ex)
 			{
@@ -621,16 +486,167 @@ namespace SnowyTool.ViewModels
 			}
 		}
 
-		#endregion
-
-
-		#region Helper
-
 		private string ComposeConfigPath()
 		{
 			return (AssociatedDisk != null)
 				? Path.Combine(AssociatedDisk.DriveLetters.First(), "SD_WLAN", "CONFIG")
 				: null;
+		}
+
+		#endregion
+
+
+		#region Import/Export
+
+		private readonly PropertyInfo[] properties = typeof(ConfigViewModel)
+			.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
+			.Where(x => x.CanWrite) // CanWrite means not Readonly property.
+			.ToArray();
+
+		private const Char separator = '=';
+		private bool isImporting;
+
+		internal void Import(string configContent)
+		{
+			var contents = TextParse.GetContent(configContent, separator);
+
+			isImporting = true;
+
+			try
+			{
+				Remaining.Clear();
+
+				foreach (var c in contents)
+				{
+					var p = properties.FirstOrDefault(x => c.Key == x.Name);
+					if (p == null)
+					{
+						if (!Remaining.Keys.Contains(c.Key))
+							Remaining.Add(c.Key, c.Value);
+
+						continue;
+					}
+
+					try
+					{
+						p.SetValue(this, Convert.ChangeType(c.Value, p.PropertyType));
+
+						Debug.WriteLine("Imported {0}: {1}", p.Name, p.GetValue(this));
+					}
+					catch (Exception ex)
+					{
+						throw new Exception(String.Format("Failed to import value ({0}). ", p.Name), ex);
+					}
+				}
+			}
+			finally
+			{
+				isImporting = false;
+				RaisePropertyChanged(() => IsChanged);
+			}
+		}
+
+		internal string Export()
+		{
+			// Turn empty String value to null.
+			foreach (var p in properties)
+			{
+				var value = p.GetValue(this) as string;
+				if (value == null)
+					continue;
+
+				if (String.IsNullOrWhiteSpace(value))
+					p.SetValue(this, null);
+			}
+
+			// Conform empty String value or null of corresponding SSID and network security key.
+			ConformNullOrEmpty(ref _APPSSID, ref _APPNETWORKKEY);
+			ConformNullOrEmpty(ref _BRGSSID, ref _BRGNETWORKKEY);
+
+			// Compose outcome.
+			var outcome = new List<string>();
+
+			foreach (var p in properties)
+			{
+				var value = p.GetValue(this);
+				if (value == null)
+					continue;
+
+				outcome.Add(String.Format("{0}{1}{2}", p.Name, separator, value));
+			}
+
+			if (Remaining.Any())
+				outcome.AddRange(Remaining.Select(x => String.Format("{0}{1}{2}", x.Key, separator, x.Value)));
+
+			outcome.Sort();
+
+			outcome.Insert(0, "[Vendor]");
+			outcome.Insert(1, String.Empty);
+
+			return String.Join(Environment.NewLine, outcome);
+		}
+
+		#endregion
+
+
+		#region Parse CID
+		
+		private readonly Regex patternAscii = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
+
+		private void ParseCID(string cid)
+		{
+			if (String.IsNullOrWhiteSpace(cid) || !patternAscii.IsMatch(cid))
+				return;
+
+			var bytes = SoapHexBinary.Parse(cid).Value;
+
+			_manufacturerID = bytes[0]; // Bytes 0
+			_oemApplicationID = Encoding.ASCII.GetString(bytes.Skip(1).Take(2).ToArray()); // Bytes 1-2
+			_productName = Encoding.ASCII.GetString(bytes.Skip(3).Take(5).ToArray()); // Bytes 3-7
+
+			var productRevisionBits = new BitArray(new Byte[] { bytes[8] }).Cast<bool>().Reverse().ToArray(); // Bytes 8
+			var major = ConvertFromBitsToInt(productRevisionBits.Take(4).Reverse());
+			var minor = ConvertFromBitsToInt(productRevisionBits.Skip(4).Take(4).Reverse());
+			_productRevision = String.Format("{0}.{1}", major, minor);
+
+			_productSerialNumber = BitConverter.ToUInt32(bytes, 9); // Bytes 9-12
+
+			var manufacturingDateBits = bytes.Skip(13).Take(2) // Bytes 13-14
+				.SelectMany(x => new BitArray(new Byte[] { x }).Cast<bool>().Reverse())
+				.Skip(4) // Skip reserved field.
+				.ToArray();
+
+			var year = ConvertFromBitsToInt(manufacturingDateBits.Take(8).Reverse());
+			var month = ConvertFromBitsToInt(manufacturingDateBits.Skip(8).Take(4).Reverse());
+			if ((year <= 1000) && (month <= 12))
+			{
+				_manufacturingDate = new DateTime(year + 2000, month, 1);
+			}
+		}
+
+		private static int ConvertFromBitsToInt(IEnumerable<bool> source)
+		{
+			var buff = new int[1];
+			new BitArray(source.ToArray()).CopyTo(buff, 0);
+			return buff[0];
+		}
+
+		#endregion
+
+
+		#region Helper
+
+		private static string GetNullOrLimited(string source, int maxLength)
+		{
+			if (maxLength < 0)
+				throw new ArgumentException("maxLength");
+
+			if (String.IsNullOrWhiteSpace(source))
+				return null;
+
+			return (source.Length <= maxLength)
+				? source
+				: source.Substring(0, maxLength);
 		}
 
 		private static bool IsBothNullOrEmptyOrEquals(string a, string b, StringComparison comparisonType = StringComparison.Ordinal)

@@ -16,7 +16,7 @@ namespace SnowyTool.Helper
 			if (Char.IsWhiteSpace(separator))
 				throw new ArgumentException("separator");
 
-			var content = new Dictionary<string, String>();
+			var content = new Dictionary<string, string>();
 
 			var lines = source.Split(new String[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 

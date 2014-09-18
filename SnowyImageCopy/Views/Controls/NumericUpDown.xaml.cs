@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +11,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SnowyImageCopy.Views.Controls
 {
@@ -89,11 +86,6 @@ namespace SnowyImageCopy.Views.Controls
 					1D,
 					null,
 					(d, baseValue) => (0 < (double)baseValue) ? (double)baseValue : DependencyProperty.UnsetValue));
-
-		private static object coerceValueCallback(DependencyObject d, object baseValue)
-		{
-			throw new NotImplementedException();
-		}
 
 		/// <summary>
 		/// Middle level between Minimum and Maximum

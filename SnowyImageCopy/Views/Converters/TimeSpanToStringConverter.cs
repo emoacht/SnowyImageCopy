@@ -16,7 +16,7 @@ namespace SnowyImageCopy.Views.Converters
 	class TimeSpanToStringConverter : IValueConverter
 	{
 		/// <summary>
-		/// Convert TimeSpan to String. The seconds will be always rounded up.
+		/// Convert TimeSpan to String. The seconds will be rounded up.
 		/// </summary>
 		/// <param name="value">TimeSpan</param>
 		/// <param name="targetType"></param>

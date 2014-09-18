@@ -603,11 +603,15 @@ namespace SnowyImageCopy.Models
 			{
 				if (bitmapMetadata.ContainsQuery(query_Orientation))
 				{
-					int orientation;
-					if (int.TryParse(bitmapMetadata.GetQuery(query_Orientation).ToString(), out orientation))
+					var value = bitmapMetadata.GetQuery(query_Orientation);
+					if (value != null)
 					{
-						//Debug.WriteLine("Exif Orientation: {0}", orientation);
-						return orientation;
+						int orientation;
+						if (int.TryParse(value.ToString(), out orientation))
+						{
+							//Debug.WriteLine("Exif Orientation: {0}", orientation);
+							return orientation;
+						}
 					}
 				}
 			}
@@ -690,13 +694,12 @@ namespace SnowyImageCopy.Models
 		{
 			return ConvertStreamToBitmapImage(stream, Size.Empty);
 		}
-
+				
 		/// <summary>
 		/// Convert stream to BitmapImage.
 		/// </summary>
 		/// <param name="stream">Source stream</param>
-		/// <param name="targetWidth">Target width</param>
-		/// <param name="targetHeight">Target height</param>
+		/// <param name="targetSize">Target size</param>
 		private static BitmapImage ConvertStreamToBitmapImage(Stream stream, Size targetSize)
 		{
 			if (0 < stream.Position)
@@ -758,7 +761,7 @@ namespace SnowyImageCopy.Models
 			{
 				return outerSize;
 			}
-			else if (originRatio > outerRatio) // Origin is horizontally longer.
+			if (originRatio > outerRatio) // Origin is horizontally longer.
 			{
 				return new Size(outerSize.Width,
 								outerSize.Width / originRatio);
@@ -805,7 +808,7 @@ namespace SnowyImageCopy.Models
 			{
 				return Int32Rect.Empty;
 			}
-			else if (originRatio > innerRatio) // Origin is horizontally longer.
+			if (originRatio > innerRatio) // Origin is horizontally longer.
 			{
 				// Cut off left and right.
 				var croppedWidth = originHeight * innerRatio;

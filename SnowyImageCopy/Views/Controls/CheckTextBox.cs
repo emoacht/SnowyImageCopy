@@ -85,7 +85,7 @@ namespace SnowyImageCopy.Views.Controls
 			{
 				isChanged = true;
 
-				this.IsChecked = baseText.Equals(inputText, StringComparison.Ordinal);
+				IsChecked = baseText.Equals(inputText, StringComparison.Ordinal);
 			}
 			finally
 			{
