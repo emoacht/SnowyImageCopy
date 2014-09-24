@@ -226,6 +226,9 @@
   <data name="Options_Browse" xml:space="preserve">
     <value>Browse</value>
   </data>
+  <data name="Options_ChooseDeleteUponCopy" xml:space="preserve">
+    <value>Enable to choose to delete image in FlashAir upon copy</value>
+  </data>
   <data name="Options_Date" xml:space="preserve">
     <value>Date</value>
   </data>
@@ -262,14 +265,14 @@
   <data name="Options_LocalFolderExplanation" xml:space="preserve">
     <value>Specify a folder to copy images.</value>
   </data>
+  <data name="Options_NoticeDeleteUponCopy" xml:space="preserve">
+    <value>Keyword in Readme</value>
+  </data>
   <data name="Options_OpenByExplorer" xml:space="preserve">
     <value>Open by Explorer</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Path</value>
-  </data>
-  <data name="Options_PossibleDeleteUponCopy" xml:space="preserve">
-    <value>Make possible to delete image in FlashAir upon copy</value>
   </data>
   <data name="Options_Recycle" xml:space="preserve">
     <value>Move to Recycle if image in FlashAir is deleted</value>

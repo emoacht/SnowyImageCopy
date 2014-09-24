@@ -25,7 +25,7 @@ namespace SnowyTool.Views.Converters
 		/// </summary>
 		/// <param name="value">Source Boolean</param>
 		/// <param name="targetType"></param>
-		/// <param name="parameter">Name of a predefined color</param>
+		/// <param name="parameter">predefined color name</param>
 		/// <param name="culture"></param>
 		/// <returns>SolidColorBrush of the predefined color</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -36,7 +36,7 @@ namespace SnowyTool.Views.Converters
 			if (!predefinedColorNames.Contains(parameter.ToString()))
 				return DependencyProperty.UnsetValue;
 
-			return (SolidColorBrush)new BrushConverter().ConvertFromString(parameter.ToString());
+			return (SolidColorBrush)new BrushConverter().ConvertFromInvariantString(parameter.ToString());
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

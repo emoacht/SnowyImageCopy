@@ -44,6 +44,7 @@ namespace SnowyImageCopy.Views.Controls
 					(d, baseValue) =>
 					{
 						var numeric = (NumericUpDown)d;
+
 						if ((double)baseValue < numeric.Minimum)
 							return numeric.Minimum;
 						if (numeric.Maximum < (double)baseValue)
@@ -60,7 +61,9 @@ namespace SnowyImageCopy.Views.Controls
 		public static readonly DependencyProperty MinimumProperty =
 			RangeBase.MinimumProperty.AddOwner(
 				typeof(NumericUpDown),
-				new FrameworkPropertyMetadata(0D, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					0D,
+					OnPropertyChanged));
 
 		public double Maximum
 		{
@@ -70,7 +73,9 @@ namespace SnowyImageCopy.Views.Controls
 		public static readonly DependencyProperty MaximumProperty =
 			RangeBase.MaximumProperty.AddOwner(
 				typeof(NumericUpDown),
-				new FrameworkPropertyMetadata(10D, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					10D,
+					OnPropertyChanged));
 
 		public double Frequency
 		{

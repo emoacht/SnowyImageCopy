@@ -57,7 +57,7 @@ namespace SnowyImageCopy.Models
 			public int Bottom;
 		}
 
-		public enum SW : int
+		public enum SW
 		{
 			SW_HIDE = 0,
 			SW_SHOWNORMAL = 1,

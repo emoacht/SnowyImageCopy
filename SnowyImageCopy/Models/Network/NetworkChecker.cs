@@ -106,7 +106,7 @@ namespace SnowyImageCopy.Models.Network
 				}
 			}
 
-			private void FindItem(Regex pattern, ref string source, ref string target)
+			private static void FindItem(Regex pattern, ref string source, ref string target)
 			{
 				if (String.IsNullOrEmpty(source) || (target != null))
 					return;

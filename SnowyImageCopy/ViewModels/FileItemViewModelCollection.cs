@@ -74,10 +74,10 @@ namespace SnowyImageCopy.ViewModels
 			ItemPropertyChangedSender = sender as FileItemViewModel;
 			ItemPropertyChangedEventArgs = e;
 
-			base.OnPropertyChanged(new PropertyChangedEventArgs(nameItemPropertyChangedSender));
+			base.OnPropertyChanged(new PropertyChangedEventArgs(NameItemPropertyChangedSender));
 		}
 
-		private string nameItemPropertyChangedSender
+		private string NameItemPropertyChangedSender
 		{
 			get
 			{

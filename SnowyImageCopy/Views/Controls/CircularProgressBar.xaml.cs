@@ -36,7 +36,9 @@ namespace SnowyImageCopy.Views.Controls
 				"Radius",
 				typeof(double),
 				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(25D, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					25D,
+					OnPropertyChanged));
 
 		public double StrokeThickness
 		{
@@ -48,7 +50,9 @@ namespace SnowyImageCopy.Views.Controls
 				"StrokeThickness",
 				typeof(double),
 				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(10D, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					10D,
+					OnPropertyChanged));
 
 		public Brush ArcSegmentColor
 		{
@@ -60,7 +64,9 @@ namespace SnowyImageCopy.Views.Controls
 				"ArcSegmentColor",
 				typeof(Brush),
 				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(SystemColors.HighlightBrush, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					SystemColors.HighlightBrush,
+					OnPropertyChanged));
 
 		public Brush RingSegmentColor
 		{
@@ -72,7 +78,9 @@ namespace SnowyImageCopy.Views.Controls
 				"RingSegmentColor",
 				typeof(Brush),
 				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(null, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					null,
+					OnPropertyChanged));
 
 		public double RingSegmentOpacity
 		{
@@ -84,7 +92,9 @@ namespace SnowyImageCopy.Views.Controls
 				"RingSegmentOpacity",
 				typeof(double),
 				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(0D, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					0D,
+					OnPropertyChanged));
 
 		public double Percentage
 		{
@@ -98,15 +108,13 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(CircularProgressBar),
 				new FrameworkPropertyMetadata(
 					60D, // Sample percentage
-					OnPercentageChanged,
-					(d, baseValue) =>
-					{
-						var num = (double)baseValue;
-						if ((num < 0D) || (100D < num))
-							throw new ArgumentOutOfRangeException("Percentage", String.Format("Value: {0}", num));
+					OnPercentageChanged),
+				value =>
+				{
+					var num = (double)value;
 
-						return num;
-					}));
+					return ((0D <= num) && (num <= 100D));
+				});
 
 		public double Angle
 		{
@@ -120,15 +128,13 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(CircularProgressBar),
 				new FrameworkPropertyMetadata(
 					216D, // Sample angle
-					OnPropertyChanged,
-					(d, baseValue) =>
-					{
-						var num = (double)baseValue;
-						if ((num < 0D) || (360D < num))
-							throw new ArgumentOutOfRangeException("Angle");
+					OnPropertyChanged),
+				value =>
+				{
+					var num = (double)value;
 
-						return num;
-					}));
+					return ((0D <= num) && (num <= 360D));
+				});
 
 		#endregion
 
@@ -175,7 +181,7 @@ namespace SnowyImageCopy.Views.Controls
 			CirclePathTransform.Y = StrokeThickness / 2;
 		}
 
-		private Point GetCartesianCoordinate(double angle, double radius)
+		private static Point GetCartesianCoordinate(double angle, double radius)
 		{
 			// Convert from degree to radian.
 			var angleRadian = (Math.PI / 180D) * (angle - 90D);

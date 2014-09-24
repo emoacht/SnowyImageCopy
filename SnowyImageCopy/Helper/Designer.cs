@@ -11,7 +11,7 @@ namespace SnowyImageCopy.Helper
 	public static class Designer
 	{
 		/// <summary>
-		/// Check if a Control is in design mode (running in Blend or Visual Studio).
+		/// Whether a Control is in design mode (running in Blend or Visual Studio)
 		/// </summary>
 		public static bool IsInDesignMode
 		{

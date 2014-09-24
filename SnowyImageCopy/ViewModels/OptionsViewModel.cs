@@ -42,7 +42,7 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener operationPropertyChangedListener;
 
-		private string[] caseOperationStateChanged
+		private string[] CaseOperationStateChanged
 		{
 			get
 			{
@@ -66,7 +66,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			//Debug.WriteLine("Operation property changed (OptionsViewModel): {0} {1}", sender, e.PropertyName);
 
-			if (caseOperationStateChanged.Contains(e.PropertyName))
+			if (CaseOperationStateChanged.Contains(e.PropertyName))
 			{
 				IsCheckingOrCopying = MainWindowViewModelInstance.Op.IsChecking || MainWindowViewModelInstance.Op.IsCopying;
 			}
@@ -129,10 +129,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public FilePeriodViewModel FilePeriodSelected
 		{
-			get
-			{
-				return FilePeriodList.FirstOrDefault(x => x.Period == Settings.Current.TargetPeriod);
-			}
+			get { return FilePeriodList.FirstOrDefault(x => x.Period == Settings.Current.TargetPeriod); }
 			set
 			{
 				Settings.Current.TargetPeriod = value.Period;

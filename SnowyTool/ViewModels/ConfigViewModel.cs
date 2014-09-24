@@ -93,7 +93,7 @@ namespace SnowyTool.ViewModels
 		/// </summary> 
 		/// <remarks>
 		/// Format: 0-64 characters (at least 8 characters are required to enable security functionality) 
-		/// Once rebooted, this value will be saved in hidden area and this string will be masked.
+		/// Once rebooted, this value will be saved in hidden area in FlashAir and this value will be masked.
 		/// </remarks>
 		public string APPNETWORKKEY
 		{
@@ -194,9 +194,9 @@ namespace SnowyTool.ViewModels
 		/// Upload operation enabled flag
 		/// </summary>
 		/// <remarks>
-		/// 1:     Upload operation enabled
-		/// Other: Upload operation disabled
-		/// If this parameter does not exist, it will be regarded as disabled.
+		/// 1:     Upload operation enabled.
+		/// Other: Upload operation disabled.
+		/// If this parameter does not exist, upload operation will be regarded as disabled.
 		/// </remarks>
 		public int UPLOAD
 		{
@@ -384,7 +384,7 @@ namespace SnowyTool.ViewModels
 		/// Remaining parameters in the config file
 		/// </summary>
 		/// <remarks>This is to hold unusable parameters (LOCK, APPINFO) and unknown ones.</remarks>
-		private readonly Dictionary<string, string> Remaining = new Dictionary<string, string>();
+		private readonly Dictionary<string, string> remaining = new Dictionary<string, string>();
 
 		public bool IsChanged
 		{
@@ -399,18 +399,17 @@ namespace SnowyTool.ViewModels
 			}
 		}
 
-		private readonly Regex patternVersion = new Regex(@"[1-9]\.\d{2}\.\d{2}", RegexOptions.Compiled);
+		private static readonly Regex versionPattern = new Regex(@"[1-9]\.\d{2}\.\d{2}$", RegexOptions.Compiled); // Pattern for firmware version (number part)
 
 		public bool IsInternetPassThruReady
 		{
 			get
 			{
-				var matchVersion = patternVersion.Match(VERSION);
-				if (!matchVersion.Success)
+				var match = versionPattern.Match(VERSION);
+				if (!match.Success)
 					return false;
 
-				var version = new Version(matchVersion.Value);
-				return (version.Major <= 2);
+				return (new Version(match.Value) >= new Version(2, 0, 2)); // Equal to or newer than 2.00.02
 			}
 		}
 
@@ -503,7 +502,7 @@ namespace SnowyTool.ViewModels
 			.Where(x => x.CanWrite) // CanWrite means not Readonly property.
 			.ToArray();
 
-		private const Char separator = '=';
+		private const char separator = '=';
 		private bool isImporting;
 
 		internal void Import(string configContent)
@@ -514,15 +513,15 @@ namespace SnowyTool.ViewModels
 
 			try
 			{
-				Remaining.Clear();
+				remaining.Clear();
 
 				foreach (var c in contents)
 				{
 					var p = properties.FirstOrDefault(x => c.Key == x.Name);
 					if (p == null)
 					{
-						if (!Remaining.Keys.Contains(c.Key))
-							Remaining.Add(c.Key, c.Value);
+						if (!remaining.Keys.Contains(c.Key))
+							remaining.Add(c.Key, c.Value);
 
 						continue;
 					}
@@ -575,8 +574,8 @@ namespace SnowyTool.ViewModels
 				outcome.Add(String.Format("{0}{1}{2}", p.Name, separator, value));
 			}
 
-			if (Remaining.Any())
-				outcome.AddRange(Remaining.Select(x => String.Format("{0}{1}{2}", x.Key, separator, x.Value)));
+			if (remaining.Any())
+				outcome.AddRange(remaining.Select(x => String.Format("{0}{1}{2}", x.Key, separator, x.Value)));
 
 			outcome.Sort();
 
@@ -591,11 +590,11 @@ namespace SnowyTool.ViewModels
 
 		#region Parse CID
 		
-		private readonly Regex patternAscii = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
+		private static readonly Regex asciiPattern = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
 
 		private void ParseCID(string cid)
 		{
-			if (String.IsNullOrWhiteSpace(cid) || !patternAscii.IsMatch(cid))
+			if (String.IsNullOrWhiteSpace(cid) || !asciiPattern.IsMatch(cid))
 				return;
 
 			var bytes = SoapHexBinary.Parse(cid).Value;

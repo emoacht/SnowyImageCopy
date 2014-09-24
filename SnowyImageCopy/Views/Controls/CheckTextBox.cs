@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,14 +14,26 @@ namespace SnowyImageCopy.Views.Controls
 	{
 		#region Dependency Property
 
-		public string BaseText
+		public String NoticeText
 		{
-			get { return (string)GetValue(BaseTextProperty); }
-			set { SetValue(BaseTextProperty, value); }
+			get { return (String)GetValue(NoticeTextProperty); }
+			set { SetValue(NoticeTextProperty, value); }
 		}
-		public static readonly DependencyProperty BaseTextProperty =
+		public static readonly DependencyProperty NoticeTextProperty =
 			DependencyProperty.Register(
-				"BaseText",
+				"NoticeText",
+				typeof(String),
+				typeof(CheckTextBox),
+				new FrameworkPropertyMetadata(String.Empty));
+
+		public string CheckText
+		{
+			get { return (string)GetValue(CheckTextProperty); }
+			set { SetValue(CheckTextProperty, value); }
+		}
+		public static readonly DependencyProperty CheckTextProperty =
+			DependencyProperty.Register(
+				"CheckText",
 				typeof(string),
 				typeof(CheckTextBox),
 				new FrameworkPropertyMetadata(
@@ -60,7 +73,7 @@ namespace SnowyImageCopy.Views.Controls
 					{
 						var textBox = (CheckTextBox)d;
 
-						textBox.CompareText(textBox.BaseText, (String)e.NewValue);
+						textBox.CompareText(textBox.CheckText, (String)e.NewValue);
 					}));
 
 			TextBox.VisibilityProperty.OverrideMetadata(
@@ -74,7 +87,64 @@ namespace SnowyImageCopy.Views.Controls
 					}));
 		}
 
-		private bool isChanged = false;
+
+		#region Notice
+
+		private bool isNotice;
+
+		protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+		{
+			base.OnPropertyChanged(e);
+
+			if (e.Property != VisibilityProperty)
+				return;
+
+			if ((Visibility)e.NewValue == Visibility.Visible)
+			{
+				if (String.IsNullOrWhiteSpace(this.Text))
+				{
+					isNotice = true;
+					this.Text = NoticeText;
+				}
+			}
+			else
+			{
+				if (isNotice)
+				{
+					isNotice = false;
+					this.Text = String.Empty;
+				}
+			}
+		}
+
+		protected override void OnGotFocus(RoutedEventArgs e)
+		{
+			base.OnGotFocus(e);
+
+			if ((this.Visibility == Visibility.Visible) && isNotice)
+			{
+				isNotice = false;
+				this.Text = String.Empty;
+			}
+		}
+
+		protected override void OnLostFocus(RoutedEventArgs e)
+		{
+			base.OnLostFocus(e);
+
+			if ((this.Visibility == Visibility.Visible) && String.IsNullOrWhiteSpace(this.Text))
+			{
+				isNotice = true;
+				this.Text = NoticeText;
+			}
+		}
+
+		#endregion
+
+
+		#region Check
+
+		private bool isChanged;
 
 		private void CompareText(string baseText, string inputText)
 		{
@@ -104,7 +174,7 @@ namespace SnowyImageCopy.Views.Controls
 
 				if (isChecked)
 				{
-					this.Text = BaseText;
+					this.Text = CheckText;
 					this.Visibility = Visibility.Visible;
 				}
 				else
@@ -117,5 +187,7 @@ namespace SnowyImageCopy.Views.Controls
 				isChanged = false;
 			}
 		}
+
+		#endregion
 	}
 }

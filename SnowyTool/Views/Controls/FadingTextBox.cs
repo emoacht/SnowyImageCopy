@@ -12,21 +12,21 @@ namespace SnowyTool.Views.Controls
 	public class FadingTextBox : TextBox
 	{
 		#region Dependency Property
-
-		public int FadeOutTime // sec
+		
+		public double FadeOutTime // sec
 		{
-			get { return (int)GetValue(FadeOutTimeProperty); }
+			get { return (double)GetValue(FadeOutTimeProperty); }
 			set { SetValue(FadeOutTimeProperty, value); }
 		}
 		public static readonly DependencyProperty FadeOutTimeProperty =
 			DependencyProperty.Register(
 				"FadeOutTime",
-				typeof(int),
+				typeof(double),
 				typeof(FadingTextBox),
 				new FrameworkPropertyMetadata(
-					0,
+					0D,
 					null,
-					(d, baseValue) => (int)Math.Max((double)(int)baseValue, fadingTime)));
+					(d, baseValue) => Math.Max((double)baseValue, fadingTime)));
 
 		#endregion
 
@@ -60,7 +60,7 @@ namespace SnowyTool.Views.Controls
 
 		private void ManageText()
 		{
-			if (FadeOutTime == 0)
+			if (FadeOutTime <= 0D)
 				return;
 
 			if (fadingTimer == null)
@@ -75,7 +75,7 @@ namespace SnowyTool.Views.Controls
 			buff.Opacity = 1D;
 			this.Foreground = buff;
 
-			remainingTime = (double)FadeOutTime;
+			remainingTime = FadeOutTime;
 			fadingTimer.Interval = TimeSpan.FromSeconds(fadingInterval);
 			fadingTimer.Start();
 		}

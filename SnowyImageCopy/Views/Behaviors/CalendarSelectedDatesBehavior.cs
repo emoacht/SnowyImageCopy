@@ -94,8 +94,8 @@ namespace SnowyImageCopy.Views.Behaviors
 
 			this.SelectedDates = new ObservableCollection<DateTime>(this.SelectedDates.Distinct());
 
-			// Release mouse capture because Calendar control captures mouse when it is clicked
-			// and so prevents other controls from responding to the first click after Calendar.
+			// Release mouse capture because Calendar control captures mouse when it is clicked and so prevents 
+			// other controls from responding to the first click after Calendar.
 			Mouse.Capture(null);
 		}
 	}

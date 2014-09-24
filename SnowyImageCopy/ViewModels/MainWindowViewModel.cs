@@ -15,6 +15,7 @@ using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models;
 using SnowyImageCopy.Views.Controls;
+using SnowyImageCopy.Models.Exceptions;
 
 namespace SnowyImageCopy.ViewModels
 {
@@ -105,10 +106,10 @@ namespace SnowyImageCopy.ViewModels
 				RaisePropertyChanged();
 			}
 		}
-		private double _progressCopyFileAll = 40;
+		private double _progressCopyFileAll = 40; // Sample percentage
 
 		/// <summary>
-		/// Percentage of total size of local files of items that are copied during current operation
+		/// Percentage of total size of local files of items that are in target and copied during current operation
 		/// </summary>
 		public double ProgressCopyFileCurrent
 		{
@@ -119,7 +120,7 @@ namespace SnowyImageCopy.ViewModels
 				RaisePropertyChanged();
 			}
 		}
-		private double _progressCopyFileCurrent = 60;
+		private double _progressCopyFileCurrent = 60; // Sample percentage
 
 		/// <summary>
 		/// Remaining time for current operation that is calculated by current transfer rate.
@@ -137,21 +138,23 @@ namespace SnowyImageCopy.ViewModels
 
 		private void UpdateProgress(ProgressInfo info)
 		{
-			int currentValueLatest = 0;
+			int sizeCopiedLatest = 0;
 			var elapsedTimeLatest = TimeSpan.Zero;
 
 			if (info != null)
 			{
-				currentValueLatest = info.CurrentValue;
+				sizeCopiedLatest = info.CurrentValue;
 				elapsedTimeLatest = info.ElapsedTime;
 			}
 
 			var fileListBuff = FileListCoreView.Cast<FileItemViewModel>().ToArray();
 
-			int sizeTotal = fileListBuff.Where(x => (x.Status != FileStatus.Recycled))
+			var sizeTotal = fileListBuff
+				.Where(x => (x.Status != FileStatus.Recycled))
 				.Sum(x => x.Size);
 
-			int sizeCopied = fileListBuff.Where(x => (x.Status == FileStatus.Copied))
+			var sizeCopied = fileListBuff
+				.Where(x => (x.Status == FileStatus.Copied))
 				.Sum(x => x.Size);
 
 			if (sizeTotal == 0)
@@ -160,23 +163,28 @@ namespace SnowyImageCopy.ViewModels
 			}
 			else
 			{
-				ProgressCopyFileAll = (double)(sizeCopied + currentValueLatest) * 100D / sizeTotal;
+				ProgressCopyFileAll = (double)(sizeCopied + sizeCopiedLatest) * 100D / (double)sizeTotal;
 
 				//Debug.WriteLine("ProgressCopyFileAll: {0}", ProgressCopyFileAll);
 			}
 
-			int sizeCopiedCurrent = fileListBuff.Where(x => (x.Status == FileStatus.Copied) && (Op.CopyStartTime < x.FileCopiedTime)).Sum(x => x.Size);
-			int sizeToBeCopied = fileListBuff.Where(x => (x.Status == FileStatus.ToBeCopied) || (x.Status == FileStatus.Copying)).Sum(x => x.Size);
+			var sizeCopiedCurrent = fileListBuff
+				.Where(x => (x.Status == FileStatus.Copied) && (Op.CopyStartTime < x.CopiedTime))
+				.Sum(x => x.Size);
+
+			var sizeToBeCopied = fileListBuff
+				.Where(x => (x.Status == FileStatus.ToBeCopied) || (x.Status == FileStatus.Copying))
+				.Sum(x => x.Size);
 
 			if (sizeToBeCopied == 0)
 			{
 				ProgressCopyFileCurrent = 0D;
 				RemainingTime = TimeSpan.Zero;
 			}
-			else if (currentValueLatest > 0)
+			else if (sizeCopiedLatest > 0)
 			{
-				ProgressCopyFileCurrent = (double)(sizeCopiedCurrent + currentValueLatest) * 100D / (sizeCopiedCurrent + sizeToBeCopied);
-				RemainingTime = TimeSpan.FromSeconds((double)(sizeToBeCopied - currentValueLatest) / currentValueLatest * elapsedTimeLatest.TotalSeconds);
+				ProgressCopyFileCurrent = (double)(sizeCopiedCurrent + sizeCopiedLatest) * 100D / (double)(sizeCopiedCurrent + sizeToBeCopied);
+				RemainingTime = TimeSpan.FromSeconds((double)(sizeToBeCopied - sizeCopiedLatest) * elapsedTimeLatest.TotalSeconds / (double)sizeCopiedLatest);
 
 				//Debug.WriteLine("ProgressCopyFileCurrent: {0} RemainingTime: {1}", ProgressCopyFileCurrent, RemainingTime);
 			}
@@ -219,10 +227,7 @@ namespace SnowyImageCopy.ViewModels
 					return;
 
 				_currentFrameSize = value;
-
-				//if (!Designer.IsInDesignMode)
-				//	SetCurrentImage();
-
+				
 				var handler = CurrentFrameSizeChanged;
 				if (handler != null)
 				{
@@ -280,10 +285,17 @@ namespace SnowyImageCopy.ViewModels
 
 			if ((CurrentImageData != null) && (CurrentItem != null))
 			{
-				if (!CurrentFrameSize.IsEmpty)
-					image = await ImageManager.ConvertBytesToBitmapImageUniformAsync(CurrentImageData, CurrentFrameSize, CurrentItem.CanReadExif);
-				else
-					image = await ImageManager.ConvertBytesToBitmapImageAsync(CurrentImageData, CurrentImageWidth, CurrentItem.CanReadExif);
+				try
+				{
+					if (!CurrentFrameSize.IsEmpty)
+						image = await ImageManager.ConvertBytesToBitmapImageUniformAsync(CurrentImageData, CurrentFrameSize, CurrentItem.CanReadExif);
+					else
+						image = await ImageManager.ConvertBytesToBitmapImageAsync(CurrentImageData, CurrentImageWidth, CurrentItem.CanReadExif);
+				}
+				catch (ImageNotSupportedException)
+				{
+					CurrentItem.CanLoadDataLocal = false;
+				}
 			}
 
 			if (image == null)
@@ -294,10 +306,9 @@ namespace SnowyImageCopy.ViewModels
 
 		private BitmapImage GetDefaultCurrentImage()
 		{
-			if (!CurrentFrameSize.IsEmpty)
-				return ImageManager.ConvertFrameworkElementToBitmapImage(new ThumbnailBox(), CurrentFrameSize);
-			else
-				return ImageManager.ConvertFrameworkElementToBitmapImage(new ThumbnailBox(), CurrentImageWidth);
+			return !CurrentFrameSize.IsEmpty
+				? ImageManager.ConvertFrameworkElementToBitmapImage(new ThumbnailBox(), CurrentFrameSize)
+				: ImageManager.ConvertFrameworkElementToBitmapImage(new ThumbnailBox(), CurrentImageWidth);
 		}
 
 		#endregion
@@ -445,10 +456,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public DelegateCommand StopCommand
 		{
-			get
-			{
-				return _stopCommand ?? (_stopCommand = new DelegateCommand(StopExecute, CanStopExecute));
-			}
+			get { return _stopCommand ?? (_stopCommand = new DelegateCommand(StopExecute, CanStopExecute)); }
 		}
 		private DelegateCommand _stopCommand;
 
@@ -523,11 +531,7 @@ namespace SnowyImageCopy.ViewModels
 				)
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
-				.Subscribe(_ =>
-					{
-						Op.Stop();
-						FileListCoreView.Refresh();
-					});
+				.Subscribe(_ => FileListCoreView.Refresh());
 		}
 
 		private FileItemViewModel GetSampleFileData(int fileNumber)
@@ -546,7 +550,7 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener fileListPropertyChangedListener;
 
-		private string caseItemPropertyChanged
+		private string CaseItemPropertyChanged
 		{
 			get
 			{
@@ -556,7 +560,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private string _caseItemPropertyChanged;
 
-		private string caseFileStatusChanged
+		private string CaseFileStatusChanged
 		{
 			get
 			{
@@ -566,7 +570,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private string _caseFileStatusChanged;
 
-		private string caseInstantCopy
+		private string CaseInstantCopy
 		{
 			get
 			{
@@ -580,7 +584,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			//Debug.WriteLine("File List property changed: {0} {1}", sender, e.PropertyName);
 
-			if (e.PropertyName != caseItemPropertyChanged)
+			if (e.PropertyName != CaseItemPropertyChanged)
 				return;
 
 			var item = ((FileItemViewModelCollection)sender).ItemPropertyChangedSender;
@@ -588,13 +592,13 @@ namespace SnowyImageCopy.ViewModels
 
 			//Debug.WriteLine(String.Format("ItemPropartyChanegd: {0} {1}", item.FileName, propertyName));
 
-			if (caseFileStatusChanged == propertyName)
+			if (CaseFileStatusChanged == propertyName)
 			{
 				switch (item.Status)
 				{
 					case FileStatus.NotCopied:
 						// Make remote file as to be copied.
-						if (!item.IsRemoteAlive)
+						if (!item.IsAliveRemote)
 							return;
 
 						item.Status = FileStatus.ToBeCopied;
@@ -602,7 +606,7 @@ namespace SnowyImageCopy.ViewModels
 
 					case FileStatus.ToBeCopied:
 						// Make remote file as not to be copied.
-						item.Status = item.IsLocalAlive ? FileStatus.Copied : FileStatus.NotCopied;
+						item.Status = item.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
 						break;
 
 					case FileStatus.Copied:
@@ -614,7 +618,7 @@ namespace SnowyImageCopy.ViewModels
 						break;
 				}
 			}
-			else if (caseInstantCopy == propertyName)
+			else if (CaseInstantCopy == propertyName)
 			{
 				if ((item.Status != FileStatus.ToBeCopied) || Op.IsChecking || Op.IsCopying || !Settings.Current.InstantCopy)
 					return;
@@ -630,7 +634,7 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener settingsPropertyChangedListener;
 
-		private string caseAutoCheckChanged
+		private string CaseAutoCheckChanged
 		{
 			get
 			{
@@ -640,7 +644,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private string _caseAutoCheckChanged;
 
-		private string[] caseTargetDateChanged
+		private string[] CaseTargetDateChanged
 		{
 			get
 			{
@@ -669,7 +673,7 @@ namespace SnowyImageCopy.ViewModels
 
 			var propertyName = e.PropertyName;
 
-			if (caseAutoCheckChanged == propertyName)
+			if (CaseAutoCheckChanged == propertyName)
 			{
 				var handler = AutoCheckChanged;
 				if (handler != null)
@@ -677,7 +681,7 @@ namespace SnowyImageCopy.ViewModels
 					handler();
 				}
 			}
-			else if (caseTargetDateChanged.Contains(propertyName))
+			else if (CaseTargetDateChanged.Contains(propertyName))
 			{
 				var handler = TargetDateChanged;
 				if (handler != null)
@@ -694,7 +698,7 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener operationPropertyChangedListener;
 
-		private string[] caseOperationStateChanged
+		private string[] CaseOperationStateChanged
 		{
 			get
 			{
@@ -715,7 +719,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private string[] _caseOperationStateChanged;
 
-		private string caseOperationProgressChanged
+		private string CaseOperationProgressChanged
 		{
 			get
 			{
@@ -731,11 +735,11 @@ namespace SnowyImageCopy.ViewModels
 
 			var propertyName = e.PropertyName;
 
-			if (caseOperationStateChanged.Contains(propertyName))
+			if (CaseOperationStateChanged.Contains(propertyName))
 			{
 				RaiseCanExecuteChanged();
 			}
-			else if (caseOperationProgressChanged == propertyName)
+			else if (CaseOperationProgressChanged == propertyName)
 			{
 				UpdateProgress(Op.OperationProgress);
 			}
