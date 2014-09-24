@@ -50,7 +50,9 @@ namespace SnowyImageCopy.Views.Controls
 				"TextChecked",
 				typeof(string),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata("On", OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					"On",
+					OnPropertyChanged));
 
 		public string TextUnchecked
 		{
@@ -62,8 +64,10 @@ namespace SnowyImageCopy.Views.Controls
 				"TextUnchecked",
 				typeof(string),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata("Off", OnPropertyChanged));
-		
+				new FrameworkPropertyMetadata(
+					"Off",
+					OnPropertyChanged));
+
 		public Brush ForegroundChecked
 		{
 			get { return (Brush)GetValue(ForegroundCheckedProperty); }
@@ -74,7 +78,9 @@ namespace SnowyImageCopy.Views.Controls
 				"ForegroundChecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(Brushes.Black, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					Brushes.Black,
+					OnPropertyChanged));
 
 		public Brush ForegroundUnchecked
 		{
@@ -86,7 +92,9 @@ namespace SnowyImageCopy.Views.Controls
 				"ForegroundUnchecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(Brushes.Black, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					Brushes.Black,
+					OnPropertyChanged));
 
 		public Brush BackgroundChecked
 		{
@@ -98,7 +106,9 @@ namespace SnowyImageCopy.Views.Controls
 				"BackgroundChecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(Brushes.SkyBlue, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					Brushes.SkyBlue,
+					OnPropertyChanged));
 
 		public Brush BackgroundUnchecked
 		{
@@ -110,7 +120,9 @@ namespace SnowyImageCopy.Views.Controls
 				"BackgroundUnchecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(Brushes.Gray, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					Brushes.Gray,
+					OnPropertyChanged));
 
 		#endregion
 

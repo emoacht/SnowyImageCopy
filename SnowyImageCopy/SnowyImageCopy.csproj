@@ -108,6 +108,9 @@
     <Compile Include="Helper\ShellLink.cs" />
     <Compile Include="Helper\Shortcut.cs" />
     <Compile Include="Models\CardInfo.cs" />
+    <Compile Include="Models\Exceptions\CardChangedException.cs" />
+    <Compile Include="Models\Exceptions\CardUploadDisabledException.cs" />
+    <Compile Include="Models\Exceptions\ImageNotSupportedException.cs" />
     <Compile Include="Models\Exceptions\RemoteFileDeleteFailedException.cs" />
     <Compile Include="Models\Exceptions\UnexpectedException.cs" />
     <Compile Include="Models\Exceptions\RemoteConnectionLostException.cs" />
@@ -134,10 +137,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\CircularProgressBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\DottedPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -211,9 +210,6 @@
     </Compile>
     <Compile Include="Views\Controls\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Controls\DottedPanel.xaml.cs">
-      <DependentUpon>DottedPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\HideableGridSplitter.cs" />
     <Compile Include="Views\Controls\NumericUpDown.xaml.cs">

@@ -130,36 +130,33 @@ namespace SnowyImageCopy.Models.Toast
 			var toast = new ToastNotification(document);
 			var tcs = new TaskCompletionSource<ToastResult>();
 
-			TypedEventHandler<ToastNotification, object> activated = null;
-			activated = (sender, e) =>
-				{
-					tcs.SetResult(ToastResult.Activated);
-				};
+			TypedEventHandler<ToastNotification, object> activated = (sender, e) =>
+			{
+				tcs.SetResult(ToastResult.Activated);
+			};
 			toast.Activated += activated;
 
-			TypedEventHandler<ToastNotification, ToastDismissedEventArgs> dismissed = null;
-			dismissed = (sender, e) =>
+			TypedEventHandler<ToastNotification, ToastDismissedEventArgs> dismissed = (sender, e) =>
+			{
+				switch (e.Reason)
 				{
-					switch (e.Reason)
-					{
-						case ToastDismissalReason.ApplicationHidden:
-							tcs.SetResult(ToastResult.ApplicationHidden);
-							break;
-						case ToastDismissalReason.UserCanceled:
-							tcs.SetResult(ToastResult.UserCanceled);
-							break;
-						case ToastDismissalReason.TimedOut:
-							tcs.SetResult(ToastResult.TimedOut);
-							break;
-					}
-				};
+					case ToastDismissalReason.ApplicationHidden:
+						tcs.SetResult(ToastResult.ApplicationHidden);
+						break;
+					case ToastDismissalReason.UserCanceled:
+						tcs.SetResult(ToastResult.UserCanceled);
+						break;
+					case ToastDismissalReason.TimedOut:
+						tcs.SetResult(ToastResult.TimedOut);
+						break;
+				}
+			};
 			toast.Dismissed += dismissed;
 
-			TypedEventHandler<ToastNotification, ToastFailedEventArgs> failed = null;
-			failed = (sender, e) =>
-				{
-					tcs.SetResult(ToastResult.Failed);
-				};
+			TypedEventHandler<ToastNotification, ToastFailedEventArgs> failed = (sender, e) =>
+			{
+				tcs.SetResult(ToastResult.Failed);
+			};
 			toast.Failed += failed;
 
 			// Show a toast.

@@ -361,7 +361,7 @@ namespace SnowyImageCopy.Helper
 
 		#region Private Property (Interface)
 
-		private IPersistFile persistFile
+		private IPersistFile PersistFile
 		{
 			get
 			{
@@ -374,7 +374,7 @@ namespace SnowyImageCopy.Helper
 			}
 		}
 
-		private IPropertyStore propertyStore
+		private IPropertyStore PropertyStore
 		{
 			get
 			{
@@ -401,7 +401,7 @@ namespace SnowyImageCopy.Helper
 			{
 				string str;
 
-				this.persistFile.GetCurFile(out str);
+				this.PersistFile.GetCurFile(out str);
 
 				return str;
 			}
@@ -443,7 +443,7 @@ namespace SnowyImageCopy.Helper
 			{
 				using (var pv = new PropVariant())
 				{
-					VerifySucceeded(this.propertyStore.GetValue(this.ArgumentsKey, pv));
+					VerifySucceeded(this.PropertyStore.GetValue(this.ArgumentsKey, pv));
 
 					return pv.Value ?? String.Empty;
 				}
@@ -581,7 +581,7 @@ namespace SnowyImageCopy.Helper
 			{
 				using (var pv = new PropVariant())
 				{
-					VerifySucceeded(this.propertyStore.GetValue(this.AppUserModelIDKey, pv));
+					VerifySucceeded(this.PropertyStore.GetValue(this.AppUserModelIDKey, pv));
 
 					return pv.Value ?? String.Empty;
 				}
@@ -593,8 +593,8 @@ namespace SnowyImageCopy.Helper
 
 				using (var pv = new PropVariant(value))
 				{
-					VerifySucceeded(this.propertyStore.SetValue(this.AppUserModelIDKey, pv));
-					VerifySucceeded(this.propertyStore.Commit());
+					VerifySucceeded(this.PropertyStore.SetValue(this.AppUserModelIDKey, pv));
+					VerifySucceeded(this.PropertyStore.Commit());
 				}
 			}
 		}
@@ -674,7 +674,7 @@ namespace SnowyImageCopy.Helper
 			if (!File.Exists(filePath))
 				throw new FileNotFoundException("File is not found.", filePath);
 
-			this.persistFile.Load(filePath, (int)STGM.STGM_READ);
+			this.PersistFile.Load(filePath, (int)STGM.STGM_READ);
 		}
 
 		/// <summary>
@@ -694,7 +694,7 @@ namespace SnowyImageCopy.Helper
 			if (String.IsNullOrEmpty(filePath))
 				throw new ArgumentNullException("filePath");
 
-			this.persistFile.Save(filePath, true);
+			this.PersistFile.Save(filePath, true);
 		}
 
 		#endregion
@@ -707,10 +707,12 @@ namespace SnowyImageCopy.Helper
 		/// </summary>
 		/// <param name="hresult">HRESULT</param>
 		/// <remarks>This method is from Sending toast notifications from desktop apps sample.</remarks>
-		private static void VerifySucceeded(uint hresult)
+		private void VerifySucceeded(uint hresult)
 		{
 			if (hresult > 1)
+			{
 				throw new Exception("Failed with HRESULT: " + hresult.ToString("X"));
+			}
 		}
 
 		#endregion

@@ -42,7 +42,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("Failed to read a XML file. {0}", ex);
+				throw new Exception("Failed to read a XML file.", ex);
 			}
 
 			if (Current == null)
@@ -57,14 +57,14 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("Failed to write a XML file. {0}", ex);
+				throw new Exception("Failed to write a XML file.", ex);
 			}
 		}
 
 		private static T ReadXmlFile<T>(string filePath) where T : new()
 		{
 			if (!File.Exists(filePath))
-				throw new FileNotFoundException("File is not found.", filePath);
+				throw new FileNotFoundException("File seems missing.", filePath);
 
 			using (var fs = new FileStream(filePath, FileMode.Open))
 			{
@@ -109,7 +109,7 @@ namespace SnowyImageCopy.Models
 				AutoCheckInterval = 30,				
 				MakesFileExtensionLowerCase = true,
 				MovesFileToRecycle = false,
-				MakesPossibleDeleteUponCopy = false,
+				EnablesChooseDeleteUponCopy = false,
 			};
 		}
 
@@ -246,7 +246,7 @@ namespace SnowyImageCopy.Models
 		{
 			get
 			{
-				if (!MakesPossibleDeleteUponCopy)
+				if (!EnablesChooseDeleteUponCopy)
 					_deleteUponCopy = false;
 
 				return _deleteUponCopy;
@@ -314,22 +314,22 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _movesFileToRecycle;
 
-		public bool MakesPossibleDeleteUponCopy
+		public bool EnablesChooseDeleteUponCopy
 		{
-			get { return _makesPossibleDeleteUponCopy; }
+			get { return _enablesChooseDeleteUponCopy; }
 			set
 			{
-				if (_makesPossibleDeleteUponCopy == value)
+				if (_enablesChooseDeleteUponCopy == value)
 					return;
 
-				_makesPossibleDeleteUponCopy = value;
+				_enablesChooseDeleteUponCopy = value;
 				RaisePropertyChanged();
 
 				if (!value)
 					DeleteUponCopy = false;
 			}
 		}
-		private bool _makesPossibleDeleteUponCopy;
+		private bool _enablesChooseDeleteUponCopy;
 
 		#endregion
 

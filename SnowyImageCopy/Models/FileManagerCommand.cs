@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// CGI command types to access FlashAir card
+	/// CGI command types to manage FlashAir card
 	/// </summary>
 	internal enum FileManagerCommand
 	{
@@ -29,14 +29,9 @@ namespace SnowyImageCopy.Models
 		GetThumbnail,
 
 		/// <summary>
-		/// Get update status of FlashAir card.
+		/// Get firmware version of FlashAir card.
 		/// </summary>
-		GetUpdateStatus,
-
-		/// <summary>
-		/// Get SSID of FlashAir card.
-		/// </summary>
-		GetSsid,
+		GetFirmwareVersion,
 
 		/// <summary>
 		/// Get CID(Card Identification number register) of FlashAir card.
@@ -44,12 +39,22 @@ namespace SnowyImageCopy.Models
 		GetCid,
 
 		/// <summary>
-		/// Get firmware version of FlashAir card.
+		/// Get SSID of FlashAir card.
 		/// </summary>
-		GetFirmwareVersion,
+		GetSsid,
 
 		/// <summary>
-		/// Get upload parameters of FlashAir card.
+		/// Get update status of FlashAir card.
+		/// </summary>
+		GetUpdateStatus,
+
+		/// <summary>
+		/// Get time stamp of write event in FlashAir card.
+		/// </summary>
+		GetWriteTimeStamp,
+
+		/// <summary>
+		/// Get Upload parameters of FlashAir card.
 		/// </summary>
 		GetUpload,
 

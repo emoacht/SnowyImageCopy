@@ -79,7 +79,7 @@
 							IsBusy="{Binding IsCheckCopyRunning, Mode=OneWay}">
 						</controls:BusyButton>
 						<controls:BusyButton
-							Grid.Column="2"
+							Grid.Column="2" Grid.Row="0"
 							Width="60" Height="40"
 							Margin="0,0,2,2"
 							FontSize="15"
@@ -87,7 +87,7 @@
 							Command="{Binding CheckCopyAutoCommand}"
 							IsBusy="{Binding IsCheckCopyAutoRunning, Mode=OneWay}"/>
 						<controls:BusyButton
-							Grid.Row="1"
+							Grid.Row="1" Grid.Column="0"
 							Width="100" Height="40"
 							Margin="0,0,2,0"
 							FontSize="15"
@@ -104,18 +104,13 @@
 							Command="{Binding CopyCommand}"
 							IsBusy="{Binding IsCopyRunning, Mode=OneWay}"/>
 						<controls:BusyButton
-							Grid.Column="3" Grid.RowSpan="2"
+							Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
 							Width="60" Height="82"
 							FontSize="15"
 							Content="{Binding Resources.Command_Stop, Source={x:Static models:ResourceService.Current}}"
 							Command="{Binding StopCommand}">
 						</controls:BusyButton>
 					</Grid>
-
-					<!--<controls:DottedPanel
-						Width="264" Height="82"
-						Foreground="White"
-						NumberDots="60"/>-->
 				</Grid>
 
 				<!-- Progress -->
@@ -144,7 +139,7 @@
 				</Grid>
 			</Grid>
 
-			<StackPanel Grid.Column="2"
+			<StackPanel Grid.Column="2" Grid.Row="0"
 						Height="60" HorizontalAlignment="Stretch" VerticalAlignment="Top">
 				<!-- Status -->
 				<TextBox Height="24" Width="256" HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -156,7 +151,7 @@
 				<StackPanel Orientation="Horizontal">
 					<!-- Delete Upon Copy -->
 					<StackPanel Orientation="Horizontal"
-								Visibility="{Binding SettingsCurrent.MakesPossibleDeleteUponCopy, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+								Visibility="{Binding SettingsCurrent.EnablesChooseDeleteUponCopy, Converter={StaticResource BooleanToVisibilityConverterKey}}">
 						<Label
 							VerticalAlignment="Center"
 							Content="{Binding Resources.Options_DeleteUponCopy, Source={x:Static models:ResourceService.Current}}"/>
@@ -192,7 +187,7 @@
 			</StackPanel>
 		</Grid>
 
-		<Grid Grid.Column="1"
+		<Grid Grid.Column="1" Grid.Row="0"
 			  Visibility="{Binding IsChecked, ElementName=OptionsButtonLeft, Converter={StaticResource BooleanInverseToVisibilityConverterKey}}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
@@ -238,7 +233,7 @@
 		</Grid>
 
 		<!-- Image area -->
-		<Grid Grid.Row="1" Grid.ColumnSpan="2">
+		<Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition/>
@@ -346,13 +341,13 @@
 											<Run Text="{Binding Date, StringFormat=HH\\:mm\\:ss}"/>
 										</TextBlock>
 										<TextBlock
-											Grid.Row="1"
+											Grid.Column="0" Grid.Row="1"
 											VerticalAlignment="Center"
 											FontSize="14"
 											Text="{Binding Status, Converter={StaticResource FileStatusToStringConverterKey}}"
 											Foreground="{StaticResource FileItemStatus.Foreground}"/>
 										<Image
-											Grid.Column="1" Grid.RowSpan="2"
+											Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
 											Width="120" Height="90"
 											Margin="4,0,0,0"
 											Source="{Binding Thumbnail}"/>

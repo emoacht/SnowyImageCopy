@@ -6,12 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-
+ 
 using SnowyImageCopy.Models.Exceptions;
 using SnowyImageCopy.Models.Network;
 using SnowyImageCopy.ViewModels;
@@ -19,7 +17,7 @@ using SnowyImageCopy.ViewModels;
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// Access FlashAir card.
+	/// Manage FlashAir card.
 	/// </summary>
 	internal static class FileManager
 	{
@@ -101,7 +99,7 @@ namespace SnowyImageCopy.Models
 					continue;
 				}
 
-				string path = itemList[i].FilePath;
+				var path = itemList[i].FilePath;
 				itemList.Remove(itemList[i]);
 				itemList.AddRange(await GetFileListAllAsync(client, path, token, card));
 			}
@@ -197,7 +195,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="remoteFilePath">Remote file path</param>
 		/// <param name="token">CancellationToken</param>
-		/// <param name="card">FlashAir card information</param>		
+		/// <param name="card">FlashAir card information</param>
 		internal static async Task<BitmapImage> GetThumbnailAsync(string remoteFilePath, CancellationToken token, CardInfo card)
 		{
 			if (String.IsNullOrEmpty(remoteFilePath))
@@ -216,7 +214,13 @@ namespace SnowyImageCopy.Models
 			}
 			catch (RemoteFileNotFoundException)
 			{
-				// If the file is not JPEG image format or does not contain a thumbnail, this exception will be thrown.
+				// If image file is not JPEG format or contains no thumbnail, StatusCode will be HttpStatusCode.NotFound.
+				Debug.WriteLine("Image file may not be JPEG format or may contain no thumbnail.");
+				throw;
+			}
+			catch (ImageNotSupportedException)
+			{
+				// This exception should not be thrown because thumbnail data is directly provided by FlashAir card.
 				return null;
 			}
 			catch
@@ -278,7 +282,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch
 			{
-				Debug.WriteLine("Failed to get and save a file");
+				Debug.WriteLine("Failed to get and save a file.");
 				throw;
 			}
 		}
@@ -301,8 +305,8 @@ namespace SnowyImageCopy.Models
 				{
 					var result = await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 
-					// "SUCCESS": If successful.
-					// "ERROR": On failure.
+					// "SUCCESS": If succeeded.
+					// "ERROR":   If failed.
 					if (!result.Equals("SUCCESS", StringComparison.Ordinal))
 						throw new RemoteFileDeleteFailedException(String.Format("Result: {0}", result), remotePath);
 				}
@@ -314,101 +318,57 @@ namespace SnowyImageCopy.Models
 			}
 			catch
 			{
-				Debug.WriteLine("Failed to delete a remote file");
+				Debug.WriteLine("Failed to delete a remote file.");
 				throw;
 			}
 		}
 
 		/// <summary>
-		/// Check update status of FlashAir card.
+		/// Get firmware version of FlashAir card.
 		/// </summary>
-		/// <returns>True if the content of FlashAir card is updated</returns>
-		internal static async Task<bool> CheckUpdateStatusAsync()
+		/// <param name="token">CancellationToken</param>
+		internal static async Task<string> GetFirmwareVersionAsync(CancellationToken token)
 		{
-			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpdateStatus, String.Empty);
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetFirmwareVersion, String.Empty);
 
 			try
 			{
 				using (var client = new HttpClient() { Timeout = timeoutLength })
 				{
-					var status = await DownloadStringAsync(client, remotePath, CancellationToken.None, null).ConfigureAwait(false);
-
-					// 1: If memory has been updated.
-					// 0: If not.
-					return (status == "1");
+					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 				}
 			}
 			catch
 			{
-				Debug.WriteLine("Failed to check update status.");
+				Debug.WriteLine("Failed to get firmware version.");
 				throw;
 			}
 		}
 
 		/// <summary>
-		/// Check if upload.cgi of FlashAir card is disabled.
+		/// Get CID of FlashAir card.
 		/// </summary>
 		/// <param name="token">CancellationToken</param>
-		/// <returns>True if disabled</returns>
-		/// <remarks>False will not mean that upload.cgi is enabled. Because function to get upload parameters 
-		/// is supported only by firmware version 2.00.02+, there is no direct way to confirm it.</remarks>
-		internal static async Task<bool> CheckUploadDisabledAsync(CancellationToken token)
+		/// <returns>If succeeded, CID. If failed, empty string.</returns>
+		internal static async Task<string> GetCidAsync(CancellationToken token)
 		{
-			var versionPattern = new Regex(@"\d\.\d{2}\.\d{2}$", RegexOptions.Compiled);
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetCid, String.Empty);
 
-			using (var client = new HttpClient() { Timeout = timeoutLength })
+			try
 			{
-				// Check if firmware of FlashAir card supports function to get upload parameters. 
-				try
+				using (var client = new HttpClient() { Timeout = timeoutLength })
 				{
-					var remotePath = ComposeRemotePath(FileManagerCommand.GetFirmwareVersion, String.Empty);
-
-					var versionText = await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
-
-					Debug.WriteLine("Version: " + versionText);
-
-					// Start with "F24": Type 1.00
-					// Start with "F19": Type 2.00
-					if (versionText.StartsWith("F24"))
-						return false;
-
-					var match = versionPattern.Match(versionText);
-					if (!match.Success)
-						return false;
-
-					var versionNumber = int.Parse(match.Value.Replace(".", String.Empty));
-					if (versionNumber < 20002) // 2.00.02
-						return false;
+					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 				}
-				catch
-				{
-					Debug.WriteLine("Failed to check firmware version.");
-					throw;
-				}
-
-				// Check if config of FlashAir card is set to enable upload.cgi.
-				try
-				{
-					var remotePath = ComposeRemotePath(FileManagerCommand.GetUpload, String.Empty);
-
-					var parameters = await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
-
-					Debug.WriteLine("Upload parameters: " + parameters);
-
-					// 1:     Uploading is enabled.
-					// Other: Uploading is disabled.
-					return (parameters != "1");
-				}
-				catch (RemoteConnectionUnableException)
-				{
-					// If failed to get upload parameters, StatusCode will be HttpStatusCode.BadRequest.
-					return false;
-				}
-				catch
-				{
-					Debug.WriteLine("Failed to check upload parameters.");
-					throw;
-				}
+			}
+			catch (RemoteConnectionUnableException)
+			{
+				return String.Empty;
+			}
+			catch
+			{
+				Debug.WriteLine("Failed to get CID.");
+				throw;
 			}
 		}
 
@@ -435,12 +395,79 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get CID of FlashAir card.
+		/// Check update status of FlashAir card.
+		/// </summary>
+		/// <returns>True if update status is set</returns>
+		internal static async Task<bool> CheckUpdateStatusAsync()
+		{
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpdateStatus, String.Empty);
+
+			try
+			{
+				using (var client = new HttpClient() { Timeout = timeoutLength })
+				{
+					var status = await DownloadStringAsync(client, remotePath, CancellationToken.None, null).ConfigureAwait(false);
+
+					// 1: If memory has been updated.
+					// 0: If not.
+					return (status == "1");
+				}
+			}
+			catch
+			{
+				Debug.WriteLine("Failed to check update status.");
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Get time stamp of write event in FlashAir card.
+		/// </summary>
+		internal static async Task<int> GetWriteTimeStampAsync()
+		{
+			return await GetWriteTimeStampAsync(CancellationToken.None);
+		}
+
+		/// <summary>
+		/// Get time stamp of write event in FlashAir card.
 		/// </summary>
 		/// <param name="token">CancellationToken</param>
-		internal static async Task<string> GetCidAsync(CancellationToken token)
+		/// <returns>If succeeded, time stamp (msec). If failed, -1.</returns>
+		/// <remarks>If no write event occurred since FlashAir card started running, this value will be 0.</remarks>
+		internal static async Task<int> GetWriteTimeStampAsync(CancellationToken token)
 		{
-			var remotePath = ComposeRemotePath(FileManagerCommand.GetCid, String.Empty);
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetWriteTimeStamp, String.Empty);
+
+			try
+			{
+				using (var client = new HttpClient() { Timeout = timeoutLength })
+				{
+					var timeStamp = await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
+
+					int num;
+					return int.TryParse(timeStamp, out num) ? num : -1;
+				}
+			}
+			catch (RemoteConnectionUnableException)
+			{
+				// If request for time stamp of write event is not supported, StatusCode will be HttpStatusCode.BadRequest.
+				return -1;
+			}
+			catch
+			{
+				Debug.WriteLine("Failed to get time stamp of write event.");
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Get Upload parameters of FlashAir card.
+		/// </summary>
+		/// <param name="token">CancellationToken</param>
+		/// <returns>If succeeded, Upload parameters (string). If failed, empty string.</returns>
+		internal static async Task<string> GetUploadAsync(CancellationToken token)
+		{
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpload, String.Empty);
 
 			try
 			{
@@ -449,9 +476,14 @@ namespace SnowyImageCopy.Models
 					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 				}
 			}
+			catch (RemoteConnectionUnableException)
+			{
+				// If request for Upload parameters is not supported, StatusCode will be HttpStatusCode.BadRequest.
+				return String.Empty;
+			}
 			catch
 			{
-				Debug.WriteLine("Failed to get CID.");
+				Debug.WriteLine("Failed to get Upload parameters.");
 				throw;
 			}
 		}
@@ -509,8 +541,8 @@ namespace SnowyImageCopy.Models
 								case HttpStatusCode.BadRequest:
 									throw new RemoteConnectionUnableException(response.StatusCode);
 								case HttpStatusCode.NotFound:
-									// This exception does not always mean that the file does not exist.
-									throw new RemoteFileNotFoundException("File not found!", path);
+									// This exception does not always mean that the specified file is missing.
+									throw new RemoteFileNotFoundException("File is missing or request cannot be handled!", path);
 								default:
 									throw new HttpRequestException(String.Format("StatusCode: {0}", response.StatusCode));
 							}
@@ -694,17 +726,18 @@ namespace SnowyImageCopy.Models
 
 		#region Helper
 
-		private readonly static Dictionary<FileManagerCommand, string> commandMap =
+		private readonly static Dictionary<FileManagerCommand, string> commandMap = 
 			new Dictionary<FileManagerCommand, string>()
 			{
 				{FileManagerCommand.None, String.Empty},
 				{FileManagerCommand.GetFileList, @"command.cgi?op=100&DIR=/"},
 				{FileManagerCommand.GetFileNum, @"command.cgi?op=101&DIR=/"},
 				{FileManagerCommand.GetThumbnail, @"thumbnail.cgi?/"},
-				{FileManagerCommand.GetUpdateStatus, @"command.cgi?op=102"},
-				{FileManagerCommand.GetSsid, @"command.cgi?op=104"},
-				{FileManagerCommand.GetCid, @"command.cgi?op=120"},
 				{FileManagerCommand.GetFirmwareVersion, @"command.cgi?op=108"},
+				{FileManagerCommand.GetCid, @"command.cgi?op=120"},
+				{FileManagerCommand.GetSsid, @"command.cgi?op=104"},
+				{FileManagerCommand.GetUpdateStatus, @"command.cgi?op=102"},
+				{FileManagerCommand.GetWriteTimeStamp, @"command.cgi?op=121"},
 				{FileManagerCommand.GetUpload, @"command.cgi?op=118"},
 				{FileManagerCommand.DeleteFile, @"upload.cgi?DEL=/"},
 			};
@@ -720,7 +753,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Record result of DownloadStringAsync method for debug
+		/// Record result of DownloadStringAsync method for debugging purpose.
 		/// </summary>
 		/// <param name="requestPath">Request path</param>
 		/// <param name="responseBytes">Response byte array</param>

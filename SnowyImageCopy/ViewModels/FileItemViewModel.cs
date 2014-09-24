@@ -124,7 +124,7 @@ namespace SnowyImageCopy.ViewModels
 			Date = new DateTime(year, month, day, hour, minute, second);
 		}
 
-		private int ConvertFromBitsToInt(IEnumerable<bool> source)
+		private static int ConvertFromBitsToInt(IEnumerable<bool> source)
 		{
 			var target = new int[1];
 			new BitArray(source.ToArray()).CopyTo(target, 0);
@@ -158,7 +158,7 @@ namespace SnowyImageCopy.ViewModels
 		#endregion
 
 
-		#region Added information
+		#region Supplementary
 
 		internal bool IsImported { get; private set; }
 
@@ -175,8 +175,8 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		/// <summary>
-		/// Whether can read Exif metadata when in local.
-		/// </summary> 
+		/// Whether can read Exif metadata
+		/// </summary>
 		internal bool CanReadExif
 		{
 			get
@@ -195,13 +195,16 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		/// <summary>
-		/// Whether can get a thumbnail by FlashAir card
+		/// Whether can get a thumbnail of a remote file
 		/// </summary>
-		/// <remarks>FlashAir card can provide a thumbnail only from JPEG image.</remarks>
+		/// <remarks>FlashAir card can provide a thumbnail only from JPEG format file.</remarks>
 		internal bool CanGetThumbnailRemote
 		{
 			get
 			{
+				if (_canGetThumbnailRemote.HasValue)
+					return _canGetThumbnailRemote.Value;
+
 				switch (FileExtension)
 				{
 					case FileExtension.jpg:
@@ -211,16 +214,21 @@ namespace SnowyImageCopy.ViewModels
 						return false;
 				}
 			}
+			set { _canGetThumbnailRemote = value; }
 		}
+		private bool? _canGetThumbnailRemote;
 
 		/// <summary>
-		/// Whether can load image data when in local.
+		/// Whether can load image data from a local file
 		/// </summary>
 		/// <remarks>As for raw images, actual loadability depends on Microsoft Camera Codec Pack.</remarks>
-		internal bool CanLoadLocal
+		internal bool CanLoadDataLocal
 		{
 			get
 			{
+				if (_canLoadDataLocal.HasValue)
+					return _canLoadDataLocal.Value;
+
 				switch (FileExtension)
 				{
 					case FileExtension.jpg:
@@ -247,15 +255,16 @@ namespace SnowyImageCopy.ViewModels
 						return false;
 				}
 			}
+			set { _canLoadDataLocal = value; }
 		}
+		private bool? _canLoadDataLocal;
 
-		private static readonly string[] flashAirSystemFolders = 
-			new string[]
-			{
-				"GUPIXINF",
-				"SD_WLAN",
-				"100__TSB",
-			};
+		private static readonly string[] flashAirSystemFolders = new string[]
+		{
+			"GUPIXINF",
+			"SD_WLAN",
+			"100__TSB",
+		};
 
 		internal bool IsFlashAirSystemFolder
 		{
@@ -285,8 +294,8 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 
-		public bool IsRemoteAlive { get; set; }
-		public bool IsLocalAlive { get; set; }
+		public bool IsAliveRemote { get; set; }
+		public bool IsAliveLocal { get; set; }
 
 		public FileStatus Status
 		{
@@ -311,7 +320,7 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 
-		public DateTime FileCopiedTime { get; set; }
+		public DateTime CopiedTime { get; set; }
 
 		#endregion
 
@@ -343,8 +352,8 @@ namespace SnowyImageCopy.ViewModels
 			if (other == null)
 				return 1;
 
-			int comparisonDate = this.Date.CompareTo(other.Date);
-			int comparisonFilePath = String.Compare(this.FilePath, other.FilePath, StringComparison.Ordinal);
+			var comparisonDate = this.Date.CompareTo(other.Date);
+			var comparisonFilePath = String.Compare(this.FilePath, other.FilePath, StringComparison.Ordinal);
 
 			return (comparisonDate != 0) ? comparisonDate : comparisonFilePath;
 		}
@@ -465,8 +474,8 @@ namespace SnowyImageCopy.ViewModels
 					.Cast<FileExtension>()
 					.FirstOrDefault(x =>
 					{
-						var extension = Path.GetExtension(FileName);
-						return (extension != null) && extension.Equals(String.Format(".{0}", x), StringComparison.OrdinalIgnoreCase);
+						var extension = Path.GetExtension(FileName); // Extension will not be null as long as FileName is not null.
+						return extension.Equals(String.Format(".{0}", x), StringComparison.OrdinalIgnoreCase);
 					});
 			}
 

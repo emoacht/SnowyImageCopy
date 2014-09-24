@@ -44,7 +44,9 @@ namespace SnowyImageCopy.Views.Behaviors
 				"MaxWidth",
 				typeof(double),
 				typeof(GridSizeBehavior),
-				new FrameworkPropertyMetadata(double.NaN, (d, e) => ((GridSizeBehavior)d).AdjustSize()));
+				new FrameworkPropertyMetadata(
+					double.NaN,
+					(d, e) => ((GridSizeBehavior)d).AdjustSize()));
 
 		/// <summary>
 		/// Inner frame size of this Grid calculated by padding

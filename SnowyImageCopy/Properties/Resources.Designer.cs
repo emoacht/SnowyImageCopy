@@ -386,6 +386,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Enable to choose to delete image in FlashAir upon copy に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Options_ChooseDeleteUponCopy {
+            get {
+                return ResourceManager.GetString("Options_ChooseDeleteUponCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Date に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Options_Date {
@@ -494,6 +503,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Keyword in Readme に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Options_NoticeDeleteUponCopy {
+            get {
+                return ResourceManager.GetString("Options_NoticeDeleteUponCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Open by Explorer に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Options_OpenByExplorer {
@@ -508,15 +526,6 @@ namespace SnowyImageCopy.Properties {
         public static string Options_Path {
             get {
                 return ResourceManager.GetString("Options_Path", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Make possible to delete image in FlashAir upon copy に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string Options_PossibleDeleteUponCopy {
-            get {
-                return ResourceManager.GetString("Options_PossibleDeleteUponCopy", resourceCulture);
             }
         }
         

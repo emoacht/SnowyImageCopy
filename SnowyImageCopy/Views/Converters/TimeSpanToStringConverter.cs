@@ -10,19 +10,20 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Convert TimeSpan to String.
+	/// Convert TimeSpan to string.
 	/// </summary>
 	[ValueConversion(typeof(TimeSpan), typeof(string))]
-	class TimeSpanToStringConverter : IValueConverter
+	public class TimeSpanToStringConverter : IValueConverter
 	{
 		/// <summary>
-		/// Convert TimeSpan to String. The seconds will be rounded up.
+		/// Convert TimeSpan to string.
 		/// </summary>
 		/// <param name="value">TimeSpan</param>
 		/// <param name="targetType"></param>
 		/// <param name="parameter"></param>
 		/// <param name="culture"></param>
 		/// <returns>String</returns>
+		/// <remarks>The Seconds will be rounded up.</remarks>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (!(value is TimeSpan))

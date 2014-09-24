@@ -7,7 +7,6 @@
 			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			 xmlns:pmd="clr-namespace:PerMonitorDpi.Views;assembly=PerMonitorDpi"
-			 xmlns:properties="clr-namespace:SnowyImageCopy.Properties"
 			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
 			 xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
 			 xmlns:models="clr-namespace:SnowyImageCopy.Models"
@@ -202,7 +201,7 @@
 						<TextBlock
 							VerticalAlignment="Center"
 							TextWrapping="Wrap"
-							Text="{Binding Resources.Options_PossibleDeleteUponCopy, Source={x:Static models:ResourceService.Current}}"/>
+							Text="{Binding Resources.Options_ChooseDeleteUponCopy, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
 							x:Name="PossibleDeleteUponCopyButton"
 							Width="60" Height="24" HorizontalAlignment="Left"
@@ -215,13 +214,14 @@
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
 							IsChecked="{Binding IsChecked, ElementName= RecycleButton, Converter={StaticResource BooleanInverseConverterKey}, ConverterParameter=True}"/>
 						<controls:CheckTextBox
-							Width="80" HorizontalAlignment="Left"
+							Width="140" HorizontalAlignment="Left"
 							Margin="4" Padding="2,0"
 							VerticalContentAlignment="Center"
 							IsUndoEnabled="False"
-							BaseText="DELETE"
+							NoticeText="{Binding Resources.Options_NoticeDeleteUponCopy, Source={x:Static models:ResourceService.Current}}"
+							CheckText="DELETE"
 							Visibility="{Binding IsChecked, ElementName=PossibleDeleteUponCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"                         
-							IsChecked="{Binding SettingsCurrent.MakesPossibleDeleteUponCopy, Mode=TwoWay}"/>
+							IsChecked="{Binding SettingsCurrent.EnablesChooseDeleteUponCopy, Mode=TwoWay}"/>
 					</WrapPanel>
 				</StackPanel>
 			</GroupBox>
