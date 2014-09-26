@@ -13,15 +13,26 @@ namespace SnowyImageCopy.Models
 	internal class CardInfo
 	{
 		/// <summary>
-		/// Check if FlashAir card is changed.
+		/// Whether FlashAir card is changed
 		/// </summary>
+		/// <returns>
+		/// True:  If changed.
+		/// False: If not changed.
+		/// Null:  If cannot detect change.
+		/// </returns>
 		/// <remarks>Checking not only CID but also firmware version and SSID is for the case that firmware version 
-		/// of a card is too old to support request for CID. However, it is still incomplete and cannot distinguish 
-		/// cards if they have the same firmware version which does not support request for CID. Prior to draw
-		/// value out of this property, getting the three parameters in sequence is required.</remarks>
-		public bool IsChanged
+		/// of a card is too old to support request for CID. However, if cards have the same firmware version and 
+		/// if the firmware version is too old and if cards have the same SSID, change of cards cannot be detected. 
+		/// Prior to draw value out of this property, getting the three parameters in sequence is required.</remarks>
+		public bool? IsChanged
 		{
-			get { return isFirmwareVersionChanged || isCidChanged || isSsidChanged; }
+			get
+			{
+				if (isFirmwareVersionChanged || isSsidChanged)
+					return true;
+
+				return CanGetCid ? isCidChanged : (bool?)null;
+			}
 		}
 
 

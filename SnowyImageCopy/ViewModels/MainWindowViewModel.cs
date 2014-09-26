@@ -246,6 +246,9 @@ namespace SnowyImageCopy.ViewModels
 			get { return _currentImageData; }
 			set
 			{
+				//if (Designer.IsInDesignMode)
+				//	return;
+
 				_currentImageData = value;
 
 				if (!Designer.IsInDesignMode)
@@ -487,13 +490,13 @@ namespace SnowyImageCopy.ViewModels
 		public MainWindowViewModel()
 		{
 			// Set samples.
-			FileListCore.Insert(GetSampleFileData(-1));
+			FileListCore.Insert(GetSampleFileData(0));
 
 			// Add event listeners.
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
 				fileListPropertyChangedListener = new PropertyChangedEventListener(FileListPropertyChanged);
-				PropertyChangedEventManager.AddListener(FileListCore, fileListPropertyChangedListener, String.Empty);				
+				PropertyChangedEventManager.AddListener(FileListCore, fileListPropertyChangedListener, String.Empty);
 
 				settingsPropertyChangedListener = new PropertyChangedEventListener(ReactSettingsPropertyChanged);
 				PropertyChangedEventManager.AddListener(Settings.Current, settingsPropertyChangedListener, String.Empty);
@@ -536,7 +539,7 @@ namespace SnowyImageCopy.ViewModels
 
 		private FileItemViewModel GetSampleFileData(int fileNumber)
 		{
-			var source = String.Format("/DCIM,SAMPLE{0}.JPG,0,0,0,0", ((0 <= fileNumber) ? fileNumber.ToString(CultureInfo.InvariantCulture) : String.Empty));
+			var source = String.Format("/DCIM,SAMPLE{0}.JPG,0,0,0,0", ((0 < fileNumber) ? fileNumber.ToString(CultureInfo.InvariantCulture) : String.Empty));
 
 			return new FileItemViewModel(source, "/DCIM");
 		}
