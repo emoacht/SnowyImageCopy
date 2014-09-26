@@ -27,7 +27,7 @@ namespace SnowyImageCopy.Views.Converters
 		{
 			if (!(value is Enum) || (parameter == null))
 				return DependencyProperty.UnsetValue;
-			
+
 			return value.ToString().Equals(parameter.ToString(), StringComparison.OrdinalIgnoreCase);
 		}
 

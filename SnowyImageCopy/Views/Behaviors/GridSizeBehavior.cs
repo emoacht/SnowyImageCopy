@@ -78,7 +78,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				typeof(Thickness),
 				typeof(GridSizeBehavior),
 				new FrameworkPropertyMetadata(new Thickness(0D)));
-		
+
 		/// <summary>
 		/// Whether change of Grid size is reliable for relaying.
 		/// </summary>
@@ -114,7 +114,7 @@ namespace SnowyImageCopy.Views.Behaviors
 
 			this.AssociatedObject.SizeChanged -= OnSizeChanged;
 		}
-		
+
 		private void OnSizeChanged(object sender, SizeChangedEventArgs e)
 		{
 			AdjustSize();

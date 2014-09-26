@@ -696,7 +696,7 @@ namespace SnowyImageCopy.Models
 		{
 			return ConvertStreamToBitmapImage(stream, Size.Empty);
 		}
-				
+
 		/// <summary>
 		/// Convert stream to BitmapImage.
 		/// </summary>
@@ -720,7 +720,7 @@ namespace SnowyImageCopy.Models
 
 			image.EndInit();
 			image.Freeze(); // This is necessary for other thread to use the image.
-			
+
 			return image;
 		}
 

@@ -38,7 +38,10 @@ namespace SnowyImageCopy.Models
 
 				_mainWindowViewModelInstance = value;
 
-				FileListCoreView.CurrentChanged += (sender, e) => CheckFileListCoreViewThumbnail();
+				if (!Designer.IsInDesignMode) // ListCollectionView may be null in Design mode.
+				{
+					FileListCoreView.CurrentChanged += (sender, e) => CheckFileListCoreViewThumbnail();
+				}
 			}
 		}
 		private MainWindowViewModel _mainWindowViewModelInstance;
@@ -272,7 +275,7 @@ namespace SnowyImageCopy.Models
 
 
 		#region Check & Copy
-		
+
 		private readonly CardInfo card = new CardInfo();
 
 		private CancellationTokenSource tokenSourceWorking;
@@ -280,12 +283,12 @@ namespace SnowyImageCopy.Models
 
 		private CancellationTokenSource tokenSourceLoading;
 		private bool isTokenSourceLoadingDisposed;
-		
+
 		private DateTime LastCheckCopyTime { get; set; }
-		
+
 		internal DateTime CopyStartTime { get; private set; }
 		private int fileCopiedSum;
-		
+
 
 		#region 1st tier
 

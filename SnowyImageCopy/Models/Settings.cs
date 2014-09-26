@@ -22,13 +22,13 @@ namespace SnowyImageCopy.Models
 
 
 		#region Lode/Save
-		
+
 		private const string settingsFile = "settings.xml";
 
 		private static readonly string settingsPath = Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 			Assembly.GetExecutingAssembly().GetName().Name,
-			settingsFile);		
+			settingsFile);
 
 		public static void Load()
 		{
@@ -106,7 +106,7 @@ namespace SnowyImageCopy.Models
 				IsCurrentImageVisible = false,
 				InstantCopy = true,
 				DeleteUponCopy = false,
-				AutoCheckInterval = 30,				
+				AutoCheckInterval = 30,
 				MakesFileExtensionLowerCase = true,
 				MovesFileToRecycle = false,
 				EnablesChooseDeleteUponCopy = false,

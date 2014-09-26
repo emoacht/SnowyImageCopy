@@ -25,7 +25,7 @@ namespace SnowyImageCopy.ViewModels
 
 
 		#region Event listener
-		
+
 		private PropertyChangedEventListener resourcesPropertyChangedListener;
 
 		private void ReactResourcesPropertyChanged(object sender, PropertyChangedEventArgs e)

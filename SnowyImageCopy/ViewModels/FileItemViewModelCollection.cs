@@ -67,7 +67,7 @@ namespace SnowyImageCopy.ViewModels
 
 			base.ClearItems();
 		}
-		
+
 
 		private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
