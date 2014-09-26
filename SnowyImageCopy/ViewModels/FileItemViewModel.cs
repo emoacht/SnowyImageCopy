@@ -348,7 +348,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		#endregion
-		
+
 
 		#region IComparable member
 

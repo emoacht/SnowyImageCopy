@@ -80,7 +80,7 @@ namespace SnowyTool.ViewModels
 			}
 		}
 		private ConfigViewModel _currentConfig;
-		
+
 		public LanModeOption CurrentLanMode
 		{
 			get { return _currentLanMode; }

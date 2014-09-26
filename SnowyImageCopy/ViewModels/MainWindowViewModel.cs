@@ -227,7 +227,7 @@ namespace SnowyImageCopy.ViewModels
 					return;
 
 				_currentFrameSize = value;
-				
+
 				var handler = CurrentFrameSizeChanged;
 				if (handler != null)
 				{
@@ -246,9 +246,6 @@ namespace SnowyImageCopy.ViewModels
 			get { return _currentImageData; }
 			set
 			{
-				//if (Designer.IsInDesignMode)
-				//	return;
-
 				_currentImageData = value;
 
 				if (!Designer.IsInDesignMode)

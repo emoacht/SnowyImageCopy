@@ -240,7 +240,7 @@ namespace SnowyTool.ViewModels
 		/// Format: 12-digit hexadecimal number
 		/// </remarks>
 		public string MASTERCODE { get; set; }
-		
+
 		/// <summary>
 		/// CID (Card Identification number register)
 		/// </summary>
@@ -274,7 +274,7 @@ namespace SnowyTool.ViewModels
 		/// Firmware version
 		/// </summary>
 		public string VERSION { get; set; }
-		
+
 		#endregion
 
 
@@ -589,7 +589,7 @@ namespace SnowyTool.ViewModels
 
 
 		#region Parse CID
-		
+
 		private static readonly Regex asciiPattern = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
 
 		private void ParseCID(string cid)

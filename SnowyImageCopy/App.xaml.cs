@@ -23,7 +23,7 @@ namespace SnowyImageCopy
 			AppDomain.CurrentDomain.UnhandledException += (sender, args) => ReportException(sender, args.ExceptionObject as Exception);
 #endif
 		}
-		
+
 		protected override void OnStartup(StartupEventArgs e)
 		{
 			base.OnStartup(e);
@@ -39,7 +39,7 @@ namespace SnowyImageCopy
 			this.MainWindow = new MainWindow();
 			this.MainWindow.Show();
 		}
-		
+
 		protected override void OnExit(ExitEventArgs e)
 		{
 			base.OnExit(e);

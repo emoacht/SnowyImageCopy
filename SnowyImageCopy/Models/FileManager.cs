@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
- 
+
 using SnowyImageCopy.Models.Exceptions;
 using SnowyImageCopy.Models.Network;
 using SnowyImageCopy.ViewModels;
@@ -726,7 +726,7 @@ namespace SnowyImageCopy.Models
 
 		#region Helper
 
-		private readonly static Dictionary<FileManagerCommand, string> commandMap = 
+		private readonly static Dictionary<FileManagerCommand, string> commandMap =
 			new Dictionary<FileManagerCommand, string>()
 			{
 				{FileManagerCommand.None, String.Empty},
