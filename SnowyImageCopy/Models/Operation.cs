@@ -672,23 +672,31 @@ namespace SnowyImageCopy.Models
 						card.IsWirelessConnected = await NetworkChecker.IsWirelessNetworkConnectedAsync(card.Ssid));
 				}
 
-				if (card.IsChanged && FileListCore.Any())
-					FileListCore.Clear();
-
 				// Get all items.
 				var fileListNew = await FileManager.GetFileListRootAsync(tokenSourceWorking.Token, card);
 				fileListNew.Sort();
 
-				// record time stamp of write event.
+				// Record time stamp of write event.
 				if (card.CanGetWriteTimeStamp)
 					card.WriteTimeStamp = await FileManager.GetWriteTimeStampAsync(tokenSourceWorking.Token);
 
-				// Remove sample items.
-				var itemsSample = FileListCore.Where(x => x.Size == 0).ToList();
-				if (itemsSample.Any())
+				// Check if any sample is in old items.
+				var isSample = FileListCore.Any(x => x.Size == 0);
+
+				// Check if FlashAir card is changed.
+				bool isChanged;
+				if (card.IsChanged.HasValue)
 				{
-					itemsSample.ForEach(x => FileListCore.Remove(x));
+					isChanged = card.IsChanged.Value;
 				}
+				else
+				{
+					var signatures = FileListCore.Select(x => x.Signature).ToArray();
+					isChanged = !fileListNew.Select(x => x.Signature).Any(x => signatures.Contains(x));
+				}
+
+				if (isSample || isChanged)
+					FileListCore.Clear();
 
 				// Check old items.
 				foreach (var itemOld in FileListCore)

@@ -167,6 +167,11 @@ namespace SnowyImageCopy.ViewModels
 			get { return String.Format("{0}/{1}", Directory, FileName); }
 		}
 
+		internal string Signature
+		{
+			get { return String.Format("{0}-{1}-{2:yyyyMMddHHmmss}", FilePath, Size, Date); }
+		}
+
 		internal FileExtension FileExtension { get; private set; }
 
 		internal bool IsImageFile
