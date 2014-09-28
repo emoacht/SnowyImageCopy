@@ -37,7 +37,7 @@ namespace SnowyImageCopy.Views.Controls
 		public HideableGridSplitter()
 		{
 			this.Initialized += OnInitialized;
-			this.IsVisibleChanged += OnIsVisibleChanged;
+			this.IsVisibleChanged += OnVisibleChanged;
 		}
 
 
@@ -73,7 +73,7 @@ namespace SnowyImageCopy.Views.Controls
 			}
 		}
 
-		private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		private void OnVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
 			var parent = base.Parent as Grid;
 			if (parent == null)

@@ -261,9 +261,6 @@
   <data name="Options_LocalFolderExplanation" xml:space="preserve">
     <value>イメージをコピーするフォルダーを指定してください。</value>
   </data>
-  <data name="Options_NoticeDeleteUponCopy" xml:space="preserve">
-    <value>Readme中のキーワード</value>
-  </data>
   <data name="Options_OpenByExplorer" xml:space="preserve">
     <value>エクスプローラーで開く</value>
   </data>
@@ -278,6 +275,9 @@
   </data>
   <data name="ProjectSite" xml:space="preserve">
     <value>http://emoacht.github.io/SnowyImageCopy/index_jp.html</value>
+  </data>
+  <data name="ReadmeFile" xml:space="preserve">
+    <value>readme_jp.html#delete</value>
   </data>
   <data name="ToastBody_CopyCompleted1st" xml:space="preserve">
     <value>FlashAirからのコピーが完了しました。</value>

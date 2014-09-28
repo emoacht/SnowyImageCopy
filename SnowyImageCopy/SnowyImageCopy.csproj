@@ -123,8 +123,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Views\Behaviors\BrowserBehavior.cs" />
     <Compile Include="Views\Behaviors\ExplorerAction.cs" />
-    <Compile Include="Views\Behaviors\FrameworkElementCultureBehavior.cs" />
+    <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
     <Compile Include="Views\Behaviors\SystemSoundPlayAction.cs" />
     <Compile Include="Views\Behaviors\WindowActivateBehavior.cs" />
     <Compile Include="Views\Controls\CheckTextBox.cs" />

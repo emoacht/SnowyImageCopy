@@ -24,7 +24,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 
-		#region Event listener
+		#region Event Listener
 
 		private PropertyChangedEventListener resourcesPropertyChangedListener;
 

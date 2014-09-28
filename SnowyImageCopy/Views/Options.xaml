@@ -33,7 +33,7 @@
 					<TextBlock Margin="6,2,0,2"
 							   FontSize="15"
 							   Foreground="{StaticResource OptionHeader.Foreground}"
-							   Text="{Binding Header, RelativeSource={RelativeSource AncestorType={x:Type GroupBox}}}"/>
+							   Text="{Binding Header, RelativeSource={RelativeSource AncestorType=GroupBox}}"/>
 				</Border>
 				<Grid Grid.Row="1">
 					<ContentPresenter/>
@@ -132,7 +132,7 @@
 
 							<i:Interaction.Behaviors>
 								<behaviors:CalendarSelectedDatesBehavior SelectedDates="{Binding SettingsCurrent.TargetDates}"/>
-								<behaviors:FrameworkElementCultureBehavior IetfLanguageTag="{Binding SettingsCurrent.CultureName}"/>
+								<behaviors:FrameworkElementLanguageBehavior IetfLanguageTag="{Binding SettingsCurrent.CultureName}"/>
 							</i:Interaction.Behaviors>
 						</Calendar>
 					</Grid>
@@ -203,7 +203,7 @@
 							TextWrapping="Wrap"
 							Text="{Binding Resources.Options_ChooseDeleteUponCopy, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
-							x:Name="PossibleDeleteUponCopyButton"
+							x:Name="ChooseDeleteUponCopyButton"
 							Width="60" Height="24" HorizontalAlignment="Left"
 							Margin="4"
 							TextChecked="ON"
@@ -214,13 +214,12 @@
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
 							IsChecked="{Binding IsChecked, ElementName= RecycleButton, Converter={StaticResource BooleanInverseConverterKey}, ConverterParameter=True}"/>
 						<controls:CheckTextBox
-							Width="140" HorizontalAlignment="Left"
+							Width="80" HorizontalAlignment="Left"
 							Margin="4" Padding="2,0"
 							VerticalContentAlignment="Center"
 							IsUndoEnabled="False"
-							NoticeText="{Binding Resources.Options_NoticeDeleteUponCopy, Source={x:Static models:ResourceService.Current}}"
 							CheckText="DELETE"
-							Visibility="{Binding IsChecked, ElementName=PossibleDeleteUponCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"                         
+							Visibility="{Binding IsChecked, ElementName=ChooseDeleteUponCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"                         
 							IsChecked="{Binding SettingsCurrent.EnablesChooseDeleteUponCopy, Mode=TwoWay}"/>
 					</WrapPanel>
 				</StackPanel>
@@ -255,8 +254,8 @@
 					</TextBlock>
 
 					<TextBlock Margin="0,0,0,4">
-						<Run Text="{Binding WindowHandler.SystemDpi.X, RelativeSource={RelativeSource AncestorType={x:Type pmd:PerMonitorDpiWindow}}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
-						<Run Text="{Binding WindowHandler.MonitorDpi.X, RelativeSource={RelativeSource AncestorType={x:Type pmd:PerMonitorDpiWindow}}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
+						<Run Text="{Binding WindowHandler.SystemDpi.X, RelativeSource={RelativeSource AncestorType=pmd:PerMonitorDpiWindow}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
+						<Run Text="{Binding WindowHandler.MonitorDpi.X, RelativeSource={RelativeSource AncestorType=pmd:PerMonitorDpiWindow}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
 					</TextBlock>
 				</StackPanel>
 			</GroupBox>

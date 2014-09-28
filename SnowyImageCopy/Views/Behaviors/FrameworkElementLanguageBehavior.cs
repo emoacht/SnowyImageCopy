@@ -9,7 +9,10 @@ using System.Windows.Markup;
 
 namespace SnowyImageCopy.Views.Behaviors
 {
-	public class FrameworkElementCultureBehavior : Behavior<FrameworkElement>
+	/// <summary>
+	/// Set Language property of FrameworkElement.
+	/// </summary>
+	public class FrameworkElementLanguageBehavior : Behavior<FrameworkElement>
 	{
 		#region Dependency Property
 
@@ -22,10 +25,10 @@ namespace SnowyImageCopy.Views.Behaviors
 			DependencyProperty.Register(
 				"IetfLanguageTag",
 				typeof(string),
-				typeof(FrameworkElementCultureBehavior),
+				typeof(FrameworkElementLanguageBehavior),
 				new FrameworkPropertyMetadata(
 					String.Empty,
-					(d, e) => ((FrameworkElementCultureBehavior)d).SetLanguage((string)e.NewValue)));
+					(d, e) => ((FrameworkElementLanguageBehavior)d).SetLanguage((string)e.NewValue)));
 
 		#endregion
 
