@@ -18,6 +18,8 @@ namespace SnowyImageCopy.Views.Controls
 	/// </summary>
 	public partial class ThumbnailBox : UserControl
 	{
+		#region Dependency Property
+
 		/// <summary>
 		/// Stroke brush of Box rectangle
 		/// </summary>
@@ -26,6 +28,8 @@ namespace SnowyImageCopy.Views.Controls
 			get { return Box.Stroke; }
 			set { Box.Stroke = value; }
 		}
+
+		#endregion
 
 
 		public ThumbnailBox()

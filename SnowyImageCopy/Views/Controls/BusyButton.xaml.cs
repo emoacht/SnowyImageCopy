@@ -49,12 +49,10 @@ namespace SnowyImageCopy.Views.Controls
 
 			if ((e.Property == Button.IsMouseOverProperty) ||
 				(e.Property == Button.IsPressedProperty) ||
-				(e.Property == Button.IsKeyboardFocusedProperty) || // This seems to be necessary to catch visual state change by Command function.
+				(e.Property == Button.IsKeyboardFocusedProperty) || // This seems to be necessary to catch visual state change by Command.
 				(e.Property == Button.IsEnabledProperty) ||
 				(e.Property == BusyButton.IsBusyProperty))
-			{
 				UpdateStates(true);
-			}
 		}
 
 		private void UpdateStates(bool useTransitions)

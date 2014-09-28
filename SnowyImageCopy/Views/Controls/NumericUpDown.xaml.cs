@@ -111,7 +111,7 @@ namespace SnowyImageCopy.Views.Controls
 		/// <summary>
 		/// Frequency when value is higher than Middle.
 		/// </summary>
-		/// <remarks>Default means invalid.</remarks>
+		/// <remarks>Default (0) means invalid.</remarks>
 		public double HigherFrequency
 		{
 			get { return (double)GetValue(HigherFrequencyProperty); }
@@ -127,7 +127,7 @@ namespace SnowyImageCopy.Views.Controls
 		/// <summary>
 		/// Frequency when value is lower than Middle.
 		/// </summary>
-		/// <remarks>Default means invalid.</remarks>
+		/// <remarks>Default (0) means invalid.</remarks>
 		public double LowerFrequency
 		{
 			get { return (double)GetValue(LowerFrequencyProperty); }
@@ -163,7 +163,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void OnClick(object sender, RoutedEventArgs e)
 		{
-			var direction = ((FrameworkElement)e.Source).Equals(DownButton) ? Direction.Down : Direction.Up;
+			var direction = e.Source.Equals(DownButton) ? Direction.Down : Direction.Up;
 			SetAppearance(direction);
 		}
 

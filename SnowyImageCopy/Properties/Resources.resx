@@ -265,9 +265,6 @@
   <data name="Options_LocalFolderExplanation" xml:space="preserve">
     <value>Specify a folder to copy images.</value>
   </data>
-  <data name="Options_NoticeDeleteUponCopy" xml:space="preserve">
-    <value>Keyword in Readme</value>
-  </data>
   <data name="Options_OpenByExplorer" xml:space="preserve">
     <value>Open by Explorer</value>
   </data>
@@ -282,6 +279,9 @@
   </data>
   <data name="ProjectSite" xml:space="preserve">
     <value>http://emoacht.github.io/SnowyImageCopy/index.html</value>
+  </data>
+  <data name="ReadmeFile" xml:space="preserve">
+    <value>readme_en.html#delete</value>
   </data>
   <data name="ToastBody_CopyCompleted1st" xml:space="preserve">
     <value>Copy from FlashAir completed.</value>

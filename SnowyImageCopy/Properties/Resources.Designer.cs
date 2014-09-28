@@ -503,15 +503,6 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Keyword in Readme に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string Options_NoticeDeleteUponCopy {
-            get {
-                return ResourceManager.GetString("Options_NoticeDeleteUponCopy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Open by Explorer に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Options_OpenByExplorer {
@@ -553,6 +544,15 @@ namespace SnowyImageCopy.Properties {
         public static string ProjectSite {
             get {
                 return ResourceManager.GetString("ProjectSite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   readme_en.html#delete に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string ReadmeFile {
+            get {
+                return ResourceManager.GetString("ReadmeFile", resourceCulture);
             }
         }
         

@@ -482,6 +482,31 @@ namespace SnowyImageCopy.ViewModels
 		#endregion
 
 
+		#region Browser
+
+		public bool IsBrowserOpen
+		{
+			get { return _isBrowserOpen; }
+			set
+			{
+				_isBrowserOpen = value;
+				RaisePropertyChanged();
+
+				if (value)
+					Op.Stop();
+			}
+		}
+		private bool _isBrowserOpen;
+
+		private void ManageBrowserOpen(bool isRunning)
+		{
+			if (isRunning)
+				IsBrowserOpen = false;
+		}
+
+		#endregion
+
+
 		#region Constructor
 
 		public MainWindowViewModel()
@@ -544,31 +569,31 @@ namespace SnowyImageCopy.ViewModels
 		#endregion
 
 
-		#region Event listener
+		#region Event Listener
 
 		#region FileItem
 
 		private PropertyChangedEventListener fileListPropertyChangedListener;
 
-		private string CaseItemPropertyChanged
+		private string CaseItemProperty
 		{
 			get
 			{
-				return _caseItemPropertyChanged ?? (_caseItemPropertyChanged =
+				return _caseItemProperty ?? (_caseItemProperty =
 					PropertySupport.GetPropertyName(() => new FileItemViewModelCollection().ItemPropertyChangedSender));
 			}
 		}
-		private string _caseItemPropertyChanged;
+		private string _caseItemProperty;
 
-		private string CaseFileStatusChanged
+		private string CaseFileStatus
 		{
 			get
 			{
-				return _caseFileStatusChanged ?? (_caseFileStatusChanged =
+				return _caseFileStatus ?? (_caseFileStatus =
 					PropertySupport.GetPropertyName(() => new FileItemViewModel().IsSelected));
 			}
 		}
-		private string _caseFileStatusChanged;
+		private string _caseFileStatus;
 
 		private string CaseInstantCopy
 		{
@@ -584,7 +609,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			//Debug.WriteLine("File List property changed: {0} {1}", sender, e.PropertyName);
 
-			if (e.PropertyName != CaseItemPropertyChanged)
+			if (e.PropertyName != CaseItemProperty)
 				return;
 
 			var item = ((FileItemViewModelCollection)sender).ItemPropertyChangedSender;
@@ -592,7 +617,7 @@ namespace SnowyImageCopy.ViewModels
 
 			//Debug.WriteLine(String.Format("ItemPropartyChanegd: {0} {1}", item.FileName, propertyName));
 
-			if (CaseFileStatusChanged == propertyName)
+			if (CaseFileStatus == propertyName)
 			{
 				switch (item.Status)
 				{
@@ -634,35 +659,35 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener settingsPropertyChangedListener;
 
-		private string CaseAutoCheckChanged
+		private string CaseAutoCheck
 		{
 			get
 			{
-				return _caseAutoCheckChanged ?? (_caseAutoCheckChanged =
+				return _caseAutoCheck ?? (_caseAutoCheck =
 					PropertySupport.GetPropertyName(() => new Settings().AutoCheckInterval));
 			}
 		}
-		private string _caseAutoCheckChanged;
+		private string _caseAutoCheck;
 
-		private string[] CaseTargetDateChanged
+		private string[] CaseTargetDate
 		{
 			get
 			{
-				if (_caseTargetDateChanged == null)
+				if (_caseTargetDate == null)
 				{
 					var instance = new Settings();
 
-					_caseTargetDateChanged = new string[]
+					_caseTargetDate = new string[]
 					{
 						PropertySupport.GetPropertyName(() => instance.TargetPeriod),
 						PropertySupport.GetPropertyName(() => instance.TargetDates),
 					};
 				}
 
-				return _caseTargetDateChanged;
+				return _caseTargetDate;
 			}
 		}
-		private string[] _caseTargetDateChanged;
+		private string[] _caseTargetDate;
 
 		private event Action AutoCheckChanged = null;
 		private event Action TargetDateChanged = null;
@@ -673,21 +698,17 @@ namespace SnowyImageCopy.ViewModels
 
 			var propertyName = e.PropertyName;
 
-			if (CaseAutoCheckChanged == propertyName)
+			if (CaseAutoCheck == propertyName)
 			{
 				var handler = AutoCheckChanged;
 				if (handler != null)
-				{
 					handler();
-				}
 			}
-			else if (CaseTargetDateChanged.Contains(propertyName))
+			else if (CaseTargetDate.Contains(propertyName))
 			{
 				var handler = TargetDateChanged;
 				if (handler != null)
-				{
 					handler();
-				}
 			}
 		}
 
@@ -698,36 +719,45 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener operationPropertyChangedListener;
 
-		private string[] CaseOperationStateChanged
+		private string CaseIsChecking
 		{
 			get
 			{
-				if (_caseOperationStateChanged == null)
-				{
-					var instance = new Operation(null);
-
-					_caseOperationStateChanged = new string[]
-					{
-						PropertySupport.GetPropertyName(() => instance.IsChecking),
-						PropertySupport.GetPropertyName(() => instance.IsCopying),
-						PropertySupport.GetPropertyName(() => instance.IsAutoRunning),
-					};
-				}
-
-				return _caseOperationStateChanged;
+				return _caseIsChecking ?? (_caseIsChecking =
+					PropertySupport.GetPropertyName(() => Op.IsChecking));
 			}
 		}
-		private string[] _caseOperationStateChanged;
+		private string _caseIsChecking;
 
-		private string CaseOperationProgressChanged
+		private string CaseIsCopying
 		{
 			get
 			{
-				return _caseOperationProgressChanged ?? (_caseOperationProgressChanged =
-					PropertySupport.GetPropertyName(() => new Operation(null).OperationProgress));
+				return _caseIsCopying ?? (_caseIsCopying =
+					PropertySupport.GetPropertyName(() => Op.IsCopying));
 			}
 		}
-		private string _caseOperationProgressChanged;
+		private string _caseIsCopying;
+
+		private string CaseIsAutoRunning
+		{
+			get
+			{
+				return _caseIsAutoRunning ?? (_caseIsAutoRunning =
+					PropertySupport.GetPropertyName(() => Op.IsAutoRunning));
+			}
+		}
+		private string _caseIsAutoRunning;
+
+		private string CaseOperationProgress
+		{
+			get
+			{
+				return _caseOperationProgress ?? (_caseOperationProgress =
+					PropertySupport.GetPropertyName(() => Op.OperationProgress));
+			}
+		}
+		private string _caseOperationProgress;
 
 		private void ReactOperationPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -735,11 +765,22 @@ namespace SnowyImageCopy.ViewModels
 
 			var propertyName = e.PropertyName;
 
-			if (CaseOperationStateChanged.Contains(propertyName))
+			if (CaseIsChecking == propertyName)
 			{
 				RaiseCanExecuteChanged();
+				ManageBrowserOpen(Op.IsChecking);
 			}
-			else if (CaseOperationProgressChanged == propertyName)
+			else if (CaseIsCopying == propertyName)
+			{
+				RaiseCanExecuteChanged();
+				ManageBrowserOpen(Op.IsCopying);
+			}
+			else if (CaseIsAutoRunning == propertyName)
+			{
+				RaiseCanExecuteChanged();
+				ManageBrowserOpen(Op.IsAutoRunning);
+			}
+			else if (CaseOperationProgress == propertyName)
 			{
 				UpdateProgress(Op.OperationProgress);
 			}

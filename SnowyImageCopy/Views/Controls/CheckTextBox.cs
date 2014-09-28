@@ -14,14 +14,14 @@ namespace SnowyImageCopy.Views.Controls
 	{
 		#region Dependency Property
 
-		public String NoticeText
+		public String MessageText
 		{
-			get { return (String)GetValue(NoticeTextProperty); }
-			set { SetValue(NoticeTextProperty, value); }
+			get { return (String)GetValue(MessageTextProperty); }
+			set { SetValue(MessageTextProperty, value); }
 		}
-		public static readonly DependencyProperty NoticeTextProperty =
+		public static readonly DependencyProperty MessageTextProperty =
 			DependencyProperty.Register(
-				"NoticeText",
+				"MessageText",
 				typeof(String),
 				typeof(CheckTextBox),
 				new FrameworkPropertyMetadata(String.Empty));
@@ -88,30 +88,30 @@ namespace SnowyImageCopy.Views.Controls
 		}
 
 
-		#region Notice
+		#region Message
 
-		private bool isNotice;
+		private bool isMessage;
 
 		protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
 		{
 			base.OnPropertyChanged(e);
 
-			if (e.Property != VisibilityProperty)
+			if ((e.Property != VisibilityProperty) || String.IsNullOrEmpty(MessageText))
 				return;
 
 			if ((Visibility)e.NewValue == Visibility.Visible)
 			{
 				if (String.IsNullOrWhiteSpace(this.Text))
 				{
-					isNotice = true;
-					this.Text = NoticeText;
+					isMessage = true;
+					this.Text = MessageText;
 				}
 			}
 			else
 			{
-				if (isNotice)
+				if (isMessage)
 				{
-					isNotice = false;
+					isMessage = false;
 					this.Text = String.Empty;
 				}
 			}
@@ -121,9 +121,12 @@ namespace SnowyImageCopy.Views.Controls
 		{
 			base.OnGotFocus(e);
 
-			if ((this.Visibility == Visibility.Visible) && isNotice)
+			if (String.IsNullOrEmpty(MessageText))
+				return;
+
+			if ((this.Visibility == Visibility.Visible) && isMessage)
 			{
-				isNotice = false;
+				isMessage = false;
 				this.Text = String.Empty;
 			}
 		}
@@ -132,10 +135,13 @@ namespace SnowyImageCopy.Views.Controls
 		{
 			base.OnLostFocus(e);
 
+			if (String.IsNullOrEmpty(MessageText))
+				return;
+
 			if ((this.Visibility == Visibility.Visible) && String.IsNullOrWhiteSpace(this.Text))
 			{
-				isNotice = true;
-				this.Text = NoticeText;
+				isMessage = true;
+				this.Text = MessageText;
 			}
 		}
 

@@ -3,7 +3,6 @@
 						 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 						 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 						 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-						 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 						 xmlns:pmd="clr-namespace:PerMonitorDpi.Views;assembly=PerMonitorDpi"
 						 xmlns:views="clr-namespace:SnowyImageCopy.Views"
 						 xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
@@ -397,6 +396,21 @@
 						<behaviors:ListBoxSelectedItemBehavior/>
 					</i:Interaction.Behaviors>
 				</ListBox>
+
+				<!-- Browser for readme -->
+				<Border
+					Grid.Column="0"
+					BorderThickness="0,1,0,0"
+					BorderBrush="{StaticResource BorderLine.Weak}"
+					Visibility="{Binding IsBrowserOpen, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+					<WebBrowser Visibility="{Binding Visibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}">
+						<i:Interaction.Behaviors>
+							<behaviors:BrowserBehavior
+								TargetFile="{Binding Resources.ReadmeFile, Source={x:Static models:ResourceService.Current}}"
+								AlternateText="Read readme."/>
+						</i:Interaction.Behaviors>
+					</WebBrowser>
+				</Border>
 
 				<!-- Splitter -->
 				<controls:HideableGridSplitter

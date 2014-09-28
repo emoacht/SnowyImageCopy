@@ -38,8 +38,30 @@ namespace SnowyImageCopy.Views.Controls
 				new FrameworkPropertyMetadata(
 					false,
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-					OnPropertyChanged));
+					(d, e) =>
+					{
+						((SlidingToggleButton)d).IsCheckedCopy = (bool)e.NewValue;
+						OnPropertyChanged(d, e);
+					}));
 
+		/// <summary>
+		/// Copy of IsChecked property for binding to another source
+		/// </summary>
+		public bool IsCheckedCopy
+		{
+			get { return (bool)GetValue(IsCheckedCopyProperty); }
+			set { SetValue(IsCheckedCopyProperty, value); }
+		}
+		public static readonly DependencyProperty IsCheckedCopyProperty =
+			DependencyProperty.Register(
+				"IsCheckedCopy",
+				typeof(bool),
+				typeof(SlidingToggleButton),
+				new FrameworkPropertyMetadata(false));
+
+		/// <summary>
+		/// Button text when checked
+		/// </summary>
 		public string TextChecked
 		{
 			get { return (string)GetValue(TextCheckedProperty); }
@@ -54,6 +76,9 @@ namespace SnowyImageCopy.Views.Controls
 					"On",
 					OnPropertyChanged));
 
+		/// <summary>
+		/// Button text when unchecked
+		/// </summary>
 		public string TextUnchecked
 		{
 			get { return (string)GetValue(TextUncheckedProperty); }
@@ -68,6 +93,9 @@ namespace SnowyImageCopy.Views.Controls
 					"Off",
 					OnPropertyChanged));
 
+		/// <summary>
+		/// Foreground Brush when checked
+		/// </summary>
 		public Brush ForegroundChecked
 		{
 			get { return (Brush)GetValue(ForegroundCheckedProperty); }
@@ -82,6 +110,9 @@ namespace SnowyImageCopy.Views.Controls
 					Brushes.Black,
 					OnPropertyChanged));
 
+		/// <summary>
+		/// Foreground Brush when unchecked
+		/// </summary>
 		public Brush ForegroundUnchecked
 		{
 			get { return (Brush)GetValue(ForegroundUncheckedProperty); }
@@ -96,6 +127,9 @@ namespace SnowyImageCopy.Views.Controls
 					Brushes.Black,
 					OnPropertyChanged));
 
+		/// <summary>
+		/// Background Brush when checked
+		/// </summary>
 		public Brush BackgroundChecked
 		{
 			get { return (Brush)GetValue(BackgroundCheckedProperty); }
@@ -110,6 +144,9 @@ namespace SnowyImageCopy.Views.Controls
 					Brushes.SkyBlue,
 					OnPropertyChanged));
 
+		/// <summary>
+		/// Background Brush when unchecked
+		/// </summary>
 		public Brush BackgroundUnchecked
 		{
 			get { return (Brush)GetValue(BackgroundUncheckedProperty); }
