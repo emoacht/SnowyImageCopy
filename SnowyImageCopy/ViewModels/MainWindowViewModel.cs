@@ -580,7 +580,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseItemProperty ?? (_caseItemProperty =
-					PropertySupport.GetPropertyName(() => new FileItemViewModelCollection().ItemPropertyChangedSender));
+					PropertySupport.GetPropertyName(() => FileListCore.ItemPropertyChangedSender));
 			}
 		}
 		private string _caseItemProperty;

@@ -283,6 +283,9 @@
   <data name="ReadmeFile" xml:space="preserve">
     <value>readme_en.html#delete</value>
   </data>
+  <data name="RecordException" xml:space="preserve">
+    <value>This app is terminating because unexpected problem happened. Leave exception log on Desktop?</value>
+  </data>
   <data name="ToastBody_CopyCompleted1st" xml:space="preserve">
     <value>Copy from FlashAir completed.</value>
   </data>
