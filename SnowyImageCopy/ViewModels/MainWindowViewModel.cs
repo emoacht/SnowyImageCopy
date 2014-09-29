@@ -580,7 +580,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseItemProperty ?? (_caseItemProperty =
-					PropertySupport.GetPropertyName(() => FileListCore.ItemPropertyChangedSender));
+					PropertySupport.GetPropertyName(() => default(FileItemViewModelCollection).ItemPropertyChangedSender));
 			}
 		}
 		private string _caseItemProperty;
@@ -590,7 +590,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseFileStatus ?? (_caseFileStatus =
-					PropertySupport.GetPropertyName(() => new FileItemViewModel().IsSelected));
+					PropertySupport.GetPropertyName(() => default(FileItemViewModel).IsSelected));
 			}
 		}
 		private string _caseFileStatus;
@@ -600,7 +600,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseInstantCopy ?? (_caseInstantCopy =
-					PropertySupport.GetPropertyName(() => new FileItemViewModel().Status));
+					PropertySupport.GetPropertyName(() => default(FileItemViewModel).Status));
 			}
 		}
 		private string _caseInstantCopy;
@@ -664,7 +664,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseAutoCheck ?? (_caseAutoCheck =
-					PropertySupport.GetPropertyName(() => new Settings().AutoCheckInterval));
+					PropertySupport.GetPropertyName(() => default(Settings).AutoCheckInterval));
 			}
 		}
 		private string _caseAutoCheck;
@@ -675,12 +675,12 @@ namespace SnowyImageCopy.ViewModels
 			{
 				if (_caseTargetDate == null)
 				{
-					var instance = new Settings();
+					var settings = default(Settings);
 
 					_caseTargetDate = new string[]
 					{
-						PropertySupport.GetPropertyName(() => instance.TargetPeriod),
-						PropertySupport.GetPropertyName(() => instance.TargetDates),
+						PropertySupport.GetPropertyName(() => settings.TargetPeriod),
+						PropertySupport.GetPropertyName(() => settings.TargetDates),
 					};
 				}
 
@@ -724,7 +724,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseIsChecking ?? (_caseIsChecking =
-					PropertySupport.GetPropertyName(() => Op.IsChecking));
+					PropertySupport.GetPropertyName(() => default(Operation).IsChecking));
 			}
 		}
 		private string _caseIsChecking;
@@ -734,7 +734,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseIsCopying ?? (_caseIsCopying =
-					PropertySupport.GetPropertyName(() => Op.IsCopying));
+					PropertySupport.GetPropertyName(() => default(Operation).IsCopying));
 			}
 		}
 		private string _caseIsCopying;
@@ -744,7 +744,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseIsAutoRunning ?? (_caseIsAutoRunning =
-					PropertySupport.GetPropertyName(() => Op.IsAutoRunning));
+					PropertySupport.GetPropertyName(() => default(Operation).IsAutoRunning));
 			}
 		}
 		private string _caseIsAutoRunning;
@@ -754,7 +754,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseOperationProgress ?? (_caseOperationProgress =
-					PropertySupport.GetPropertyName(() => Op.OperationProgress));
+					PropertySupport.GetPropertyName(() => default(Operation).OperationProgress));
 			}
 		}
 		private string _caseOperationProgress;
