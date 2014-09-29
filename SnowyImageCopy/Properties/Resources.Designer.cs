@@ -557,6 +557,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   This app is terminating because unexpected problem happened. Leave exception log on Desktop? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string RecordException {
+            get {
+                return ResourceManager.GetString("RecordException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Copy from FlashAir completed. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string ToastBody_CopyCompleted1st {
