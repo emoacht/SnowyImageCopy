@@ -28,20 +28,22 @@ namespace SnowyImageCopy.Views.Behaviors
 				"IsRequested",
 				typeof(bool),
 				typeof(WindowActivateBehavior),
-				new FrameworkPropertyMetadata(false, (d, e) =>
-				{
-					if ((bool)e.NewValue)
+				new FrameworkPropertyMetadata(
+					false,
+					(d, e) =>
 					{
-						var window = ((WindowActivateBehavior)d).AssociatedObject;
-						if (window.IsActive == false)
+						if ((bool)e.NewValue)
 						{
-							if (window.WindowState == WindowState.Minimized)
-								window.WindowState = WindowState.Normal;
+							var window = ((WindowActivateBehavior)d).AssociatedObject;
+							if (window.IsActive == false)
+							{
+								if (window.WindowState == WindowState.Minimized)
+									window.WindowState = WindowState.Normal;
 
-							window.Activate();
+								window.Activate();
+							}
 						}
-					}
-				}));
+					}));
 
 		#endregion
 

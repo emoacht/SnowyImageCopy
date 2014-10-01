@@ -5,13 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SnowyImageCopy.Views.Controls
 {
@@ -34,15 +33,35 @@ namespace SnowyImageCopy.Views.Controls
 			set { SetValue(IsCheckedProperty, value); }
 		}
 		public static readonly DependencyProperty IsCheckedProperty =
-			DependencyProperty.Register(
-				"IsChecked",
-				typeof(bool),
+			ToggleButton.IsCheckedProperty.AddOwner(
 				typeof(SlidingToggleButton),
 				new FrameworkPropertyMetadata(
 					false,
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-					OnPropertyChanged));
+					(d, e) =>
+					{
+						((SlidingToggleButton)d).IsCheckedCopy = (bool)e.NewValue;
+						OnPropertyChanged(d, e);
+					}));
 
+		/// <summary>
+		/// Copy of IsChecked property for binding to another source
+		/// </summary>
+		public bool IsCheckedCopy
+		{
+			get { return (bool)GetValue(IsCheckedCopyProperty); }
+			set { SetValue(IsCheckedCopyProperty, value); }
+		}
+		public static readonly DependencyProperty IsCheckedCopyProperty =
+			DependencyProperty.Register(
+				"IsCheckedCopy",
+				typeof(bool),
+				typeof(SlidingToggleButton),
+				new FrameworkPropertyMetadata(false));
+
+		/// <summary>
+		/// Button text when checked
+		/// </summary>
 		public string TextChecked
 		{
 			get { return (string)GetValue(TextCheckedProperty); }
@@ -53,8 +72,13 @@ namespace SnowyImageCopy.Views.Controls
 				"TextChecked",
 				typeof(string),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata("On", OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					"On",
+					OnPropertyChanged));
 
+		/// <summary>
+		/// Button text when unchecked
+		/// </summary>
 		public string TextUnchecked
 		{
 			get { return (string)GetValue(TextUncheckedProperty); }
@@ -65,8 +89,13 @@ namespace SnowyImageCopy.Views.Controls
 				"TextUnchecked",
 				typeof(string),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata("Off", OnPropertyChanged));
-		
+				new FrameworkPropertyMetadata(
+					"Off",
+					OnPropertyChanged));
+
+		/// <summary>
+		/// Foreground Brush when checked
+		/// </summary>
 		public Brush ForegroundChecked
 		{
 			get { return (Brush)GetValue(ForegroundCheckedProperty); }
@@ -77,8 +106,13 @@ namespace SnowyImageCopy.Views.Controls
 				"ForegroundChecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(Brushes.Black, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					Brushes.Black,
+					OnPropertyChanged));
 
+		/// <summary>
+		/// Foreground Brush when unchecked
+		/// </summary>
 		public Brush ForegroundUnchecked
 		{
 			get { return (Brush)GetValue(ForegroundUncheckedProperty); }
@@ -89,8 +123,13 @@ namespace SnowyImageCopy.Views.Controls
 				"ForegroundUnchecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(Brushes.Black, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					Brushes.Black,
+					OnPropertyChanged));
 
+		/// <summary>
+		/// Background Brush when checked
+		/// </summary>
 		public Brush BackgroundChecked
 		{
 			get { return (Brush)GetValue(BackgroundCheckedProperty); }
@@ -101,8 +140,13 @@ namespace SnowyImageCopy.Views.Controls
 				"BackgroundChecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(Brushes.SkyBlue, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					Brushes.SkyBlue,
+					OnPropertyChanged));
 
+		/// <summary>
+		/// Background Brush when unchecked
+		/// </summary>
 		public Brush BackgroundUnchecked
 		{
 			get { return (Brush)GetValue(BackgroundUncheckedProperty); }
@@ -113,7 +157,9 @@ namespace SnowyImageCopy.Views.Controls
 				"BackgroundUnchecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(Brushes.Gray, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					Brushes.Gray,
+					OnPropertyChanged));
 
 		#endregion
 

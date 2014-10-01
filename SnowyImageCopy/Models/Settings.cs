@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,13 +22,13 @@ namespace SnowyImageCopy.Models
 
 
 		#region Lode/Save
-		
+
 		private const string settingsFile = "settings.xml";
 
 		private static readonly string settingsPath = Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 			Assembly.GetExecutingAssembly().GetName().Name,
-			settingsFile);		
+			settingsFile);
 
 		public static void Load()
 		{
@@ -43,7 +42,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("Failed to read a XML file. {0}", ex);
+				throw new Exception("Failed to read a XML file.", ex);
 			}
 
 			if (Current == null)
@@ -58,14 +57,14 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("Failed to write a XML file. {0}", ex);
+				throw new Exception("Failed to write a XML file.", ex);
 			}
 		}
 
 		private static T ReadXmlFile<T>(string filePath) where T : new()
 		{
 			if (!File.Exists(filePath))
-				throw new FileNotFoundException("File is not found.", filePath);
+				throw new FileNotFoundException("File seems missing.", filePath);
 
 			using (var fs = new FileStream(filePath, FileMode.Open))
 			{
@@ -106,9 +105,11 @@ namespace SnowyImageCopy.Models
 				TargetPeriod = FilePeriod.All,
 				IsCurrentImageVisible = false,
 				InstantCopy = true,
+				DeleteUponCopy = false,
 				AutoCheckInterval = 30,
-				WillMoveFileToRecycle = false,
-				WillMakeFileExtensionLowerCase = true,
+				MakesFileExtensionLowerCase = true,
+				MovesFileToRecycle = false,
+				EnablesChooseDeleteUponCopy = false,
 			};
 		}
 
@@ -225,7 +226,7 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 
-		#region Instant copy
+		#region Dashboard
 
 		public bool InstantCopy
 		{
@@ -240,6 +241,26 @@ namespace SnowyImageCopy.Models
 			}
 		}
 		private bool _instantCopy;
+
+		public bool DeleteUponCopy
+		{
+			get
+			{
+				if (!EnablesChooseDeleteUponCopy)
+					_deleteUponCopy = false;
+
+				return _deleteUponCopy;
+			}
+			set
+			{
+				if (_deleteUponCopy == value)
+					return;
+
+				_deleteUponCopy = value;
+				RaisePropertyChanged();
+			}
+		}
+		private bool _deleteUponCopy;
 
 		#endregion
 
@@ -265,33 +286,50 @@ namespace SnowyImageCopy.Models
 
 		#region File
 
-		public bool WillMoveFileToRecycle
+		public bool MakesFileExtensionLowerCase
 		{
-			get { return _willMoveFileToRecycle; }
+			get { return _makesFileExtensionLowerCase; }
 			set
 			{
-				if (_willMoveFileToRecycle == value)
+				if (_makesFileExtensionLowerCase == value)
 					return;
 
-				_willMoveFileToRecycle = value;
+				_makesFileExtensionLowerCase = value;
 				RaisePropertyChanged();
 			}
 		}
-		private bool _willMoveFileToRecycle;
+		private bool _makesFileExtensionLowerCase;
 
-		public bool WillMakeFileExtensionLowerCase
+		public bool MovesFileToRecycle
 		{
-			get { return _willMakeFileExtensionLowerCase; }
+			get { return _movesFileToRecycle; }
 			set
 			{
-				if (_willMakeFileExtensionLowerCase == value)
+				if (_movesFileToRecycle == value)
 					return;
 
-				_willMakeFileExtensionLowerCase = value;
+				_movesFileToRecycle = value;
 				RaisePropertyChanged();
 			}
 		}
-		private bool _willMakeFileExtensionLowerCase;
+		private bool _movesFileToRecycle;
+
+		public bool EnablesChooseDeleteUponCopy
+		{
+			get { return _enablesChooseDeleteUponCopy; }
+			set
+			{
+				if (_enablesChooseDeleteUponCopy == value)
+					return;
+
+				_enablesChooseDeleteUponCopy = value;
+				RaisePropertyChanged();
+
+				if (!value)
+					DeleteUponCopy = false;
+			}
+		}
+		private bool _enablesChooseDeleteUponCopy;
 
 		#endregion
 

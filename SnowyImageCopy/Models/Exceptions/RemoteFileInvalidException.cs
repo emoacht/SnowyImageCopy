@@ -13,14 +13,7 @@ namespace SnowyImageCopy.Models.Exceptions
 	[Serializable]
 	internal class RemoteFileInvalidException : Exception
 	{
-		public new string Message
-		{
-			get { return !String.IsNullOrEmpty(base.Message) ? base.Message : this._message; }
-			private set { _message = value; }
-		}
-		private string _message;
-
-		public string FileName { get; private set; }
+		public string FilePath { get; private set; }
 
 
 		#region Constructor
@@ -30,10 +23,10 @@ namespace SnowyImageCopy.Models.Exceptions
 		public RemoteFileInvalidException(string message, Exception inner) : base(message, inner) { }
 		protected RemoteFileInvalidException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-		public RemoteFileInvalidException(string message, string fileName)
+		public RemoteFileInvalidException(string message, string filePath)
+			: base(message)
 		{
-			this.Message = message;
-			this.FileName = fileName;
+			this.FilePath = filePath;
 		}
 
 		#endregion

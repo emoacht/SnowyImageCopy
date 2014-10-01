@@ -57,6 +57,9 @@
     <SolidColorBrush x:Key="Sliding.Checked.Background" Color="{StaticResource SnowBlue.Normal.BackgroundColor}"/>
     <SolidColorBrush x:Key="Sliding.Checked.Foreground" Color="{StaticResource SnowBlue.Normal.ForegroundColor}"/>
 
+    <SolidColorBrush x:Key="Sliding.CheckedSecond.Background" Color="#FFf7d0db"/>
+    <SolidColorBrush x:Key="Sliding.CheckedSecond.Foreground" Color="#FF800054"/>
+        
     <SolidColorBrush x:Key="Sliding.Unchecked.Background" Color="LightGray"/>
     <SolidColorBrush x:Key="Sliding.Unchecked.Foreground" Color="DimGray"/>
 
@@ -81,7 +84,7 @@
     <SolidColorBrush x:Key="Window.Background" Color="White"/>
     <SolidColorBrush x:Key="ImageListBox.Background" Color="{StaticResource SnowBlue.LightestColor}"/>
 
-    <SolidColorBrush x:Key="BorderLine.Strong" Color="#FFd9d9d9"/>
+    <SolidColorBrush x:Key="BorderLine.Strong" Color="LightGray"/>
     <SolidColorBrush x:Key="BorderLine.Weak" Color="#FFeeeeee"/>
 
     <SolidColorBrush x:Key="OptionHeader.Foreground" Color="Navy"/>

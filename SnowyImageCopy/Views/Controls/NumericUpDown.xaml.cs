@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +11,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SnowyImageCopy.Views.Controls
 {
@@ -47,6 +44,7 @@ namespace SnowyImageCopy.Views.Controls
 					(d, baseValue) =>
 					{
 						var numeric = (NumericUpDown)d;
+
 						if ((double)baseValue < numeric.Minimum)
 							return numeric.Minimum;
 						if (numeric.Maximum < (double)baseValue)
@@ -63,7 +61,9 @@ namespace SnowyImageCopy.Views.Controls
 		public static readonly DependencyProperty MinimumProperty =
 			RangeBase.MinimumProperty.AddOwner(
 				typeof(NumericUpDown),
-				new FrameworkPropertyMetadata(0D, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					0D,
+					OnPropertyChanged));
 
 		public double Maximum
 		{
@@ -73,7 +73,9 @@ namespace SnowyImageCopy.Views.Controls
 		public static readonly DependencyProperty MaximumProperty =
 			RangeBase.MaximumProperty.AddOwner(
 				typeof(NumericUpDown),
-				new FrameworkPropertyMetadata(10D, OnPropertyChanged));
+				new FrameworkPropertyMetadata(
+					10D,
+					OnPropertyChanged));
 
 		public double Frequency
 		{
@@ -89,11 +91,6 @@ namespace SnowyImageCopy.Views.Controls
 					1D,
 					null,
 					(d, baseValue) => (0 < (double)baseValue) ? (double)baseValue : DependencyProperty.UnsetValue));
-
-		private static object coerceValueCallback(DependencyObject d, object baseValue)
-		{
-			throw new NotImplementedException();
-		}
 
 		/// <summary>
 		/// Middle level between Minimum and Maximum
@@ -114,7 +111,7 @@ namespace SnowyImageCopy.Views.Controls
 		/// <summary>
 		/// Frequency when value is higher than Middle.
 		/// </summary>
-		/// <remarks>Default means invalid.</remarks>
+		/// <remarks>Default (0) means invalid.</remarks>
 		public double HigherFrequency
 		{
 			get { return (double)GetValue(HigherFrequencyProperty); }
@@ -130,7 +127,7 @@ namespace SnowyImageCopy.Views.Controls
 		/// <summary>
 		/// Frequency when value is lower than Middle.
 		/// </summary>
-		/// <remarks>Default means invalid.</remarks>
+		/// <remarks>Default (0) means invalid.</remarks>
 		public double LowerFrequency
 		{
 			get { return (double)GetValue(LowerFrequencyProperty); }
@@ -166,7 +163,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void OnClick(object sender, RoutedEventArgs e)
 		{
-			var direction = ((FrameworkElement)e.Source).Equals(DownButton) ? Direction.Down : Direction.Up;
+			var direction = e.Source.Equals(DownButton) ? Direction.Down : Direction.Up;
 			SetAppearance(direction);
 		}
 

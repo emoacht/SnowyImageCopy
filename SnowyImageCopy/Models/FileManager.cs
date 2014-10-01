@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 
 using SnowyImageCopy.Models.Exceptions;
 using SnowyImageCopy.Models.Network;
@@ -19,7 +17,7 @@ using SnowyImageCopy.ViewModels;
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// Access FlashAir card.
+	/// Manage FlashAir card.
 	/// </summary>
 	internal static class FileManager
 	{
@@ -101,7 +99,7 @@ namespace SnowyImageCopy.Models
 					continue;
 				}
 
-				string path = itemList[i].FilePath;
+				var path = itemList[i].FilePath;
 				itemList.Remove(itemList[i]);
 				itemList.AddRange(await GetFileListAllAsync(client, path, token, card));
 			}
@@ -197,7 +195,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="remoteFilePath">Remote file path</param>
 		/// <param name="token">CancellationToken</param>
-		/// <param name="card">FlashAir card information</param>		
+		/// <param name="card">FlashAir card information</param>
 		internal static async Task<BitmapImage> GetThumbnailAsync(string remoteFilePath, CancellationToken token, CardInfo card)
 		{
 			if (String.IsNullOrEmpty(remoteFilePath))
@@ -216,7 +214,13 @@ namespace SnowyImageCopy.Models
 			}
 			catch (RemoteFileNotFoundException)
 			{
-				// If the file is not JPEG image format or does not contain a thumbnail, this exception will be thrown. 
+				// If image file is not JPEG format or contains no thumbnail, StatusCode will be HttpStatusCode.NotFound.
+				Debug.WriteLine("Image file may not be JPEG format or may contain no thumbnail.");
+				throw;
+			}
+			catch (ImageNotSupportedException)
+			{
+				// This exception should not be thrown because thumbnail data is directly provided by FlashAir card.
 				return null;
 			}
 			catch
@@ -227,7 +231,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get file data of a specified file in FlashAir card and save it in local folder. 
+		/// Get file data of a specified remote file in FlashAir card and save it in local folder. 
 		/// </summary>
 		/// <param name="remoteFilePath">Remote file path</param>
 		/// <param name="localFilePath">Local file path</param>
@@ -258,7 +262,7 @@ namespace SnowyImageCopy.Models
 						await fs.WriteAsync(bytes, 0, bytes.Length, token).ConfigureAwait(false);
 					}
 
-					// Conform date of copied file in local folder to that of original file in FlashAir card
+					// Conform date of copied file in local folder to that of original file in FlashAir card.
 					var localFileInfo = new FileInfo(localFilePath);
 					localFileInfo.CreationTime = itemDate; // Creation time
 					localFileInfo.LastWriteTime = itemDate; // Last write time
@@ -278,31 +282,92 @@ namespace SnowyImageCopy.Models
 			}
 			catch
 			{
-				Debug.WriteLine("Failed to get and save a file");
+				Debug.WriteLine("Failed to get and save a file.");
 				throw;
 			}
 		}
 
 		/// <summary>
-		/// Check update status of FlashAir card.
+		/// Delete a specified remote file in FlashAir card.
 		/// </summary>
-		/// <returns>Whether the content of FlashAir card is updated</returns>
-		internal static async Task<bool> CheckUpdateStatusAsync()
+		/// <param name="remoteFilePath">Remote file path</param>
+		/// <param name="token">CancellationToken</param>
+		internal static async Task DeleteFileAsync(string remoteFilePath, CancellationToken token)
 		{
-			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpdateStatus, String.Empty);
+			if (String.IsNullOrEmpty(remoteFilePath))
+				throw new ArgumentNullException("remoteFilePath");
+
+			var remotePath = ComposeRemotePath(FileManagerCommand.DeleteFile, remoteFilePath);
 
 			try
 			{
 				using (var client = new HttpClient() { Timeout = timeoutLength })
 				{
-					var updatedStatus = await DownloadStringAsync(client, remotePath, CancellationToken.None, null).ConfigureAwait(false);
+					var result = await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 
-					return (updatedStatus == "1"); // 1:If memory card has been updated, 0:If not
+					// "SUCCESS": If succeeded.
+					// "ERROR":   If failed.
+					if (!result.Equals("SUCCESS", StringComparison.Ordinal))
+						throw new RemoteFileDeleteFailedException(String.Format("Result: {0}", result), remotePath);
+				}
+			}
+			catch (RemoteFileNotFoundException)
+			{
+				// If upload.cgi is disabled, StatusCode will be HttpStatusCode.NotFound.
+				throw new RemoteFileDeleteFailedException(remotePath);
+			}
+			catch
+			{
+				Debug.WriteLine("Failed to delete a remote file.");
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Get firmware version of FlashAir card.
+		/// </summary>
+		/// <param name="token">CancellationToken</param>
+		internal static async Task<string> GetFirmwareVersionAsync(CancellationToken token)
+		{
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetFirmwareVersion, String.Empty);
+
+			try
+			{
+				using (var client = new HttpClient() { Timeout = timeoutLength })
+				{
+					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 				}
 			}
 			catch
 			{
-				Debug.WriteLine("Failed to check update status.");
+				Debug.WriteLine("Failed to get firmware version.");
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Get CID of FlashAir card.
+		/// </summary>
+		/// <param name="token">CancellationToken</param>
+		/// <returns>If succeeded, CID. If failed, empty string.</returns>
+		internal static async Task<string> GetCidAsync(CancellationToken token)
+		{
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetCid, String.Empty);
+
+			try
+			{
+				using (var client = new HttpClient() { Timeout = timeoutLength })
+				{
+					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
+				}
+			}
+			catch (RemoteConnectionUnableException)
+			{
+				return String.Empty;
+			}
+			catch
+			{
+				Debug.WriteLine("Failed to get CID.");
 				throw;
 			}
 		}
@@ -330,12 +395,79 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get CID of FlashAir card.
+		/// Check update status of FlashAir card.
+		/// </summary>
+		/// <returns>True if update status is set</returns>
+		internal static async Task<bool> CheckUpdateStatusAsync()
+		{
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpdateStatus, String.Empty);
+
+			try
+			{
+				using (var client = new HttpClient() { Timeout = timeoutLength })
+				{
+					var status = await DownloadStringAsync(client, remotePath, CancellationToken.None, null).ConfigureAwait(false);
+
+					// 1: If memory has been updated.
+					// 0: If not.
+					return (status == "1");
+				}
+			}
+			catch
+			{
+				Debug.WriteLine("Failed to check update status.");
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Get time stamp of write event in FlashAir card.
+		/// </summary>
+		internal static async Task<int> GetWriteTimeStampAsync()
+		{
+			return await GetWriteTimeStampAsync(CancellationToken.None);
+		}
+
+		/// <summary>
+		/// Get time stamp of write event in FlashAir card.
 		/// </summary>
 		/// <param name="token">CancellationToken</param>
-		internal static async Task<string> GetCidAsync(CancellationToken token)
+		/// <returns>If succeeded, time stamp (msec). If failed, -1.</returns>
+		/// <remarks>If no write event occurred since FlashAir card started running, this value will be 0.</remarks>
+		internal static async Task<int> GetWriteTimeStampAsync(CancellationToken token)
 		{
-			var remotePath = ComposeRemotePath(FileManagerCommand.GetCid, String.Empty);
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetWriteTimeStamp, String.Empty);
+
+			try
+			{
+				using (var client = new HttpClient() { Timeout = timeoutLength })
+				{
+					var timeStamp = await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
+
+					int num;
+					return int.TryParse(timeStamp, out num) ? num : -1;
+				}
+			}
+			catch (RemoteConnectionUnableException)
+			{
+				// If request for time stamp of write event is not supported, StatusCode will be HttpStatusCode.BadRequest.
+				return -1;
+			}
+			catch
+			{
+				Debug.WriteLine("Failed to get time stamp of write event.");
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Get Upload parameters of FlashAir card.
+		/// </summary>
+		/// <param name="token">CancellationToken</param>
+		/// <returns>If succeeded, Upload parameters (string). If failed, empty string.</returns>
+		internal static async Task<string> GetUploadAsync(CancellationToken token)
+		{
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpload, String.Empty);
 
 			try
 			{
@@ -344,9 +476,14 @@ namespace SnowyImageCopy.Models
 					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 				}
 			}
+			catch (RemoteConnectionUnableException)
+			{
+				// If request for Upload parameters is not supported, StatusCode will be HttpStatusCode.BadRequest.
+				return String.Empty;
+			}
 			catch
 			{
-				Debug.WriteLine("Failed to get CID.");
+				Debug.WriteLine("Failed to get Upload parameters.");
 				throw;
 			}
 		}
@@ -400,12 +537,12 @@ namespace SnowyImageCopy.Models
 									// None.
 									break;
 								case HttpStatusCode.Unauthorized:
-									throw new RemoteConnectionUnableException(HttpStatusCode.Unauthorized);
 								case HttpStatusCode.InternalServerError:
-									throw new RemoteConnectionUnableException(HttpStatusCode.InternalServerError);
+								case HttpStatusCode.BadRequest:
+									throw new RemoteConnectionUnableException(response.StatusCode);
 								case HttpStatusCode.NotFound:
-									// This exception does not always mean that the file does not exist.
-									throw new RemoteFileNotFoundException("File not found!", path);
+									// This exception does not always mean that the specified file is missing.
+									throw new RemoteFileNotFoundException("File is missing or request cannot be handled!", path);
 								default:
 									throw new HttpRequestException(String.Format("StatusCode: {0}", response.StatusCode));
 							}
@@ -421,9 +558,10 @@ namespace SnowyImageCopy.Models
 							// Register delegate to CancellationToken because CancellationToken can no longer
 							// directly affect HttpClient. Disposing the HttpResponseMessage will make ReadAsStreamAsync
 							// method throw an ObjectDisposedException and so exit this operation.
+							var ctr = new CancellationTokenRegistration();
 							try
 							{
-								token.Register(() => response.Dispose());
+								ctr = token.Register(() => response.Dispose());
 							}
 							catch (ObjectDisposedException ode)
 							{
@@ -431,93 +569,95 @@ namespace SnowyImageCopy.Models
 								// this exception will be thrown.
 								Debug.WriteLine("CancellationTokenSource has been disposed when tried to register delegate. {0}", ode);
 							}
-
-							var tcs = new TaskCompletionSource<bool>();
-
-							// Start timer to monitor network connection.
-							using (var monitorTimer = new Timer(async s =>
+							using (ctr)
 							{
-								if (!await NetworkChecker.IsNetworkConnectedAsync(card))
+								var tcs = new TaskCompletionSource<bool>();
+
+								// Start timer to monitor network connection.
+								using (var monitorTimer = new Timer(async s =>
 								{
-									((TaskCompletionSource<bool>)s).TrySetResult(true);
-								}
-							}, tcs, monitorLength, monitorLength))
-							{
-								var monitorTask = tcs.Task;
-
-								if ((size == 0) || (progress == null))
-								{
-									// Route without progress reporting
-									var readTask = Task.Run(async () => await response.Content.ReadAsByteArrayAsync());
-									var timeoutTask = Task.Delay(timeoutLength);
-
-									var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
-									if (completedTask == timeoutTask)
-										throw new TimeoutException("Reading response content timed out!");
-									if (completedTask == monitorTask)
-										throw new RemoteConnectionLostException("Connection lost!");
-
-									var bytes = await readTask;
-
-									if ((0 < size) && (bytes.Length != size))
-										throw new RemoteFileInvalidException("Data length does not match!", path);
-
-									return bytes;
-								}
-								else
-								{
-									// Route with progress reporting
-									int readLength;
-									int readLengthTotal = 0;
-
-									var buffer = new byte[65536]; // 64KiB
-									var bufferTotal = new byte[size];
-
-									const double stepUint = 524288D; // 512KiB
-									double stepTotal = Math.Ceiling(size / stepUint); // Number of steps to report during downloading
-									if (stepTotal < 6)
-										stepTotal = 6; // Minimum number of steps
-
-									double stepCurrent = 1D;
-									var startTime = DateTime.Now;
-
-									using (var stream = await response.Content.ReadAsStreamAsync())
+									if (!await NetworkChecker.IsNetworkConnectedAsync(card))
 									{
-										while (readLengthTotal != size)
+										((TaskCompletionSource<bool>)s).TrySetResult(true);
+									}
+								}, tcs, monitorLength, monitorLength))
+								{
+									var monitorTask = tcs.Task;
+
+									if ((size == 0) || (progress == null))
+									{
+										// Route without progress reporting
+										var readTask = Task.Run(async () => await response.Content.ReadAsByteArrayAsync());
+										var timeoutTask = Task.Delay(timeoutLength);
+
+										var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
+										if (completedTask == timeoutTask)
+											throw new TimeoutException("Reading response content timed out!");
+										if (completedTask == monitorTask)
+											throw new RemoteConnectionLostException("Connection lost!");
+
+										var bytes = await readTask;
+
+										if ((0 < size) && (bytes.Length != size))
+											throw new RemoteFileInvalidException("Data length does not match!", path);
+
+										return bytes;
+									}
+									else
+									{
+										// Route with progress reporting
+										int readLength;
+										int readLengthTotal = 0;
+
+										var buffer = new byte[65536]; // 64KiB
+										var bufferTotal = new byte[size];
+
+										const double stepUint = 524288D; // 512KiB
+										double stepTotal = Math.Ceiling(size / stepUint); // Number of steps to report during downloading
+										if (stepTotal < 6)
+											stepTotal = 6; // Minimum number of steps
+
+										double stepCurrent = 1D;
+										var startTime = DateTime.Now;
+
+										using (var stream = await response.Content.ReadAsStreamAsync())
 										{
-											// CancellationToken in overload of ReadAsync method will not work for response content.
-											var readTask = Task.Run(async () => await stream.ReadAsync(buffer, 0, buffer.Length));
-											var timeoutTask = Task.Delay(timeoutLength);
-
-											var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
-											if (completedTask == timeoutTask)
-												throw new TimeoutException("Reading response content timed out!");
-											if (completedTask == monitorTask)
-												throw new RemoteConnectionLostException("Connection lost!");
-
-											readLength = await readTask;
-
-											if ((readLength == 0) || (readLengthTotal + readLength > size))
-												throw new RemoteFileInvalidException("Data length does not match!", path);
-
-											Buffer.BlockCopy(buffer, 0, bufferTotal, readLengthTotal, readLength);
-
-											readLengthTotal += readLength;
-
-											monitorTimer.Change(monitorLength, monitorLength);
-
-											// Report if read length in total exceeds stepped length.
-											if (stepCurrent / stepTotal * size <= readLengthTotal)
+											while (readLengthTotal != size)
 											{
-												stepCurrent++;
-												progress.Report(new ProgressInfo(
-													currentValue: readLengthTotal,
-													totalValue: size,
-													elapsedTime: DateTime.Now - startTime));
+												// CancellationToken in overload of ReadAsync method will not work for response content.
+												var readTask = Task.Run(async () => await stream.ReadAsync(buffer, 0, buffer.Length));
+												var timeoutTask = Task.Delay(timeoutLength);
+
+												var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
+												if (completedTask == timeoutTask)
+													throw new TimeoutException("Reading response content timed out!");
+												if (completedTask == monitorTask)
+													throw new RemoteConnectionLostException("Connection lost!");
+
+												readLength = await readTask;
+
+												if ((readLength == 0) || (readLengthTotal + readLength > size))
+													throw new RemoteFileInvalidException("Data length does not match!", path);
+
+												Buffer.BlockCopy(buffer, 0, bufferTotal, readLengthTotal, readLength);
+
+												readLengthTotal += readLength;
+
+												monitorTimer.Change(monitorLength, monitorLength);
+
+												// Report if read length in total exceeds stepped length.
+												if (stepCurrent / stepTotal * size <= readLengthTotal)
+												{
+													stepCurrent++;
+													progress.Report(new ProgressInfo(
+														currentValue: readLengthTotal,
+														totalValue: size,
+														elapsedTime: DateTime.Now - startTime));
+												}
 											}
 										}
+										return bufferTotal;
 									}
-									return bufferTotal;
 								}
 							}
 						}
@@ -593,9 +733,13 @@ namespace SnowyImageCopy.Models
 				{FileManagerCommand.GetFileList, @"command.cgi?op=100&DIR=/"},
 				{FileManagerCommand.GetFileNum, @"command.cgi?op=101&DIR=/"},
 				{FileManagerCommand.GetThumbnail, @"thumbnail.cgi?/"},
-				{FileManagerCommand.GetUpdateStatus, @"command.cgi?op=102"},
-				{FileManagerCommand.GetSsid, @"command.cgi?op=104"},
+				{FileManagerCommand.GetFirmwareVersion, @"command.cgi?op=108"},
 				{FileManagerCommand.GetCid, @"command.cgi?op=120"},
+				{FileManagerCommand.GetSsid, @"command.cgi?op=104"},
+				{FileManagerCommand.GetUpdateStatus, @"command.cgi?op=102"},
+				{FileManagerCommand.GetWriteTimeStamp, @"command.cgi?op=121"},
+				{FileManagerCommand.GetUpload, @"command.cgi?op=118"},
+				{FileManagerCommand.DeleteFile, @"upload.cgi?DEL=/"},
 			};
 
 		/// <summary>
@@ -609,7 +753,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Record result of DownloadStringAsync method for debug
+		/// Record result of DownloadStringAsync method for debugging purpose.
 		/// </summary>
 		/// <param name="requestPath">Request path</param>
 		/// <param name="responseBytes">Response byte array</param>

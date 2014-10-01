@@ -10,8 +10,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SnowyImageCopy.Views.Controls
 {
@@ -20,6 +18,8 @@ namespace SnowyImageCopy.Views.Controls
 	/// </summary>
 	public partial class ThumbnailBox : UserControl
 	{
+		#region Dependency Property
+
 		/// <summary>
 		/// Stroke brush of Box rectangle
 		/// </summary>
@@ -28,6 +28,8 @@ namespace SnowyImageCopy.Views.Controls
 			get { return Box.Stroke; }
 			set { Box.Stroke = value; }
 		}
+
+		#endregion
 
 
 		public ThumbnailBox()

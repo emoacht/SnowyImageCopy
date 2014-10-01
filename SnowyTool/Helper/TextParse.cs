@@ -11,12 +11,12 @@ namespace SnowyTool.Helper
 		public static Dictionary<string, string> GetContent(string source, char separator)
 		{
 			if (String.IsNullOrWhiteSpace(source))
-				throw new ArgumentException("source");
+				throw new ArgumentNullException("source");
 
 			if (Char.IsWhiteSpace(separator))
 				throw new ArgumentException("separator");
 
-			var content = new Dictionary<string, String>();
+			var content = new Dictionary<string, string>();
 
 			var lines = source.Split(new String[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 

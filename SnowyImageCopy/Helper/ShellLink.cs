@@ -361,7 +361,7 @@ namespace SnowyImageCopy.Helper
 
 		#region Private Property (Interface)
 
-		private IPersistFile persistFile
+		private IPersistFile PersistFile
 		{
 			get
 			{
@@ -374,7 +374,7 @@ namespace SnowyImageCopy.Helper
 			}
 		}
 
-		private IPropertyStore propertyStore
+		private IPropertyStore PropertyStore
 		{
 			get
 			{
@@ -401,7 +401,7 @@ namespace SnowyImageCopy.Helper
 			{
 				string str;
 
-				this.persistFile.GetCurFile(out str);
+				this.PersistFile.GetCurFile(out str);
 
 				return str;
 			}
@@ -416,7 +416,7 @@ namespace SnowyImageCopy.Helper
 			get
 			{
 				var sb = new StringBuilder(MAX_PATH - 1);
-				WIN32_FIND_DATAW data = new WIN32_FIND_DATAW();
+				var data = new WIN32_FIND_DATAW();
 
 				VerifySucceeded(this.shellLink.GetPath(sb, sb.Capacity, ref data, SLGP.SLGP_UNCPRIORITY));
 
@@ -434,16 +434,16 @@ namespace SnowyImageCopy.Helper
 		/// <summary>
 		/// Arguments
 		/// </summary>
-		/// <remarks>According to MSDN, this length should not have a limitation as long as it it 
-		/// in Unicode. In addition, it is recommended to retrieve argument strings though 
-		/// IPropertyStore rather than GetArguments method.</remarks>
+		/// <remarks>According to MSDN, this length should not have a limitation as long as it in Unicode. 
+		/// In addition, it is recommended to retrieve argument strings though IPropertyStore rather than 
+		/// GetArguments method.</remarks>
 		internal string Arguments
 		{
 			get
 			{
 				using (var pv = new PropVariant())
 				{
-					VerifySucceeded(this.propertyStore.GetValue(this.ArgumentsKey, pv));
+					VerifySucceeded(this.PropertyStore.GetValue(this.ArgumentsKey, pv));
 
 					return pv.Value ?? String.Empty;
 				}
@@ -581,7 +581,7 @@ namespace SnowyImageCopy.Helper
 			{
 				using (var pv = new PropVariant())
 				{
-					VerifySucceeded(this.propertyStore.GetValue(this.AppUserModelIDKey, pv));
+					VerifySucceeded(this.PropertyStore.GetValue(this.AppUserModelIDKey, pv));
 
 					return pv.Value ?? String.Empty;
 				}
@@ -591,10 +591,10 @@ namespace SnowyImageCopy.Helper
 				if (128 < value.Length)
 					throw new Exception("AppUserModelID is too long.");
 
-				using (PropVariant pv = new PropVariant(value))
+				using (var pv = new PropVariant(value))
 				{
-					VerifySucceeded(this.propertyStore.SetValue(this.AppUserModelIDKey, pv));
-					VerifySucceeded(this.propertyStore.Commit());
+					VerifySucceeded(this.PropertyStore.SetValue(this.AppUserModelIDKey, pv));
+					VerifySucceeded(this.PropertyStore.Commit());
 				}
 			}
 		}
@@ -674,7 +674,7 @@ namespace SnowyImageCopy.Helper
 			if (!File.Exists(filePath))
 				throw new FileNotFoundException("File is not found.", filePath);
 
-			this.persistFile.Load(filePath, (int)STGM.STGM_READ);
+			this.PersistFile.Load(filePath, (int)STGM.STGM_READ);
 		}
 
 		/// <summary>
@@ -694,7 +694,7 @@ namespace SnowyImageCopy.Helper
 			if (String.IsNullOrEmpty(filePath))
 				throw new ArgumentNullException("filePath");
 
-			this.persistFile.Save(filePath, true);
+			this.PersistFile.Save(filePath, true);
 		}
 
 		#endregion
@@ -710,7 +710,9 @@ namespace SnowyImageCopy.Helper
 		private void VerifySucceeded(uint hresult)
 		{
 			if (hresult > 1)
+			{
 				throw new Exception("Failed with HRESULT: " + hresult.ToString("X"));
+			}
 		}
 
 		#endregion

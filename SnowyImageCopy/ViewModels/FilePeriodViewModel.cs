@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
@@ -24,8 +24,8 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 
-		#region Event listener
-		
+		#region Event Listener
+
 		private PropertyChangedEventListener resourcesPropertyChangedListener;
 
 		private void ReactResourcesPropertyChanged(object sender, PropertyChangedEventArgs e)

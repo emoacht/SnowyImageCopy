@@ -50,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -66,17 +67,21 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Reactive.Core">
-      <HintPath>..\packages\Rx-Core.2.2.2\lib\net45\System.Reactive.Core.dll</HintPath>
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive.Interfaces">
-      <HintPath>..\packages\Rx-Interfaces.2.2.2\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive.Linq">
-      <HintPath>..\packages\Rx-Linq.2.2.2\lib\net45\System.Reactive.Linq.dll</HintPath>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive.PlatformServices">
-      <HintPath>..\packages\Rx-PlatformServices.2.2.2\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime" />
     <Reference Include="System.Runtime.InteropServices.WindowsRuntime" />
@@ -104,6 +109,10 @@
     <Compile Include="Helper\ShellLink.cs" />
     <Compile Include="Helper\Shortcut.cs" />
     <Compile Include="Models\CardInfo.cs" />
+    <Compile Include="Models\Exceptions\CardChangedException.cs" />
+    <Compile Include="Models\Exceptions\CardUploadDisabledException.cs" />
+    <Compile Include="Models\Exceptions\ImageNotSupportedException.cs" />
+    <Compile Include="Models\Exceptions\RemoteFileDeleteFailedException.cs" />
     <Compile Include="Models\Exceptions\UnexpectedException.cs" />
     <Compile Include="Models\Exceptions\RemoteConnectionLostException.cs" />
     <Compile Include="Models\Network\NetworkChecker.cs" />
@@ -114,10 +123,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Views\Behaviors\BrowserBehavior.cs" />
     <Compile Include="Views\Behaviors\ExplorerAction.cs" />
-    <Compile Include="Views\Behaviors\FrameworkElementCultureBehavior.cs" />
+    <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
     <Compile Include="Views\Behaviors\SystemSoundPlayAction.cs" />
     <Compile Include="Views\Behaviors\WindowActivateBehavior.cs" />
+    <Compile Include="Views\Controls\CheckTextBox.cs" />
     <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
     <Compile Include="Views\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
@@ -128,10 +139,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\CircularProgressBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\DottedPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -205,9 +212,6 @@
     </Compile>
     <Compile Include="Views\Controls\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Controls\DottedPanel.xaml.cs">
-      <DependentUpon>DottedPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\HideableGridSplitter.cs" />
     <Compile Include="Views\Controls\NumericUpDown.xaml.cs">

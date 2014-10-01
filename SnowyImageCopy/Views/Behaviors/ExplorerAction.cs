@@ -11,7 +11,7 @@ using System.Windows.Interactivity;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Open a folder by Explorer.
+	/// Open folder by Explorer.
 	/// </summary>
 	public class ExplorerAction : TriggerAction<DependencyObject>
 	{

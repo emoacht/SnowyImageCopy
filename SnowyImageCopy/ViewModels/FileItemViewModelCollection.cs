@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -68,17 +67,17 @@ namespace SnowyImageCopy.ViewModels
 
 			base.ClearItems();
 		}
-		
+
 
 		private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			ItemPropertyChangedSender = sender as FileItemViewModel;
 			ItemPropertyChangedEventArgs = e;
 
-			base.OnPropertyChanged(new PropertyChangedEventArgs(nameItemPropertyChangedSender));
+			base.OnPropertyChanged(new PropertyChangedEventArgs(NameItemPropertyChangedSender));
 		}
 
-		private string nameItemPropertyChangedSender
+		private string NameItemPropertyChangedSender
 		{
 			get
 			{

@@ -18,6 +18,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
+Ver 0.9.6 2014-10-1
+
+ - Added function to delete image in FlashAir upon copy
+
 Ver 0.9.5 2014-09-12
 
  - Fixed bugs in auto check

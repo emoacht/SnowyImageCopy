@@ -10,10 +10,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 using SnowyImageCopy.ViewModels;
+using SnowyImageCopy.Views.Controls;
 
 namespace SnowyImageCopy.Views
 {
@@ -40,6 +39,15 @@ namespace SnowyImageCopy.Views
 				return;
 
 			((OptionsViewModel)this.DataContext).MainWindowViewModelInstance = mainWindowViewModelInstance;
+
+			// Binding in xaml will not work because MainWindowViewModel may be null when Options is instantiated.
+			ChooseDeleteUponCopyButton.SetBinding(
+				SlidingToggleButton.IsCheckedCopyProperty,
+				new Binding("IsBrowserOpen")
+				{
+					Source = mainWindowViewModelInstance,
+					Mode = BindingMode.OneWayToSource,
+				});
 		}
 	}
 }

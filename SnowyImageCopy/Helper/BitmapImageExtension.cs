@@ -11,7 +11,7 @@ namespace SnowyImageCopy.Helper
 	public static class BitmapImageExtension
 	{
 		/// <summary>
-		/// Convert a BitmapImage to a Bitmap 
+		/// Convert a BitmapImage to a Bitmap. 
 		/// </summary>
 		/// <typeparam name="T">BitmapEncoder</typeparam>
 		/// <param name="source">Source System.Windows.Media.Imaging.BitmapImage</param>

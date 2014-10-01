@@ -10,6 +10,8 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
+using SnowyImageCopy.Models.Exceptions;
+
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
@@ -28,7 +30,7 @@ namespace SnowyImageCopy.Models
 
 
 		#region Read/Create Thumbnail (Internal)
-		
+
 		/// <summary>
 		/// Read a thumbnail in metadata from a specified file.
 		/// </summary>
@@ -39,7 +41,7 @@ namespace SnowyImageCopy.Models
 				throw new ArgumentNullException("localPath");
 
 			if (!File.Exists(localPath))
-				throw new FileNotFoundException(localPath);
+				throw new FileNotFoundException("File seems missing.", localPath);
 
 			try
 			{
@@ -52,8 +54,8 @@ namespace SnowyImageCopy.Models
 			{
 				Debug.WriteLine("Failed to read a thumbnail. {0}", ex);
 
-				if (IsImageFormatException(ex))
-					return null;
+				if (IsImageNotSupported(ex))
+					throw new ImageNotSupportedException();
 
 				throw;
 			}
@@ -82,8 +84,8 @@ namespace SnowyImageCopy.Models
 			{
 				Debug.WriteLine("Failed to read a thumbnail. {0}", ex);
 
-				if (IsImageFormatException(ex))
-					return null;
+				if (IsImageNotSupported(ex))
+					throw new ImageNotSupportedException();
 
 				throw;
 			}
@@ -99,7 +101,7 @@ namespace SnowyImageCopy.Models
 				throw new ArgumentNullException("localPath");
 
 			if (!File.Exists(localPath))
-				throw new FileNotFoundException(localPath);
+				throw new FileNotFoundException("File seems missing.", localPath);
 
 			try
 			{
@@ -115,8 +117,8 @@ namespace SnowyImageCopy.Models
 			{
 				Debug.WriteLine("Failed to create a thumbnail. {0}", ex);
 
-				if (IsImageFormatException(ex))
-					return null;
+				if (IsImageNotSupported(ex))
+					throw new ImageNotSupportedException();
 
 				throw;
 			}
@@ -145,8 +147,8 @@ namespace SnowyImageCopy.Models
 			{
 				Debug.WriteLine("Failed to create a thumbnail. {0}", ex);
 
-				if (IsImageFormatException(ex))
-					return null;
+				if (IsImageNotSupported(ex))
+					throw new ImageNotSupportedException();
 
 				throw;
 			}
@@ -310,7 +312,7 @@ namespace SnowyImageCopy.Models
 		{
 			if (Double.IsNaN(element.Width) || (element.Width <= 0) ||
 				Double.IsNaN(element.Height) || (element.Height <= 0))
-				throw new ArgumentException("source");
+				throw new ArgumentException("element");
 
 			try
 			{
@@ -426,8 +428,8 @@ namespace SnowyImageCopy.Models
 			{
 				Debug.WriteLine("Failed to convert byte array to BitmapImage. {0}", ex);
 
-				if (IsImageFormatException(ex))
-					return null;
+				if (IsImageNotSupported(ex))
+					throw new ImageNotSupportedException();
 
 				throw;
 			}
@@ -461,8 +463,8 @@ namespace SnowyImageCopy.Models
 			{
 				Debug.WriteLine("Failed to convert byte array to BitmapImage. {0}", ex);
 
-				if (IsImageFormatException(ex))
-					return null;
+				if (IsImageNotSupported(ex))
+					throw new ImageNotSupportedException();
 
 				throw;
 			}
@@ -485,7 +487,7 @@ namespace SnowyImageCopy.Models
 
 			using (var ms = new MemoryStream())
 			{
-				var encoder = new JpegBitmapEncoder(); // Codec?
+				var encoder = new JpegBitmapEncoder(); // Codec is to be considered.
 				encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
 				encoder.Save(ms);
 				ms.Seek(0, SeekOrigin.Begin);
@@ -520,7 +522,7 @@ namespace SnowyImageCopy.Models
 				{
 					Debug.WriteLine("Failed to get DateTaken from metadata. {0}", ex);
 
-					if (IsImageFormatException(ex))
+					if (IsImageNotSupported(ex))
 						return DateTime.MinValue;
 
 					throw;
@@ -547,7 +549,7 @@ namespace SnowyImageCopy.Models
 				{
 					Debug.WriteLine("Failed to get Orientation from metadata. {0}", ex);
 
-					if (IsImageFormatException(ex))
+					if (IsImageNotSupported(ex))
 						return 0;
 
 					throw;
@@ -569,7 +571,7 @@ namespace SnowyImageCopy.Models
 			if (0 < stream.Position)
 				stream.Seek(0, SeekOrigin.Begin);
 
-			//const string query_DateTaken = "System.Photo.DateTaken";
+			//const string queryDateTaken = "System.Photo.DateTaken";
 
 			var bitmapFrame = BitmapFrame.Create(stream);
 			var bitmapMetadata = bitmapFrame.Metadata as BitmapMetadata;
@@ -595,19 +597,23 @@ namespace SnowyImageCopy.Models
 			if (0 < stream.Position)
 				stream.Seek(0, SeekOrigin.Begin);
 
-			const string query_Orientation = "System.Photo.Orientation";
+			const string queryOrientation = "System.Photo.Orientation";
 
 			var bitmapFrame = BitmapFrame.Create(stream);
 			var bitmapMetadata = bitmapFrame.Metadata as BitmapMetadata;
 			if (bitmapMetadata != null)
 			{
-				if (bitmapMetadata.ContainsQuery(query_Orientation))
+				if (bitmapMetadata.ContainsQuery(queryOrientation))
 				{
-					int orientation;
-					if (int.TryParse(bitmapMetadata.GetQuery(query_Orientation).ToString(), out orientation))
+					var value = bitmapMetadata.GetQuery(queryOrientation);
+					if (value != null)
 					{
-						//Debug.WriteLine("Exif Orientation: {0}", orientation);
-						return orientation;
+						int orientation;
+						if (int.TryParse(value.ToString(), out orientation))
+						{
+							//Debug.WriteLine("Exif Orientation: {0}", orientation);
+							return orientation;
+						}
 					}
 				}
 			}
@@ -695,8 +701,7 @@ namespace SnowyImageCopy.Models
 		/// Convert stream to BitmapImage.
 		/// </summary>
 		/// <param name="stream">Source stream</param>
-		/// <param name="targetWidth">Target width</param>
-		/// <param name="targetHeight">Target height</param>
+		/// <param name="targetSize">Target size</param>
 		private static BitmapImage ConvertStreamToBitmapImage(Stream stream, Size targetSize)
 		{
 			if (0 < stream.Position)
@@ -715,7 +720,7 @@ namespace SnowyImageCopy.Models
 
 			image.EndInit();
 			image.Freeze(); // This is necessary for other thread to use the image.
-			
+
 			return image;
 		}
 
@@ -758,7 +763,7 @@ namespace SnowyImageCopy.Models
 			{
 				return outerSize;
 			}
-			else if (originRatio > outerRatio) // Origin is horizontally longer.
+			if (originRatio > outerRatio) // Origin is horizontally longer.
 			{
 				return new Size(outerSize.Width,
 								outerSize.Width / originRatio);
@@ -805,7 +810,7 @@ namespace SnowyImageCopy.Models
 			{
 				return Int32Rect.Empty;
 			}
-			else if (originRatio > innerRatio) // Origin is horizontally longer.
+			if (originRatio > innerRatio) // Origin is horizontally longer.
 			{
 				// Cut off left and right.
 				var croppedWidth = originHeight * innerRatio;
@@ -829,10 +834,10 @@ namespace SnowyImageCopy.Models
 		#region Helper
 
 		/// <summary>
-		/// Check if an exception is thrown because image format is not compatible.
+		/// Check if an exception is thrown because image format is not supported by PC.
 		/// </summary>
-		/// <param name="ex">Target exception</param>
-		private static bool IsImageFormatException(Exception ex)
+		/// <param name="ex">Source exception</param>
+		private static bool IsImageNotSupported(Exception ex)
 		{
 			if (ex.GetType() == typeof(FileFormatException))
 				return true;

@@ -12,7 +12,7 @@ namespace SnowyImageCopy.Helper
 		/// <summary>
 		/// Get property name from a specified property expression.
 		/// </summary>
-		/// <typeparam name="T">Object type containing the property specified in the property expression</typeparam>
+		/// <typeparam name="T">Object type containing the property specified in a property expression</typeparam>
 		/// <param name="propertyExpression">Property expression</param>
 		/// <returns>Property name</returns>
 		public static string GetPropertyName<T>(Expression<Func<T>> propertyExpression)

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,35 +38,35 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 
-		#region Event listener
+		#region Event Listener
 
 		private PropertyChangedEventListener operationPropertyChangedListener;
 
-		private string[] caseOperationStateChanged
+		private string[] CaseIsCheckingOrCopying
 		{
 			get
 			{
-				if (_caseOperationStateChanged == null)
+				if (_caseIsCheckingOrCopying == null)
 				{
-					var instance = new Operation(null);
+					var operation = default(Operation);
 
-					_caseOperationStateChanged = new string[]
+					_caseIsCheckingOrCopying = new string[]
 					{
-						PropertySupport.GetPropertyName(() => instance.IsChecking),
-						PropertySupport.GetPropertyName(() => instance.IsCopying),
+						PropertySupport.GetPropertyName(() => operation.IsChecking),
+						PropertySupport.GetPropertyName(() => operation.IsCopying),
 					};
 				}
 
-				return _caseOperationStateChanged;
+				return _caseIsCheckingOrCopying;
 			}
 		}
-		private string[] _caseOperationStateChanged;
+		private string[] _caseIsCheckingOrCopying;
 
 		private void ReactOperationPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			//Debug.WriteLine("Operation property changed (OptionsViewModel): {0} {1}", sender, e.PropertyName);
 
-			if (caseOperationStateChanged.Contains(e.PropertyName))
+			if (CaseIsCheckingOrCopying.Contains(e.PropertyName))
 			{
 				IsCheckingOrCopying = MainWindowViewModelInstance.Op.IsChecking || MainWindowViewModelInstance.Op.IsCopying;
 			}
@@ -101,7 +99,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Path
 
-		// Leave to View.
+		// Left to View.
 
 		#endregion
 
@@ -131,10 +129,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public FilePeriodViewModel FilePeriodSelected
 		{
-			get
-			{
-				return FilePeriodList.FirstOrDefault(x => x.Period == Settings.Current.TargetPeriod);
-			}
+			get { return FilePeriodList.FirstOrDefault(x => x.Period == Settings.Current.TargetPeriod); }
 			set
 			{
 				Settings.Current.TargetPeriod = value.Period;
@@ -147,14 +142,14 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Auto Check
 
-		// Leave to View.
+		// Left to View.
 
 		#endregion
 
 
 		#region File
 
-		// Leave to View.
+		// Left to View.
 
 		#endregion
 
@@ -206,7 +201,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Info
 
-		// Leave to View.
+		// Left to View.
 
 		#endregion
 	}

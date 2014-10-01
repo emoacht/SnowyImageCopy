@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +10,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SnowyImageCopy.Views.Controls
 {
@@ -52,12 +49,10 @@ namespace SnowyImageCopy.Views.Controls
 
 			if ((e.Property == Button.IsMouseOverProperty) ||
 				(e.Property == Button.IsPressedProperty) ||
-				(e.Property == Button.IsKeyboardFocusedProperty) || // This seems to be necessary to catch visual state change by Command function.
+				(e.Property == Button.IsKeyboardFocusedProperty) || // This seems to be necessary to catch visual state change by Command.
 				(e.Property == Button.IsEnabledProperty) ||
 				(e.Property == BusyButton.IsBusyProperty))
-			{
 				UpdateStates(true);
-			}
 		}
 
 		private void UpdateStates(bool useTransitions)

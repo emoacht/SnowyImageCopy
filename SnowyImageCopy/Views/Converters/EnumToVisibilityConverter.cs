@@ -25,7 +25,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>Visibility</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Enum))
+			if (!(value is Enum) || (parameter == null))
 				return DependencyProperty.UnsetValue;
 
 			return value.ToString().Equals(parameter.ToString(), StringComparison.OrdinalIgnoreCase)

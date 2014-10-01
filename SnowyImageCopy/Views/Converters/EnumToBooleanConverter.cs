@@ -25,7 +25,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>Boolean</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Enum))
+			if (!(value is Enum) || (parameter == null))
 				return DependencyProperty.UnsetValue;
 
 			return value.ToString().Equals(parameter.ToString(), StringComparison.OrdinalIgnoreCase);
@@ -41,11 +41,11 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>Enum name</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool) || !(bool)value)
+			if (!(value is bool) || !(bool)value || (parameter == null))
 				return DependencyProperty.UnsetValue;
 
 			var name = Enum.GetNames(targetType)
-				.FirstOrDefault(x => x.ToString().Equals(parameter.ToString(), StringComparison.OrdinalIgnoreCase));
+				.FirstOrDefault(x => x.ToString(CultureInfo.InvariantCulture).Equals(parameter.ToString(), StringComparison.OrdinalIgnoreCase));
 
 			return name ?? DependencyProperty.UnsetValue;
 		}

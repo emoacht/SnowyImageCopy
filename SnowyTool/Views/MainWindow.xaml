@@ -4,263 +4,305 @@
 						 xmlns:pmd="clr-namespace:PerMonitorDpi.Views;assembly=PerMonitorDpi"
 						 xmlns:views="clr-namespace:SnowyTool.Views"
 						 xmlns:viewModels="clr-namespace:SnowyTool.ViewModels"
-						 xmlns:converters="clr-namespace:SnowyTool.Views.Converters"
+						 xmlns:controls="clr-namespace:SnowyTool.Views.Controls"
 						 x:Name="MainWindowRoot"
-						 Title="Snowy Tool"
+						 Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
 						 FontFamily="Segoe UI"
 						 Width="540" SizeToContent="Height" ResizeMode="CanMinimize">
 	<Window.DataContext>
 		<viewModels:MainWindowViewModel/>
 	</Window.DataContext>
 
-	<Window.Resources>
-		<SolidColorBrush x:Key="ReadOnlyBrush" Color="#FFf7fdff"/>
-		
-		<converters:BooleanInverseToBrushConverter x:Key="BooleanInverseToBrushConverterKey"/>
-		<converters:EnumToBooleanConverter x:Key="EnumToBooleanConverterKey"/>
-		<converters:SextupleDigitConverter x:Key="SextupleDigitConverterKey"/>
-	</Window.Resources>
-
 	<Grid x:Name="LayoutRoot"
-		  Background="White">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto"/>
-			<ColumnDefinition Width="*"/>
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
+		  Background="{StaticResource Window.Background}">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
 
-		<!-- Drive -->
-		<StackPanel>
-			<Grid Margin="8,8,0,0">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="Auto"/>
-				</Grid.ColumnDefinitions>
+			<!-- Drive -->
+			<StackPanel Margin="8,8,0,0" HorizontalAlignment="Left"
+						Orientation="Horizontal">
 				<TextBlock
 					VerticalAlignment="Center"
 					Text="Drive"/>
 				<TextBox
-					Grid.Column="1"
-					Height="24" Margin="6,0" HorizontalAlignment="Stretch" VerticalAlignment="Center"
-					Padding="2,0" VerticalContentAlignment="Center"
+					Height="24" Width="40" VerticalAlignment="Center"
+					Margin="6,0" Padding="2,0"
+					VerticalContentAlignment="Center"
 					FontSize="14" IsReadOnly="True"
 					Text="{Binding CurrentConfig.AssociatedDisk.DriveLetters[0], Mode=OneWay}"/>
 				<Button
-					Grid.Column="2"
 					Height="24"
-					Padding="6,0" VerticalContentAlignment="Center"
-					Content="Refresh"
-					Command="{Binding SearchCommand}"/>
+					Padding="6,0"
+					VerticalContentAlignment="Center"
+					Content="Search"
+					Command="{Binding SearchCommand}"
+					Style="{StaticResource ButtonBaseStyle}"/>
+				<controls:FadingTextBox
+					Height="24" Width="180" VerticalAlignment="Center"
+					Margin="10,0,0,0"
+					VerticalContentAlignment="Center"
+					IsReadOnly="True"
+					FadeOutTime="4"
+					Text="{Binding Path=OperationStatus, Mode=TwoWay}"/>
+			</StackPanel>
+
+			<StackPanel Grid.Row="1"
+						Margin="0,8,0,0"
+						Orientation="Horizontal">
+				<!-- Wireless LAN -->
+				<GroupBox Margin="8,0,0,0"
+						  Header="Wireless LAN">
+					<StackPanel Margin="4,4,4,0">
+						<RadioButton
+							Margin="0,4"
+							Content="AP (Access Point) mode"
+							IsChecked="{Binding CurrentLanMode, ConverterParameter=AccessPoint, Converter={StaticResource EnumToBooleanConverterKey}}"/>
+						<RadioButton
+							Margin="0,4"
+							Content="STA (Station) mode"
+							IsChecked="{Binding CurrentLanMode, ConverterParameter=Station,	Converter={StaticResource EnumToBooleanConverterKey}}"/>
+						<RadioButton
+							Margin="0,4"
+							Foreground="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanInverseToBrushConverterKey}, ConverterParameter=Gray}"
+							Content="Internet pass-thru mode"
+							IsChecked="{Binding CurrentLanMode, ConverterParameter=InternetPassThru, Converter={StaticResource EnumToBooleanConverterKey}}"
+							IsEnabled="{Binding CurrentConfig.IsInternetPassThruReady}"/>
+					</StackPanel>
+				</GroupBox>
+
+				<!-- Wireless LAN startup -->
+				<GroupBox Margin="8,0,0,0"
+						  Header="Wireless LAN startup">
+					<StackPanel Margin="4,4,4,0">
+						<RadioButton
+							Margin="0,4"
+							Content="Automatic startup mode"
+							IsChecked="{Binding CurrentLanStartupMode, ConverterParameter=Automatic, Converter={StaticResource EnumToBooleanConverterKey}}"/>
+						<RadioButton
+							Margin="0,4"
+							Content="Manual startup mode"
+							IsChecked="{Binding CurrentLanStartupMode, ConverterParameter=Manual, Converter={StaticResource EnumToBooleanConverterKey}}"/>
+					</StackPanel>
+				</GroupBox>
+
+				<!-- upload.cgi -->
+				<GroupBox Margin="8,0,0,0"
+						  Header="upload.cgi">
+					<StackPanel Margin="4,4,4,0">
+						<RadioButton
+							Margin="0,4"
+							Content="Enabled"
+							IsChecked="{Binding IsUploadEnabled, Mode=TwoWay, Converter={StaticResource NullableBooleanToBooleanConverterKey}, ConverterParameter=True}"/>
+						<RadioButton
+							Margin="0,4"
+							Content="Disabled"
+							IsChecked="{Binding IsUploadEnabled, Mode=TwoWay, Converter={StaticResource NullableBooleanToBooleanConverterKey}, ConverterParameter=False}"/>
+					</StackPanel>
+				</GroupBox>
+			</StackPanel>
+
+			<!-- SSID and Network security key -->
+			<StackPanel Grid.Row="2"
+						Margin="8,2,8,0">
+				<GroupBox Margin="0,4,0,0"
+						  Header="For AP mode (Built-in AP), STA mode (External AP), Internet pass-thru mode (Built-in AP)">
+					<Grid Margin="4,4,4,2">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+
+						<TextBlock
+							HorizontalAlignment="Left" VerticalAlignment="Center"
+							Text="SSID"/>
+						<TextBox
+							Grid.Column="1"
+							Height="23" HorizontalAlignment="Stretch"
+							Margin="8,2,0,2"
+							VerticalContentAlignment="Center"
+							Text="{Binding CurrentConfig.APPSSID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+
+						<TextBlock
+							Grid.Row="1"
+							HorizontalAlignment="Left" VerticalAlignment="Center"
+							Text="Network security key"/>
+						<TextBox
+							Grid.Column="1" Grid.Row="1"
+							Height="23" HorizontalAlignment="Stretch"
+							Margin="8,2,0,2"
+							VerticalContentAlignment="Center"
+							Text="{Binding CurrentConfig.APPNETWORKKEY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+					</Grid>
+				</GroupBox>
+
+				<GroupBox Margin="0,4,0,0"
+						  Foreground="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanInverseToBrushConverterKey}, ConverterParameter=Gray}"
+						  Header="For Internet pass-thru mode (External AP)"
+						  IsEnabled="{Binding CurrentConfig.IsInternetPassThruEnabled}">
+					<Grid Margin="4,4,4,2">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+
+						<TextBlock
+							HorizontalAlignment="Left" VerticalAlignment="Center"
+							Text="SSID"/>
+						<TextBox
+							Grid.Column="1"
+							Height="23" HorizontalAlignment="Stretch"
+							Margin="8,2,0,2"
+							VerticalContentAlignment="Center"
+							Text="{Binding CurrentConfig.BRGSSID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+
+						<TextBlock
+							Grid.Row="1"
+							HorizontalAlignment="Left" VerticalAlignment="Center"
+							Text="Network security key"/>
+						<TextBox
+							Grid.Column="1" Grid.Row="1"
+							Height="23" HorizontalAlignment="Stretch"
+							Margin="8,2,0,2"
+							VerticalContentAlignment="Center"
+							Text="{Binding CurrentConfig.BRGNETWORKKEY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+					</Grid>
+				</GroupBox>
+			</StackPanel>
+
+			<!-- Apply -->
+			<Grid Grid.Row="3">
+				<Button	Height="30" HorizontalAlignment="Stretch"
+						Margin="10"
+						FontSize="14"
+						Content="Apply"
+						Command="{Binding ApplyCommand}"
+						Style="{StaticResource ButtonBaseStyle}"/>
 			</Grid>
+		</Grid>
 
-			<!-- Network settings -->
-			<GroupBox Margin="8,8,0,0"
-					  Header="Network settings">
-				<StackPanel Margin="4,4,4,0">
-					<RadioButton
-						Margin="0,4"
-						Content="AP (Access Point) mode"
-						IsChecked="{Binding CurrentNetworkMode, ConverterParameter=AccessPoint, Converter={StaticResource EnumToBooleanConverterKey}}"/>
-					<RadioButton
-						Margin="0,4"
-						Content="STA (Station) mode"
-						IsChecked="{Binding CurrentNetworkMode, ConverterParameter=Station,	Converter={StaticResource EnumToBooleanConverterKey}}"/>
-					<RadioButton
-						Margin="0,4"
-						Content="Internet pass-thru mode"
-						IsChecked="{Binding CurrentNetworkMode, ConverterParameter=InternetPassThru, Converter={StaticResource EnumToBooleanConverterKey}}"
-						IsEnabled="{Binding CurrentConfig.IsInternetPassThruReady}"
-						Foreground="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, ConverterParameter=Gray, Converter={StaticResource BooleanInverseToBrushConverterKey}}"/>
-				</StackPanel>
-			</GroupBox>
+		<!-- FlashAir Card Information -->
+		<Grid HorizontalAlignment="Right" VerticalAlignment="Top">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
 
-			<!-- Wireless LAN startup mode -->
-			<GroupBox Margin="8,4,0,0"
-					  Header="Wireless LAN startup mode">
-				<StackPanel Margin="4,4,4,0">
-					<RadioButton
-						Margin="0,4"
-						Content="Automatic startup mode"
-						IsChecked="{Binding CurrentStartupMode, ConverterParameter=Automatic, Converter={StaticResource EnumToBooleanConverterKey}}"/>
-					<RadioButton
-						Margin="0,4"
-						Content="Manual startup mode"
-						IsChecked="{Binding CurrentStartupMode, ConverterParameter=Manual, Converter={StaticResource EnumToBooleanConverterKey}}"/>
-				</StackPanel>
-			</GroupBox>
-		</StackPanel>
+			<ToggleButton
+				x:Name="InformationButton"
+				Height="24" HorizontalAlignment="Stretch"
+				Padding="8,0,8,0"
+				HorizontalContentAlignment="Left"
+				Content="FlashAir Card Information"
+				Style="{StaticResource SwitchButtonStyle}"/>
 
-		<!-- FlashAir information -->
-		<GroupBox Grid.Column="1"
-				  Margin="12,8,8,0" HorizontalAlignment="Stretch"
-				  Header="FlashAir information">
-			<Grid Margin="4" HorizontalAlignment="Stretch">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="*"/>
-				</Grid.ColumnDefinitions>
-
-				<TextBlock
-					Grid.Row="0"
-					HorizontalAlignment="Left" VerticalAlignment="Center"
-					Text="Product name"/>
-				<TextBox
-					Grid.Column="1" Grid.Row="0"
-					Height="23" Margin="8,2,0,2" HorizontalAlignment="Stretch"
-					VerticalContentAlignment="Center" IsReadOnly="True"
-					Background="{StaticResource ReadOnlyBrush}"
-					Text="{Binding CurrentConfig.ProductName, Mode=OneWay}"/>
-
-				<TextBlock
-					Grid.Row="1"
-					HorizontalAlignment="Left" VerticalAlignment="Center"
-					Text="Product revision"/>
-				<TextBox
-					Grid.Column="1" Grid.Row="1"
-					Height="23" Margin="8,2,0,2" HorizontalAlignment="Stretch"
-					VerticalContentAlignment="Center" IsReadOnly="True"
-					Background="{StaticResource ReadOnlyBrush}"
-					Text="{Binding CurrentConfig.ProductRevision, Mode=OneWay}"/>
-
-				<TextBlock
-					Grid.Row="2"
-					HorizontalAlignment="Left" VerticalAlignment="Center"
-					Text="Serial number"/>
-				<TextBox
-					Grid.Column="1" Grid.Row="2"
-					Height="23" Margin="8,2,0,2" HorizontalAlignment="Stretch"
-					VerticalContentAlignment="Center" IsReadOnly="True"
-					Background="{StaticResource ReadOnlyBrush}"
-					Text="{Binding CurrentConfig.ProductSerialNumber, Mode=OneWay}"/>
-
-				<TextBlock
-					Grid.Row="3"
-					HorizontalAlignment="Left" VerticalAlignment="Center"
-					Text="Manufacturing date"/>
-				<TextBox
-					Grid.Column="1" Grid.Row="3"
-					Height="23" Margin="8,2,0,2" HorizontalAlignment="Stretch"
-					VerticalContentAlignment="Center" IsReadOnly="True"
-					Background="{StaticResource ReadOnlyBrush}"
-					Text="{Binding CurrentConfig.ManufacturingDate, Mode=OneWay, StringFormat=yyyy/MM}"/>
-
-				<TextBlock
-					Grid.Row="4"
-					HorizontalAlignment="Left" VerticalAlignment="Center"
-					Text="Capacity (MiB)"/>
-				<TextBox
-					Grid.Column="1" Grid.Row="4"
-					Height="23" Margin="8,2,0,2" HorizontalAlignment="Stretch"
-					VerticalContentAlignment="Center" IsReadOnly="True"
-					Background="{StaticResource ReadOnlyBrush}"
-					Text="{Binding CurrentConfig.AssociatedDisk.Size, Mode=OneWay, Converter={StaticResource SextupleDigitConverterKey}}"/>
-
-				<TextBlock
-					Grid.Row="5"
-					HorizontalAlignment="Left" VerticalAlignment="Center"
-					Text="Firmware version"/>
-				<TextBox
-					Grid.Column="1" Grid.Row="5"
-					Height="23" Margin="8,2,0,2" HorizontalAlignment="Stretch"
-					VerticalContentAlignment="Center" IsReadOnly="True"
-					Background="{StaticResource ReadOnlyBrush}"
-					Text="{Binding CurrentConfig.VERSION, Mode=OneWay}"/>
-			</Grid>
-		</GroupBox>
-
-		<!-- SSID and Network security key -->
-		<StackPanel Grid.Row="1" Grid.ColumnSpan="2"
-					Margin="8,2,8,0">
-			<GroupBox Margin="0,4,0,0"
-					  Header="For AP mode (Built-in AP), STA mode (External AP), Internet pass-thru mode (Built-in AP)">
-				<Grid Margin="4,4,4,2">
+			<Border
+				Grid.Row="1"
+				Width="260"
+				Background="{StaticResource Window.Background}"
+				BorderBrush="{StaticResource BorderLine.Strong}"
+				BorderThickness="1,0,0,1"
+				Visibility="{Binding IsChecked, ElementName=InformationButton, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+				<Grid Margin="10,8,8,8" HorizontalAlignment="Stretch">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="Auto"/>
 						<ColumnDefinition Width="*"/>
 					</Grid.ColumnDefinitions>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="Auto"/>
-					</Grid.RowDefinitions>
 
 					<TextBlock
+						Grid.Row="0"
 						HorizontalAlignment="Left" VerticalAlignment="Center"
-						Text="SSID"/>
+						Text="Product name"/>
 					<TextBox
-						Grid.Column="1"
-						Height="23" Margin="8,2,0,2" HorizontalAlignment="Stretch"
-						VerticalContentAlignment="Center" 
-						Text="{Binding CurrentConfig.APPSSID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+						Grid.Column="1" Grid.Row="0"
+						Height="23" HorizontalAlignment="Stretch"
+						Margin="8,2,0,2"
+						VerticalContentAlignment="Center"
+						IsReadOnly="True"
+						Text="{Binding CurrentConfig.ProductName, Mode=OneWay}"/>
 
 					<TextBlock
 						Grid.Row="1"
 						HorizontalAlignment="Left" VerticalAlignment="Center"
-						Text="Network security key"/>
+						Text="Product revision"/>
 					<TextBox
 						Grid.Column="1" Grid.Row="1"
-						Height="23" Margin="8,2,0,2" HorizontalAlignment="Stretch"
+						Height="23" HorizontalAlignment="Stretch"
+						Margin="8,2,0,2"
 						VerticalContentAlignment="Center"
-						Text="{Binding CurrentConfig.APPNETWORKKEY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-				</Grid>
-			</GroupBox>
-
-			<GroupBox Margin="0,4,0,0"
-					  Header="For Internet pass-thru mode (External AP)"
-					  IsEnabled="{Binding CurrentConfig.IsInternetPassThruEnabled}"
-					  Foreground="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, ConverterParameter=Gray, Converter={StaticResource BooleanInverseToBrushConverterKey}}">
-				<Grid Margin="4,4,4,2">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="*"/>
-					</Grid.ColumnDefinitions>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="Auto"/>
-					</Grid.RowDefinitions>
+						IsReadOnly="True"
+						Text="{Binding CurrentConfig.ProductRevision, Mode=OneWay}"/>
 
 					<TextBlock
+						Grid.Row="2"
 						HorizontalAlignment="Left" VerticalAlignment="Center"
-						Text="SSID"/>
+						Text="Serial number"/>
 					<TextBox
-						Grid.Column="1"
-						Height="23" Margin="8,2,0,2" HorizontalAlignment="Stretch"
+						Grid.Column="1" Grid.Row="2"
+						Height="23" HorizontalAlignment="Stretch"
+						Margin="8,2,0,2"
 						VerticalContentAlignment="Center"
-						Text="{Binding CurrentConfig.BRGSSID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+						IsReadOnly="True"
+						Text="{Binding CurrentConfig.ProductSerialNumber, Mode=OneWay}"/>
 
 					<TextBlock
-						Grid.Row="1"
+						Grid.Row="3"
 						HorizontalAlignment="Left" VerticalAlignment="Center"
-						Text="Network security key"/>
+						Text="Manufacturing date"/>
 					<TextBox
-						Grid.Column="1" Grid.Row="1"
-						Height="23" Margin="8,2,0,2" HorizontalAlignment="Stretch"
+						Grid.Column="1" Grid.Row="3"
+						Height="23" HorizontalAlignment="Stretch"
+						Margin="8,2,0,2"
 						VerticalContentAlignment="Center"
-						Text="{Binding CurrentConfig.BRGNETWORKKEY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-				</Grid>
-			</GroupBox>
-		</StackPanel>
+						IsReadOnly="True"
+						Text="{Binding CurrentConfig.ManufacturingDate, Mode=OneWay, StringFormat=yyyy/MM}"/>
 
-		<!-- Apply -->
-		<Grid Grid.Row="2" Grid.ColumnSpan="2"
-			  IsEnabled="{Binding CurrentConfig.IsChanged}">
-			<Button	Height="30" Margin="10" HorizontalAlignment="Stretch"
-					FontSize="14"
-					Content="Apply"
-					Command="{Binding ApplyCommand}"/>
+					<TextBlock
+						Grid.Row="4"
+						HorizontalAlignment="Left" VerticalAlignment="Center"
+						Text="Capacity (MiB)"/>
+					<TextBox
+						Grid.Column="1" Grid.Row="4"
+						Height="23" HorizontalAlignment="Stretch"
+						Margin="8,2,0,2"
+						VerticalContentAlignment="Center"
+						IsReadOnly="True"
+						Text="{Binding CurrentConfig.AssociatedDisk.Size, Mode=OneWay, Converter={StaticResource SextupleDigitConverterKey}}"/>
+
+					<TextBlock
+						Grid.Row="5"
+						HorizontalAlignment="Left" VerticalAlignment="Center"
+						Text="Firmware version"/>
+					<TextBox
+						Grid.Column="1" Grid.Row="5"
+						Height="23" HorizontalAlignment="Stretch"
+						Margin="8,2,0,2"
+						VerticalContentAlignment="Center"
+						IsReadOnly="True"
+						Text="{Binding CurrentConfig.VERSION, Mode=OneWay}"/>
+				</Grid>
+			</Border>
 		</Grid>
 	</Grid>
 </pmd:PerMonitorDpiWindow>

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -84,16 +83,13 @@ namespace SnowyTool.Models
 		/// Drive letters by WMI (Win32_LogicalDisk)
 		/// </summary>
 		public string[] DriveLetters { get; set; }
-		
+
 		/// <summary>
 		/// Whether this disk can be SD
 		/// </summary>
 		public bool CanBeSD
 		{
-			get
-			{
-				return ((BusType == 12) || (DriveType == 2) || MediaType.ToLower().Contains("removable"));
-			}
+			get { return ((BusType == 12) || (DriveType == 2) || MediaType.ToLower().Contains("removable")); }
 		}
 	}
 }
