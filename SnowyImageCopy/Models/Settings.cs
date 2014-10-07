@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,8 +20,71 @@ namespace SnowyImageCopy.Models
 	/// <summary>
 	/// This application's settings.
 	/// </summary>	
-	public class Settings : NotificationObject
+	public class Settings : NotificationObject, INotifyDataErrorInfo
 	{
+		#region INotifyDataErrorInfo member
+
+		/// <summary>
+		/// Holder of property name (key) and validation error messages (value)
+		/// </summary>
+		private readonly Dictionary<string, List<string>> errors = new Dictionary<string, List<string>>();
+
+		private bool ValidateProperty(object value, [CallerMemberName]string propertyName = null)
+		{
+			if (String.IsNullOrEmpty(propertyName))
+				return false;
+
+			var context = new ValidationContext(this) { MemberName = propertyName };
+			var results = new List<ValidationResult>();
+			var isValidated = Validator.TryValidateProperty(value, context, results);
+
+			if (isValidated)
+			{
+				if (errors.ContainsKey(propertyName))
+					errors.Remove(propertyName);
+			}
+			else
+			{
+				if (errors.ContainsKey(propertyName))
+					errors[propertyName].Clear();
+				else
+					errors[propertyName] = new List<string>();
+
+				errors[propertyName].AddRange(results.Select(x => x.ErrorMessage));
+			}
+
+			RaiseErrorsChanged(propertyName);
+
+			return isValidated;
+		}
+
+		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+		private void RaiseErrorsChanged(string propertyName)
+		{
+			var handler = this.ErrorsChanged;
+			if (handler != null)
+			{
+				handler(this, new DataErrorsChangedEventArgs(propertyName));
+			}
+		}
+
+		public IEnumerable GetErrors(string propertyName)
+		{
+			if (string.IsNullOrEmpty(propertyName) || !errors.ContainsKey(propertyName))
+				return null;
+
+			return errors[propertyName];
+		}
+
+		public bool HasErrors
+		{
+			get { return errors.Any(); }
+		}
+
+		#endregion
+
+
 		public static Settings Current { get; set; }
 
 
