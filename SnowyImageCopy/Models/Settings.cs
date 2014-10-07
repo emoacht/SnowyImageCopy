@@ -116,7 +116,7 @@ namespace SnowyImageCopy.Models
 
 		#region Path
 
-		private readonly Regex rootPattern = new Regex("^http(|s)://.+/$", RegexOptions.Compiled);
+		private readonly Regex rootPattern = new Regex(@"^https?://\S{1,15}/$", RegexOptions.Compiled);
 
 		public string RemoteRoot
 		{
