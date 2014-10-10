@@ -61,7 +61,7 @@ namespace SnowyImageCopy.Views.Controls
 		#endregion
 
 
-		public CheckTextBox() : base() { }
+		public CheckTextBox() { }
 
 		static CheckTextBox()
 		{

@@ -31,7 +31,7 @@ namespace SnowyTool.Views.Controls
 		#endregion
 
 
-		public FadingTextBox() : base() { }
+		public FadingTextBox() { }
 
 		static FadingTextBox()
 		{
