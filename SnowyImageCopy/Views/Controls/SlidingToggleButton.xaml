@@ -1,16 +1,15 @@
 ﻿<UserControl x:Class="SnowyImageCopy.Views.Controls.SlidingToggleButton"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
              d:DesignHeight="30" d:DesignWidth="60"
              x:Name="SlidingRoot">
 
     <Grid Cursor="Arrow" ForceCursor="True">
         <!-- Background -->
         <TextBox x:Name="BackgroundBox"
-                 Width="60"
                  IsReadOnly="True" IsUndoEnabled="False"
                  PreviewMouseUp="OnClick"
                  PreviewKeyUp="OnClick"/>

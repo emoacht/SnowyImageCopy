@@ -19,13 +19,21 @@ namespace SnowyImageCopy.Views.Controls
 	/// </summary>
 	public partial class SlidingToggleButton : UserControl
 	{
-		public SlidingToggleButton()
-		{
-			InitializeComponent();
-		}
-
-
 		#region Dependency Property
+
+		public double InnerButtonWidth
+		{
+			get { return (double)GetValue(InnerButtonWidthProperty); }
+			set { SetValue(InnerButtonWidthProperty, value); }
+		}
+		public static readonly DependencyProperty InnerButtonWidthProperty =
+			DependencyProperty.Register(
+				"InnerButtonWidth",
+				typeof(double),
+				typeof(SlidingToggleButton),
+				new FrameworkPropertyMetadata(
+					18D,
+					OnWidthChanged));
 
 		public bool IsChecked
 		{
@@ -41,7 +49,7 @@ namespace SnowyImageCopy.Views.Controls
 					(d, e) =>
 					{
 						((SlidingToggleButton)d).IsCheckedCopy = (bool)e.NewValue;
-						OnPropertyChanged(d, e);
+						OnAppearanceChanged(d, e);
 					}));
 
 		/// <summary>
@@ -74,7 +82,7 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(SlidingToggleButton),
 				new FrameworkPropertyMetadata(
 					"On",
-					OnPropertyChanged));
+					OnAppearanceChanged));
 
 		/// <summary>
 		/// Button text when unchecked
@@ -91,7 +99,7 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(SlidingToggleButton),
 				new FrameworkPropertyMetadata(
 					"Off",
-					OnPropertyChanged));
+					OnAppearanceChanged));
 
 		/// <summary>
 		/// Foreground Brush when checked
@@ -108,7 +116,7 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(SlidingToggleButton),
 				new FrameworkPropertyMetadata(
 					Brushes.Black,
-					OnPropertyChanged));
+					OnAppearanceChanged));
 
 		/// <summary>
 		/// Foreground Brush when unchecked
@@ -125,7 +133,7 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(SlidingToggleButton),
 				new FrameworkPropertyMetadata(
 					Brushes.Black,
-					OnPropertyChanged));
+					OnAppearanceChanged));
 
 		/// <summary>
 		/// Background Brush when checked
@@ -142,7 +150,7 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(SlidingToggleButton),
 				new FrameworkPropertyMetadata(
 					Brushes.SkyBlue,
-					OnPropertyChanged));
+					OnAppearanceChanged));
 
 		/// <summary>
 		/// Background Brush when unchecked
@@ -159,12 +167,36 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(SlidingToggleButton),
 				new FrameworkPropertyMetadata(
 					Brushes.Gray,
-					OnPropertyChanged));
+					OnAppearanceChanged));
 
 		#endregion
 
 
-		private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		public SlidingToggleButton()
+		{
+			InitializeComponent();
+		}
+
+		static SlidingToggleButton()
+		{
+			FrameworkElement.WidthProperty.OverrideMetadata(
+				typeof(SlidingToggleButton),
+				new FrameworkPropertyMetadata(
+					60D,
+					OnWidthChanged));
+		}
+
+
+		private static void OnWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			var button = (SlidingToggleButton)d;
+
+			button.ForegroundButtonLeft.Width = button.InnerButtonWidth;
+			button.ForegroundBox.Width = button.Width - button.InnerButtonWidth;
+			button.ForegroundButtonRight.Width = button.InnerButtonWidth;
+		}
+
+		private static void OnAppearanceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			((SlidingToggleButton)d).SetAppearance();
 		}
@@ -174,7 +206,6 @@ namespace SnowyImageCopy.Views.Controls
 			IsChecked = !IsChecked;
 			SetAppearance();
 		}
-
 
 		private void SetAppearance()
 		{
