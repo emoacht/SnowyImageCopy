@@ -129,6 +129,7 @@
     <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
     <Compile Include="Views\Behaviors\SystemSoundPlayAction.cs" />
     <Compile Include="Views\Behaviors\WindowActivateBehavior.cs" />
+    <Compile Include="Views\Behaviors\WindowLoadCommandBehavior.cs" />
     <Compile Include="Views\Controls\CheckTextBox.cs" />
     <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
     <Compile Include="Views\Options.xaml.cs">

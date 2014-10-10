@@ -19,7 +19,7 @@ namespace SnowyImageCopy.Models
 {
 	/// <summary>
 	/// This application's settings.
-	/// </summary>	
+	/// </summary>
 	public class Settings : NotificationObject, INotifyDataErrorInfo
 	{
 		#region INotifyDataErrorInfo member

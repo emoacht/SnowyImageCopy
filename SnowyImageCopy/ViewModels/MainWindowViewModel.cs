@@ -97,30 +97,30 @@ namespace SnowyImageCopy.ViewModels
 		/// Percentage of total size of local files of items that are in target and copied so far
 		/// </summary>
 		/// <remarks>This includes local files that are copied during current operation.</remarks>
-		public double ProgressCopyFileAll
+		public double ProgressCopiedAll
 		{
-			get { return _progressCopyFileAll; }
+			get { return _progressCopiedAll; }
 			set
 			{
-				_progressCopyFileAll = value;
+				_progressCopiedAll = value;
 				RaisePropertyChanged();
 			}
 		}
-		private double _progressCopyFileAll = 40; // Sample percentage
+		private double _progressCopiedAll = 40; // Sample percentage
 
 		/// <summary>
 		/// Percentage of total size of local files of items that are in target and copied during current operation
 		/// </summary>
-		public double ProgressCopyFileCurrent
+		public double ProgressCopiedCurrent
 		{
-			get { return _progressCopyFileCurrent; }
+			get { return _progressCopiedCurrent; }
 			set
 			{
-				_progressCopyFileCurrent = value;
+				_progressCopiedCurrent = value;
 				RaisePropertyChanged();
 			}
 		}
-		private double _progressCopyFileCurrent = 60; // Sample percentage
+		private double _progressCopiedCurrent = 60; // Sample percentage
 
 		/// <summary>
 		/// Remaining time for current operation that is calculated by current transfer rate.
@@ -159,13 +159,13 @@ namespace SnowyImageCopy.ViewModels
 
 			if (sizeTotal == 0)
 			{
-				ProgressCopyFileAll = 0D;
+				ProgressCopiedAll = 0D;
 			}
 			else
 			{
-				ProgressCopyFileAll = (double)(sizeCopied + sizeCopiedLatest) * 100D / (double)sizeTotal;
+				ProgressCopiedAll = (double)(sizeCopied + sizeCopiedLatest) * 100D / (double)sizeTotal;
 
-				//Debug.WriteLine("ProgressCopyFileAll: {0}", ProgressCopyFileAll);
+				//Debug.WriteLine("ProgressCopiedAll: {0}", ProgressCopiedAll);
 			}
 
 			var sizeCopiedCurrent = fileListBuff
@@ -178,15 +178,15 @@ namespace SnowyImageCopy.ViewModels
 
 			if (sizeToBeCopied == 0)
 			{
-				ProgressCopyFileCurrent = 0D;
+				ProgressCopiedCurrent = 0D;
 				RemainingTime = TimeSpan.Zero;
 			}
 			else if (sizeCopiedLatest > 0)
 			{
-				ProgressCopyFileCurrent = (double)(sizeCopiedCurrent + sizeCopiedLatest) * 100D / (double)(sizeCopiedCurrent + sizeToBeCopied);
+				ProgressCopiedCurrent = (double)(sizeCopiedCurrent + sizeCopiedLatest) * 100D / (double)(sizeCopiedCurrent + sizeToBeCopied);
 				RemainingTime = TimeSpan.FromSeconds((double)(sizeToBeCopied - sizeCopiedLatest) * elapsedTimeLatest.TotalSeconds / (double)sizeCopiedLatest);
 
-				//Debug.WriteLine("ProgressCopyFileCurrent: {0} RemainingTime: {1}", ProgressCopyFileCurrent, RemainingTime);
+				//Debug.WriteLine("ProgressCopiedCurrent: {0} RemainingTime: {1}", ProgressCopiedCurrent, RemainingTime);
 			}
 		}
 
