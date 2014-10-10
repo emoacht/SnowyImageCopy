@@ -9,8 +9,8 @@ namespace SnowyImageCopy.Common
 {
 	public class DelegateCommand : ICommand
 	{
-		private Action _execute;
-		private Func<bool> _canExecute;
+		private readonly Action _execute;
+		private readonly Func<bool> _canExecute;
 
 
 		#region Constructor
