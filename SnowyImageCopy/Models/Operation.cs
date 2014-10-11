@@ -323,8 +323,6 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				SystemSounds.Hand.Play();
-
 				if (ex.GetType() == typeof(RemoteConnectionUnableException))
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionUnable;
@@ -392,7 +390,8 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				SystemSounds.Hand.Play();
+				if (!IsAutoRunning)
+					SystemSounds.Hand.Play();
 
 				if (ex.GetType() == typeof(RemoteConnectionUnableException))
 				{
