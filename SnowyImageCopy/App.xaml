@@ -10,6 +10,7 @@
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
 			<converters:BooleanInverseToThicknessConverter x:Key="BooleanInverseToThicknessConverterKey"/>
 			<converters:BooleanInverseToVisibilityConverter x:Key="BooleanInverseToVisibilityConverterKey"/>
+			<converters:BooleanToProgressStateConverter x:Key="BooleanToProgressStateConverterKey"/>
 
 			<converters:EnumToBooleanConverter x:Key="EnumToBooleanConverterKey"/>
 			<converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverterKey"/>
@@ -17,6 +18,7 @@
 			<converters:FileStatusToBrushConverter x:Key="FileStatusToBrushConverterKey"/>
 			<converters:FileStatusToStringConverter x:Key="FileStatusToStringConverterKey"/>
 
+			<converters:DoubleCentesimalConverter x:Key="DoubleCentesimalConverterKey"/>
 			<converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey"/>
 			<converters:DoubleAndVisibilityToDoubleConverter x:Key="DoubleAndVisibilityToDoubleConverterKey"/>
 			<converters:ObjectArrayConverter x:Key="ObjectArrayConverterKey"/>

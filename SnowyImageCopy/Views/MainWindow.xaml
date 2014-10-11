@@ -18,6 +18,11 @@
 		<viewModels:MainWindowViewModel/>
 	</Window.DataContext>
 
+	<Window.TaskbarItemInfo>
+		<TaskbarItemInfo ProgressState="{Binding IsUpdated, Converter={StaticResource BooleanToProgressStateConverterKey}}"
+						 ProgressValue="{Binding ProgressCopiedCurrent, Converter={StaticResource DoubleCentesimalConverterKey}}"/>
+	</Window.TaskbarItemInfo>
+
 	<i:Interaction.Behaviors>
 		<behaviors:WindowActivateBehavior IsRequested="{Binding IsWindowActivateRequested, Mode=TwoWay}"/>
 	</i:Interaction.Behaviors>

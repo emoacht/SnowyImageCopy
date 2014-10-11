@@ -106,6 +106,11 @@ namespace SnowyImageCopy.Models
 		private readonly TimeSpan autoThresholdLength = TimeSpan.FromMinutes(10);
 
 		/// <summary>
+		/// Waiting time length for showing completion of copying
+		/// </summary>
+		private readonly TimeSpan copyWaitingLength = TimeSpan.FromSeconds(0.2);
+
+		/// <summary>
 		/// Threshold time length of copying to determine whether to send a toast notification after copy
 		/// </summary>
 		private readonly TimeSpan toastThresholdLength = TimeSpan.FromSeconds(30);
@@ -376,6 +381,9 @@ namespace SnowyImageCopy.Models
 
 				LastCheckCopyTime = DateTime.Now;
 
+				await Task.Delay(copyWaitingLength);
+				OperationProgress = null;
+
 				IsChecking = false;
 				IsCopying = false;
 
@@ -509,6 +517,9 @@ namespace SnowyImageCopy.Models
 				OperationProgress = null;
 
 				await CopyFileBaseAsync(new Progress<ProgressInfo>(x => OperationProgress = x));
+
+				await Task.Delay(copyWaitingLength);
+				OperationProgress = null;
 
 				IsCopying = false;
 

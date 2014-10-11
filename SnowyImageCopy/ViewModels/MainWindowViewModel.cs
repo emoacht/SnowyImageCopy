@@ -136,8 +136,27 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private TimeSpan _remainingTime;
 
+		/// <summary>
+		/// Whether progress has been updated
+		/// </summary>
+		public bool IsUpdated
+		{
+			get { return _isUpdated; }
+			set
+			{
+				if (_isUpdated == value)
+					return;
+
+				_isUpdated = value;
+				RaisePropertyChanged();
+			}
+		}
+		private bool _isUpdated;
+
 		private void UpdateProgress(ProgressInfo info)
 		{
+			IsUpdated = true;
+
 			int sizeCopiedLatest = 0;
 			var elapsedTimeLatest = TimeSpan.Zero;
 
