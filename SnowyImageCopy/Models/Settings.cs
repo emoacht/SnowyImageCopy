@@ -18,7 +18,7 @@ using SnowyImageCopy.Common;
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// This application's settings.
+	/// This application's settings
 	/// </summary>
 	public class Settings : NotificationObject, INotifyDataErrorInfo
 	{
@@ -88,7 +88,7 @@ namespace SnowyImageCopy.Models
 		public static Settings Current { get; set; }
 
 
-		#region Lode/Save
+		#region Load/Save
 
 		private const string settingsFile = "settings.xml";
 
@@ -96,6 +96,8 @@ namespace SnowyImageCopy.Models
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 			Assembly.GetExecutingAssembly().GetName().Name,
 			settingsFile);
+
+		private static bool isLoaded;
 
 		public static void Load()
 		{
@@ -114,10 +116,15 @@ namespace SnowyImageCopy.Models
 
 			if (Current == null)
 				Current = GetDefaultSettings();
+
+			isLoaded = true;
 		}
 
 		public static void Save()
 		{
+			if (!isLoaded)
+				return;
+
 			try
 			{
 				WriteXmlFile<Settings>(Current, settingsPath);
