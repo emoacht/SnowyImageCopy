@@ -34,6 +34,13 @@ namespace SnowyImageCopy
 			this.DispatcherUnhandledException += OnDispatcherUnhandledException;
 #endif
 
+			if (CommandLine.ShowsUsage)
+			{
+				CommandLine.ShowUsage();
+				this.Shutdown();
+				return;
+			}
+
 			Settings.Load();
 
 			ResourceService.Current.ChangeCulture(Settings.Current.CultureName);

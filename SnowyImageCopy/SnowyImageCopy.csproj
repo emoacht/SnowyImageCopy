@@ -110,6 +110,7 @@
     <Compile Include="Helper\ShellLink.cs" />
     <Compile Include="Helper\Shortcut.cs" />
     <Compile Include="Models\CardInfo.cs" />
+    <Compile Include="Models\CommandLine.cs" />
     <Compile Include="Models\Exceptions\CardChangedException.cs" />
     <Compile Include="Models\Exceptions\CardUploadDisabledException.cs" />
     <Compile Include="Models\Exceptions\ImageNotSupportedException.cs" />
