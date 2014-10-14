@@ -53,6 +53,15 @@ namespace SnowyImageCopy.Models
 		}
 		private static readonly string[] makesWindowStateMinimizedOptions = { "/minimized", "-minimized", "/m", "-m" };
 
+		/// <summary>
+		/// Whether to record download log
+		/// </summary>
+		public static bool RecordsDownloadLog
+		{
+			get { return CheckArgs(recordsDownloadLogOptions); }
+		}
+		private static readonly string[] recordsDownloadLogOptions = { "/recordlog", "-recordlog", "/r", "-r" };
+
 
 		public static void ShowUsage()
 		{
@@ -61,11 +70,13 @@ namespace SnowyImageCopy.Models
 
 			Console.WriteLine(
 				"\n" +
-				"Usage: SnowyImageCopy [{0}] [{1}]\n" +
+				"Usage: SnowyImageCopy [{0}] [{1}] [{2}]\n" +
 				"{0}: Start auto check at startup\n" +
-				"{1}: Make window state minimized at startup",
+				"{1}: Make window state minimized at startup\n" +
+				"{2}: Record download log",
 				startsAutoCheckOptions[0],
-				makesWindowStateMinimizedOptions[0]);
+				makesWindowStateMinimizedOptions[0],
+				recordsDownloadLogOptions[0]);
 
 			FreeConsole();
 		}

@@ -53,10 +53,6 @@ namespace SnowyImageCopy.Models.Network
 
 			var ssids = await GetConnectedSsidAsync();
 
-#if (DEBUG)
-			ssids.ToList().ForEach(x => Debug.WriteLine(String.Format("Found SSID: {0}", x)));
-#endif
-
 			return ssids.Any(x => x.Equals(ssid, StringComparison.Ordinal));
 		}
 
