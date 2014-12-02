@@ -10,7 +10,7 @@ namespace SnowyImageCopy.Views.Controls
 {
 	public class HideableGridSplitter : GridSplitter
 	{
-		#region Dependency Property
+		#region Property
 
 		/// <summary>
 		/// Minimum length of width of Column at the right of this splitter or height of Row at the bottom of this splitter

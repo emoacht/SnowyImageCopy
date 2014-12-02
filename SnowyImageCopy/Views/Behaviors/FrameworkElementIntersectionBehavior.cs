@@ -15,7 +15,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// </summary>
 	public class FrameworkElementIntersectionBehavior : Behavior<FrameworkElement>
 	{
-		#region Dependency Property
+		#region Property
 
 		/// <summary>
 		/// Target FrameworkElement for checking

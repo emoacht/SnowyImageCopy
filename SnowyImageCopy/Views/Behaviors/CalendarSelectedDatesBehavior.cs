@@ -16,7 +16,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// </summary>
 	public class CalendarSelectedDatesBehavior : Behavior<Calendar>
 	{
-		#region Dependency Property
+		#region Property
 
 		public ObservableCollection<DateTime> SelectedDates
 		{

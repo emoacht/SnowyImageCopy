@@ -12,7 +12,7 @@ namespace SnowyImageCopy.Views.Controls
 {
 	public class CheckTextBox : TextBox
 	{
-		#region Dependency Property
+		#region Property
 
 		public String MessageText
 		{

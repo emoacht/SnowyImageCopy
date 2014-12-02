@@ -14,7 +14,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// </summary>
 	public class FolderBrowserAction : TriggerAction<DependencyObject>
 	{
-		#region Dependency Property
+		#region Property
 
 		/// <summary>
 		/// Explanation shown in the dialog.

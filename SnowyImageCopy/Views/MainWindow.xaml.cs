@@ -27,7 +27,7 @@ namespace SnowyImageCopy.Views
 		}
 
 
-		#region Dependency Property
+		#region Property
 
 		public bool IsWindowPlacementReliable
 		{

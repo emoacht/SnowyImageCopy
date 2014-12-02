@@ -13,7 +13,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// </summary>
 	public class WindowActivateBehavior : Behavior<Window>
 	{
-		#region Dependency Property
+		#region Property
 
 		/// <summary>
 		/// Whether activating Window is requested

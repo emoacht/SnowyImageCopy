@@ -19,7 +19,7 @@ namespace SnowyImageCopy.Views.Controls
 	/// </summary>
 	public partial class SlidingToggleButton : UserControl
 	{
-		#region Dependency Property
+		#region Property
 
 		public double InnerButtonWidth
 		{

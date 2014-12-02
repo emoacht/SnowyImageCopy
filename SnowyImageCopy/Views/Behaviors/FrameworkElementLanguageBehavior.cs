@@ -14,7 +14,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// </summary>
 	public class FrameworkElementLanguageBehavior : Behavior<FrameworkElement>
 	{
-		#region Dependency Property
+		#region Property
 
 		public string IetfLanguageTag
 		{

@@ -15,7 +15,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// </summary>
 	public class ExplorerAction : TriggerAction<DependencyObject>
 	{
-		#region Dependency Property
+		#region Property
 
 		/// <summary>
 		/// Folder path to be opened.

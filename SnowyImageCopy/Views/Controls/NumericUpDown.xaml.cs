@@ -25,7 +25,7 @@ namespace SnowyImageCopy.Views.Controls
 		}
 
 
-		#region Dependency Property
+		#region Property
 
 		public double Value
 		{

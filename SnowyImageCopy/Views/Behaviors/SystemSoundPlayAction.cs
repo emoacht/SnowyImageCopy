@@ -14,7 +14,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// </summary>
 	public class SystemSoundPlayAction : TriggerAction<DependencyObject>
 	{
-		#region Dependency Property
+		#region Property
 
 		/// <summary>
 		/// SystemSound to be played
