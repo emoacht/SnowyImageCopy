@@ -120,7 +120,7 @@ namespace SnowyImageCopy.Models
 
 			var items = await DownloadStringAsync(client, remotePath, token, card);
 
-			return items.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+			return items.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
 				.Select(item => new FileItemViewModel(item, remoteDirectoryPath))
 				.Where(x => x.IsImported)
 				.ToList();
@@ -146,7 +146,7 @@ namespace SnowyImageCopy.Models
 				{
 					var items = await DownloadStringAsync(client, remotePath, token, card).ConfigureAwait(false);
 
-					return items.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+					return items.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
 						.Select(item => new FileItemViewModel(item, remoteDirectoryPath))
 						.Where(x => x.IsImported)
 						.ToList();
@@ -724,7 +724,7 @@ namespace SnowyImageCopy.Models
 
 		#region Helper
 
-		private readonly static Dictionary<FileManagerCommand, string> commandMap =
+		private static readonly Dictionary<FileManagerCommand, string> commandMap =
 			new Dictionary<FileManagerCommand, string>()
 			{
 				{FileManagerCommand.None, String.Empty},

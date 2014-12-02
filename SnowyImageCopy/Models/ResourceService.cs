@@ -39,7 +39,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Supported Culture names
 		/// </summary>
-		private readonly string[] supportedCultureNames = new string[]
+		private static readonly string[] supportedCultureNames = new[]
 		{
 			"en", // Resources.resx
 			"ja-JP", // Resources.ja-JP.resx (Only "ja" is not enough to load this resource file)

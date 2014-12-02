@@ -41,7 +41,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>Enum name</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool) || !(bool)value || (parameter == null))
+			if (!(value is bool) || !(bool)value || !targetType.IsEnum || (parameter == null))
 				return DependencyProperty.UnsetValue;
 
 			var name = Enum.GetNames(targetType)

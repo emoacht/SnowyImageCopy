@@ -696,7 +696,7 @@ namespace SnowyImageCopy.ViewModels
 				{
 					var settings = default(Settings);
 
-					_caseTargetDate = new string[]
+					_caseTargetDate = new[]
 					{
 						PropertySupport.GetPropertyName(() => settings.TargetPeriod),
 						PropertySupport.GetPropertyName(() => settings.TargetDates),

@@ -32,7 +32,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public static bool ShowsUsage
 		{
-			get { return CheckArgs(new string[] { "/?", "-?" }); }
+			get { return CheckArgs(new[] { "/?", "-?" }); }
 		}
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace SnowyImageCopy.Models
 			if (args == null)
 			{
 				args = Environment.GetCommandLineArgs()
-					.Skip(1) // First arg is executable file path.
+					.Skip(1) // First arg is always executable file path.
 					.Select(x => x.ToLower())
 					.ToArray();
 			}
