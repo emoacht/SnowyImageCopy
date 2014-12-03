@@ -5,22 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace SnowyImageCopy.Views.Controls
 {
-	/// <summary>
-	/// Interaction logic for BusyButton.xaml
-	/// </summary>
-	public partial class BusyButton : Button
+	[TemplateVisualState(Name = "Normal", GroupName = "CommonStates")]
+	[TemplateVisualState(Name = "MouseOver", GroupName = "CommonStates")]
+	[TemplateVisualState(Name = "Pressed", GroupName = "CommonStates")]
+	[TemplateVisualState(Name = "Disabled", GroupName = "CommonStates")]
+	[TemplateVisualState(Name = "Busy", GroupName = "CommonStates")]
+	//[TemplateVisualState(Name = "Focused", GroupName = "FocusedStates")]
+	//[TemplateVisualState(Name = "Unfocused", GroupName = "FocusedStates")]
+	public class BusyButton : Button
 	{
 		public BusyButton()
 		{
-			InitializeComponent();
 		}
 
 

@@ -6,20 +6,70 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace SnowyImageCopy.Views.Controls
 {
-	/// <summary>
-	/// Interaction logic for SlidingToggleButton.xaml
-	/// </summary>
-	public partial class SlidingToggleButton : UserControl
+	[TemplatePart(Name = "PART_BackgroundTextBox", Type = typeof(TextBox))]
+	[TemplatePart(Name = "PART_ForegroundButtonLeft", Type = typeof(Button))]
+	[TemplatePart(Name = "PART_ForegroundButtonRight", Type = typeof(Button))]
+	[TemplatePart(Name = "PART_ForegroundTextBlock", Type = typeof(TextBlock))]
+	public class SlidingToggleButton : Control
 	{
+		public SlidingToggleButton()
+		{
+		}
+
+		static SlidingToggleButton()
+		{
+			FrameworkElement.WidthProperty.OverrideMetadata(
+				typeof(SlidingToggleButton),
+				new FrameworkPropertyMetadata(
+					60D,
+					OnWidthChanged));
+		}
+
+		public override void OnApplyTemplate()
+		{
+			base.OnApplyTemplate();
+
+			BackgroundTextBox = this.GetTemplateChild("PART_BackgroundTextBox") as TextBox;
+			if (BackgroundTextBox != null)
+			{
+				BackgroundTextBox.PreviewMouseUp += new MouseButtonEventHandler(OnClick);
+				BackgroundTextBox.PreviewKeyUp += new KeyEventHandler(OnClick);
+			}
+
+			ForegroundButtonLeft = this.GetTemplateChild("PART_ForegroundButtonLeft") as Button;
+			if (ForegroundButtonLeft != null)
+			{
+				ForegroundButtonLeft.Click += new RoutedEventHandler(OnClick);
+			}
+
+			ForegroundButtonRight = this.GetTemplateChild("PART_ForegroundButtonRight") as Button;
+			if (ForegroundButtonRight != null)
+			{
+				ForegroundButtonRight.Click += new RoutedEventHandler(OnClick);
+			}
+
+			ForegroundTextBlock = this.GetTemplateChild("PART_ForegroundTextBlock") as TextBlock;
+			if (ForegroundTextBlock != null)
+			{
+				ForegroundTextBlock.PreviewMouseUp += new MouseButtonEventHandler(OnClick);
+				ForegroundTextBlock.PreviewKeyUp += new KeyEventHandler(OnClick);
+			}
+
+			SetAppearance();
+		}
+
+
 		#region Property
+
+		private TextBox BackgroundTextBox { get; set; }
+		private Button ForegroundButtonLeft { get; set; }
+		private Button ForegroundButtonRight { get; set; }
+		private TextBlock ForegroundTextBlock { get; set; }
 
 		public double InnerButtonWidth
 		{
@@ -172,27 +222,12 @@ namespace SnowyImageCopy.Views.Controls
 		#endregion
 
 
-		public SlidingToggleButton()
-		{
-			InitializeComponent();
-		}
-
-		static SlidingToggleButton()
-		{
-			FrameworkElement.WidthProperty.OverrideMetadata(
-				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(
-					60D,
-					OnWidthChanged));
-		}
-
-
 		private static void OnWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			var button = (SlidingToggleButton)d;
 
 			button.ForegroundButtonLeft.Width = button.InnerButtonWidth;
-			button.ForegroundBox.Width = button.Width - button.InnerButtonWidth;
+			button.ForegroundTextBlock.Width = button.Width - button.InnerButtonWidth;
 			button.ForegroundButtonRight.Width = button.InnerButtonWidth;
 		}
 
@@ -209,21 +244,24 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void SetAppearance()
 		{
+			if ((BackgroundTextBox == null) || (ForegroundButtonLeft == null) || (ForegroundButtonRight == null) || (ForegroundTextBlock == null))
+				return;
+
 			if (IsChecked)
 			{
+				BackgroundTextBox.Background = BackgroundChecked;
 				ForegroundButtonLeft.Visibility = Visibility.Collapsed;
 				ForegroundButtonRight.Visibility = Visibility.Visible;
-				ForegroundText.Text = TextChecked;
-				ForegroundText.Foreground = ForegroundChecked;
-				BackgroundBox.Background = BackgroundChecked;
+				ForegroundTextBlock.Text = TextChecked;
+				ForegroundTextBlock.Foreground = ForegroundChecked;
 			}
 			else
 			{
+				BackgroundTextBox.Background = BackgroundUnchecked;
 				ForegroundButtonLeft.Visibility = Visibility.Visible;
 				ForegroundButtonRight.Visibility = Visibility.Collapsed;
-				ForegroundText.Text = TextUnchecked;
-				ForegroundText.Foreground = ForegroundUnchecked;
-				BackgroundBox.Background = BackgroundUnchecked;
+				ForegroundTextBlock.Text = TextUnchecked;
+				ForegroundTextBlock.Foreground = ForegroundUnchecked;
 			}
 		}
 	}

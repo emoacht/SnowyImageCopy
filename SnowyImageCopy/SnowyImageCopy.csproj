@@ -95,7 +95,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Windows" />
+    <Reference Include="Windows">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -130,7 +132,10 @@
     <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
     <Compile Include="Views\Behaviors\SystemSoundPlayAction.cs" />
     <Compile Include="Views\Behaviors\WindowActivateBehavior.cs" />
+    <Compile Include="Views\Controls\BusyButton.cs" />
     <Compile Include="Views\Controls\CheckTextBox.cs" />
+    <Compile Include="Views\Controls\NumericUpDown.cs" />
+    <Compile Include="Views\Controls\SlidingToggleButton.cs" />
     <Compile Include="Views\Converters\BooleanToProgressStateConverter.cs" />
     <Compile Include="Views\Converters\DoubleCentesimalConverter.cs" />
     <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
@@ -138,19 +143,7 @@
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProductInfo.cs" />
-    <Page Include="Views\Controls\BusyButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Controls\CircularProgressBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\NumericUpDown.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\SlidingToggleButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -211,19 +204,10 @@
     <Compile Include="Views\Behaviors\FrameworkElementIntersectionBehavior.cs" />
     <Compile Include="Views\Behaviors\GridSizeBehavior.cs" />
     <Compile Include="Views\Behaviors\ListBoxSelectedItemBehavior.cs" />
-    <Compile Include="Views\Controls\BusyButton.xaml.cs">
-      <DependentUpon>BusyButton.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\HideableGridSplitter.cs" />
-    <Compile Include="Views\Controls\NumericUpDown.xaml.cs">
-      <DependentUpon>NumericUpDown.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Controls\SlidingToggleButton.xaml.cs">
-      <DependentUpon>SlidingToggleButton.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\ThumbnailBox.xaml.cs">
       <DependentUpon>ThumbnailBox.xaml</DependentUpon>
     </Compile>
@@ -314,6 +298,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libraries\PerMonitorDpi.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
