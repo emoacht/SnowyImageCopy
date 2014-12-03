@@ -53,10 +53,6 @@ namespace SnowyImageCopy.Models.Network
 
 			var ssids = await GetConnectedSsidAsync();
 
-#if (DEBUG)
-			ssids.ToList().ForEach(x => Debug.WriteLine(String.Format("Found SSID: {0}", x)));
-#endif
-
 			return ssids.Any(x => x.Equals(ssid, StringComparison.Ordinal));
 		}
 
@@ -83,7 +79,7 @@ namespace SnowyImageCopy.Models.Network
 
 			public bool IsValid
 			{
-				get { return new string[] { Name, State, HostedNetworkStatus }.All(x => !String.IsNullOrEmpty(x)); }
+				get { return new[] { Name, State, HostedNetworkStatus }.All(x => !String.IsNullOrEmpty(x)); }
 			}
 
 			public bool IsConnected
@@ -164,7 +160,7 @@ namespace SnowyImageCopy.Models.Network
 		/// </summary>
 		private static async Task<Queue<string>> ExecuteNetshAsync()
 		{
-			var commands = new string[]
+			var commands = new[]
 			{
 				"chcp 437", // Change code page to US (English).
 				"netsh wlan show interface",

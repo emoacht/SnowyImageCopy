@@ -24,7 +24,7 @@ namespace SnowyImageCopy.Views.Controls
 		}
 
 
-		#region Dependency Property
+		#region Property
 
 		public double Radius // Outer radius
 		{

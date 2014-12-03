@@ -15,7 +15,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// </summary>
 	public class FrameworkElementIntersectionBehavior : Behavior<FrameworkElement>
 	{
-		#region Dependency Property
+		#region Property
 
 		/// <summary>
 		/// Target FrameworkElement for checking
@@ -100,7 +100,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			if ((this.AssociatedObject == null) || (TargetFrameworkElement == null))
 				return;
 
-			IsIntersected = IsFrameworkElementIntersected(this.AssociatedObject, new FrameworkElement[] { TargetFrameworkElement });
+			IsIntersected = IsFrameworkElementIntersected(this.AssociatedObject, new[] { TargetFrameworkElement });
 		}
 
 		private bool IsFrameworkElementIntersected(FrameworkElement baseElement, IEnumerable<FrameworkElement> targetElements)
@@ -119,7 +119,7 @@ namespace SnowyImageCopy.Views.Behaviors
 					(baseElement.ActualWidth + ExpandedMargin.Left + ExpandedMargin.Right) * factor.X,
 					(baseElement.ActualHeight + ExpandedMargin.Top + ExpandedMargin.Bottom) * factor.Y);
 
-			var rects = new Rect[] { expandedRect }
+			var rects = new[] { expandedRect }
 				.Concat(targetElements
 					.Where(x => x.IsVisible) // If not visible, PointToScreen method will fail.
 					.Select(x => new Rect(x.PointToScreen(default(Point)), new Size(x.ActualWidth * factor.X, x.ActualHeight * factor.Y))))

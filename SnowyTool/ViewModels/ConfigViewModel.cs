@@ -603,7 +603,7 @@ namespace SnowyTool.ViewModels
 			_oemApplicationID = Encoding.ASCII.GetString(bytes.Skip(1).Take(2).ToArray()); // Bytes 1-2
 			_productName = Encoding.ASCII.GetString(bytes.Skip(3).Take(5).ToArray()); // Bytes 3-7
 
-			var productRevisionBits = new BitArray(new Byte[] { bytes[8] }).Cast<bool>().Reverse().ToArray(); // Bytes 8
+			var productRevisionBits = new BitArray(new[] { bytes[8] }).Cast<bool>().Reverse().ToArray(); // Bytes 8
 			var major = ConvertFromBitsToInt(productRevisionBits.Take(4).Reverse());
 			var minor = ConvertFromBitsToInt(productRevisionBits.Skip(4).Take(4).Reverse());
 			_productRevision = String.Format("{0}.{1}", major, minor);
@@ -611,7 +611,7 @@ namespace SnowyTool.ViewModels
 			_productSerialNumber = BitConverter.ToUInt32(bytes, 9); // Bytes 9-12
 
 			var manufacturingDateBits = bytes.Skip(13).Take(2) // Bytes 13-14
-				.SelectMany(x => new BitArray(new Byte[] { x }).Cast<bool>().Reverse())
+				.SelectMany(x => new BitArray(new[] { x }).Cast<bool>().Reverse())
 				.Skip(4) // Skip reserved field.
 				.ToArray();
 

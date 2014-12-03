@@ -6,26 +6,60 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace SnowyImageCopy.Views.Controls
 {
-	/// <summary>
-	/// Interaction logic for NumericUpDown.xaml
-	/// </summary>
-	public partial class NumericUpDown : UserControl
+	[TemplatePart(Name = "PART_UpButton", Type = typeof(RepeatButton))]
+	[TemplatePart(Name = "PART_DownButton", Type = typeof(RepeatButton))]
+	public class NumericUpDown : Control
 	{
 		public NumericUpDown()
 		{
-			InitializeComponent();
+		}
+
+		public override void OnApplyTemplate()
+		{
+			base.OnApplyTemplate();
+
+			UpButton = this.GetTemplateChild("PART_UpButton") as RepeatButton;
+			DownButton = this.GetTemplateChild("PART_DownButton") as RepeatButton;
 		}
 
 
-		#region Dependency Property
+		#region Property
+
+		private RepeatButton UpButton
+		{
+			get { return _upButton; }
+			set
+			{
+				if (_upButton != null)
+					_upButton.Click -= new RoutedEventHandler(OnButtonClick);
+
+				_upButton = value;
+
+				if (_upButton != null)
+					_upButton.Click += new RoutedEventHandler(OnButtonClick);
+			}
+		}
+		private RepeatButton _upButton;
+
+		private RepeatButton DownButton
+		{
+			get { return _downButton; }
+			set
+			{
+				if (_downButton != null)
+					_downButton.Click -= new RoutedEventHandler(OnButtonClick);
+
+				_downButton = value;
+
+				if (_downButton != null)
+					_downButton.Click += new RoutedEventHandler(OnButtonClick);
+			}
+		}
+		private RepeatButton _downButton;
+
 
 		public double Value
 		{
@@ -161,12 +195,14 @@ namespace SnowyImageCopy.Views.Controls
 			((NumericUpDown)sender).ChangeCanChangeValue();
 		}
 
-		private void OnClick(object sender, RoutedEventArgs e)
+		private void OnButtonClick(object sender, RoutedEventArgs e)
 		{
+			if ((UpButton == null) || (DownButton == null))
+				return;
+
 			var direction = e.Source.Equals(DownButton) ? Direction.Down : Direction.Up;
 			SetAppearance(direction);
 		}
-
 
 		private void SetAppearance(Direction direction)
 		{
@@ -219,6 +255,9 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void ChangeCanChangeValue()
 		{
+			if ((UpButton == null) || (DownButton == null))
+				return;
+
 			DownButton.IsEnabled = (Value > Minimum);
 			UpButton.IsEnabled = (Value < Maximum);
 		}

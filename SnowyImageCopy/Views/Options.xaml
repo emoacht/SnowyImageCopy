@@ -143,15 +143,13 @@
 			<GroupBox Template="{StaticResource ItemGroupTemplate}"
 					  Header="{Binding Resources.Options_AutoCheck, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
-					<StackPanel
-						Height="24"
-						Margin="0,4,0,4"
-						Orientation="Horizontal">
-						<Label
+					<StackPanel Orientation="Horizontal">
+						<TextBlock
 							VerticalAlignment="Center"
-							Content="{Binding Resources.Options_AutoCheckInterval, Source={x:Static models:ResourceService.Current}}"/>
+							Text="{Binding Resources.Options_AutoCheckInterval, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:NumericUpDown
 							Width="90" Height="24"
+							Margin="4"
 							Minimum="1" Middle="10" Maximum="180" Frequency="10" LowerFrequency="1" HigherFrequency="10"
 							Value="{Binding SettingsCurrent.AutoCheckInterval}"/>
 					</StackPanel>
@@ -168,7 +166,7 @@
 							TextWrapping="Wrap"
 							Text="{Binding Resources.Options_ExtensionLowerCase, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
-							Width="60" Height="24" HorizontalAlignment="Left"
+							Width="60" Height="24"
 							Margin="4"
 							TextChecked="ON"
 							TextUnchecked="OFF"
@@ -186,7 +184,7 @@
 							Text="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
 							x:Name="RecycleButton"
-							Width="60" Height="24" HorizontalAlignment="Left"
+							Width="60" Height="24"
 							Margin="4"
 							TextChecked="ON"
 							TextUnchecked="OFF"
@@ -204,7 +202,7 @@
 							Text="{Binding Resources.Options_ChooseDeleteUponCopy, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
 							x:Name="ChooseDeleteUponCopyButton"
-							Width="60" Height="24" HorizontalAlignment="Left"
+							Width="60" Height="24"
 							Margin="4"
 							TextChecked="ON"
 							TextUnchecked="OFF"
@@ -214,12 +212,12 @@
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
 							IsChecked="{Binding IsChecked, ElementName= RecycleButton, Converter={StaticResource BooleanInverseConverterKey}, ConverterParameter=True}"/>
 						<controls:CheckTextBox
-							Width="80" HorizontalAlignment="Left"
+							Width="80"
 							Margin="4" Padding="2,0"
 							VerticalContentAlignment="Center"
 							IsUndoEnabled="False"
 							CheckText="DELETE"
-							Visibility="{Binding IsChecked, ElementName=ChooseDeleteUponCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"                         
+							Visibility="{Binding IsChecked, ElementName=ChooseDeleteUponCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
 							IsChecked="{Binding SettingsCurrent.EnablesChooseDeleteUponCopy, Mode=TwoWay}"/>
 					</WrapPanel>
 				</StackPanel>

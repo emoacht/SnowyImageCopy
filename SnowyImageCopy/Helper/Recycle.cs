@@ -85,7 +85,7 @@ namespace SnowyImageCopy.Helper
 		/// <param name="filePath">Target file path</param>
 		public static void MoveToRecycle(string filePath)
 		{
-			MoveToRecycle(new string[] { filePath });
+			MoveToRecycle(new[] { filePath });
 		}
 
 		/// <summary>

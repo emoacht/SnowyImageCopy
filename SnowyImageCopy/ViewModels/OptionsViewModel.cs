@@ -50,7 +50,7 @@ namespace SnowyImageCopy.ViewModels
 				{
 					var operation = default(Operation);
 
-					_caseIsCheckingOrCopying = new string[]
+					_caseIsCheckingOrCopying = new[]
 					{
 						PropertySupport.GetPropertyName(() => operation.IsChecking),
 						PropertySupport.GetPropertyName(() => operation.IsCopying),

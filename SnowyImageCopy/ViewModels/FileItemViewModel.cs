@@ -49,7 +49,7 @@ namespace SnowyImageCopy.ViewModels
 
 		private void SetAttributes(int source)
 		{
-			var ba = new BitArray(new int[] { source });
+			var ba = new BitArray(new[] { source });
 
 			for (int i = 0; i < ba.Length; i++)
 			{
@@ -111,8 +111,8 @@ namespace SnowyImageCopy.ViewModels
 			if ((rawDate <= 0) || (rawTime <= 0))
 				return;
 
-			var baDate = new BitArray(new int[] { rawDate }).Cast<bool>().ToArray();
-			var baTime = new BitArray(new int[] { rawTime }).Cast<bool>().ToArray();
+			var baDate = new BitArray(new[] { rawDate }).Cast<bool>().ToArray();
+			var baTime = new BitArray(new[] { rawTime }).Cast<bool>().ToArray();
 
 			var year = ConvertFromBitsToInt(baDate.Skip(9)) + 1980;
 			var month = ConvertFromBitsToInt(baDate.Skip(5).Take(4));
@@ -264,7 +264,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private bool? _canLoadDataLocal;
 
-		private static readonly string[] flashAirSystemFolders = new string[]
+		private static readonly string[] flashAirSystemFolders =
 		{
 			"GUPIXINF",
 			"SD_WLAN",
@@ -410,7 +410,7 @@ namespace SnowyImageCopy.ViewModels
 
 				// Check if directory path is valid
 				if (!asciiPattern.IsMatch(Directory) || // Directory path must be ASCII characters only (If byte array is decoded by ASCII, this part is non-sense).
-					Path.GetInvalidPathChars().Concat(new Char[] { '?' }).Any(x => Directory.Contains(x))) // '?' appears typically when byte array was not correctly decoded.
+					Path.GetInvalidPathChars().Concat(new[] { '?' }).Any(x => Directory.Contains(x))) // '?' appears typically when byte array was not correctly decoded.
 					return;
 
 				sourceWithoutDirectory = source.Substring(remoteDirectoryPath.Length).TrimStart();
@@ -424,7 +424,7 @@ namespace SnowyImageCopy.ViewModels
 				return;
 
 			var elements = sourceWithoutDirectory.Substring(1) // 1 means length of separator.
-				.Split(new Char[] { separator }, StringSplitOptions.None)
+				.Split(new[] { separator }, StringSplitOptions.None)
 				.ToList();
 
 			if (elements.Count < 5) // 5 means file name, size, raw attribute, raw data and raw time 

@@ -97,30 +97,30 @@ namespace SnowyImageCopy.ViewModels
 		/// Percentage of total size of local files of items that are in target and copied so far
 		/// </summary>
 		/// <remarks>This includes local files that are copied during current operation.</remarks>
-		public double ProgressCopyFileAll
+		public double ProgressCopiedAll
 		{
-			get { return _progressCopyFileAll; }
+			get { return _progressCopiedAll; }
 			set
 			{
-				_progressCopyFileAll = value;
+				_progressCopiedAll = value;
 				RaisePropertyChanged();
 			}
 		}
-		private double _progressCopyFileAll = 40; // Sample percentage
+		private double _progressCopiedAll = 40; // Sample percentage
 
 		/// <summary>
 		/// Percentage of total size of local files of items that are in target and copied during current operation
 		/// </summary>
-		public double ProgressCopyFileCurrent
+		public double ProgressCopiedCurrent
 		{
-			get { return _progressCopyFileCurrent; }
+			get { return _progressCopiedCurrent; }
 			set
 			{
-				_progressCopyFileCurrent = value;
+				_progressCopiedCurrent = value;
 				RaisePropertyChanged();
 			}
 		}
-		private double _progressCopyFileCurrent = 60; // Sample percentage
+		private double _progressCopiedCurrent = 60; // Sample percentage
 
 		/// <summary>
 		/// Remaining time for current operation that is calculated by current transfer rate.
@@ -136,8 +136,27 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private TimeSpan _remainingTime;
 
+		/// <summary>
+		/// Whether progress has been updated
+		/// </summary>
+		public bool IsUpdated
+		{
+			get { return _isUpdated; }
+			set
+			{
+				if (_isUpdated == value)
+					return;
+
+				_isUpdated = value;
+				RaisePropertyChanged();
+			}
+		}
+		private bool _isUpdated;
+
 		private void UpdateProgress(ProgressInfo info)
 		{
+			IsUpdated = true;
+
 			int sizeCopiedLatest = 0;
 			var elapsedTimeLatest = TimeSpan.Zero;
 
@@ -159,13 +178,13 @@ namespace SnowyImageCopy.ViewModels
 
 			if (sizeTotal == 0)
 			{
-				ProgressCopyFileAll = 0D;
+				ProgressCopiedAll = 0D;
 			}
 			else
 			{
-				ProgressCopyFileAll = (double)(sizeCopied + sizeCopiedLatest) * 100D / (double)sizeTotal;
+				ProgressCopiedAll = (double)(sizeCopied + sizeCopiedLatest) * 100D / (double)sizeTotal;
 
-				//Debug.WriteLine("ProgressCopyFileAll: {0}", ProgressCopyFileAll);
+				//Debug.WriteLine("ProgressCopiedAll: {0}", ProgressCopiedAll);
 			}
 
 			var sizeCopiedCurrent = fileListBuff
@@ -178,15 +197,15 @@ namespace SnowyImageCopy.ViewModels
 
 			if (sizeToBeCopied == 0)
 			{
-				ProgressCopyFileCurrent = 0D;
+				ProgressCopiedCurrent = 0D;
 				RemainingTime = TimeSpan.Zero;
 			}
 			else if (sizeCopiedLatest > 0)
 			{
-				ProgressCopyFileCurrent = (double)(sizeCopiedCurrent + sizeCopiedLatest) * 100D / (double)(sizeCopiedCurrent + sizeToBeCopied);
+				ProgressCopiedCurrent = (double)(sizeCopiedCurrent + sizeCopiedLatest) * 100D / (double)(sizeCopiedCurrent + sizeToBeCopied);
 				RemainingTime = TimeSpan.FromSeconds((double)(sizeToBeCopied - sizeCopiedLatest) * elapsedTimeLatest.TotalSeconds / (double)sizeCopiedLatest);
 
-				//Debug.WriteLine("ProgressCopyFileCurrent: {0} RemainingTime: {1}", ProgressCopyFileCurrent, RemainingTime);
+				//Debug.WriteLine("ProgressCopiedCurrent: {0} RemainingTime: {1}", ProgressCopiedCurrent, RemainingTime);
 			}
 		}
 
@@ -580,7 +599,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseItemProperty ?? (_caseItemProperty =
-					PropertySupport.GetPropertyName(() => default(FileItemViewModelCollection).ItemPropertyChangedSender));
+					PropertySupport.GetPropertyName(() => (default(FileItemViewModelCollection)).ItemPropertyChangedSender));
 			}
 		}
 		private string _caseItemProperty;
@@ -590,7 +609,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseFileStatus ?? (_caseFileStatus =
-					PropertySupport.GetPropertyName(() => default(FileItemViewModel).IsSelected));
+					PropertySupport.GetPropertyName(() => (default(FileItemViewModel)).IsSelected));
 			}
 		}
 		private string _caseFileStatus;
@@ -600,7 +619,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseInstantCopy ?? (_caseInstantCopy =
-					PropertySupport.GetPropertyName(() => default(FileItemViewModel).Status));
+					PropertySupport.GetPropertyName(() => (default(FileItemViewModel)).Status));
 			}
 		}
 		private string _caseInstantCopy;
@@ -664,7 +683,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseAutoCheck ?? (_caseAutoCheck =
-					PropertySupport.GetPropertyName(() => default(Settings).AutoCheckInterval));
+					PropertySupport.GetPropertyName(() => (default(Settings)).AutoCheckInterval));
 			}
 		}
 		private string _caseAutoCheck;
@@ -677,7 +696,7 @@ namespace SnowyImageCopy.ViewModels
 				{
 					var settings = default(Settings);
 
-					_caseTargetDate = new string[]
+					_caseTargetDate = new[]
 					{
 						PropertySupport.GetPropertyName(() => settings.TargetPeriod),
 						PropertySupport.GetPropertyName(() => settings.TargetDates),
@@ -724,7 +743,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseIsChecking ?? (_caseIsChecking =
-					PropertySupport.GetPropertyName(() => default(Operation).IsChecking));
+					PropertySupport.GetPropertyName(() => (default(Operation)).IsChecking));
 			}
 		}
 		private string _caseIsChecking;
@@ -734,7 +753,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseIsCopying ?? (_caseIsCopying =
-					PropertySupport.GetPropertyName(() => default(Operation).IsCopying));
+					PropertySupport.GetPropertyName(() => (default(Operation)).IsCopying));
 			}
 		}
 		private string _caseIsCopying;
@@ -744,7 +763,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseIsAutoRunning ?? (_caseIsAutoRunning =
-					PropertySupport.GetPropertyName(() => default(Operation).IsAutoRunning));
+					PropertySupport.GetPropertyName(() => (default(Operation)).IsAutoRunning));
 			}
 		}
 		private string _caseIsAutoRunning;
@@ -754,7 +773,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				return _caseOperationProgress ?? (_caseOperationProgress =
-					PropertySupport.GetPropertyName(() => default(Operation).OperationProgress));
+					PropertySupport.GetPropertyName(() => (default(Operation)).OperationProgress));
 			}
 		}
 		private string _caseOperationProgress;

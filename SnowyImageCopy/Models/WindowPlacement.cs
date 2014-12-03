@@ -75,7 +75,7 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 
-		public void Load(Window window)
+		public void Load(Window window, bool isNormal = true)
 		{
 			if (Settings.Current.Placement == null)
 				return;
@@ -86,7 +86,7 @@ namespace SnowyImageCopy.Models
 
 			placement.length = Marshal.SizeOf(typeof(WINDOWPLACEMENT));
 			placement.flags = 0; // No flag set
-			placement.showCmd = SW.SW_SHOWNORMAL; // Make window state normal regardless of previous window state.
+			placement.showCmd = isNormal ? SW.SW_SHOWNORMAL : SW.SW_SHOWMINNOACTIVE; // Make window state normal by default.
 
 			SetWindowPlacement(handle, ref placement);
 		}

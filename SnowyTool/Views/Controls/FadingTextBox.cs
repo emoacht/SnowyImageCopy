@@ -11,7 +11,7 @@ namespace SnowyTool.Views.Controls
 {
 	public class FadingTextBox : TextBox
 	{
-		#region Dependency Property
+		#region Property
 
 		public double FadeOutTime // sec
 		{
@@ -31,7 +31,7 @@ namespace SnowyTool.Views.Controls
 		#endregion
 
 
-		public FadingTextBox() : base() { }
+		public FadingTextBox() { }
 
 		static FadingTextBox()
 		{

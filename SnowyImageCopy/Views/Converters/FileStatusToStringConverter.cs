@@ -13,7 +13,7 @@ using SnowyImageCopy.Properties;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Convert FileStatus to String.
+	/// Convert FileStatus to string.
 	/// </summary>
 	[ValueConversion(typeof(FileStatus), typeof(string))]
 	public class FileStatusToStringConverter : IValueConverter

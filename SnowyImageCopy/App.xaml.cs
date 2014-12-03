@@ -21,18 +21,23 @@ namespace SnowyImageCopy
 	{
 		public App()
 		{
-#if (!DEBUG)
-			AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
-#endif
+			if (!Debugger.IsAttached)
+				AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 		}
 
 		protected override void OnStartup(StartupEventArgs e)
 		{
 			base.OnStartup(e);
 
-#if (!DEBUG)
-			this.DispatcherUnhandledException += OnDispatcherUnhandledException;
-#endif
+			if (!Debugger.IsAttached)
+				this.DispatcherUnhandledException += OnDispatcherUnhandledException;
+
+			if (CommandLine.ShowsUsage)
+			{
+				CommandLine.ShowUsage();
+				this.Shutdown();
+				return;
+			}
 
 			Settings.Load();
 
@@ -72,7 +77,7 @@ namespace SnowyImageCopy
 			var content = String.Format(@"[Date: {0} Sender: {1}]", DateTime.Now, sender) + Environment.NewLine
 				+ exception + Environment.NewLine + Environment.NewLine;
 
-			Trace.WriteLine(content); // For the case when surrounded by #if (!DEBUG)
+			Trace.WriteLine(content);
 
 			var filePathAppData = Path.Combine(
 				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),

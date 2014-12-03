@@ -18,7 +18,7 @@ namespace SnowyTool.Helper
 
 			var content = new Dictionary<string, string>();
 
-			var lines = source.Split(new String[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+			var lines = source.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
 			foreach (var line in lines)
 			{

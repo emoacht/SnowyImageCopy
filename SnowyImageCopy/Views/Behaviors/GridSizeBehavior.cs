@@ -14,7 +14,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// </summary>
 	public class GridSizeBehavior : Behavior<Grid>
 	{
-		#region Dependency Property
+		#region Property
 
 		/// <summary>
 		/// Size of this Grid

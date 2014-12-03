@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 
 using PerMonitorDpi.Views;
 using SnowyImageCopy.Models;
+using SnowyImageCopy.ViewModels;
 
 namespace SnowyImageCopy.Views
 {
@@ -26,7 +27,7 @@ namespace SnowyImageCopy.Views
 		}
 
 
-		#region Dependency Property
+		#region Property
 
 		public bool IsWindowPlacementReliable
 		{
@@ -49,7 +50,17 @@ namespace SnowyImageCopy.Views
 
 			IsWindowPlacementReliable = true; // This must be set before loading WindowPlacement.
 
-			new WindowPlacement().Load(this);
+			new WindowPlacement().Load(this, !CommandLine.MakesWindowStateMinimized);
+
+			if (CommandLine.StartsAutoCheck)
+			{
+				var mainWindowViewModelInstance = this.DataContext as MainWindowViewModel;
+				if (mainWindowViewModelInstance != null)
+				{
+					if (mainWindowViewModelInstance.CheckCopyAutoCommand.CanExecute())
+						mainWindowViewModelInstance.CheckCopyAutoCommand.Execute();
+				}
+			}
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

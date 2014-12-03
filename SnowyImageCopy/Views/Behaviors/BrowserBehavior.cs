@@ -18,7 +18,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// </summary>
 	public class BrowserBehavior : Behavior<WebBrowser>
 	{
-		#region Dependency Property
+		#region Property
 
 		/// <summary>
 		/// Target file

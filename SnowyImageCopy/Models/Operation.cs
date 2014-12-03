@@ -106,6 +106,11 @@ namespace SnowyImageCopy.Models
 		private readonly TimeSpan autoThresholdLength = TimeSpan.FromMinutes(10);
 
 		/// <summary>
+		/// Waiting time length for showing completion of copying
+		/// </summary>
+		private readonly TimeSpan copyWaitingLength = TimeSpan.FromSeconds(0.2);
+
+		/// <summary>
 		/// Threshold time length of copying to determine whether to send a toast notification after copy
 		/// </summary>
 		private readonly TimeSpan toastThresholdLength = TimeSpan.FromSeconds(30);
@@ -323,8 +328,6 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				SystemSounds.Hand.Play();
-
 				if (ex.GetType() == typeof(RemoteConnectionUnableException))
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionUnable;
@@ -378,6 +381,9 @@ namespace SnowyImageCopy.Models
 
 				LastCheckCopyTime = DateTime.Now;
 
+				await Task.Delay(copyWaitingLength);
+				OperationProgress = null;
+
 				IsChecking = false;
 				IsCopying = false;
 
@@ -392,7 +398,8 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				SystemSounds.Hand.Play();
+				if (!IsAutoRunning)
+					SystemSounds.Hand.Play();
 
 				if (ex.GetType() == typeof(RemoteConnectionUnableException))
 				{
@@ -418,7 +425,7 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_DeleteDisabled;
 				}
-				else if (ex.GetType() == typeof(RemoteFileDeleteFailedException))
+				else if (ex.GetType() == typeof(RemoteFileDeletionFailedException))
 				{
 					OperationStatus = Resources.OperationStatus_DeleteFailed;
 				}
@@ -511,6 +518,9 @@ namespace SnowyImageCopy.Models
 
 				await CopyFileBaseAsync(new Progress<ProgressInfo>(x => OperationProgress = x));
 
+				await Task.Delay(copyWaitingLength);
+				OperationProgress = null;
+
 				IsCopying = false;
 
 				await ShowToastAsync();
@@ -548,7 +558,7 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_DeleteDisabled;
 				}
-				else if (ex.GetType() == typeof(RemoteFileDeleteFailedException))
+				else if (ex.GetType() == typeof(RemoteFileDeletionFailedException))
 				{
 					OperationStatus = Resources.OperationStatus_DeleteFailed;
 				}
@@ -790,15 +800,19 @@ namespace SnowyImageCopy.Models
 					if (!item.IsTarget || item.HasThumbnail || (item.Status == FileStatus.Copied) || !item.IsAliveRemote || !item.CanGetThumbnailRemote)
 						continue;
 
+					if (!card.CanGetThumbnail)
+						continue;
+
 					tokenSourceWorking.Token.ThrowIfCancellationRequested();
 
 					try
 					{
 						item.Thumbnail = await FileManager.GetThumbnailAsync(item.FilePath, tokenSourceWorking.Token, card);
 					}
-					catch (RemoteFileNotFoundException)
+					catch (RemoteFileThumbnailFailedException)
 					{
 						item.CanGetThumbnailRemote = false;
+						card.ThumbnailFailedPath = item.FilePath;
 					}
 				}
 
