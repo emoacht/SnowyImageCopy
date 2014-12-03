@@ -34,9 +34,9 @@ namespace SnowyImageCopy.Models
 		private static readonly TimeSpan monitorLength = TimeSpan.FromSeconds(2);
 
 		/// <summary>
-		/// Times of retry 
+		/// Maximum count of retry 
 		/// </summary>
-		private const int retryCount = 3;
+		private const int retryCountMax = 3;
 
 		/// <summary>
 		/// Interval length of retry
@@ -212,19 +212,24 @@ namespace SnowyImageCopy.Models
 					return await ImageManager.ConvertBytesToBitmapImageAsync(bytes).ConfigureAwait(false);
 				}
 			}
-			catch (RemoteFileNotFoundException)
-			{
-				// If image file is not JPEG format or contains no thumbnail, StatusCode will be HttpStatusCode.NotFound.
-				Debug.WriteLine("Image file may not be JPEG format or may contain no thumbnail.");
-				throw;
-			}
 			catch (ImageNotSupportedException)
 			{
 				// This exception should not be thrown because thumbnail data is directly provided by FlashAir card.
 				return null;
 			}
-			catch
+			catch (Exception ex)
 			{
+				if ((ex.GetType() == typeof(RemoteFileNotFoundException)) ||
+					((ex.GetType() == typeof(RemoteConnectionUnableException)) &&
+					(((RemoteConnectionUnableException)ex).Code == HttpStatusCode.InternalServerError)))
+				{
+					// If image file is not JPEG format or if there is no Exif standardized thumbnail stored,
+					// StatusCode will be HttpStatusCode.NotFound. Or it may be HttpStatusCode.InternalServerError
+					// when image file is not standard JPEG format.
+					Debug.WriteLine("Image file may not be JPEG format or may contain no thumbnail.");
+					throw new RemoteFileThumbnailFailedException(remotePath);
+				}
+
 				Debug.WriteLine("Failed to get a thumbnail.");
 				throw;
 			}
@@ -308,13 +313,13 @@ namespace SnowyImageCopy.Models
 					// "SUCCESS": If succeeded.
 					// "ERROR":   If failed.
 					if (!result.Equals("SUCCESS", StringComparison.Ordinal))
-						throw new RemoteFileDeleteFailedException(String.Format("Result: {0}", result), remotePath);
+						throw new RemoteFileDeletionFailedException(String.Format("Result: {0}", result), remotePath);
 				}
 			}
 			catch (RemoteFileNotFoundException)
 			{
 				// If upload.cgi is disabled, StatusCode will be HttpStatusCode.NotFound.
-				throw new RemoteFileDeleteFailedException(remotePath);
+				throw new RemoteFileDeletionFailedException(remotePath);
 			}
 			catch
 			{
@@ -515,11 +520,11 @@ namespace SnowyImageCopy.Models
 
 		private static async Task<byte[]> DownloadBytesAsync(HttpClient client, string path, int size, IProgress<ProgressInfo> progress, CancellationToken token, CardInfo card)
 		{
-			int count = 0; // Counter for retry
+			int retryCount = 0;
 
 			while (true)
 			{
-				count++;
+				retryCount++;
 
 				try
 				{
@@ -704,7 +709,7 @@ namespace SnowyImageCopy.Models
 				}
 				catch (RemoteConnectionUnableException)
 				{
-					if (count >= retryCount)
+					if (retryCount >= retryCountMax)
 						throw;
 				}
 				catch (Exception ex)

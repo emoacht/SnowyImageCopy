@@ -425,7 +425,7 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_DeleteDisabled;
 				}
-				else if (ex.GetType() == typeof(RemoteFileDeleteFailedException))
+				else if (ex.GetType() == typeof(RemoteFileDeletionFailedException))
 				{
 					OperationStatus = Resources.OperationStatus_DeleteFailed;
 				}
@@ -558,7 +558,7 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_DeleteDisabled;
 				}
-				else if (ex.GetType() == typeof(RemoteFileDeleteFailedException))
+				else if (ex.GetType() == typeof(RemoteFileDeletionFailedException))
 				{
 					OperationStatus = Resources.OperationStatus_DeleteFailed;
 				}
@@ -800,15 +800,19 @@ namespace SnowyImageCopy.Models
 					if (!item.IsTarget || item.HasThumbnail || (item.Status == FileStatus.Copied) || !item.IsAliveRemote || !item.CanGetThumbnailRemote)
 						continue;
 
+					if (!card.CanGetThumbnail)
+						continue;
+
 					tokenSourceWorking.Token.ThrowIfCancellationRequested();
 
 					try
 					{
 						item.Thumbnail = await FileManager.GetThumbnailAsync(item.FilePath, tokenSourceWorking.Token, card);
 					}
-					catch (RemoteFileNotFoundException)
+					catch (RemoteFileThumbnailFailedException)
 					{
 						item.CanGetThumbnailRemote = false;
+						card.ThumbnailFailedPath = item.FilePath;
 					}
 				}
 
