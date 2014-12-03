@@ -225,7 +225,7 @@ namespace SnowyImageCopy.Models
 				{
 					// If image file is not JPEG format or if there is no Exif standardized thumbnail stored,
 					// StatusCode will be HttpStatusCode.NotFound. Or it may be HttpStatusCode.InternalServerError
-					// when image file is not standard JPEG format.
+					// when image file is non-standard JPEG format.
 					Debug.WriteLine("Image file may not be JPEG format or may contain no thumbnail.");
 					throw new RemoteFileThumbnailFailedException(remotePath);
 				}
