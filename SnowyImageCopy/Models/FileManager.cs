@@ -502,7 +502,8 @@ namespace SnowyImageCopy.Models
 		{
 			var bytes = await DownloadBytesAsync(client, path, 0, null, token, card);
 
-			await RecordDownloadStringAsync(path, bytes);
+			if (recordsDownloadString)
+				await RecordDownloadStringAsync(path, bytes);
 
 			// Response from FlashAir card seems to be ASCII encoded. Not certain though.
 			return Encoding.ASCII.GetString(bytes);
@@ -764,9 +765,6 @@ namespace SnowyImageCopy.Models
 		/// <param name="responseBytes">Response byte array</param>
 		private static async Task RecordDownloadStringAsync(string requestPath, byte[] responseBytes)
 		{
-			if (!recordsDownloadString)
-				return;
-
 			var filePath = Path.Combine(
 				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,

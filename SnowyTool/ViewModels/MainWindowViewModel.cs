@@ -125,7 +125,7 @@ namespace SnowyTool.ViewModels
 		}
 		private LanStartupModeOption _currentLanStartupMode;
 
-		private readonly ModeSet[] modeSetMap = new[]
+		private readonly ModeSet[] modeSetMap =
 		{
 			new ModeSet(0, LanModeOption.AccessPoint, LanStartupModeOption.Manual),
 			new ModeSet(2, LanModeOption.Station, LanStartupModeOption.Manual),

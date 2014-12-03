@@ -40,27 +40,36 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public static bool StartsAutoCheck
 		{
-			get { return CheckArgs(startsAutoCheckOptions); }
+			get { return CheckArgs(StartsAutoCheckOptions); }
 		}
-		private static readonly string[] startsAutoCheckOptions = { "/autocheck", "-autocheck", "/a", "-a" };
+		private static string[] StartsAutoCheckOptions
+		{
+			get { return new[] { "/autocheck", "-autocheck", "/a", "-a" }; }
+		}
 
 		/// <summary>
 		/// Whether to make window state minimized at startup of this application
 		/// </summary>
 		public static bool MakesWindowStateMinimized
 		{
-			get { return CheckArgs(makesWindowStateMinimizedOptions); }
+			get { return CheckArgs(MakesWindowStateMinimizedOptions); }
 		}
-		private static readonly string[] makesWindowStateMinimizedOptions = { "/minimized", "-minimized", "/m", "-m" };
+		private static string[] MakesWindowStateMinimizedOptions
+		{
+			get { return new[] { "/minimized", "-minimized", "/m", "-m" }; }
+		}
 
 		/// <summary>
 		/// Whether to record download log
 		/// </summary>
 		public static bool RecordsDownloadLog
 		{
-			get { return CheckArgs(recordsDownloadLogOptions); }
+			get { return CheckArgs(RecordsDownloadLogOptions); }
 		}
-		private static readonly string[] recordsDownloadLogOptions = { "/recordlog", "-recordlog", "/r", "-r" };
+		private static string[] RecordsDownloadLogOptions
+		{
+			get { return new[] { "/recordlog", "-recordlog", "/r", "-r" }; }
+		}
 
 
 		public static void ShowUsage()
@@ -74,9 +83,9 @@ namespace SnowyImageCopy.Models
 				"{0}: Start auto check at startup\n" +
 				"{1}: Make window state minimized at startup\n" +
 				"{2}: Record download log",
-				startsAutoCheckOptions[0],
-				makesWindowStateMinimizedOptions[0],
-				recordsDownloadLogOptions[0]);
+				StartsAutoCheckOptions[0],
+				MakesWindowStateMinimizedOptions[0],
+				RecordsDownloadLogOptions[0]);
 
 			FreeConsole();
 		}

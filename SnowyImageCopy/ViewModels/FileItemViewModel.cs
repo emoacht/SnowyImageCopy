@@ -264,7 +264,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private bool? _canLoadDataLocal;
 
-		private static readonly string[] flashAirSystemFolders = new[]
+		private static readonly string[] flashAirSystemFolders =
 		{
 			"GUPIXINF",
 			"SD_WLAN",
