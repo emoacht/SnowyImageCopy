@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -15,15 +16,22 @@ namespace SnowyImageCopy.Views.Controls
 	[TemplatePart(Name = "PART_CircleArcSegment", Type = typeof(ArcSegment))]
 	public class CircularProgressBar : ProgressBar
 	{
-		public override void OnApplyTemplate()
+		public CircularProgressBar()
+		{ }
+
+		static CircularProgressBar()
 		{
-			base.OnApplyTemplate();
+			RangeBase.ValueProperty.OverrideMetadata(
+				typeof(CircularProgressBar),
+				new FrameworkPropertyMetadata(
+					0D,
+					OnValueMaximumChanged));
 
-			circlePathBox = this.GetTemplateChild("PART_CirclePathBox") as Path;
-			circlePathFigure = this.GetTemplateChild("PART_CirclePathFigure") as PathFigure;
-			circleArcSegment = this.GetTemplateChild("PART_CircleArcSegment") as ArcSegment;
-
-			RenderArc();
+			RangeBase.MaximumProperty.OverrideMetadata(
+				typeof(CircularProgressBar),
+				new FrameworkPropertyMetadata(
+					100D,
+					OnValueMaximumChanged));
 		}
 
 
@@ -150,6 +158,23 @@ namespace SnowyImageCopy.Views.Controls
 
 		#endregion
 
+
+		public override void OnApplyTemplate()
+		{
+			base.OnApplyTemplate();
+
+			circlePathBox = this.GetTemplateChild("PART_CirclePathBox") as Path;
+			circlePathFigure = this.GetTemplateChild("PART_CirclePathFigure") as PathFigure;
+			circleArcSegment = this.GetTemplateChild("PART_CircleArcSegment") as ArcSegment;
+
+			RenderArc();
+		}
+
+		private static void OnValueMaximumChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			var circle = (CircularProgressBar)d;
+			circle.Percentage = circle.Value / circle.Maximum;
+		}
 
 		private static void OnPercentageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{

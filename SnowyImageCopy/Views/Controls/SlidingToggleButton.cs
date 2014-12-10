@@ -17,6 +17,19 @@ namespace SnowyImageCopy.Views.Controls
 	[TemplatePart(Name = "PART_ForegroundTextBlock", Type = typeof(TextBlock))]
 	public class SlidingToggleButton : Control
 	{
+		public SlidingToggleButton()
+		{ }
+
+		static SlidingToggleButton()
+		{
+			FrameworkElement.WidthProperty.OverrideMetadata(
+				typeof(SlidingToggleButton),
+				new FrameworkPropertyMetadata(
+					60D,
+					OnWidthChanged));
+		}
+
+
 		#region Template Part
 
 		private TextBox backgroundTextBox;
@@ -179,18 +192,6 @@ namespace SnowyImageCopy.Views.Controls
 
 		#endregion
 
-
-		public SlidingToggleButton()
-		{ }
-
-		static SlidingToggleButton()
-		{
-			FrameworkElement.WidthProperty.OverrideMetadata(
-				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(
-					60D,
-					OnWidthChanged));
-		}
 
 		public override void OnApplyTemplate()
 		{
