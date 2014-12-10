@@ -359,4 +359,44 @@
 		</Setter>
 	</Style>
 
+	<!-- CircularProgressBar -->
+	<Style TargetType="{x:Type controls:CircularProgressBar}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type controls:CircularProgressBar}">
+					<Grid>
+						<!-- Background ring -->
+						<Ellipse Width="{Binding Width, ElementName=PART_CirclePathBox}"
+								 Height="{Binding Height, ElementName=PART_CirclePathBox}"
+								 Stroke="{TemplateBinding RingSegmentColor}"
+								 Opacity="{TemplateBinding RingSegmentOpacity}"
+								 StrokeThickness="{TemplateBinding StrokeThickness}"/>
+
+						<!-- Foreground arc -->
+						<Path x:Name="PART_CirclePathBox"
+							  Stroke="{TemplateBinding ArcSegmentColor}"
+							  StrokeThickness="{TemplateBinding StrokeThickness}">
+							<Path.Data>
+								<PathGeometry>
+									<PathGeometry.Figures>
+										<PathFigureCollection>
+											<PathFigure x:Name="PART_CirclePathFigure">
+												<PathFigure.Segments>
+													<PathSegmentCollection>
+														<ArcSegment x:Name="PART_CircleArcSegment"
+																	SweepDirection="Clockwise"/>
+													</PathSegmentCollection>
+												</PathFigure.Segments>
+											</PathFigure>
+										</PathFigureCollection>
+									</PathGeometry.Figures>
+								</PathGeometry>
+							</Path.Data>
+						</Path>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
 </ResourceDictionary>

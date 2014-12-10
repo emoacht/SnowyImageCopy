@@ -12,6 +12,34 @@ namespace SnowyImageCopy.Views.Controls
 {
 	public class CheckTextBox : TextBox
 	{
+		public CheckTextBox()
+		{ }
+
+		static CheckTextBox()
+		{
+			TextBox.TextProperty.OverrideMetadata(
+				typeof(CheckTextBox),
+				new FrameworkPropertyMetadata(
+					String.Empty,
+					(d, e) =>
+					{
+						var textBox = (CheckTextBox)d;
+
+						textBox.CompareText(textBox.CheckText, (String)e.NewValue);
+					}));
+
+			TextBox.VisibilityProperty.OverrideMetadata(
+				typeof(CheckTextBox),
+				new FrameworkPropertyMetadata(
+					Visibility.Visible,
+					(d, e) =>
+					{
+						if ((Visibility)e.NewValue != Visibility.Visible)
+							((CheckTextBox)d).IsChecked = false;
+					}));
+		}
+
+
 		#region Property
 
 		public String MessageText
@@ -59,33 +87,6 @@ namespace SnowyImageCopy.Views.Controls
 					(d, e) => ((CheckTextBox)d).ReflectChecked((bool)e.NewValue)));
 
 		#endregion
-
-
-		public CheckTextBox() { }
-
-		static CheckTextBox()
-		{
-			TextBox.TextProperty.OverrideMetadata(
-				typeof(CheckTextBox),
-				new FrameworkPropertyMetadata(
-					String.Empty,
-					(d, e) =>
-					{
-						var textBox = (CheckTextBox)d;
-
-						textBox.CompareText(textBox.CheckText, (String)e.NewValue);
-					}));
-
-			TextBox.VisibilityProperty.OverrideMetadata(
-				typeof(CheckTextBox),
-				new FrameworkPropertyMetadata(
-					Visibility.Visible,
-					(d, e) =>
-					{
-						if ((Visibility)e.NewValue != Visibility.Visible)
-							((CheckTextBox)d).IsChecked = false;
-					}));
-		}
 
 
 		#region Message
