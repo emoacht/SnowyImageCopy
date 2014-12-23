@@ -13,9 +13,6 @@ using PerMonitorDpi.Views;
 
 namespace SnowyTool.Views
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : PerMonitorDpiWindow
 	{
 		public MainWindow()

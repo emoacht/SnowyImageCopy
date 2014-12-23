@@ -13,9 +13,6 @@ using System.Windows.Media.Imaging;
 
 namespace SnowyImageCopy.Views.Controls
 {
-	/// <summary>
-	/// Interaction logic for ThumbnailBox.xaml
-	/// </summary>
 	public partial class ThumbnailBox : UserControl
 	{
 		#region Property
