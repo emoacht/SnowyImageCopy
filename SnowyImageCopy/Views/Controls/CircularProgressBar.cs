@@ -21,6 +21,10 @@ namespace SnowyImageCopy.Views.Controls
 
 		static CircularProgressBar()
 		{
+			FrameworkElement.WidthProperty.OverrideMetadata(
+				typeof(CircularProgressBar),
+				new FrameworkPropertyMetadata(100D));
+
 			RangeBase.ValueProperty.OverrideMetadata(
 				typeof(CircularProgressBar),
 				new FrameworkPropertyMetadata(
@@ -45,20 +49,6 @@ namespace SnowyImageCopy.Views.Controls
 
 
 		#region Property
-
-		public double Radius // Outer radius
-		{
-			get { return (double)GetValue(RadiusProperty); }
-			set { SetValue(RadiusProperty, value); }
-		}
-		public static readonly DependencyProperty RadiusProperty =
-			DependencyProperty.Register(
-				"Radius",
-				typeof(double),
-				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(
-					25D,
-					OnPropertyChanged));
 
 		public double StrokeThickness
 		{
@@ -193,10 +183,12 @@ namespace SnowyImageCopy.Views.Controls
 			if ((circlePathBox == null) || (circlePathFigure == null) || (circleArcSegment == null))
 				return;
 
-			circlePathBox.Width = Radius * 2;
-			circlePathBox.Height = Radius * 2;
+			var radius = this.Width / 2D; // Outer radius
 
-			var pathRadius = Radius - StrokeThickness / 2;
+			circlePathBox.Width = radius * 2D;
+			circlePathBox.Height = radius * 2D;
+
+			var pathRadius = radius - StrokeThickness / 2D;
 
 			var startPoint = new Point(pathRadius, 0D);
 
