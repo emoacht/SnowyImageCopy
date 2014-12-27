@@ -312,7 +312,7 @@ namespace SnowyImageCopy.Models
 		{
 			if (Double.IsNaN(element.Width) || (element.Width <= 0) ||
 				Double.IsNaN(element.Height) || (element.Height <= 0))
-				throw new ArgumentException("element");
+				throw new ArgumentException("The element is invalid.", "element");
 
 			try
 			{

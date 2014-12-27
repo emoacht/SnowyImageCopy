@@ -109,6 +109,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\PropertySupport.cs" />
     <Compile Include="Helper\ShellLink.cs" />
     <Compile Include="Helper\Shortcut.cs" />
     <Compile Include="Models\CardInfo.cs" />
@@ -163,7 +164,6 @@
     <Compile Include="Helper\BitmapExtension.cs" />
     <Compile Include="Helper\BitmapImageExtension.cs" />
     <Compile Include="Helper\Designer.cs" />
-    <Compile Include="Helper\PropertySupport.cs" />
     <Compile Include="Helper\FileAddition.cs" />
     <Compile Include="Helper\OsVersion.cs" />
     <Compile Include="Helper\Recycle.cs" />

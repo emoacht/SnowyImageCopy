@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SnowyImageCopy.Helper
+namespace SnowyImageCopy.Common
 {
 	public class PropertySupport
 	{
@@ -22,7 +22,7 @@ namespace SnowyImageCopy.Helper
 
 			var memberExpression = propertyExpression.Body as MemberExpression;
 			if (memberExpression == null)
-				throw new ArgumentException("The expression is not a MemberExpression.");
+				throw new ArgumentException("The expression is not a member access expression.", "propertyExpression");
 
 			return memberExpression.Member.Name;
 		}
