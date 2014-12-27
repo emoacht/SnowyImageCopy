@@ -27,7 +27,8 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Views/Styles/DefaultTheme.xaml"/>
 				<ResourceDictionary Source="/Views/Styles/CustomTheme.xaml"/>
-				<ResourceDictionary Source="/Views/Styles/Controls.xaml"/>
+				<ResourceDictionary Source="/Views/Styles/CommonControls.xaml"/>
+				<ResourceDictionary Source="/Views/Styles/CustomControls.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
 		</ResourceDictionary>

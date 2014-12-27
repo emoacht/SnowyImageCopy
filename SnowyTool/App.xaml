@@ -13,11 +13,11 @@
             <converters:SextupleDigitConverter x:Key="SextupleDigitConverterKey"/>
             <converters:NullableBooleanToBooleanConverter x:Key="NullableBooleanToBooleanConverterKey"/>
 
-            <!-- Styles, Templates -->
+            <!-- Styles, templates -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Views/Styles/DefaultTheme.xaml"/>
-                <ResourceDictionary Source="Views/Styles/CustomTheme.xaml"/>
-                <ResourceDictionary Source="Views/Styles/Controls.xaml"/>
+                <ResourceDictionary Source="/Views/Styles/DefaultTheme.xaml"/>
+                <ResourceDictionary Source="/Views/Styles/CustomTheme.xaml"/>
+                <ResourceDictionary Source="/Views/Styles/CommonControls.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

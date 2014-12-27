@@ -65,8 +65,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Views\ProductInfo.cs" />
-    <Page Include="..\SnowyImageCopy\Views\Styles\Controls.xaml">
-      <Link>Views\Styles\Controls.xaml</Link>
+    <Page Include="..\SnowyImageCopy\Views\Styles\CommonControls.xaml">
+      <Link>Views\Styles\CommonControls.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

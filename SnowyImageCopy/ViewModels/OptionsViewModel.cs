@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 using SnowyImageCopy.Common;
-using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models;
 
 namespace SnowyImageCopy.ViewModels
