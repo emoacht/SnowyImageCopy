@@ -557,7 +557,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   This app is terminating because unexpected problem happened. Leave exception log on Desktop? に類似しているローカライズされた文字列を検索します。
+        ///   This app will terminate, because unexpected problem happened. Leave exception log on Desktop? に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string RecordException {
             get {

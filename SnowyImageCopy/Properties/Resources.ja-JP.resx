@@ -280,7 +280,7 @@
     <value>readme_jp.html#delete</value>
   </data>
   <data name="RecordException" xml:space="preserve">
-    <value>このアプリは予想外の問題が起きたため終了しています。例外のログをデスクトップに残しますか?</value>
+    <value>予想外の問題が起きたため、このアプリを終了します。例外のログをデスクトップに残しますか?</value>
   </data>
   <data name="ToastBody_CopyCompleted1st" xml:space="preserve">
     <value>FlashAirからのコピーが完了しました。</value>
