@@ -11,6 +11,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// <summary>
 	/// Bring selected item of ListBox into view.
 	/// </summary>
+	[TypeConstraint(typeof(ListBox))]
 	public sealed class ListBoxSelectedItemBehavior : Behavior<ListBox>
 	{
 		protected override void OnAttached()

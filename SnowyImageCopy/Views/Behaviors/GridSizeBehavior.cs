@@ -12,6 +12,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// <summary>
 	/// Relay change of Grid size.
 	/// </summary>
+	[TypeConstraint(typeof(Grid))]
 	public class GridSizeBehavior : Behavior<Grid>
 	{
 		#region Property
@@ -80,7 +81,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				new FrameworkPropertyMetadata(new Thickness(0D)));
 
 		/// <summary>
-		/// Whether change of Grid size is reliable for relaying.
+		/// Whether change of Grid size is reliable for relaying
 		/// </summary>
 		/// <remarks>Without setting this property, relaying will never happen.</remarks>
 		public bool IsReliable
