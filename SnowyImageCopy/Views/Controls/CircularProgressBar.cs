@@ -123,7 +123,7 @@ namespace SnowyImageCopy.Views.Controls
 				{
 					var num = (double)value;
 
-					return ((0D <= num) && (num <= 100D));
+					return (0D <= num) && (num <= 100D);
 				});
 
 		public double Angle
@@ -143,7 +143,7 @@ namespace SnowyImageCopy.Views.Controls
 				{
 					var num = (double)value;
 
-					return ((0D <= num) && (num <= 360D));
+					return (0D <= num) && (num <= 360D);
 				});
 
 		#endregion
