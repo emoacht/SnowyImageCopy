@@ -292,7 +292,7 @@ namespace SnowyImageCopy.Models
 		private DateTime LastCheckCopyTime { get; set; }
 
 		internal DateTime CopyStartTime { get; private set; }
-		private int fileCopiedSum;
+		private int countFileCopied;
 
 
 		#region 1st tier
@@ -788,6 +788,10 @@ namespace SnowyImageCopy.Models
 						item.Status = FileStatus.NotCopied;
 						item.IsAliveLocal = false;
 					}
+					catch (IOException)
+					{
+						item.CanLoadDataLocal = false;
+					}
 					catch (ImageNotSupportedException)
 					{
 						item.CanLoadDataLocal = false;
@@ -860,7 +864,7 @@ namespace SnowyImageCopy.Models
 		private async Task CopyFileBaseAsync(IProgress<ProgressInfo> progress)
 		{
 			CopyStartTime = DateTime.Now;
-			fileCopiedSum = 0;
+			countFileCopied = 0;
 
 			if (!FileListCore.Any(x => x.IsTarget && (x.Status == FileStatus.ToBeCopied)))
 			{
@@ -934,7 +938,7 @@ namespace SnowyImageCopy.Models
 						item.IsAliveLocal = true;
 						item.Status = FileStatus.Copied;
 
-						fileCopiedSum++;
+						countFileCopied++;
 					}
 					catch (RemoteFileNotFoundException)
 					{
@@ -957,7 +961,7 @@ namespace SnowyImageCopy.Models
 					}
 				}
 
-				OperationStatus = String.Format(Resources.OperationStatus_CopyCompleted, fileCopiedSum, (int)(DateTime.Now - CopyStartTime).TotalSeconds);
+				OperationStatus = String.Format(Resources.OperationStatus_CopyCompleted, countFileCopied, (int)(DateTime.Now - CopyStartTime).TotalSeconds);
 			}
 			finally
 			{
@@ -979,13 +983,13 @@ namespace SnowyImageCopy.Models
 			if (!OsVersion.IsEightOrNewer)
 				return;
 
-			if ((fileCopiedSum <= 0) || (DateTime.Now - CopyStartTime < toastThresholdLength))
+			if ((countFileCopied <= 0) || (DateTime.Now - CopyStartTime < toastThresholdLength))
 				return;
 
 			var result = await ToastManager.ShowAsync(
 				Resources.ToastHeadline_CopyCompleted,
 				Resources.ToastBody_CopyCompleted1st,
-				String.Format(Resources.ToastBody_CopyCompleted2nd, fileCopiedSum, (int)(DateTime.Now - CopyStartTime).TotalSeconds));
+				String.Format(Resources.ToastBody_CopyCompleted2nd, countFileCopied, (int)(DateTime.Now - CopyStartTime).TotalSeconds));
 
 			if (result == ToastResult.Activated)
 				IsWindowActivateRequested = true; // Activating Window is requested.
@@ -1015,6 +1019,10 @@ namespace SnowyImageCopy.Models
 			{
 				item.Status = FileStatus.NotCopied;
 				item.IsAliveLocal = false;
+			}
+			catch (IOException)
+			{
+				item.CanLoadDataLocal = false;
 			}
 			finally
 			{
