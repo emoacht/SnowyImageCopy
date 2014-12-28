@@ -392,12 +392,12 @@ namespace SnowyImageCopy.ViewModels
 		/// <param name="remoteDirectoryPath">Remote directory path used to get the list</param>
 		internal void Import(string source, string remoteDirectoryPath)
 		{
-			if (String.IsNullOrEmpty(source))
+			if (String.IsNullOrWhiteSpace(source))
 				return;
 
 			var sourceWithoutDirectory = source.Trim();
 
-			if (!String.IsNullOrEmpty(remoteDirectoryPath))
+			if (!String.IsNullOrWhiteSpace(remoteDirectoryPath))
 			{
 				// Check if source string has enough length (typically in the case of WLANSD_FILELIST).
 				if (source.Length <= remoteDirectoryPath.Length)

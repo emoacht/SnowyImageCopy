@@ -660,7 +660,7 @@ namespace SnowyImageCopy.Helper
 		#endregion
 
 
-		#region Internal Method
+		#region Load/Save
 
 		/// <summary>
 		/// Load shortcut file.
@@ -668,7 +668,7 @@ namespace SnowyImageCopy.Helper
 		/// <param name="filePath">Path of shortcut file</param>
 		internal void Load(string filePath)
 		{
-			if (String.IsNullOrEmpty(filePath))
+			if (String.IsNullOrWhiteSpace(filePath))
 				throw new ArgumentNullException("filePath");
 
 			if (!File.Exists(filePath))
@@ -691,7 +691,7 @@ namespace SnowyImageCopy.Helper
 		/// <param name="filePath">Path of shortcut file</param>
 		internal void Save(string filePath)
 		{
-			if (String.IsNullOrEmpty(filePath))
+			if (String.IsNullOrWhiteSpace(filePath))
 				throw new ArgumentNullException("filePath");
 
 			this.PersistFile.Save(filePath, true);
@@ -700,7 +700,7 @@ namespace SnowyImageCopy.Helper
 		#endregion
 
 
-		#region Private Method
+		#region Helper
 
 		/// <summary>
 		/// Verify if operation succeeded.

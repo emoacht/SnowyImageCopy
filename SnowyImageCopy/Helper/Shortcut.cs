@@ -48,6 +48,9 @@ namespace SnowyImageCopy.Helper
 		/// <param name="iconPath">Path of file that contains an icon to be used for shortcut file</param>
 		public void InstallShortcut(string shortcutPath, string targetPath, string argument, string appId, string iconPath)
 		{
+			if (String.IsNullOrWhiteSpace(shortcutPath))
+				throw new ArgumentNullException("shortcutPath");
+
 			try
 			{
 				using (var shortcut = new ShellLink()

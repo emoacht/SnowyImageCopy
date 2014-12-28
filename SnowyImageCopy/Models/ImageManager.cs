@@ -37,7 +37,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="localPath">Local file path</param>
 		internal static async Task<BitmapImage> ReadThumbnailAsync(string localPath)
 		{
-			if (String.IsNullOrEmpty(localPath))
+			if (String.IsNullOrWhiteSpace(localPath))
 				throw new ArgumentNullException("localPath");
 
 			if (!File.Exists(localPath))
@@ -97,7 +97,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="localPath">Local file path</param>
 		internal static async Task<BitmapImage> CreateThumbnailAsync(string localPath)
 		{
-			if (String.IsNullOrEmpty(localPath))
+			if (String.IsNullOrWhiteSpace(localPath))
 				throw new ArgumentNullException("localPath");
 
 			if (!File.Exists(localPath))

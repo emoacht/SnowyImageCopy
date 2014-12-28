@@ -678,7 +678,7 @@ namespace SnowyImageCopy.Models
 
 				// Check SSID.
 				card.Ssid = await FileManager.GetSsidAsync(tokenSourceWorking.Token);
-				if (!String.IsNullOrEmpty(card.Ssid))
+				if (!String.IsNullOrWhiteSpace(card.Ssid))
 				{
 					// Check if PC is connected to FlashAir card by wireless network.
 					var checkTask = Task.Run(async () =>
@@ -907,7 +907,7 @@ namespace SnowyImageCopy.Models
 						var localPath = ComposeLocalPath(item);
 
 						var localDirectory = Path.GetDirectoryName(localPath);
-						if (!String.IsNullOrEmpty(localDirectory) && !Directory.Exists(localDirectory))
+						if (!Directory.Exists(localDirectory))
 							Directory.CreateDirectory(localDirectory);
 
 						var data = await FileManager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, tokenSourceWorking.Token, card);
@@ -982,8 +982,7 @@ namespace SnowyImageCopy.Models
 			if ((fileCopiedSum <= 0) || (DateTime.Now - CopyStartTime < toastThresholdLength))
 				return;
 
-			var t = new ToastManager();
-			var result = await t.ShowAsync(
+			var result = await ToastManager.ShowAsync(
 				Resources.ToastHeadline_CopyCompleted,
 				Resources.ToastBody_CopyCompleted1st,
 				String.Format(Resources.ToastBody_CopyCompleted2nd, fileCopiedSum, (int)(DateTime.Now - CopyStartTime).TotalSeconds));
@@ -1040,10 +1039,9 @@ namespace SnowyImageCopy.Models
 		/// <param name="item">Target item</param>
 		private static string ComposeLocalPath(FileItemViewModel item)
 		{
-			if (String.IsNullOrEmpty((item.FileName)))
-				throw new InvalidOperationException("FileName property is empty.");
-
 			var fileName = item.FileName;
+			if (String.IsNullOrWhiteSpace((fileName)))
+				throw new InvalidOperationException("FileName property is empty.");					
 
 			if (Settings.Current.MakesFileExtensionLowerCase)
 			{

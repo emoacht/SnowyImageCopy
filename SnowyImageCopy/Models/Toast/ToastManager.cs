@@ -22,30 +22,13 @@ namespace SnowyImageCopy.Models.Toast
 		#region Constant
 
 		/// <summary>
-		/// Shortcut file of this application to be installed in Start menu
-		/// </summary>
-		private readonly string shortcutFile;
-
-		/// <summary>
-		/// AppUserModelID of this application
-		/// </summary>
-		private readonly string appId;
-
-		/// <summary>
 		/// Waiting time length before showing a toast after the shortcut file is newly installed.
 		/// </summary>
 		/// <remarks>As far as I observed, roughly 3 seconds are required.</remarks>
-		private readonly TimeSpan waitingLength = TimeSpan.FromSeconds(3);
+		private static readonly TimeSpan waitingLength = TimeSpan.FromSeconds(3);
 
 		#endregion
 
-
-		internal ToastManager()
-		{
-			// Read from Settings.settings.
-			shortcutFile = Properties.Settings.Default.ShortcutFile;
-			appId = Properties.Settings.Default.AppId;
-		}
 
 		/// <summary>
 		/// Show a toast.
@@ -53,7 +36,7 @@ namespace SnowyImageCopy.Models.Toast
 		/// <param name="headline">A toast's headline</param>
 		/// <param name="body">A toast's body</param>
 		/// <returns>Result of showing a toast</returns>
-		internal async Task<ToastResult> ShowAsync(string headline, string body)
+		internal static async Task<ToastResult> ShowAsync(string headline, string body)
 		{
 			return await ShowAsync(headline, body, String.Empty);
 		}
@@ -65,10 +48,14 @@ namespace SnowyImageCopy.Models.Toast
 		/// <param name="body1st">A toast's body (1st line)</param>
 		/// <param name="body2nd">A toast's body (2nd line, optional)</param>
 		/// <returns>Result of showing a toast</returns>
-		internal async Task<ToastResult> ShowAsync(string headline, string body1st, string body2nd)
+		internal static async Task<ToastResult> ShowAsync(string headline, string body1st, string body2nd)
 		{
 			if (!OsVersion.IsEightOrNewer)
 				return ToastResult.Unavailable;
+
+			// Read from Settings.settings.
+			var shortcutFile = Properties.Settings.Default.ShortcutFile;
+			var appId = Properties.Settings.Default.AppId;
 
 			var shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), // Not CommonStartMenu
 				"Programs", shortcutFile);
@@ -101,8 +88,11 @@ namespace SnowyImageCopy.Models.Toast
 		/// <param name="body1st">A toast's body (1st line)</param>
 		/// <param name="body2nd">A toast's body (2nd line, optional)</param>
 		/// <returns>Result of showing a toast</returns>
-		private async Task<ToastResult> ShowBaseAsync(string headline, string body1st, string body2nd)
+		private static async Task<ToastResult> ShowBaseAsync(string headline, string body1st, string body2nd)
 		{
+			// Read from Settings.settings.
+			var appId = Properties.Settings.Default.AppId;
+
 			// Get a toast XML template (ToastText02 or ToastText04).
 			var document = ToastNotificationManager.GetTemplateContent(String.IsNullOrEmpty(body2nd)
 				? ToastTemplateType.ToastText02

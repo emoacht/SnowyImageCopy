@@ -135,7 +135,7 @@ namespace SnowyImageCopy.Models
 		/// <remarks>This method is not actually used.</remarks>
 		internal static async Task<List<FileItemViewModel>> GetFileListAsync(string remoteDirectoryPath, CancellationToken token, CardInfo card)
 		{
-			if (String.IsNullOrEmpty(remoteDirectoryPath))
+			if (String.IsNullOrWhiteSpace(remoteDirectoryPath))
 				throw new ArgumentNullException("remoteDirectoryPath");
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.GetFileList, remoteDirectoryPath);
@@ -168,7 +168,7 @@ namespace SnowyImageCopy.Models
 		/// <remarks>This method is not actually used.</remarks>
 		internal static async Task<int> GetFileNumAsync(string remoteDirectoryPath, CancellationToken token, CardInfo card)
 		{
-			if (String.IsNullOrEmpty(remoteDirectoryPath))
+			if (String.IsNullOrWhiteSpace(remoteDirectoryPath))
 				throw new ArgumentNullException("remoteDirectoryPath");
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.GetFileNum, remoteDirectoryPath);
@@ -198,7 +198,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="card">FlashAir card information</param>
 		internal static async Task<BitmapImage> GetThumbnailAsync(string remoteFilePath, CancellationToken token, CardInfo card)
 		{
-			if (String.IsNullOrEmpty(remoteFilePath))
+			if (String.IsNullOrWhiteSpace(remoteFilePath))
 				throw new ArgumentNullException("remoteFilePath");
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.GetThumbnail, remoteFilePath);
@@ -249,9 +249,10 @@ namespace SnowyImageCopy.Models
 		/// <returns>Byte array of the file</returns>
 		internal static async Task<byte[]> GetSaveFileAsync(string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool canReadExif, IProgress<ProgressInfo> progress, CancellationToken token, CardInfo card)
 		{
-			if (String.IsNullOrEmpty(remoteFilePath))
+			if (String.IsNullOrWhiteSpace(remoteFilePath))
 				throw new ArgumentNullException("remoteFilePath");
-			if (String.IsNullOrEmpty(localFilePath))
+
+			if (String.IsNullOrWhiteSpace(localFilePath))
 				throw new ArgumentNullException("localFilePath");
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.None, remoteFilePath);
@@ -299,7 +300,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="token">CancellationToken</param>
 		internal static async Task DeleteFileAsync(string remoteFilePath, CancellationToken token)
 		{
-			if (String.IsNullOrEmpty(remoteFilePath))
+			if (String.IsNullOrWhiteSpace(remoteFilePath))
 				throw new ArgumentNullException("remoteFilePath");
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.DeleteFile, remoteFilePath);

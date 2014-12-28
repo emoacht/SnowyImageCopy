@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Models.Network
 			if (!NetworkInterface.GetIsNetworkAvailable())
 				return false;
 
-			if ((card == null) || String.IsNullOrEmpty(card.Ssid) || !card.IsWirelessConnected)
+			if ((card == null) || String.IsNullOrWhiteSpace(card.Ssid) || !card.IsWirelessConnected)
 				return true;
 
 			return await IsWirelessNetworkConnectedAsync(card.Ssid);
@@ -43,7 +43,7 @@ namespace SnowyImageCopy.Models.Network
 		/// <param name="ssid">SSID of wireless network</param>
 		internal static async Task<bool> IsWirelessNetworkConnectedAsync(string ssid)
 		{
-			if (String.IsNullOrEmpty(ssid))
+			if (String.IsNullOrWhiteSpace(ssid))
 				throw new ArgumentNullException("ssid");
 
 			if (NetworkInterface.GetAllNetworkInterfaces()
@@ -150,7 +150,7 @@ namespace SnowyImageCopy.Models.Network
 			}
 
 			return interfaceInfoList
-				.Where(x => x.IsConnected && !String.IsNullOrEmpty(x.Ssid))
+				.Where(x => x.IsConnected && !String.IsNullOrWhiteSpace(x.Ssid))
 				.Select(x => x.Ssid)
 				.ToArray();
 		}

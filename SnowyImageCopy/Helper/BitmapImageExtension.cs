@@ -42,6 +42,7 @@ namespace SnowyImageCopy.Helper
 		{
 			if (source == null)
 				throw new ArgumentNullException("source");
+
 			if (String.IsNullOrEmpty(filePath))
 				throw new ArgumentNullException("filePath");
 

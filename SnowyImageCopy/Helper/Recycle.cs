@@ -85,6 +85,9 @@ namespace SnowyImageCopy.Helper
 		/// <param name="filePath">Target file path</param>
 		public static void MoveToRecycle(string filePath)
 		{
+			if (String.IsNullOrWhiteSpace(filePath))
+				return;
+
 			MoveToRecycle(new[] { filePath });
 		}
 
@@ -94,6 +97,9 @@ namespace SnowyImageCopy.Helper
 		/// <param name="filePaths">Target file paths</param>
 		public static void MoveToRecycle(IEnumerable<string> filePaths)
 		{
+			if ((filePaths == null) || !filePaths.Any())
+				return;
+
 			var filePathCombined = String.Join("\0", filePaths) + '\0' + '\0';
 
 			try
