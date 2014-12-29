@@ -6,9 +6,6 @@ using System.Windows;
 
 namespace SnowyTool
 {
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
 	public partial class App : Application
 	{
 	}

@@ -121,15 +121,15 @@
 				<Grid Grid.Column="2"
 					  Width="82" Height="82" VerticalAlignment="Top">
 					<controls:CircularProgressBar
-						HorizontalAlignment="Center" VerticalAlignment="Center"
-						Radius="41" StrokeThickness="7"
+						Width="82" HorizontalAlignment="Center" VerticalAlignment="Center"
+						StrokeThickness="7"
 						ArcSegmentColor="{StaticResource Progress.ArcSegment.Current}"
 						RingSegmentColor="{StaticResource Progress.RingSegment}"
 						RingSegmentOpacity="0.11"
 						Percentage="{Binding ProgressCopiedCurrent}"/>
 					<controls:CircularProgressBar
-						HorizontalAlignment="Center" VerticalAlignment="Center"
-						Radius="34.2" StrokeThickness="14"
+						Width="68.4" HorizontalAlignment="Center" VerticalAlignment="Center"
+						StrokeThickness="14"
 						ArcSegmentColor="{StaticResource Progress.ArcSegment.All}"
 						RingSegmentColor="{StaticResource Progress.RingSegment}"
 						RingSegmentOpacity="0.11"

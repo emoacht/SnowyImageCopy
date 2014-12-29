@@ -32,7 +32,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public static bool ShowsUsage
 		{
-			get { return CheckArgs(new[] { "/?", "-?" }); }
+			get { return CheckArgs("/?", "-?"); }
 		}
 
 		/// <summary>
@@ -95,7 +95,7 @@ namespace SnowyImageCopy.Models
 
 		private static string[] args;
 
-		private static bool CheckArgs(IEnumerable<string> options)
+		private static bool CheckArgs(params string[] options)
 		{
 			if (args == null)
 			{
@@ -105,7 +105,7 @@ namespace SnowyImageCopy.Models
 					.ToArray();
 			}
 
-			return args.Any() && args.Intersect(options).Any();
+			return args.Any() && options.Any() && args.Intersect(options).Any();
 		}
 
 		#endregion

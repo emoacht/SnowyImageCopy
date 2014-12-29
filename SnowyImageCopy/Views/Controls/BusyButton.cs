@@ -17,11 +17,6 @@ namespace SnowyImageCopy.Views.Controls
 	//[TemplateVisualState(Name = "Unfocused", GroupName = "FocusedStates")]
 	public class BusyButton : Button
 	{
-		public BusyButton()
-		{
-		}
-
-
 		#region Property
 
 		public bool IsBusy

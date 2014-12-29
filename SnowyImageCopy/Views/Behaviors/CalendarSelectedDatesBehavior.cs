@@ -14,6 +14,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// <summary>
 	/// Get/Set SelectedDates property of Calendar as Dependency Property.
 	/// </summary>
+	[TypeConstraint(typeof(Calendar))]
 	public class CalendarSelectedDatesBehavior : Behavior<Calendar>
 	{
 		#region Property
@@ -92,7 +93,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			SelectedDates = new ObservableCollection<DateTime>(SelectedDates.Distinct());
 
 			// Release mouse capture because Calendar control captures mouse when it is clicked and so 
-			// prevents other controls from responding to the first click after Calendar.
+			// prevents other controls from responding to the first click after it.
 			Mouse.Capture(null);
 		}
 	}

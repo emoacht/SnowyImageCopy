@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +11,9 @@ using System.Windows.Markup;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Set Language property of FrameworkElement.
+	/// Set FrameworkElement language.
 	/// </summary>
+	[TypeConstraint(typeof(FrameworkElement))]
 	public class FrameworkElementLanguageBehavior : Behavior<FrameworkElement>
 	{
 		#region Property
@@ -33,12 +35,20 @@ namespace SnowyImageCopy.Views.Behaviors
 		#endregion
 
 
-		private void SetLanguage(string ietfCultureTag)
+		private void SetLanguage(string ietfLanguageTag)
 		{
-			if (String.IsNullOrEmpty(ietfCultureTag))
+			if (String.IsNullOrEmpty(ietfLanguageTag))
 				return;
 
-			this.AssociatedObject.Language = XmlLanguage.GetLanguage(ietfCultureTag);
+			try
+			{
+				this.AssociatedObject.Language = XmlLanguage.GetLanguage(ietfLanguageTag);
+			}
+			catch
+			{
+				Debug.WriteLine("Failed to set FrameworkElement language.");
+				throw;
+			}
 		}
 	}
 }

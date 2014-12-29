@@ -10,6 +10,13 @@ namespace SnowyImageCopy.Views.Controls
 {
 	public class HideableGridSplitter : GridSplitter
 	{
+		public HideableGridSplitter()
+		{
+			this.Initialized += OnInitialized;
+			this.IsVisibleChanged += OnVisibleChanged;
+		}
+		
+
 		#region Property
 
 		/// <summary>
@@ -32,15 +39,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private GridLength rightColumnWidth; // Width of Column at the right of this splitter
 		private GridLength bottomRowHeight; // Height of Row at the bottom of this splitter
-
-
-		public HideableGridSplitter()
-		{
-			this.Initialized += OnInitialized;
-			this.IsVisibleChanged += OnVisibleChanged;
-		}
-
-
+		
 		private void OnInitialized(object sender, EventArgs e)
 		{
 			var parent = base.Parent as Grid;

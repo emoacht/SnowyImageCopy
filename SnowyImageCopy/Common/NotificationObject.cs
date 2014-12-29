@@ -23,7 +23,7 @@ namespace SnowyImageCopy.Common
 
 			var memberExpression = propertyExpression.Body as MemberExpression;
 			if (memberExpression == null)
-				throw new ArgumentException("The expression is not a MemberExpression.");
+				throw new ArgumentException("The expression is not a member access expression.", "propertyExpression");
 
 			RaisePropertyChanged(memberExpression.Member.Name);
 		}

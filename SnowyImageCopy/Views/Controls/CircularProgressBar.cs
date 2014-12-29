@@ -5,40 +5,50 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace SnowyImageCopy.Views.Controls
 {
-	/// <summary>
-	/// Interaction logic for CircularProgressBar.xaml
-	/// </summary>
-	public partial class CircularProgressBar : UserControl
+	[TemplatePart(Name = "PART_CirclePathBox", Type = typeof(Path))]
+	[TemplatePart(Name = "PART_CirclePathFigure", Type = typeof(PathFigure))]
+	[TemplatePart(Name = "PART_CircleArcSegment", Type = typeof(ArcSegment))]
+	public class CircularProgressBar : ProgressBar
 	{
 		public CircularProgressBar()
+		{ }
+
+		static CircularProgressBar()
 		{
-			InitializeComponent();
+			FrameworkElement.WidthProperty.OverrideMetadata(
+				typeof(CircularProgressBar),
+				new FrameworkPropertyMetadata(100D));
+
+			RangeBase.ValueProperty.OverrideMetadata(
+				typeof(CircularProgressBar),
+				new FrameworkPropertyMetadata(
+					0D,
+					OnValueMaximumChanged));
+
+			RangeBase.MaximumProperty.OverrideMetadata(
+				typeof(CircularProgressBar),
+				new FrameworkPropertyMetadata(
+					100D,
+					OnValueMaximumChanged));
 		}
+
+
+		#region Template Part
+
+		private Path circlePathBox;
+		private PathFigure circlePathFigure;
+		private ArcSegment circleArcSegment;
+
+		#endregion
 
 
 		#region Property
-
-		public double Radius // Outer radius
-		{
-			get { return (double)GetValue(RadiusProperty); }
-			set { SetValue(RadiusProperty, value); }
-		}
-		public static readonly DependencyProperty RadiusProperty =
-			DependencyProperty.Register(
-				"Radius",
-				typeof(double),
-				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(
-					25D,
-					OnPropertyChanged));
 
 		public double StrokeThickness
 		{
@@ -113,7 +123,7 @@ namespace SnowyImageCopy.Views.Controls
 				{
 					var num = (double)value;
 
-					return ((0D <= num) && (num <= 100D));
+					return (0D <= num) && (num <= 100D);
 				});
 
 		public double Angle
@@ -133,11 +143,28 @@ namespace SnowyImageCopy.Views.Controls
 				{
 					var num = (double)value;
 
-					return ((0D <= num) && (num <= 360D));
+					return (0D <= num) && (num <= 360D);
 				});
 
 		#endregion
 
+
+		public override void OnApplyTemplate()
+		{
+			base.OnApplyTemplate();
+
+			circlePathBox = this.GetTemplateChild("PART_CirclePathBox") as Path;
+			circlePathFigure = this.GetTemplateChild("PART_CirclePathFigure") as PathFigure;
+			circleArcSegment = this.GetTemplateChild("PART_CircleArcSegment") as ArcSegment;
+
+			RenderArc();
+		}
+
+		private static void OnValueMaximumChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			var circle = (CircularProgressBar)d;
+			circle.Percentage = circle.Value / circle.Maximum;
+		}
 
 		private static void OnPercentageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -151,13 +178,17 @@ namespace SnowyImageCopy.Views.Controls
 			circle.RenderArc();
 		}
 
-
 		private void RenderArc()
 		{
-			CirclePathBox.Width = Radius * 2;
-			CirclePathBox.Height = Radius * 2;
+			if ((circlePathBox == null) || (circlePathFigure == null) || (circleArcSegment == null))
+				return;
 
-			var pathRadius = Radius - StrokeThickness / 2;
+			var radius = this.Width / 2D; // Outer radius
+
+			circlePathBox.Width = radius * 2D;
+			circlePathBox.Height = radius * 2D;
+
+			var pathRadius = radius - StrokeThickness / 2D;
 
 			var startPoint = new Point(pathRadius, 0D);
 
@@ -171,14 +202,13 @@ namespace SnowyImageCopy.Views.Controls
 				(Math.Abs(endPoint.Y - startPoint.Y) < 0.01))
 				endPoint.X -= 0.01;
 
-			CirclePathFigure.StartPoint = startPoint;
+			circlePathFigure.StartPoint = startPoint;
 
-			CircleArcSegment.Point = endPoint;
-			CircleArcSegment.Size = new Size(pathRadius, pathRadius);
-			CircleArcSegment.IsLargeArc = (Angle > 180D);
+			circleArcSegment.Point = endPoint;
+			circleArcSegment.Size = new Size(pathRadius, pathRadius);
+			circleArcSegment.IsLargeArc = (Angle > 180D);
 
-			CirclePathTransform.X = StrokeThickness / 2;
-			CirclePathTransform.Y = StrokeThickness / 2;
+			circlePathBox.RenderTransform = new TranslateTransform(StrokeThickness / 2, StrokeThickness / 2);
 		}
 
 		private static Point GetCartesianCoordinate(double angle, double radius)

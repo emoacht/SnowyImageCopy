@@ -14,7 +14,7 @@ namespace SnowyTool.Helper
 				throw new ArgumentNullException("source");
 
 			if (Char.IsWhiteSpace(separator))
-				throw new ArgumentException("separator");
+				throw new ArgumentException("The separator is invalid.", "separator");
 
 			var content = new Dictionary<string, string>();
 

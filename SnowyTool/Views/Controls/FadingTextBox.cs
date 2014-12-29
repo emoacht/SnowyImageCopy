@@ -11,6 +11,28 @@ namespace SnowyTool.Views.Controls
 {
 	public class FadingTextBox : TextBox
 	{
+		public FadingTextBox()
+		{ }
+
+		static FadingTextBox()
+		{
+			TextBox.TextProperty.OverrideMetadata(
+				typeof(FadingTextBox),
+				new FrameworkPropertyMetadata(
+					String.Empty,
+					null,
+					(d, baseValue) =>
+					{
+						// Using coerceValueCallback instead of propertyChangedCallback is for the case that 
+						// source value is the same.
+						if (!String.IsNullOrEmpty((String)baseValue))
+							((FadingTextBox)d).ManageText();
+
+						return (String)baseValue;
+					}));
+		}
+
+
 		#region Property
 
 		public double FadeOutTime // sec
@@ -30,26 +52,6 @@ namespace SnowyTool.Views.Controls
 
 		#endregion
 
-
-		public FadingTextBox() { }
-
-		static FadingTextBox()
-		{
-			TextBox.TextProperty.OverrideMetadata(
-				typeof(FadingTextBox),
-				new FrameworkPropertyMetadata(
-					String.Empty,
-					null,
-					(d, baseValue) =>
-					{
-						// Using coerceValueCallback instead of propertyChangedCallback is for the case that 
-						// source value is the same.
-						if (!String.IsNullOrEmpty((String)baseValue))
-							((FadingTextBox)d).ManageText();
-
-						return (String)baseValue;
-					}));
-		}
 
 		private DispatcherTimer fadingTimer;
 

@@ -14,9 +14,6 @@ using SnowyImageCopy.Views;
 
 namespace SnowyImageCopy
 {
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
 	public partial class App : Application
 	{
 		public App()
@@ -87,7 +84,7 @@ namespace SnowyImageCopy
 			try
 			{
 				var folderPathAppData = Path.GetDirectoryName(filePathAppData);
-				if (!String.IsNullOrEmpty(folderPathAppData) && !Directory.Exists(folderPathAppData))
+				if (!Directory.Exists(folderPathAppData))
 					Directory.CreateDirectory(folderPathAppData);
 
 				File.AppendAllText(filePathAppData, content);

@@ -18,6 +18,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
+Ver 0.9.8 2014-12-29
+
+ - Fixed exception when total file size in specified dates exceeds 2GiB
+
 Ver 0.9.7 2014-12-4
 
  - Added command line arguments to start auto check automatically

@@ -206,7 +206,7 @@ namespace SnowyImageCopy.Models
 
 		private static Version FindVersionNumber(string source)
 		{
-			if (String.IsNullOrEmpty(source))
+			if (String.IsNullOrWhiteSpace(source))
 				return null;
 
 			var match = versionPattern.Match(source);

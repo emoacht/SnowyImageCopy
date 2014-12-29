@@ -292,7 +292,7 @@ namespace SnowyImageCopy.Models
 		private DateTime LastCheckCopyTime { get; set; }
 
 		internal DateTime CopyStartTime { get; private set; }
-		private int fileCopiedSum;
+		private int countFileCopied;
 
 
 		#region 1st tier
@@ -678,7 +678,7 @@ namespace SnowyImageCopy.Models
 
 				// Check SSID.
 				card.Ssid = await FileManager.GetSsidAsync(tokenSourceWorking.Token);
-				if (!String.IsNullOrEmpty(card.Ssid))
+				if (!String.IsNullOrWhiteSpace(card.Ssid))
 				{
 					// Check if PC is connected to FlashAir card by wireless network.
 					var checkTask = Task.Run(async () =>
@@ -788,6 +788,10 @@ namespace SnowyImageCopy.Models
 						item.Status = FileStatus.NotCopied;
 						item.IsAliveLocal = false;
 					}
+					catch (IOException)
+					{
+						item.CanLoadDataLocal = false;
+					}
 					catch (ImageNotSupportedException)
 					{
 						item.CanLoadDataLocal = false;
@@ -860,7 +864,7 @@ namespace SnowyImageCopy.Models
 		private async Task CopyFileBaseAsync(IProgress<ProgressInfo> progress)
 		{
 			CopyStartTime = DateTime.Now;
-			fileCopiedSum = 0;
+			countFileCopied = 0;
 
 			if (!FileListCore.Any(x => x.IsTarget && (x.Status == FileStatus.ToBeCopied)))
 			{
@@ -907,7 +911,7 @@ namespace SnowyImageCopy.Models
 						var localPath = ComposeLocalPath(item);
 
 						var localDirectory = Path.GetDirectoryName(localPath);
-						if (!String.IsNullOrEmpty(localDirectory) && !Directory.Exists(localDirectory))
+						if (!Directory.Exists(localDirectory))
 							Directory.CreateDirectory(localDirectory);
 
 						var data = await FileManager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, tokenSourceWorking.Token, card);
@@ -934,7 +938,7 @@ namespace SnowyImageCopy.Models
 						item.IsAliveLocal = true;
 						item.Status = FileStatus.Copied;
 
-						fileCopiedSum++;
+						countFileCopied++;
 					}
 					catch (RemoteFileNotFoundException)
 					{
@@ -957,7 +961,7 @@ namespace SnowyImageCopy.Models
 					}
 				}
 
-				OperationStatus = String.Format(Resources.OperationStatus_CopyCompleted, fileCopiedSum, (int)(DateTime.Now - CopyStartTime).TotalSeconds);
+				OperationStatus = String.Format(Resources.OperationStatus_CopyCompleted, countFileCopied, (int)(DateTime.Now - CopyStartTime).TotalSeconds);
 			}
 			finally
 			{
@@ -979,14 +983,13 @@ namespace SnowyImageCopy.Models
 			if (!OsVersion.IsEightOrNewer)
 				return;
 
-			if ((fileCopiedSum <= 0) || (DateTime.Now - CopyStartTime < toastThresholdLength))
+			if ((countFileCopied <= 0) || (DateTime.Now - CopyStartTime < toastThresholdLength))
 				return;
 
-			var t = new ToastManager();
-			var result = await t.ShowAsync(
+			var result = await ToastManager.ShowAsync(
 				Resources.ToastHeadline_CopyCompleted,
 				Resources.ToastBody_CopyCompleted1st,
-				String.Format(Resources.ToastBody_CopyCompleted2nd, fileCopiedSum, (int)(DateTime.Now - CopyStartTime).TotalSeconds));
+				String.Format(Resources.ToastBody_CopyCompleted2nd, countFileCopied, (int)(DateTime.Now - CopyStartTime).TotalSeconds));
 
 			if (result == ToastResult.Activated)
 				IsWindowActivateRequested = true; // Activating Window is requested.
@@ -1017,6 +1020,10 @@ namespace SnowyImageCopy.Models
 				item.Status = FileStatus.NotCopied;
 				item.IsAliveLocal = false;
 			}
+			catch (IOException)
+			{
+				item.CanLoadDataLocal = false;
+			}
 			finally
 			{
 				if (tokenSourceLoading != null)
@@ -1040,10 +1047,9 @@ namespace SnowyImageCopy.Models
 		/// <param name="item">Target item</param>
 		private static string ComposeLocalPath(FileItemViewModel item)
 		{
-			if (String.IsNullOrEmpty((item.FileName)))
-				throw new InvalidOperationException("FileName property is empty.");
-
 			var fileName = item.FileName;
+			if (String.IsNullOrWhiteSpace((fileName)))
+				throw new InvalidOperationException("FileName property is empty.");					
 
 			if (Settings.Current.MakesFileExtensionLowerCase)
 			{

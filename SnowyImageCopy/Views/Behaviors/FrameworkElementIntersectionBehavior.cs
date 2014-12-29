@@ -13,6 +13,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// <summary>
 	/// Check intersection of multiple FrameworkElements.
 	/// </summary>
+	[TypeConstraint(typeof(FrameworkElement))]
 	public class FrameworkElementIntersectionBehavior : Behavior<FrameworkElement>
 	{
 		#region Property
@@ -51,7 +52,7 @@ namespace SnowyImageCopy.Views.Behaviors
 					(d, e) => ((FrameworkElementIntersectionBehavior)d).CheckIntersection()));
 
 		/// <summary>
-		/// Expanded margin of this FrameworkElement for checking.
+		/// Expanded margin of this FrameworkElement for checking
 		/// </summary>
 		public Thickness ExpandedMargin
 		{
@@ -66,7 +67,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				new FrameworkPropertyMetadata(new Thickness(0D)));
 
 		/// <summary>
-		/// Whether this FrameworkElement is intersected with target FrameworkElement.
+		/// Whether this FrameworkElement is intersected with target FrameworkElement
 		/// </summary>
 		public bool IsIntersected
 		{

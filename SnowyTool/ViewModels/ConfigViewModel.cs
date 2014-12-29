@@ -638,7 +638,7 @@ namespace SnowyTool.ViewModels
 		private static string GetNullOrLimited(string source, int maxLength)
 		{
 			if (maxLength < 0)
-				throw new ArgumentException("maxLength");
+				throw new ArgumentOutOfRangeException("maxLength");
 
 			if (String.IsNullOrWhiteSpace(source))
 				return null;

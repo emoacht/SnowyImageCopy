@@ -16,9 +16,6 @@ using SnowyImageCopy.Views.Controls;
 
 namespace SnowyImageCopy.Views
 {
-	/// <summary>
-	/// Interaction logic for Options.xaml
-	/// </summary>
 	public partial class Options : UserControl
 	{
 		public Options()

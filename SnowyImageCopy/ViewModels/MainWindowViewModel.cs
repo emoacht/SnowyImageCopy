@@ -170,11 +170,11 @@ namespace SnowyImageCopy.ViewModels
 
 			var sizeTotal = fileListBuff
 				.Where(x => (x.Status != FileStatus.Recycled))
-				.Sum(x => x.Size);
+				.Sum(x => (long)x.Size);
 
 			var sizeCopied = fileListBuff
 				.Where(x => (x.Status == FileStatus.Copied))
-				.Sum(x => x.Size);
+				.Sum(x => (long)x.Size);
 
 			if (sizeTotal == 0)
 			{
@@ -189,11 +189,11 @@ namespace SnowyImageCopy.ViewModels
 
 			var sizeCopiedCurrent = fileListBuff
 				.Where(x => (x.Status == FileStatus.Copied) && (Op.CopyStartTime < x.CopiedTime))
-				.Sum(x => x.Size);
+				.Sum(x => (long)x.Size);
 
 			var sizeToBeCopied = fileListBuff
 				.Where(x => (x.Status == FileStatus.ToBeCopied) || (x.Status == FileStatus.Copying))
-				.Sum(x => x.Size);
+				.Sum(x => (long)x.Size);
 
 			if (sizeToBeCopied == 0)
 			{

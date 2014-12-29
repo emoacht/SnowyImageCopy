@@ -13,20 +13,7 @@ namespace SnowyImageCopy.Views.Controls
 	[TemplatePart(Name = "PART_DownButton", Type = typeof(RepeatButton))]
 	public class NumericUpDown : Control
 	{
-		public NumericUpDown()
-		{
-		}
-
-		public override void OnApplyTemplate()
-		{
-			base.OnApplyTemplate();
-
-			UpButton = this.GetTemplateChild("PART_UpButton") as RepeatButton;
-			DownButton = this.GetTemplateChild("PART_DownButton") as RepeatButton;
-		}
-
-
-		#region Property
+		#region Template Part
 
 		private RepeatButton UpButton
 		{
@@ -60,6 +47,10 @@ namespace SnowyImageCopy.Views.Controls
 		}
 		private RepeatButton _downButton;
 
+		#endregion
+
+
+		#region Property
 
 		public double Value
 		{
@@ -174,13 +165,12 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(NumericUpDown),
 				new FrameworkPropertyMetadata(0D));
 
-		#endregion
-
-
 		private bool IsMiddleEnabled
 		{
 			get { return (Minimum < Middle) && (Middle < Maximum) && (0 < LowerFrequency) && (0 < HigherFrequency); }
 		}
+
+		#endregion
 
 
 		private enum Direction
@@ -189,6 +179,14 @@ namespace SnowyImageCopy.Views.Controls
 			Up,
 		}
 
+
+		public override void OnApplyTemplate()
+		{
+			base.OnApplyTemplate();
+
+			UpButton = this.GetTemplateChild("PART_UpButton") as RepeatButton;
+			DownButton = this.GetTemplateChild("PART_DownButton") as RepeatButton;
+		}
 
 		private static void OnPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
 		{

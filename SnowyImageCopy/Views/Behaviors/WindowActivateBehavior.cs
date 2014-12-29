@@ -11,6 +11,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// <summary>
 	/// Activate Window.
 	/// </summary>
+	[TypeConstraint(typeof(Window))]
 	public class WindowActivateBehavior : Behavior<Window>
 	{
 		#region Property

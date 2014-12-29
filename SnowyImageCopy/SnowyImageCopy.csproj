@@ -109,6 +109,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\PropertySupport.cs" />
     <Compile Include="Helper\ShellLink.cs" />
     <Compile Include="Helper\Shortcut.cs" />
     <Compile Include="Models\CardInfo.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Views\Behaviors\WindowActivateBehavior.cs" />
     <Compile Include="Views\Controls\BusyButton.cs" />
     <Compile Include="Views\Controls\CheckTextBox.cs" />
+    <Compile Include="Views\Controls\CircularProgressBar.cs" />
     <Compile Include="Views\Controls\NumericUpDown.cs" />
     <Compile Include="Views\Controls\SlidingToggleButton.cs" />
     <Compile Include="Views\Converters\BooleanToProgressStateConverter.cs" />
@@ -144,10 +146,6 @@
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProductInfo.cs" />
-    <Page Include="Views\Controls\CircularProgressBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Controls\ThumbnailBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -166,7 +164,6 @@
     <Compile Include="Helper\BitmapExtension.cs" />
     <Compile Include="Helper\BitmapImageExtension.cs" />
     <Compile Include="Helper\Designer.cs" />
-    <Compile Include="Helper\PropertySupport.cs" />
     <Compile Include="Helper\FileAddition.cs" />
     <Compile Include="Helper\OsVersion.cs" />
     <Compile Include="Helper\Recycle.cs" />
@@ -205,9 +202,6 @@
     <Compile Include="Views\Behaviors\FrameworkElementIntersectionBehavior.cs" />
     <Compile Include="Views\Behaviors\GridSizeBehavior.cs" />
     <Compile Include="Views\Behaviors\ListBoxSelectedItemBehavior.cs" />
-    <Compile Include="Views\Controls\CircularProgressBar.xaml.cs">
-      <DependentUpon>CircularProgressBar.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\HideableGridSplitter.cs" />
     <Compile Include="Views\Controls\ThumbnailBox.xaml.cs">
       <DependentUpon>ThumbnailBox.xaml</DependentUpon>
@@ -229,7 +223,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Styles\Controls.xaml">
+    <Page Include="Views\Styles\CommonControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Styles\CustomControls.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -298,10 +296,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Libraries\PerMonitorDpi.dll" />
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <Content Include="Libraries\PerMonitorDpi.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -16,6 +16,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// <summary>
 	/// Manage WebBrowser.
 	/// </summary>
+	[TypeConstraint(typeof(WebBrowser))]
 	public class BrowserBehavior : Behavior<WebBrowser>
 	{
 		#region Property
@@ -115,18 +116,18 @@ namespace SnowyImageCopy.Views.Behaviors
 		/// <summary>
 		/// Remove anchor at the end of htm/html file path.
 		/// </summary>
-		/// <param name="source">Source file path</param>
+		/// <param name="filePath">File path</param>
 		/// <returns>File path without anchor</returns>
-		private static string RemoveAnchor(string source)
+		private static string RemoveAnchor(string filePath)
 		{
-			if (String.IsNullOrWhiteSpace(source))
-				return source;
+			if (String.IsNullOrWhiteSpace(filePath))
+				return filePath;
 
-			var match = anchorPattern.Match(source);
+			var match = anchorPattern.Match(filePath);
 			if (!match.Success)
-				return source;
+				return filePath;
 
-			return source.Substring(0, match.Index + match.Value.IndexOf('#'));
+			return filePath.Substring(0, match.Index + match.Value.IndexOf('#'));
 		}
 
 		#endregion
