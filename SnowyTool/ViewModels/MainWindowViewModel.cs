@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Media;
@@ -48,20 +49,32 @@ namespace SnowyTool.ViewModels
 			}
 		}
 
+		private static readonly ModeSet[] _modeSetMap =
+		{
+			new ModeSet(0, LanModeOption.AccessPoint, LanStartupModeOption.Manual),
+			new ModeSet(2, LanModeOption.Station, LanStartupModeOption.Manual),
+			new ModeSet(3, LanModeOption.InternetPassThru, LanStartupModeOption.Manual),
+			new ModeSet(4, LanModeOption.AccessPoint, LanStartupModeOption.Automatic),
+			new ModeSet(5, LanModeOption.Station, LanStartupModeOption.Automatic),
+			new ModeSet(6, LanModeOption.InternetPassThru, LanStartupModeOption.Automatic),
+		};
+
 		public ConfigViewModel CurrentConfig
 		{
 			get { return _currentConfig; }
 			set
 			{
+				if (_currentConfig != null)
+					_currentConfig.PropertyChanged -= OnCurrentConfigPropertyChanged;
+
 				_currentConfig = value;
 
-				ModeSet currentMode = null;
+				if (_currentConfig != null)
+					_currentConfig.PropertyChanged += OnCurrentConfigPropertyChanged;
 
-				if (value != null)
-				{
-					currentMode = _modeSetMap
-						.SingleOrDefault(x => x.AppMode == value.APPMODE);
-				}
+				var currentMode = (value != null)
+					? _modeSetMap.SingleOrDefault(x => x.AppMode == value.APPMODE)
+					: null;
 
 				if (currentMode != null)
 				{
@@ -74,9 +87,8 @@ namespace SnowyTool.ViewModels
 					CurrentLanStartupMode = LanStartupModeOption.None;
 				}
 
-				RaisePropertyChanged(() => IsUploadEnabled);
-
 				RaisePropertyChanged();
+				RaisePropertyChanged(() => IsUploadEnabled);
 			}
 		}
 		private ConfigViewModel _currentConfig;
@@ -93,12 +105,15 @@ namespace SnowyTool.ViewModels
 
 				RaisePropertyChanged();
 
-				var currentMode = _modeSetMap
-					.Where(x => x.LanMode == value)
-					.SingleOrDefault(x => x.LanStartupMode == CurrentLanStartupMode);
+				if (CurrentConfig != null)
+				{
+					var currentMode = _modeSetMap
+						.Where(x => x.LanMode == value)
+						.SingleOrDefault(x => x.LanStartupMode == CurrentLanStartupMode);
 
-				if ((CurrentConfig != null) && (currentMode != null))
-					CurrentConfig.APPMODE = currentMode.AppMode;
+					if (currentMode != null)
+						CurrentConfig.APPMODE = currentMode.AppMode;
+				}
 			}
 		}
 		private LanModeOption _currentLanMode;
@@ -115,25 +130,18 @@ namespace SnowyTool.ViewModels
 
 				RaisePropertyChanged();
 
-				var currentMode = _modeSetMap
-					.Where(x => x.LanStartupMode == value)
-					.SingleOrDefault(x => x.LanMode == CurrentLanMode);
+				if (CurrentConfig != null)
+				{
+					var currentMode = _modeSetMap
+						.Where(x => x.LanStartupMode == value)
+						.SingleOrDefault(x => x.LanMode == CurrentLanMode);
 
-				if ((CurrentConfig != null) && (currentMode != null))
-					CurrentConfig.APPMODE = currentMode.AppMode;
+					if (currentMode != null)
+						CurrentConfig.APPMODE = currentMode.AppMode;
+				}
 			}
 		}
 		private LanStartupModeOption _currentLanStartupMode;
-
-		private static readonly ModeSet[] _modeSetMap =
-		{
-			new ModeSet(0, LanModeOption.AccessPoint, LanStartupModeOption.Manual),
-			new ModeSet(2, LanModeOption.Station, LanStartupModeOption.Manual),
-			new ModeSet(3, LanModeOption.InternetPassThru, LanStartupModeOption.Manual),
-			new ModeSet(4, LanModeOption.AccessPoint, LanStartupModeOption.Automatic),
-			new ModeSet(5, LanModeOption.Station, LanStartupModeOption.Automatic),
-			new ModeSet(6, LanModeOption.InternetPassThru, LanStartupModeOption.Automatic),
-		};
 
 		public bool? IsUploadEnabled
 		{
@@ -152,6 +160,12 @@ namespace SnowyTool.ViewModels
 
 				RaisePropertyChanged();
 			}
+		}
+
+		private void OnCurrentConfigPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == "IsChanged")
+				DelegateCommand.RaiseCanExecuteChanged();
 		}
 
 		#endregion
@@ -260,28 +274,31 @@ namespace SnowyTool.ViewModels
 		{
 			_isApplying = true;
 
-			var configNew = new ConfigViewModel();
-
-			if (!await configNew.ReadAsync(CurrentConfig.AssociatedDisk) ||
-				(configNew.CID != CurrentConfig.CID))
-			{
-				SystemSounds.Hand.Play();
-				OperationStatus = "FlashAir seems changed.";
-				return;
-			}
-
 			try
 			{
-				await CurrentConfig.WriteAsync();
+				var configNew = new ConfigViewModel();
 
-				SystemSounds.Asterisk.Play();
-				OperationStatus = "Applied new config.";
-			}
-			catch (Exception ex)
-			{
-				SystemSounds.Hand.Play();
-				OperationStatus = "Failed to apply new config.";
-				Debug.WriteLine("Failed to apply new config. {0}", ex);
+				if (!await configNew.ReadAsync(CurrentConfig.AssociatedDisk) ||
+					(configNew.CID != CurrentConfig.CID))
+				{
+					SystemSounds.Hand.Play();
+					OperationStatus = "FlashAir seems changed.";
+					return;
+				}
+
+				try
+				{
+					await CurrentConfig.WriteAsync();
+
+					SystemSounds.Asterisk.Play();
+					OperationStatus = "Applied new config.";
+				}
+				catch (Exception ex)
+				{
+					SystemSounds.Hand.Play();
+					OperationStatus = "Failed to apply new config.";
+					Debug.WriteLine("Failed to apply new config. {0}", ex);
+				}
 			}
 			finally
 			{
