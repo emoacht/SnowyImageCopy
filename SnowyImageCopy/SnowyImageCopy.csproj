@@ -299,6 +299,8 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Libraries\DesktopToast.dll" />
+    <Resource Include="Libraries\DesktopToast.xml" />
     <Content Include="Libraries\PerMonitorDpi.dll" />
     <Resource Include="Libraries\PerMonitorDpi.xml" />
   </ItemGroup>
