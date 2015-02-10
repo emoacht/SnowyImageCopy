@@ -57,6 +57,10 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DesktopToast, Version=0.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\DesktopToast.dll</HintPath>
+    </Reference>
     <Reference Include="PerMonitorDpi, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\PerMonitorDpi.dll</HintPath>
@@ -122,8 +126,6 @@
     <Compile Include="Models\Exceptions\UnexpectedException.cs" />
     <Compile Include="Models\Exceptions\RemoteConnectionLostException.cs" />
     <Compile Include="Models\Network\NetworkChecker.cs" />
-    <Compile Include="Models\Toast\ToastManager.cs" />
-    <Compile Include="Models\Toast\ToastResult.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

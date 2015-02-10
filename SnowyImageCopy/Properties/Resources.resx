@@ -286,11 +286,11 @@
   <data name="RecordException" xml:space="preserve">
     <value>This app will terminate, because unexpected problem happened. Leave exception log on Desktop?</value>
   </data>
-  <data name="ToastBody_CopyCompleted1st" xml:space="preserve">
-    <value>Copy from FlashAir completed.</value>
-  </data>
-  <data name="ToastBody_CopyCompleted2nd" xml:space="preserve">
+  <data name="ToastBodyExtra_CopyCompleted" xml:space="preserve">
     <value>({0} images, {1} seconds)</value>
+  </data>
+  <data name="ToastBody_CopyCompleted" xml:space="preserve">
+    <value>Copy from FlashAir completed.</value>
   </data>
   <data name="ToastHeadline_CopyCompleted" xml:space="preserve">
     <value>Copy Completed</value>

@@ -282,11 +282,11 @@
   <data name="RecordException" xml:space="preserve">
     <value>予想外の問題が起きたため、このアプリを終了します。例外のログをデスクトップに残しますか?</value>
   </data>
-  <data name="ToastBody_CopyCompleted1st" xml:space="preserve">
-    <value>FlashAirからのコピーが完了しました。</value>
-  </data>
-  <data name="ToastBody_CopyCompleted2nd" xml:space="preserve">
+  <data name="ToastBodyExtra_CopyCompleted" xml:space="preserve">
     <value>({0} イメージ, {1} 秒)</value>
+  </data>
+  <data name="ToastBody_CopyCompleted" xml:space="preserve">
+    <value>FlashAirからのコピーが完了しました。</value>
   </data>
   <data name="ToastHeadline_CopyCompleted" xml:space="preserve">
     <value>コピー完了</value>

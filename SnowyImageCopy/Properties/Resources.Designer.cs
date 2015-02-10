@@ -568,18 +568,18 @@ namespace SnowyImageCopy.Properties {
         /// <summary>
         ///   Copy from FlashAir completed. に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        public static string ToastBody_CopyCompleted1st {
+        public static string ToastBody_CopyCompleted {
             get {
-                return ResourceManager.GetString("ToastBody_CopyCompleted1st", resourceCulture);
+                return ResourceManager.GetString("ToastBody_CopyCompleted", resourceCulture);
             }
         }
         
         /// <summary>
         ///   ({0} images, {1} seconds) に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        public static string ToastBody_CopyCompleted2nd {
+        public static string ToastBodyExtra_CopyCompleted {
             get {
-                return ResourceManager.GetString("ToastBody_CopyCompleted2nd", resourceCulture);
+                return ResourceManager.GetString("ToastBodyExtra_CopyCompleted", resourceCulture);
             }
         }
         
