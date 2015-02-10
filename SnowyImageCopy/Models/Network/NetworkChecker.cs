@@ -15,7 +15,7 @@ namespace SnowyImageCopy.Models.Network
 	internal static class NetworkChecker
 	{
 		/// <summary>
-		/// Check if PC is connected to a network. 
+		/// Check if PC is connected to a network.
 		/// </summary>
 		internal static bool IsNetworkConnected()
 		{

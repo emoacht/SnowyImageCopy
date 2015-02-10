@@ -67,13 +67,13 @@ namespace SnowyImageCopy.Models
 							}
 						})
 						.Where(x => x != null)
-						.ToList();
+						.ToArray();
 				}
 
 				return _supportedCultures;
 			}
 		}
-		private IReadOnlyCollection<CultureInfo> _supportedCultures;
+		private CultureInfo[] _supportedCultures;
 
 		/// <summary>
 		/// Change Culture of this application's Resources by Culture name
@@ -83,7 +83,7 @@ namespace SnowyImageCopy.Models
 		{
 			var culture = SupportedCultures.SingleOrDefault(x => x.Name == cultureName);
 
-			// If culture is null, Culture of this application's Resources will be automatically selected. 
+			// If culture is null, Culture of this application's Resources will be automatically selected.
 			Resources.Culture = culture;
 
 			// Notify this application's Resources is changed.

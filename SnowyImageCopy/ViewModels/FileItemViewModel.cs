@@ -22,7 +22,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public string Directory { get; private set; }
 		public string FileName { get; private set; }
-		public int Size { get; private set; } // Byte
+		public int Size { get; private set; } // In bytes
 
 		#endregion
 

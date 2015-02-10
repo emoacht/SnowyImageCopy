@@ -523,7 +523,7 @@ namespace SnowyImageCopy.Models
 					Debug.WriteLine("Failed to get DateTaken from metadata. {0}", ex);
 
 					if (IsImageNotSupported(ex))
-						return DateTime.MinValue;
+						return default(DateTime);
 
 					throw;
 				}
@@ -585,7 +585,7 @@ namespace SnowyImageCopy.Models
 				}
 			}
 
-			return DateTime.MinValue;
+			return default(DateTime);
 		}
 
 		/// <summary>

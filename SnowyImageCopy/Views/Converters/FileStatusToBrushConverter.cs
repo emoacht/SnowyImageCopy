@@ -18,7 +18,7 @@ namespace SnowyImageCopy.Views.Converters
 	[ValueConversion(typeof(FileStatus), typeof(Brush))]
 	public class FileStatusToBrushConverter : IValueConverter
 	{
-		public static Dictionary<FileStatus, Color> statusColorMap
+		public static Dictionary<FileStatus, Color> StatusColorMap
 		{
 			get
 			{
@@ -48,8 +48,8 @@ namespace SnowyImageCopy.Views.Converters
 
 			var status = (FileStatus)value;
 
-			return statusColorMap.Keys.Contains(status)
-				? new SolidColorBrush(statusColorMap[status])
+			return StatusColorMap.Keys.Contains(status)
+				? new SolidColorBrush(StatusColorMap[status])
 				: Brushes.LightGray; // Fallback
 		}
 

@@ -112,7 +112,7 @@ namespace SnowyImageCopy.ViewModels
 				if (_filePeriodList == null)
 				{
 					_filePeriodList = Enum.GetValues(typeof(FilePeriod)).OfType<FilePeriod>()
-						.Select(x => new FilePeriodViewModel() { Period = x })
+						.Select(x => new FilePeriodViewModel { Period = x })
 						.ToList();
 				}
 

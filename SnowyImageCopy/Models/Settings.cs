@@ -174,7 +174,7 @@ namespace SnowyImageCopy.Models
 
 		private static Settings GetDefaultSettings()
 		{
-			return new Settings()
+			return new Settings
 			{
 				TargetPeriod = FilePeriod.All,
 				IsCurrentImageVisible = false,
@@ -212,10 +212,8 @@ namespace SnowyImageCopy.Models
 		{
 			get
 			{
-				if (String.IsNullOrEmpty(_localFolder))
-					_localFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), defaultLocalFolder);
-
-				return _localFolder;
+				return _localFolder ?? (_localFolder =
+					Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), defaultLocalFolder));
 			}
 			set
 			{
@@ -249,10 +247,7 @@ namespace SnowyImageCopy.Models
 
 		public ObservableCollection<DateTime> TargetDates
 		{
-			get
-			{
-				return _targetDates ?? (_targetDates = new ObservableCollection<DateTime>());
-			}
+			get { return _targetDates ?? (_targetDates = new ObservableCollection<DateTime>()); }
 			set
 			{
 				if ((_targetDates != null) && (_targetDates == value))
