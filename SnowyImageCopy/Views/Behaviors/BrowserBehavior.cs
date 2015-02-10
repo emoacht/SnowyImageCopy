@@ -74,11 +74,11 @@ namespace SnowyImageCopy.Views.Behaviors
 		}
 
 
-		private bool isApplying;
+		private bool _isApplying;
 
 		private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
-			isApplying = true;
+			_isApplying = true;
 
 			if (!(bool)e.NewValue)
 			{
@@ -97,9 +97,9 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		private void OnNavigating(object sender, NavigatingCancelEventArgs e)
 		{
-			if (isApplying)
+			if (_isApplying)
 			{
-				isApplying = false;
+				_isApplying = false;
 				return;
 			}
 
@@ -111,7 +111,7 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#region Helper
 
-		private static readonly Regex anchorPattern = new Regex(@"\.(htm|html)#.*", RegexOptions.Compiled);
+		private static readonly Regex _anchorPattern = new Regex(@"\.(htm|html)#.*", RegexOptions.Compiled);
 
 		/// <summary>
 		/// Remove anchor at the end of htm/html file path.
@@ -123,7 +123,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			if (String.IsNullOrWhiteSpace(filePath))
 				return filePath;
 
-			var match = anchorPattern.Match(filePath);
+			var match = _anchorPattern.Match(filePath);
 			if (!match.Success)
 				return filePath;
 

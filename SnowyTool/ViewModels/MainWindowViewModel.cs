@@ -59,7 +59,7 @@ namespace SnowyTool.ViewModels
 
 				if (value != null)
 				{
-					currentMode = modeSetMap
+					currentMode = _modeSetMap
 						.SingleOrDefault(x => x.AppMode == value.APPMODE);
 				}
 
@@ -93,7 +93,7 @@ namespace SnowyTool.ViewModels
 
 				RaisePropertyChanged();
 
-				var currentMode = modeSetMap
+				var currentMode = _modeSetMap
 					.Where(x => x.LanMode == value)
 					.SingleOrDefault(x => x.LanStartupMode == CurrentLanStartupMode);
 
@@ -115,7 +115,7 @@ namespace SnowyTool.ViewModels
 
 				RaisePropertyChanged();
 
-				var currentMode = modeSetMap
+				var currentMode = _modeSetMap
 					.Where(x => x.LanStartupMode == value)
 					.SingleOrDefault(x => x.LanMode == CurrentLanMode);
 
@@ -125,7 +125,7 @@ namespace SnowyTool.ViewModels
 		}
 		private LanStartupModeOption _currentLanStartupMode;
 
-		private readonly ModeSet[] modeSetMap =
+		private static readonly ModeSet[] _modeSetMap =
 		{
 			new ModeSet(0, LanModeOption.AccessPoint, LanStartupModeOption.Manual),
 			new ModeSet(2, LanModeOption.Station, LanStartupModeOption.Manual),
@@ -174,7 +174,7 @@ namespace SnowyTool.ViewModels
 
 		private bool CanSearchExecute()
 		{
-			return !isSearching;
+			return !_isSearching;
 		}
 
 		#endregion
@@ -195,7 +195,7 @@ namespace SnowyTool.ViewModels
 
 		private bool CanApplyExecute()
 		{
-			return !isApplying && (CurrentConfig != null) && CurrentConfig.IsChanged;
+			return !_isApplying && (CurrentConfig != null) && CurrentConfig.IsChanged;
 		}
 
 		#endregion
@@ -222,11 +222,11 @@ namespace SnowyTool.ViewModels
 
 		#region Search/Apply
 
-		private bool isSearching;
+		private bool _isSearching;
 
 		private async Task SearchConfigAsync()
 		{
-			isSearching = true;
+			_isSearching = true;
 
 			try
 			{
@@ -249,16 +249,16 @@ namespace SnowyTool.ViewModels
 			}
 			finally
 			{
-				isSearching = false;
+				_isSearching = false;
 				DelegateCommand.RaiseCanExecuteChanged();
 			}
 		}
 
-		private bool isApplying;
+		private bool _isApplying;
 
 		private async Task ApplyConfigAsync()
 		{
-			isApplying = true;
+			_isApplying = true;
 
 			var configNew = new ConfigViewModel();
 
@@ -285,7 +285,7 @@ namespace SnowyTool.ViewModels
 			}
 			finally
 			{
-				isApplying = false;
+				_isApplying = false;
 				DelegateCommand.RaiseCanExecuteChanged();
 			}
 		}

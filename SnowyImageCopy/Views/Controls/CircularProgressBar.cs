@@ -41,9 +41,9 @@ namespace SnowyImageCopy.Views.Controls
 
 		#region Template Part
 
-		private Path circlePathBox;
-		private PathFigure circlePathFigure;
-		private ArcSegment circleArcSegment;
+		private Path _circlePathBox;
+		private PathFigure _circlePathFigure;
+		private ArcSegment _circleArcSegment;
 
 		#endregion
 
@@ -153,9 +153,9 @@ namespace SnowyImageCopy.Views.Controls
 		{
 			base.OnApplyTemplate();
 
-			circlePathBox = this.GetTemplateChild("PART_CirclePathBox") as Path;
-			circlePathFigure = this.GetTemplateChild("PART_CirclePathFigure") as PathFigure;
-			circleArcSegment = this.GetTemplateChild("PART_CircleArcSegment") as ArcSegment;
+			_circlePathBox = this.GetTemplateChild("PART_CirclePathBox") as Path;
+			_circlePathFigure = this.GetTemplateChild("PART_CirclePathFigure") as PathFigure;
+			_circleArcSegment = this.GetTemplateChild("PART_CircleArcSegment") as ArcSegment;
 
 			RenderArc();
 		}
@@ -180,13 +180,13 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void RenderArc()
 		{
-			if ((circlePathBox == null) || (circlePathFigure == null) || (circleArcSegment == null))
+			if ((_circlePathBox == null) || (_circlePathFigure == null) || (_circleArcSegment == null))
 				return;
 
 			var radius = this.Width / 2D; // Outer radius
 
-			circlePathBox.Width = radius * 2D;
-			circlePathBox.Height = radius * 2D;
+			_circlePathBox.Width = radius * 2D;
+			_circlePathBox.Height = radius * 2D;
 
 			var pathRadius = radius - StrokeThickness / 2D;
 
@@ -202,13 +202,13 @@ namespace SnowyImageCopy.Views.Controls
 				(Math.Abs(endPoint.Y - startPoint.Y) < 0.01))
 				endPoint.X -= 0.01;
 
-			circlePathFigure.StartPoint = startPoint;
+			_circlePathFigure.StartPoint = startPoint;
 
-			circleArcSegment.Point = endPoint;
-			circleArcSegment.Size = new Size(pathRadius, pathRadius);
-			circleArcSegment.IsLargeArc = (Angle > 180D);
+			_circleArcSegment.Point = endPoint;
+			_circleArcSegment.Size = new Size(pathRadius, pathRadius);
+			_circleArcSegment.IsLargeArc = (Angle > 180D);
 
-			circlePathBox.RenderTransform = new TranslateTransform(StrokeThickness / 2, StrokeThickness / 2);
+			_circlePathBox.RenderTransform = new TranslateTransform(StrokeThickness / 2, StrokeThickness / 2);
 		}
 
 		private static Point GetCartesianCoordinate(double angle, double radius)

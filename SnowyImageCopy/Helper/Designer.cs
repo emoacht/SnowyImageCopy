@@ -8,28 +8,28 @@ using System.Windows;
 
 namespace SnowyImageCopy.Helper
 {
-    /// <summary>
-    /// Designer information
-    /// </summary>
-    public static class Designer
-    {
-        /// <summary>
-        /// Whether a Control is in design mode (running in Blend or Visual Studio)
-        /// </summary>
-        public static bool IsInDesignMode
-        {
-            get
-            {
-                if (!_isInDesignMode.HasValue)
-                {
-                    _isInDesignMode = (bool)DependencyPropertyDescriptor
-                        .FromProperty(DesignerProperties.IsInDesignModeProperty, typeof(FrameworkElement))
-                        .Metadata.DefaultValue;
-                }
+	/// <summary>
+	/// Designer information
+	/// </summary>
+	public static class Designer
+	{
+		/// <summary>
+		/// Whether a Control is in design mode (running in Blend or Visual Studio)
+		/// </summary>
+		public static bool IsInDesignMode
+		{
+			get
+			{
+				if (!_isInDesignMode.HasValue)
+				{
+					_isInDesignMode = (bool)DependencyPropertyDescriptor
+						.FromProperty(DesignerProperties.IsInDesignModeProperty, typeof(FrameworkElement))
+						.Metadata.DefaultValue;
+				}
 
-                return _isInDesignMode.Value;
-            }
-        }
-        private static bool? _isInDesignMode;
-    }
+				return _isInDesignMode.Value;
+			}
+		}
+		private static bool? _isInDesignMode;
+	}
 }

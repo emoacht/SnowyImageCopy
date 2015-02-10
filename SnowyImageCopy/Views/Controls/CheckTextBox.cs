@@ -91,7 +91,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		#region Message
 
-		private bool isMessage;
+		private bool _isMessage;
 
 		protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
 		{
@@ -104,15 +104,15 @@ namespace SnowyImageCopy.Views.Controls
 			{
 				if (String.IsNullOrWhiteSpace(this.Text))
 				{
-					isMessage = true;
+					_isMessage = true;
 					this.Text = MessageText;
 				}
 			}
 			else
 			{
-				if (isMessage)
+				if (_isMessage)
 				{
-					isMessage = false;
+					_isMessage = false;
 					this.Text = String.Empty;
 				}
 			}
@@ -125,9 +125,9 @@ namespace SnowyImageCopy.Views.Controls
 			if (String.IsNullOrEmpty(MessageText))
 				return;
 
-			if ((this.Visibility == Visibility.Visible) && isMessage)
+			if ((this.Visibility == Visibility.Visible) && _isMessage)
 			{
-				isMessage = false;
+				_isMessage = false;
 				this.Text = String.Empty;
 			}
 		}
@@ -141,7 +141,7 @@ namespace SnowyImageCopy.Views.Controls
 
 			if ((this.Visibility == Visibility.Visible) && String.IsNullOrWhiteSpace(this.Text))
 			{
-				isMessage = true;
+				_isMessage = true;
 				this.Text = MessageText;
 			}
 		}
@@ -151,33 +151,33 @@ namespace SnowyImageCopy.Views.Controls
 
 		#region Check
 
-		private bool isChanged;
+		private bool _isChanged;
 
 		private void CompareText(string baseText, string inputText)
 		{
-			if (isChanged)
+			if (_isChanged)
 				return;
 
 			try
 			{
-				isChanged = true;
+				_isChanged = true;
 
 				IsChecked = baseText.Equals(inputText, StringComparison.Ordinal);
 			}
 			finally
 			{
-				isChanged = false;
+				_isChanged = false;
 			}
 		}
 
 		private void ReflectChecked(bool isChecked)
 		{
-			if (isChanged)
+			if (_isChanged)
 				return;
 
 			try
 			{
-				isChanged = true;
+				_isChanged = true;
 
 				if (isChecked)
 				{
@@ -191,7 +191,7 @@ namespace SnowyImageCopy.Views.Controls
 			}
 			finally
 			{
-				isChanged = false;
+				_isChanged = false;
 			}
 		}
 

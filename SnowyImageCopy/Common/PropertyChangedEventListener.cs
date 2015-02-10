@@ -10,12 +10,12 @@ namespace SnowyImageCopy.Common
 {
     public class PropertyChangedEventListener : IWeakEventListener
     {
+        private readonly Action<object, PropertyChangedEventArgs> _propertyChangedAction;
+
         public PropertyChangedEventListener(Action<object, PropertyChangedEventArgs> propertyChangedAction)
         {
-            this.propertyChangedAction = propertyChangedAction;
+            this._propertyChangedAction = propertyChangedAction;
         }
-
-        private readonly Action<object, PropertyChangedEventArgs> propertyChangedAction;
 
         public bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
         {
@@ -26,7 +26,7 @@ namespace SnowyImageCopy.Common
             if (pce == null)
                 return false;
 
-            this.propertyChangedAction(sender, pce);
+            this._propertyChangedAction(sender, pce);
             return true;
         }
     }

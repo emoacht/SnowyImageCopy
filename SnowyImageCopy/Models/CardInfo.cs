@@ -28,10 +28,10 @@ namespace SnowyImageCopy.Models
 		{
 			get
 			{
-				if (isFirmwareVersionChanged || isSsidChanged)
+				if (_isFirmwareVersionChanged || _isSsidChanged)
 					return true;
 
-				return CanGetCid ? isCidChanged : (bool?)null;
+				return CanGetCid ? _isCidChanged : (bool?)null;
 			}
 		}
 
@@ -46,23 +46,23 @@ namespace SnowyImageCopy.Models
 			get { return _firmwareVersion; }
 			set
 			{
-				isFirmwareVersionChanged = (_firmwareVersion != value);
-				if (!isFirmwareVersionChanged)
+				_isFirmwareVersionChanged = (_firmwareVersion != value);
+				if (!_isFirmwareVersionChanged)
 					return;
 
 				_firmwareVersion = value;
 
 				var versionNumber = FindVersionNumber(value);
 
-				isFirmwareVersion103OrNewer = (versionNumber >= new Version(1, 0, 3)); // If versionNumber == null, false.
-				isFirmwareVersion202OrNewer = (versionNumber >= new Version(2, 0, 2)); // If versionNumber == null, false.
+				_isFirmwareVersion103OrNewer = (versionNumber >= new Version(1, 0, 3)); // If versionNumber == null, false.
+				_isFirmwareVersion202OrNewer = (versionNumber >= new Version(2, 0, 2)); // If versionNumber == null, false.
 			}
 		}
 		private string _firmwareVersion;
-		private bool isFirmwareVersionChanged;
+		private bool _isFirmwareVersionChanged;
 
-		private bool isFirmwareVersion103OrNewer; // Equal to or newer than 1.00.03
-		private bool isFirmwareVersion202OrNewer; // Equal to or newer than 2.00.02
+		private bool _isFirmwareVersion103OrNewer; // Equal to or newer than 1.00.03
+		private bool _isFirmwareVersion202OrNewer; // Equal to or newer than 2.00.02
 
 		#endregion
 
@@ -71,7 +71,7 @@ namespace SnowyImageCopy.Models
 
 		public bool CanGetCid
 		{
-			get { return isFirmwareVersion103OrNewer; }
+			get { return _isFirmwareVersion103OrNewer; }
 		}
 
 		/// <summary>
@@ -82,15 +82,15 @@ namespace SnowyImageCopy.Models
 			get { return _cid; }
 			set
 			{
-				isCidChanged = (_cid != value);
-				if (!isCidChanged)
+				_isCidChanged = (_cid != value);
+				if (!_isCidChanged)
 					return;
 
 				_cid = value;
 			}
 		}
 		private string _cid;
-		private bool isCidChanged;
+		private bool _isCidChanged;
 
 		/// <summary>
 		/// SSID
@@ -100,15 +100,15 @@ namespace SnowyImageCopy.Models
 			get { return _ssid; }
 			set
 			{
-				isSsidChanged = (_ssid != value);
-				if (!isSsidChanged)
+				_isSsidChanged = (_ssid != value);
+				if (!_isSsidChanged)
 					return;
 
 				_ssid = value;
 			}
 		}
 		private string _ssid;
-		private bool isSsidChanged;
+		private bool _isSsidChanged;
 
 		/// <summary>
 		/// Whether PC is connected to FlashAir card by a wireless connection
@@ -126,7 +126,7 @@ namespace SnowyImageCopy.Models
 
 		public bool CanGetWriteTimeStamp
 		{
-			get { return isFirmwareVersion202OrNewer; }
+			get { return _isFirmwareVersion202OrNewer; }
 		}
 
 		/// <summary>
@@ -157,11 +157,11 @@ namespace SnowyImageCopy.Models
 		}
 		private List<string> _thumbnailFailedPathes;
 
-		private const int thumbnailFailedPathesCountMax = 3;
+		private const int _thumbnailFailedPathesCountMax = 3;
 
 		public bool CanGetThumbnail
 		{
-			get { return ((_thumbnailFailedPathes == null) || (_thumbnailFailedPathes.Count < thumbnailFailedPathesCountMax)); }
+			get { return ((_thumbnailFailedPathes == null) || (_thumbnailFailedPathes.Count < _thumbnailFailedPathesCountMax)); }
 		}
 
 		#endregion
@@ -171,7 +171,7 @@ namespace SnowyImageCopy.Models
 
 		public bool CanGetUpload
 		{
-			get { return isFirmwareVersion202OrNewer; }
+			get { return _isFirmwareVersion202OrNewer; }
 		}
 
 		/// <summary>
@@ -202,14 +202,14 @@ namespace SnowyImageCopy.Models
 
 		#region Helper
 
-		private static readonly Regex versionPattern = new Regex(@"[1-9]\.\d{2}\.\d{2}$", RegexOptions.Compiled);
+		private static readonly Regex _versionPattern = new Regex(@"[1-9]\.\d{2}\.\d{2}$", RegexOptions.Compiled);
 
 		private static Version FindVersionNumber(string source)
 		{
 			if (String.IsNullOrWhiteSpace(source))
 				return null;
 
-			var match = versionPattern.Match(source);
+			var match = _versionPattern.Match(source);
 			if (!match.Success)
 				return null;
 

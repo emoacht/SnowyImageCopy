@@ -136,12 +136,12 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Thumbnail
 
-		private static readonly BitmapImage defaultThumbnail =
+		private static readonly BitmapImage _defaultThumbnail =
 			ImageManager.ConvertFrameworkElementToBitmapImage(new ThumbnailBox());
 
 		public BitmapImage Thumbnail
 		{
-			get { return _thumbnail ?? defaultThumbnail; }
+			get { return _thumbnail ?? _defaultThumbnail; }
 			set
 			{
 				_thumbnail = value;
@@ -264,7 +264,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private bool? _canLoadDataLocal;
 
-		private static readonly string[] flashAirSystemFolders =
+		private static readonly string[] _flashAirSystemFolders =
 		{
 			"GUPIXINF",
 			"SD_WLAN",
@@ -273,7 +273,7 @@ namespace SnowyImageCopy.ViewModels
 
 		internal bool IsFlashAirSystemFolder
 		{
-			get { return flashAirSystemFolders.Contains(FileName, StringComparer.OrdinalIgnoreCase); }
+			get { return _flashAirSystemFolders.Contains(FileName, StringComparer.OrdinalIgnoreCase); }
 		}
 
 		#endregion
@@ -342,8 +342,8 @@ namespace SnowyImageCopy.ViewModels
 
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
-				resourcesPropertyChangedListener = new PropertyChangedEventListener(ReactResourcesPropertyChanged);
-				PropertyChangedEventManager.AddListener(ResourceService.Current, resourcesPropertyChangedListener, "Resources");
+				_resourcesPropertyChangedListener = new PropertyChangedEventListener(ReactResourcesPropertyChanged);
+				PropertyChangedEventManager.AddListener(ResourceService.Current, _resourcesPropertyChangedListener, "Resources");
 			}
 		}
 
@@ -368,7 +368,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Event Listener
 
-		private PropertyChangedEventListener resourcesPropertyChangedListener;
+		private PropertyChangedEventListener _resourcesPropertyChangedListener;
 
 		private void ReactResourcesPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -382,8 +382,8 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Import
 
-		private const char separator = ','; // Separator character (comma)
-		private static readonly Regex asciiPattern = new Regex(@"^[\x20-\x7F]+$", RegexOptions.Compiled); // Pattern for ASCII code (alphanumeric symbols)
+		private const char _separator = ','; // Separator character (comma)
+		private static readonly Regex _asciiPattern = new Regex(@"^[\x20-\x7F]+$", RegexOptions.Compiled); // Pattern for ASCII code (alphanumeric symbols)
 
 		/// <summary>
 		/// Import file information from a list of files in FlashAir card.
@@ -409,7 +409,7 @@ namespace SnowyImageCopy.ViewModels
 				Directory = remoteDirectoryPath;
 
 				// Check if directory path is valid
-				if (!asciiPattern.IsMatch(Directory) || // Directory path must be ASCII characters only (If byte array is decoded by ASCII, this part is non-sense).
+				if (!_asciiPattern.IsMatch(Directory) || // Directory path must be ASCII characters only (If byte array is decoded by ASCII, this part is non-sense).
 					Path.GetInvalidPathChars().Concat(new[] { '?' }).Any(x => Directory.Contains(x))) // '?' appears typically when byte array was not correctly decoded.
 					return;
 
@@ -420,11 +420,11 @@ namespace SnowyImageCopy.ViewModels
 				Directory = String.Empty;
 			}
 
-			if (!sourceWithoutDirectory.ElementAt(0).Equals(separator))
+			if (!sourceWithoutDirectory.ElementAt(0).Equals(_separator))
 				return;
 
 			var elements = sourceWithoutDirectory.Substring(1) // 1 means length of separator.
-				.Split(new[] { separator }, StringSplitOptions.None)
+				.Split(new[] { _separator }, StringSplitOptions.None)
 				.ToList();
 
 			if (elements.Count < 5) // 5 means file name, size, raw attribute, raw data and raw time 
@@ -432,7 +432,7 @@ namespace SnowyImageCopy.ViewModels
 
 			while (5 < elements.Count) // In the case that file name includes separator character
 			{
-				elements[0] = String.Format("{0}{1}{2}", elements[0], separator, elements[1]);
+				elements[0] = String.Format("{0}{1}{2}", elements[0], _separator, elements[1]);
 				elements.RemoveAt(1);
 			}
 
@@ -440,7 +440,7 @@ namespace SnowyImageCopy.ViewModels
 
 			// Check if file name is valid
 			if (String.IsNullOrWhiteSpace(FileName) || // File name must not be empty.
-				!asciiPattern.IsMatch(FileName) || // File name must be ASCII characters only (If byte array is decoded by ASCII, this part is non-sense).
+				!_asciiPattern.IsMatch(FileName) || // File name must be ASCII characters only (If byte array is decoded by ASCII, this part is non-sense).
 				Path.GetInvalidFileNameChars().Any(x => FileName.Contains(x)))
 				return;
 
