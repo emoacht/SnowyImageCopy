@@ -28,10 +28,10 @@ namespace SnowyImageCopy.Helper
 		/// Read all bytes from a specified file asynchronously.
 		/// </summary>
 		/// <param name="filePath">Source file path</param>
-		/// <param name="token">CancellationToken</param>
-		public static async Task<byte[]> ReadAllBytesAsync(string filePath, CancellationToken token)
+		/// <param name="cancellationToken">CancellationToken</param>
+		public static async Task<byte[]> ReadAllBytesAsync(string filePath, CancellationToken cancellationToken)
 		{
-			return await ReadAllBytesAsync(filePath, _defaultCopyBufferSize, token);
+			return await ReadAllBytesAsync(filePath, _defaultCopyBufferSize, cancellationToken);
 		}
 
 		/// <summary>
@@ -39,13 +39,13 @@ namespace SnowyImageCopy.Helper
 		/// </summary>
 		/// <param name="filePath">Source file path</param>
 		/// <param name="bufferSize">Buffer size</param>
-		/// <param name="token">CancellationToken</param>
-		public static async Task<byte[]> ReadAllBytesAsync(string filePath, int bufferSize, CancellationToken token)
+		/// <param name="cancellationToken">CancellationToken</param>
+		public static async Task<byte[]> ReadAllBytesAsync(string filePath, int bufferSize, CancellationToken cancellationToken)
 		{
 			using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 			using (var ms = new MemoryStream())
 			{
-				await fs.CopyToAsync(ms, bufferSize, token);
+				await fs.CopyToAsync(ms, bufferSize, cancellationToken).ConfigureAwait(false);
 				return ms.ToArray();
 			}
 		}

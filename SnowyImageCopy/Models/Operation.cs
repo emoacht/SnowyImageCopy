@@ -681,7 +681,7 @@ namespace SnowyImageCopy.Models
 				_card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(_card.Ssid);
 
 				// Get all items.
-				var fileListNew = await FileManager.GetFileListRootAsync(_tokenSourceWorking.Token, _card);
+				var fileListNew = await FileManager.GetFileListRootAsync(_card, _tokenSourceWorking.Token);
 				fileListNew.Sort();
 
 				// Record time stamp of write event.
@@ -806,7 +806,7 @@ namespace SnowyImageCopy.Models
 
 					try
 					{
-						item.Thumbnail = await FileManager.GetThumbnailAsync(item.FilePath, _tokenSourceWorking.Token, _card);
+						item.Thumbnail = await FileManager.GetThumbnailAsync(item.FilePath, _card, _tokenSourceWorking.Token);
 					}
 					catch (RemoteFileThumbnailFailedException)
 					{
@@ -909,7 +909,7 @@ namespace SnowyImageCopy.Models
 						if (!Directory.Exists(localDirectory))
 							Directory.CreateDirectory(localDirectory);
 
-						var data = await FileManager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, _tokenSourceWorking.Token, _card);
+						var data = await FileManager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, _card, _tokenSourceWorking.Token);
 
 						CurrentItem = item;
 						CurrentImageData = data;
