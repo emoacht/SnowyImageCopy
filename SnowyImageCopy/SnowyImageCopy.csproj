@@ -300,6 +300,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libraries\PerMonitorDpi.dll" />
+    <Resource Include="Libraries\PerMonitorDpi.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
