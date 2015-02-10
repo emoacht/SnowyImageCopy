@@ -9,32 +9,32 @@ using System.Threading.Tasks;
 
 namespace SnowyImageCopy.Common
 {
-	public abstract class NotificationObject : INotifyPropertyChanged
-	{
-		protected NotificationObject()
-		{ }
+    public abstract class NotificationObject : INotifyPropertyChanged
+    {
+        protected NotificationObject()
+        { }
 
-		public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-		protected virtual void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
-		{
-			if (propertyExpression == null)
-				throw new ArgumentNullException("propertyExpression");
+        protected virtual void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
+        {
+            if (propertyExpression == null)
+                throw new ArgumentNullException("propertyExpression");
 
-			var memberExpression = propertyExpression.Body as MemberExpression;
-			if (memberExpression == null)
-				throw new ArgumentException("The expression is not a member access expression.", "propertyExpression");
+            var memberExpression = propertyExpression.Body as MemberExpression;
+            if (memberExpression == null)
+                throw new ArgumentException("The expression is not a member access expression.", "propertyExpression");
 
-			RaisePropertyChanged(memberExpression.Member.Name);
-		}
+            RaisePropertyChanged(memberExpression.Member.Name);
+        }
 
-		protected virtual void RaisePropertyChanged([CallerMemberName]string propertyName = null)
-		{
-			var handler = this.PropertyChanged;
-			if (handler != null)
-			{
-				handler(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
+        protected virtual void RaisePropertyChanged([CallerMemberName]string propertyName = null)
+        {
+            var handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
 }

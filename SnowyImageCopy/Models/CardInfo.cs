@@ -114,7 +114,7 @@ namespace SnowyImageCopy.Models
 		/// Whether PC is connected to FlashAir card by a wireless connection
 		/// </summary>
 		/// <remarks>
-		/// True: Access Point mode, Internet Pass-Thru mode
+		/// True:  Access Point mode, Internet Pass-Thru mode
 		/// False: Station mode
 		/// </remarks>
 		public bool IsWirelessConnected { get; set; }

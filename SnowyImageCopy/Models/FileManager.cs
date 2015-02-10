@@ -5,11 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-
 using SnowyImageCopy.Models.Exceptions;
 using SnowyImageCopy.Models.Network;
 using SnowyImageCopy.ViewModels;
@@ -49,7 +49,7 @@ namespace SnowyImageCopy.Models
 		#region Method (Internal)
 
 		/// <summary>
-		/// Get a list of all files recursively from root of FlashAir card.
+		/// Get a list of all files recursively from root folder of FlashAir card.
 		/// </summary>
 		/// <param name="token">CancellationToken</param>
 		/// <param name="card">FlashAir card information</param>
@@ -57,7 +57,7 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					return await GetFileListAllAsync(client, String.Empty, token, card).ConfigureAwait(false);
 				}
@@ -142,7 +142,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					var items = await DownloadStringAsync(client, remotePath, token, card).ConfigureAwait(false);
 
@@ -160,7 +160,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get number of files in a specified directory in FlashAir card.
+		/// Get the number of files in a specified directory in FlashAir card.
 		/// </summary>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
 		/// <param name="token">CancellationToken</param>
@@ -175,7 +175,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					var itemNum = await DownloadStringAsync(client, remotePath, token, card).ConfigureAwait(false);
 
@@ -205,7 +205,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					var bytes = await DownloadBytesAsync(client, remotePath, token, card).ConfigureAwait(false);
 
@@ -236,7 +236,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get file data of a specified remote file in FlashAir card and save it in local folder. 
+		/// Get file data of a specified remote file in FlashAir card and save it in local folder.
 		/// </summary>
 		/// <param name="remoteFilePath">Remote file path</param>
 		/// <param name="localFilePath">Local file path</param>
@@ -259,7 +259,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					var bytes = await DownloadBytesAsync(client, remotePath, size, progress, token, card).ConfigureAwait(false);
 
@@ -277,7 +277,7 @@ namespace SnowyImageCopy.Models
 					if (canReadExif)
 					{
 						var exifDateTaken = await ImageManager.GetExifDateTakenAsync(bytes);
-						if (exifDateTaken != DateTime.MinValue)
+						if (exifDateTaken != default(DateTime))
 						{
 							localFileInfo.CreationTime = exifDateTaken;
 						}
@@ -307,7 +307,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					var result = await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 
@@ -339,7 +339,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 				}
@@ -362,7 +362,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 				}
@@ -388,7 +388,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 				}
@@ -410,7 +410,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					var status = await DownloadStringAsync(client, remotePath, CancellationToken.None, null).ConfigureAwait(false);
 
@@ -446,7 +446,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					var timeStamp = await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 
@@ -477,7 +477,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient() { Timeout = timeoutLength })
+				using (var client = new HttpClient { Timeout = timeoutLength })
 				{
 					return await DownloadStringAsync(client, remotePath, token, null).ConfigureAwait(false);
 				}
@@ -620,7 +620,7 @@ namespace SnowyImageCopy.Models
 										const double stepUint = 524288D; // 512KiB
 										double stepTotal = Math.Ceiling(size / stepUint); // Number of steps to report during downloading
 										if (stepTotal < 6)
-											stepTotal = 6; // Minimum number of steps
+											stepTotal = 6; // The minimum number of steps
 
 										double stepCurrent = 1D;
 										var startTime = DateTime.Now;
@@ -732,7 +732,7 @@ namespace SnowyImageCopy.Models
 		#region Helper
 
 		private static readonly Dictionary<FileManagerCommand, string> commandMap =
-			new Dictionary<FileManagerCommand, string>()
+			new Dictionary<FileManagerCommand, string>
 			{
 				{FileManagerCommand.None, String.Empty},
 				{FileManagerCommand.GetFileList, @"command.cgi?op=100&DIR=/"},
@@ -748,7 +748,7 @@ namespace SnowyImageCopy.Models
 			};
 
 		/// <summary>
-		/// Compose path to remote file in FlashAir card inserting CGI command string.
+		/// Compose remote path in FlashAir card inserting CGI command string.
 		/// </summary>
 		/// <param name="command">CGI command type</param>
 		/// <param name="remotePath">Remote path</param>
@@ -760,7 +760,7 @@ namespace SnowyImageCopy.Models
 		private static readonly bool recordsDownloadString = Debugger.IsAttached || CommandLine.RecordsDownloadLog;
 
 		/// <summary>
-		/// Record result of DownloadStringAsync method for debugging purpose.
+		/// Record result of DownloadStringAsync method.
 		/// </summary>
 		/// <param name="requestPath">Request path</param>
 		/// <param name="responseBytes">Response byte array</param>
@@ -768,7 +768,7 @@ namespace SnowyImageCopy.Models
 		{
 			var filePath = Path.Combine(
 				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
+				Assembly.GetExecutingAssembly().GetName().Name,
 				"download.log");
 
 			try

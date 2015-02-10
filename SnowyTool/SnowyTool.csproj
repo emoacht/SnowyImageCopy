@@ -91,7 +91,7 @@
     <Compile Include="Common\DelegateCommand.cs" />
     <Compile Include="Common\NotificationObject.cs" />
     <Compile Include="Helper\OsVersion.cs" />
-    <Compile Include="Helper\TextParse.cs" />
+    <Compile Include="Helper\StringDictionary.cs" />
     <Compile Include="Models\DiskSearcher.cs" />
     <Compile Include="Models\DiskInfo.cs" />
     <Compile Include="Models\LanModeOption.cs" />

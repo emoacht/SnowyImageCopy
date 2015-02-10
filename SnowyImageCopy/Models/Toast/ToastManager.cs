@@ -54,7 +54,7 @@ namespace SnowyImageCopy.Models.Toast
 				return ToastResult.Unavailable;
 
 			// Read from Settings.settings.
-			var shortcutFile = Properties.Settings.Default.ShortcutFile;
+			var shortcutFile = Properties.Settings.Default.ShortcutFileName;
 			var appId = Properties.Settings.Default.AppId;
 
 			var shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), // Not CommonStartMenu

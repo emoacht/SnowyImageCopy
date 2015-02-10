@@ -5,11 +5,8 @@
     <Setting Name="AppId" Type="System.String" Scope="Application">
       <Value Profile="(Default)">SnowyImageCopy</Value>
     </Setting>
-    <Setting Name="ShortcutFile" Type="System.String" Scope="Application">
+    <Setting Name="ShortcutFileName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Snowy.lnk</Value>
-    </Setting>
-    <Setting Name="ProjectSite" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://emoacht.github.io/SnowyImageCopy</Value>
     </Setting>
   </Settings>
 </SettingsFile>

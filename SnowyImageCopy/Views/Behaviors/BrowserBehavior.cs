@@ -58,7 +58,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			base.OnAttached();
 
-			this.AssociatedObject.IsVisibleChanged += OnVisibleChanged;
+			this.AssociatedObject.IsVisibleChanged += OnIsVisibleChanged;
 			this.AssociatedObject.Navigating += OnNavigating;
 		}
 
@@ -69,14 +69,14 @@ namespace SnowyImageCopy.Views.Behaviors
 			if (this.AssociatedObject == null)
 				return;
 
-			this.AssociatedObject.IsVisibleChanged -= OnVisibleChanged;
+			this.AssociatedObject.IsVisibleChanged -= OnIsVisibleChanged;
 			this.AssociatedObject.Navigating -= OnNavigating;
 		}
 
 
 		private bool isApplying;
 
-		private void OnVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
 			isApplying = true;
 
