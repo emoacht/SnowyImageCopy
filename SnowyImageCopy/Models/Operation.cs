@@ -15,7 +15,6 @@ using DesktopToast;
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models.Exceptions;
-using SnowyImageCopy.Models.Network;
 using SnowyImageCopy.Properties;
 using SnowyImageCopy.ViewModels;
 
@@ -310,7 +309,7 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				if (await NetworkChecker.IsNetworkConnectedAsync(_card))
+				if (NetworkChecker.IsNetworkConnected(_card))
 				{
 					OperationStatus = Resources.OperationStatus_Checking;
 
@@ -677,14 +676,9 @@ namespace SnowyImageCopy.Models
 				if (_card.CanGetCid)
 					_card.Cid = await FileManager.GetCidAsync(_tokenSourceWorking.Token);
 
-				// Check SSID.
+				// Check SSID and check if PC is connected to FlashAir card by wireless network.
 				_card.Ssid = await FileManager.GetSsidAsync(_tokenSourceWorking.Token);
-				if (!String.IsNullOrWhiteSpace(_card.Ssid))
-				{
-					// Check if PC is connected to FlashAir card by wireless network.
-					var checkTask = Task.Run(async () =>
-						_card.IsWirelessConnected = await NetworkChecker.IsWirelessNetworkConnectedAsync(_card.Ssid));
-				}
+				_card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(_card.Ssid);
 
 				// Get all items.
 				var fileListNew = await FileManager.GetFileListRootAsync(_tokenSourceWorking.Token, _card);

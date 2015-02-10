@@ -10,8 +10,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+
 using SnowyImageCopy.Models.Exceptions;
-using SnowyImageCopy.Models.Network;
 using SnowyImageCopy.ViewModels;
 
 namespace SnowyImageCopy.Models
@@ -579,9 +579,9 @@ namespace SnowyImageCopy.Models
 								var tcs = new TaskCompletionSource<bool>();
 
 								// Start timer to monitor network connection.
-								using (var monitorTimer = new Timer(async s =>
+								using (var monitorTimer = new Timer(s =>
 								{
-									if (!await NetworkChecker.IsNetworkConnectedAsync(card))
+									if (!NetworkChecker.IsNetworkConnected(card))
 									{
 										((TaskCompletionSource<bool>)s).TrySetResult(true);
 									}
