@@ -13,7 +13,7 @@ namespace SnowyImageCopy.ViewModels
 {
 	public class FileItemViewModelCollection : ObservableCollection<FileItemViewModel>
 	{
-		private readonly object locker = new object();
+		private readonly object _locker = new object();
 
 		/// <summary>
 		/// Insert new item to correct position in order to minimize the necessity of sorting.
@@ -21,7 +21,7 @@ namespace SnowyImageCopy.ViewModels
 		/// <param name="item">New item to collection</param>
 		public void Insert(FileItemViewModel item)
 		{
-			lock (locker)
+			lock (_locker)
 			{
 				int index = 0;
 

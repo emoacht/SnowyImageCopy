@@ -9,8 +9,8 @@ namespace SnowyTool.Views
 {
 	public static class ProductInfo
 	{
-		private static readonly Assembly assembly = Assembly.GetExecutingAssembly();
-		public static readonly Version Version = assembly.GetName().Version;
+		private static readonly Assembly _assembly = Assembly.GetExecutingAssembly();
+		public static readonly Version Version = _assembly.GetName().Version;
 
 
 		#region Assembly attributes
@@ -20,7 +20,7 @@ namespace SnowyTool.Views
 			get
 			{
 				if (String.IsNullOrEmpty(_title))
-					_title = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTitleAttribute))).Title;
+					_title = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyTitleAttribute))).Title;
 
 				return _title;
 			}
@@ -32,7 +32,7 @@ namespace SnowyTool.Views
 			get
 			{
 				if (String.IsNullOrEmpty(_description))
-					_description = ((AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyDescriptionAttribute))).Description;
+					_description = ((AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyDescriptionAttribute))).Description;
 
 				return _description;
 			}
@@ -44,7 +44,7 @@ namespace SnowyTool.Views
 			get
 			{
 				if (String.IsNullOrEmpty(_company))
-					_company = ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute))).Company;
+					_company = ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyCompanyAttribute))).Company;
 
 				return _company;
 			}
@@ -56,7 +56,7 @@ namespace SnowyTool.Views
 			get
 			{
 				if (String.IsNullOrEmpty(_product))
-					_product = ((AssemblyProductAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute))).Product;
+					_product = ((AssemblyProductAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyProductAttribute))).Product;
 
 				return _product;
 			}
@@ -68,7 +68,7 @@ namespace SnowyTool.Views
 			get
 			{
 				if (String.IsNullOrEmpty(_copyright))
-					_copyright = ((AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCopyrightAttribute))).Copyright;
+					_copyright = ((AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyCopyrightAttribute))).Copyright;
 
 				return _copyright;
 			}
@@ -80,7 +80,7 @@ namespace SnowyTool.Views
 			get
 			{
 				if (String.IsNullOrEmpty(_trademark))
-					_trademark = ((AssemblyTrademarkAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTrademarkAttribute))).Trademark;
+					_trademark = ((AssemblyTrademarkAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyTrademarkAttribute))).Trademark;
 
 				return _trademark;
 			}

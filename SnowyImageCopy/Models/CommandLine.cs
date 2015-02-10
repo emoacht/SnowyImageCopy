@@ -93,19 +93,19 @@ namespace SnowyImageCopy.Models
 
 		#region Helper
 
-		private static string[] args;
+		private static string[] _args;
 
 		private static bool CheckArgs(params string[] options)
 		{
-			if (args == null)
+			if (_args == null)
 			{
-				args = Environment.GetCommandLineArgs()
+				_args = Environment.GetCommandLineArgs()
 					.Skip(1) // First arg is always executable file path.
 					.Select(x => x.ToLower())
 					.ToArray();
 			}
 
-			return args.Any() && options.Any() && args.Intersect(options).Any();
+			return _args.Any() && options.Any() && _args.Intersect(options).Any();
 		}
 
 		#endregion

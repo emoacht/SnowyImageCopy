@@ -247,7 +247,7 @@ namespace SnowyImageCopy.ViewModels
 
 				_currentFrameSize = value;
 
-				var handler = CurrentFrameSizeChanged;
+				var handler = _currentFrameSizeChanged;
 				if (handler != null)
 				{
 					handler();
@@ -256,7 +256,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private Size _currentFrameSize = Size.Empty;
 
-		private event Action CurrentFrameSizeChanged = null;
+		private event Action _currentFrameSizeChanged = null;
 
 		public FileItemViewModel CurrentItem { get; set; }
 
@@ -536,22 +536,22 @@ namespace SnowyImageCopy.ViewModels
 			// Add event listeners.
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
-				fileListPropertyChangedListener = new PropertyChangedEventListener(FileListPropertyChanged);
-				PropertyChangedEventManager.AddListener(FileListCore, fileListPropertyChangedListener, String.Empty);
+				_fileListPropertyChangedListener = new PropertyChangedEventListener(FileListPropertyChanged);
+				PropertyChangedEventManager.AddListener(FileListCore, _fileListPropertyChangedListener, String.Empty);
 
-				settingsPropertyChangedListener = new PropertyChangedEventListener(ReactSettingsPropertyChanged);
-				PropertyChangedEventManager.AddListener(Settings.Current, settingsPropertyChangedListener, String.Empty);
+				_settingsPropertyChangedListener = new PropertyChangedEventListener(ReactSettingsPropertyChanged);
+				PropertyChangedEventManager.AddListener(Settings.Current, _settingsPropertyChangedListener, String.Empty);
 
-				operationPropertyChangedListener = new PropertyChangedEventListener(ReactOperationPropertyChanged);
-				PropertyChangedEventManager.AddListener(Op, operationPropertyChangedListener, String.Empty);
+				_operationPropertyChangedListener = new PropertyChangedEventListener(ReactOperationPropertyChanged);
+				PropertyChangedEventManager.AddListener(Op, _operationPropertyChangedListener, String.Empty);
 			}
 
 			// Subscribe event handlers.
 			var currentFrameSizeChangedSubscriber =
 				Observable.FromEvent
 				(
-					handler => CurrentFrameSizeChanged += handler,
-					handler => CurrentFrameSizeChanged -= handler
+					handler => _currentFrameSizeChanged += handler,
+					handler => _currentFrameSizeChanged -= handler
 				)
 				.Throttle(TimeSpan.FromMilliseconds(50))
 				.ObserveOn(SynchronizationContext.Current)
@@ -560,8 +560,8 @@ namespace SnowyImageCopy.ViewModels
 			var autoCheckIntervalChangedSubscriber =
 				Observable.FromEvent
 				(
-					handler => AutoCheckChanged += handler,
-					handler => AutoCheckChanged -= handler
+					handler => _autoCheckChanged += handler,
+					handler => _autoCheckChanged -= handler
 				)
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
@@ -570,8 +570,8 @@ namespace SnowyImageCopy.ViewModels
 			var targetPeriodDatesChangedSubscriber =
 				Observable.FromEvent
 				(
-					handler => TargetDateChanged += handler,
-					handler => TargetDateChanged -= handler
+					handler => _targetDateChanged += handler,
+					handler => _targetDateChanged -= handler
 				)
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
@@ -592,7 +592,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region FileItem
 
-		private PropertyChangedEventListener fileListPropertyChangedListener;
+		private PropertyChangedEventListener _fileListPropertyChangedListener;
 
 		private string CaseItemProperty
 		{
@@ -676,7 +676,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Settings
 
-		private PropertyChangedEventListener settingsPropertyChangedListener;
+		private PropertyChangedEventListener _settingsPropertyChangedListener;
 
 		private string CaseAutoCheck
 		{
@@ -708,8 +708,8 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private string[] _caseTargetDate;
 
-		private event Action AutoCheckChanged = null;
-		private event Action TargetDateChanged = null;
+		private event Action _autoCheckChanged = null;
+		private event Action _targetDateChanged = null;
 
 		private void ReactSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -719,13 +719,13 @@ namespace SnowyImageCopy.ViewModels
 
 			if (CaseAutoCheck == propertyName)
 			{
-				var handler = AutoCheckChanged;
+				var handler = _autoCheckChanged;
 				if (handler != null)
 					handler();
 			}
 			else if (CaseTargetDate.Contains(propertyName))
 			{
-				var handler = TargetDateChanged;
+				var handler = _targetDateChanged;
 				if (handler != null)
 					handler();
 			}
@@ -736,7 +736,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Operation
 
-		private PropertyChangedEventListener operationPropertyChangedListener;
+		private PropertyChangedEventListener _operationPropertyChangedListener;
 
 		private string CaseIsChecking
 		{

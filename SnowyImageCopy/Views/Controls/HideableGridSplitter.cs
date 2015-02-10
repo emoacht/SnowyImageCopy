@@ -37,8 +37,8 @@ namespace SnowyImageCopy.Views.Controls
 		#endregion
 
 
-		private GridLength rightColumnWidth; // Width of Column at the right of this splitter
-		private GridLength bottomRowHeight; // Height of Row at the bottom of this splitter
+		private GridLength _rightColumnWidth; // Width of Column at the right of this splitter
+		private GridLength _bottomRowHeight; // Height of Row at the bottom of this splitter
 		
 		private void OnInitialized(object sender, EventArgs e)
 		{
@@ -56,7 +56,7 @@ namespace SnowyImageCopy.Views.Controls
 					var rightColumn = parent.ColumnDefinitions[columnIndex + 1]; // Column at the right of this splitter
 
 					// Record current column width.
-					rightColumnWidth = rightColumn.Width;
+					_rightColumnWidth = rightColumn.Width;
 					break;
 
 				case GridResizeDirection.Rows:
@@ -67,7 +67,7 @@ namespace SnowyImageCopy.Views.Controls
 					var bottomRow = parent.RowDefinitions[rowIndex + 1]; // Row at the bottom of this splitter
 
 					// Record current row height.
-					bottomRowHeight = bottomRow.Height;
+					_bottomRowHeight = bottomRow.Height;
 					break;
 			}
 		}
@@ -90,13 +90,13 @@ namespace SnowyImageCopy.Views.Controls
 					if (this.Visibility == Visibility.Visible)
 					{
 						// Restore previous column width.
-						rightColumn.Width = rightColumnWidth;
+						rightColumn.Width = _rightColumnWidth;
 						rightColumn.MinWidth = MinLength;
 					}
 					else
 					{
 						// Record current column width.
-						rightColumnWidth = rightColumn.Width;
+						_rightColumnWidth = rightColumn.Width;
 
 						// Hide the column.
 						rightColumn.Width = new GridLength(0);
@@ -114,13 +114,13 @@ namespace SnowyImageCopy.Views.Controls
 					if (this.Visibility == Visibility.Visible)
 					{
 						// Restore previous row height.
-						bottomRow.Height = bottomRowHeight;
+						bottomRow.Height = _bottomRowHeight;
 						bottomRow.MinHeight = MinLength;
 					}
 					else
 					{
 						// Record height of the row.
-						bottomRowHeight = bottomRow.Height;
+						_bottomRowHeight = bottomRow.Height;
 
 						// Hide the column.
 						bottomRow.Height = new GridLength(0);

@@ -25,8 +25,8 @@ namespace SnowyImageCopy.ViewModels
 
 				_mainWindowViewModelInstance = value;
 
-				operationPropertyChangedListener = new PropertyChangedEventListener(ReactOperationPropertyChanged);
-				PropertyChangedEventManager.AddListener(MainWindowViewModelInstance.Op, operationPropertyChangedListener, String.Empty);
+				_operationPropertyChangedListener = new PropertyChangedEventListener(ReactOperationPropertyChanged);
+				PropertyChangedEventManager.AddListener(MainWindowViewModelInstance.Op, _operationPropertyChangedListener, String.Empty);
 			}
 		}
 		private MainWindowViewModel _mainWindowViewModelInstance;
@@ -39,7 +39,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Event Listener
 
-		private PropertyChangedEventListener operationPropertyChangedListener;
+		private PropertyChangedEventListener _operationPropertyChangedListener;
 
 		private string[] CaseIsCheckingOrCopying
 		{
@@ -155,23 +155,23 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Language
 
-		private Dictionary<string, string> cultureMap;
-		private const string cultureNameAuto = "(auto)";
+		private Dictionary<string, string> _cultureMap;
+		private const string _cultureNameAuto = "(auto)";
 
 		public string[] Cultures
 		{
 			get
 			{
-				if (cultureMap == null)
+				if (_cultureMap == null)
 				{
-					cultureMap = new[] { new KeyValuePair<string, string>(String.Empty, cultureNameAuto) }
+					_cultureMap = new[] { new KeyValuePair<string, string>(String.Empty, _cultureNameAuto) }
 						.Concat(ResourceService.Current.SupportedCultures
 							.Select(x => new KeyValuePair<string, string>(x.Name, x.EnglishName)) // Or NativeName
 							.OrderBy(x => x.Value))
 						.ToDictionary(x => x.Key, x => x.Value);
 				}
 
-				return cultureMap.Select(x => x.Value).ToArray();
+				return _cultureMap.Select(x => x.Value).ToArray();
 			}
 		}
 
@@ -179,13 +179,13 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				var index = cultureMap.Select(x => x.Key).ToList().FindIndex(x => x == Settings.Current.CultureName);
+				var index = _cultureMap.Select(x => x.Key).ToList().FindIndex(x => x == Settings.Current.CultureName);
 
 				return (0 <= index) ? index : 0;
 			}
 			set
 			{
-				var cultureName = cultureMap.Select(x => x.Key).ToList()[value];
+				var cultureName = _cultureMap.Select(x => x.Key).ToList()[value];
 
 				// If cultureName is empty, Culture of this application's Resources will be automatically selected.
 				ResourceService.Current.ChangeCulture(cultureName);

@@ -16,7 +16,7 @@ namespace SnowyTool.Views.Converters
 	[ValueConversion(typeof(bool), typeof(Brush))]
 	public class BooleanInverseToBrushConverter : IValueConverter
 	{
-		private readonly string[] predefinedColorNames = typeof(Colors).GetProperties()
+		private readonly string[] _predefinedColorNames = typeof(Colors).GetProperties()
 			.Select(x => x.Name)
 			.ToArray();
 
@@ -33,7 +33,7 @@ namespace SnowyTool.Views.Converters
 			if (!(value is bool) || (bool)value || (parameter == null))
 				return DependencyProperty.UnsetValue;
 
-			if (!predefinedColorNames.Contains(parameter.ToString()))
+			if (!_predefinedColorNames.Contains(parameter.ToString()))
 				return DependencyProperty.UnsetValue;
 
 			return (SolidColorBrush)new BrushConverter().ConvertFromInvariantString(parameter.ToString());

@@ -39,7 +39,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Supported Culture names
 		/// </summary>
-		private static readonly string[] supportedCultureNames =
+		private static readonly string[] _supportedCultureNames =
 		{
 			"en", // Resources.resx
 			"ja-JP", // Resources.ja-JP.resx (Only "ja" is not enough to load this resource file)
@@ -54,7 +54,7 @@ namespace SnowyImageCopy.Models
 			{
 				if (_supportedCultures == null)
 				{
-					_supportedCultures = supportedCultureNames
+					_supportedCultures = _supportedCultureNames
 						.Select(x =>
 						{
 							try

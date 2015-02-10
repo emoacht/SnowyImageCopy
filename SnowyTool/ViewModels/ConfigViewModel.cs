@@ -38,8 +38,8 @@ namespace SnowyTool.ViewModels
             {
                 _APPMODE = value;
 
-                if (isImporting)
-                    APPMODE_IMPORT = _APPMODE;
+                if (_isImporting)
+                    _APPMODE_IMPORT = _APPMODE;
                 else
                     RaisePropertyChanged(() => IsChanged);
 
@@ -47,7 +47,7 @@ namespace SnowyTool.ViewModels
             }
         }
         private int _APPMODE = 4; // Default
-        private int APPMODE_IMPORT = 1; // Any number other than default
+        private int _APPMODE_IMPORT = 1; // Any number other than default
 
         /// <summary>
         /// NETBIOS/Bonjour name (Address of FlashAir)
@@ -79,14 +79,14 @@ namespace SnowyTool.ViewModels
             {
                 _APPSSID = GetNullOrLimited(value, 32);
 
-                if (isImporting)
-                    APPSSID_IMPORT = _APPSSID;
+                if (_isImporting)
+                    _APPSSID_IMPORT = _APPSSID;
                 else
                     RaisePropertyChanged(() => IsChanged);
             }
         }
         private string _APPSSID;
-        private string APPSSID_IMPORT;
+        private string _APPSSID_IMPORT;
 
         /// <summary>
         /// Network security key corresponding to APPSSID
@@ -102,14 +102,14 @@ namespace SnowyTool.ViewModels
             {
                 _APPNETWORKKEY = GetNullOrLimited(value, 64);
 
-                if (isImporting)
-                    APPNETWORKKEY_IMPORT = _APPNETWORKKEY;
+                if (_isImporting)
+                    _APPNETWORKKEY_IMPORT = _APPNETWORKKEY;
                 else
                     RaisePropertyChanged(() => IsChanged);
             }
         }
         private string _APPNETWORKKEY;
-        private string APPNETWORKKEY_IMPORT;
+        private string _APPNETWORKKEY_IMPORT;
 
         /// <summary>
         /// SSID of external Access Point for Internet pass-thru mode
@@ -124,14 +124,14 @@ namespace SnowyTool.ViewModels
             {
                 _BRGSSID = GetNullOrLimited(value, 32);
 
-                if (isImporting)
-                    BRGSSID_IMPORT = _BRGSSID;
+                if (_isImporting)
+                    _BRGSSID_IMPORT = _BRGSSID;
                 else
                     RaisePropertyChanged(() => IsChanged);
             }
         }
         private string _BRGSSID;
-        private string BRGSSID_IMPORT;
+        private string _BRGSSID_IMPORT;
 
         /// <summary>
         /// Network security key corresponding to BRGSSID
@@ -146,14 +146,14 @@ namespace SnowyTool.ViewModels
             {
                 _BRGNETWORKKEY = GetNullOrLimited(value, 64);
 
-                if (isImporting)
-                    BRGNETWORKKEY_IMPORT = _BRGNETWORKKEY;
+                if (_isImporting)
+                    _BRGNETWORKKEY_IMPORT = _BRGNETWORKKEY;
                 else
                     RaisePropertyChanged(() => IsChanged);
             }
         }
         private string _BRGNETWORKKEY;
-        private string BRGNETWORKKEY_IMPORT;
+        private string _BRGNETWORKKEY_IMPORT;
 
         /// <summary>
         /// Automatic timeout period (msec) for Wireless LAN
@@ -205,14 +205,14 @@ namespace SnowyTool.ViewModels
             {
                 _UPLOAD = value;
 
-                if (isImporting)
-                    UPLOAD_IMPORT = _UPLOAD;
+                if (_isImporting)
+                    _UPLOAD_IMPORT = _UPLOAD;
                 else
                     RaisePropertyChanged(() => IsChanged);
             }
         }
         private int _UPLOAD = 0; // Disabled
-        private int UPLOAD_IMPORT = 0; // Disabled
+        private int _UPLOAD_IMPORT = 0; // Disabled
 
         /// <summary>
         /// Upload destination directory
@@ -384,28 +384,28 @@ namespace SnowyTool.ViewModels
         /// Remaining parameters in the config file
         /// </summary>
         /// <remarks>This is to hold unusable parameters (LOCK, APPINFO) and unknown ones.</remarks>
-        private readonly Dictionary<string, string> remaining = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _remaining = new Dictionary<string, string>();
 
         public bool IsChanged
         {
             get
             {
-                return ((APPMODE_IMPORT != APPMODE) ||
-                    !IsBothNullOrEmptyOrEquals(APPSSID_IMPORT, APPSSID) ||
-                    !IsBothNullOrEmptyOrEquals(APPNETWORKKEY_IMPORT, APPNETWORKKEY) ||
-                    !IsBothNullOrEmptyOrEquals(BRGSSID_IMPORT, BRGSSID) ||
-                    !IsBothNullOrEmptyOrEquals(BRGNETWORKKEY_IMPORT, BRGNETWORKKEY) ||
-                    (UPLOAD_IMPORT != UPLOAD));
+                return ((_APPMODE_IMPORT != APPMODE) ||
+                    !IsBothNullOrEmptyOrEquals(_APPSSID_IMPORT, APPSSID) ||
+                    !IsBothNullOrEmptyOrEquals(_APPNETWORKKEY_IMPORT, APPNETWORKKEY) ||
+                    !IsBothNullOrEmptyOrEquals(_BRGSSID_IMPORT, BRGSSID) ||
+                    !IsBothNullOrEmptyOrEquals(_BRGNETWORKKEY_IMPORT, BRGNETWORKKEY) ||
+                    (_UPLOAD_IMPORT != UPLOAD));
             }
         }
 
-        private static readonly Regex versionPattern = new Regex(@"[1-9]\.\d{2}\.\d{2}$", RegexOptions.Compiled); // Pattern for firmware version (number part)
+        private static readonly Regex _versionPattern = new Regex(@"[1-9]\.\d{2}\.\d{2}$", RegexOptions.Compiled); // Pattern for firmware version (number part)
 
         public bool IsInternetPassThruReady
         {
             get
             {
-                var match = versionPattern.Match(VERSION);
+                var match = _versionPattern.Match(VERSION);
                 if (!match.Success)
                     return false;
 
@@ -497,31 +497,31 @@ namespace SnowyTool.ViewModels
 
         #region Import/Export
 
-        private readonly PropertyInfo[] properties = typeof(ConfigViewModel)
+        private readonly PropertyInfo[] _properties = typeof(ConfigViewModel)
             .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
             .Where(x => x.CanWrite) // CanWrite means not Readonly property.
             .ToArray();
 
-        private const char separator = '=';
-        private bool isImporting;
+        private const char _separator = '=';
+        private bool _isImporting;
 
         internal void Import(string configContent)
         {
-            var contents = StringDictionary.Parse(configContent, separator);
+            var contents = StringDictionary.Parse(configContent, _separator);
 
-            isImporting = true;
+            _isImporting = true;
 
             try
             {
-                remaining.Clear();
+                _remaining.Clear();
 
                 foreach (var c in contents)
                 {
-                    var p = properties.FirstOrDefault(x => c.Key == x.Name);
+                    var p = _properties.FirstOrDefault(x => c.Key == x.Name);
                     if (p == null)
                     {
-                        if (!remaining.Keys.Contains(c.Key))
-                            remaining.Add(c.Key, c.Value);
+                        if (!_remaining.Keys.Contains(c.Key))
+                            _remaining.Add(c.Key, c.Value);
 
                         continue;
                     }
@@ -540,7 +540,7 @@ namespace SnowyTool.ViewModels
             }
             finally
             {
-                isImporting = false;
+                _isImporting = false;
                 RaisePropertyChanged(() => IsChanged);
             }
         }
@@ -548,7 +548,7 @@ namespace SnowyTool.ViewModels
         internal string Export()
         {
             // Turn empty String value to null.
-            foreach (var p in properties)
+            foreach (var p in _properties)
             {
                 var value = p.GetValue(this) as string;
                 if (value == null)
@@ -565,17 +565,17 @@ namespace SnowyTool.ViewModels
             // Compose outcome.
             var outcome = new List<string>();
 
-            foreach (var p in properties)
+            foreach (var p in _properties)
             {
                 var value = p.GetValue(this);
                 if (value == null)
                     continue;
 
-                outcome.Add(String.Format("{0}{1}{2}", p.Name, separator, value));
+                outcome.Add(String.Format("{0}{1}{2}", p.Name, _separator, value));
             }
 
-            if (remaining.Any())
-                outcome.AddRange(remaining.Select(x => String.Format("{0}{1}{2}", x.Key, separator, x.Value)));
+            if (_remaining.Any())
+                outcome.AddRange(_remaining.Select(x => String.Format("{0}{1}{2}", x.Key, _separator, x.Value)));
 
             outcome.Sort();
 
@@ -590,11 +590,11 @@ namespace SnowyTool.ViewModels
 
         #region Parse CID
 
-        private static readonly Regex asciiPattern = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
+        private static readonly Regex _asciiPattern = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
 
         private void ParseCID(string cid)
         {
-            if (String.IsNullOrWhiteSpace(cid) || !asciiPattern.IsMatch(cid))
+            if (String.IsNullOrWhiteSpace(cid) || !_asciiPattern.IsMatch(cid))
                 return;
 
             var bytes = SoapHexBinary.Parse(cid).Value;
