@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace SnowyImageCopy.Views
 {
+	/// <summary>
+	/// This application's product information
+	/// </summary>
 	public static class ProductInfo
 	{
 		private static readonly Assembly _assembly = Assembly.GetExecutingAssembly();

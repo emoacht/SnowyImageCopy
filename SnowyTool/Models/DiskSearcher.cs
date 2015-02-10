@@ -11,6 +11,9 @@ using SnowyTool.Helper;
 
 namespace SnowyTool.Models
 {
+	/// <summary>
+	/// Search disks.
+	/// </summary>
 	internal static class DiskSearcher
 	{
 		/// <summary>
