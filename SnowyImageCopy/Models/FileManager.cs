@@ -514,7 +514,7 @@ namespace SnowyImageCopy.Models
 			if (recordsDownloadString)
 				await RecordDownloadStringAsync(path, bytes);
 
-			// Response from FlashAir card seems to be ASCII encoded. Not certain though.
+			// Response from FlashAir card seems to be encoded by ASCII.
 			return Encoding.ASCII.GetString(bytes);
 		}
 
