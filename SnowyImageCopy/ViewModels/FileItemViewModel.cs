@@ -84,53 +84,6 @@ namespace SnowyImageCopy.ViewModels
 
 		public DateTime Date { get; private set; }
 
-		public int RawDate
-		{
-			get { return _rawDate; }
-			private set
-			{
-				_rawDate = value;
-				SetDateTime(_rawDate, RawTime);
-			}
-		}
-		private int _rawDate;
-
-		public int RawTime
-		{
-			get { return _rawTime; }
-			private set
-			{
-				_rawTime = value;
-				SetDateTime(RawDate, _rawTime);
-			}
-		}
-		private int _rawTime;
-
-		private void SetDateTime(int rawDate, int rawTime)
-		{
-			if ((rawDate <= 0) || (rawTime <= 0))
-				return;
-
-			var baDate = new BitArray(new[] { rawDate }).Cast<bool>().ToArray();
-			var baTime = new BitArray(new[] { rawTime }).Cast<bool>().ToArray();
-
-			var year = ConvertFromBitsToInt(baDate.Skip(9)) + 1980;
-			var month = ConvertFromBitsToInt(baDate.Skip(5).Take(4));
-			var day = ConvertFromBitsToInt(baDate.Take(5));
-			var hour = ConvertFromBitsToInt(baTime.Skip(11));
-			var minute = ConvertFromBitsToInt(baTime.Skip(5).Take(6));
-			var second = ConvertFromBitsToInt(baTime.Take(5)) * 2;
-
-			Date = new DateTime(year, month, day, hour, minute, second);
-		}
-
-		private static int ConvertFromBitsToInt(IEnumerable<bool> source)
-		{
-			var target = new int[1];
-			new BitArray(source.ToArray()).CopyTo(target, 0);
-			return target[0];
-		}
-
 		#endregion
 
 
@@ -445,6 +398,9 @@ namespace SnowyImageCopy.ViewModels
 				return;
 
 			// Determine size, attribute and date.
+			int rawDate = 0;
+			int rawTime = 0;
+
 			for (int i = 1; i <= 4; i++)
 			{
 				int num;
@@ -459,10 +415,10 @@ namespace SnowyImageCopy.ViewModels
 							RawAttribute = num;
 							break;
 						case 3:
-							RawDate = num;
+							rawDate = num;
 							break;
 						case 4:
-							RawTime = num;
+							rawTime = num;
 							break;
 					}
 				}
@@ -471,6 +427,8 @@ namespace SnowyImageCopy.ViewModels
 					return;
 				}
 			}
+
+			Date = FatDateTime.ConvertFromDateIntAndTimeIntToDateTime(rawDate, rawTime);
 
 			// Determine file extension.
 			if ((0 < Size) && !IsDirectory && !IsVolume)
