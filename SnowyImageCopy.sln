@@ -14,6 +14,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowyImageCopy", "SnowyImag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowyTool", "SnowyTool\SnowyTool.csproj", "{BB8A7F03-E29D-4023-BD7B-FE2988FF4D77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowyImageCopy.Test", "SnowyImageCopy.Test\SnowyImageCopy.Test.csproj", "{FBFE3C9C-8D09-4ABF-82C6-C9B6D0B27AEB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{55DF0585-A26E-489E-BD94-4E6A50A83E23} = {55DF0585-A26E-489E-BD94-4E6A50A83E23}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +33,10 @@ Global
 		{BB8A7F03-E29D-4023-BD7B-FE2988FF4D77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB8A7F03-E29D-4023-BD7B-FE2988FF4D77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB8A7F03-E29D-4023-BD7B-FE2988FF4D77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBFE3C9C-8D09-4ABF-82C6-C9B6D0B27AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBFE3C9C-8D09-4ABF-82C6-C9B6D0B27AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBFE3C9C-8D09-4ABF-82C6-C9B6D0B27AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBFE3C9C-8D09-4ABF-82C6-C9B6D0B27AEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
