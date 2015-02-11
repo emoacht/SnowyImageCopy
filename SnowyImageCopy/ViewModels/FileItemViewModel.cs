@@ -69,6 +69,21 @@ namespace SnowyImageCopy.ViewModels
 			get { return String.Format("{0}/{1}", Directory, FileName); }
 		}
 
+		internal string FileNameWithCaseExtension
+		{
+			get
+			{
+				if (!Settings.Current.MakesFileExtensionLowerCase)
+					return FileName;
+
+				var extension = Path.GetExtension(FileName);
+				if (String.IsNullOrEmpty(extension))
+					return FileName;
+
+				return Path.GetFileNameWithoutExtension(FileName) + extension.ToLower();
+			}
+		}
+
 		internal string Signature
 		{
 			get { return String.Format("{0}-{1}-{2:yyyyMMddHHmmss}", FilePath, Size, Date); }

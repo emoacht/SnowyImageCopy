@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
 
@@ -76,6 +77,7 @@ namespace SnowyImageCopy.Models
 
 		private FileItemViewModel CurrentItem
 		{
+			get { return MainWindowViewModelInstance.CurrentItem; }
 			set { MainWindowViewModelInstance.CurrentItem = value; }
 		}
 
@@ -175,6 +177,34 @@ namespace SnowyImageCopy.Models
 			}
 		}
 		private ProgressInfo _operationProgress;
+
+		/// <summary>
+		/// Saving current image data on desktop
+		/// </summary>
+		public bool IsSavingDesktop
+		{
+			get { return _isSavingDesktop; }
+			set
+			{
+				_isSavingDesktop = value;
+				RaisePropertyChanged();
+			}
+		}
+		private bool _isSavingDesktop;
+
+		/// <summary>
+		/// Sending current image data to clipboard
+		/// </summary>
+		public bool IsSendingClipboard
+		{
+			get { return _isSendingClipboard; }
+			set
+			{
+				_isSendingClipboard = value;
+				RaisePropertyChanged();
+			}
+		}
+		private bool _isSendingClipboard;
 
 		#endregion
 
@@ -285,9 +315,6 @@ namespace SnowyImageCopy.Models
 
 		private CancellationTokenSource _tokenSourceWorking;
 		private bool _isTokenSourceWorkingDisposed;
-
-		private CancellationTokenSource _tokenSourceLoading;
-		private bool _isTokenSourceLoadingDisposed;
 
 		private DateTime LastCheckCopyTime { get; set; }
 
@@ -605,39 +632,6 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-		/// <summary>
-		/// Load image data from local file of a specified item and set it to current image data.
-		/// </summary>
-		/// <param name="item">Target item</param>
-		internal async Task LoadSetFileAsync(FileItemViewModel item)
-		{
-			if (!_isTokenSourceLoadingDisposed && (_tokenSourceLoading != null) && !_tokenSourceLoading.IsCancellationRequested)
-			{
-				try
-				{
-					_tokenSourceLoading.Cancel();
-				}
-				catch (ObjectDisposedException ode)
-				{
-					Debug.WriteLine("CancellationTokenSource has been disposed when tried to cancel operation. {0}", ode);
-				}
-			}
-
-			try
-			{
-				await LoadSetFileBaseAsync(item);
-			}
-			catch (OperationCanceledException)
-			{
-				// None.
-			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine("Failed to load image data from local file. {0}", ex);
-				throw new UnexpectedException("Failed to load image data from local file.", ex);
-			}
-		}
-
 		#endregion
 
 
@@ -916,11 +910,11 @@ namespace SnowyImageCopy.Models
 
 				while (true)
 				{
-					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
-
 					var item = FileListCore.FirstOrDefault(x => x.IsTarget && (x.Status == FileStatus.ToBeCopied));
 					if (item == null)
 						break; // Copy completed.
+
+					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
 
 					try
 					{
@@ -1019,18 +1013,40 @@ namespace SnowyImageCopy.Models
 				IsWindowActivateRequested = true; // Activating Window is requested.
 		}
 
+		#endregion
+
+		#endregion
+
+
+		#region Load & Save & Send
+
+		private CancellationTokenSource _tokenSourceLoading;
+		private bool _isTokenSourceLoadingDisposed;
+
 		/// <summary>
-		/// Load image data from local file of a specified item and set it to current image data.
+		/// Load image data from a local file and set it to current image data.
 		/// </summary>
 		/// <param name="item">Target item</param>
-		private async Task LoadSetFileBaseAsync(FileItemViewModel item)
+		internal async Task LoadSetAsync(FileItemViewModel item)
 		{
-			var localPath = ComposeLocalPath(item);
+			if (!_isTokenSourceLoadingDisposed && (_tokenSourceLoading != null) && !_tokenSourceLoading.IsCancellationRequested)
+			{
+				try
+				{
+					_tokenSourceLoading.Cancel();
+				}
+				catch (ObjectDisposedException ode)
+				{
+					Debug.WriteLine("CancellationTokenSource has been disposed when tried to cancel operation. {0}", ode);
+				}
+			}
 
 			try
 			{
 				_tokenSourceLoading = new CancellationTokenSource();
 				_isTokenSourceLoadingDisposed = false;
+
+				var localPath = ComposeLocalPath(item);
 
 				byte[] data = null;
 				if (item.CanLoadDataLocal)
@@ -1038,6 +1054,10 @@ namespace SnowyImageCopy.Models
 
 				CurrentItem = item;
 				CurrentImageData = data;
+			}
+			catch (OperationCanceledException)
+			{
+				// None.
 			}
 			catch (FileNotFoundException)
 			{
@@ -1047,6 +1067,11 @@ namespace SnowyImageCopy.Models
 			catch (IOException)
 			{
 				item.CanLoadDataLocal = false;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("Failed to load image data from local file. {0}", ex);
+				throw new UnexpectedException("Failed to load image data from local file.", ex);
 			}
 			finally
 			{
@@ -1058,7 +1083,76 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-		#endregion
+		/// <summary>
+		/// Save current image data on desktop.
+		/// </summary>
+		public async Task SaveDesktopAsync()
+		{
+			if ((CurrentImageData == null) || (CurrentItem == null))
+				return;
+
+			try
+			{
+				IsSavingDesktop = true;
+
+				var filePath = ComposeDesktopPath(CurrentItem);
+
+				using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+				{
+					await fs.WriteAsync(CurrentImageData, 0, CurrentImageData.Length);
+				}
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("Failed to save image data on desktop. {0}", ex);
+			}
+			finally
+			{
+				IsSavingDesktop = false;
+			}
+		}
+
+		/// <summary>
+		/// Send current image data to clipboard.
+		/// </summary>
+		public async Task SendClipboardAsync()
+		{
+			if (CurrentImageData == null)
+				return;
+
+			try
+			{
+				IsSendingClipboard = true;
+
+				var image = await ImageManager.ConvertBytesToBitmapImageAsync(CurrentImageData);
+
+				var tcs = new TaskCompletionSource<bool>();
+				var thread = new Thread(() =>
+				{
+					try
+					{
+						Clipboard.SetImage(image);
+						tcs.SetResult(true);
+					}
+					catch (Exception ex)
+					{
+						tcs.SetException(ex);
+					}
+				});
+				thread.SetApartmentState(ApartmentState.STA); // Clipboard class must run in STA thread.
+				thread.Start();
+
+				await tcs.Task;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("Failed to send image data to clipboard. {0}", ex);
+			}
+			finally
+			{
+				IsSendingClipboard = false;
+			}
+		}
 
 		#endregion
 
@@ -1068,33 +1162,34 @@ namespace SnowyImageCopy.Models
 		private const string _unknownFolderName = "Unknown"; // Folder name for an item whose date or time is invalid
 
 		/// <summary>
-		/// Compose local file path of a specified item.
+		/// Compose local file path to a specified local folder.
 		/// </summary>
 		/// <param name="item">Target item</param>
+		/// <returns>Local file path</returns>
 		private static string ComposeLocalPath(FileItemViewModel item)
 		{
-			var fileName = item.FileName;
-			if (String.IsNullOrWhiteSpace((fileName)))
-				throw new InvalidOperationException("FileName property is empty.");
-
-			if (Settings.Current.MakesFileExtensionLowerCase)
-			{
-				var extension = Path.GetExtension(fileName);
-				if (!String.IsNullOrEmpty(extension))
-					fileName = Path.GetFileNameWithoutExtension(fileName) + extension.ToLower();
-			}
-
 			var folderName = (item.Date != default(DateTime))
 				? item.Date.ToString("yyyyMMdd")
 				: _unknownFolderName;
 
-			return Path.Combine(Settings.Current.LocalFolder, folderName, fileName);
+			return Path.Combine(Settings.Current.LocalFolder, folderName, item.FileNameWithCaseExtension);
 		}
 
 		/// <summary>
-		/// Check if local file of a specified item exists.
+		/// Compose local file path to desktop.
 		/// </summary>
 		/// <param name="item">Target item</param>
+		/// <returns>Local file path</returns>
+		private static string ComposeDesktopPath(FileItemViewModel item)
+		{
+			return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), item.FileNameWithCaseExtension);
+		}
+
+		/// <summary>
+		/// Check if a local file exists.
+		/// </summary>
+		/// <param name="item">Target item</param>
+		/// <returns>True if exists</returns>
 		private static bool IsCopiedLocal(FileItemViewModel item)
 		{
 			var localPath = ComposeLocalPath(item);

@@ -129,6 +129,12 @@
   <data name="Command_Copy" xml:space="preserve">
     <value>Copy</value>
   </data>
+  <data name="Command_Save" xml:space="preserve">
+    <value>To Desktop</value>
+  </data>
+  <data name="Command_Send" xml:space="preserve">
+    <value>To Clipboard</value>
+  </data>
   <data name="Command_Stop" xml:space="preserve">
     <value>Stop</value>
   </data>
