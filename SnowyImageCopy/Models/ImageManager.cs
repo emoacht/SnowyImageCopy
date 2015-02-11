@@ -73,11 +73,10 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				using (var ms = new MemoryStream())
-				using (var writer = new BinaryWriter(ms))
 				{
-					writer.Write(bytes);
-
-					return await Task.Run(() => ReadThumbnailFromExifByImaging(ms));
+					return await ms.WriteAsync(bytes, 0, bytes.Length)
+						.ContinueWith(_ => ReadThumbnailFromExifByImaging(ms))
+						.ConfigureAwait(false);
 				}
 			}
 			catch (Exception ex)
@@ -136,11 +135,10 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				using (var ms = new MemoryStream())
-				using (var writer = new BinaryWriter(ms))
 				{
-					writer.Write(bytes);
-
-					return await Task.Run(() => CreateThumbnailFromImageUniform(ms));
+					return await ms.WriteAsync(bytes, 0, bytes.Length)
+						.ContinueWith(_ => CreateThumbnailFromImageUniform(ms))
+						.ConfigureAwait(false);
 				}
 			}
 			catch (Exception ex)
@@ -179,10 +177,8 @@ namespace SnowyImageCopy.Models
 				var propItem = drawingImage.GetPropertyItem(thumbnailDataId);
 
 				using (var ms = new MemoryStream())
-				using (var writer = new BinaryWriter(ms))
 				{
-					writer.Write(propItem.Value);
-
+					ms.Write(propItem.Value, 0, propItem.Value.Length);
 					return ConvertStreamToBitmapImage(ms);
 				}
 			}
@@ -414,9 +410,8 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				using (var ms = new MemoryStream())
-				using (var writer = new BinaryWriter(ms))
 				{
-					writer.Write(bytes);
+					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
 					if (willReadExif)
 						await Task.Run(() => ReflectOrientationToStream(ms));
@@ -449,9 +444,8 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				using (var ms = new MemoryStream())
-				using (var writer = new BinaryWriter(ms))
 				{
-					writer.Write(bytes);
+					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
 					if (willReadExif)
 						await Task.Run(() => ReflectOrientationToStream(ms));
@@ -474,7 +468,7 @@ namespace SnowyImageCopy.Models
 		/// Reflect orientation in Exif metadata to image.
 		/// </summary>
 		/// <param name="stream">Target stream</param>
-		private static void ReflectOrientationToStream(MemoryStream stream)
+		private static void ReflectOrientationToStream(Stream stream)
 		{
 			if (0 < stream.Position)
 				stream.Seek(0, SeekOrigin.Begin);
