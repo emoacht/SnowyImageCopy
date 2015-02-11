@@ -1040,6 +1040,8 @@ namespace SnowyImageCopy.Models
 
 		#region Helper
 
+		private const string _unknownFolderName = "Unknown"; // Folder name for an item whose date or time is invalid
+
 		/// <summary>
 		/// Compose local file path of a specified item.
 		/// </summary>
@@ -1057,7 +1059,11 @@ namespace SnowyImageCopy.Models
 					fileName = Path.GetFileNameWithoutExtension(fileName) + extension.ToLower();
 			}
 
-			return Path.Combine(Settings.Current.LocalFolder, item.Date.ToString("yyyyMMdd"), fileName);
+			var folderName = (item.Date != default(DateTime))
+				? item.Date.ToString("yyyyMMdd")
+				: _unknownFolderName;
+
+			return Path.Combine(Settings.Current.LocalFolder, folderName, fileName);
 		}
 
 		/// <summary>

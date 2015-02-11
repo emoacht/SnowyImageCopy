@@ -43,7 +43,16 @@ namespace SnowyImageCopy.Helper
 			var minute = ConvertFromBitsToInt(baTime.Skip(5).Take(6));
 			var second = ConvertFromBitsToInt(baTime.Take(5)) * 2;
 
-			return new DateTime(year, month, day, hour, minute, second);
+			try
+			{
+				return new DateTime(year, month, day, hour, minute, second);
+			}
+			catch (ArgumentOutOfRangeException)
+			{
+				// If time stamp of source folder or file is weird, date or time parameters may become invalid
+				// and so this Exception will be thrown.
+				return default(DateTime);
+			}
 		}
 
 		/// <summary>
