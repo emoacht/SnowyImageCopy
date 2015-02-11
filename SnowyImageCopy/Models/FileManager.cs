@@ -785,10 +785,14 @@ namespace SnowyImageCopy.Models
 					(File.GetLastWriteTime(filePath) < DateTime.Now.AddHours(-1)))
 					File.Delete(filePath);
 
-				var result = String.Format("[{0:HH:mm:ss fff}]", DateTime.Now) + Environment.NewLine
-					+ "request => " + requestPath + Environment.NewLine
-					+ "response -> " + Environment.NewLine
-					+ Encoding.ASCII.GetString(responseBytes) + Environment.NewLine;
+				var result = new[]
+				{
+					String.Format("[{0:HH:mm:ss fff}]", DateTime.Now),
+					String.Format("request => {0}", requestPath),
+					"response -> ",
+					Encoding.ASCII.GetString(responseBytes)
+				}
+				.Aggregate(String.Empty, (work, next) => work + next + Environment.NewLine);
 
 				using (var sw = new StreamWriter(filePath, true, Encoding.UTF8))
 				{

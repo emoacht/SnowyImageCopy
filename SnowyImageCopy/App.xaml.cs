@@ -99,7 +99,7 @@ namespace SnowyImageCopy
 				return;
 
 			var filePathDesktop = Path.Combine(
-				Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+				Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
 				fileName);
 
 			try
