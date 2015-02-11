@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -20,7 +21,9 @@ namespace SnowyImageCopy.Helper
 		/// </summary>
 		/// <param name="lpFileOp"></param>
 		/// <returns>Error code (0 if successful)</returns>
-		/// <remarks>MSDN says don't use GetLastError to examine the return values of this function.</remarks>
+		/// <remarks>MSDN says don't use GetLastError to examine the return values of this function. 
+		/// Several of return values are based on pre-Win32 error codes, which in some cases overlap 
+		/// common Win32 error codes without matching their meaning.</remarks>
 		[DllImport("Shell32.dll", EntryPoint = "SHFileOperationW")]
 		private static extern int SHFileOperation
 			(ref SHFILEOPSTRUCT lpFileOp);
@@ -105,30 +108,23 @@ namespace SnowyImageCopy.Helper
 
 			var filePathCombined = String.Join("\0", filePaths) + '\0' + '\0';
 
-			try
+			var sh = new SHFILEOPSTRUCT
 			{
-				var sh = new SHFILEOPSTRUCT
-				{
-					hwnd = IntPtr.Zero,
-					wFunc = FO.FO_DELETE,
-					pFrom = filePathCombined,
-					pTo = null,
-					// FOF_SILENT is necessary to prevent this application's window from losing focus.
-					fFlags = FOF.FOF_ALLOWUNDO | FOF.FOF_NOCONFIRMATION | FOF.FOF_SILENT,
-					fAnyOperationsAborted = false,
-					hNameMappings = IntPtr.Zero,
-					lpszProgressTitle = null,
-				};
+				hwnd = IntPtr.Zero,
+				wFunc = FO.FO_DELETE,
+				pFrom = filePathCombined,
+				pTo = null,
+				// FOF_SILENT is necessary to prevent this application's window from losing focus.
+				fFlags = FOF.FOF_ALLOWUNDO | FOF.FOF_NOCONFIRMATION | FOF.FOF_SILENT,
+				fAnyOperationsAborted = false,
+				hNameMappings = IntPtr.Zero,
+				lpszProgressTitle = null,
+			};
 
-				var result = SHFileOperation(ref sh);
+			var result = SHFileOperation(ref sh);
 
-				if (result != 0) // 0 means success or user canceled operation (it will never happen in this application).
-					throw new Exception(String.Format("Error number: {0:x}", result));
-			}
-			catch (Exception ex)
-			{
-				throw new Exception("Failed to move a file to Recycle.", ex);
-			}
+			if (result != 0) // 0 means success or user canceled operation (it will never happen in this application).
+				throw new Win32Exception(String.Format("Failed to move files to Recycle. Error code: {0} File paths: {1}", result, String.Join(",", filePaths)));
 		}
 	}
 }

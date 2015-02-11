@@ -50,11 +50,11 @@
 			<GroupBox Template="{StaticResource ItemGroupTemplate}"
 					  Header="{Binding Resources.Options_Path, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
-					<TextBlock Text="{Binding Resources.Options_RemoteRoot, Source={x:Static models:ResourceService.Current}}"/>
+					<TextBlock Text="{Binding Resources.Options_RemoteAddress, Source={x:Static models:ResourceService.Current}}"/>
 					<TextBox HorizontalAlignment="Stretch"
 							 Margin="0,4,0,6" Padding="2"
 							 VerticalContentAlignment="Center"
-							 Text="{Binding SettingsCurrent.RemoteRoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"
+							 Text="{Binding SettingsCurrent.RemoteAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"
 							 IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
 
 					<TextBlock Text="{Binding Resources.Options_LocalFolder, Source={x:Static models:ResourceService.Current}}"/>

@@ -199,6 +199,9 @@
   <data name="OperationStatus_NoNetwork" xml:space="preserve">
     <value>PC is not connected to network.</value>
   </data>
+  <data name="OperationStatus_NotFolderFound" xml:space="preserve">
+    <value>Specified folder is not found in FlashAir.</value>
+  </data>
   <data name="OperationStatus_NotSameFlashAir" xml:space="preserve">
     <value>FlashAir is changed.</value>
   </data>
@@ -274,7 +277,7 @@
   <data name="Options_Recycle" xml:space="preserve">
     <value>Move to Recycle if image in FlashAir is deleted</value>
   </data>
-  <data name="Options_RemoteRoot" xml:space="preserve">
+  <data name="Options_RemoteAddress" xml:space="preserve">
     <value>FlashAir Address (Copy Source)</value>
   </data>
   <data name="ProjectSite" xml:space="preserve">

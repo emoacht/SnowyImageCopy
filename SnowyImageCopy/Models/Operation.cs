@@ -409,6 +409,10 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionLost;
 				}
+				else if (ex.GetType() == typeof(RemoteFileNotFoundException))
+				{
+					OperationStatus = Resources.OperationStatus_NotFolderFound;
+				}
 				else if (ex.GetType() == typeof(TimeoutException))
 				{
 					OperationStatus = Resources.OperationStatus_TimedOut;
@@ -483,6 +487,10 @@ namespace SnowyImageCopy.Models
 				else if (ex.GetType() == typeof(RemoteConnectionLostException))
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionLost;
+				}
+				else if (ex.GetType() == typeof(RemoteFileNotFoundException))
+				{
+					OperationStatus = Resources.OperationStatus_NotFolderFound;
 				}
 				else if (ex.GetType() == typeof(TimeoutException))
 				{
@@ -709,10 +717,13 @@ namespace SnowyImageCopy.Models
 				// Check old items.
 				foreach (var itemOld in FileListCore)
 				{
-					var itemBuff = fileListNew.FirstOrDefault(x => x.FilePath == itemOld.FilePath);
-					if ((itemBuff != null) && (itemBuff.Size == itemOld.Size))
+					var itemSame = fileListNew.FirstOrDefault(x =>
+						x.FilePath.Equals(itemOld.FilePath, StringComparison.OrdinalIgnoreCase) &&
+						(x.Size == itemOld.Size));
+
+					if (itemSame != null)
 					{
-						fileListNew.Remove(itemBuff);
+						fileListNew.Remove(itemSame);
 
 						itemOld.IsAliveRemote = true;
 						itemOld.IsAliveLocal = IsCopiedLocal(itemOld);
@@ -740,26 +751,40 @@ namespace SnowyImageCopy.Models
 					FileListCore.Insert(itemNew); // Customized Insert method
 				}
 
-				// Manage deleted items.
-				var itemsDeleted = FileListCore.Where(x => !x.IsAliveRemote && (x.Status != FileStatus.Recycled)).ToArray();
-				if (itemsDeleted.Any())
+				// Manage lost items.
+				var itemsLost = FileListCore.Where(x => !x.IsAliveRemote).ToArray();
+				if (itemsLost.Any())
 				{
 					if (Settings.Current.MovesFileToRecycle)
 					{
-						var itemsDeletedCopied = itemsDeleted.Where(x => x.Status == FileStatus.Copied).ToList();
+						foreach (var item in itemsLost)
+						{
+							if (!item.IsDescendant || (item.Status != FileStatus.Copied))
+								continue;
 
-						Recycle.MoveToRecycle(itemsDeletedCopied.Select(ComposeLocalPath));
+							try
+							{
+								Recycle.MoveToRecycle(ComposeLocalPath(item));
+							}
+							catch (Exception ex)
+							{
+								Debug.WriteLine("Failed to move a file to Recycle. {0}", ex);
+								item.Status = FileStatus.NotCopied;
+								continue;
+							}
 
-						itemsDeletedCopied.ForEach(x => x.Status = FileStatus.Recycled);
+							item.Status = FileStatus.Recycled;
+						}
 					}
 
-					for (int i = itemsDeleted.Length - 1; i >= 0; i--)
+					for (int i = itemsLost.Length - 1; i >= 0; i--)
 					{
-						if ((itemsDeleted[i].Status == FileStatus.Copied) ||
-							(itemsDeleted[i].Status == FileStatus.Recycled))
+						var item = itemsLost[i];
+						if (item.IsDescendant &&
+							((item.Status == FileStatus.Copied) || (item.Status == FileStatus.Recycled)))
 							continue;
 
-						FileListCore.Remove(itemsDeleted[i]);
+						FileListCore.Remove(item);
 					}
 				}
 

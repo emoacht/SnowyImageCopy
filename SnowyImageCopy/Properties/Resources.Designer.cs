@@ -305,6 +305,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Specified folder is not found in FlashAir. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string OperationStatus_NotFolderFound {
+            get {
+                return ResourceManager.GetString("OperationStatus_NotFolderFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   FlashAir is changed. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string OperationStatus_NotSameFlashAir {
@@ -532,9 +541,9 @@ namespace SnowyImageCopy.Properties {
         /// <summary>
         ///   FlashAir Address (Copy Source) に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        public static string Options_RemoteRoot {
+        public static string Options_RemoteAddress {
             get {
-                return ResourceManager.GetString("Options_RemoteRoot", resourceCulture);
+                return ResourceManager.GetString("Options_RemoteAddress", resourceCulture);
             }
         }
         

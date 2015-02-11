@@ -190,21 +190,46 @@ namespace SnowyImageCopy.Models
 
 		#region Path
 
-		private static readonly Regex _rootPattern = new Regex(@"^https?://\S{1,15}/$", RegexOptions.Compiled);
+		private static readonly Regex _rootPattern = new Regex(@"^https?://((?!/)\S){1,15}/", RegexOptions.Compiled);
+
+		public string RemoteAddress
+		{
+			get { return _remoteAddress; }
+			set
+			{
+				if (_remoteAddress == value)
+					return;
+
+				if (Path.GetInvalidPathChars().Any(x => value.Contains(x)))
+					return;
+
+				var match = _rootPattern.Match(value);
+				if (!match.Success)
+					return;
+
+				_remoteRoot = match.Value;
+
+				var descendant = value.Substring(_remoteRoot.Length).TrimStart('/');
+				descendant = Regex.Replace(descendant, @"\s+", String.Empty);
+				descendant = Regex.Replace(descendant, "/{2,}", "/");
+
+				_remoteDescendant = String.Format("/{0}", descendant).TrimEnd('/');
+				_remoteAddress = _remoteRoot + descendant;
+			}
+		}
+		private string _remoteAddress = @"http://flashair/"; // Default FlashAir Url
 
 		public string RemoteRoot
 		{
-			get { return _remoteRoot; }
-			set
-			{
-				if (_remoteRoot == value)
-					return;
-
-				if (_rootPattern.IsMatch(value))
-					_remoteRoot = value;
-			}
+			get { return _remoteRoot ?? _remoteAddress; }
 		}
-		private string _remoteRoot = @"http://flashair/"; // Default FlashAir Url
+		private string _remoteRoot;
+
+		public string RemoteDescendant
+		{
+			get { return _remoteDescendant ?? String.Empty; }
+		}
+		private string _remoteDescendant;
 
 		private const string _defaultLocalFolder = "FlashAirImages"; // Default local folder name
 

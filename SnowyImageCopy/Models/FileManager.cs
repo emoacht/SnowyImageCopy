@@ -60,7 +60,7 @@ namespace SnowyImageCopy.Models
 			{
 				using (var client = new HttpClient { Timeout = _timeoutLength })
 				{
-					return await GetFileListAllAsync(client, String.Empty, card, cancellationToken).ConfigureAwait(false);
+					return await GetFileListAllAsync(client, Settings.Current.RemoteDescendant, card, cancellationToken).ConfigureAwait(false);
 				}
 			}
 			catch

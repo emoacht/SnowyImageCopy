@@ -201,6 +201,11 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 
+		public bool IsDescendant
+		{
+			get { return Directory.StartsWith(Settings.Current.RemoteDescendant, StringComparison.OrdinalIgnoreCase); }
+		}
+
 		public bool IsAliveRemote { get; set; }
 		public bool IsAliveLocal { get; set; }
 
