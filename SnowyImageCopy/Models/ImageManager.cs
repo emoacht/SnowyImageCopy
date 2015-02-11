@@ -202,7 +202,7 @@ namespace SnowyImageCopy.Models
 
 			using (var ms = new MemoryStream())
 			{
-				var encoder = new JpegBitmapEncoder(); // Codec?
+				var encoder = new JpegBitmapEncoder(); // Codec is to be considered.
 				encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
 				encoder.Save(ms);
 
@@ -243,7 +243,7 @@ namespace SnowyImageCopy.Models
 
 			using (var ms = new MemoryStream())
 			{
-				var encoder = new JpegBitmapEncoder(); // Codec?
+				var encoder = new JpegBitmapEncoder(); // Codec is to be considered.
 				encoder.Frames.Add(BitmapFrame.Create(rtb));
 				encoder.Save(ms);
 
@@ -265,7 +265,7 @@ namespace SnowyImageCopy.Models
 
 			using (var ms = new MemoryStream())
 			{
-				var encoder = new JpegBitmapEncoder(); // Codec?
+				var encoder = new JpegBitmapEncoder(); // Codec is to be considered.
 				encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
 				encoder.Save(ms);
 
@@ -830,14 +830,14 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Check if an exception is thrown because image format is not supported by PC.
 		/// </summary>
-		/// <param name="ex">Source exception</param>
+		/// <param name="ex">Target exception</param>
 		private static bool IsImageNotSupported(Exception ex)
 		{
 			if (ex.GetType() == typeof(FileFormatException))
 				return true;
 
 			// Windows Imaging Component (WIC) defined error code
-			// The description is: No imaging component suitable to complete this operation was found.
+			// This description is: No imaging component suitable to complete this operation was found.
 			const uint WINCODEC_ERR_COMPONENTNOTFOUND = 0x88982F50;
 
 			if (ex.GetType() == typeof(NotSupportedException))
