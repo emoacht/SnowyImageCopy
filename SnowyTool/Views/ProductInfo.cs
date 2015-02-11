@@ -100,7 +100,7 @@ namespace SnowyTool.Views
 
 		public static string ProductInfoShort
 		{
-			get { return String.Format("{0} {1}.{2}.{3}", Title, Version.Major, Version.Minor, Version.Build); }
+			get { return String.Format("{0} {1}", Title, Version.ToString(3)); }
 		}
 	}
 }
