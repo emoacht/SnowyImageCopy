@@ -247,28 +247,52 @@ namespace SnowyImageCopy.ViewModels
 
 				_currentFrameSize = value;
 
-				var handler = CurrentFrameSizeChanged;
+				var handler = _currentFrameSizeChanged;
 				if (handler != null)
-				{
 					handler();
-				}
 			}
 		}
 		private Size _currentFrameSize = Size.Empty;
 
-		private event Action CurrentFrameSizeChanged = null;
+		private event Action _currentFrameSizeChanged = null;
 
 		public FileItemViewModel CurrentItem { get; set; }
 
+		private ReaderWriterLockSlim _dataLock = new ReaderWriterLockSlim();
+		private bool _isCurrentImageDataGiven;
+
 		public byte[] CurrentImageData
 		{
-			get { return _currentImageData; }
+			get
+			{
+				_dataLock.EnterReadLock();
+				try
+				{
+					return _currentImageData;
+				}
+				finally
+				{
+					_dataLock.ExitReadLock();
+				}
+			}
 			set
 			{
-				_currentImageData = value;
+				_dataLock.EnterWriteLock();
+				try
+				{
+					_currentImageData = value;
+				}
+				finally
+				{
+					_dataLock.ExitWriteLock();
+				}
 
 				if (!Designer.IsInDesignMode)
 					SetCurrentImage();
+
+				if (!_isCurrentImageDataGiven &&
+					(_isCurrentImageDataGiven = (value != null)))
+					RaiseCanExecuteChanged();
 			}
 		}
 		private byte[] _currentImageData;
@@ -306,10 +330,9 @@ namespace SnowyImageCopy.ViewModels
 			{
 				try
 				{
-					if (!CurrentFrameSize.IsEmpty)
-						image = await ImageManager.ConvertBytesToBitmapImageUniformAsync(CurrentImageData, CurrentFrameSize, CurrentItem.CanReadExif);
-					else
-						image = await ImageManager.ConvertBytesToBitmapImageAsync(CurrentImageData, CurrentImageWidth, CurrentItem.CanReadExif);
+					image = !CurrentFrameSize.IsEmpty
+						? await ImageManager.ConvertBytesToBitmapImageUniformAsync(CurrentImageData, CurrentFrameSize, CurrentItem.CanReadExif)
+						: await ImageManager.ConvertBytesToBitmapImageAsync(CurrentImageData, CurrentImageWidth, CurrentItem.CanReadExif);
 				}
 				catch (ImageNotSupportedException)
 				{
@@ -492,6 +515,48 @@ namespace SnowyImageCopy.ViewModels
 		#endregion
 
 
+		#region Save Desktop Command
+
+		public DelegateCommand SaveDesktopCommand
+		{
+			get { return _saveDesktopCommand ?? (_saveDesktopCommand = new DelegateCommand(SaveDesktopExecute, CanSaveDesktopExecute)); }
+		}
+		private DelegateCommand _saveDesktopCommand;
+
+		private async void SaveDesktopExecute()
+		{
+			await Op.SaveDesktopAsync();
+		}
+
+		private bool CanSaveDesktopExecute()
+		{
+			return (CurrentImageData != null) && !Op.IsSavingDesktop;
+		}
+
+		#endregion
+
+
+		#region Send Clipboard Command
+
+		public DelegateCommand SendClipboardCommand
+		{
+			get { return _sendClipboardCommand ?? (_sendClipboardCommand = new DelegateCommand(SendClipboardExecute, CanSendClipboardExecute)); }
+		}
+		private DelegateCommand _sendClipboardCommand;
+
+		private async void SendClipboardExecute()
+		{
+			await Op.SendClipboardAsync();
+		}
+
+		private bool CanSendClipboardExecute()
+		{
+			return (CurrentImageData != null) && !Op.IsSendingClipboard;
+		}
+
+		#endregion
+
+
 		private void RaiseCanExecuteChanged()
 		{
 			// This method is static.
@@ -536,22 +601,22 @@ namespace SnowyImageCopy.ViewModels
 			// Add event listeners.
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
-				fileListPropertyChangedListener = new PropertyChangedEventListener(FileListPropertyChanged);
-				PropertyChangedEventManager.AddListener(FileListCore, fileListPropertyChangedListener, String.Empty);
+				_fileListPropertyChangedListener = new PropertyChangedEventListener(FileListPropertyChanged);
+				PropertyChangedEventManager.AddListener(FileListCore, _fileListPropertyChangedListener, String.Empty);
 
-				settingsPropertyChangedListener = new PropertyChangedEventListener(ReactSettingsPropertyChanged);
-				PropertyChangedEventManager.AddListener(Settings.Current, settingsPropertyChangedListener, String.Empty);
+				_settingsPropertyChangedListener = new PropertyChangedEventListener(ReactSettingsPropertyChanged);
+				PropertyChangedEventManager.AddListener(Settings.Current, _settingsPropertyChangedListener, String.Empty);
 
-				operationPropertyChangedListener = new PropertyChangedEventListener(ReactOperationPropertyChanged);
-				PropertyChangedEventManager.AddListener(Op, operationPropertyChangedListener, String.Empty);
+				_operationPropertyChangedListener = new PropertyChangedEventListener(ReactOperationPropertyChanged);
+				PropertyChangedEventManager.AddListener(Op, _operationPropertyChangedListener, String.Empty);
 			}
 
 			// Subscribe event handlers.
 			var currentFrameSizeChangedSubscriber =
 				Observable.FromEvent
 				(
-					handler => CurrentFrameSizeChanged += handler,
-					handler => CurrentFrameSizeChanged -= handler
+					handler => _currentFrameSizeChanged += handler,
+					handler => _currentFrameSizeChanged -= handler
 				)
 				.Throttle(TimeSpan.FromMilliseconds(50))
 				.ObserveOn(SynchronizationContext.Current)
@@ -560,8 +625,8 @@ namespace SnowyImageCopy.ViewModels
 			var autoCheckIntervalChangedSubscriber =
 				Observable.FromEvent
 				(
-					handler => AutoCheckChanged += handler,
-					handler => AutoCheckChanged -= handler
+					handler => _autoCheckChanged += handler,
+					handler => _autoCheckChanged -= handler
 				)
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
@@ -570,8 +635,8 @@ namespace SnowyImageCopy.ViewModels
 			var targetPeriodDatesChangedSubscriber =
 				Observable.FromEvent
 				(
-					handler => TargetDateChanged += handler,
-					handler => TargetDateChanged -= handler
+					handler => _targetDateChanged += handler,
+					handler => _targetDateChanged -= handler
 				)
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
@@ -592,7 +657,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region FileItem
 
-		private PropertyChangedEventListener fileListPropertyChangedListener;
+		private PropertyChangedEventListener _fileListPropertyChangedListener;
 
 		private string CaseItemProperty
 		{
@@ -658,7 +723,7 @@ namespace SnowyImageCopy.ViewModels
 						if (!IsCurrentImageVisible || Op.IsCopying)
 							return;
 
-						await Op.LoadSetFileAsync(item);
+						await Op.LoadSetAsync(item);
 						break;
 				}
 			}
@@ -676,7 +741,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Settings
 
-		private PropertyChangedEventListener settingsPropertyChangedListener;
+		private PropertyChangedEventListener _settingsPropertyChangedListener;
 
 		private string CaseAutoCheck
 		{
@@ -708,8 +773,8 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private string[] _caseTargetDate;
 
-		private event Action AutoCheckChanged = null;
-		private event Action TargetDateChanged = null;
+		private event Action _autoCheckChanged = null;
+		private event Action _targetDateChanged = null;
 
 		private void ReactSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -719,13 +784,13 @@ namespace SnowyImageCopy.ViewModels
 
 			if (CaseAutoCheck == propertyName)
 			{
-				var handler = AutoCheckChanged;
+				var handler = _autoCheckChanged;
 				if (handler != null)
 					handler();
 			}
 			else if (CaseTargetDate.Contains(propertyName))
 			{
-				var handler = TargetDateChanged;
+				var handler = _targetDateChanged;
 				if (handler != null)
 					handler();
 			}
@@ -736,7 +801,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Operation
 
-		private PropertyChangedEventListener operationPropertyChangedListener;
+		private PropertyChangedEventListener _operationPropertyChangedListener;
 
 		private string CaseIsChecking
 		{
@@ -778,6 +843,26 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private string _caseOperationProgress;
 
+		private string CaseIsSavingDesktop
+		{
+			get
+			{
+				return _caseIsSavingDesktop ?? (_caseIsSavingDesktop =
+					PropertySupport.GetPropertyName(() => (default(Operation)).IsSavingDesktop));
+			}
+		}
+		private string _caseIsSavingDesktop;
+
+		private string CaseIsSendingClipboard
+		{
+			get
+			{
+				return _caseIsSendingClipboard ?? (_caseIsSendingClipboard =
+					PropertySupport.GetPropertyName(() => (default(Operation)).IsSendingClipboard));
+			}
+		}
+		private string _caseIsSendingClipboard;
+
 		private void ReactOperationPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			//Debug.WriteLine("Operation property changed (MainWindowViewModel): {0} {1}", sender, e.PropertyName);
@@ -802,6 +887,10 @@ namespace SnowyImageCopy.ViewModels
 			else if (CaseOperationProgress == propertyName)
 			{
 				UpdateProgress(Op.OperationProgress);
+			}
+			else if ((CaseIsSavingDesktop == propertyName) || (CaseIsSendingClipboard == propertyName))
+			{
+				RaiseCanExecuteChanged();
 			}
 		}
 

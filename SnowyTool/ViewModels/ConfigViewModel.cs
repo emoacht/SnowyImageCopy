@@ -17,6 +17,14 @@ namespace SnowyTool.ViewModels
 {
 	public class ConfigViewModel : ViewModel
 	{
+		#region Type
+
+		private class MonitoredMemberAttribute : Attribute
+		{ }
+
+		#endregion
+
+
 		#region Property (Raw)
 
 		/// <summary>
@@ -31,23 +39,18 @@ namespace SnowyTool.ViewModels
 		/// 6: Wireless LAN functionality will be set when the card is turned on. Sets the Wireless LAN to Internet pass-thru mode. (FW 2.00.02+)
 		/// Other: Undefined behavior.
 		/// </remarks>
+		[MonitoredMember]
 		public int APPMODE
 		{
 			get { return _APPMODE; }
 			set
 			{
 				_APPMODE = value;
-
-				if (isImporting)
-					APPMODE_IMPORT = _APPMODE;
-				else
-					RaisePropertyChanged(() => IsChanged);
-
+				RaisePropertyChanged(() => IsChanged);
 				RaisePropertyChanged(() => IsInternetPassThruEnabled);
 			}
 		}
 		private int _APPMODE = 4; // Default
-		private int APPMODE_IMPORT = 1; // Any number other than default
 
 		/// <summary>
 		/// NETBIOS/Bonjour name (Address of FlashAir)
@@ -56,10 +59,15 @@ namespace SnowyTool.ViewModels
 		/// Format: 15 characters
 		/// If this parameter does not exist or empty, default name "flashair" will be used.
 		/// </remarks>
+		[MonitoredMember]
 		public string APPNAME
 		{
 			get { return _APPNAME; }
-			set { _APPNAME = GetNullOrLimited(value, 15); }
+			set
+			{
+				_APPNAME = GetNullOrLimited(value, 15);
+				RaisePropertyChanged(() => IsChanged);
+			}
 		}
 		private string _APPNAME;
 
@@ -72,21 +80,17 @@ namespace SnowyTool.ViewModels
 		/// For STA mode, SSID of external Access Point.
 		/// If this parameter is not set, default string "flashair_" will be used.
 		/// </remarks>
+		[MonitoredMember]
 		public string APPSSID
 		{
 			get { return _APPSSID; }
 			set
 			{
 				_APPSSID = GetNullOrLimited(value, 32);
-
-				if (isImporting)
-					APPSSID_IMPORT = _APPSSID;
-				else
-					RaisePropertyChanged(() => IsChanged);
+				RaisePropertyChanged(() => IsChanged);
 			}
 		}
 		private string _APPSSID;
-		private string APPSSID_IMPORT;
 
 		/// <summary>
 		/// Network security key corresponding to APPSSID
@@ -95,21 +99,17 @@ namespace SnowyTool.ViewModels
 		/// Format: 0-64 characters (at least 8 characters are required to enable security functionality) 
 		/// Once rebooted, this value will be saved in hidden area in FlashAir and this value will be masked.
 		/// </remarks>
+		[MonitoredMember]
 		public string APPNETWORKKEY
 		{
 			get { return _APPNETWORKKEY; }
 			set
 			{
 				_APPNETWORKKEY = GetNullOrLimited(value, 64);
-
-				if (isImporting)
-					APPNETWORKKEY_IMPORT = _APPNETWORKKEY;
-				else
-					RaisePropertyChanged(() => IsChanged);
+				RaisePropertyChanged(() => IsChanged);
 			}
 		}
 		private string _APPNETWORKKEY;
-		private string APPNETWORKKEY_IMPORT;
 
 		/// <summary>
 		/// SSID of external Access Point for Internet pass-thru mode
@@ -117,21 +117,17 @@ namespace SnowyTool.ViewModels
 		/// <remarks>
 		/// Format: 1-32 characters
 		/// </remarks>
+		[MonitoredMember]
 		public string BRGSSID
 		{
 			get { return _BRGSSID; }
 			set
 			{
 				_BRGSSID = GetNullOrLimited(value, 32);
-
-				if (isImporting)
-					BRGSSID_IMPORT = _BRGSSID;
-				else
-					RaisePropertyChanged(() => IsChanged);
+				RaisePropertyChanged(() => IsChanged);
 			}
 		}
 		private string _BRGSSID;
-		private string BRGSSID_IMPORT;
 
 		/// <summary>
 		/// Network security key corresponding to BRGSSID
@@ -139,21 +135,17 @@ namespace SnowyTool.ViewModels
 		/// <remarks>
 		/// Format: 0-64 characters
 		/// </remarks>
+		[MonitoredMember]
 		public string BRGNETWORKKEY
 		{
 			get { return _BRGNETWORKKEY; }
 			set
 			{
 				_BRGNETWORKKEY = GetNullOrLimited(value, 64);
-
-				if (isImporting)
-					BRGNETWORKKEY_IMPORT = _BRGNETWORKKEY;
-				else
-					RaisePropertyChanged(() => IsChanged);
+				RaisePropertyChanged(() => IsChanged);
 			}
 		}
 		private string _BRGNETWORKKEY;
-		private string BRGNETWORKKEY_IMPORT;
 
 		/// <summary>
 		/// Automatic timeout period (msec) for Wireless LAN
@@ -198,21 +190,17 @@ namespace SnowyTool.ViewModels
 		/// Other: Upload operation disabled.
 		/// If this parameter does not exist, upload operation will be regarded as disabled.
 		/// </remarks>
+		[MonitoredMember]
 		public int UPLOAD
 		{
 			get { return _UPLOAD; }
 			set
 			{
 				_UPLOAD = value;
-
-				if (isImporting)
-					UPLOAD_IMPORT = _UPLOAD;
-				else
-					RaisePropertyChanged(() => IsChanged);
+				RaisePropertyChanged(() => IsChanged);
 			}
 		}
 		private int _UPLOAD = 0; // Disabled
-		private int UPLOAD_IMPORT = 0; // Disabled
 
 		/// <summary>
 		/// Upload destination directory
@@ -353,7 +341,7 @@ namespace SnowyTool.ViewModels
 		/// </summary>
 		/// <remarks>
 		/// 12 bits [19:8] -> bytes 13 (second half) and 14
-		/// 8 bits [19:12] at the head for the year (0 means 2000) and 4 bits [11:8] at the tail for the month
+		/// 8 bits [19:12] at the head for count of years from 2000 and 4 bits [11:8] at the tail for month
 		/// </remarks>
 		public DateTime ManufacturingDate
 		{
@@ -384,28 +372,20 @@ namespace SnowyTool.ViewModels
 		/// Remaining parameters in the config file
 		/// </summary>
 		/// <remarks>This is to hold unusable parameters (LOCK, APPINFO) and unknown ones.</remarks>
-		private readonly Dictionary<string, string> remaining = new Dictionary<string, string>();
+		private readonly Dictionary<string, string> _remaining = new Dictionary<string, string>();
 
 		public bool IsChanged
 		{
-			get
-			{
-				return ((APPMODE_IMPORT != APPMODE) ||
-					!IsBothNullOrEmptyOrEquals(APPSSID_IMPORT, APPSSID) ||
-					!IsBothNullOrEmptyOrEquals(APPNETWORKKEY_IMPORT, APPNETWORKKEY) ||
-					!IsBothNullOrEmptyOrEquals(BRGSSID_IMPORT, BRGSSID) ||
-					!IsBothNullOrEmptyOrEquals(BRGNETWORKKEY_IMPORT, BRGNETWORKKEY) ||
-					(UPLOAD_IMPORT != UPLOAD));
-			}
+			get { return !_isImporting && !GetMonitoredValues().SequenceEqual(_monitoredValues); }
 		}
 
-		private static readonly Regex versionPattern = new Regex(@"[1-9]\.\d{2}\.\d{2}$", RegexOptions.Compiled); // Pattern for firmware version (number part)
+		private static readonly Regex _versionPattern = new Regex(@"[1-9]\.\d{2}\.\d{2}$", RegexOptions.Compiled); // Pattern for firmware version (number part)
 
 		public bool IsInternetPassThruReady
 		{
 			get
 			{
-				var match = versionPattern.Match(VERSION);
+				var match = _versionPattern.Match(VERSION);
 				if (!match.Success)
 					return false;
 
@@ -442,6 +422,7 @@ namespace SnowyTool.ViewModels
 				using (var sr = new StreamReader(configPath, Encoding.ASCII))
 				{
 					Import(await sr.ReadToEndAsync());
+					return true;
 				}
 			}
 			catch (Exception ex)
@@ -449,8 +430,6 @@ namespace SnowyTool.ViewModels
 				Debug.WriteLine("Failed to read config file. {0}", ex);
 				return false;
 			}
-
-			return true;
 		}
 
 		/// <summary>
@@ -497,31 +476,44 @@ namespace SnowyTool.ViewModels
 
 		#region Import/Export
 
-		private readonly PropertyInfo[] properties = typeof(ConfigViewModel)
+		private static readonly PropertyInfo[] _writableProperties = typeof(ConfigViewModel)
 			.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
 			.Where(x => x.CanWrite) // CanWrite means not Readonly property.
 			.ToArray();
 
-		private const char separator = '=';
-		private bool isImporting;
+		private static readonly PropertyInfo[] _monitoredProperties = _writableProperties
+			.Where(x => x.GetCustomAttribute(typeof(MonitoredMemberAttribute)) != null)
+			.ToArray();
+
+		private string[] _monitoredValues;
+
+		private IEnumerable<string> GetMonitoredValues()
+		{
+			return _monitoredProperties
+				.Select(x => x.GetValue(this))
+				.Select(x => (x != null) ? x.ToString() : String.Empty);
+		}
+
+		private const char _separator = '=';
+		private bool _isImporting;
 
 		internal void Import(string configContent)
 		{
-			var contents = TextParse.GetContent(configContent, separator);
+			var contents = StringDictionary.Parse(configContent, _separator);
 
-			isImporting = true;
+			_isImporting = true;
 
 			try
 			{
-				remaining.Clear();
+				_remaining.Clear();
 
 				foreach (var c in contents)
 				{
-					var p = properties.FirstOrDefault(x => c.Key == x.Name);
+					var p = _writableProperties.FirstOrDefault(x => c.Key == x.Name);
 					if (p == null)
 					{
-						if (!remaining.Keys.Contains(c.Key))
-							remaining.Add(c.Key, c.Value);
+						if (!_remaining.Keys.Contains(c.Key))
+							_remaining.Add(c.Key, c.Value);
 
 						continue;
 					}
@@ -537,18 +529,19 @@ namespace SnowyTool.ViewModels
 						throw new Exception(String.Format("Failed to import value ({0}). ", p.Name), ex);
 					}
 				}
+
+				_monitoredValues = GetMonitoredValues().ToArray();
 			}
 			finally
 			{
-				isImporting = false;
-				RaisePropertyChanged(() => IsChanged);
+				_isImporting = false;
 			}
 		}
 
 		internal string Export()
 		{
 			// Turn empty String value to null.
-			foreach (var p in properties)
+			foreach (var p in _writableProperties)
 			{
 				var value = p.GetValue(this) as string;
 				if (value == null)
@@ -565,17 +558,17 @@ namespace SnowyTool.ViewModels
 			// Compose outcome.
 			var outcome = new List<string>();
 
-			foreach (var p in properties)
+			foreach (var p in _writableProperties)
 			{
 				var value = p.GetValue(this);
 				if (value == null)
 					continue;
 
-				outcome.Add(String.Format("{0}{1}{2}", p.Name, separator, value));
+				outcome.Add(String.Format("{0}{1}{2}", p.Name, _separator, value));
 			}
 
-			if (remaining.Any())
-				outcome.AddRange(remaining.Select(x => String.Format("{0}{1}{2}", x.Key, separator, x.Value)));
+			if (_remaining.Any())
+				outcome.AddRange(_remaining.Select(x => String.Format("{0}{1}{2}", x.Key, _separator, x.Value)));
 
 			outcome.Sort();
 
@@ -590,11 +583,11 @@ namespace SnowyTool.ViewModels
 
 		#region Parse CID
 
-		private static readonly Regex asciiPattern = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
+		private static readonly Regex _asciiPattern = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
 
 		private void ParseCID(string cid)
 		{
-			if (String.IsNullOrWhiteSpace(cid) || !asciiPattern.IsMatch(cid))
+			if (String.IsNullOrWhiteSpace(cid) || !_asciiPattern.IsMatch(cid))
 				return;
 
 			var bytes = SoapHexBinary.Parse(cid).Value;
@@ -646,14 +639,6 @@ namespace SnowyTool.ViewModels
 			return (source.Length <= maxLength)
 				? source
 				: source.Substring(0, maxLength);
-		}
-
-		private static bool IsBothNullOrEmptyOrEquals(string a, string b, StringComparison comparisonType = StringComparison.Ordinal)
-		{
-			return String.Equals(
-				a == String.Empty ? null : a,
-				b == String.Empty ? null : b,
-				comparisonType);
 		}
 
 		private static void ConformNullOrEmpty(ref string a, ref string b)

@@ -48,53 +48,53 @@ namespace SnowyTool.Views.Controls
 				new FrameworkPropertyMetadata(
 					0D,
 					null,
-					(d, baseValue) => Math.Max((double)baseValue, fadingTime)));
+					(d, baseValue) => Math.Max((double)baseValue, _fadingTime)));
 
 		#endregion
 
 
-		private DispatcherTimer fadingTimer;
+		private DispatcherTimer _fadingTimer;
 
-		private const double fadingInterval = 0.1; // sec
-		private const double fadingTime = 1.5; // sec
-		private const double fadingStep = fadingInterval / fadingTime;
-		private double remainingTime; // sec
+		private const double _fadingInterval = 0.1; // sec
+		private const double _fadingTime = 1.5; // sec
+		private const double _fadingStep = _fadingInterval / _fadingTime;
+		private double _remainingTime; // sec
 
 		private void ManageText()
 		{
 			if (FadeOutTime <= 0D)
 				return;
 
-			if (fadingTimer == null)
+			if (_fadingTimer == null)
 			{
-				fadingTimer = new DispatcherTimer();
-				fadingTimer.Tick += OnFadingTimerTick;
+				_fadingTimer = new DispatcherTimer();
+				_fadingTimer.Tick += OnFadingTimerTick;
 			}
 
-			fadingTimer.Stop();
+			_fadingTimer.Stop();
 
 			var buff = this.Foreground.Clone();
 			buff.Opacity = 1D;
 			this.Foreground = buff;
 
-			remainingTime = FadeOutTime;
-			fadingTimer.Interval = TimeSpan.FromSeconds(fadingInterval);
-			fadingTimer.Start();
+			_remainingTime = FadeOutTime;
+			_fadingTimer.Interval = TimeSpan.FromSeconds(_fadingInterval);
+			_fadingTimer.Start();
 		}
 
 		private void OnFadingTimerTick(object sender, EventArgs e)
 		{
-			remainingTime -= fadingInterval;
+			_remainingTime -= _fadingInterval;
 
-			if (remainingTime <= 0D)
+			if (_remainingTime <= 0D)
 			{
 				this.Text = String.Empty;
-				fadingTimer.Stop();
+				_fadingTimer.Stop();
 			}
-			else if (remainingTime <= fadingTime)
+			else if (_remainingTime <= _fadingTime)
 			{
 				var buff = this.Foreground.Clone();
-				buff.Opacity -= fadingStep;
+				buff.Opacity -= _fadingStep;
 				this.Foreground = buff;
 			}
 		}

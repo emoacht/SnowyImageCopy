@@ -129,6 +129,12 @@
   <data name="Command_Copy" xml:space="preserve">
     <value>Copy</value>
   </data>
+  <data name="Command_Save" xml:space="preserve">
+    <value>To Desktop</value>
+  </data>
+  <data name="Command_Send" xml:space="preserve">
+    <value>To Clipboard</value>
+  </data>
   <data name="Command_Stop" xml:space="preserve">
     <value>Stop</value>
   </data>
@@ -198,6 +204,9 @@
   </data>
   <data name="OperationStatus_NoNetwork" xml:space="preserve">
     <value>PC is not connected to network.</value>
+  </data>
+  <data name="OperationStatus_NotFolderFound" xml:space="preserve">
+    <value>Specified folder is not found in FlashAir.</value>
   </data>
   <data name="OperationStatus_NotSameFlashAir" xml:space="preserve">
     <value>FlashAir is changed.</value>
@@ -274,7 +283,7 @@
   <data name="Options_Recycle" xml:space="preserve">
     <value>Move to Recycle if image in FlashAir is deleted</value>
   </data>
-  <data name="Options_RemoteRoot" xml:space="preserve">
+  <data name="Options_RemoteAddress" xml:space="preserve">
     <value>FlashAir Address (Copy Source)</value>
   </data>
   <data name="ProjectSite" xml:space="preserve">
@@ -286,11 +295,11 @@
   <data name="RecordException" xml:space="preserve">
     <value>This app will terminate, because unexpected problem happened. Leave exception log on Desktop?</value>
   </data>
-  <data name="ToastBody_CopyCompleted1st" xml:space="preserve">
-    <value>Copy from FlashAir completed.</value>
-  </data>
-  <data name="ToastBody_CopyCompleted2nd" xml:space="preserve">
+  <data name="ToastBodyExtra_CopyCompleted" xml:space="preserve">
     <value>({0} images, {1} seconds)</value>
+  </data>
+  <data name="ToastBody_CopyCompleted" xml:space="preserve">
+    <value>Copy from FlashAir completed.</value>
   </data>
   <data name="ToastHeadline_CopyCompleted" xml:space="preserve">
     <value>Copy Completed</value>

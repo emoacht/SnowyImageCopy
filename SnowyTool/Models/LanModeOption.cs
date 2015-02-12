@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace SnowyTool.Models
 {
+	/// <summary>
+	/// LAN mode options of FlashAir
+	/// </summary>
 	public enum LanModeOption
 	{
 		None = 0,

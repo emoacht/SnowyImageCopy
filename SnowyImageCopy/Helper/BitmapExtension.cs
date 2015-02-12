@@ -11,6 +11,9 @@ using System.Windows.Media.Imaging;
 
 namespace SnowyImageCopy.Helper
 {
+	/// <summary>
+	/// Extension method for <see cref="System.Drawing.Bitmap"/>
+	/// </summary>
 	public static class BitmapExtension
 	{
 		#region Win32

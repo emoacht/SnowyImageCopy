@@ -93,7 +93,6 @@
 	<Style x:Key="SwitchButtonStyle" TargetType="{x:Type ToggleButton}">
 		<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
 		<Setter Property="SnapsToDevicePixels" Value="True"/>
-		<Setter Property="BorderBrush" Value="{StaticResource SnowBlue.Normal.Border}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Background" Value="{StaticResource SnowBlue.Normal.Background}"/>
 		<Setter Property="Foreground" Value="{StaticResource SnowBlue.Normal.Foreground}"/>
@@ -109,7 +108,31 @@
 				<Setter Property="Background" Value="{StaticResource SnowBlue.MouseOver.Background}"/>
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="BorderBrush" Value="{StaticResource SnowBlue.Disabled.Border}"/>
+				<Setter Property="Background" Value="{StaticResource SnowBlue.Disabled.Background}"/>
+				<Setter Property="Foreground" Value="{StaticResource SnowBlue.Disabled.Foreground}"/>
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+
+	<!-- Action Button -->
+	<Style x:Key="ActionButtonStyle" TargetType="{x:Type Button}">
+		<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
+		<Setter Property="SnapsToDevicePixels" Value="True"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Background" Value="{StaticResource SnowGray.Normal.Background}"/>
+		<Setter Property="Foreground" Value="{StaticResource SnowGray.Normal.Foreground}"/>
+		<Setter Property="Template" Value="{StaticResource ButtonTemplate}"/>
+
+		<Style.Triggers>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter Property="Background" Value="{StaticResource SnowBlue.MouseOver.Background}"/>
+				<Setter Property="Foreground" Value="{StaticResource SnowBlue.Normal.Foreground}"/>
+			</Trigger>
+			<Trigger Property="IsPressed" Value="True">
+				<Setter Property="Background" Value="{StaticResource SnowBlue.Pressed.Background}"/>
+				<Setter Property="Foreground" Value="{StaticResource SnowBlue.Normal.Foreground}"/>
+			</Trigger>
+			<Trigger Property="IsEnabled" Value="False">
 				<Setter Property="Background" Value="{StaticResource SnowBlue.Disabled.Background}"/>
 				<Setter Property="Foreground" Value="{StaticResource SnowBlue.Disabled.Foreground}"/>
 			</Trigger>

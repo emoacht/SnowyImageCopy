@@ -8,26 +8,26 @@ using System.Windows;
 
 namespace SnowyImageCopy.Common
 {
-	public class PropertyChangedEventListener : IWeakEventListener
-	{
-		public PropertyChangedEventListener(Action<object, PropertyChangedEventArgs> propertyChangedAction)
-		{
-			this.propertyChangedAction = propertyChangedAction;
-		}
+    public class PropertyChangedEventListener : IWeakEventListener
+    {
+        private readonly Action<object, PropertyChangedEventArgs> _propertyChangedAction;
 
-		private readonly Action<object, PropertyChangedEventArgs> propertyChangedAction;
+        public PropertyChangedEventListener(Action<object, PropertyChangedEventArgs> propertyChangedAction)
+        {
+            this._propertyChangedAction = propertyChangedAction;
+        }
 
-		public bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
-		{
-			if (managerType != typeof(PropertyChangedEventManager))
-				return false;
-			
-			var pce = e as PropertyChangedEventArgs;
-			if (pce == null)
-				return false;
+        public bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
+        {
+            if (managerType != typeof(PropertyChangedEventManager))
+                return false;
 
-			this.propertyChangedAction(sender, pce);
-			return true;
-		}
-	}
+            var pce = e as PropertyChangedEventArgs;
+            if (pce == null)
+                return false;
+
+            this._propertyChangedAction(sender, pce);
+            return true;
+        }
+    }
 }

@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace SnowyImageCopy.Helper
 {
+	/// <summary>
+	/// OS version information
+	/// </summary>
 	public static class OsVersion
 	{
-		private static readonly Version ver = Environment.OSVersion.Version;
+		private static readonly Version _ver = Environment.OSVersion.Version;
 
 		/// <summary>
 		/// Whether OS is Windows 8 or newer
@@ -16,7 +19,7 @@ namespace SnowyImageCopy.Helper
 		/// <remarks>Windows 8 = version 6.2</remarks>
 		public static bool IsEightOrNewer
 		{
-			get { return ((6 == ver.Major) && (2 <= ver.Minor)) || (7 <= ver.Major); }
+			get { return ((6 == _ver.Major) && (2 <= _ver.Minor)) || (7 <= _ver.Major); }
 		}
 	}
 }

@@ -18,6 +18,11 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
+Ver 0.9.9 2015-2-12
+
+ - Added function to save current image on desktop and to send current image to clipboard
+ - Changed copy source to accept not only root folder but also its descendants
+
 Ver 0.9.8 2014-12-29
 
  - Fixed exception when total file size in specified dates exceeds 2GiB
@@ -56,11 +61,15 @@ Ver 0.9.0 2014-04-10
 
  - Initial release
 
+##License
+
+ - MIT License
+
 ##Other
 
- - Libraries: [Reactive Extensions][2], [WPF Per-Monitor DPI Aware Window][3]
- - License: MIT License
+ - Libraries: [Reactive Extensions][2], [WPF Per-Monitor DPI Aware Window][3], [Desktop Toast][4]
 
 [1]: https://www.flashair-developers.com/en/
 [2]: http://rx.codeplex.com/
 [3]: https://github.com/emoacht/WpfPerMonitorDpi
+[4]: https://github.com/emoacht/DesktopToast

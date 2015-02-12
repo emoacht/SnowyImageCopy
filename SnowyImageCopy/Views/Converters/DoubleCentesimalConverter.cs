@@ -10,7 +10,7 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Convert double of percentage to centesimal double. 
+	/// Convert double of percentage to centesimal double.
 	/// </summary>
 	[ValueConversion(typeof(double), typeof(double))]
 	public class DoubleCentesimalConverter : IValueConverter

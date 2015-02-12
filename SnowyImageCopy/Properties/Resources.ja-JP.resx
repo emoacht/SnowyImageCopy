@@ -129,6 +129,12 @@
   <data name="Command_Copy" xml:space="preserve">
     <value>コピー</value>
   </data>
+  <data name="Command_Save" xml:space="preserve">
+    <value>デスクトップへ</value>
+  </data>
+  <data name="Command_Send" xml:space="preserve">
+    <value>クリップボードへ</value>
+  </data>
   <data name="Command_Stop" xml:space="preserve">
     <value>停止</value>
   </data>
@@ -194,6 +200,9 @@
   </data>
   <data name="OperationStatus_NoNetwork" xml:space="preserve">
     <value>PCがネットワークに接続していません。</value>
+  </data>
+  <data name="OperationStatus_NotFolderFound" xml:space="preserve">
+    <value>指定のフォルダーがFlashAirに見つかりません。</value>
   </data>
   <data name="OperationStatus_NotSameFlashAir" xml:space="preserve">
     <value>FlashAirが変更されています。</value>
@@ -270,7 +279,7 @@
   <data name="Options_Recycle" xml:space="preserve">
     <value>FlashAir内のイメージが削除されたらごみ箱に移動する</value>
   </data>
-  <data name="Options_RemoteRoot" xml:space="preserve">
+  <data name="Options_RemoteAddress" xml:space="preserve">
     <value>FlashAirアドレス (コピー元)</value>
   </data>
   <data name="ProjectSite" xml:space="preserve">
@@ -282,11 +291,11 @@
   <data name="RecordException" xml:space="preserve">
     <value>予想外の問題が起きたため、このアプリを終了します。例外のログをデスクトップに残しますか?</value>
   </data>
-  <data name="ToastBody_CopyCompleted1st" xml:space="preserve">
-    <value>FlashAirからのコピーが完了しました。</value>
-  </data>
-  <data name="ToastBody_CopyCompleted2nd" xml:space="preserve">
+  <data name="ToastBodyExtra_CopyCompleted" xml:space="preserve">
     <value>({0} イメージ, {1} 秒)</value>
+  </data>
+  <data name="ToastBody_CopyCompleted" xml:space="preserve">
+    <value>FlashAirからのコピーが完了しました。</value>
   </data>
   <data name="ToastHeadline_CopyCompleted" xml:space="preserve">
     <value>コピー完了</value>

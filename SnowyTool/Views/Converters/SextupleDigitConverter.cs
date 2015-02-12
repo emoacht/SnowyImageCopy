@@ -15,7 +15,7 @@ namespace SnowyTool.Views.Converters
 	[ValueConversion(typeof(ulong), typeof(ulong))]
 	public class SextupleDigitConverter : IValueConverter
 	{
-		private const ulong sextupleDigitFactor = 1048576UL;
+		private const ulong _sextupleDigitFactor = 1048576UL;
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
@@ -23,7 +23,7 @@ namespace SnowyTool.Views.Converters
 			if ((value == null) || (!ulong.TryParse(value.ToString(), out buff)))
 				return DependencyProperty.UnsetValue;
 
-			return buff / sextupleDigitFactor;
+			return buff / _sextupleDigitFactor;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -32,7 +32,7 @@ namespace SnowyTool.Views.Converters
 			if ((value == null) || (!ulong.TryParse(value.ToString(), out buff)))
 				return DependencyProperty.UnsetValue;
 
-			return buff * sextupleDigitFactor;
+			return buff * _sextupleDigitFactor;
 		}
 	}
 }

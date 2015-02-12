@@ -2,7 +2,7 @@
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls">
 
-<!--==========================================
+	<!--==========================================
 	 Styles, templates for custom controls
 ===========================================-->
 

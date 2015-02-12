@@ -8,6 +8,9 @@ using System.Windows;
 
 namespace SnowyImageCopy.Helper
 {
+	/// <summary>
+	/// Designer information
+	/// </summary>
 	public static class Designer
 	{
 		/// <summary>

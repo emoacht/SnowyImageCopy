@@ -97,6 +97,24 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   To Desktop に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Command_Save {
+            get {
+                return ResourceManager.GetString("Command_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   To Clipboard に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Command_Send {
+            get {
+                return ResourceManager.GetString("Command_Send", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Stop に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Command_Stop {
@@ -301,6 +319,15 @@ namespace SnowyImageCopy.Properties {
         public static string OperationStatus_NoNetwork {
             get {
                 return ResourceManager.GetString("OperationStatus_NoNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Specified folder is not found in FlashAir. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string OperationStatus_NotFolderFound {
+            get {
+                return ResourceManager.GetString("OperationStatus_NotFolderFound", resourceCulture);
             }
         }
         
@@ -532,9 +559,9 @@ namespace SnowyImageCopy.Properties {
         /// <summary>
         ///   FlashAir Address (Copy Source) に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        public static string Options_RemoteRoot {
+        public static string Options_RemoteAddress {
             get {
-                return ResourceManager.GetString("Options_RemoteRoot", resourceCulture);
+                return ResourceManager.GetString("Options_RemoteAddress", resourceCulture);
             }
         }
         
@@ -568,18 +595,18 @@ namespace SnowyImageCopy.Properties {
         /// <summary>
         ///   Copy from FlashAir completed. に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        public static string ToastBody_CopyCompleted1st {
+        public static string ToastBody_CopyCompleted {
             get {
-                return ResourceManager.GetString("ToastBody_CopyCompleted1st", resourceCulture);
+                return ResourceManager.GetString("ToastBody_CopyCompleted", resourceCulture);
             }
         }
         
         /// <summary>
         ///   ({0} images, {1} seconds) に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        public static string ToastBody_CopyCompleted2nd {
+        public static string ToastBodyExtra_CopyCompleted {
             get {
-                return ResourceManager.GetString("ToastBody_CopyCompleted2nd", resourceCulture);
+                return ResourceManager.GetString("ToastBodyExtra_CopyCompleted", resourceCulture);
             }
         }
         

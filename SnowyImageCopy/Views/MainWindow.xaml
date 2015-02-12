@@ -434,11 +434,27 @@
 					Grid.Column="2"
 					x:Name="CurrentImageGrid"
 					Visibility="{Binding IsCurrentImageVisible, Converter={StaticResource BooleanToVisibilityConverterKey}}">
-					<Image x:Name="CurrentImageImage"
-						   Width="{Binding CurrentImageWidth, Mode=OneWay}"
-						   HorizontalAlignment="Left" VerticalAlignment="Top"
-						   Margin="0,4,8,4"
-						   Source="{Binding CurrentImage, Mode=OneWay}"/>
+					<Grid VerticalAlignment="Top">
+						<Image x:Name="CurrentImageImage"
+							   Width="{Binding CurrentImageWidth, Mode=OneWay}"
+							   HorizontalAlignment="Left" VerticalAlignment="Top"
+							   Margin="0,4,8,30"
+							   Source="{Binding CurrentImage, Mode=OneWay}"/>
+
+						<StackPanel Margin="0,0,0,4" VerticalAlignment="Bottom"
+									Orientation="Horizontal">
+							<Button Height="22" Margin="0,0,2,0"
+									Padding="7,0"
+									Content="{Binding Resources.Command_Save, Source={x:Static models:ResourceService.Current}}"
+									Command="{Binding SaveDesktopCommand}"
+									Style="{StaticResource ActionButtonStyle}"/>
+							<Button Height="22"
+									Padding="7,0"
+									Content="{Binding Resources.Command_Send, Source={x:Static models:ResourceService.Current}}"
+									Command="{Binding SendClipboardCommand}"
+									Style="{StaticResource ActionButtonStyle}"/>
+						</StackPanel>
+					</Grid>
 
 					<i:Interaction.Behaviors>
 						<behaviors:GridSizeBehavior

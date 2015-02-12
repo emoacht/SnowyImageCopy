@@ -12,7 +12,7 @@ namespace SnowyImageCopy.Models
 	/// <summary>
 	/// Load/Save this application's window size and position.
 	/// </summary>
-	/// <remarks>This class is public because the instance will be handled by XmlSerializer.</remarks>
+	/// <remarks>This class must be public because the instance will be handled by XmlSerializer.</remarks>
 	public class WindowPlacement
 	{
 		#region Win32

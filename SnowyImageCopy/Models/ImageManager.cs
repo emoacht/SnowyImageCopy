@@ -73,11 +73,10 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				using (var ms = new MemoryStream())
-				using (var writer = new BinaryWriter(ms))
 				{
-					writer.Write(bytes);
-
-					return await Task.Run(() => ReadThumbnailFromExifByImaging(ms));
+					return await ms.WriteAsync(bytes, 0, bytes.Length)
+						.ContinueWith(_ => ReadThumbnailFromExifByImaging(ms))
+						.ConfigureAwait(false);
 				}
 			}
 			catch (Exception ex)
@@ -136,11 +135,10 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				using (var ms = new MemoryStream())
-				using (var writer = new BinaryWriter(ms))
 				{
-					writer.Write(bytes);
-
-					return await Task.Run(() => CreateThumbnailFromImageUniform(ms));
+					return await ms.WriteAsync(bytes, 0, bytes.Length)
+						.ContinueWith(_ => CreateThumbnailFromImageUniform(ms))
+						.ConfigureAwait(false);
 				}
 			}
 			catch (Exception ex)
@@ -179,10 +177,8 @@ namespace SnowyImageCopy.Models
 				var propItem = drawingImage.GetPropertyItem(thumbnailDataId);
 
 				using (var ms = new MemoryStream())
-				using (var writer = new BinaryWriter(ms))
 				{
-					writer.Write(propItem.Value);
-
+					ms.Write(propItem.Value, 0, propItem.Value.Length);
 					return ConvertStreamToBitmapImage(ms);
 				}
 			}
@@ -206,7 +202,7 @@ namespace SnowyImageCopy.Models
 
 			using (var ms = new MemoryStream())
 			{
-				var encoder = new JpegBitmapEncoder(); // Codec?
+				var encoder = new JpegBitmapEncoder(); // Codec is to be considered.
 				encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
 				encoder.Save(ms);
 
@@ -247,7 +243,7 @@ namespace SnowyImageCopy.Models
 
 			using (var ms = new MemoryStream())
 			{
-				var encoder = new JpegBitmapEncoder(); // Codec?
+				var encoder = new JpegBitmapEncoder(); // Codec is to be considered.
 				encoder.Frames.Add(BitmapFrame.Create(rtb));
 				encoder.Save(ms);
 
@@ -269,7 +265,7 @@ namespace SnowyImageCopy.Models
 
 			using (var ms = new MemoryStream())
 			{
-				var encoder = new JpegBitmapEncoder(); // Codec?
+				var encoder = new JpegBitmapEncoder(); // Codec is to be considered.
 				encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
 				encoder.Save(ms);
 
@@ -414,9 +410,8 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				using (var ms = new MemoryStream())
-				using (var writer = new BinaryWriter(ms))
 				{
-					writer.Write(bytes);
+					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
 					if (willReadExif)
 						await Task.Run(() => ReflectOrientationToStream(ms));
@@ -449,9 +444,8 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				using (var ms = new MemoryStream())
-				using (var writer = new BinaryWriter(ms))
 				{
-					writer.Write(bytes);
+					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
 					if (willReadExif)
 						await Task.Run(() => ReflectOrientationToStream(ms));
@@ -474,7 +468,7 @@ namespace SnowyImageCopy.Models
 		/// Reflect orientation in Exif metadata to image.
 		/// </summary>
 		/// <param name="stream">Target stream</param>
-		private static void ReflectOrientationToStream(MemoryStream stream)
+		private static void ReflectOrientationToStream(Stream stream)
 		{
 			if (0 < stream.Position)
 				stream.Seek(0, SeekOrigin.Begin);
@@ -523,7 +517,7 @@ namespace SnowyImageCopy.Models
 					Debug.WriteLine("Failed to get DateTaken from metadata. {0}", ex);
 
 					if (IsImageNotSupported(ex))
-						return DateTime.MinValue;
+						return default(DateTime);
 
 					throw;
 				}
@@ -585,7 +579,7 @@ namespace SnowyImageCopy.Models
 				}
 			}
 
-			return DateTime.MinValue;
+			return default(DateTime);
 		}
 
 		/// <summary>
@@ -836,14 +830,14 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Check if an exception is thrown because image format is not supported by PC.
 		/// </summary>
-		/// <param name="ex">Source exception</param>
+		/// <param name="ex">Target exception</param>
 		private static bool IsImageNotSupported(Exception ex)
 		{
 			if (ex.GetType() == typeof(FileFormatException))
 				return true;
 
 			// Windows Imaging Component (WIC) defined error code
-			// The description is: No imaging component suitable to complete this operation was found.
+			// This description is: No imaging component suitable to complete this operation was found.
 			const uint WINCODEC_ERR_COMPONENTNOTFOUND = 0x88982F50;
 
 			if (ex.GetType() == typeof(NotSupportedException))

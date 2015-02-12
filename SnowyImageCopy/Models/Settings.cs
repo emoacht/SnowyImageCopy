@@ -27,7 +27,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Holder of property name (key) and validation error messages (value)
 		/// </summary>
-		private readonly Dictionary<string, List<string>> errors = new Dictionary<string, List<string>>();
+		private readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
 		private bool ValidateProperty(object value, [CallerMemberName]string propertyName = null)
 		{
@@ -40,17 +40,17 @@ namespace SnowyImageCopy.Models
 
 			if (isValidated)
 			{
-				if (errors.ContainsKey(propertyName))
-					errors.Remove(propertyName);
+				if (_errors.ContainsKey(propertyName))
+					_errors.Remove(propertyName);
 			}
 			else
 			{
-				if (errors.ContainsKey(propertyName))
-					errors[propertyName].Clear();
+				if (_errors.ContainsKey(propertyName))
+					_errors[propertyName].Clear();
 				else
-					errors[propertyName] = new List<string>();
+					_errors[propertyName] = new List<string>();
 
-				errors[propertyName].AddRange(results.Select(x => x.ErrorMessage));
+				_errors[propertyName].AddRange(results.Select(x => x.ErrorMessage));
 			}
 
 			RaiseErrorsChanged(propertyName);
@@ -71,15 +71,15 @@ namespace SnowyImageCopy.Models
 
 		public IEnumerable GetErrors(string propertyName)
 		{
-			if (string.IsNullOrEmpty(propertyName) || !errors.ContainsKey(propertyName))
+			if (string.IsNullOrEmpty(propertyName) || !_errors.ContainsKey(propertyName))
 				return null;
 
-			return errors[propertyName];
+			return _errors[propertyName];
 		}
 
 		public bool HasErrors
 		{
-			get { return errors.Any(); }
+			get { return _errors.Any(); }
 		}
 
 		#endregion
@@ -90,20 +90,20 @@ namespace SnowyImageCopy.Models
 
 		#region Load/Save
 
-		private const string settingsFile = "settings.xml";
+		private const string _settingsFile = "settings.xml";
 
-		private static readonly string settingsPath = Path.Combine(
+		private static readonly string _settingsPath = Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 			Assembly.GetExecutingAssembly().GetName().Name,
-			settingsFile);
+			_settingsFile);
 
-		private static bool isLoaded;
+		private static bool _isLoaded;
 
 		public static void Load()
 		{
 			try
 			{
-				Current = ReadXmlFile<Settings>(settingsPath);
+				Current = ReadXmlFile<Settings>(_settingsPath);
 			}
 			catch (FileNotFoundException)
 			{
@@ -117,17 +117,17 @@ namespace SnowyImageCopy.Models
 			if (Current == null)
 				Current = GetDefaultSettings();
 
-			isLoaded = true;
+			_isLoaded = true;
 		}
 
 		public static void Save()
 		{
-			if (!isLoaded)
+			if (!_isLoaded)
 				return;
 
 			try
 			{
-				WriteXmlFile<Settings>(Current, settingsPath);
+				WriteXmlFile<Settings>(Current, _settingsPath);
 			}
 			catch (Exception ex)
 			{
@@ -174,7 +174,7 @@ namespace SnowyImageCopy.Models
 
 		private static Settings GetDefaultSettings()
 		{
-			return new Settings()
+			return new Settings
 			{
 				TargetPeriod = FilePeriod.All,
 				IsCurrentImageVisible = false,
@@ -190,32 +190,55 @@ namespace SnowyImageCopy.Models
 
 		#region Path
 
-		private static readonly Regex rootPattern = new Regex(@"^https?://\S{1,15}/$", RegexOptions.Compiled);
+		private static readonly Regex _rootPattern = new Regex(@"^https?://((?!/)\S){1,15}/", RegexOptions.Compiled);
+
+		public string RemoteAddress
+		{
+			get { return _remoteAddress; }
+			set
+			{
+				if (_remoteAddress == value)
+					return;
+
+				if (Path.GetInvalidPathChars().Any(x => value.Contains(x)))
+					return;
+
+				var match = _rootPattern.Match(value);
+				if (!match.Success)
+					return;
+
+				_remoteRoot = match.Value;
+
+				var descendant = value.Substring(_remoteRoot.Length).TrimStart('/');
+				descendant = Regex.Replace(descendant, @"\s+", String.Empty);
+				descendant = Regex.Replace(descendant, "/{2,}", "/");
+
+				_remoteDescendant = String.Format("/{0}", descendant).TrimEnd('/');
+				_remoteAddress = _remoteRoot + descendant;
+			}
+		}
+		private string _remoteAddress = @"http://flashair/"; // Default FlashAir Url
 
 		public string RemoteRoot
 		{
-			get { return _remoteRoot; }
-			set
-			{
-				if (_remoteRoot == value)
-					return;
-
-				if (rootPattern.IsMatch(value))
-					_remoteRoot = value;
-			}
+			get { return _remoteRoot ?? _remoteAddress; }
 		}
-		private string _remoteRoot = @"http://flashair/"; // Default FlashAir Url
+		private string _remoteRoot;
 
-		private const string defaultLocalFolder = "FlashAirImages"; // Default local folder name
+		public string RemoteDescendant
+		{
+			get { return _remoteDescendant ?? String.Empty; }
+		}
+		private string _remoteDescendant;
+
+		private const string _defaultLocalFolder = "FlashAirImages"; // Default local folder name
 
 		public string LocalFolder
 		{
 			get
 			{
-				if (String.IsNullOrEmpty(_localFolder))
-					_localFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), defaultLocalFolder);
-
-				return _localFolder;
+				return _localFolder ?? (_localFolder =
+					Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), _defaultLocalFolder));
 			}
 			set
 			{
@@ -249,10 +272,7 @@ namespace SnowyImageCopy.Models
 
 		public ObservableCollection<DateTime> TargetDates
 		{
-			get
-			{
-				return _targetDates ?? (_targetDates = new ObservableCollection<DateTime>());
-			}
+			get { return _targetDates ?? (_targetDates = new ObservableCollection<DateTime>()); }
 			set
 			{
 				if ((_targetDates != null) && (_targetDates == value))

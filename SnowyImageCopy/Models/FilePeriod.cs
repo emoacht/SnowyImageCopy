@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
@@ -17,7 +12,7 @@ namespace SnowyImageCopy.Models
 		All,
 
 		/// <summary>
-		/// Files dated today.
+		/// Files dated today
 		/// </summary>
 		Today,
 
