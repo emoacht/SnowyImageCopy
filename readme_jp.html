@@ -67,8 +67,8 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 
 <div id="title">
 <h1>Snowy</h1>
-<p id="version">Ver.0.9.9</p>
-<p id="date">2015/2/12</p>
+<p id="version">Ver.0.9.10</p>
+<p id="date">2015/3/2</p>
 </div><!-- end of title -->
 
 <div id="main">
@@ -96,15 +96,17 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 	<li>まだPCにコピーされていない画像のサムネイルはJPEG形式の画像のみ表示されます。</li>
 	<li>RAW画像もコピーできます。PCにコピー後、画像形式がMicrosoftカメラコーデックパックでサポートされているものであれば、サムネイルと現在のイメージに表示されます。</li>
 	<li>PCにコピー後はFlashAir内のイメージを削除するようにしている場合、FlashAirから削除されたらごみ箱に移動する機能は使わない方が無難です。</li>
+	<li>モニターのカラープロファイルは現在のイメージに反映されますが、サムネイルには反映されません。</li>
 </ol>
 
 <a id="delete"></a><h2>コピー後に削除</h2>
 
 <ul>
-	<li>"コピー後に削除"はFlashAir内のイメージを、そのデータがPCにコピーされた後に削除するよう試みる機能です。</li>
-	<li>この機能はFlashAirの<a href="https://flashair-developers.com/ja/documents/api/uploadcgi/">upload.cgi</a>を使用します。このCGIはFlashAirとカメラの間でデータの不整合を起こし得るため、<span style="color:red">この機能はFlashAirのファイルシステムを破壊し、重大なデータの損失を招くかもしれません。</span>何が起きるかは個々のカメラ機種によります。従って、実用の前にこの機能をカメラと共にテストしてください。たいていの場合、この機能による削除を認識させるにはカメラを再起動させる必要があります。</li>
-	<li>FlashAirのupload.cgiが無効になっていると、この機能は失敗します。この設定を確認または変更するには、同梱のSnowy Toolを使うか、FlashAir内のCONFIGファイルの<a href="https://flashair-developers.com/ja/documents/api/config/#UPLOAD">UPLOAD</a>パラメーターを直接見てください。</li>
-	<li>この機能を使うには、オプション内の"コピー後にFlashAir内のイメージの削除を選べるようにする"ボタンをONにし、その横のテキストボックスに"DELETE"（全て大文字）と入力してください。"コピー後に削除"ボタンが現れるので、これをONにしてください。</li>
+	<li>"コピー後に削除"の機能はFlashAir内のイメージを、そのデータがPCにコピーされた後に削除するよう試みます。</li>
+	<li>実際に使う前にこの機能をカメラと共にテストすることが必須です。この機能はFlashAirの<a href="https://flashair-developers.com/ja/documents/api/uploadcgi/">upload.cgi</a>を使用しますが、これはFlashAirとカメラの間でデータの不整合を起こし得るため、<span style="color:red">FlashAirのファイルシステムと保存されたイメージが破壊されるかもしれません。</span>何が起きるかは個々のカメラ機種によります。</li>
+	<li>FlashAirのupload.cgiが無効になっている場合、この機能は失敗します。この設定を確認または変更するには、FlashAirをPCに挿入して同梱のSnowy Toolを使ってください。またはFlashAir内のCONFIGファイルを開いて、<a href="https://flashair-developers.com/ja/documents/api/config/#UPLOAD">UPLOAD</a>パラメーターを直接確認してください。</li>
+	<li>多くの場合、この機能による削除を認識させるにはカメラを再起動させる必要があります。</li>
+	<li>この機能を使うには、"コピー後にFlashAir内のイメージの削除を選べるようにする"ボタンをオンにし、テキストボックスに"DELETE"（全て大文字）と入力してください。"コピー後に削除"ボタンが現れるので、これをオンにしてください。</li>
 </ul>
 
 <h2>コマンドライン</h2>

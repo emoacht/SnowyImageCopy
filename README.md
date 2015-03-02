@@ -18,6 +18,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
+Ver 0.9.10 2015-3-2
+
+ - Added color management support
+
 Ver 0.9.9 2015-2-12
 
  - Added function to save current image on desktop and to send current image to clipboard

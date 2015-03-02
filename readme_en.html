@@ -67,8 +67,8 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 
 <div id="title">
 <h1>Snowy</h1>
-<p id="version">Ver.0.9.9</p>
-<p id="date">2015/2/12</p>
+<p id="version">Ver.0.9.10</p>
+<p id="date">2015/3/2</p>
 </div><!-- end of title -->
 
 <div id="main">
@@ -96,15 +96,17 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 	<li>Thumbnails of images not copied to PC yet are shown only for images of JPEG format.</li>
 	<li>RAW images can be copied too. After copied to PC and if they are image formats supported by Microsoft Camera Codec Pack, they will be shown in thumbnails and in current image.</li>
 	<li>If you routinely delete images in FlashAir after copied to PC, it is safer not to use the function to move to Recycle if deleted from FlashAir.</li>
+	<li>A color profile of monitor will be reflected to current image but not thumbnails.</li>
 </ol>
 
 <a id="delete"></a><h2>Delete Upon Copy</h2>
 
 <ul>
-	<li>"Delete Upon Copy" is a function which tries to delete an image in FlashAir upon the data is copied to PC.</li>
-	<li>This function uses <a href="https://flashair-developers.com/en/documents/api/uploadcgi/">upload.cgi</a> of FlashAir. Since this CGI may cause inconsistency of data between FlashAir and camera, <span style="color:red">this function might destroy file system of FlashAir and lead to serious data loss.</span> What will happen depends on each camera model. Therefore, test this function with camera before actual use. In most cases, you need to reboot camera to make it recognize the deletion by this function.</li>
-	<li>If upload.cgi of FlashAir is disabled, this function will fail. To check or change this setting, use included Snowy Tool or see directly <a href="https://flashair-developers.com/en/documents/api/config/#UPLOAD">UPLOAD</a> parameter in CONFIG file in FlashAir.</li>
-	<li>To use this function, turn ON "Enable to choose to delete image in FlashAir upon copy" button in Options and input "DELETE" (all uppercase) to the next text box. "Delete Upon Copy" button will appear. So make it ON. </li>
+	<li>"Delete Upon Copy" function tries to delete an image in FlashAir after the data is copied to PC.</li>
+	<li>It is essential to test this function with your camera before actual use. Since this function uses <a href="https://flashair-developers.com/en/documents/api/uploadcgi/">upload.cgi</a> of FlashAir and it may cause inconsistency of data between FlashAir and camera, <span style="color:red">file system of FlashAir and stored images might be destroyed.</span> What will happen depends on each camera model.</li>
+	<li>If upload.cgi of FlashAir is disabled, this function will fail. To check or change this setting, insert FlashAir to PC and use included Snowy Tool. Or open CONFIG file in FlashAir and directly check <a href="https://flashair-developers.com/en/documents/api/config/#UPLOAD">UPLOAD</a> parameter.</li>
+	<li>In many cases, you need to reboot a camera to make it recognize the deletion by this function.</li>
+	<li>To use this function, turn on "Enable to choose to delete image in FlashAir upon copy" button and type "DELETE" (all uppercase) in the text box. "Delete Upon Copy" button will appear. So change it to on.</li>
 </ul>
 
 <h2>Command Line</h2>
