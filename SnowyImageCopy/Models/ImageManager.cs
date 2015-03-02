@@ -160,7 +160,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Read a thumbnail in metadata by System.Drawing.
 		/// </summary>
-		/// <param name="stream">Source stream</param>
+		/// <param name="stream">Source Stream</param>
 		/// <returns>BitmapImage</returns>
 		private static BitmapImage ReadThumbnailFromExifByDrawing(Stream stream)
 		{
@@ -187,7 +187,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Read a thumbnail in metadata by System.Windows.Media.Imaging.
 		/// </summary>
-		/// <param name="stream">Source stream</param>
+		/// <param name="stream">Source Stream</param>
 		/// <returns>BitmapImage</returns>
 		private static BitmapImage ReadThumbnailFromExifByImaging(Stream stream)
 		{
@@ -213,7 +213,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Create a thumbnail from image applying Uniform transformation.
 		/// </summary>
-		/// <param name="stream">Source stream</param>
+		/// <param name="stream">Source Stream</param>
 		private static BitmapImage CreateThumbnailFromImageUniform(Stream stream)
 		{
 			if (0 < stream.Position)
@@ -254,7 +254,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Create a thumbnail from image applying UniformToFill transformation.
 		/// </summary>
-		/// <param name="stream">Source stream</param>
+		/// <param name="stream">Source Stream</param>
 		private static BitmapImage CreateThumbnailFromImageUniformToFill(Stream stream)
 		{
 			if (0 < stream.Position)
@@ -363,49 +363,43 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 
-		#region Convert byte array to BitmapImage
+		#region Convert byte array to BitmapSource
 
 		/// <summary>
-		/// Convert byte array to BitmapImage.
+		/// Convert byte array to BitmapSource.
 		/// </summary>
 		/// <param name="bytes">Source byte array</param>
-		internal static async Task<BitmapImage> ConvertBytesToBitmapImageAsync(byte[] bytes)
+		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes)
 		{
-			return await ConvertBytesToBitmapImageAsync(bytes, 0D, 0D, false).ConfigureAwait(false);
+			return await ConvertBytesToBitmapSourceAsync(bytes, 0D, 0D, false).ConfigureAwait(false);
 		}
 
 		/// <summary>
-		/// Convert byte array to BitmapImage.
-		/// </summary>
-		/// <param name="bytes">Source byte array</param>
-		/// <param name="targetWidth">Target width</param>
-		internal static async Task<BitmapImage> ConvertBytesToBitmapImageAsync(byte[] bytes, double targetWidth)
-		{
-			return await ConvertBytesToBitmapImageAsync(bytes, targetWidth, 0D, false).ConfigureAwait(false);
-		}
-
-		/// <summary>
-		/// Convert byte array to BitmapImage.
+		/// Convert byte array to BitmapSource.
 		/// </summary>
 		/// <param name="bytes">Source byte array</param>
 		/// <param name="targetWidth">Target width</param>
 		/// <param name="willReadExif">Whether Exif metadata will be read from byte array</param>
-		internal static async Task<BitmapImage> ConvertBytesToBitmapImageAsync(byte[] bytes, double targetWidth, bool willReadExif)
+		/// <param name="destinationProfile">Destination color profile for color management</param>
+		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes, double targetWidth, bool willReadExif, ColorContext destinationProfile = null)
 		{
-			return await ConvertBytesToBitmapImageAsync(bytes, targetWidth, 0D, willReadExif).ConfigureAwait(false);
+			return await ConvertBytesToBitmapSourceAsync(bytes, targetWidth, 0D, willReadExif, destinationProfile).ConfigureAwait(false);
 		}
 
 		/// <summary>
-		/// Convert byte array to BitmapImage.
+		/// Convert byte array to BitmapSource.
 		/// </summary>
 		/// <param name="bytes">Source byte array</param>
 		/// <param name="targetWidth">Target width</param>
-		/// <param name="targetHeight">Target Height</param>
+		/// <param name="targetHeight">Target height</param>
 		/// <param name="willReadExif">Whether Exif metadata will be read from byte array</param>
-		internal static async Task<BitmapImage> ConvertBytesToBitmapImageAsync(byte[] bytes, double targetWidth, double targetHeight, bool willReadExif)
+		/// <param name="destinationProfile">Destination color profile for color management</param>
+		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes, double targetWidth, double targetHeight, bool willReadExif, ColorContext destinationProfile = null)
 		{
 			if ((bytes == null) || !bytes.Any())
 				throw new ArgumentNullException("bytes");
+
+			var targetSize = new Size(targetWidth, targetHeight);
 
 			try
 			{
@@ -413,15 +407,17 @@ namespace SnowyImageCopy.Models
 				{
 					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
-					if (willReadExif)
-						await Task.Run(() => ReflectOrientationToStream(ms));
+					if (willReadExif || (destinationProfile != null))
+					{
+						return await Task.Run(() => ConvertStreamToBitmapSource(ms, targetSize, willReadExif, destinationProfile));
+					}
 
-					return await Task.Run(() => ConvertStreamToBitmapImage(ms, new Size(targetWidth, targetHeight)));
+					return await Task.Run(() => ConvertStreamToBitmapImage(ms, targetSize));
 				}
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to convert byte array to BitmapImage. {0}", ex);
+				Debug.WriteLine("Failed to convert byte array to BitmapSource. {0}", ex);
 
 				if (IsImageNotSupported(ex))
 					throw new ImageNotSupportedException();
@@ -431,12 +427,13 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Convert byte array to BitmapImage applying Uniform transformation
+		/// Convert byte array to BitmapSource applying Uniform transformation.
 		/// </summary>
 		/// <param name="bytes">Source byte array</param>
 		/// <param name="outerSize">Target outer size</param>
 		/// <param name="willReadExif">Whether Exif metadata will be read from byte array</param>
-		internal static async Task<BitmapImage> ConvertBytesToBitmapImageUniformAsync(byte[] bytes, Size outerSize, bool willReadExif)
+		/// <param name="destinationProfile">Destination color profile for color management</param>
+		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceUniformAsync(byte[] bytes, Size outerSize, bool willReadExif, ColorContext destinationProfile = null)
 		{
 			if ((bytes == null) || !bytes.Any())
 				throw new ArgumentNullException("bytes");
@@ -447,15 +444,17 @@ namespace SnowyImageCopy.Models
 				{
 					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
-					if (willReadExif)
-						await Task.Run(() => ReflectOrientationToStream(ms));
+					if (willReadExif || (destinationProfile != null))
+					{
+						return await Task.Run(() => ConvertStreamToBitmapSource(ms, outerSize, willReadExif, destinationProfile));
+					}
 
 					return await Task.Run(() => ConvertStreamToBitmapImageUniform(ms, outerSize));
 				}
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to convert byte array to BitmapImage. {0}", ex);
+				Debug.WriteLine("Failed to convert byte array to BitmapSource. {0}", ex);
 
 				if (IsImageNotSupported(ex))
 					throw new ImageNotSupportedException();
@@ -465,31 +464,140 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Reflect orientation in Exif metadata to image.
+		/// Convert Stream to BitmapSource.
 		/// </summary>
-		/// <param name="stream">Target stream</param>
-		private static void ReflectOrientationToStream(Stream stream)
+		/// <param name="stream">Source Stream</param>
+		/// <param name="outerSize">Target outer size</param>
+		/// <param name="willReadExif">Whether Exif metadata will be read from Stream</param>
+		/// <param name="destinationProfile">Destination color profile for color management</param>
+		private static BitmapSource ConvertStreamToBitmapSource(Stream stream, Size outerSize, bool willReadExif, ColorContext destinationProfile)
 		{
 			if (0 < stream.Position)
 				stream.Seek(0, SeekOrigin.Begin);
 
-			var orientation = GetExifOrientation(stream);
-			stream.Seek(0, SeekOrigin.Begin);
+			var bitmapFrame = BitmapFrame.Create(
+				stream,
+				BitmapCreateOptions.IgnoreColorProfile | BitmapCreateOptions.PreservePixelFormat, // For color management
+				BitmapCacheOption.OnLoad);
 
-			var bitmapSource = (BitmapSource)BitmapFrame.Create(stream);
-			ReflectOrientationToBitmapSource(ref bitmapSource, orientation);
+			var orientation = willReadExif ? GetExifOrientation(bitmapFrame) : 0; // 0 means invalid.
 
-			using (var ms = new MemoryStream())
+			var bitmapSource = ResizeAndReflectExifOrientation(bitmapFrame, outerSize, orientation);
+
+			if (destinationProfile != null)
 			{
-				var encoder = new JpegBitmapEncoder(); // Codec is to be considered.
-				encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-				encoder.Save(ms);
-				ms.Seek(0, SeekOrigin.Begin);
-
-				// Copy to the original stream.
-				stream.SetLength(0);
-				ms.CopyTo(stream);
+				var sourceProfile = GetColorProfile(bitmapFrame);
+				bitmapSource = ConvertColorProfile(bitmapSource, sourceProfile, destinationProfile);
 			}
+
+			bitmapSource.Freeze();
+
+			return bitmapSource;
+		}
+
+		/// <summary>
+		/// Resize BitmapSource and reflect Exif orientation to BitmapSource.
+		/// </summary>
+		/// <param name="bitmapSource">Source BitmapSource</param>
+		/// <param name="outerSize">Target outer size</param>
+		/// <param name="orientation">Exif orientation</param>
+		private static BitmapSource ResizeAndReflectExifOrientation(BitmapSource bitmapSource, Size outerSize, int orientation)
+		{
+			var transform = new TransformGroup();
+			var centerX = bitmapSource.Width / 2D;
+			var centerY = bitmapSource.Height / 2D;
+			bool isRotatedRightAngle = false;
+
+			// Reflect Exif orientation.
+			switch (orientation)
+			{
+				case 0: // Invalid
+				case 1: // Horizontal (normal)
+					break;
+
+				case 2: // Mirror horizontal
+					transform.Children.Add(new ScaleTransform(-1, 1, centerX, centerY));
+					break;
+				case 3: // Rotate 180 clockwise
+					transform.Children.Add(new RotateTransform(180D, centerX, centerY));
+					break;
+				case 4: // Mirror vertical
+					transform.Children.Add(new ScaleTransform(1, -1, centerX, centerY));
+					break;
+				case 5: // Mirror horizontal and rotate 270 clockwise
+					transform.Children.Add(new ScaleTransform(-1, 1, centerX, centerY));
+					transform.Children.Add(new RotateTransform(270D, centerX, centerY));
+					isRotatedRightAngle = true;
+					break;
+				case 6: // Rotate 90 clockwise
+					transform.Children.Add(new RotateTransform(90D, centerX, centerY));
+					isRotatedRightAngle = true;
+					break;
+				case 7: // Mirror horizontal and rotate 90 clockwise
+					transform.Children.Add(new ScaleTransform(-1, 1, centerX, centerY));
+					transform.Children.Add(new RotateTransform(90D, centerX, centerY));
+					isRotatedRightAngle = true;
+					break;
+				case 8: // Rotate 270 clockwise
+					transform.Children.Add(new RotateTransform(270D, centerX, centerY));
+					isRotatedRightAngle = true;
+					break;
+			}
+
+			// Resize.
+			if ((0 < bitmapSource.Width) && (0 < bitmapSource.Height)) // For just in case
+			{
+				var factor = new[]
+					{
+						(outerSize.Width / (isRotatedRightAngle ? bitmapSource.Height : bitmapSource.Width)), // Scale factor of X
+						(outerSize.Height / (isRotatedRightAngle ? bitmapSource.Width : bitmapSource.Height)) // Scale factor of Y
+					}
+					.Where(x => 0 < x)
+					.DefaultIfEmpty(1D)
+					.Min();
+
+				transform.Children.Add(new ScaleTransform(factor, factor, centerX, centerY));
+			}
+
+			var bitmapTransformed = new TransformedBitmap();
+			bitmapTransformed.BeginInit();
+			bitmapTransformed.Transform = transform;
+			bitmapTransformed.Source = bitmapSource;
+			bitmapTransformed.EndInit();
+
+			return bitmapTransformed;
+		}
+
+		/// <summary>
+		/// Get color profile from BitmapFrame.
+		/// </summary>
+		/// <param name="bitmapFrame">Source BitmapFrame</param>
+		private static ColorContext GetColorProfile(BitmapFrame bitmapFrame)
+		{
+			return ((bitmapFrame.ColorContexts != null) && bitmapFrame.ColorContexts.Any())
+				? bitmapFrame.ColorContexts.First()
+				: new ColorContext(PixelFormats.Bgra32);
+		}
+
+		/// <summary>
+		/// Convert color profile of BitmapSource for color management.
+		/// </summary>
+		/// <param name="bitmapSource">Source BitmapSource</param>
+		/// <param name="sourceProfile">Source color profile</param>
+		/// <param name="destinationProfile">Destination color profile</param>
+		/// <remarks>Source color profile is color profile embedded in image file and destination color profile is
+		/// color profile used by the monitor to which the Window belongs.</remarks>
+		public static BitmapSource ConvertColorProfile(BitmapSource bitmapSource, ColorContext sourceProfile, ColorContext destinationProfile)
+		{
+			var bitmapConverted = new ColorConvertedBitmap();
+			bitmapConverted.BeginInit();
+			bitmapConverted.Source = bitmapSource;
+			bitmapConverted.SourceColorContext = sourceProfile;
+			bitmapConverted.DestinationColorContext = destinationProfile;
+			bitmapConverted.DestinationFormat = PixelFormats.Bgra32;
+			bitmapConverted.EndInit();
+
+			return bitmapConverted;
 		}
 
 		#endregion
@@ -498,7 +606,7 @@ namespace SnowyImageCopy.Models
 		#region Exif (Internal)
 
 		/// <summary>
-		/// Get Date of image taken from Exif metadata.
+		/// Get date of image taken in Exif metadata from byte array.
 		/// </summary>
 		/// <param name="bytes">Source byte array</param>
 		internal static async Task<DateTime> GetExifDateTakenAsync(byte[] bytes)
@@ -510,7 +618,7 @@ namespace SnowyImageCopy.Models
 			{
 				try
 				{
-					return await Task.Run(() => GetExifDateTaken(ms));
+					return await Task.Run(() => GetExifDateTaken(BitmapFrame.Create(ms)));
 				}
 				catch (Exception ex)
 				{
@@ -525,7 +633,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get orientation in Exif metadata.
+		/// Get orientation in Exif metadata from byte array.
 		/// </summary>
 		/// <param name="bytes">Source byte array</param>
 		internal static async Task<int> GetExifOrientationAsync(byte[] bytes)
@@ -537,7 +645,7 @@ namespace SnowyImageCopy.Models
 			{
 				try
 				{
-					return await Task.Run(() => GetExifOrientation(ms));
+					return await Task.Run(() => GetExifOrientation(BitmapFrame.Create(ms)));
 				}
 				catch (Exception ex)
 				{
@@ -557,17 +665,13 @@ namespace SnowyImageCopy.Models
 		#region Exif (Private)
 
 		/// <summary>
-		/// Get date of image taken in Exif metadata.
+		/// Get date of image taken in Exif metadata from BitmapFrame.
 		/// </summary>
-		/// <param name="stream">Source stream</param>
-		private static DateTime GetExifDateTaken(Stream stream)
+		/// <param name="stream">Source BitmapFrame</param>
+		private static DateTime GetExifDateTaken(BitmapFrame bitmapFrame)
 		{
-			if (0 < stream.Position)
-				stream.Seek(0, SeekOrigin.Begin);
-
 			//const string queryDateTaken = "System.Photo.DateTaken";
 
-			var bitmapFrame = BitmapFrame.Create(stream);
 			var bitmapMetadata = bitmapFrame.Metadata as BitmapMetadata;
 			if (bitmapMetadata != null)
 			{
@@ -583,17 +687,13 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get orientation in Exif metadata.
+		/// Get orientation in Exif metadata from BitmapFrame.
 		/// </summary>
-		/// <param name="stream">Source stream</param>
-		private static int GetExifOrientation(Stream stream)
+		/// <param name="bitmapFrame">Source BitmapFrame</param>
+		private static int GetExifOrientation(BitmapFrame bitmapFrame)
 		{
-			if (0 < stream.Position)
-				stream.Seek(0, SeekOrigin.Begin);
-
 			const string queryOrientation = "System.Photo.Orientation";
 
-			var bitmapFrame = BitmapFrame.Create(stream);
 			var bitmapMetadata = bitmapFrame.Metadata as BitmapMetadata;
 			if (bitmapMetadata != null)
 			{
@@ -615,68 +715,6 @@ namespace SnowyImageCopy.Models
 			return 0;
 		}
 
-		/// <summary>
-		/// Reflect orientation in Exif metadata to BitmapSource.
-		/// </summary>
-		/// <param name="bitmapSource">Target BitmapSource</param>
-		/// <param name="orientation">Orientation in Exif metadata</param>
-		private static void ReflectOrientationToBitmapSource(ref BitmapSource bitmapSource, int orientation)
-		{
-			// To reflect orientation:
-			// 1 -> Horizontal (normal)
-			// 2 -> Mirror horizontal
-			// 3 -> Rotate 180 clockwise
-			// 4 -> Mirror vertical
-			// 5 -> Mirror horizontal and rotate 270 clockwise
-			// 6 -> Rotate 90 clockwise
-			// 7 -> Mirror horizontal and rotate 90 clockwise
-			// 8 -> Rotate 270 clockwise
-
-			switch (orientation)
-			{
-				case 0: // Invalid
-				case 1: // Horizontal (normal)
-					break;
-				default:
-					var transform = new TransformGroup();
-					switch (orientation)
-					{
-						case 2: // Mirror horizontal
-							transform.Children.Add(new ScaleTransform(-1, 1, bitmapSource.Width / 2, bitmapSource.Height / 2));
-							break;
-						case 3: // Rotate 180 clockwise
-							transform.Children.Add(new RotateTransform(180D, bitmapSource.Width / 2, bitmapSource.Height / 2));
-							break;
-						case 4: // Mirror vertical
-							transform.Children.Add(new ScaleTransform(1, -1, bitmapSource.Width / 2, bitmapSource.Height / 2));
-							break;
-						case 5: // Mirror horizontal and rotate 270 clockwise
-							transform.Children.Add(new ScaleTransform(-1, 1, bitmapSource.Width / 2, bitmapSource.Height / 2));
-							transform.Children.Add(new RotateTransform(270D, bitmapSource.Width / 2, bitmapSource.Height / 2));
-							break;
-						case 6: // Rotate 90 clockwise
-							transform.Children.Add(new RotateTransform(90D, bitmapSource.Width / 2, bitmapSource.Height / 2));
-							break;
-						case 7: // Mirror horizontal and rotate 90 clockwise
-							transform.Children.Add(new ScaleTransform(-1, 1, bitmapSource.Width / 2, bitmapSource.Height / 2));
-							transform.Children.Add(new RotateTransform(90D, bitmapSource.Width / 2, bitmapSource.Height / 2));
-							break;
-						case 8: // Rotate 270 clockwise
-							transform.Children.Add(new RotateTransform(270D, bitmapSource.Width / 2, bitmapSource.Height / 2));
-							break;
-					}
-
-					var bitmapTransformed = new TransformedBitmap();
-					bitmapTransformed.BeginInit();
-					bitmapTransformed.Transform = transform;
-					bitmapTransformed.Source = bitmapSource;
-					bitmapTransformed.EndInit();
-
-					bitmapSource = bitmapTransformed;
-					break;
-			}
-		}
-
 		#endregion
 
 
@@ -685,7 +723,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Convert stream to BitmapImage.
 		/// </summary>
-		/// <param name="stream">Source stream</param>
+		/// <param name="stream">Source Stream</param>
 		private static BitmapImage ConvertStreamToBitmapImage(Stream stream)
 		{
 			return ConvertStreamToBitmapImage(stream, Size.Empty);
@@ -694,7 +732,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Convert stream to BitmapImage.
 		/// </summary>
-		/// <param name="stream">Source stream</param>
+		/// <param name="stream">Source Stream</param>
 		/// <param name="targetSize">Target size</param>
 		private static BitmapImage ConvertStreamToBitmapImage(Stream stream, Size targetSize)
 		{
@@ -721,7 +759,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Convert stream to BitmapImage applying Uniform transformation.
 		/// </summary>
-		/// <param name="stream">Source stream</param>
+		/// <param name="stream">Source Stream</param>
 		/// <param name="outerSize">Target outer size</param>
 		private static BitmapImage ConvertStreamToBitmapImageUniform(Stream stream, Size outerSize)
 		{

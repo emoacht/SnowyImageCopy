@@ -201,8 +201,8 @@ namespace SnowyImageCopy.Models
 		/// <param name="remoteFilePath">Remote file path</param>
 		/// <param name="card">FlashAir card information</param>
 		/// <param name="cancellationToken">CancellationToken</param>
-		/// <remarks>Thumbnail of the image file</remarks>
-		internal static async Task<BitmapImage> GetThumbnailAsync(string remoteFilePath, CardInfo card, CancellationToken cancellationToken)
+		/// <returns>Thumbnail of the image file</returns>
+		internal static async Task<BitmapSource> GetThumbnailAsync(string remoteFilePath, CardInfo card, CancellationToken cancellationToken)
 		{
 			if (String.IsNullOrWhiteSpace(remoteFilePath))
 				throw new ArgumentNullException("remoteFilePath");
@@ -215,7 +215,7 @@ namespace SnowyImageCopy.Models
 				{
 					var bytes = await DownloadBytesAsync(client, remotePath, card, cancellationToken).ConfigureAwait(false);
 
-					return await ImageManager.ConvertBytesToBitmapImageAsync(bytes).ConfigureAwait(false);
+					return await ImageManager.ConvertBytesToBitmapSourceAsync(bytes).ConfigureAwait(false);
 				}
 			}
 			catch (ImageNotSupportedException)

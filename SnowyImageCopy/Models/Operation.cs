@@ -1124,7 +1124,7 @@ namespace SnowyImageCopy.Models
 			{
 				IsSendingClipboard = true;
 
-				var image = await ImageManager.ConvertBytesToBitmapImageAsync(CurrentImageData);
+				var image = await ImageManager.ConvertBytesToBitmapSourceAsync(CurrentImageData);
 
 				var tcs = new TaskCompletionSource<bool>();
 				var thread = new Thread(() =>

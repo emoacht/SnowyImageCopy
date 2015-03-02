@@ -153,6 +153,40 @@
             <returns>Window chrome color</returns>
             <remarks>This method is intended to get window chrome color of Windows 8 or newer.</remarks>
         </member>
+        <member name="T:PerMonitorDpi.Models.ColorProfileChangedEventArgs">
+            <summary>
+            Color profile changed event args
+            </summary>
+        </member>
+        <member name="M:PerMonitorDpi.Models.ColorProfileChangedEventArgs.#ctor(System.String,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="oldPath">Old color profile path</param>
+            <param name="newPath">New color profile path</param>
+        </member>
+        <member name="P:PerMonitorDpi.Models.ColorProfileChangedEventArgs.OldPath">
+            <summary>
+            Old color profile path
+            </summary>
+        </member>
+        <member name="P:PerMonitorDpi.Models.ColorProfileChangedEventArgs.NewPath">
+            <summary>
+            New color profile path
+            </summary>
+        </member>
+        <member name="T:PerMonitorDpi.Models.ColorProfileChecker">
+            <summary>
+            Check color profile.
+            </summary>
+        </member>
+        <member name="M:PerMonitorDpi.Models.ColorProfileChecker.GetColorProfilePath(System.Windows.Media.Visual)">
+            <summary>
+            Get color profile file path used by the monior to which a specified Window belongs.
+            </summary>
+            <param name="sourceVisual">Source Window</param>
+            <returns>Color profile file path</returns>
+        </member>
         <member name="T:PerMonitorDpi.Models.Dpi">
             <summary>
             DPI information
@@ -230,6 +264,28 @@
             PropertyChanged event
             </summary>
         </member>
+        <member name="T:PerMonitorDpi.Models.DpiChangedEventArgs">
+            <summary>
+            DPI changed event args
+            </summary>
+        </member>
+        <member name="M:PerMonitorDpi.Models.DpiChangedEventArgs.#ctor(PerMonitorDpi.Models.Dpi,PerMonitorDpi.Models.Dpi)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="oldDpi">Old DPI</param>
+            <param name="newDpi">New DPI</param>
+        </member>
+        <member name="P:PerMonitorDpi.Models.DpiChangedEventArgs.OldDpi">
+            <summary>
+            Old DPI
+            </summary>
+        </member>
+        <member name="P:PerMonitorDpi.Models.DpiChangedEventArgs.NewDpi">
+            <summary>
+            New DPI
+            </summary>
+        </member>
         <member name="T:PerMonitorDpi.Models.DpiChecker">
             <summary>
             Check DPI.
@@ -302,6 +358,16 @@
         <member name="F:PerMonitorDpi.Models.WindowHandler.WindowDpiProperty">
             <summary>
             Dependency property for <see cref="P:PerMonitorDpi.Models.WindowHandler.WindowDpi"/>
+            </summary>
+        </member>
+        <member name="F:PerMonitorDpi.Models.WindowHandler.WindowColorProfilePathPropertyKey">
+            <summary>
+            Dependency property key for <see cref="P:PerMonitorDpi.Models.WindowHandler.WindowColorProfilePath"/>
+            </summary>
+        </member>
+        <member name="F:PerMonitorDpi.Models.WindowHandler.WindowColorProfilePathProperty">
+            <summary>
+            Dependency property for <see cref="P:PerMonitorDpi.Models.WindowHandler.WindowColorProfilePath"/>
             </summary>
         </member>
         <member name="M:PerMonitorDpi.Models.WindowHandler.#ctor">
@@ -408,12 +474,24 @@
             Per-Monitor DPI of target Window (public readonly)
             </summary>
         </member>
+        <member name="P:PerMonitorDpi.Models.WindowHandler.WindowColorProfilePath">
+            <summary>
+            Color profile path of target Window (public readonly)
+            </summary>
+        </member>
         <member name="E:PerMonitorDpi.Models.WindowHandler.DpiChanged">
             <summary>
             DPI changed event
             </summary>
             <remarks>This event will be fired when DPI of target Window is changed. It is not necessarily 
             the same timing when DPI of the monitor to which target Window belongs is changed.</remarks>
+        </member>
+        <member name="E:PerMonitorDpi.Models.WindowHandler.ColorProfileChanged">
+            <summary>
+            Color profile path changed event
+            </summary>
+            <remarks>This event will be fired when color profile path of the monitor to which target
+            Window belongs has changed and Window's move/resize which caused the change has exited.</remarks>
         </member>
         <member name="T:PerMonitorDpi.Models.WindowHandler.WindowStatus">
             <summary>
@@ -480,6 +558,46 @@
             </summary>
             <param name="dword">Dword (uint)</param>
             <returns>High-order Word (ushort)</returns>
+        </member>
+        <member name="F:PerMonitorDpi.Models.Win32.NativeMethod.WA_ACTIVE">
+            <summary>
+            Activated by some method other than a mouse click.
+            </summary>
+        </member>
+        <member name="F:PerMonitorDpi.Models.Win32.NativeMethod.WA_CLICKACTIVE">
+            <summary>
+            Activated by a mouse click.
+            </summary>
+        </member>
+        <member name="F:PerMonitorDpi.Models.Win32.NativeMethod.WA_INACTIVE">
+            <summary>
+            Deactivated.
+            </summary>
+        </member>
+        <member name="F:PerMonitorDpi.Models.Win32.NativeMethod.SIZE_MAXHIDE">
+            <summary>
+            Some other window is maximized.
+            </summary>
+        </member>
+        <member name="F:PerMonitorDpi.Models.Win32.NativeMethod.SIZE_MAXIMIZED">
+            <summary>
+            The window has been maximized.
+            </summary> 
+        </member>
+        <member name="F:PerMonitorDpi.Models.Win32.NativeMethod.SIZE_MAXSHOW">
+            <summary>
+            Some other window has been restored to its former size.
+            </summary>
+        </member>
+        <member name="F:PerMonitorDpi.Models.Win32.NativeMethod.SIZE_MINIMIZED">
+            <summary>
+            The window has been minimized.
+            </summary>
+        </member>
+        <member name="F:PerMonitorDpi.Models.Win32.NativeMethod.SIZE_RESTORED">
+            <summary>
+            The window has been resized, but neither the SIZE_MINIMIZED nor SIZE_MAXIMIZED value applies.
+            </summary>
         </member>
         <member name="F:PerMonitorDpi.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONULL">
             <summary>

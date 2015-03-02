@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
+using PerMonitorDpi.Models;
 using PerMonitorDpi.Views;
 using SnowyImageCopy.Models;
 using SnowyImageCopy.ViewModels;
@@ -41,6 +43,8 @@ namespace SnowyImageCopy.Views
 		#endregion
 
 
+		private MainWindowViewModel _mainWindowViewModel;
+
 		protected override void OnSourceInitialized(EventArgs e)
 		{
 			base.OnSourceInitialized(e);
@@ -49,15 +53,25 @@ namespace SnowyImageCopy.Views
 
 			new WindowPlacement().Load(this, !CommandLine.MakesWindowStateMinimized);
 
+			_mainWindowViewModel = this.DataContext as MainWindowViewModel;
+			if (_mainWindowViewModel == null)
+				return;
+
 			if (CommandLine.StartsAutoCheck)
 			{
-				var mainWindowViewModelInstance = this.DataContext as MainWindowViewModel;
-				if (mainWindowViewModelInstance != null)
-				{
-					if (mainWindowViewModelInstance.CheckCopyAutoCommand.CanExecute())
-						mainWindowViewModelInstance.CheckCopyAutoCommand.Execute();
-				}
+				if (_mainWindowViewModel.CheckCopyAutoCommand.CanExecute())
+					_mainWindowViewModel.CheckCopyAutoCommand.Execute();
 			}
+
+			SetDestinationColorProfile(this.WindowHandler.WindowColorProfilePath);
+			this.WindowHandler.ColorProfileChanged += (sender_, e_) => SetDestinationColorProfile(e_.NewPath);
+		}
+
+		private void SetDestinationColorProfile(string colorProfilePath)
+		{
+			_mainWindowViewModel.DestinationColorProfile = File.Exists(colorProfilePath)
+				? new ColorContext(new Uri(colorProfilePath))
+				: null;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

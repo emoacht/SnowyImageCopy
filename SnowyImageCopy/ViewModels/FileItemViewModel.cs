@@ -41,7 +41,7 @@ namespace SnowyImageCopy.ViewModels
 		private static readonly BitmapImage _defaultThumbnail =
 			ImageManager.ConvertFrameworkElementToBitmapImage(new ThumbnailBox());
 
-		public BitmapImage Thumbnail
+		public BitmapSource Thumbnail
 		{
 			get { return _thumbnail ?? _defaultThumbnail; }
 			set
@@ -50,7 +50,7 @@ namespace SnowyImageCopy.ViewModels
 				RaisePropertyChanged();
 			}
 		}
-		private BitmapImage _thumbnail;
+		private BitmapSource _thumbnail;
 
 		public bool HasThumbnail
 		{

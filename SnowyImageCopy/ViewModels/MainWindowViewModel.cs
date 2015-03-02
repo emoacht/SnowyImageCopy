@@ -9,13 +9,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models;
-using SnowyImageCopy.Views.Controls;
 using SnowyImageCopy.Models.Exceptions;
+using SnowyImageCopy.Views.Controls;
 
 namespace SnowyImageCopy.ViewModels
 {
@@ -297,7 +298,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private byte[] _currentImageData;
 
-		public BitmapImage CurrentImage
+		public BitmapSource CurrentImage
 		{
 			get { return _currentImage ?? (_currentImage = GetDefaultCurrentImage()); }
 			set
@@ -310,7 +311,7 @@ namespace SnowyImageCopy.ViewModels
 				RaisePropertyChanged();
 			}
 		}
-		private BitmapImage _currentImage;
+		private BitmapSource _currentImage;
 
 		/// <summary>
 		/// Set current image.
@@ -324,15 +325,15 @@ namespace SnowyImageCopy.ViewModels
 				return;
 			}
 
-			BitmapImage image = null;
+			BitmapSource image = null;
 
 			if ((CurrentImageData != null) && (CurrentItem != null))
 			{
 				try
 				{
 					image = !CurrentFrameSize.IsEmpty
-						? await ImageManager.ConvertBytesToBitmapImageUniformAsync(CurrentImageData, CurrentFrameSize, CurrentItem.CanReadExif)
-						: await ImageManager.ConvertBytesToBitmapImageAsync(CurrentImageData, CurrentImageWidth, CurrentItem.CanReadExif);
+						? await ImageManager.ConvertBytesToBitmapSourceUniformAsync(CurrentImageData, CurrentFrameSize, CurrentItem.CanReadExif, DestinationColorProfile)
+						: await ImageManager.ConvertBytesToBitmapSourceAsync(CurrentImageData, CurrentImageWidth, CurrentItem.CanReadExif, DestinationColorProfile);
 				}
 				catch (ImageNotSupportedException)
 				{
@@ -352,6 +353,19 @@ namespace SnowyImageCopy.ViewModels
 				? ImageManager.ConvertFrameworkElementToBitmapImage(new ThumbnailBox(), CurrentFrameSize)
 				: ImageManager.ConvertFrameworkElementToBitmapImage(new ThumbnailBox(), CurrentImageWidth);
 		}
+
+		public ColorContext DestinationColorProfile
+		{
+			get { return _destinationColorProfile ?? new ColorContext(PixelFormats.Bgra32); }
+			set
+			{
+				_destinationColorProfile = value;
+
+				if (value != null)
+					SetCurrentImage();
+			}
+		}
+		private ColorContext _destinationColorProfile;
 
 		#endregion
 
