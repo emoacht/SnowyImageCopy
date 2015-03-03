@@ -18,7 +18,7 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
-Ver 0.9.10 2015-3-2
+Ver 0.9.10 2015-3-3
 
  - Added color management support
 
