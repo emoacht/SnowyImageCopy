@@ -306,7 +306,11 @@ namespace SnowyImageCopy.ViewModels
 				_currentImage = value;
 
 				if (_currentImage != null)
-					CurrentImageWidth = _currentImage.PixelWidth; // Not ordinary Width
+				{
+					// Width and PixelWidth of BitmapImage are almost identical except fractional part
+					// while those of BitmapSource are not alway close and can be much different.
+					CurrentImageWidth = Math.Round(_currentImage.Width);
+				}
 
 				RaisePropertyChanged();
 			}
