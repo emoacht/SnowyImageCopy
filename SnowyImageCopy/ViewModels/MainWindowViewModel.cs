@@ -630,35 +630,32 @@ namespace SnowyImageCopy.ViewModels
 			}
 
 			// Subscribe event handlers.
-			var currentFrameSizeChangedSubscriber =
-				Observable.FromEvent
+			Disposer.Add(Observable.FromEvent
 				(
 					handler => _currentFrameSizeChanged += handler,
 					handler => _currentFrameSizeChanged -= handler
 				)
 				.Throttle(TimeSpan.FromMilliseconds(50))
 				.ObserveOn(SynchronizationContext.Current)
-				.Subscribe(_ => SetCurrentImage());
+				.Subscribe(_ => SetCurrentImage()));
 
-			var autoCheckIntervalChangedSubscriber =
-				Observable.FromEvent
+			Disposer.Add(Observable.FromEvent
 				(
 					handler => _autoCheckChanged += handler,
 					handler => _autoCheckChanged -= handler
 				)
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
-				.Subscribe(_ => Op.ResetAutoTimer());
+				.Subscribe(_ => Op.ResetAutoTimer()));
 
-			var targetPeriodDatesChangedSubscriber =
-				Observable.FromEvent
+			Disposer.Add(Observable.FromEvent
 				(
 					handler => _targetDateChanged += handler,
 					handler => _targetDateChanged -= handler
 				)
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
-				.Subscribe(_ => FileListCoreView.Refresh());
+				.Subscribe(_ => FileListCoreView.Refresh()));
 		}
 
 		private FileItemViewModel GetSampleFileData(int fileNumber)
