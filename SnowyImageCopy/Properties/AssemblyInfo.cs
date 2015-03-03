@@ -52,8 +52,8 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.9.10.46")]
-[assembly: AssemblyFileVersion("0.9.10.46")]
+[assembly: AssemblyVersion("0.9.10.48")]
+[assembly: AssemblyFileVersion("0.9.10.48")]
 
 // For unit test
 [assembly: InternalsVisibleTo("SnowyImageCopy.Test")]
