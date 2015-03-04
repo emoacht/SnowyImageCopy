@@ -307,8 +307,8 @@ namespace SnowyImageCopy.ViewModels
 
 				if (_currentImage != null)
 				{
-					// Width and PixelWidth of BitmapImage are almost identical except fractional part
-					// while those of BitmapSource are not alway close and can be much different.
+					// Width and PixelWidth of BitmapImage are almost the same except fractional part
+					// while those of BitmapSource are not always close and can be much different.
 					CurrentImageWidth = Math.Round(_currentImage.Width);
 				}
 
@@ -614,7 +614,7 @@ namespace SnowyImageCopy.ViewModels
 		public MainWindowViewModel()
 		{
 			// Set samples.
-			FileListCore.Insert(GetSampleFileData(0));
+			FileListCore.Insert(CreateSampleFileItem(0));
 
 			// Add event listeners.
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
@@ -658,9 +658,9 @@ namespace SnowyImageCopy.ViewModels
 				.Subscribe(_ => FileListCoreView.Refresh()));
 		}
 
-		private FileItemViewModel GetSampleFileData(int fileNumber)
+		private FileItemViewModel CreateSampleFileItem(int index)
 		{
-			var source = String.Format("/DCIM,SAMPLE{0}.JPG,0,0,0,0", ((0 < fileNumber) ? fileNumber.ToString(CultureInfo.InvariantCulture) : String.Empty));
+			var source = String.Format("/DCIM,SAMPLE{0}.JPG,0,0,0,0", ((0 < index) ? index.ToString(CultureInfo.InvariantCulture) : String.Empty));
 
 			return new FileItemViewModel(source, "/DCIM");
 		}

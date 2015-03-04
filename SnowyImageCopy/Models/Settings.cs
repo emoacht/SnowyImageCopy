@@ -29,7 +29,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		private readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
-		private bool ValidateProperty(object value, [CallerMemberName]string propertyName = null)
+		private bool ValidateProperty(object value, [CallerMemberName] string propertyName = null)
 		{
 			if (String.IsNullOrEmpty(propertyName))
 				return false;
