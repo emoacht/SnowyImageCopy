@@ -676,33 +676,18 @@ namespace SnowyImageCopy.ViewModels
 
 		private string CaseItemProperty
 		{
-			get
-			{
-				return _caseItemProperty ?? (_caseItemProperty =
-					PropertySupport.GetPropertyName(() => (default(FileItemViewModelCollection)).ItemPropertyChangedSender));
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(FileItemViewModelCollection)).ItemPropertyChangedSender); }
 		}
-		private string _caseItemProperty;
 
 		private string CaseFileStatus
 		{
-			get
-			{
-				return _caseFileStatus ?? (_caseFileStatus =
-					PropertySupport.GetPropertyName(() => (default(FileItemViewModel)).IsSelected));
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(FileItemViewModel)).IsSelected); }
 		}
-		private string _caseFileStatus;
 
 		private string CaseInstantCopy
 		{
-			get
-			{
-				return _caseInstantCopy ?? (_caseInstantCopy =
-					PropertySupport.GetPropertyName(() => (default(FileItemViewModel)).Status));
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(FileItemViewModel)).Status); }
 		}
-		private string _caseInstantCopy;
 
 		private async void FileListPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -760,33 +745,18 @@ namespace SnowyImageCopy.ViewModels
 
 		private string CaseAutoCheck
 		{
-			get
-			{
-				return _caseAutoCheck ?? (_caseAutoCheck =
-					PropertySupport.GetPropertyName(() => (default(Settings)).AutoCheckInterval));
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).AutoCheckInterval); }
 		}
-		private string _caseAutoCheck;
 
-		private string[] CaseTargetDate
+		private string CaseTargetPeriod
 		{
-			get
-			{
-				if (_caseTargetDate == null)
-				{
-					var settings = default(Settings);
-
-					_caseTargetDate = new[]
-					{
-						PropertySupport.GetPropertyName(() => settings.TargetPeriod),
-						PropertySupport.GetPropertyName(() => settings.TargetDates),
-					};
-				}
-
-				return _caseTargetDate;
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).TargetPeriod); }
 		}
-		private string[] _caseTargetDate;
+
+		private string CaseTargetDates
+		{
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).TargetDates); }
+		}
 
 		private event Action _autoCheckChanged = null;
 		private event Action _targetDateChanged = null;
@@ -803,7 +773,7 @@ namespace SnowyImageCopy.ViewModels
 				if (handler != null)
 					handler();
 			}
-			else if (CaseTargetDate.Contains(propertyName))
+			else if ((CaseTargetPeriod == propertyName) || (CaseTargetDates == propertyName))
 			{
 				var handler = _targetDateChanged;
 				if (handler != null)
@@ -820,63 +790,33 @@ namespace SnowyImageCopy.ViewModels
 
 		private string CaseIsChecking
 		{
-			get
-			{
-				return _caseIsChecking ?? (_caseIsChecking =
-					PropertySupport.GetPropertyName(() => (default(Operation)).IsChecking));
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsChecking); }
 		}
-		private string _caseIsChecking;
 
 		private string CaseIsCopying
 		{
-			get
-			{
-				return _caseIsCopying ?? (_caseIsCopying =
-					PropertySupport.GetPropertyName(() => (default(Operation)).IsCopying));
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsCopying); }
 		}
-		private string _caseIsCopying;
 
 		private string CaseIsAutoRunning
 		{
-			get
-			{
-				return _caseIsAutoRunning ?? (_caseIsAutoRunning =
-					PropertySupport.GetPropertyName(() => (default(Operation)).IsAutoRunning));
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsAutoRunning); }
 		}
-		private string _caseIsAutoRunning;
 
 		private string CaseOperationProgress
 		{
-			get
-			{
-				return _caseOperationProgress ?? (_caseOperationProgress =
-					PropertySupport.GetPropertyName(() => (default(Operation)).OperationProgress));
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).OperationProgress); }
 		}
-		private string _caseOperationProgress;
 
 		private string CaseIsSavingDesktop
 		{
-			get
-			{
-				return _caseIsSavingDesktop ?? (_caseIsSavingDesktop =
-					PropertySupport.GetPropertyName(() => (default(Operation)).IsSavingDesktop));
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsSavingDesktop); }
 		}
-		private string _caseIsSavingDesktop;
 
 		private string CaseIsSendingClipboard
 		{
-			get
-			{
-				return _caseIsSendingClipboard ?? (_caseIsSendingClipboard =
-					PropertySupport.GetPropertyName(() => (default(Operation)).IsSendingClipboard));
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsSendingClipboard); }
 		}
-		private string _caseIsSendingClipboard;
 
 		private void ReactOperationPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{

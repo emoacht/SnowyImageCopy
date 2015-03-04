@@ -41,31 +41,23 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener _operationPropertyChangedListener;
 
-		private string[] CaseIsCheckingOrCopying
+		private string CaseIsChecking
 		{
-			get
-			{
-				if (_caseIsCheckingOrCopying == null)
-				{
-					var operation = default(Operation);
-
-					_caseIsCheckingOrCopying = new[]
-					{
-						PropertySupport.GetPropertyName(() => operation.IsChecking),
-						PropertySupport.GetPropertyName(() => operation.IsCopying),
-					};
-				}
-
-				return _caseIsCheckingOrCopying;
-			}
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsChecking); }
 		}
-		private string[] _caseIsCheckingOrCopying;
+
+		private string CaseIsCopying
+		{
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsCopying); }
+		}
 
 		private void ReactOperationPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			//Debug.WriteLine("Operation property changed (OptionsViewModel): {0} {1}", sender, e.PropertyName);
 
-			if (CaseIsCheckingOrCopying.Contains(e.PropertyName))
+			var propertyName = e.PropertyName;
+
+			if ((CaseIsChecking == propertyName) || (CaseIsCopying == propertyName))
 			{
 				IsCheckingOrCopying = MainWindowViewModelInstance.Op.IsChecking || MainWindowViewModelInstance.Op.IsCopying;
 			}

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reactive.Disposables;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +15,32 @@ namespace SnowyImageCopy.ViewModels
 	{
 		public ViewModel()
 		{ }
+
+
+		#region Property name
+
+		private Dictionary<string, string> _propertyNameMap;
+
+		protected virtual string GetPropertyName([CallerMemberName] string callerPropertyName = null)
+		{
+			return ((_propertyNameMap != null) && _propertyNameMap.ContainsKey(callerPropertyName))
+				? _propertyNameMap[callerPropertyName]
+				: null;
+		}
+
+		protected virtual string GetPropertyName<T>(Expression<Func<T>> propertyExpression, [CallerMemberName] string callerPropertyName = null)
+		{
+			var calledPropertyName = PropertySupport.GetPropertyName(propertyExpression);
+
+			if (_propertyNameMap == null)
+				_propertyNameMap = new Dictionary<string, string>();
+
+			_propertyNameMap.Add(callerPropertyName, calledPropertyName);
+
+			return calledPropertyName;
+		}
+
+		#endregion
 
 
 		#region Dispose
