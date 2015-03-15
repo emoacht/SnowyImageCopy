@@ -60,7 +60,7 @@ namespace SnowyImageCopy.Models
 			set { MainWindowViewModelInstance.OperationStatus = value; }
 		}
 
-		private FileItemViewModelCollection FileListCore
+		private ItemObservableCollection<FileItemViewModel> FileListCore
 		{
 			get { return MainWindowViewModelInstance.FileListCore; }
 		}

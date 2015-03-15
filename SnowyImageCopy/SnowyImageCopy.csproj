@@ -174,7 +174,7 @@
     <Compile Include="Models\Exceptions\RemoteConnectionUnableException.cs" />
     <Compile Include="Models\FileExtension.cs" />
     <Compile Include="ViewModels\FileItemViewModel.cs" />
-    <Compile Include="ViewModels\FileItemViewModelCollection.cs" />
+    <Compile Include="ViewModels\ItemObservableCollection.cs" />
     <Compile Include="Models\FileManager.cs" />
     <Compile Include="Models\FileManagerCommand.cs" />
     <Compile Include="Models\FilePeriod.cs" />

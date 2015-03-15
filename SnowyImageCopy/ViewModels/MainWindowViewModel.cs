@@ -62,11 +62,11 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private Operation _op;
 
-		public FileItemViewModelCollection FileListCore
+		public ItemObservableCollection<FileItemViewModel> FileListCore
 		{
-			get { return _fileListCore ?? (_fileListCore = new FileItemViewModelCollection()); }
+			get { return _fileListCore ?? (_fileListCore = new ItemObservableCollection<FileItemViewModel>()); }
 		}
-		private FileItemViewModelCollection _fileListCore;
+		private ItemObservableCollection<FileItemViewModel> _fileListCore;
 
 		public ListCollectionView FileListCoreView
 		{
@@ -676,7 +676,7 @@ namespace SnowyImageCopy.ViewModels
 
 		private string CaseItemProperty
 		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(FileItemViewModelCollection)).ItemPropertyChangedSender); }
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(ItemObservableCollection<FileItemViewModel>)).ItemPropertyChangedSender); }
 		}
 
 		private string CaseFileStatus
@@ -696,10 +696,10 @@ namespace SnowyImageCopy.ViewModels
 			if (e.PropertyName != CaseItemProperty)
 				return;
 
-			var item = ((FileItemViewModelCollection)sender).ItemPropertyChangedSender;
-			var propertyName = ((FileItemViewModelCollection)sender).ItemPropertyChangedEventArgs.PropertyName;
+			var item = ((ItemObservableCollection<FileItemViewModel>)sender).ItemPropertyChangedSender;
+			var propertyName = ((ItemObservableCollection<FileItemViewModel>)sender).ItemPropertyChangedEventArgs.PropertyName;
 
-			//Debug.WriteLine(String.Format("ItemPropartyChanegd: {0} {1}", item.FileName, propertyName));
+			//Debug.WriteLine(String.Format("ItemPropertyChanged: {0} {1}", item.FileName, propertyName));
 
 			if (CaseFileStatus == propertyName)
 			{

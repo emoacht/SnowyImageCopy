@@ -11,7 +11,8 @@ using SnowyImageCopy.Common;
 
 namespace SnowyImageCopy.ViewModels
 {
-	public class FileItemViewModelCollection : ObservableCollection<FileItemViewModel>
+	public class ItemObservableCollection<T> : ObservableCollection<T>
+		where T : class, INotifyPropertyChanged, IComparable<T>
 	{
 		private readonly object _locker = new object();
 
@@ -19,7 +20,7 @@ namespace SnowyImageCopy.ViewModels
 		/// Insert new item to correct position in order to minimize the necessity of sorting.
 		/// </summary>
 		/// <param name="item">New item to collection</param>
-		public void Insert(FileItemViewModel item)
+		public void Insert(T item)
 		{
 			lock (_locker)
 			{
@@ -47,11 +48,11 @@ namespace SnowyImageCopy.ViewModels
 		protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
 		{
 			if (e.OldItems != null)
-				foreach (FileItemViewModel item in e.OldItems)
+				foreach (T item in e.OldItems)
 					item.PropertyChanged -= OnItemPropertyChanged;
 
 			if (e.NewItems != null) // e.NewItems seems not to become null.
-				foreach (FileItemViewModel item in e.NewItems)
+				foreach (T item in e.NewItems)
 					item.PropertyChanged += OnItemPropertyChanged;
 
 			base.OnCollectionChanged(e);
@@ -63,15 +64,15 @@ namespace SnowyImageCopy.ViewModels
 		protected override void ClearItems()
 		{
 			if (this.Items != null)
-				this.Items.ToList().ForEach(x => x.PropertyChanged -= OnItemPropertyChanged);
+				foreach (T item in this.Items)
+					item.PropertyChanged -= OnItemPropertyChanged;
 
 			base.ClearItems();
 		}
 
-
 		private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			ItemPropertyChangedSender = sender as FileItemViewModel;
+			ItemPropertyChangedSender = sender as T;
 			ItemPropertyChangedEventArgs = e;
 
 			base.OnPropertyChanged(new PropertyChangedEventArgs(NameItemPropertyChangedSender));
@@ -90,7 +91,7 @@ namespace SnowyImageCopy.ViewModels
 		/// <summary>
 		/// Item which fired a PropertyChanged event
 		/// </summary>
-		public FileItemViewModel ItemPropertyChangedSender { get; private set; }
+		public T ItemPropertyChangedSender { get; private set; }
 
 		/// <summary>
 		/// PropertyChangedEventArgs of the PropertyChanged event
