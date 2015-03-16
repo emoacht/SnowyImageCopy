@@ -109,7 +109,7 @@
 											<RadioButton
 												Margin="0,4,0,4"
 												Content="{Binding Description, Mode=OneWay}"
-												IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+												IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
 										</ControlTemplate>
 									</Setter.Value>
 								</Setter>
