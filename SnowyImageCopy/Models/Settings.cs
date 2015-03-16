@@ -190,8 +190,6 @@ namespace SnowyImageCopy.Models
 
 		#region Path
 
-		private static readonly Regex _rootPattern = new Regex(@"^https?://((?!/)\S){1,15}/", RegexOptions.Compiled);
-
 		public string RemoteAddress
 		{
 			get { return _remoteAddress; }
@@ -200,21 +198,14 @@ namespace SnowyImageCopy.Models
 				if (_remoteAddress == value)
 					return;
 
-				if (Path.GetInvalidPathChars().Any(x => value.Contains(x)))
+				string root;
+				string descendant;
+				if (!TryParseRemoteAddress(value, out root, out descendant))
 					return;
 
-				var match = _rootPattern.Match(value);
-				if (!match.Success)
-					return;
-
-				_remoteRoot = match.Value;
-
-				var descendant = value.Substring(_remoteRoot.Length).TrimStart('/');
-				descendant = Regex.Replace(descendant, @"\s+", String.Empty);
-				descendant = Regex.Replace(descendant, "/{2,}", "/");
-
-				_remoteDescendant = String.Format("/{0}", descendant).TrimEnd('/');
-				_remoteAddress = _remoteRoot + descendant;
+				_remoteAddress = root + descendant;
+				_remoteRoot = root;
+				_remoteDescendant = "/" + descendant.TrimEnd('/');
 			}
 		}
 		private string _remoteAddress = @"http://flashair/"; // Default FlashAir Url
@@ -230,6 +221,28 @@ namespace SnowyImageCopy.Models
 			get { return _remoteDescendant ?? String.Empty; }
 		}
 		private string _remoteDescendant;
+
+		private static readonly Regex _rootPattern = new Regex(@"^https?://((?!/)\S){1,15}/", RegexOptions.Compiled);
+
+		private bool TryParseRemoteAddress(string source, out string root, out string descendant)
+		{
+			root = null;
+			descendant = null;
+
+			if (Path.GetInvalidPathChars().Any(x => source.Contains(x)))
+				return false;
+
+			var match = _rootPattern.Match(source);
+			if (!match.Success)
+				return false;
+
+			root = match.Value;
+
+			descendant = source.Substring(match.Length).TrimStart('/');
+			descendant = Regex.Replace(descendant, @"\s+", String.Empty);
+			descendant = Regex.Replace(descendant, "/{2,}", "/");
+			return true;
+		}
 
 		private const string _defaultLocalFolder = "FlashAirImages"; // Default local folder name
 
