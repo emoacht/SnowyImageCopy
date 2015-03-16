@@ -701,7 +701,7 @@ namespace SnowyImageCopy.ViewModels
 
 			//Debug.WriteLine(String.Format("ItemPropertyChanged: {0} {1}", item.FileName, propertyName));
 
-			if (CaseFileStatus == propertyName)
+			if (propertyName == CaseFileStatus)
 			{
 				switch (item.Status)
 				{
@@ -727,7 +727,7 @@ namespace SnowyImageCopy.ViewModels
 						break;
 				}
 			}
-			else if (CaseInstantCopy == propertyName)
+			else if (propertyName == CaseInstantCopy)
 			{
 				if ((item.Status != FileStatus.ToBeCopied) || Op.IsChecking || Op.IsCopying || !Settings.Current.InstantCopy)
 					return;
@@ -767,13 +767,13 @@ namespace SnowyImageCopy.ViewModels
 
 			var propertyName = e.PropertyName;
 
-			if (CaseAutoCheck == propertyName)
+			if (propertyName == CaseAutoCheck)
 			{
 				var handler = _autoCheckChanged;
 				if (handler != null)
 					handler();
 			}
-			else if ((CaseTargetPeriod == propertyName) || (CaseTargetDates == propertyName))
+			else if ((propertyName == CaseTargetPeriod) || (propertyName == CaseTargetDates))
 			{
 				var handler = _targetDateChanged;
 				if (handler != null)
@@ -824,26 +824,26 @@ namespace SnowyImageCopy.ViewModels
 
 			var propertyName = e.PropertyName;
 
-			if (CaseIsChecking == propertyName)
+			if (propertyName == CaseIsChecking)
 			{
 				RaiseCanExecuteChanged();
 				ManageBrowserOpen(Op.IsChecking);
 			}
-			else if (CaseIsCopying == propertyName)
+			else if (propertyName == CaseIsCopying)
 			{
 				RaiseCanExecuteChanged();
 				ManageBrowserOpen(Op.IsCopying);
 			}
-			else if (CaseIsAutoRunning == propertyName)
+			else if (propertyName == CaseIsAutoRunning)
 			{
 				RaiseCanExecuteChanged();
 				ManageBrowserOpen(Op.IsAutoRunning);
 			}
-			else if (CaseOperationProgress == propertyName)
+			else if (propertyName == CaseOperationProgress)
 			{
 				UpdateProgress(Op.OperationProgress);
 			}
-			else if ((CaseIsSavingDesktop == propertyName) || (CaseIsSendingClipboard == propertyName))
+			else if ((propertyName == CaseIsSavingDesktop) || (propertyName == CaseIsSendingClipboard))
 			{
 				RaiseCanExecuteChanged();
 			}

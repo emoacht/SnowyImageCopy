@@ -57,7 +57,7 @@ namespace SnowyImageCopy.ViewModels
 
 			var propertyName = e.PropertyName;
 
-			if ((CaseIsChecking == propertyName) || (CaseIsCopying == propertyName))
+			if ((propertyName == CaseIsChecking) || (propertyName == CaseIsCopying))
 			{
 				IsCheckingOrCopying = MainWindowViewModelInstance.Op.IsChecking || MainWindowViewModelInstance.Op.IsCopying;
 			}
