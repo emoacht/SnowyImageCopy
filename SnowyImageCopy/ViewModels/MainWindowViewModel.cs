@@ -641,8 +641,8 @@ namespace SnowyImageCopy.ViewModels
 
 			Disposer.Add(Observable.FromEvent
 				(
-					handler => _autoCheckChanged += handler,
-					handler => _autoCheckChanged -= handler
+					handler => _autoCheckIntervalChanged += handler,
+					handler => _autoCheckIntervalChanged -= handler
 				)
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
@@ -674,17 +674,17 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener _fileListPropertyChangedListener;
 
-		private string CaseItemProperty
+		private string CaseItemPropertyChangedSender
 		{
 			get { return GetPropertyName() ?? GetPropertyName(() => (default(ItemObservableCollection<FileItemViewModel>)).ItemPropertyChangedSender); }
 		}
 
-		private string CaseFileStatus
+		private string CaseIsSelected
 		{
 			get { return GetPropertyName() ?? GetPropertyName(() => (default(FileItemViewModel)).IsSelected); }
 		}
 
-		private string CaseInstantCopy
+		private string CaseStatus
 		{
 			get { return GetPropertyName() ?? GetPropertyName(() => (default(FileItemViewModel)).Status); }
 		}
@@ -693,7 +693,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			//Debug.WriteLine("File List property changed: {0} {1}", sender, e.PropertyName);
 
-			if (e.PropertyName != CaseItemProperty)
+			if (e.PropertyName != CaseItemPropertyChangedSender)
 				return;
 
 			var item = ((ItemObservableCollection<FileItemViewModel>)sender).ItemPropertyChangedSender;
@@ -701,7 +701,7 @@ namespace SnowyImageCopy.ViewModels
 
 			//Debug.WriteLine(String.Format("ItemPropertyChanged: {0} {1}", item.FileName, propertyName));
 
-			if (propertyName == CaseFileStatus)
+			if (propertyName == CaseIsSelected)
 			{
 				switch (item.Status)
 				{
@@ -727,7 +727,7 @@ namespace SnowyImageCopy.ViewModels
 						break;
 				}
 			}
-			else if (propertyName == CaseInstantCopy)
+			else if (propertyName == CaseStatus)
 			{
 				if ((item.Status != FileStatus.ToBeCopied) || Op.IsChecking || Op.IsCopying || !Settings.Current.InstantCopy)
 					return;
@@ -743,7 +743,7 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener _settingsPropertyChangedListener;
 
-		private string CaseAutoCheck
+		private string CaseAutoCheckInterval
 		{
 			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).AutoCheckInterval); }
 		}
@@ -758,7 +758,7 @@ namespace SnowyImageCopy.ViewModels
 			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).TargetDates); }
 		}
 
-		private event Action _autoCheckChanged = null;
+		private event Action _autoCheckIntervalChanged = null;
 		private event Action _targetDateChanged = null;
 
 		private void ReactSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -767,9 +767,9 @@ namespace SnowyImageCopy.ViewModels
 
 			var propertyName = e.PropertyName;
 
-			if (propertyName == CaseAutoCheck)
+			if (propertyName == CaseAutoCheckInterval)
 			{
-				var handler = _autoCheckChanged;
+				var handler = _autoCheckIntervalChanged;
 				if (handler != null)
 					handler();
 			}
