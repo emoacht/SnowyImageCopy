@@ -138,33 +138,33 @@ namespace SnowyImageCopy.ViewModels
 
 		public FileItemViewModel CurrentItem { get; set; }
 
-		private ReaderWriterLockSlim _dataLock = new ReaderWriterLockSlim();
+		private ReaderWriterLockSlim _dataLocker = new ReaderWriterLockSlim();
 		private bool _isCurrentImageDataGiven;
 
 		public byte[] CurrentImageData
 		{
 			get
 			{
-				_dataLock.EnterReadLock();
+				_dataLocker.EnterReadLock();
 				try
 				{
 					return _currentImageData;
 				}
 				finally
 				{
-					_dataLock.ExitReadLock();
+					_dataLocker.ExitReadLock();
 				}
 			}
 			set
 			{
-				_dataLock.EnterWriteLock();
+				_dataLocker.EnterWriteLock();
 				try
 				{
 					_currentImageData = value;
 				}
 				finally
 				{
-					_dataLock.ExitWriteLock();
+					_dataLocker.ExitWriteLock();
 				}
 
 				if (!Designer.IsInDesignMode)
