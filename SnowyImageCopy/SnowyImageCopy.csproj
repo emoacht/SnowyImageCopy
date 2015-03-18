@@ -141,7 +141,6 @@
     <Compile Include="Views\Controls\CircularProgressBar.cs" />
     <Compile Include="Views\Controls\NumericUpDown.cs" />
     <Compile Include="Views\Controls\SlidingToggleButton.cs" />
-    <Compile Include="Views\Converters\BooleanToProgressStateConverter.cs" />
     <Compile Include="Views\Converters\DoubleCentesimalConverter.cs" />
     <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
     <Compile Include="Views\Options.xaml.cs">

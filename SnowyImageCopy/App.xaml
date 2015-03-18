@@ -10,7 +10,6 @@
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
 			<converters:BooleanInverseToThicknessConverter x:Key="BooleanInverseToThicknessConverterKey"/>
 			<converters:BooleanInverseToVisibilityConverter x:Key="BooleanInverseToVisibilityConverterKey"/>
-			<converters:BooleanToProgressStateConverter x:Key="BooleanToProgressStateConverterKey"/>
 
 			<converters:EnumToBooleanConverter x:Key="EnumToBooleanConverterKey"/>
 			<converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverterKey"/>

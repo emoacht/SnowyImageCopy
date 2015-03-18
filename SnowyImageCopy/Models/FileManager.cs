@@ -661,11 +661,13 @@ namespace SnowyImageCopy.Models
 												// Report if read length in total exceeds stepped length.
 												if (stepCurrent / stepTotal * size <= readLengthTotal)
 												{
-													stepCurrent++;
 													progress.Report(new ProgressInfo(
 														currentValue: readLengthTotal,
 														totalValue: size,
-														elapsedTime: DateTime.Now - startTime));
+														elapsedTime: DateTime.Now - startTime,
+														isFirst: stepCurrent == 1D));
+
+													stepCurrent++;
 												}
 											}
 										}

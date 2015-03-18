@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Shell;
 using System.Windows.Threading;
 
 using DesktopToast;
@@ -165,20 +166,6 @@ namespace SnowyImageCopy.Models
 		private bool _isAutoRunning;
 
 		/// <summary>
-		/// Progress of operation
-		/// </summary>
-		public ProgressInfo OperationProgress
-		{
-			get { return _operationProgress; }
-			set
-			{
-				_operationProgress = value;
-				RaisePropertyChanged();
-			}
-		}
-		private ProgressInfo _operationProgress;
-
-		/// <summary>
 		/// Saving current image data on desktop
 		/// </summary>
 		public bool IsSavingDesktop
@@ -205,6 +192,171 @@ namespace SnowyImageCopy.Models
 			}
 		}
 		private bool _isSendingClipboard;
+
+		#endregion
+
+
+		#region Progress
+
+		/// <summary>
+		/// Percentage of total size of items in target and copied so far including current operation
+		/// </summary>
+		public double ProgressCopiedAll
+		{
+			get { return _progressCopiedAll; }
+			set
+			{
+				_progressCopiedAll = value;
+				RaisePropertyChanged();
+			}
+		}
+		private double _progressCopiedAll = 40; // Sample percentage
+
+		/// <summary>
+		/// Percentage of total size of items in target and copied during current operation
+		/// </summary>
+		public double ProgressCopiedCurrent
+		{
+			get { return _progressCopiedCurrent; }
+			set
+			{
+				_progressCopiedCurrent = value;
+				RaisePropertyChanged();
+			}
+		}
+		private double _progressCopiedCurrent = 60; // Sample percentage
+
+		/// <summary>
+		/// Remaining time for current operation calculated by current transfer rate
+		/// </summary>
+		public TimeSpan RemainingTime
+		{
+			get { return _remainingTime; }
+			set
+			{
+				_remainingTime = value;
+				RaisePropertyChanged();
+			}
+		}
+		private TimeSpan _remainingTime;
+
+		/// <summary>
+		/// Progress state of current operation
+		/// </summary>
+		public TaskbarItemProgressState ProgressState
+		{
+			get { return _progressState; }
+			set
+			{
+				if (_progressState == value)
+					return;
+
+				_progressState = value;
+				RaisePropertyChanged();
+			}
+		}
+		private TaskbarItemProgressState _progressState;
+
+		private object _updateLocker = new object();
+		private long _sizeOverall;           // Total size of items
+		private long _sizeCopiedAll;         // Total size of items copied so far including current operation
+		private long _sizeCopiedCurrent;     // Total size of items copied during current operation
+		private long _sizeToBeCopiedCurrent; // Total size of items to be copied during current operation
+
+		internal void UpdateProgress(ProgressInfo info = null)
+		{
+			lock (_updateLocker)
+			{
+				UpdateSize(info);
+				UpdateProgressAll(info);
+				UpdateProgressCurrent(info);
+			}
+		}
+
+		private void UpdateSize(ProgressInfo info)
+		{
+			if ((info != null) && !info.IsFirst)
+				return;
+
+			var checksCopiedCurrent = (info != null);
+
+			_sizeOverall = 0L;
+			_sizeCopiedAll = 0L;
+			_sizeCopiedCurrent = 0L;
+			_sizeToBeCopiedCurrent = 0L;
+
+			foreach (var item in FileListCoreView.Cast<FileItemViewModel>())
+			{
+				switch (item.Status)
+				{
+					case FileStatus.Recycled:
+						break;
+					default:
+						_sizeOverall += item.Size;
+
+						switch (item.Status)
+						{
+							case FileStatus.Copied:
+								_sizeCopiedAll += item.Size;
+
+								if (checksCopiedCurrent && (CopyStartTime < item.CopiedTime))
+									_sizeCopiedCurrent += item.Size;
+								break;
+
+							case FileStatus.ToBeCopied:
+							case FileStatus.Copying:
+								_sizeToBeCopiedCurrent += item.Size;
+								break;
+						}
+						break;
+				}
+			}
+		}
+
+		private void UpdateProgressAll(ProgressInfo info)
+		{
+			if (_sizeOverall == 0)
+			{
+				ProgressCopiedAll = 0D;
+			}
+			else
+			{
+				var sizeCopiedLatest = (info != null) ? (long)info.CurrentValue : 0L;
+
+				ProgressCopiedAll = (double)(_sizeCopiedAll + sizeCopiedLatest) * 100D / (double)_sizeOverall;
+
+				//Debug.WriteLine("ProgressCopiedAll: {0}", ProgressCopiedAll);
+			}
+		}
+
+		private void UpdateProgressCurrent(ProgressInfo info)
+		{
+			if (info == null)
+			{
+				ProgressCopiedCurrent = 0D;
+				RemainingTime = TimeSpan.Zero;
+				ProgressState = TaskbarItemProgressState.None;
+			}
+			else if (info.IsError)
+			{
+				ProgressState = TaskbarItemProgressState.Error;
+			}
+			else
+			{
+				var sizeCopiedLatest = (long)info.CurrentValue;
+				var elapsedTimeLatest = info.ElapsedTime;
+				var sizeCopiedToBeCopiedCurrent = _sizeCopiedCurrent + _sizeToBeCopiedCurrent;
+
+				if ((sizeCopiedLatest <= 0) || (sizeCopiedToBeCopiedCurrent <= 0))
+					return; // For just in case
+
+				ProgressCopiedCurrent = (double)(_sizeCopiedCurrent + sizeCopiedLatest) * 100D / (double)sizeCopiedToBeCopiedCurrent;
+				RemainingTime = TimeSpan.FromSeconds((double)(_sizeToBeCopiedCurrent - sizeCopiedLatest) * elapsedTimeLatest.TotalSeconds / (double)sizeCopiedLatest);
+				ProgressState = TaskbarItemProgressState.Normal;
+
+				//Debug.WriteLine("ProgressCopiedCurrent: {0} RemainingTime: {1}", ProgressCopiedCurrent, RemainingTime);
+			}
+		}
 
 		#endregion
 
@@ -398,18 +550,18 @@ namespace SnowyImageCopy.Models
 
 				await CheckFileBaseAsync();
 
-				OperationProgress = null;
+				UpdateProgress();
 
 				LastCheckCopyTime = CheckFileToBeCopied(true)
 					? DateTime.MinValue
 					: DateTime.Now;
 
-				await CopyFileBaseAsync(new Progress<ProgressInfo>(x => OperationProgress = x));
+				await CopyFileBaseAsync(new Progress<ProgressInfo>(x => UpdateProgress(x)));
 
 				LastCheckCopyTime = DateTime.Now;
 
 				await Task.Delay(_copyWaitingLength);
-				OperationProgress = null;
+				UpdateProgress();
 
 				IsChecking = false;
 				IsCopying = false;
@@ -425,6 +577,8 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
+				UpdateProgress(new ProgressInfo(isError: true));
+
 				if (!IsAutoRunning)
 					SystemSounds.Hand.Play();
 
@@ -492,7 +646,7 @@ namespace SnowyImageCopy.Models
 
 				await CheckFileBaseAsync();
 
-				OperationProgress = null;
+				UpdateProgress();
 
 				LastCheckCopyTime = CheckFileToBeCopied(false)
 					? DateTime.MinValue
@@ -505,6 +659,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
+				UpdateProgress(new ProgressInfo(isError: true));
 				SystemSounds.Hand.Play();
 
 				if (ex.GetType() == typeof(RemoteConnectionUnableException))
@@ -549,12 +704,10 @@ namespace SnowyImageCopy.Models
 			{
 				IsCopying = true;
 
-				OperationProgress = null;
-
-				await CopyFileBaseAsync(new Progress<ProgressInfo>(x => OperationProgress = x));
+				await CopyFileBaseAsync(new Progress<ProgressInfo>(x => UpdateProgress(x)));
 
 				await Task.Delay(_copyWaitingLength);
-				OperationProgress = null;
+				UpdateProgress();
 
 				IsCopying = false;
 
@@ -567,6 +720,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
+				UpdateProgress(new ProgressInfo(isError: true));
 				SystemSounds.Hand.Play();
 
 				if (ex.GetType() == typeof(RemoteConnectionUnableException))

@@ -19,8 +19,8 @@
 	</Window.DataContext>
 
 	<Window.TaskbarItemInfo>
-		<TaskbarItemInfo ProgressState="{Binding IsUpdated, Converter={StaticResource BooleanToProgressStateConverterKey}}"
-						 ProgressValue="{Binding ProgressCopiedCurrent, Converter={StaticResource DoubleCentesimalConverterKey}}"/>
+		<TaskbarItemInfo ProgressState="{Binding Op.ProgressState}"
+						 ProgressValue="{Binding Op.ProgressCopiedCurrent, Converter={StaticResource DoubleCentesimalConverterKey}}"/>
 	</Window.TaskbarItemInfo>
 
 	<i:Interaction.Behaviors>
@@ -126,20 +126,20 @@
 						ArcSegmentColor="{StaticResource Progress.ArcSegment.Current}"
 						RingSegmentColor="{StaticResource Progress.RingSegment}"
 						RingSegmentOpacity="0.11"
-						Percentage="{Binding ProgressCopiedCurrent}"/>
+						Percentage="{Binding Op.ProgressCopiedCurrent}"/>
 					<controls:CircularProgressBar
 						Width="68.4" HorizontalAlignment="Center" VerticalAlignment="Center"
 						StrokeThickness="14"
 						ArcSegmentColor="{StaticResource Progress.ArcSegment.All}"
 						RingSegmentColor="{StaticResource Progress.RingSegment}"
 						RingSegmentOpacity="0.11"
-						Percentage="{Binding ProgressCopiedAll}"/>
+						Percentage="{Binding Op.ProgressCopiedAll}"/>
 					<TextBox
 						HorizontalAlignment="Center" VerticalAlignment="Center"
 						BorderThickness="0"
 						Background="{x:Null}"
 						IsUndoEnabled="False"
-						Text="{Binding RemainingTime, Converter={StaticResource TimeSpanToStringConverterKey}}"/>
+						Text="{Binding Op.RemainingTime, Converter={StaticResource TimeSpanToStringConverterKey}}"/>
 				</Grid>
 			</Grid>
 

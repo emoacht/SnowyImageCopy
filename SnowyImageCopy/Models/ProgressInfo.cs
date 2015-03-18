@@ -13,11 +13,6 @@ namespace SnowyImageCopy.Models
 	public class ProgressInfo
 	{
 		/// <summary>
-		/// Current percentage
-		/// </summary>
-		public double CurrentPercentage { get; private set; }
-
-		/// <summary>
 		/// Current value
 		/// </summary>
 		public int CurrentValue { get; private set; }
@@ -32,19 +27,30 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public TimeSpan ElapsedTime { get; private set; }
 
+		/// <summary>
+		/// Whether this report is the first among a group of reports
+		/// </summary>
+		public bool IsFirst { get; private set; }
+
+		/// <summary>
+		/// Whether this report is for an error
+		/// </summary>
+		public bool IsError { get; private set; }
+
 
 		#region Constructor
 
-		public ProgressInfo(double currentPercentage)
-		{
-			this.CurrentPercentage = currentPercentage;
-		}
-
-		public ProgressInfo(int currentValue, int totalValue, TimeSpan elapsedTime)
+		public ProgressInfo(int currentValue, int totalValue, TimeSpan elapsedTime, bool isFirst)
 		{
 			this.CurrentValue = currentValue;
 			this.TotalValue = totalValue;
 			this.ElapsedTime = elapsedTime;
+			this.IsFirst = isFirst;
+		}
+
+		public ProgressInfo(bool isError)
+		{
+			this.IsError = isError;
 		}
 
 		#endregion
