@@ -292,7 +292,9 @@ namespace SnowyImageCopy.Models
 					return;
 
 				_targetDates = value;
-				RaisePropertyChanged();
+
+				if (TargetPeriod == FilePeriod.Select) // To prevent loading settings from firing event unnecessarily
+					RaisePropertyChanged();
 			}
 		}
 		private ObservableCollection<DateTime> _targetDates;

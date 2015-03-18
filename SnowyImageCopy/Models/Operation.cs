@@ -546,6 +546,7 @@ namespace SnowyImageCopy.Models
 			{
 				IsChecking = true;
 				IsCopying = true;
+				UpdateProgress();
 
 				await CheckFileBaseAsync();
 
@@ -561,7 +562,6 @@ namespace SnowyImageCopy.Models
 
 				await Task.Delay(_copyWaitingLength);
 				UpdateProgress();
-
 				IsChecking = false;
 				IsCopying = false;
 
@@ -641,6 +641,7 @@ namespace SnowyImageCopy.Models
 			try
 			{
 				IsChecking = true;
+				UpdateProgress();
 
 				await CheckFileBaseAsync();
 
@@ -705,7 +706,6 @@ namespace SnowyImageCopy.Models
 
 				await Task.Delay(_copyWaitingLength);
 				UpdateProgress();
-
 				IsCopying = false;
 
 				await ShowToastAsync();
