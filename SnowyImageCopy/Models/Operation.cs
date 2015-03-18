@@ -168,7 +168,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Saving current image data on desktop
 		/// </summary>
-		public bool IsSavingDesktop
+		internal bool IsSavingDesktop
 		{
 			get { return _isSavingDesktop; }
 			set
@@ -182,7 +182,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Sending current image data to clipboard
 		/// </summary>
-		public bool IsSendingClipboard
+		internal bool IsSendingClipboard
 		{
 			get { return _isSendingClipboard; }
 			set
@@ -377,7 +377,7 @@ namespace SnowyImageCopy.Models
 				.All(x => x.HasThumbnail || (!(x.IsAliveRemote && x.CanGetThumbnailRemote) && !(x.IsAliveLocal && x.CanLoadDataLocal)));
 		}
 
-		public void StartAutoTimer()
+		internal void StartAutoTimer()
 		{
 			CheckFileListCoreViewThumbnail();
 
@@ -391,7 +391,7 @@ namespace SnowyImageCopy.Models
 			ResetAutoTimer();
 		}
 
-		public void ResetAutoTimer()
+		internal void ResetAutoTimer()
 		{
 			if (IsAutoRunning)
 			{
@@ -537,8 +537,7 @@ namespace SnowyImageCopy.Models
 		/// True:  If completed.
 		/// False: If interrupted or failed.
 		/// </returns>
-		/// <remarks>This method is called by Command or timer.</remarks>
-		public async Task<bool> CheckCopyFileAsync()
+		internal async Task<bool> CheckCopyFileAsync()
 		{
 			if (!IsReady())
 				return true; // This is true case.
@@ -634,8 +633,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Check files in FlashAir card.
 		/// </summary>
-		/// <remarks>This method is called by Command.</remarks>
-		public async Task CheckFileAsync()
+		internal async Task CheckFileAsync()
 		{
 			if (!IsReady())
 				return;
@@ -694,8 +692,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Copy files from FlashAir card.
 		/// </summary>
-		/// <remarks>This method is called by Command.</remarks>
-		public async Task CopyFileAsync()
+		internal async Task CopyFileAsync()
 		{
 			if (!IsReady())
 				return;
@@ -768,8 +765,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Stop operation.
 		/// </summary>
-		/// <remarks>This method is called by Command.</remarks>
-		public void Stop()
+		internal void Stop()
 		{
 			StopAutoTimer();
 
@@ -1240,7 +1236,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Save current image data on desktop.
 		/// </summary>
-		public async Task SaveDesktopAsync()
+		internal async Task SaveDesktopAsync()
 		{
 			if ((CurrentImageData == null) || (CurrentItem == null))
 				return;
@@ -1269,7 +1265,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Send current image data to clipboard.
 		/// </summary>
-		public async Task SendClipboardAsync()
+		internal async Task SendClipboardAsync()
 		{
 			if (CurrentImageData == null)
 				return;

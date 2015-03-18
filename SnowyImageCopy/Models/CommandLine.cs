@@ -10,7 +10,7 @@ namespace SnowyImageCopy.Models
 	/// <summary>
 	/// Command line options
 	/// </summary>
-	public static class CommandLine
+	internal static class CommandLine
 	{
 		#region Win32
 
