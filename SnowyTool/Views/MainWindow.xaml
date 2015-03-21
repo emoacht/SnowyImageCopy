@@ -10,7 +10,8 @@
 		x:Name="MainWindowRoot"
 		Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
 		FontFamily="Segoe UI"
-		Width="540" SizeToContent="Height" ResizeMode="CanMinimize">
+		Width="540" SizeToContent="Height" ResizeMode="CanMinimize"
+		Icon="/SnowyTool;component/Resources/Feather.ico">
 	<Window.DataContext>
 		<viewModels:MainWindowViewModel/>
 	</Window.DataContext>
