@@ -9,11 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-using PerMonitorDpi.Views;
-
 namespace SnowyTool.Views
 {
-	public partial class MainWindow : PerMonitorDpiWindow
+	public partial class MainWindow : Window
 	{
 		public MainWindow()
 		{

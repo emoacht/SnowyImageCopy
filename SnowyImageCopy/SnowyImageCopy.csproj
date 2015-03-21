@@ -61,9 +61,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\DesktopToast.dll</HintPath>
     </Reference>
-    <Reference Include="PerMonitorDpi, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MonitorAware, Version=0.5.0.14, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\PerMonitorDpi.dll</HintPath>
+      <HintPath>Libraries\MonitorAware.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -89,7 +89,6 @@
       <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime" />
-    <Reference Include="System.Runtime.InteropServices.WindowsRuntime" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -98,9 +97,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="Windows">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -301,9 +297,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libraries\DesktopToast.dll" />
-    <Resource Include="Libraries\DesktopToast.xml" />
-    <Content Include="Libraries\PerMonitorDpi.dll" />
-    <Resource Include="Libraries\PerMonitorDpi.xml" />
+    <Resource Include="Libraries\DesktopToast.xml">
+      <SubType>Designer</SubType>
+    </Resource>
+    <Content Include="Libraries\MonitorAware.dll" />
+    <Resource Include="Libraries\MonitorAware.xml">
+      <SubType>Designer</SubType>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

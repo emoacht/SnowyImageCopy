@@ -11,14 +11,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-using PerMonitorDpi.Models;
-using PerMonitorDpi.Views;
+using MonitorAware.Models;
+using MonitorAware.Views;
 using SnowyImageCopy.Models;
 using SnowyImageCopy.ViewModels;
 
 namespace SnowyImageCopy.Views
 {
-	public partial class MainWindow : PerMonitorDpiWindow
+	public partial class MainWindow : MonitorAwareWindow
 	{
 		public MainWindow()
 		{
@@ -61,7 +61,7 @@ namespace SnowyImageCopy.Views
 				_mainWindowViewModel.CheckCopyAutoCommand.CanExecute())
 				_mainWindowViewModel.CheckCopyAutoCommand.Execute();
 
-			SetDestinationColorProfile(this.WindowHandler.WindowColorProfilePath);
+			SetDestinationColorProfile(this.WindowHandler.ColorProfilePath);
 			this.WindowHandler.ColorProfileChanged += (sender_, e_) => SetDestinationColorProfile(e_.NewPath);
 		}
 

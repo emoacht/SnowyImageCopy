@@ -1,17 +1,23 @@
-﻿<pmd:PerMonitorDpiWindow x:Class="SnowyTool.Views.MainWindow"
-						 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-						 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-						 xmlns:pmd="clr-namespace:PerMonitorDpi.Views;assembly=PerMonitorDpi"
-						 xmlns:views="clr-namespace:SnowyTool.Views"
-						 xmlns:viewModels="clr-namespace:SnowyTool.ViewModels"
-						 xmlns:controls="clr-namespace:SnowyTool.Views.Controls"
-						 x:Name="MainWindowRoot"
-						 Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
-						 FontFamily="Segoe UI"
-						 Width="540" SizeToContent="Height" ResizeMode="CanMinimize">
+﻿<Window x:Class="SnowyTool.Views.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+		xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+		xmlns:ma="clr-namespace:MonitorAware.Views;assembly=MonitorAware"
+		xmlns:views="clr-namespace:SnowyTool.Views"
+		xmlns:viewModels="clr-namespace:SnowyTool.ViewModels"
+		xmlns:controls="clr-namespace:SnowyTool.Views.Controls"
+		x:Name="MainWindowRoot"
+		Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
+		FontFamily="Segoe UI"
+		Width="540" SizeToContent="Height" ResizeMode="CanMinimize">
 	<Window.DataContext>
 		<viewModels:MainWindowViewModel/>
 	</Window.DataContext>
+
+	<i:Interaction.Behaviors>
+		<ma:MonitorAwareBehavior x:Name="MonitorBehavior"/>
+	</i:Interaction.Behaviors>
 
 	<Grid x:Name="LayoutRoot"
 		  Background="{StaticResource Window.Background}">
@@ -319,4 +325,4 @@
 			</Border>
 		</Grid>
 	</Grid>
-</pmd:PerMonitorDpiWindow>
+</Window>

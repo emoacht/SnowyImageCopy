@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interactivity;
 
-using PerMonitorDpi.Models;
+using MonitorAware.Models;
 
 namespace SnowyImageCopy.Views.Behaviors
 {

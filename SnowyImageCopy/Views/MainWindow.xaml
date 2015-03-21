@@ -1,19 +1,19 @@
-﻿<pmd:PerMonitorDpiWindow x:Class="SnowyImageCopy.Views.MainWindow"
-						 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-						 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-						 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-						 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-						 xmlns:pmd="clr-namespace:PerMonitorDpi.Views;assembly=PerMonitorDpi"
-						 xmlns:views="clr-namespace:SnowyImageCopy.Views"
-						 xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
-						 xmlns:models="clr-namespace:SnowyImageCopy.Models"
-						 xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
-						 xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
-						 x:Name="MainWindowRoot"
-						 Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
-						 FontFamily="Segoe UI"
-						 Width="720" Height="480" MinWidth="640" MinHeight="280"
-						 Icon="/SnowyImageCopy;component/Resources/Feather.ico">
+﻿<ma:MonitorAwareWindow x:Class="SnowyImageCopy.Views.MainWindow"
+					   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+					   xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+					   xmlns:ma="clr-namespace:MonitorAware.Views;assembly=MonitorAware"
+					   xmlns:views="clr-namespace:SnowyImageCopy.Views"
+					   xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
+					   xmlns:models="clr-namespace:SnowyImageCopy.Models"
+					   xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
+					   xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
+					   x:Name="MainWindowRoot"
+					   Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
+					   FontFamily="Segoe UI"
+					   Width="720" Height="480" MinWidth="640" MinHeight="280"
+					   Icon="/SnowyImageCopy;component/Resources/Feather.ico">
 	<Window.DataContext>
 		<viewModels:MainWindowViewModel/>
 	</Window.DataContext>
@@ -468,4 +468,4 @@
 			</Grid>
 		</Grid>
 	</Grid>
-</pmd:PerMonitorDpiWindow>
+</ma:MonitorAwareWindow>

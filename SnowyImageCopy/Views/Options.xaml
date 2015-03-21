@@ -6,7 +6,7 @@
 			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
-			 xmlns:pmd="clr-namespace:PerMonitorDpi.Views;assembly=PerMonitorDpi"
+			 xmlns:ma="clr-namespace:MonitorAware.Views;assembly=MonitorAware"
 			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
 			 xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
 			 xmlns:models="clr-namespace:SnowyImageCopy.Models"
@@ -252,8 +252,8 @@
 					</TextBlock>
 
 					<TextBlock Margin="0,0,0,4">
-						<Run Text="{Binding WindowHandler.SystemDpi.X, RelativeSource={RelativeSource AncestorType=pmd:PerMonitorDpiWindow}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
-						<Run Text="{Binding WindowHandler.MonitorDpi.X, RelativeSource={RelativeSource AncestorType=pmd:PerMonitorDpiWindow}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
+						<Run Text="{Binding WindowHandler.SystemDpi.X, RelativeSource={RelativeSource AncestorType=ma:MonitorAwareWindow}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
+						<Run Text="{Binding WindowHandler.MonitorDpi.X, RelativeSource={RelativeSource AncestorType=ma:MonitorAwareWindow}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
 					</TextBlock>
 				</StackPanel>
 			</GroupBox>
