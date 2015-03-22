@@ -509,7 +509,7 @@ namespace SnowyImageCopy.ViewModels
 			}
 
 			// Subscribe event handlers.
-			Disposer.Add(Observable.FromEvent
+			Subscription.Add(Observable.FromEvent
 				(
 					handler => _currentFrameSizeChanged += handler,
 					handler => _currentFrameSizeChanged -= handler
@@ -518,7 +518,7 @@ namespace SnowyImageCopy.ViewModels
 				.ObserveOn(SynchronizationContext.Current)
 				.Subscribe(_ => SetCurrentImage()));
 
-			Disposer.Add(Observable.FromEvent
+			Subscription.Add(Observable.FromEvent
 				(
 					handler => _autoCheckIntervalChanged += handler,
 					handler => _autoCheckIntervalChanged -= handler
@@ -527,7 +527,7 @@ namespace SnowyImageCopy.ViewModels
 				.ObserveOn(SynchronizationContext.Current)
 				.Subscribe(_ => Op.ResetAutoTimer()));
 
-			Disposer.Add(Observable.FromEvent
+			Subscription.Add(Observable.FromEvent
 				(
 					handler => _targetDateChanged += handler,
 					handler => _targetDateChanged -= handler

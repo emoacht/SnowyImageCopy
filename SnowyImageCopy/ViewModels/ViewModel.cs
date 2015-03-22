@@ -45,11 +45,11 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Dispose
 
-		public CompositeDisposable Disposer
+		public CompositeDisposable Subscription
 		{
-			get { return _disposer ?? (_disposer = new CompositeDisposable()); }
+			get { return _subscription ?? (_subscription = new CompositeDisposable()); }
 		}
-		private CompositeDisposable _disposer;
+		private CompositeDisposable _subscription;
 
 		bool _disposed = false;
 
@@ -66,8 +66,8 @@ namespace SnowyImageCopy.ViewModels
 
 			if (disposing)
 			{
-				if (_disposer != null)
-					_disposer.Dispose();
+				if (_subscription != null)
+					_subscription.Dispose();
 			}
 
 			_disposed = true;

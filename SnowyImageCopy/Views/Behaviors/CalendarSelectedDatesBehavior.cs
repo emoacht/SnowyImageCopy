@@ -63,11 +63,11 @@ namespace SnowyImageCopy.Views.Behaviors
 
 			var associatedSelectedDates = this.AssociatedObject.SelectedDates; // SelectedDates property of Calendar
 
-			// Make a copy of SelectedDates because SelectedDates will be changed by OnSelectedDatesChanged 
+			// Make a cache of SelectedDates because SelectedDates will be changed by OnSelectedDatesChanged 
 			// during OnLoaded.
-			var selectedDatesCopy = SelectedDates.ToArray();
+			var selectedDatesCache = SelectedDates.ToArray();
 
-			foreach (var date in selectedDatesCopy)
+			foreach (var date in selectedDatesCache)
 			{
 				if (associatedSelectedDates.Contains(date))
 					continue;
