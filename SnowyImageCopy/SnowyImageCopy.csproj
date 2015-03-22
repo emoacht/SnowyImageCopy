@@ -198,7 +198,7 @@
     <Compile Include="Views\Behaviors\FolderBrowserAction.cs" />
     <Compile Include="Views\Behaviors\FrameworkElementIntersectionBehavior.cs" />
     <Compile Include="Views\Behaviors\GridSizeBehavior.cs" />
-    <Compile Include="Views\Behaviors\ListBoxSelectedItemBehavior.cs" />
+    <Compile Include="Views\Behaviors\SelectorSelectedItemBehavior.cs" />
     <Compile Include="Views\Controls\HideableGridSplitter.cs" />
     <Compile Include="Views\Controls\ThumbnailBox.xaml.cs">
       <DependentUpon>ThumbnailBox.xaml</DependentUpon>

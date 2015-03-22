@@ -88,7 +88,7 @@
 
 	<!-- Other -->
 	<SolidColorBrush x:Key="Window.Background" Color="White"/>
-	<SolidColorBrush x:Key="ImageListBox.Background" Color="{StaticResource SnowBlue.LightestColor}"/>
+	<SolidColorBrush x:Key="ImageListView.Background" Color="{StaticResource SnowBlue.LightestColor}"/>
 
 	<SolidColorBrush x:Key="BorderLine.Strong" Color="LightGray"/>
 	<SolidColorBrush x:Key="BorderLine.Weak" Color="#FFeeeeee"/>

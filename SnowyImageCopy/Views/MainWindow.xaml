@@ -286,7 +286,7 @@
 							<behaviors:FrameworkElementIntersectionBehavior.TriggerObject>
 								<MultiBinding Converter="{StaticResource ObjectArrayConverterKey}">
 									<Binding ElementName="LayoutRoot" Path="ActualWidth" Mode="OneTime"/>
-									<Binding ElementName="ImageListBox" Path="ActualWidth"/>
+									<Binding ElementName="ImageListView" Path="ActualWidth"/>
 								</MultiBinding>
 							</behaviors:FrameworkElementIntersectionBehavior.TriggerObject>
 						</behaviors:FrameworkElementIntersectionBehavior>
@@ -301,31 +301,31 @@
 					<ColumnDefinition Width="Auto"/>
 				</Grid.ColumnDefinitions>
 
-				<!-- Image list box -->
-				<ListBox
-					x:Name="ImageListBox"
+				<!-- Image list view -->
+				<ListView
+					x:Name="ImageListView"
 					SelectionMode="Single"
 					ItemsSource="{Binding FileListCoreView}"
 					SelectedIndex="{Binding FileListCoreViewIndex, Mode=OneWay}">
-					<ListBox.Template>
-						<ControlTemplate TargetType="{x:Type ListBox}">
+					<ListView.Template>
+						<ControlTemplate TargetType="{x:Type ListView}">
 							<Border BorderThickness="0"
-									Background="{StaticResource ImageListBox.Background}">
+									Background="{StaticResource ImageListView.Background}">
 								<ScrollViewer HorizontalScrollBarVisibility="Disabled">
 									<WrapPanel Margin="4,0,4,4"
 											   IsItemsHost="True"/>
 								</ScrollViewer>
 							</Border>
 						</ControlTemplate>
-					</ListBox.Template>
+					</ListView.Template>
 
-					<ListBox.ItemTemplate>
+					<ListView.ItemTemplate>
 						<DataTemplate>
 							<Border	Margin="4"
 									Background="{Binding Status, Converter={StaticResource FileStatusToBrushConverterKey}}">
 								<Grid>
 									<Grid Background="{StaticResource FileItemStatus.Foreground}"
-										  Opacity="{Binding Opacity, ElementName=ListBoxItemShadow}"/>
+										  Opacity="{Binding Opacity, ElementName=ListViewItemShadow}"/>
 									<Grid Margin="4">
 										<Grid.ColumnDefinitions>
 											<ColumnDefinition Width="Auto"/>
@@ -359,10 +359,10 @@
 								</Grid>
 							</Border>
 						</DataTemplate>
-					</ListBox.ItemTemplate>
+					</ListView.ItemTemplate>
 
-					<ListBox.ItemContainerStyle>
-						<Style TargetType="{x:Type ListBoxItem}">
+					<ListView.ItemContainerStyle>
+						<Style TargetType="{x:Type ListViewItem}">
 							<Setter Property="IsSelected" Value="{Binding IsSelected}"/>
 							<Setter Property="Margin" Value="0"/>
 							<Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -370,7 +370,7 @@
 								<Setter.Value>
 									<ControlTemplate TargetType="{x:Type ContentControl}">
 										<Grid>
-											<Grid x:Name="ListBoxItemShadow"
+											<Grid x:Name="ListViewItemShadow"
 												  Opacity="0"/>
 											<Border Background="{TemplateBinding Background}">
 												<ContentPresenter/>
@@ -382,7 +382,7 @@
 													<VisualState x:Name="MouseOver">
 														<Storyboard>
 															<DoubleAnimation
-																Storyboard.TargetName="ListBoxItemShadow"
+																Storyboard.TargetName="ListViewItemShadow"
 																Storyboard.TargetProperty="Opacity"
 																Duration="0:0:0.1"
 																To="0.2"/>
@@ -395,12 +395,12 @@
 								</Setter.Value>
 							</Setter>
 						</Style>
-					</ListBox.ItemContainerStyle>
+					</ListView.ItemContainerStyle>
 
 					<i:Interaction.Behaviors>
-						<behaviors:ListBoxSelectedItemBehavior/>
+						<behaviors:SelectorSelectedItemBehavior/>
 					</i:Interaction.Behaviors>
-				</ListBox>
+				</ListView>
 
 				<!-- Browser for readme -->
 				<Border
