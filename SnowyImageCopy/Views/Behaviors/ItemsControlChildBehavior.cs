@@ -223,7 +223,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		/// <param name="child">Child item</param>
 		private void StoreIntersected(bool isIntersected, Control child)
 		{
-			var isTrue = (child.Tag != null) && (child.Tag is bool) && (bool)child.Tag;
+			var isTrue = (child.Tag is bool) && (bool)child.Tag;
 
 			if ((isIntersected && !isTrue) || (!isIntersected && isTrue))
 				child.Tag = isIntersected;
