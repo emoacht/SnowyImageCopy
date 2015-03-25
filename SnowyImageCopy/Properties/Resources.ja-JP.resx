@@ -231,7 +231,7 @@
   <data name="Options_Browse" xml:space="preserve">
     <value>参照</value>
   </data>
-  <data name="Options_ChooseDeleteUponCopy" xml:space="preserve">
+  <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
     <value>コピー後にFlashAir内のイメージの削除を選べるようにする</value>
   </data>
   <data name="Options_Date" xml:space="preserve">
@@ -246,7 +246,7 @@
   <data name="Options_DateToday" xml:space="preserve">
     <value>今日</value>
   </data>
-  <data name="Options_DeleteUponCopy" xml:space="preserve">
+  <data name="Options_DeleteOnCopy" xml:space="preserve">
     <value>コピー後に削除</value>
   </data>
   <data name="Options_ExtensionLowerCase" xml:space="preserve">

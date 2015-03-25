@@ -199,9 +199,9 @@
 						<TextBlock
 							VerticalAlignment="Center"
 							TextWrapping="Wrap"
-							Text="{Binding Resources.Options_ChooseDeleteUponCopy, Source={x:Static models:ResourceService.Current}}"/>
+							Text="{Binding Resources.Options_ChooseDeleteOnCopy, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
-							x:Name="ChooseDeleteUponCopyButton"
+							x:Name="ChooseDeleteOnCopyButton"
 							Width="60" Height="24"
 							Margin="4"
 							TextChecked="ON"
@@ -217,8 +217,8 @@
 							VerticalContentAlignment="Center"
 							IsUndoEnabled="False"
 							CheckText="DELETE"
-							Visibility="{Binding IsChecked, ElementName=ChooseDeleteUponCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
-							IsChecked="{Binding SettingsCurrent.EnablesChooseDeleteUponCopy, Mode=TwoWay}"/>
+							Visibility="{Binding IsChecked, ElementName=ChooseDeleteOnCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
+							IsChecked="{Binding SettingsCurrent.EnablesChooseDeleteOnCopy, Mode=TwoWay}"/>
 					</WrapPanel>
 				</StackPanel>
 			</GroupBox>

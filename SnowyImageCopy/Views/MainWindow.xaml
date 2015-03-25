@@ -153,12 +153,12 @@
 						 Text="{Binding OperationStatus, Mode=OneWay}"/>
 
 				<StackPanel Orientation="Horizontal">
-					<!-- Delete Upon Copy -->
+					<!-- Delete On Copy -->
 					<StackPanel Orientation="Horizontal"
-								Visibility="{Binding SettingsCurrent.EnablesChooseDeleteUponCopy, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+								Visibility="{Binding SettingsCurrent.EnablesChooseDeleteOnCopy, Converter={StaticResource BooleanToVisibilityConverterKey}}">
 						<Label
 							VerticalAlignment="Center"
-							Content="{Binding Resources.Options_DeleteUponCopy, Source={x:Static models:ResourceService.Current}}"/>
+							Content="{Binding Resources.Options_DeleteOnCopy, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
 							Width="60" Height="24"
 							Margin="0,4"
@@ -168,7 +168,7 @@
 							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
 							BackgroundChecked="{StaticResource Sliding.CheckedSecond.Background}"
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
-							IsChecked="{Binding SettingsCurrent.DeleteUponCopy, Mode=TwoWay}"/>
+							IsChecked="{Binding SettingsCurrent.DeleteOnCopy, Mode=TwoWay}"/>
 					</StackPanel>
 
 					<!-- Instant Copy -->

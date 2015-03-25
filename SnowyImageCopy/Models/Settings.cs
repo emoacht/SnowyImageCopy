@@ -179,11 +179,11 @@ namespace SnowyImageCopy.Models
 				TargetPeriod = FilePeriod.All,
 				IsCurrentImageVisible = false,
 				InstantCopy = true,
-				DeleteUponCopy = false,
+				DeleteOnCopy = false,
 				AutoCheckInterval = 30,
 				MakesFileExtensionLowerCase = true,
 				MovesFileToRecycle = false,
-				EnablesChooseDeleteUponCopy = false,
+				EnablesChooseDeleteOnCopy = false,
 			};
 		}
 
@@ -351,25 +351,25 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _instantCopy;
 
-		public bool DeleteUponCopy
+		public bool DeleteOnCopy
 		{
 			get
 			{
-				if (!EnablesChooseDeleteUponCopy)
-					_deleteUponCopy = false;
+				if (!EnablesChooseDeleteOnCopy)
+					_deleteOnCopy = false;
 
-				return _deleteUponCopy;
+				return _deleteOnCopy;
 			}
 			set
 			{
-				if (_deleteUponCopy == value)
+				if (_deleteOnCopy == value)
 					return;
 
-				_deleteUponCopy = value;
+				_deleteOnCopy = value;
 				RaisePropertyChanged();
 			}
 		}
-		private bool _deleteUponCopy;
+		private bool _deleteOnCopy;
 
 		#endregion
 
@@ -423,22 +423,22 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _movesFileToRecycle;
 
-		public bool EnablesChooseDeleteUponCopy
+		public bool EnablesChooseDeleteOnCopy
 		{
-			get { return _enablesChooseDeleteUponCopy; }
+			get { return _enablesChooseDeleteOnCopy; }
 			set
 			{
-				if (_enablesChooseDeleteUponCopy == value)
+				if (_enablesChooseDeleteOnCopy == value)
 					return;
 
-				_enablesChooseDeleteUponCopy = value;
+				_enablesChooseDeleteOnCopy = value;
 				RaisePropertyChanged();
 
 				if (!value)
-					DeleteUponCopy = false;
+					DeleteOnCopy = false;
 			}
 		}
-		private bool _enablesChooseDeleteUponCopy;
+		private bool _enablesChooseDeleteOnCopy;
 
 		#endregion
 

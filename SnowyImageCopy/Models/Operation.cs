@@ -1051,7 +1051,7 @@ namespace SnowyImageCopy.Models
 				}
 
 				// Check if upload.cgi is disabled.
-				if (Settings.Current.DeleteUponCopy && _card.CanGetUpload)
+				if (Settings.Current.DeleteOnCopy && _card.CanGetUpload)
 				{
 					_card.Upload = await FileManager.GetUploadAsync(_tokenSourceWorking.Token);
 					if (_card.IsUploadDisabled)
@@ -1118,7 +1118,7 @@ namespace SnowyImageCopy.Models
 						throw;
 					}
 
-					if (Settings.Current.DeleteUponCopy &&
+					if (Settings.Current.DeleteOnCopy &&
 						IsCopiedLocal(item))
 					{
 						await FileManager.DeleteFileAsync(item.FilePath, _tokenSourceWorking.Token);
