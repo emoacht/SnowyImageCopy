@@ -492,8 +492,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public MainWindowViewModel()
 		{
-			// Set samples.
-			FileListCore.Insert(CreateSampleFileItem(0));
+			SetSample(1);
 
 			// Add event listeners.
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
@@ -541,11 +540,16 @@ namespace SnowyImageCopy.ViewModels
 				}));
 		}
 
-		private FileItemViewModel CreateSampleFileItem(int index)
+		private void SetSample(int number = 1)
 		{
-			var source = String.Format("/DCIM,SAMPLE{0}.JPG,0,0,0,0", ((0 < index) ? index.ToString(CultureInfo.InvariantCulture) : String.Empty));
-
-			return new FileItemViewModel(source, "/DCIM");
+			Enumerable.Range(0, number)
+				.Select(x =>
+				{
+					var source = String.Format("/DCIM,SAMPLE{0}.JPG,0,0,0,0", ((0 < x) ? x.ToString(CultureInfo.InvariantCulture) : String.Empty));
+					return new FileItemViewModel(source, "/DCIM");
+				})
+				.ToList()
+				.ForEach(x => FileListCore.Insert(x));
 		}
 
 		#endregion
