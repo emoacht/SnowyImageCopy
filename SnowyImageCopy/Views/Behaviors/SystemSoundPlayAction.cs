@@ -10,7 +10,7 @@ using System.Windows.Interactivity;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Play SystemSound.
+	/// Play <see cref="SystemSound"/>.
 	/// </summary>
 	public class SystemSoundPlayAction : TriggerAction<DependencyObject>
 	{

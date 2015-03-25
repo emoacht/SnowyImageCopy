@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Manage WebBrowser.
+	/// Manage <see cref="WebBrowser"/>.
 	/// </summary>
 	[TypeConstraint(typeof(WebBrowser))]
 	public class BrowserBehavior : Behavior<WebBrowser>

@@ -12,7 +12,7 @@ using System.Windows.Interactivity;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Get/Set SelectedDates property of Calendar as Dependency Property.
+	/// Get/Set SelectedDates property of <see cref="Calendar"/> as Dependency Property.
 	/// </summary>
 	[TypeConstraint(typeof(Calendar))]
 	public class CalendarSelectedDatesBehavior : Behavior<Calendar>
