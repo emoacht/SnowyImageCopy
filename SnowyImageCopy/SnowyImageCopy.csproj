@@ -112,6 +112,7 @@
     <Compile Include="Common\PropertySupport.cs" />
     <Compile Include="Helper\FatDateTime.cs" />
     <Compile Include="Helper\NativeWifi.cs" />
+    <Compile Include="Helper\VisualTreeHelperAddition.cs" />
     <Compile Include="Models\CardInfo.cs" />
     <Compile Include="Models\CommandLine.cs" />
     <Compile Include="Models\Exceptions\CardChangedException.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Views\Behaviors\BrowserBehavior.cs" />
     <Compile Include="Views\Behaviors\ExplorerAction.cs" />
     <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
+    <Compile Include="Views\Behaviors\ItemsControlChildBehavior.cs" />
     <Compile Include="Views\Behaviors\SystemSoundPlayAction.cs" />
     <Compile Include="Views\Behaviors\WindowActivateBehavior.cs" />
     <Compile Include="Views\Controls\BusyButton.cs" />

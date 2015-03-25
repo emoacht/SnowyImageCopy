@@ -193,6 +193,11 @@ namespace SnowyImageCopy.ViewModels
 			get { return _flashAirSystemFolders.Contains(FileName, StringComparer.OrdinalIgnoreCase); }
 		}
 
+		public override string ToString()
+		{
+			return FileName; // For the case where being called for binding
+		}
+
 		#endregion
 
 

@@ -307,20 +307,8 @@
 					SelectionMode="Single"
 					ItemsSource="{Binding FileListCoreView}"
 					SelectedIndex="{Binding FileListCoreViewIndex, Mode=OneWay}">
-					<ListView.Template>
-						<ControlTemplate TargetType="{x:Type ListView}">
-							<Border BorderThickness="0"
-									Background="{StaticResource ImageListView.Background}">
-								<ScrollViewer HorizontalScrollBarVisibility="Disabled">
-									<WrapPanel Margin="4,0,4,4"
-											   IsItemsHost="True"/>
-								</ScrollViewer>
-							</Border>
-						</ControlTemplate>
-					</ListView.Template>
-
-					<ListView.ItemTemplate>
-						<DataTemplate>
+					<ListView.Resources>
+						<DataTemplate x:Key="RealizedThumbnail">
 							<Border	Margin="4"
 									Background="{Binding Status, Converter={StaticResource FileStatusToBrushConverterKey}}">
 								<Grid>
@@ -328,7 +316,7 @@
 										  Opacity="{Binding Opacity, ElementName=ListViewItemShadow}"/>
 									<Grid Margin="4">
 										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="Auto"/>
+											<ColumnDefinition Width="*"/>
 											<ColumnDefinition Width="Auto"/>
 										</Grid.ColumnDefinitions>
 										<Grid.RowDefinitions>
@@ -358,6 +346,32 @@
 									</Grid>
 								</Grid>
 							</Border>
+						</DataTemplate>
+					</ListView.Resources>
+
+					<ListView.Template>
+						<ControlTemplate TargetType="{x:Type ListView}">
+							<Border BorderThickness="0"
+									Background="{StaticResource ImageListView.Background}">
+								<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+									<WrapPanel Margin="4,0,4,4"
+											   IsItemsHost="True"/>
+								</ScrollViewer>
+							</Border>
+						</ControlTemplate>
+					</ListView.Template>
+
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<ContentControl x:Name="Thumbnail"
+											MinWidth="228" Height="108" Margin="0"
+											Content="{Binding}"
+											ContentTemplate="{x:Null}"/>
+							<DataTemplate.Triggers>
+								<DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}" Value="True">
+									<Setter TargetName="Thumbnail" Property="ContentTemplate" Value="{StaticResource RealizedThumbnail}"/>
+								</DataTrigger>
+							</DataTemplate.Triggers>
 						</DataTemplate>
 					</ListView.ItemTemplate>
 
@@ -398,6 +412,7 @@
 					</ListView.ItemContainerStyle>
 
 					<i:Interaction.Behaviors>
+						<behaviors:ItemsControlChildBehavior/>
 						<behaviors:SelectorSelectedItemBehavior/>
 					</i:Interaction.Behaviors>
 				</ListView>
