@@ -184,6 +184,7 @@ namespace SnowyImageCopy.Models
 				MakesFileExtensionLowerCase = true,
 				MovesFileToRecycle = false,
 				EnablesChooseDeleteOnCopy = false,
+				SelectsReadOnlyFile = false,
 			};
 		}
 
@@ -422,6 +423,20 @@ namespace SnowyImageCopy.Models
 			}
 		}
 		private bool _movesFileToRecycle;
+
+		public bool SelectsReadOnlyFile
+		{
+			get { return _selectsReadOnlyFile; }
+			set
+			{
+				if (_selectsReadOnlyFile == value)
+					return;
+
+				_selectsReadOnlyFile = value;
+				RaisePropertyChanged();
+			}
+		}
+		private bool _selectsReadOnlyFile;
 
 		public bool EnablesChooseDeleteOnCopy
 		{

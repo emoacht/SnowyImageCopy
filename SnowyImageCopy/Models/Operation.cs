@@ -872,6 +872,7 @@ namespace SnowyImageCopy.Models
 						itemOld.IsAliveRemote = true;
 						itemOld.IsAliveLocal = IsCopiedLocal(itemOld);
 						itemOld.Status = itemOld.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
+						itemOld.IsReadOnly = itemSame.IsReadOnly;
 						continue;
 					}
 
@@ -1005,20 +1006,21 @@ namespace SnowyImageCopy.Models
 		/// <returns>True if a file to be copied is contained</returns>
 		private bool CheckFileToBeCopied(bool changesToBeCopied)
 		{
-			bool containsToBeCopied = false;
+			int countToBeCopied = 0;
 
 			foreach (var item in FileListCore)
 			{
-				if (item.IsTarget && item.IsAliveRemote && (item.Status == FileStatus.NotCopied))
+				if (item.IsTarget && item.IsAliveRemote && (item.Status == FileStatus.NotCopied) &&
+					(Settings.Current.SelectsReadOnlyFile ? item.IsReadOnly : true))
 				{
-					containsToBeCopied = true;
+					countToBeCopied++;
 
 					if (changesToBeCopied)
 						item.Status = FileStatus.ToBeCopied;
 				}
 			}
 
-			return containsToBeCopied;
+			return (0 < countToBeCopied);
 		}
 
 		/// <summary>

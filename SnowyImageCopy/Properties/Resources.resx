@@ -286,6 +286,9 @@
   <data name="Options_RemoteAddress" xml:space="preserve">
     <value>FlashAir Address (Copy Source)</value>
   </data>
+  <data name="Options_SelectReadOnly" xml:space="preserve">
+    <value>Select ReadOnly image only on check</value>
+  </data>
   <data name="ProjectSite" xml:space="preserve">
     <value>http://emoacht.github.io/SnowyImageCopy/index.html</value>
   </data>

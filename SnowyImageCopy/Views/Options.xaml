@@ -199,6 +199,23 @@
 						<TextBlock
 							VerticalAlignment="Center"
 							TextWrapping="Wrap"
+							Text="{Binding Resources.Options_SelectReadOnly, Source={x:Static models:ResourceService.Current}}"/>
+						<controls:SlidingToggleButton
+							Width="60" Height="24"
+							Margin="4"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.SelectsReadOnlyFile, Mode=TwoWay}"/>
+					</WrapPanel>
+
+					<WrapPanel>
+						<TextBlock
+							VerticalAlignment="Center"
+							TextWrapping="Wrap"
 							Text="{Binding Resources.Options_ChooseDeleteOnCopy, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
 							x:Name="ChooseDeleteOnCopyButton"

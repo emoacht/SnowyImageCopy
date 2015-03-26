@@ -24,7 +24,7 @@ namespace SnowyImageCopy.ViewModels
 		public string FileName { get; private set; }
 		public int Size { get; private set; } // In bytes
 
-		public bool IsReadOnly { get; private set; }
+		public bool IsReadOnly { get; set; }
 		public bool IsHidden { get; private set; }
 		public bool IsSystemFile { get; private set; }
 		public bool IsVolume { get; private set; }

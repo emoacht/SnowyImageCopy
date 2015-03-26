@@ -282,6 +282,9 @@
   <data name="Options_RemoteAddress" xml:space="preserve">
     <value>FlashAirアドレス (コピー元)</value>
   </data>
+  <data name="Options_SelectReadOnly" xml:space="preserve">
+    <value>チェック後に読み取り専用のイメージだけを選択する</value>
+  </data>
   <data name="ProjectSite" xml:space="preserve">
     <value>http://emoacht.github.io/SnowyImageCopy/index_jp.html</value>
   </data>
