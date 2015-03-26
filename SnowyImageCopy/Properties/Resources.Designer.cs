@@ -469,9 +469,9 @@ namespace SnowyImageCopy.Properties {
         /// <summary>
         ///   Make file extension lowercase に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        public static string Options_ExtensionLowerCase {
+        public static string Options_ExtensionLowercase {
             get {
-                return ResourceManager.GetString("Options_ExtensionLowerCase", resourceCulture);
+                return ResourceManager.GetString("Options_ExtensionLowercase", resourceCulture);
             }
         }
         

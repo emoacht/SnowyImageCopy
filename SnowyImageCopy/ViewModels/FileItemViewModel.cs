@@ -73,7 +73,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				if (!Settings.Current.MakesFileExtensionLowerCase)
+				if (!Settings.Current.MakesFileExtensionLowercase)
 					return FileName;
 
 				var extension = Path.GetExtension(FileName);

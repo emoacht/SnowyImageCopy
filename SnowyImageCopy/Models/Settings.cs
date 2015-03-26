@@ -181,7 +181,7 @@ namespace SnowyImageCopy.Models
 				InstantCopy = true,
 				DeleteOnCopy = false,
 				AutoCheckInterval = 30,
-				MakesFileExtensionLowerCase = true,
+				MakesFileExtensionLowercase = true,
 				MovesFileToRecycle = false,
 				EnablesChooseDeleteOnCopy = false,
 				SelectsReadOnlyFile = false,
@@ -396,19 +396,19 @@ namespace SnowyImageCopy.Models
 
 		#region File
 
-		public bool MakesFileExtensionLowerCase
+		public bool MakesFileExtensionLowercase
 		{
-			get { return _makesFileExtensionLowerCase; }
+			get { return _makesFileExtensionLowercase; }
 			set
 			{
-				if (_makesFileExtensionLowerCase == value)
+				if (_makesFileExtensionLowercase == value)
 					return;
 
-				_makesFileExtensionLowerCase = value;
+				_makesFileExtensionLowercase = value;
 				RaisePropertyChanged();
 			}
 		}
-		private bool _makesFileExtensionLowerCase;
+		private bool _makesFileExtensionLowercase;
 
 		public bool MovesFileToRecycle
 		{

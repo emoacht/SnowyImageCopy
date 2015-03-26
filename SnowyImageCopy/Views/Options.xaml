@@ -164,7 +164,7 @@
 						<TextBlock
 							VerticalAlignment="Center"
 							TextWrapping="Wrap"
-							Text="{Binding Resources.Options_ExtensionLowerCase, Source={x:Static models:ResourceService.Current}}"/>
+							Text="{Binding Resources.Options_ExtensionLowercase, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
 							Width="60" Height="24"
 							Margin="4"
@@ -174,7 +174,7 @@
 							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
 							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
-							IsChecked="{Binding SettingsCurrent.MakesFileExtensionLowerCase, Mode=TwoWay}"/>
+							IsChecked="{Binding SettingsCurrent.MakesFileExtensionLowercase, Mode=TwoWay}"/>
 					</WrapPanel>
 
 					<WrapPanel>

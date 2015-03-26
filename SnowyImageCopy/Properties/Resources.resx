@@ -253,7 +253,7 @@
   <data name="Options_DeleteOnCopy" xml:space="preserve">
     <value>Delete On Copy</value>
   </data>
-  <data name="Options_ExtensionLowerCase" xml:space="preserve">
+  <data name="Options_ExtensionLowercase" xml:space="preserve">
     <value>Make file extension lowercase</value>
   </data>
   <data name="Options_File" xml:space="preserve">
