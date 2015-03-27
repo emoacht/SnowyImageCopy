@@ -75,7 +75,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				.Subscribe(x => CheckChild(x.EventArgs.NewItems.Cast<object>())));
 		}
 
-		private const double _margin = 100D; // Vertical margin of viewport for checking
+		private const double _margin = 100D; // Vertical margin to set realization window for checking
 		private int _startIndex = 0; // Start index for checking
 
 		private void CheckChild()
