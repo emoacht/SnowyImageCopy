@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Management;
 using System.Text;
@@ -109,11 +108,7 @@ namespace SnowyTool.Models
 			if (!OsVersion.IsEightOrNewer)
 				return;
 
-			var scope = new ManagementScope("\\\\.\\root\\microsoft\\windows\\storage");
-			scope.Connect();
-
-			var searcher = new ManagementObjectSearcher("SELECT * FROM MSFT_PhysicalDisk");
-			searcher.Scope = scope;
+			var searcher = new ManagementObjectSearcher(@"\\.\Root\Microsoft\Windows\Storage", "SELECT * FROM MSFT_PhysicalDisk");
 
 			foreach (var drive in searcher.Get())
 			{
