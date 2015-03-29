@@ -23,6 +23,9 @@ namespace SnowyImageCopy.ViewModels
 
 		protected virtual string GetPropertyName([CallerMemberName] string callerPropertyName = null)
 		{
+			if (String.IsNullOrEmpty(callerPropertyName))
+				return null;
+
 			return ((_propertyNameMap != null) && _propertyNameMap.ContainsKey(callerPropertyName))
 				? _propertyNameMap[callerPropertyName]
 				: null;
@@ -30,6 +33,9 @@ namespace SnowyImageCopy.ViewModels
 
 		protected virtual string GetPropertyName<T>(Expression<Func<T>> propertyExpression, [CallerMemberName] string callerPropertyName = null)
 		{
+			if (String.IsNullOrEmpty(callerPropertyName))
+				return null;
+
 			var calledPropertyName = PropertySupport.GetPropertyName(propertyExpression);
 
 			if (_propertyNameMap == null)
@@ -51,7 +57,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private CompositeDisposable _subscription;
 
-		bool _disposed = false;
+		bool _disposed;
 
 		public void Dispose()
 		{
