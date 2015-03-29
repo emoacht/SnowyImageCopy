@@ -101,7 +101,7 @@ namespace SnowyImageCopy.Helper
 		/// Move specified files to Recycle.
 		/// </summary>
 		/// <param name="filePaths">Target file paths</param>
-		public static void MoveToRecycle(IEnumerable<string> filePaths)
+		public static void MoveToRecycle(string[] filePaths)
 		{
 			if ((filePaths == null) || !filePaths.Any())
 				return;
