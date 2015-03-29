@@ -37,7 +37,7 @@
     </application>
   </compatibility>
 
-  <!-- Declare this application is DPI aware -->
+  <!-- DPI awareness -->
   <asmv3:application xmlns:asmv3="urn:schemas-microsoft-com:asm.v3">
     <asmv3:windowsSettings
          xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">
