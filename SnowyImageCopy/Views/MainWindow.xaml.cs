@@ -11,7 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-using MonitorAware.Models;
 using MonitorAware.Views;
 using SnowyImageCopy.Models;
 using SnowyImageCopy.ViewModels;

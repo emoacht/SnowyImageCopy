@@ -76,7 +76,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		}
 
 		private const double _margin = 100D; // Vertical margin to set realization window for checking
-		private int _startIndex = 0; // Start index for checking
+		private int _startIndex; // Start index for checking
 
 		private void CheckChild()
 		{

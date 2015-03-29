@@ -257,7 +257,7 @@ namespace SnowyImageCopy.Models
 		}
 		private TaskbarItemProgressState _progressState;
 
-		private object _updateLocker = new object();
+		private readonly object _updateLocker = new object();
 		private long _sizeOverall;           // Total size of items
 		private long _sizeCopiedAll;         // Total size of items copied so far including current operation
 		private long _sizeCopiedCurrent;     // Total size of items copied during current operation
@@ -556,7 +556,7 @@ namespace SnowyImageCopy.Models
 					? DateTime.MinValue
 					: DateTime.Now;
 
-				await CopyFileBaseAsync(new Progress<ProgressInfo>(x => UpdateProgress(x)));
+				await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
 
 				LastCheckCopyTime = DateTime.Now;
 
@@ -702,7 +702,7 @@ namespace SnowyImageCopy.Models
 			{
 				IsCopying = true;
 
-				await CopyFileBaseAsync(new Progress<ProgressInfo>(x => UpdateProgress(x)));
+				await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
 
 				await Task.Delay(_copyWaitingLength);
 				UpdateProgress();
@@ -1003,7 +1003,7 @@ namespace SnowyImageCopy.Models
 		/// Check files to be copied from FlashAir card.
 		/// </summary>
 		/// <param name="changesToBeCopied">Whether to change file status if a file meets conditions to be copied</param>
-		/// <returns>True if a file to be copied is contained</returns>
+		/// <returns>True if any file to be copied is contained</returns>
 		private bool CheckFileToBeCopied(bool changesToBeCopied)
 		{
 			int countToBeCopied = 0;
@@ -1011,7 +1011,7 @@ namespace SnowyImageCopy.Models
 			foreach (var item in FileListCore)
 			{
 				if (item.IsTarget && item.IsAliveRemote && (item.Status == FileStatus.NotCopied) &&
-					(Settings.Current.SelectsReadOnlyFile ? item.IsReadOnly : true))
+					(!Settings.Current.SelectsReadOnlyFile || item.IsReadOnly))
 				{
 					countToBeCopied++;
 
@@ -1077,7 +1077,7 @@ namespace SnowyImageCopy.Models
 						var localPath = ComposeLocalPath(item);
 
 						var localDirectory = Path.GetDirectoryName(localPath);
-						if (!Directory.Exists(localDirectory))
+						if (!String.IsNullOrEmpty(localDirectory) && !Directory.Exists(localDirectory))
 							Directory.CreateDirectory(localDirectory);
 
 						var data = await FileManager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, _card, _tokenSourceWorking.Token);

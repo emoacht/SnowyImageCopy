@@ -84,7 +84,7 @@ namespace SnowyImageCopy
 			try
 			{
 				var folderPathAppData = Path.GetDirectoryName(filePathAppData);
-				if (!Directory.Exists(folderPathAppData))
+				if (!String.IsNullOrEmpty(folderPathAppData) && !Directory.Exists(folderPathAppData))
 					Directory.CreateDirectory(folderPathAppData);
 
 				File.AppendAllText(filePathAppData, content);

@@ -43,18 +43,18 @@ namespace SnowyImageCopy.Models
 		[StructLayout(LayoutKind.Sequential)]
 		public struct POINT
 		{
-			public int X;
-			public int Y;
+			public int x;
+			public int y;
 		}
 
 		[Serializable]
 		[StructLayout(LayoutKind.Sequential)]
 		public struct RECT
 		{
-			public int Left;
-			public int Top;
-			public int Right;
-			public int Bottom;
+			public int left;
+			public int top;
+			public int right;
+			public int bottom;
 		}
 
 		public enum SW

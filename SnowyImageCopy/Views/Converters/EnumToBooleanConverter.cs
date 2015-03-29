@@ -18,7 +18,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// <summary>
 		/// Return true when source Enum name matches target Enum name string.
 		/// </summary>
-		/// <param name="value">Source Enum name</param>
+		/// <param name="value">Enum name</param>
 		/// <param name="targetType"></param>
 		/// <param name="parameter">Target Enum name string</param>
 		/// <param name="culture"></param>
@@ -34,7 +34,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// <summary>
 		/// Return Enum name when source Boolean is true.
 		/// </summary>
-		/// <param name="value">Source Boolean</param>
+		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>
 		/// <param name="parameter">Target Enum name string</param>
 		/// <param name="culture"></param>

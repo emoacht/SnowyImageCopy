@@ -18,7 +18,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// <summary>
 		/// Return Visibility.Visible when source Enum name matches target Enum name string.
 		/// </summary>
-		/// <param name="value">Source Enum</param>
+		/// <param name="value">Enum name</param>
 		/// <param name="targetType"></param>
 		/// <param name="parameter">Target Enum name string</param>
 		/// <param name="culture"></param>

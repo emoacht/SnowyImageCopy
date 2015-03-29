@@ -134,11 +134,11 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private Size _currentFrameSize = Size.Empty;
 
-		private event Action _currentFrameSizeChanged = null;
+		private event Action _currentFrameSizeChanged;
 
 		public FileItemViewModel CurrentItem { get; set; }
 
-		private ReaderWriterLockSlim _dataLocker = new ReaderWriterLockSlim();
+		private readonly ReaderWriterLockSlim _dataLocker = new ReaderWriterLockSlim();
 		private bool _isCurrentImageDataGiven;
 
 		public byte[] CurrentImageData
@@ -651,8 +651,8 @@ namespace SnowyImageCopy.ViewModels
 			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).TargetDates); }
 		}
 
-		private event Action _autoCheckIntervalChanged = null;
-		private event Action _targetDateChanged = null;
+		private event Action _autoCheckIntervalChanged;
+		private event Action _targetDateChanged;
 
 		private void ReactSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{

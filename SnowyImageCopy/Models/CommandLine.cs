@@ -100,7 +100,7 @@ namespace SnowyImageCopy.Models
 			if (_args == null)
 			{
 				_args = Environment.GetCommandLineArgs()
-					.Skip(1) // First arg is always executable file path.
+					.Skip(1) // The first arg is always executable file path.
 					.Select(x => x.ToLower())
 					.ToArray();
 			}

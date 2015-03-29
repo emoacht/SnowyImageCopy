@@ -18,6 +18,7 @@ namespace SnowyTool.Models
 		/// <summary>
 		/// Search disks by WMI.
 		/// </summary>
+		/// <returns>Array of disk information</returns>
 		internal static DiskInfo[] Search()
 		{
 			var diskGroup = new List<DiskInfo>();
@@ -31,6 +32,7 @@ namespace SnowyTool.Models
 		/// <summary>
 		/// Search drives by WMI (Win32_DiskDrive, Win32_DiskPartition, Win32_LogicalDisk).
 		/// </summary>
+		/// <param name="diskGroup">List of disk information</param>
 		private static void SearchDiskDrive(ref List<DiskInfo> diskGroup)
 		{
 			var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive");
@@ -102,6 +104,7 @@ namespace SnowyTool.Models
 		/// <summary>
 		/// Search drives and supplement information by WMI (MSFT_PhysicalDisk).
 		/// </summary>
+		/// <param name="diskGroup">List of disk information</param>
 		/// <remarks>Windows Storage Management API is only available for Windows 8 or newer.</remarks>
 		private static void SearchPhysicalDisk(ref List<DiskInfo> diskGroup)
 		{
