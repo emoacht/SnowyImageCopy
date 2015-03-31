@@ -57,22 +57,31 @@ namespace SnowyImageCopy.Views.Behaviors
 				handler => _viewer.ScrollChanged += handler,
 				handler => _viewer.ScrollChanged -= handler)
 				//.Do(_ => Debug.WriteLine("ScrollChanged!"))
-				.Subscribe(x => CheckChild()));
+				.Subscribe(_ => CheckChild()));
 
 			var source = this.AssociatedObject.Items as INotifyCollectionChanged; // ItemsSource
 			if (source == null)
 				return;
 
-			_subscription.Add(Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+			var collectionChanged = Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
 				handler => handler.Invoke,
 				handler => source.CollectionChanged += handler,
-				handler => source.CollectionChanged -= handler)
-				//.Do(_ => Debug.WriteLine("CollectionChanged!"))
-				.Where(x => x.EventArgs.Action != NotifyCollectionChangedAction.Remove)
+				handler => source.CollectionChanged -= handler);
+
+			_subscription.Add(collectionChanged
+				.Where(x => x.EventArgs.Action != NotifyCollectionChangedAction.Reset)
 				.Where(x => x.EventArgs.NewItems != null)
+				//.Do(x => Debug.WriteLine("CollectionChanged ({0})!", x.EventArgs.Action))
 				.Delay(TimeSpan.FromMilliseconds(10)) // Waiting time for child to perform Measure method
 				.ObserveOn(SynchronizationContext.Current)
 				.Subscribe(x => CheckChild(x.EventArgs.NewItems.Cast<object>())));
+
+			_subscription.Add(collectionChanged
+				.Where(x => x.EventArgs.Action == NotifyCollectionChangedAction.Reset)
+				//.Do(x => Debug.WriteLine("CollectionChanged ({0})!", x.EventArgs.Action))
+				.Throttle(TimeSpan.FromMilliseconds(10))
+				.ObserveOn(SynchronizationContext.Current)
+				.Subscribe(_ => CheckChild()));
 		}
 
 		private const double _margin = 100D; // Vertical margin to set realization window for checking
