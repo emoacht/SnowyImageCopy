@@ -78,7 +78,7 @@
         <member name="M:DesktopToast.Helper.ShellLink.Save">
             <summary>
             Save shortcut file.
-            </summary> 
+            </summary>
         </member>
         <member name="M:DesktopToast.Helper.ShellLink.Save(System.String)">
             <summary>
@@ -109,10 +109,10 @@
             Arguments
             </summary>
             <remarks>
-            <para>According to MSDN, this length should not have a limitation as long as it in Unicode. 
-            In addition, it is recommended to retrieve argument strings though IPropertyStore rather than 
+            <para>According to MSDN, this length should not have a limitation as long as it in Unicode.
+            In addition, it is recommended to retrieve argument strings though IPropertyStore rather than
             GetArguments method.</para>
-            <para>The setter accepts Null while the getter never returns Null. This behavior is the same 
+            <para>The setter accepts Null while the getter never returns Null. This behavior is the same
             as other properties by IShellLink.</para>
             </remarks>
         </member>
@@ -120,8 +120,8 @@
             <summary>
             Description
             </summary>
-            <remarks>According to MSDN, this length is limited to INFOTIPSIZE. However, in practice, 
-            there seems to be the same limitation as the maximum path length limitation. Moreover, 
+            <remarks>According to MSDN, this length is limited to INFOTIPSIZE. However, in practice,
+            there seems to be the same limitation as the maximum path length limitation. Moreover,
             Description longer than the limitation will screw up arguments.</remarks>
         </member>
         <member name="P:DesktopToast.Helper.ShellLink.WorkingDirectory">
@@ -152,11 +152,11 @@
             </summary>
             <remarks>
             <para>According to MSDN, an AppUserModelID must be in the following form:
-            CompanyName.ProductName.SubProduct.VersionInformation 
-            It can have no more than 128 characters and cannot contain spaces. Each section should be 
-            camel-cased. CompanyName and ProductName should always be used, while SubProduct and 
+            CompanyName.ProductName.SubProduct.VersionInformation
+            It can have no more than 128 characters and cannot contain spaces. Each section should be
+            camel-cased. CompanyName and ProductName should always be used, while SubProduct and
             VersionInformation are optional.</para>
-            <para>The setter accepts Null while the getter never returns Null. This behavior is the same 
+            <para>The setter accepts Null while the getter never returns Null. This behavior is the same
             as other properties by IShellLink.</para>
             </remarks>
         </member>
@@ -302,8 +302,8 @@
             <summary>
             Convert camel-cased string to camel-cased string with separator.
             </summary>
-            <param name="source">Source String</param>
-            <param name="separator">Separator Char</param>
+            <param name="source">Source string</param>
+            <param name="separator">Separator char</param>
             <returns>String with separator</returns>
         </member>
         <member name="M:DesktopToast.Helper.StringExtension.IsNullOrEmptyOrEquals(System.String,System.String,System.StringComparison)">
@@ -521,7 +521,7 @@
         </member>
         <member name="M:DesktopToast.ToastManager.CheckInstallShortcut(DesktopToast.ToastRequest)">
             <summary>
-            Check and install shortcut in Windows startup.
+            Check and install a shortcut file in Start menu.
             </summary>
             <param name="request">Toast request</param>
         </member>
@@ -593,7 +593,7 @@
         </member>
         <member name="P:DesktopToast.ToastRequest.ShortcutFileName">
             <summary>
-            Shortcut file name to be installed in Windows startup (required for shortcut)
+            Shortcut file name to be installed in Start menu (required for shortcut)
             </summary>
         </member>
         <member name="P:DesktopToast.ToastRequest.ShortcutTargetFilePath">
@@ -633,9 +633,9 @@
             </summary>
             <remarks>
             An AppUserModelID must be in the following form:
-            CompanyName.ProductName.SubProduct.VersionInformation 
-            It can have no more than 128 characters and cannot contain spaces. Each section should be 
-            camel-cased. CompanyName and ProductName should always be used, while SubProduct and 
+            CompanyName.ProductName.SubProduct.VersionInformation
+            It can have no more than 128 characters and cannot contain spaces. Each section should be
+            camel-cased. CompanyName and ProductName should always be used, while SubProduct and
             VersionInformation are optional.
             </remarks>
         </member>
