@@ -566,7 +566,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Select ReadOnly image only on check に類似しているローカライズされた文字列を検索します。
+        ///   Select only ReadOnly image on check に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Options_SelectReadOnly {
             get {
