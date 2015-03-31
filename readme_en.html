@@ -67,8 +67,8 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 
 <div id="title">
 <h1>Snowy</h1>
-<p id="version">Ver.0.9.10</p>
-<p id="date">2015/3/3</p>
+<p id="version">Ver.1.0</p>
+<p id="date">2015/3/31</p>
 </div><!-- end of title -->
 
 <div id="main">
@@ -105,7 +105,7 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 	<li>"Delete On Copy" function tries to delete an image in FlashAir after the data is copied to PC.</li>
 	<li>It is essential to test this function with your camera before actual use. Since this function uses <a href="https://flashair-developers.com/en/documents/api/uploadcgi/">upload.cgi</a> of FlashAir and it may cause inconsistency of data between FlashAir and camera, <span style="color:red">file system of FlashAir and stored images might be destroyed.</span> What will happen depends on each camera model.</li>
 	<li>If upload.cgi of FlashAir is disabled, this function will fail. To check or change this setting, insert FlashAir to PC and use included Snowy Tool. Or open CONFIG file in FlashAir and directly check <a href="https://flashair-developers.com/en/documents/api/config/#UPLOAD">UPLOAD</a> parameter.</li>
-	<li>In many cases, you need to reboot a camera to make it recognize the deletion by this function.</li>
+	<li>An image with Read-only attribute in FlashAir will not be deleted. In many cases, you need to reboot a camera to make it recognize the deletion by this function.</li>
 	<li>To use this function, turn on "Enable to choose to delete image in FlashAir on copy" button and type "DELETE" (all uppercase) in the text box. "Delete On Copy" button will appear. So change it to on.</li>
 </ul>
 
@@ -141,7 +141,7 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 <h2>Other</h2>
 
 <ul>
-	<li>Libraries: <a href="http://rx.codeplex.com/">Reactive Extensions</a>, <a href="https://github.com/emoacht/WpfPerMonitorDpi">WPF Per-Monitor DPI Aware Window</a>, <a href="https://github.com/emoacht/DesktopToast">Desktop Toast</a></li>
+	<li>Libraries: <a href="http://rx.codeplex.com/">Reactive Extensions</a>, <a href="https://github.com/emoacht/WpfMonitorAware">WPF Monitor Aware Window</a>, <a href="https://github.com/emoacht/DesktopToast">Desktop Toast</a></li>
 	<li>Repository: <a href="http://github.com/emoacht/SnowyImageCopy">GitHub</a></li>
 </ul>
 <p>If you find a bug or any other problem, please inform the author. It will be a great help.</p>

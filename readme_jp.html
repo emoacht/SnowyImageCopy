@@ -67,8 +67,8 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 
 <div id="title">
 <h1>Snowy</h1>
-<p id="version">Ver.0.9.10</p>
-<p id="date">2015/3/3</p>
+<p id="version">Ver.1.0</p>
+<p id="date">2015/3/31</p>
 </div><!-- end of title -->
 
 <div id="main">
@@ -105,7 +105,7 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 	<li>"コピー後に削除"の機能はFlashAir内のイメージを、そのデータがPCにコピーされた後に削除するよう試みます。</li>
 	<li>実際に使う前にこの機能をカメラと共にテストすることが必須です。この機能はFlashAirの<a href="https://flashair-developers.com/ja/documents/api/uploadcgi/">upload.cgi</a>を使用しますが、これはFlashAirとカメラの間でデータの不整合を起こし得るため、<span style="color:red">FlashAirのファイルシステムと保存されたイメージが破壊されるかもしれません。</span>何が起きるかは個々のカメラ機種によります。</li>
 	<li>FlashAirのupload.cgiが無効になっている場合、この機能は失敗します。この設定を確認または変更するには、FlashAirをPCに挿入して同梱のSnowy Toolを使ってください。またはFlashAir内のCONFIGファイルを開いて、<a href="https://flashair-developers.com/ja/documents/api/config/#UPLOAD">UPLOAD</a>パラメーターを直接確認してください。</li>
-	<li>多くの場合、この機能による削除を認識させるにはカメラを再起動させる必要があります。</li>
+	<li>読み取り専用の属性が付いたイメージは削除されません。多くの場合、この機能による削除を認識させるにはカメラを再起動させる必要があります。</li>
 	<li>この機能を使うには、"コピー後にFlashAir内のイメージの削除を選べるようにする"ボタンをオンにし、テキストボックスに"DELETE"（全て大文字）と入力してください。"コピー後に削除"ボタンが現れるので、これをオンにしてください。</li>
 </ul>
 
@@ -141,7 +141,7 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 <h2>その他</h2>
 
 <ul>
-	<li>ライブラリ: <a href="http://rx.codeplex.com/">Reactive Extensions</a>, <a href="https://github.com/emoacht/WpfPerMonitorDpi">WPF Per-Monitor DPI Aware Window</a>, <a href="https://github.com/emoacht/DesktopToast">Desktop Toast</a></li>
+	<li>ライブラリ: <a href="http://rx.codeplex.com/">Reactive Extensions</a>, <a href="https://github.com/emoacht/WpfMonitorAware">WPF Monitor Aware Window</a>, <a href="https://github.com/emoacht/DesktopToast">Desktop Toast</a></li>
 	<li>レポジトリ: <a href="http://github.com/emoacht/SnowyImageCopy">GitHub</a></li>
 </ul>
 <p>バグなどの不具合を見つけたら、作者にお知らせください。大いに助けになります。</p>
