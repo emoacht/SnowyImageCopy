@@ -26,6 +26,7 @@ namespace SnowyImageCopy.Models
 		/// Check if PC is connected to a network and if applicable, a specified wireless network.
 		/// </summary>
 		/// <param name="card">FlashAir card information</param>
+		/// <returns>True if connected</returns>
 		internal static bool IsNetworkConnected(CardInfo card)
 		{
 			if (!NetworkInterface.GetIsNetworkAvailable())
@@ -41,6 +42,7 @@ namespace SnowyImageCopy.Models
 		/// Check if PC is connected to a specified wireless network.
 		/// </summary>
 		/// <param name="ssid">SSID of wireless network</param>
+		/// <returns>True if connected</returns>
 		internal static bool IsWirelessNetworkConnected(string ssid)
 		{
 			if (String.IsNullOrWhiteSpace(ssid))

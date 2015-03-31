@@ -235,8 +235,8 @@
   <data name="Options_Browse" xml:space="preserve">
     <value>Browse</value>
   </data>
-  <data name="Options_ChooseDeleteUponCopy" xml:space="preserve">
-    <value>Enable to choose to delete image in FlashAir upon copy</value>
+  <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
+    <value>Enable to choose to delete image in FlashAir on copy</value>
   </data>
   <data name="Options_Date" xml:space="preserve">
     <value>Date</value>
@@ -250,10 +250,10 @@
   <data name="Options_DateToday" xml:space="preserve">
     <value>Today</value>
   </data>
-  <data name="Options_DeleteUponCopy" xml:space="preserve">
-    <value>Delete Upon Copy</value>
+  <data name="Options_DeleteOnCopy" xml:space="preserve">
+    <value>Delete On Copy</value>
   </data>
-  <data name="Options_ExtensionLowerCase" xml:space="preserve">
+  <data name="Options_ExtensionLowercase" xml:space="preserve">
     <value>Make file extension lowercase</value>
   </data>
   <data name="Options_File" xml:space="preserve">
@@ -285,6 +285,9 @@
   </data>
   <data name="Options_RemoteAddress" xml:space="preserve">
     <value>FlashAir Address (Copy Source)</value>
+  </data>
+  <data name="Options_SelectReadOnly" xml:space="preserve">
+    <value>Select only Read-only image on check</value>
   </data>
   <data name="ProjectSite" xml:space="preserve">
     <value>http://emoacht.github.io/SnowyImageCopy/index.html</value>

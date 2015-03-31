@@ -18,6 +18,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
+Ver 1.0.0 2015-3-31
+
+ - First decent release
+
 Ver 0.9.10 2015-3-3
 
  - Added color management support
@@ -71,9 +75,9 @@ Ver 0.9.0 2014-04-10
 
 ##Other
 
- - Libraries: [Reactive Extensions][2], [WPF Per-Monitor DPI Aware Window][3], [Desktop Toast][4]
+ - Libraries: [Reactive Extensions][2], [WPF Monitor Aware Window][3], [Desktop Toast][4]
 
 [1]: https://www.flashair-developers.com/en/
 [2]: http://rx.codeplex.com/
-[3]: https://github.com/emoacht/WpfPerMonitorDpi
+[3]: https://github.com/emoacht/WpfMonitorAware
 [4]: https://github.com/emoacht/DesktopToast

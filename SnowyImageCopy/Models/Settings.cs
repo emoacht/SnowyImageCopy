@@ -29,7 +29,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		private readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
-		private bool ValidateProperty(object value, [CallerMemberName]string propertyName = null)
+		private bool ValidateProperty(object value, [CallerMemberName] string propertyName = null)
 		{
 			if (String.IsNullOrEmpty(propertyName))
 				return false;
@@ -179,18 +179,17 @@ namespace SnowyImageCopy.Models
 				TargetPeriod = FilePeriod.All,
 				IsCurrentImageVisible = false,
 				InstantCopy = true,
-				DeleteUponCopy = false,
+				DeleteOnCopy = false,
 				AutoCheckInterval = 30,
-				MakesFileExtensionLowerCase = true,
+				MakesFileExtensionLowercase = true,
 				MovesFileToRecycle = false,
-				EnablesChooseDeleteUponCopy = false,
+				EnablesChooseDeleteOnCopy = false,
+				SelectsReadOnlyFile = false,
 			};
 		}
 
 
 		#region Path
-
-		private static readonly Regex _rootPattern = new Regex(@"^https?://((?!/)\S){1,15}/", RegexOptions.Compiled);
 
 		public string RemoteAddress
 		{
@@ -200,21 +199,14 @@ namespace SnowyImageCopy.Models
 				if (_remoteAddress == value)
 					return;
 
-				if (Path.GetInvalidPathChars().Any(x => value.Contains(x)))
+				string root;
+				string descendant;
+				if (!TryParseRemoteAddress(value, out root, out descendant))
 					return;
 
-				var match = _rootPattern.Match(value);
-				if (!match.Success)
-					return;
-
-				_remoteRoot = match.Value;
-
-				var descendant = value.Substring(_remoteRoot.Length).TrimStart('/');
-				descendant = Regex.Replace(descendant, @"\s+", String.Empty);
-				descendant = Regex.Replace(descendant, "/{2,}", "/");
-
-				_remoteDescendant = String.Format("/{0}", descendant).TrimEnd('/');
-				_remoteAddress = _remoteRoot + descendant;
+				_remoteAddress = root + descendant;
+				_remoteRoot = root;
+				_remoteDescendant = "/" + descendant.TrimEnd('/');
 			}
 		}
 		private string _remoteAddress = @"http://flashair/"; // Default FlashAir Url
@@ -230,6 +222,28 @@ namespace SnowyImageCopy.Models
 			get { return _remoteDescendant ?? String.Empty; }
 		}
 		private string _remoteDescendant;
+
+		private static readonly Regex _rootPattern = new Regex(@"^https?://((?!/)\S){1,15}/", RegexOptions.Compiled);
+
+		private bool TryParseRemoteAddress(string source, out string root, out string descendant)
+		{
+			root = null;
+			descendant = null;
+
+			if (Path.GetInvalidPathChars().Any(x => source.Contains(x)))
+				return false;
+
+			var match = _rootPattern.Match(source);
+			if (!match.Success)
+				return false;
+
+			root = match.Value;
+
+			descendant = source.Substring(match.Length).TrimStart('/');
+			descendant = Regex.Replace(descendant, @"\s+", String.Empty);
+			descendant = Regex.Replace(descendant, "/{2,}", "/");
+			return true;
+		}
 
 		private const string _defaultLocalFolder = "FlashAirImages"; // Default local folder name
 
@@ -279,7 +293,9 @@ namespace SnowyImageCopy.Models
 					return;
 
 				_targetDates = value;
-				RaisePropertyChanged();
+
+				if (TargetPeriod == FilePeriod.Select) // To prevent loading settings from firing event unnecessarily
+					RaisePropertyChanged();
 			}
 		}
 		private ObservableCollection<DateTime> _targetDates;
@@ -336,25 +352,25 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _instantCopy;
 
-		public bool DeleteUponCopy
+		public bool DeleteOnCopy
 		{
 			get
 			{
-				if (!EnablesChooseDeleteUponCopy)
-					_deleteUponCopy = false;
+				if (!EnablesChooseDeleteOnCopy)
+					_deleteOnCopy = false;
 
-				return _deleteUponCopy;
+				return _deleteOnCopy;
 			}
 			set
 			{
-				if (_deleteUponCopy == value)
+				if (_deleteOnCopy == value)
 					return;
 
-				_deleteUponCopy = value;
+				_deleteOnCopy = value;
 				RaisePropertyChanged();
 			}
 		}
-		private bool _deleteUponCopy;
+		private bool _deleteOnCopy;
 
 		#endregion
 
@@ -380,19 +396,19 @@ namespace SnowyImageCopy.Models
 
 		#region File
 
-		public bool MakesFileExtensionLowerCase
+		public bool MakesFileExtensionLowercase
 		{
-			get { return _makesFileExtensionLowerCase; }
+			get { return _makesFileExtensionLowercase; }
 			set
 			{
-				if (_makesFileExtensionLowerCase == value)
+				if (_makesFileExtensionLowercase == value)
 					return;
 
-				_makesFileExtensionLowerCase = value;
+				_makesFileExtensionLowercase = value;
 				RaisePropertyChanged();
 			}
 		}
-		private bool _makesFileExtensionLowerCase;
+		private bool _makesFileExtensionLowercase;
 
 		public bool MovesFileToRecycle
 		{
@@ -408,22 +424,36 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _movesFileToRecycle;
 
-		public bool EnablesChooseDeleteUponCopy
+		public bool SelectsReadOnlyFile
 		{
-			get { return _enablesChooseDeleteUponCopy; }
+			get { return _selectsReadOnlyFile; }
 			set
 			{
-				if (_enablesChooseDeleteUponCopy == value)
+				if (_selectsReadOnlyFile == value)
 					return;
 
-				_enablesChooseDeleteUponCopy = value;
+				_selectsReadOnlyFile = value;
+				RaisePropertyChanged();
+			}
+		}
+		private bool _selectsReadOnlyFile;
+
+		public bool EnablesChooseDeleteOnCopy
+		{
+			get { return _enablesChooseDeleteOnCopy; }
+			set
+			{
+				if (_enablesChooseDeleteOnCopy == value)
+					return;
+
+				_enablesChooseDeleteOnCopy = value;
 				RaisePropertyChanged();
 
 				if (!value)
-					DeleteUponCopy = false;
+					DeleteOnCopy = false;
 			}
 		}
-		private bool _enablesChooseDeleteUponCopy;
+		private bool _enablesChooseDeleteOnCopy;
 
 		#endregion
 

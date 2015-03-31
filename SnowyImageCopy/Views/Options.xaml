@@ -6,7 +6,7 @@
 			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
-			 xmlns:pmd="clr-namespace:PerMonitorDpi.Views;assembly=PerMonitorDpi"
+			 xmlns:ma="clr-namespace:MonitorAware.Views;assembly=MonitorAware"
 			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
 			 xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
 			 xmlns:models="clr-namespace:SnowyImageCopy.Models"
@@ -15,10 +15,6 @@
 			 mc:Ignorable="d"
 			 d:DesignHeight="800" d:DesignWidth="250"
 			 Loaded="OnLoaded">
-	<!--<UserControl.DataContext>
-		<viewModels:OptionsViewModel/>
-	</UserControl.DataContext>-->
-
 	<UserControl.Resources>
 		<ControlTemplate x:Key="ItemGroupTemplate" TargetType="{x:Type GroupBox}">
 			<Grid>
@@ -39,6 +35,18 @@
 					<ContentPresenter/>
 				</Grid>
 			</Grid>
+		</ControlTemplate>
+
+		<ControlTemplate x:Key="ItemDetailedTemplate" TargetType="{x:Type GroupBox}">
+			<DockPanel Margin="0,4">
+				<Grid DockPanel.Dock="Right"
+					  Margin="4,0,0,0">
+					<ContentPresenter VerticalAlignment="Top"/>
+				</Grid>
+				<TextBlock DockPanel.Dock="Left"
+						   TextWrapping="Wrap"
+						   Text="{Binding Header, RelativeSource={RelativeSource AncestorType=GroupBox}}"/>
+			</DockPanel>
 		</ControlTemplate>
 	</UserControl.Resources>
 
@@ -109,7 +117,7 @@
 											<RadioButton
 												Margin="0,4,0,4"
 												Content="{Binding Description, Mode=OneWay}"
-												IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+												IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
 										</ControlTemplate>
 									</Setter.Value>
 								</Setter>
@@ -160,32 +168,24 @@
 			<GroupBox Template="{StaticResource ItemGroupTemplate}"
 					  Header="{Binding Resources.Options_File, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
-					<WrapPanel>
-						<TextBlock
-							VerticalAlignment="Center"
-							TextWrapping="Wrap"
-							Text="{Binding Resources.Options_ExtensionLowerCase, Source={x:Static models:ResourceService.Current}}"/>
+					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+							  Header="{Binding Resources.Options_ExtensionLowercase, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Width="60" Height="24"
-							Margin="4"
 							TextChecked="ON"
 							TextUnchecked="OFF"
 							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
 							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
 							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
-							IsChecked="{Binding SettingsCurrent.MakesFileExtensionLowerCase, Mode=TwoWay}"/>
-					</WrapPanel>
+							IsChecked="{Binding SettingsCurrent.MakesFileExtensionLowercase, Mode=TwoWay}"/>
+					</GroupBox>
 
-					<WrapPanel>
-						<TextBlock
-							VerticalAlignment="Center"
-							TextWrapping="Wrap"
-							Text="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}"/>
+					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+							  Header="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							x:Name="RecycleButton"
 							Width="60" Height="24"
-							Margin="4"
 							TextChecked="ON"
 							TextUnchecked="OFF"
 							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
@@ -193,33 +193,43 @@
 							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
 							IsChecked="{Binding SettingsCurrent.MovesFileToRecycle, Mode=TwoWay}"/>
-					</WrapPanel>
+					</GroupBox>
 
-					<WrapPanel>
-						<TextBlock
-							VerticalAlignment="Center"
-							TextWrapping="Wrap"
-							Text="{Binding Resources.Options_ChooseDeleteUponCopy, Source={x:Static models:ResourceService.Current}}"/>
+					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+							  Header="{Binding Resources.Options_SelectReadOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
-							x:Name="ChooseDeleteUponCopyButton"
 							Width="60" Height="24"
-							Margin="4"
 							TextChecked="ON"
 							TextUnchecked="OFF"
-							ForegroundChecked="{StaticResource Sliding.CheckedSecond.Foreground}"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
 							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
-							BackgroundChecked="{StaticResource Sliding.CheckedSecond.Background}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
-							IsChecked="{Binding IsChecked, ElementName= RecycleButton, Converter={StaticResource BooleanInverseConverterKey}, ConverterParameter=True}"/>
-						<controls:CheckTextBox
-							Width="80"
-							Margin="4" Padding="2,0"
-							VerticalContentAlignment="Center"
-							IsUndoEnabled="False"
-							CheckText="DELETE"
-							Visibility="{Binding IsChecked, ElementName=ChooseDeleteUponCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
-							IsChecked="{Binding SettingsCurrent.EnablesChooseDeleteUponCopy, Mode=TwoWay}"/>
-					</WrapPanel>
+							IsChecked="{Binding SettingsCurrent.SelectsReadOnlyFile, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+							  Header="{Binding Resources.Options_ChooseDeleteOnCopy, Source={x:Static models:ResourceService.Current}}">
+						<StackPanel>
+							<controls:SlidingToggleButton
+								x:Name="ChooseDeleteOnCopyButton"
+								Width="60" Height="24"
+								TextChecked="ON"
+								TextUnchecked="OFF"
+								ForegroundChecked="{StaticResource Sliding.CheckedSecond.Foreground}"
+								ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+								BackgroundChecked="{StaticResource Sliding.CheckedSecond.Background}"
+								BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+								IsChecked="{Binding IsChecked, ElementName= RecycleButton, Converter={StaticResource BooleanInverseConverterKey}, ConverterParameter=True}"/>
+							<controls:CheckTextBox
+								Margin="0,4,0,0" Padding="2,0"
+								VerticalContentAlignment="Center"
+								IsUndoEnabled="False"
+								CheckText="DELETE"
+								Visibility="{Binding IsChecked, ElementName=ChooseDeleteOnCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
+								IsChecked="{Binding SettingsCurrent.EnablesChooseDeleteOnCopy, Mode=TwoWay}"/>
+						</StackPanel>
+					</GroupBox>
 				</StackPanel>
 			</GroupBox>
 
@@ -252,8 +262,8 @@
 					</TextBlock>
 
 					<TextBlock Margin="0,0,0,4">
-						<Run Text="{Binding WindowHandler.SystemDpi.X, RelativeSource={RelativeSource AncestorType=pmd:PerMonitorDpiWindow}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
-						<Run Text="{Binding WindowHandler.MonitorDpi.X, RelativeSource={RelativeSource AncestorType=pmd:PerMonitorDpiWindow}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
+						<Run Text="{Binding WindowHandler.SystemDpi.X, RelativeSource={RelativeSource AncestorType=ma:MonitorAwareWindow}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
+						<Run Text="{Binding WindowHandler.MonitorDpi.X, RelativeSource={RelativeSource AncestorType=ma:MonitorAwareWindow}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
 					</TextBlock>
 				</StackPanel>
 			</GroupBox>

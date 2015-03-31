@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-	<!--==================
+<!--==================
 	 Customs theme
 ===================-->
 
@@ -88,7 +88,7 @@
 
 	<!-- Other -->
 	<SolidColorBrush x:Key="Window.Background" Color="White"/>
-	<SolidColorBrush x:Key="ImageListBox.Background" Color="{StaticResource SnowBlue.LightestColor}"/>
+	<SolidColorBrush x:Key="ImageListView.Background" Color="{StaticResource SnowBlue.LightestColor}"/>
 
 	<SolidColorBrush x:Key="BorderLine.Strong" Color="LightGray"/>
 	<SolidColorBrush x:Key="BorderLine.Weak" Color="#FFeeeeee"/>

@@ -39,8 +39,8 @@ namespace SnowyImageCopy.Helper
 		/// Save a BitmapImage to a specified file.
 		/// </summary>
 		/// <typeparam name="T">BitmapEncoder</typeparam>
-		/// <param name="source">Source BitmapImage</param>
-		/// <param name="filePath">Target file path</param>
+		/// <param name="source">BitmapImage</param>
+		/// <param name="filePath">File path</param>
 		public static void Save<T>(this BitmapImage source, string filePath) where T : BitmapEncoder, new()
 		{
 			if (source == null)
@@ -61,7 +61,7 @@ namespace SnowyImageCopy.Helper
 		/// Get codec info from a BitmapImage.
 		/// </summary>
 		/// <typeparam name="T">BitmapEncoder</typeparam>
-		/// <param name="source">Source BitmapImage</param>
+		/// <param name="source">BitmapImage</param>
 		/// <returns>Codec info</returns>
 		public static BitmapCodecInfo GetCodecInfo<T>(this BitmapImage source) where T : BitmapEncoder, new()
 		{

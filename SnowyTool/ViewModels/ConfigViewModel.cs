@@ -406,6 +406,7 @@ namespace SnowyTool.ViewModels
 		/// <summary>
 		/// Read Config file.
 		/// </summary>
+		/// <remarks>True if completed</remarks>
 		internal async Task<bool> ReadAsync(DiskInfo info)
 		{
 			if (info == null)
@@ -478,7 +479,7 @@ namespace SnowyTool.ViewModels
 
 		private static readonly PropertyInfo[] _writableProperties = typeof(ConfigViewModel)
 			.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
-			.Where(x => x.CanWrite) // CanWrite means not Readonly property.
+			.Where(x => x.CanWrite) // CanWrite means not readonly property.
 			.ToArray();
 
 		private static readonly PropertyInfo[] _monitoredProperties = _writableProperties
@@ -540,7 +541,7 @@ namespace SnowyTool.ViewModels
 
 		internal string Export()
 		{
-			// Turn empty String value to null.
+			// Turn empty string value to null.
 			foreach (var p in _writableProperties)
 			{
 				var value = p.GetValue(this) as string;
@@ -551,7 +552,7 @@ namespace SnowyTool.ViewModels
 					p.SetValue(this, null);
 			}
 
-			// Conform empty String value or null of corresponding SSID and network security key.
+			// Conform empty string value or null of corresponding SSID and network security key.
 			ConformNullOrEmpty(ref _APPSSID, ref _APPNETWORKKEY);
 			ConformNullOrEmpty(ref _BRGSSID, ref _BRGNETWORKKEY);
 

@@ -24,7 +24,7 @@ namespace SnowyImageCopy.ViewModels
 		public string FileName { get; private set; }
 		public int Size { get; private set; } // In bytes
 
-		public bool IsReadOnly { get; private set; }
+		public bool IsReadOnly { get; set; }
 		public bool IsHidden { get; private set; }
 		public bool IsSystemFile { get; private set; }
 		public bool IsVolume { get; private set; }
@@ -73,7 +73,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				if (!Settings.Current.MakesFileExtensionLowerCase)
+				if (!Settings.Current.MakesFileExtensionLowercase)
 					return FileName;
 
 				var extension = Path.GetExtension(FileName);
@@ -191,6 +191,11 @@ namespace SnowyImageCopy.ViewModels
 		internal bool IsFlashAirSystemFolder
 		{
 			get { return _flashAirSystemFolders.Contains(FileName, StringComparer.OrdinalIgnoreCase); }
+		}
+
+		public override string ToString()
+		{
+			return FileName; // For the case where being called for binding
 		}
 
 		#endregion

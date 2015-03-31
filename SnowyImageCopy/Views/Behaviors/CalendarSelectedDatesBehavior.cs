@@ -12,7 +12,7 @@ using System.Windows.Interactivity;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Get/Set SelectedDates property of Calendar as Dependency Property.
+	/// Get/Set SelectedDates property of <see cref="Calendar"/> as Dependency Property.
 	/// </summary>
 	[TypeConstraint(typeof(Calendar))]
 	public class CalendarSelectedDatesBehavior : Behavior<Calendar>
@@ -63,11 +63,11 @@ namespace SnowyImageCopy.Views.Behaviors
 
 			var associatedSelectedDates = this.AssociatedObject.SelectedDates; // SelectedDates property of Calendar
 
-			// Make a copy of SelectedDates because SelectedDates will be changed by OnSelectedDatesChanged 
+			// Make a cache of SelectedDates because SelectedDates will be changed by OnSelectedDatesChanged 
 			// during OnLoaded.
-			var selectedDatesCopy = SelectedDates.ToArray();
+			var selectedDatesCache = SelectedDates.ToArray();
 
-			foreach (var date in selectedDatesCopy)
+			foreach (var date in selectedDatesCache)
 			{
 				if (associatedSelectedDates.Contains(date))
 					continue;

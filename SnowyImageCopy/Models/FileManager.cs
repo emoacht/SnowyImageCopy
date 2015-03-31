@@ -201,7 +201,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="remoteFilePath">Remote file path</param>
 		/// <param name="card">FlashAir card information</param>
 		/// <param name="cancellationToken">CancellationToken</param>
-		/// <returns>Thumbnail of the image file</returns>
+		/// <returns>Thumbnail of image file</returns>
 		internal static async Task<BitmapSource> GetThumbnailAsync(string remoteFilePath, CardInfo card, CancellationToken cancellationToken)
 		{
 			if (String.IsNullOrWhiteSpace(remoteFilePath))
@@ -252,7 +252,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="progress">Progress</param>
 		/// <param name="card">FlashAir card information</param>
 		/// <param name="cancellationToken">CancellationToken</param>
-		/// <returns>Byte array of the file</returns>
+		/// <returns>Byte array of file</returns>
 		internal static async Task<byte[]> GetSaveFileAsync(string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool canReadExif, IProgress<ProgressInfo> progress, CardInfo card, CancellationToken cancellationToken)
 		{
 			if (String.IsNullOrWhiteSpace(remoteFilePath))
@@ -437,6 +437,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Get time stamp of write event in FlashAir card.
 		/// </summary>
+		/// <returns>If succeeded, time stamp (msec). If failed, -1.</returns>
 		internal static async Task<int> GetWriteTimeStampAsync()
 		{
 			return await GetWriteTimeStampAsync(CancellationToken.None);
@@ -511,7 +512,7 @@ namespace SnowyImageCopy.Models
 		{
 			var bytes = await DownloadBytesAsync(client, path, 0, null, card, cancellationToken);
 
-			if (recordsDownloadString)
+			if (_recordsDownloadString)
 				await RecordDownloadStringAsync(path, bytes);
 
 			// Response from FlashAir card seems to be encoded by ASCII.
@@ -661,11 +662,13 @@ namespace SnowyImageCopy.Models
 												// Report if read length in total exceeds stepped length.
 												if (stepCurrent / stepTotal * size <= readLengthTotal)
 												{
-													stepCurrent++;
 													progress.Report(new ProgressInfo(
 														currentValue: readLengthTotal,
 														totalValue: size,
-														elapsedTime: DateTime.Now - startTime));
+														elapsedTime: DateTime.Now - startTime,
+														isFirst: stepCurrent == 1D));
+
+													stepCurrent++;
 												}
 											}
 										}
@@ -759,13 +762,14 @@ namespace SnowyImageCopy.Models
 		/// Compose remote path in FlashAir card inserting CGI command string.
 		/// </summary>
 		/// <param name="command">CGI command type</param>
-		/// <param name="remotePath">Remote path</param>
+		/// <param name="remotePath">Source remote path</param>
+		/// <returns>Outcome remote path</returns>
 		private static string ComposeRemotePath(FileManagerCommand command, string remotePath)
 		{
 			return Settings.Current.RemoteRoot + _commandMap[command] + remotePath.TrimStart('/');
 		}
 
-		private static readonly bool recordsDownloadString = Debugger.IsAttached || CommandLine.RecordsDownloadLog;
+		private static readonly bool _recordsDownloadString = Debugger.IsAttached || CommandLine.RecordsDownloadLog;
 
 		/// <summary>
 		/// Record result of DownloadStringAsync method.

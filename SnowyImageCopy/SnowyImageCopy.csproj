@@ -61,9 +61,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\DesktopToast.dll</HintPath>
     </Reference>
-    <Reference Include="PerMonitorDpi, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MonitorAware, Version=0.5.0.14, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\PerMonitorDpi.dll</HintPath>
+      <HintPath>Libraries\MonitorAware.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -89,7 +89,6 @@
       <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime" />
-    <Reference Include="System.Runtime.InteropServices.WindowsRuntime" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -98,9 +97,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="Windows">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Windows.winmd</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -116,6 +112,7 @@
     <Compile Include="Common\PropertySupport.cs" />
     <Compile Include="Helper\FatDateTime.cs" />
     <Compile Include="Helper\NativeWifi.cs" />
+    <Compile Include="Helper\VisualTreeHelperAddition.cs" />
     <Compile Include="Models\CardInfo.cs" />
     <Compile Include="Models\CommandLine.cs" />
     <Compile Include="Models\Exceptions\CardChangedException.cs" />
@@ -134,6 +131,7 @@
     <Compile Include="Views\Behaviors\BrowserBehavior.cs" />
     <Compile Include="Views\Behaviors\ExplorerAction.cs" />
     <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
+    <Compile Include="Views\Behaviors\ItemsControlChildBehavior.cs" />
     <Compile Include="Views\Behaviors\SystemSoundPlayAction.cs" />
     <Compile Include="Views\Behaviors\WindowActivateBehavior.cs" />
     <Compile Include="Views\Controls\BusyButton.cs" />
@@ -141,7 +139,6 @@
     <Compile Include="Views\Controls\CircularProgressBar.cs" />
     <Compile Include="Views\Controls\NumericUpDown.cs" />
     <Compile Include="Views\Controls\SlidingToggleButton.cs" />
-    <Compile Include="Views\Converters\BooleanToProgressStateConverter.cs" />
     <Compile Include="Views\Converters\DoubleCentesimalConverter.cs" />
     <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
     <Compile Include="Views\Options.xaml.cs">
@@ -174,7 +171,7 @@
     <Compile Include="Models\Exceptions\RemoteConnectionUnableException.cs" />
     <Compile Include="Models\FileExtension.cs" />
     <Compile Include="ViewModels\FileItemViewModel.cs" />
-    <Compile Include="ViewModels\FileItemViewModelCollection.cs" />
+    <Compile Include="ViewModels\ItemObservableCollection.cs" />
     <Compile Include="Models\FileManager.cs" />
     <Compile Include="Models\FileManagerCommand.cs" />
     <Compile Include="Models\FilePeriod.cs" />
@@ -203,7 +200,7 @@
     <Compile Include="Views\Behaviors\FolderBrowserAction.cs" />
     <Compile Include="Views\Behaviors\FrameworkElementIntersectionBehavior.cs" />
     <Compile Include="Views\Behaviors\GridSizeBehavior.cs" />
-    <Compile Include="Views\Behaviors\ListBoxSelectedItemBehavior.cs" />
+    <Compile Include="Views\Behaviors\SelectorSelectedItemBehavior.cs" />
     <Compile Include="Views\Controls\HideableGridSplitter.cs" />
     <Compile Include="Views\Controls\ThumbnailBox.xaml.cs">
       <DependentUpon>ThumbnailBox.xaml</DependentUpon>
@@ -302,9 +299,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libraries\DesktopToast.dll" />
-    <Resource Include="Libraries\DesktopToast.xml" />
-    <Content Include="Libraries\PerMonitorDpi.dll" />
-    <Resource Include="Libraries\PerMonitorDpi.xml" />
+    <Resource Include="Libraries\DesktopToast.xml">
+      <SubType>Designer</SubType>
+    </Resource>
+    <Content Include="Libraries\MonitorAware.dll" />
+    <Resource Include="Libraries\MonitorAware.xml">
+      <SubType>Designer</SubType>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -15,7 +15,7 @@ namespace SnowyTool.Views.Converters
 		/// <summary>
 		/// Convert Nullable Boolean to Boolean.
 		/// </summary>
-		/// <param name="value">Source Nullable Boolean</param>
+		/// <param name="value">Nullable Boolean</param>
 		/// <param name="targetType"></param>
 		/// <param name="parameter">Condition Boolean string</param>
 		/// <param name="culture"></param>
@@ -42,13 +42,13 @@ namespace SnowyTool.Views.Converters
 		}
 
 		/// <summary>
-		/// Convert Boolean to (Nullable) Boolean.
+		/// Convert Boolean to Nullable Boolean.
 		/// </summary>
-		/// <param name="value">Source Boolean</param>
+		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>
 		/// <param name="parameter">Condition Boolean string</param>
 		/// <param name="culture"></param>
-		/// <returns>(Nullable) Boolean</returns>
+		/// <returns>Nullable Boolean</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (!(value is bool) || !(bool)value)

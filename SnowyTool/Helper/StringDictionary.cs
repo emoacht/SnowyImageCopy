@@ -12,11 +12,11 @@ namespace SnowyTool.Helper
     public static class StringDictionary
     {
         /// <summary>
-        /// Parse String divided by new lines and separator in each line to Dictionary.
+        /// Parse string divided by new lines and separator in each line to Dictionary.
         /// </summary>
-        /// <param name="source">Source String</param>
-        /// <param name="separator">Separator Char</param>
-        /// <returns>Dictionary of Key String and value String</returns>
+        /// <param name="source">Source string</param>
+        /// <param name="separator">Separator char</param>
+        /// <returns>Dictionary of Key string and value string</returns>
         public static Dictionary<string, string> Parse(string source, char separator)
         {
             if (String.IsNullOrWhiteSpace(source))

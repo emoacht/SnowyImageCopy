@@ -98,9 +98,14 @@ namespace SnowyTool.Views
 			get { return String.Format("{0} {1}", Title, Version); }
 		}
 
-		public static string ProductInfoShort
+		public static string ProductInfoMiddle
 		{
 			get { return String.Format("{0} {1}", Title, Version.ToString(3)); }
+		}
+
+		public static string ProductInfoShort
+		{
+			get { return String.Format("{0} {1}", Title, Version.ToString(2)); }
 		}
 	}
 }

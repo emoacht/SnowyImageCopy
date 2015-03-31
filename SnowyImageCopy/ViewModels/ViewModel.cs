@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reactive.Disposables;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,15 +17,47 @@ namespace SnowyImageCopy.ViewModels
 		{ }
 
 
+		#region Property name
+
+		private Dictionary<string, string> _propertyNameMap;
+
+		protected virtual string GetPropertyName([CallerMemberName] string callerPropertyName = null)
+		{
+			if (String.IsNullOrEmpty(callerPropertyName))
+				return null;
+
+			return ((_propertyNameMap != null) && _propertyNameMap.ContainsKey(callerPropertyName))
+				? _propertyNameMap[callerPropertyName]
+				: null;
+		}
+
+		protected virtual string GetPropertyName<T>(Expression<Func<T>> propertyExpression, [CallerMemberName] string callerPropertyName = null)
+		{
+			if (String.IsNullOrEmpty(callerPropertyName))
+				return null;
+
+			var calledPropertyName = PropertySupport.GetPropertyName(propertyExpression);
+
+			if (_propertyNameMap == null)
+				_propertyNameMap = new Dictionary<string, string>();
+
+			_propertyNameMap.Add(callerPropertyName, calledPropertyName);
+
+			return calledPropertyName;
+		}
+
+		#endregion
+
+
 		#region Dispose
 
-		public CompositeDisposable Disposer
+		public CompositeDisposable Subscription
 		{
-			get { return _disposer ?? (_disposer = new CompositeDisposable()); }
+			get { return _subscription ?? (_subscription = new CompositeDisposable()); }
 		}
-		private CompositeDisposable _disposer;
+		private CompositeDisposable _subscription;
 
-		bool _disposed = false;
+		bool _disposed;
 
 		public void Dispose()
 		{
@@ -38,8 +72,8 @@ namespace SnowyImageCopy.ViewModels
 
 			if (disposing)
 			{
-				if (_disposer != null)
-					_disposer.Dispose();
+				if (_subscription != null)
+					_subscription.Dispose();
 			}
 
 			_disposed = true;

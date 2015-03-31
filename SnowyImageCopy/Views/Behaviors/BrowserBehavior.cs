@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Manage WebBrowser.
+	/// Manage <see cref="WebBrowser"/>.
 	/// </summary>
 	[TypeConstraint(typeof(WebBrowser))]
 	public class BrowserBehavior : Behavior<WebBrowser>
@@ -111,7 +111,7 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#region Helper
 
-		private static readonly Regex _anchorPattern = new Regex(@"\.(htm|html)#.*", RegexOptions.Compiled);
+		private static readonly Regex _anchorPattern = new Regex(@"(?<path>.+\.(?:htm|html))#.*", RegexOptions.Compiled);
 
 		/// <summary>
 		/// Remove anchor at the end of htm/html file path.
@@ -127,7 +127,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			if (!match.Success)
 				return filePath;
 
-			return filePath.Substring(0, match.Index + match.Value.IndexOf('#'));
+			return match.Groups["path"].Value;
 		}
 
 		#endregion

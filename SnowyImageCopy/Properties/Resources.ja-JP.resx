@@ -231,7 +231,7 @@
   <data name="Options_Browse" xml:space="preserve">
     <value>参照</value>
   </data>
-  <data name="Options_ChooseDeleteUponCopy" xml:space="preserve">
+  <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
     <value>コピー後にFlashAir内のイメージの削除を選べるようにする</value>
   </data>
   <data name="Options_Date" xml:space="preserve">
@@ -246,10 +246,10 @@
   <data name="Options_DateToday" xml:space="preserve">
     <value>今日</value>
   </data>
-  <data name="Options_DeleteUponCopy" xml:space="preserve">
+  <data name="Options_DeleteOnCopy" xml:space="preserve">
     <value>コピー後に削除</value>
   </data>
-  <data name="Options_ExtensionLowerCase" xml:space="preserve">
+  <data name="Options_ExtensionLowercase" xml:space="preserve">
     <value>ファイル拡張子を小文字にする</value>
   </data>
   <data name="Options_File" xml:space="preserve">
@@ -281,6 +281,9 @@
   </data>
   <data name="Options_RemoteAddress" xml:space="preserve">
     <value>FlashAirアドレス (コピー元)</value>
+  </data>
+  <data name="Options_SelectReadOnly" xml:space="preserve">
+    <value>チェック後に読み取り専用のイメージだけを選択する</value>
   </data>
   <data name="ProjectSite" xml:space="preserve">
     <value>http://emoacht.github.io/SnowyImageCopy/index_jp.html</value>

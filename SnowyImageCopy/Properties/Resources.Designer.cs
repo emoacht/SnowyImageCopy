@@ -413,11 +413,11 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Enable to choose to delete image in FlashAir upon copy に類似しているローカライズされた文字列を検索します。
+        ///   Enable to choose to delete image in FlashAir on copy に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        public static string Options_ChooseDeleteUponCopy {
+        public static string Options_ChooseDeleteOnCopy {
             get {
-                return ResourceManager.GetString("Options_ChooseDeleteUponCopy", resourceCulture);
+                return ResourceManager.GetString("Options_ChooseDeleteOnCopy", resourceCulture);
             }
         }
         
@@ -458,20 +458,20 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Delete Upon Copy に類似しているローカライズされた文字列を検索します。
+        ///   Delete On Copy に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        public static string Options_DeleteUponCopy {
+        public static string Options_DeleteOnCopy {
             get {
-                return ResourceManager.GetString("Options_DeleteUponCopy", resourceCulture);
+                return ResourceManager.GetString("Options_DeleteOnCopy", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Make file extension lowercase に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        public static string Options_ExtensionLowerCase {
+        public static string Options_ExtensionLowercase {
             get {
-                return ResourceManager.GetString("Options_ExtensionLowerCase", resourceCulture);
+                return ResourceManager.GetString("Options_ExtensionLowercase", resourceCulture);
             }
         }
         
@@ -562,6 +562,15 @@ namespace SnowyImageCopy.Properties {
         public static string Options_RemoteAddress {
             get {
                 return ResourceManager.GetString("Options_RemoteAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Select only Read-only image on check に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Options_SelectReadOnly {
+            get {
+                return ResourceManager.GetString("Options_SelectReadOnly", resourceCulture);
             }
         }
         
