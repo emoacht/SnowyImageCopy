@@ -1121,7 +1121,7 @@ namespace SnowyImageCopy.Models
 					}
 
 					if (Settings.Current.DeleteOnCopy &&
-						IsCopiedLocal(item))
+						!item.IsReadOnly && IsCopiedLocal(item))
 					{
 						await FileManager.DeleteFileAsync(item.FilePath, _tokenSourceWorking.Token);
 					}
