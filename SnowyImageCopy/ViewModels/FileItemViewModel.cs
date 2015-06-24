@@ -228,6 +228,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public bool IsAliveRemote { get; set; }
 		public bool IsAliveLocal { get; set; }
+		public bool IsAvailableLocal { get; set; }
 
 		public FileStatus Status
 		{
