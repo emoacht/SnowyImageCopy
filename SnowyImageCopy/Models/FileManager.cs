@@ -742,7 +742,7 @@ namespace SnowyImageCopy.Models
 
 		#region Helper
 
-		private static readonly Dictionary<FileManagerCommand, string> _commandMap =
+		private static readonly IReadOnlyDictionary<FileManagerCommand, string> _commandMap =
 			new Dictionary<FileManagerCommand, string>
 			{
 				{FileManagerCommand.None, String.Empty},

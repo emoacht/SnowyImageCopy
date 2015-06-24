@@ -18,7 +18,7 @@ namespace SnowyImageCopy.Views.Converters
 	[ValueConversion(typeof(FileStatus), typeof(Brush))]
 	public class FileStatusToBrushConverter : IValueConverter
 	{
-		public static Dictionary<FileStatus, Color> StatusColorMap
+		public static IReadOnlyDictionary<FileStatus, Color> StatusColorMap
 		{
 			get
 			{
