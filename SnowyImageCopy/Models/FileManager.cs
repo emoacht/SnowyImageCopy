@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 using SnowyImageCopy.Models.Exceptions;
-using SnowyImageCopy.ViewModels;
 
 namespace SnowyImageCopy.Models
 {
@@ -54,7 +53,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="card">FlashAir card information</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>File list</returns>
-		internal static async Task<List<FileItemViewModel>> GetFileListRootAsync(CardInfo card, CancellationToken cancellationToken)
+		internal static async Task<List<IFileItem>> GetFileListRootAsync(CardInfo card, CancellationToken cancellationToken)
 		{
 			try
 			{
@@ -79,7 +78,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>File list</returns>
 		/// <remarks>This method is part of parent method.</remarks>
-		private static async Task<List<FileItemViewModel>> GetFileListAllAsync(HttpClient client, string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
+		private static async Task<List<IFileItem>> GetFileListAllAsync(HttpClient client, string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
 		{
 			var itemList = await GetFileListEachAsync(client, remoteDirectoryPath, card, cancellationToken);
 
@@ -117,14 +116,14 @@ namespace SnowyImageCopy.Models
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>File list</returns>
 		/// <remarks>This method is part of parent method.</remarks>
-		private static async Task<List<FileItemViewModel>> GetFileListEachAsync(HttpClient client, string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
+		private static async Task<List<IFileItem>> GetFileListEachAsync(HttpClient client, string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
 		{
 			var remotePath = ComposeRemotePath(FileManagerCommand.GetFileList, remoteDirectoryPath);
 
-			var items = await DownloadStringAsync(client, remotePath, card, cancellationToken);
+			var fileEntries = await DownloadStringAsync(client, remotePath, card, cancellationToken);
 
-			return items.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-				.Select(item => new FileItemViewModel(item, remoteDirectoryPath))
+			return fileEntries.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+				.Select<string, IFileItem>(fileEntry => new FileItem(fileEntry, remoteDirectoryPath))
 				.Where(x => x.IsImported)
 				.ToList();
 		}
@@ -137,7 +136,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>File list</returns>
 		/// <remarks>This method is not actually used.</remarks>
-		internal static async Task<List<FileItemViewModel>> GetFileListAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
+		internal static async Task<List<IFileItem>> GetFileListAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
 		{
 			if (String.IsNullOrWhiteSpace(remoteDirectoryPath))
 				throw new ArgumentNullException("remoteDirectoryPath");
@@ -148,10 +147,10 @@ namespace SnowyImageCopy.Models
 			{
 				using (var client = new HttpClient { Timeout = _timeoutLength })
 				{
-					var items = await DownloadStringAsync(client, remotePath, card, cancellationToken).ConfigureAwait(false);
+					var fileEntries = await DownloadStringAsync(client, remotePath, card, cancellationToken).ConfigureAwait(false);
 
-					return items.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-						.Select(item => new FileItemViewModel(item, remoteDirectoryPath))
+					return fileEntries.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+						.Select<string, IFileItem>(fileEntry => new FileItem(fileEntry, remoteDirectoryPath))
 						.Where(x => x.IsImported)
 						.ToList();
 				}
