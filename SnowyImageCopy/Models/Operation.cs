@@ -475,7 +475,7 @@ namespace SnowyImageCopy.Models
 		private int _copyFileCount;
 
 
-		#region 1st tier
+		#region 1st layer
 
 		/// <summary>
 		/// Check if content of FlashAir card is updated.
@@ -786,7 +786,7 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 
-		#region 2nd tier
+		#region 2nd layer
 
 		/// <summary>
 		/// Check if ready for operation.
@@ -1378,10 +1378,10 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check if a local file is not offline in terms of OneDrive.
+		/// Check if a local file is available (not offline) in terms of OneDrive.
 		/// </summary>
 		/// <param name="info">FileInfo of a local file</param>
-		/// <returns>True if not offline</returns>
+		/// <returns>True if available</returns>
 		private static bool IsAvailableLocal(FileInfo info)
 		{
 			return (info != null) && !info.Attributes.HasFlag(FileAttributes.Offline);
