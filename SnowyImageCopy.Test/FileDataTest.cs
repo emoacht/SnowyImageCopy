@@ -2,12 +2,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using SnowyImageCopy.Helper;
-using SnowyImageCopy.ViewModels;
+using SnowyImageCopy.Models;
 
 namespace SnowyImageCopy.Test
 {
 	[TestClass]
-	public class FileItemViewModelTest
+	public class FileDataTest
 	{
 		/// <summary>
 		/// Basic directory case
@@ -52,9 +52,9 @@ namespace SnowyImageCopy.Test
 		public void ImportTest5()
 		{
 			var size = (long)Int32.MaxValue * 2;
-			var source = String.Format("/DCIM/150___03,IMG_3862.CR2,{0},32,17519,31985", size);
+			var fileEntry = String.Format("/DCIM/150___03,IMG_3862.CR2,{0},32,17519,31985", size);
 
-			ImportTestBase(source, "/DCIM/150___03", "/DCIM/150___03", "IMG_3862.CR2", 0, default(DateTime), false);
+			ImportTestBase(fileEntry, "/DCIM/150___03", "/DCIM/150___03", "IMG_3862.CR2", 0, default(DateTime), false);
 		}
 
 		/// <summary>
@@ -78,7 +78,7 @@ namespace SnowyImageCopy.Test
 			DateTime time,
 			bool isImported = true)
 		{
-			var source = String.Format("{0},{1},{2},{3},{4},{5}",
+			var fileEntry = String.Format("{0},{1},{2},{3},{4},{5}",
 				directoryPath,
 				fileName,
 				size,
@@ -86,11 +86,11 @@ namespace SnowyImageCopy.Test
 				FatDateTime.ConvertFromDateTimeToDateInt(time),
 				FatDateTime.ConvertFromDateTimeToTimeInt(time));
 
-			ImportTestBase(source, directoryPath, directoryPath, fileName, size, time, isImported);
+			ImportTestBase(fileEntry, directoryPath, directoryPath, fileName, size, time, isImported);
 		}
 
 		private void ImportTestBase(
-			string source,
+			string fileEntry,
 			string directoryPath,
 			string directory,
 			string fileName,
@@ -98,7 +98,7 @@ namespace SnowyImageCopy.Test
 			DateTime date,
 			bool isImported = true)
 		{
-			var instance = new FileItemViewModel(source, directoryPath);
+			var instance = new FileItem(fileEntry, directoryPath);
 
 			Assert.AreEqual(instance.Directory, directory);
 			Assert.AreEqual(instance.FileName, fileName);
@@ -108,7 +108,7 @@ namespace SnowyImageCopy.Test
 		}
 
 		private void ImportTestBase(
-			string source,
+			string fileEntry,
 			string directoryPath,
 			string directory,
 			string fileName,
@@ -122,7 +122,7 @@ namespace SnowyImageCopy.Test
 			DateTime date,
 			bool isImported = true)
 		{
-			var instance = new FileItemViewModel(source, directoryPath);
+			var instance = new FileItem(fileEntry, directoryPath);
 
 			Assert.AreEqual(instance.Directory, directory);
 			Assert.AreEqual(instance.FileName, fileName);
