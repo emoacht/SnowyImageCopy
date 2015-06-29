@@ -139,29 +139,21 @@ namespace SnowyImageCopy.Models
 
 		#region Thumbnail
 
-		public string ThumbnailFailedPath
-		{
-			set
-			{
-				if (_thumbnailFailedPathes == null)
-					_thumbnailFailedPathes = new List<string>();
-
-				if (!_thumbnailFailedPathes.Contains(value))
-					_thumbnailFailedPathes.Add(value);
-			}
-		}
-
-		public IReadOnlyList<string> ThumbnailFailedPathes
-		{
-			get { return _thumbnailFailedPathes ?? (_thumbnailFailedPathes = new List<string>()); }
-		}
 		private List<string> _thumbnailFailedPathes;
-
 		private const int _thumbnailFailedPathesCountMax = 3;
 
 		public bool CanGetThumbnail
 		{
 			get { return ((_thumbnailFailedPathes == null) || (_thumbnailFailedPathes.Count < _thumbnailFailedPathesCountMax)); }
+		}
+
+		public void RecordThumbnailFailedPath(string filePath)
+		{
+			if (_thumbnailFailedPathes == null)
+				_thumbnailFailedPathes = new List<string>();
+
+			if (!_thumbnailFailedPathes.Contains(filePath))
+				_thumbnailFailedPathes.Add(filePath);
 		}
 
 		#endregion
