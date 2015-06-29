@@ -91,11 +91,11 @@ namespace SnowyImageCopy.Models
 			if (String.IsNullOrWhiteSpace(fileEntry))
 				return false;
 
-			var sourceWithoutDirectory = fileEntry.Trim();
+			var fileEntryWithoutDirectory = fileEntry.Trim();
 
 			if (!String.IsNullOrWhiteSpace(directoryPath))
 			{
-				// Check if the leading part of file entry matches directory path. Be aware that length of 
+				// Check if the leading part of file entry matches directory path. Be aware that the length of 
 				// file entry like "WLANSD_FILELIST" may be shorter than that of directory path.
 				if (!fileEntry.StartsWith(directoryPath, StringComparison.OrdinalIgnoreCase))
 					return false;
@@ -104,20 +104,20 @@ namespace SnowyImageCopy.Models
 
 				// Check if directory path is valid.
 				if (!_asciiPattern.IsMatch(Directory) || // This ASCII checking may be needless because response from FlashAir card seems to be encoded by ASCII.
-					Path.GetInvalidPathChars().Concat(new[] { '?' }).Any(x => Directory.Contains(x))) // '?' appears typically when byte array was not correctly encoded.
+					Path.GetInvalidPathChars().Concat(new[] { '?' }).Any(x => Directory.Contains(x))) // '?' appears typically when byte array is not correctly encoded.
 					return false;
 
-				sourceWithoutDirectory = fileEntry.Substring(directoryPath.Length).TrimStart();
+				fileEntryWithoutDirectory = fileEntry.Substring(directoryPath.Length).TrimStart();
 			}
 			else
 			{
 				Directory = String.Empty;
 			}
 
-			if (!sourceWithoutDirectory.ElementAt(0).Equals(_separator))
+			if (!fileEntryWithoutDirectory.ElementAt(0).Equals(_separator))
 				return false;
 
-			var elements = sourceWithoutDirectory.TrimStart(_separator)
+			var elements = fileEntryWithoutDirectory.TrimStart(_separator)
 				.Split(new[] { _separator }, StringSplitOptions.None)
 				.ToList();
 
@@ -141,7 +141,7 @@ namespace SnowyImageCopy.Models
 			// Determine size, attribute and date.
 			int rawDate = 0;
 			int rawTime = 0;
-
+			
 			for (int i = 1; i <= 4; i++)
 			{
 				int num;

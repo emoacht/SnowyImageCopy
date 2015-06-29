@@ -7,7 +7,7 @@ using SnowyImageCopy.Models;
 namespace SnowyImageCopy.Test
 {
 	[TestClass]
-	public class FileDataTest
+	public class FileItemTest
 	{
 		/// <summary>
 		/// Basic directory case

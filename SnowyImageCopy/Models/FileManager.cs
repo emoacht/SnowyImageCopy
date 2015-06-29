@@ -181,10 +181,10 @@ namespace SnowyImageCopy.Models
 			{
 				using (var client = new HttpClient { Timeout = _timeoutLength })
 				{
-					var itemNum = await DownloadStringAsync(client, remotePath, card, cancellationToken).ConfigureAwait(false);
+					var fileNum = await DownloadStringAsync(client, remotePath, card, cancellationToken).ConfigureAwait(false);
 
 					int num;
-					return int.TryParse(itemNum, out num) ? num : 0;
+					return int.TryParse(fileNum, out num) ? num : 0;
 				}
 			}
 			catch
