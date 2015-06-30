@@ -37,6 +37,7 @@ namespace SnowyImageCopy.ViewModels
 		#region Supplementary
 
 		internal string FilePath { get { return _fileItem.FilePath; } }
+		internal string Signature { get { return _fileItem.Signature; } }
 
 		internal string FileNameWithCaseExtension
 		{
@@ -51,11 +52,6 @@ namespace SnowyImageCopy.ViewModels
 
 				return Path.GetFileNameWithoutExtension(this.FileName) + extension.ToLower();
 			}
-		}
-
-		internal string Signature
-		{
-			get { return String.Format("{0}-{1}-{2:yyyyMMddHHmmss}", this.FilePath, this.Size, this.Date); }
 		}
 
 		/// <summary>
@@ -287,10 +283,7 @@ namespace SnowyImageCopy.ViewModels
 			if (other == null)
 				return 1;
 
-			var comparisonDate = this.Date.CompareTo(other.Date);
-			var comparisonFilePath = String.Compare(this.FilePath, other.FilePath, StringComparison.Ordinal);
-
-			return (comparisonDate != 0) ? comparisonDate : comparisonFilePath;
+			return this.FileItem.CompareTo(other.FileItem);
 		}
 
 		#endregion

@@ -42,8 +42,15 @@ namespace SnowyImageCopy.Models
 
 		public string FilePath
 		{
-			get { return String.Format("{0}/{1}", Directory, FileName); }
+			get { return _filePath ?? (_filePath = String.Format("{0}/{1}", Directory, FileName)); }
 		}
+		private string _filePath;
+
+		public string Signature
+		{
+			get { return _signature ?? (_signature = String.Format("{0:yyyyMMddHHmmss}{1}{2}", Date, FilePath, Size)); }
+		}
+		private string _signature;
 
 		public bool IsImageFile
 		{
@@ -141,7 +148,7 @@ namespace SnowyImageCopy.Models
 			// Determine size, attribute and date.
 			int rawDate = 0;
 			int rawTime = 0;
-			
+
 			for (int i = 1; i <= 4; i++)
 			{
 				int num;
@@ -194,6 +201,27 @@ namespace SnowyImageCopy.Models
 			IsVolume = ba[3];     // Bit 3
 			IsDirectory = ba[4];  // Bit 4
 			IsArchive = ba[5];    // Bit 5
+		}
+
+		#endregion
+
+
+		#region IComparable member
+
+		public int CompareTo(IFileItem other)
+		{
+			if (other == null)
+				return 1;
+
+			var dateComparison = this.Date.CompareTo(other.Date);
+			if (dateComparison != 0)
+				return dateComparison;
+
+			var filePathComparison = String.Compare(this.FilePath, other.FilePath, StringComparison.Ordinal);
+			if (filePathComparison != 0)
+				return filePathComparison;
+
+			return this.Size.CompareTo(other.Size);
 		}
 
 		#endregion

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SnowyImageCopy.Models
 {
-	internal interface IFileItem
+	internal interface IFileItem : IComparable<IFileItem>
 	{
 		string Directory { get; }
 		string FileName { get; }
@@ -25,6 +25,7 @@ namespace SnowyImageCopy.Models
 		bool IsImported { get; }
 
 		string FilePath { get; }
+		string Signature { get; }
 		bool IsImageFile { get; }
 		bool IsFlashAirSystemFolder { get; }
 	}
