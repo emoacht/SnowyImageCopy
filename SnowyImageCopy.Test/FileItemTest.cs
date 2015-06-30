@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using SnowyImageCopy.Helper;
@@ -9,6 +10,8 @@ namespace SnowyImageCopy.Test
 	[TestClass]
 	public class FileItemTest
 	{
+		#region Import
+
 		/// <summary>
 		/// Basic directory case
 		/// </summary>
@@ -75,7 +78,7 @@ namespace SnowyImageCopy.Test
 			string fileName,
 			long size,
 			bool isFile,
-			DateTime time,
+			DateTime date,
 			bool isImported = true)
 		{
 			var fileEntry = String.Format("{0},{1},{2},{3},{4},{5}",
@@ -83,10 +86,10 @@ namespace SnowyImageCopy.Test
 				fileName,
 				size,
 				(isFile ? 32 : 16),
-				FatDateTime.ConvertFromDateTimeToDateInt(time),
-				FatDateTime.ConvertFromDateTimeToTimeInt(time));
+				FatDateTime.ConvertFromDateTimeToDateInt(date),
+				FatDateTime.ConvertFromDateTimeToTimeInt(date));
 
-			ImportTestBase(fileEntry, directoryPath, directoryPath, fileName, size, time, isImported);
+			ImportTestBase(fileEntry, directoryPath, directoryPath, fileName, size, date, isImported);
 		}
 
 		private void ImportTestBase(
@@ -100,11 +103,11 @@ namespace SnowyImageCopy.Test
 		{
 			var instance = new FileItem(fileEntry, directoryPath);
 
-			Assert.AreEqual(instance.Directory, directory);
-			Assert.AreEqual(instance.FileName, fileName);
-			Assert.AreEqual(instance.Size, size);
-			Assert.AreEqual(instance.Date, date);
-			Assert.AreEqual(instance.IsImported, isImported);
+			Assert.AreEqual(directory, instance.Directory);
+			Assert.AreEqual(fileName, instance.FileName);
+			Assert.AreEqual(size, instance.Size);
+			Assert.AreEqual(date, instance.Date);
+			Assert.AreEqual(isImported, instance.IsImported);
 		}
 
 		private void ImportTestBase(
@@ -124,19 +127,63 @@ namespace SnowyImageCopy.Test
 		{
 			var instance = new FileItem(fileEntry, directoryPath);
 
-			Assert.AreEqual(instance.Directory, directory);
-			Assert.AreEqual(instance.FileName, fileName);
-			Assert.AreEqual(instance.Size, size);
+			Assert.AreEqual(directory, instance.Directory);
+			Assert.AreEqual(fileName, instance.FileName);
+			Assert.AreEqual(size, instance.Size);
 
-			Assert.AreEqual(instance.IsReadOnly, isReadOnly);
-			Assert.AreEqual(instance.IsHidden, isHidden);
-			Assert.AreEqual(instance.IsSystemFile, isSystemFile);
-			Assert.AreEqual(instance.IsVolume, isVolume);
-			Assert.AreEqual(instance.IsDirectory, isDirectory);
-			Assert.AreEqual(instance.IsArchive, isArchive);
+			Assert.AreEqual(isReadOnly, instance.IsReadOnly);
+			Assert.AreEqual(isHidden, instance.IsHidden);
+			Assert.AreEqual(isSystemFile, instance.IsSystemFile);
+			Assert.AreEqual(isVolume, instance.IsVolume);
+			Assert.AreEqual(isDirectory, instance.IsDirectory);
+			Assert.AreEqual(isArchive, instance.IsArchive);
 
-			Assert.AreEqual(instance.Date, date);
-			Assert.AreEqual(instance.IsImported, isImported);
+			Assert.AreEqual(date, instance.Date);
+			Assert.AreEqual(isImported, instance.IsImported);
+		}
+
+		#endregion
+
+		#endregion
+
+
+		#region CompareTo
+
+		[TestMethod]
+		public void CompareToTest()
+		{
+			var baseTime = DateTime.Now;
+
+			var instances = new List<FileItem>
+			{						
+				CreateFileItem("/DCIM/141___01", "IMG_5982.JPG", 2209469, 32, baseTime.AddMonths(1)), // 5
+				CreateFileItem("/DCIM/100___01", "IMG_6256.JPG", 2209461, 32, baseTime), // 0
+				CreateFileItem("/DCIM/100___01", "IMG_1358.JPG", 2209461, 32, baseTime.AddHours(1)), // 2
+				CreateFileItem("/DCIM/140___01", "IMG_1340.JPG", 2209461, 32, baseTime.AddDays(1)), // 3
+				CreateFileItem("/DCIM/100___01", "IMG_1356.JPG", 2209461, 32, baseTime.AddHours(1)), // 1
+				CreateFileItem("/DCIM/141___01", "IMG_5982.JPG", 1256912, 32, baseTime.AddMonths(1)), // 4
+			};
+			instances.Sort();
+
+			Assert.AreEqual("IMG_6256.JPG", instances[0].FileName);
+			Assert.AreEqual("IMG_1356.JPG", instances[1].FileName);
+			Assert.AreEqual("IMG_1358.JPG", instances[2].FileName);
+			Assert.AreEqual("IMG_1340.JPG", instances[3].FileName);
+			Assert.AreEqual(1256912, instances[4].Size);
+			Assert.AreEqual(2209469, instances[5].Size);
+		}
+
+		private FileItem CreateFileItem(string directoryPath, string fileName, int size, int attributes, DateTime date)
+		{
+			var fileEntry = String.Format("{0},{1},{2},{3},{4},{5}",
+				directoryPath,
+				fileName,
+				size,
+				attributes,
+				FatDateTime.ConvertFromDateTimeToDateInt(date),
+				FatDateTime.ConvertFromDateTimeToTimeInt(date));
+
+			return new FileItem(fileEntry, directoryPath);
 		}
 
 		#endregion
