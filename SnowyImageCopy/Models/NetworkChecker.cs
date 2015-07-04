@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -53,9 +54,16 @@ namespace SnowyImageCopy.Models
 				.All(x => x.NetworkInterfaceType != NetworkInterfaceType.Wireless80211))
 				return false;
 
-			var ssids = NativeWifi.EnumerateConnectedNetworkSsids();
+			try
+			{
+				var ssids = NativeWifi.EnumerateConnectedNetworkSsids();
 
-			return ssids.Any(x => x.Equals(ssid, StringComparison.Ordinal));
+				return ssids.Any(x => x.Equals(ssid, StringComparison.Ordinal));
+			}
+			catch (Win32Exception)
+			{
+				return false;
+			}
 		}
 	}
 }
