@@ -53,7 +53,7 @@ namespace SnowyImageCopy.Models
 				.All(x => x.NetworkInterfaceType != NetworkInterfaceType.Wireless80211))
 				return false;
 
-			var ssids = NativeWifi.GetConnectedNetworkSsid();
+			var ssids = NativeWifi.EnumerateConnectedNetworkSsids();
 
 			return ssids.Any(x => x.Equals(ssid, StringComparison.Ordinal));
 		}
