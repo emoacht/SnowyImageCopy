@@ -11,26 +11,28 @@ namespace SnowyImageCopy.Test
 		#region TryParseRemoteAddress
 
 		[TestMethod]
-		public void TryParseRemoteAddressTest1()
+		public void TestTryParseRemoteAddressValid()
 		{
-			TryParseRemoteAddressTestBase(@"http://flashair/", @"http://flashair/", String.Empty);
-			TryParseRemoteAddressTestBase(@"http://flashair_012345/", @"http://flashair_012345/", String.Empty);
-			TryParseRemoteAddressTestBase(@"http://flashair/dcim", @"http://flashair/", @"dcim");
-			TryParseRemoteAddressTestBase(@"https://flashair//dcim/", @"https://flashair/", @"dcim/");
-			TryParseRemoteAddressTestBase(@"http://flashair/dcim//161___01", @"http://flashair/", @"dcim/161___01");
+			TestTryParseRemoteAddressBase(@"http://flashair/", @"http://flashair/", String.Empty);			
+			TestTryParseRemoteAddressBase(@"http://flashair_012345/", @"http://flashair_012345/", String.Empty);
+			TestTryParseRemoteAddressBase(@"http://flashair/dcim", @"http://flashair/", @"dcim");
+			TestTryParseRemoteAddressBase(@"https://flashair//dcim/", @"https://flashair/", @"dcim/");
+			TestTryParseRemoteAddressBase(@"http://flashair/dcim//161___01", @"http://flashair/", @"dcim/161___01");
+			TestTryParseRemoteAddressBase(@"http://flashair:8080/dcim//161___01", @"http://flashair:8080/", @"dcim/161___01");
 		}
 
 		[TestMethod]
-		public void TryParseRemoteAddressTest2()
+		public void TestTryParseRemoteAddressInvalid()
 		{
-			TryParseRemoteAddressTestBase(@"http:///");
-			TryParseRemoteAddressTestBase(@"http://flashair_0123456/");
+			TestTryParseRemoteAddressBase(@"http:///"); // Wrong path
+			TestTryParseRemoteAddressBase(@"http://flashair"); // No slash at the end
+			TestTryParseRemoteAddressBase(@"http://flashair_0123456/"); // Too long host name
 		}
 
 
 		#region Base
 
-		private void TryParseRemoteAddressTestBase(string source, string root, string descendant)
+		private void TestTryParseRemoteAddressBase(string source, string root, string descendant)
 		{
 			var settingsObject = new PrivateObject(new Settings());
 			var args = new object[] { source, null, null };
@@ -40,7 +42,7 @@ namespace SnowyImageCopy.Test
 			Assert.IsTrue(((string)args[2]).Equals(descendant, StringComparison.Ordinal));
 		}
 
-		private void TryParseRemoteAddressTestBase(string source)
+		private void TestTryParseRemoteAddressBase(string source)
 		{
 			var settingsObject = new PrivateObject(new Settings());
 			var args = new object[] { source, null, null };

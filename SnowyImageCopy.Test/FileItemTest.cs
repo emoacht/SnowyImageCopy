@@ -13,67 +13,67 @@ namespace SnowyImageCopy.Test
 		#region Import
 
 		/// <summary>
-		/// Basic directory case
+		/// Directory case
 		/// </summary>
 		[TestMethod]
-		public void ImportTest1()
+		public void TestImportDirectory()
 		{
-			ImportTestBase("/DCIM,100__TSB,0,16,17181,18432", "/DCIM", "/DCIM", "100__TSB", 0, false, false, false, false, true, false, new DateTime(2013, 8, 29, 9, 0, 0));
+			TestImportBase("/DCIM,100__TSB,0,16,17181,18432", "/DCIM", "/DCIM", "100__TSB", 0, false, false, false, false, true, false, new DateTime(2013, 8, 29, 9, 0, 0));
 		}
 
 		/// <summary>
-		/// Basic file case
+		/// File case
 		/// </summary>
 		[TestMethod]
-		public void ImportTest2()
+		public void TestImportFile()
 		{
-			ImportTestBase("/DCIM/160___01,IMG_6221.JPG,2299469,32,17953,20181", "/DCIM/160___01", "/DCIM/160___01", "IMG_6221.JPG", 2299469, false, false, false, false, false, true, new DateTime(2015, 1, 1, 9, 54, 42));
+			TestImportBase("/DCIM/160___01,IMG_6221.JPG,2299469,32,17953,20181", "/DCIM/160___01", "/DCIM/160___01", "IMG_6221.JPG", 2299469, false, false, false, false, false, true, new DateTime(2015, 1, 1, 9, 54, 42));
 		}
 
 		/// <summary>
-		/// Basic file case without attributes
+		/// File case without attributes
 		/// </summary>
 		[TestMethod]
-		public void ImportTest3()
+		public void TestImportFileWithoutAttributes()
 		{
-			ImportTestBase("/DCIM/150___03,IMG_6837.JPG,2747563,32,17513,39513", "/DCIM/150___03", "/DCIM/150___03", "IMG_6837.JPG", 2747563, new DateTime(2014, 3, 9, 19, 18, 50));
+			TestImportBase("/DCIM/150___03,IMG_6837.JPG,2747563,32,17513,39513", "/DCIM/150___03", "/DCIM/150___03", "IMG_6837.JPG", 2747563, new DateTime(2014, 3, 9, 19, 18, 50));
 		}
 
 		/// <summary>
 		/// Invalid date case
 		/// </summary>
 		[TestMethod]
-		public void ImportTest4()
+		public void TestImportInvalidDate()
 		{
-			ImportTestBase(",DCIM,0,16,17852,17", "", "", "DCIM", 0, default(DateTime));
+			TestImportBase(",DCIM,0,16,17852,17", "", "", "DCIM", 0, default(DateTime));
 		}
 
 		/// <summary>
 		/// Invalid size case
 		/// </summary>
 		[TestMethod]
-		public void ImportTest5()
+		public void TestImportInvalidSize()
 		{
 			var size = (long)Int32.MaxValue * 2;
 			var fileEntry = String.Format("/DCIM/150___03,IMG_3862.CR2,{0},32,17519,31985", size);
 
-			ImportTestBase(fileEntry, "/DCIM/150___03", "/DCIM/150___03", "IMG_3862.CR2", 0, default(DateTime), false);
+			TestImportBase(fileEntry, "/DCIM/150___03", "/DCIM/150___03", "IMG_3862.CR2", 0, default(DateTime), false);
 		}
 
 		/// <summary>
 		/// Other cases
 		/// </summary>
 		[TestMethod]
-		public void ImportTest6()
+		public void TestImportOther()
 		{
-			ImportTestBase("", "DCIM", 0, false, DateTime.Today);
-			ImportTestBase("/DCIM/100___012345678901234567890123456789", "IMG_012345678901234567890123456789.JPG", 1922840, true, DateTime.Today);
+			TestImportBase("", "DCIM", 0, false, DateTime.Today);
+			TestImportBase("/DCIM/100___012345678901234567890123456789", "IMG_012345678901234567890123456789.JPG", 1922840, true, DateTime.Today);
 		}
 
 
 		#region Base
 
-		private void ImportTestBase(
+		private void TestImportBase(
 			string directoryPath,
 			string fileName,
 			long size,
@@ -89,10 +89,10 @@ namespace SnowyImageCopy.Test
 				FatDateTime.ConvertFromDateTimeToDateInt(date),
 				FatDateTime.ConvertFromDateTimeToTimeInt(date));
 
-			ImportTestBase(fileEntry, directoryPath, directoryPath, fileName, size, date, isImported);
+			TestImportBase(fileEntry, directoryPath, directoryPath, fileName, size, date, isImported);
 		}
 
-		private void ImportTestBase(
+		private void TestImportBase(
 			string fileEntry,
 			string directoryPath,
 			string directory,
@@ -110,7 +110,7 @@ namespace SnowyImageCopy.Test
 			Assert.AreEqual(isImported, instance.IsImported);
 		}
 
-		private void ImportTestBase(
+		private void TestImportBase(
 			string fileEntry,
 			string directoryPath,
 			string directory,
@@ -150,7 +150,7 @@ namespace SnowyImageCopy.Test
 		#region CompareTo
 
 		[TestMethod]
-		public void CompareToTest()
+		public void TestCompareTo()
 		{
 			var baseTime = DateTime.Now;
 
