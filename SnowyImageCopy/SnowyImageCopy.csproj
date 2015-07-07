@@ -110,6 +110,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\PropertySupport.cs" />
+    <Compile Include="Helper\CancellationTokenSourcePlus.cs" />
     <Compile Include="Helper\FatDateTime.cs" />
     <Compile Include="Helper\NativeWifi.cs" />
     <Compile Include="Helper\VisualTreeHelperAddition.cs" />
