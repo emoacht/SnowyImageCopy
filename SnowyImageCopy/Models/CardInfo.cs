@@ -69,10 +69,7 @@ namespace SnowyImageCopy.Models
 
 		#region CID/SSID
 
-		public bool CanGetCid
-		{
-			get { return _isFirmwareVersion103OrNewer; }
-		}
+		public bool CanGetCid { get { return _isFirmwareVersion103OrNewer; } }
 
 		/// <summary>
 		/// CID
@@ -124,10 +121,7 @@ namespace SnowyImageCopy.Models
 
 		#region Time stamp of write event
 
-		public bool CanGetWriteTimeStamp
-		{
-			get { return _isFirmwareVersion202OrNewer; }
-		}
+		public bool CanGetWriteTimeStamp { get { return _isFirmwareVersion202OrNewer; } }
 
 		/// <summary>
 		/// Time stamp of write event
@@ -161,10 +155,7 @@ namespace SnowyImageCopy.Models
 
 		#region Upload
 
-		public bool CanGetUpload
-		{
-			get { return _isFirmwareVersion202OrNewer; }
-		}
+		public bool CanGetUpload { get { return _isFirmwareVersion202OrNewer; } }
 
 		/// <summary>
 		/// Upload parameters

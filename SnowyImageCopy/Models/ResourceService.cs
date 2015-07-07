@@ -18,10 +18,7 @@ namespace SnowyImageCopy.Models
 	/// </remarks>
 	public class ResourceService : NotificationObject
 	{
-		public static ResourceService Current
-		{
-			get { return _current; }
-		}
+		public static ResourceService Current { get { return _current; } }
 		private static readonly ResourceService _current = new ResourceService();
 
 		private ResourceService()
@@ -30,10 +27,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Resources to be referred for binding
 		/// </summary>
-		public Resources Resources
-		{
-			get { return _resources; }
-		}
+		public Resources Resources { get { return _resources; } }
 		private readonly Resources _resources = new Resources();
 
 		/// <summary>
