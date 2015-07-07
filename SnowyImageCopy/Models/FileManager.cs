@@ -23,24 +23,24 @@ namespace SnowyImageCopy.Models
 		#region Constant
 
 		/// <summary>
-		/// Timeout length for operation
+		/// Timeout duration for operation
 		/// </summary>
-		private static readonly TimeSpan _timeoutLength = TimeSpan.FromSeconds(10);
+		private static readonly TimeSpan _timeoutDuration = TimeSpan.FromSeconds(10);
 
 		/// <summary>
-		/// Interval length to monitor network connection during operation
+		/// Interval of monitoring network connection during operation
 		/// </summary>
-		private static readonly TimeSpan _monitorLength = TimeSpan.FromSeconds(2);
+		private static readonly TimeSpan _monitorInterval = TimeSpan.FromSeconds(2);
 
 		/// <summary>
-		/// Maximum count of retry 
+		/// The maximum count of retry 
 		/// </summary>
 		private const int _retryCountMax = 3;
 
 		/// <summary>
-		/// Interval length of retry
+		/// Interval of retry
 		/// </summary>
-		private static readonly TimeSpan _retryLength = TimeSpan.FromMilliseconds(500);
+		private static readonly TimeSpan _retryInterval = TimeSpan.FromMilliseconds(500);
 
 		#endregion
 
@@ -57,7 +57,7 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					return await GetFileListAllAsync(client, Settings.Current.RemoteDescendant, card, cancellationToken).ConfigureAwait(false);
 				}
@@ -145,7 +145,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					var fileEntries = await DownloadStringAsync(client, remotePath, card, cancellationToken).ConfigureAwait(false);
 
@@ -179,7 +179,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					var fileNum = await DownloadStringAsync(client, remotePath, card, cancellationToken).ConfigureAwait(false);
 
@@ -210,7 +210,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					var bytes = await DownloadBytesAsync(client, remotePath, card, cancellationToken).ConfigureAwait(false);
 
@@ -264,7 +264,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					var bytes = await DownloadBytesAsync(client, remotePath, size, progress, card, cancellationToken).ConfigureAwait(false);
 
@@ -312,7 +312,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					var result = await DownloadStringAsync(client, remotePath, null, cancellationToken).ConfigureAwait(false);
 
@@ -345,7 +345,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					return await DownloadStringAsync(client, remotePath, null, cancellationToken).ConfigureAwait(false);
 				}
@@ -368,7 +368,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					return await DownloadStringAsync(client, remotePath, null, cancellationToken).ConfigureAwait(false);
 				}
@@ -395,7 +395,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					return await DownloadStringAsync(client, remotePath, null, cancellationToken).ConfigureAwait(false);
 				}
@@ -417,7 +417,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					var status = await DownloadStringAsync(client, remotePath, null, CancellationToken.None).ConfigureAwait(false);
 
@@ -454,7 +454,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					var timeStamp = await DownloadStringAsync(client, remotePath, null, cancellationToken).ConfigureAwait(false);
 
@@ -485,7 +485,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var client = new HttpClient { Timeout = _timeoutLength })
+				using (var client = new HttpClient { Timeout = _timeoutDuration })
 				{
 					return await DownloadStringAsync(client, remotePath, null, cancellationToken).ConfigureAwait(false);
 				}
@@ -593,7 +593,7 @@ namespace SnowyImageCopy.Models
 									{
 										((TaskCompletionSource<bool>)s).TrySetResult(true);
 									}
-								}, tcs, _monitorLength, _monitorLength))
+								}, tcs, _monitorInterval, _monitorInterval))
 								{
 									var monitorTask = tcs.Task;
 
@@ -601,7 +601,7 @@ namespace SnowyImageCopy.Models
 									{
 										// Route without progress reporting
 										var readTask = Task.Run(async () => await response.Content.ReadAsByteArrayAsync());
-										var timeoutTask = Task.Delay(_timeoutLength);
+										var timeoutTask = Task.Delay(_timeoutDuration);
 
 										var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
 										if (completedTask == timeoutTask)
@@ -639,7 +639,7 @@ namespace SnowyImageCopy.Models
 											{
 												// CancellationToken in overload of ReadAsync method will not work for response content.
 												var readTask = Task.Run(async () => await stream.ReadAsync(buffer, 0, buffer.Length));
-												var timeoutTask = Task.Delay(_timeoutLength);
+												var timeoutTask = Task.Delay(_timeoutDuration);
 
 												var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
 												if (completedTask == timeoutTask)
@@ -656,7 +656,7 @@ namespace SnowyImageCopy.Models
 
 												readLengthTotal += readLength;
 
-												monitorTimer.Change(_monitorLength, _monitorLength);
+												monitorTimer.Change(_monitorInterval, _monitorInterval);
 
 												// Report if read length in total exceeds stepped length.
 												if (stepCurrent / stepTotal * size <= readLengthTotal)
@@ -731,8 +731,8 @@ namespace SnowyImageCopy.Models
 				}
 
 				// Wait interval before retry.
-				if (TimeSpan.Zero < _retryLength)
-					await Task.Delay(_retryLength, cancellationToken);
+				if (TimeSpan.Zero < _retryInterval)
+					await Task.Delay(_retryInterval, cancellationToken);
 			}
 		}
 
