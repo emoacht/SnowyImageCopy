@@ -14,10 +14,10 @@ using System.Windows.Navigation;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Manage <see cref="WebBrowser"/>.
+	/// Manage <see cref="System.Windows.Controls.WebBrowser"/>.
 	/// </summary>
 	[TypeConstraint(typeof(WebBrowser))]
-	public class BrowserBehavior : Behavior<WebBrowser>
+	public class WebBrowserBehavior : Behavior<WebBrowser>
 	{
 		#region Property
 
@@ -33,7 +33,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			DependencyProperty.Register(
 				"TargetFile",
 				typeof(string),
-				typeof(BrowserBehavior),
+				typeof(WebBrowserBehavior),
 				new FrameworkPropertyMetadata(String.Empty));
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			DependencyProperty.Register(
 				"AlternateText",
 				typeof(string),
-				typeof(BrowserBehavior),
+				typeof(WebBrowserBehavior),
 				new FrameworkPropertyMetadata(String.Empty));
 
 		#endregion

@@ -425,7 +425,7 @@
 					Visibility="{Binding IsBrowserOpen, Converter={StaticResource BooleanToVisibilityConverterKey}}">
 					<WebBrowser Visibility="{Binding Visibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}">
 						<i:Interaction.Behaviors>
-							<behaviors:BrowserBehavior
+							<behaviors:WebBrowserBehavior
 								TargetFile="{Binding Resources.ReadmeFile, Source={x:Static models:ResourceService.Current}}"
 								AlternateText="Read readme."/>
 						</i:Interaction.Behaviors>

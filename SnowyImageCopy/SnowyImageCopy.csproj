@@ -131,7 +131,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Views\Behaviors\BrowserBehavior.cs" />
+    <Compile Include="Views\Behaviors\WebBrowserBehavior.cs" />
     <Compile Include="Views\Behaviors\ExplorerAction.cs" />
     <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
     <Compile Include="Views\Behaviors\ItemsControlChildBehavior.cs" />
