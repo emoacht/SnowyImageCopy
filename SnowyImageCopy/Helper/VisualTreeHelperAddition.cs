@@ -9,7 +9,7 @@ using System.Windows.Media;
 namespace SnowyImageCopy.Helper
 {
 	/// <summary>
-	/// Additional method for <see cref="VisualTreeHelper"/>
+	/// Additional method for <see cref="System.Windows.Media.VisualTreeHelper"/>
 	/// </summary>
 	public static class VisualTreeHelperAddition
 	{

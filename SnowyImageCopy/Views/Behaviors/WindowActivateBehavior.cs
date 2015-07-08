@@ -9,7 +9,7 @@ using System.Windows.Interactivity;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Activate <see cref="Window"/>.
+	/// Activate <see cref="System.Windows.Window"/>.
 	/// </summary>
 	[TypeConstraint(typeof(Window))]
 	public class WindowActivateBehavior : Behavior<Window>

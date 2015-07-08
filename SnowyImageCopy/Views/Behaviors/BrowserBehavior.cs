@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Manage <see cref="WebBrowser"/>.
+	/// Manage <see cref="System.Windows.Controls.WebBrowser"/>.
 	/// </summary>
 	[TypeConstraint(typeof(WebBrowser))]
 	public class BrowserBehavior : Behavior<WebBrowser>
@@ -118,6 +118,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		/// </summary>
 		/// <param name="filePath">File path</param>
 		/// <returns>File path without anchor</returns>
+		/// <remarks>Uri.GetLeftPart(UriPartial.Path) method does not work for file path.</remarks>
 		private static string RemoveAnchor(string filePath)
 		{
 			if (String.IsNullOrWhiteSpace(filePath))
