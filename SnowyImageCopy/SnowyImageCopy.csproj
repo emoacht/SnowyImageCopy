@@ -122,6 +122,8 @@
     <Compile Include="Models\Exceptions\RemoteFileThumbnailFailedException.cs" />
     <Compile Include="Models\Exceptions\UnexpectedException.cs" />
     <Compile Include="Models\Exceptions\RemoteConnectionLostException.cs" />
+    <Compile Include="Models\FileItem.cs" />
+    <Compile Include="Models\IFileItem.cs" />
     <Compile Include="Models\NetworkChecker.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -833,7 +833,9 @@ namespace SnowyImageCopy.Models
 				_card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(_card.Ssid);
 
 				// Get all items.
-				var fileListNew = await FileManager.GetFileListRootAsync(_card, _tokenSourceWorking.Token);
+				var fileListNew = (await FileManager.GetFileListRootAsync(_card, _tokenSourceWorking.Token))
+					.Select(fileItem => new FileItemViewModel(fileItem))
+					.ToList();
 				fileListNew.Sort();
 
 				// Record time stamp of write event.
@@ -872,7 +874,7 @@ namespace SnowyImageCopy.Models
 						itemOld.IsAliveRemote = true;
 						itemOld.IsAliveLocal = IsCopiedLocal(itemOld);
 						itemOld.Status = itemOld.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
-						itemOld.IsReadOnly = itemSame.IsReadOnly;
+						itemOld.FileItem = itemSame.FileItem;
 						continue;
 					}
 
