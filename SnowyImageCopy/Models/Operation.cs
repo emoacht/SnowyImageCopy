@@ -99,24 +99,24 @@ namespace SnowyImageCopy.Models
 		#region Constant
 
 		/// <summary>
-		/// Waiting time length for showing status in case of failure during auto check
+		/// Duration to show status in case of failure during auto check
 		/// </summary>
-		private readonly TimeSpan _autoWaitingLength = TimeSpan.FromSeconds(5);
+		private readonly TimeSpan _autoCheckFailureDuration = TimeSpan.FromSeconds(5);
 
 		/// <summary>
-		/// Threshold time length of intervals to actually check files during auto check
+		/// The longest interval of actual checking during auto check
 		/// </summary>
-		private readonly TimeSpan _autoThresholdLength = TimeSpan.FromMinutes(10);
+		private readonly TimeSpan _autoCheckLongestInterval = TimeSpan.FromMinutes(10);
 
 		/// <summary>
-		/// Waiting time length for showing completion of copying
+		/// Waiting duration before showing completion of copying
 		/// </summary>
-		private readonly TimeSpan _copyWaitingLength = TimeSpan.FromSeconds(0.2);
+		private readonly TimeSpan _copyWaitingDuration = TimeSpan.FromSeconds(0.2);
 
 		/// <summary>
-		/// Threshold time length of copying to determine whether to send a toast notification after copy
+		/// The shortest duration of copying to show a toast notification after copying
 		/// </summary>
-		private readonly TimeSpan _toastThresholdLength = TimeSpan.FromSeconds(30);
+		private readonly TimeSpan _copyToastShortestDuration = TimeSpan.FromSeconds(30);
 
 		#endregion
 
@@ -427,7 +427,7 @@ namespace SnowyImageCopy.Models
 			_autoTimer.Stop();
 
 			if (!await ExecuteAutoCheckAsync())
-				await Task.Delay(_autoWaitingLength);
+				await Task.Delay(_autoCheckFailureDuration);
 
 			if (IsAutoRunning)
 			{
@@ -443,7 +443,7 @@ namespace SnowyImageCopy.Models
 		private async Task<bool> ExecuteAutoCheckAsync()
 		{
 			if (_isFileListCoreViewThumbnailFilled &&
-				(DateTime.Now < LastCheckCopyTime.Add(_autoThresholdLength)))
+				(DateTime.Now < LastCheckCopyTime.Add(_autoCheckLongestInterval)))
 			{
 				var isUpdated = await CheckUpdateAsync();
 				if (!isUpdated.HasValue)
@@ -560,7 +560,7 @@ namespace SnowyImageCopy.Models
 
 				LastCheckCopyTime = DateTime.Now;
 
-				await Task.Delay(_copyWaitingLength);
+				await Task.Delay(_copyWaitingDuration);
 				UpdateProgress();
 				IsChecking = false;
 				IsCopying = false;
@@ -704,7 +704,7 @@ namespace SnowyImageCopy.Models
 
 				await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
 
-				await Task.Delay(_copyWaitingLength);
+				await Task.Delay(_copyWaitingDuration);
 				UpdateProgress();
 				IsCopying = false;
 
@@ -1135,11 +1135,11 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Show a toast to notify copy completed.
+		/// Show a toast to notify completion of copying.
 		/// </summary>
 		private async Task ShowToastAsync()
 		{
-			if (!OsVersion.IsEightOrNewer || (_copyFileCount <= 0) || (DateTime.Now - CopyStartTime < _toastThresholdLength))
+			if (!OsVersion.IsEightOrNewer || (_copyFileCount <= 0) || (DateTime.Now - CopyStartTime < _copyToastShortestDuration))
 				return;
 
 			var request = new ToastRequest
