@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 using SnowyTool.Common;
 using SnowyTool.Models;
+using SnowyTool.Properties;
 
 namespace SnowyTool.ViewModels
 {
@@ -254,12 +255,12 @@ namespace SnowyTool.ViewModels
 						continue;
 
 					CurrentConfig = configNew;
-					OperationStatus = "Found FlashAir.";
+					OperationStatus = Resources.OperationStatus_Found;
 					return;
 				}
 
 				CurrentConfig = null;
-				OperationStatus = "No FlashAir.";
+				OperationStatus = Resources.OperationStatus_No;
 			}
 			finally
 			{
@@ -282,7 +283,7 @@ namespace SnowyTool.ViewModels
 					(configNew.CID != CurrentConfig.CID))
 				{
 					SystemSounds.Hand.Play();
-					OperationStatus = "FlashAir seems changed.";
+					OperationStatus = Resources.OperationStatus_Changed;
 					return;
 				}
 
@@ -291,12 +292,12 @@ namespace SnowyTool.ViewModels
 					await CurrentConfig.WriteAsync();
 
 					SystemSounds.Asterisk.Play();
-					OperationStatus = "Applied new config.";
+					OperationStatus = Resources.OperationStatus_Applied;
 				}
 				catch (Exception ex)
 				{
 					SystemSounds.Hand.Play();
-					OperationStatus = "Failed to apply new config.";
+					OperationStatus = Resources.OperationStatus_Failed;
 					Debug.WriteLine("Failed to apply new config. {0}", ex);
 				}
 			}
