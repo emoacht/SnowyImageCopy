@@ -8,52 +8,31 @@ namespace SnowyImageCopy.Test
 	[TestClass]
 	public class SettingsTest
 	{
+		#region TryParseRemoteAddress
+
 		[TestMethod]
-		public void TryParseRemoteAddressTest1()
+		public void TestTryParseRemoteAddressValid()
 		{
-			TryParseRemoteAddressTestBase(@"http://flashair/", @"http://flashair/", String.Empty);
+			TestTryParseRemoteAddressBase(@"http://flashair/", @"http://flashair/", String.Empty);
+			TestTryParseRemoteAddressBase(@"http://flashair_012345/", @"http://flashair_012345/", String.Empty);
+			TestTryParseRemoteAddressBase(@"http://flashair/dcim", @"http://flashair/", @"dcim");
+			TestTryParseRemoteAddressBase(@"https://flashair//dcim/", @"https://flashair/", @"dcim/");
+			TestTryParseRemoteAddressBase(@"http://flashair/dcim//161___01", @"http://flashair/", @"dcim/161___01");
+			TestTryParseRemoteAddressBase(@"http://flashair:8080/dcim//161___01", @"http://flashair:8080/", @"dcim/161___01");
 		}
 
 		[TestMethod]
-		public void TryParseRemoteAddressTest2()
+		public void TestTryParseRemoteAddressInvalid()
 		{
-			TryParseRemoteAddressTestBase(@"http://flashair_012345/", @"http://flashair_012345/", String.Empty);
-		}
-
-		[TestMethod]
-		public void TryParseRemoteAddressTest3()
-		{
-			TryParseRemoteAddressTestBase(@"http://flashair/dcim", @"http://flashair/", @"dcim");
-		}
-
-		[TestMethod]
-		public void TryParseRemoteAddressTest4()
-		{
-			TryParseRemoteAddressTestBase(@"https://flashair//dcim/", @"https://flashair/", @"dcim/");
-		}
-
-		[TestMethod]
-		public void TryParseRemoteAddressTest5()
-		{
-			TryParseRemoteAddressTestBase(@"http://flashair/dcim//161___01", @"http://flashair/", @"dcim/161___01");
-		}
-
-		[TestMethod]
-		public void TryParseRemoteAddressTest6()
-		{
-			TryParseRemoteAddressTestBase(@"http:///");
-		}
-
-		[TestMethod]
-		public void TryParseRemoteAddressTest7()
-		{
-			TryParseRemoteAddressTestBase(@"http://flashair_0123456/");
+			TestTryParseRemoteAddressBase(@"http:///"); // Wrong path
+			TestTryParseRemoteAddressBase(@"http://flashair"); // No slash at the end
+			TestTryParseRemoteAddressBase(@"http://flashair_0123456/"); // Too long host name
 		}
 
 
 		#region Base
 
-		private void TryParseRemoteAddressTestBase(string source, string root, string descendant)
+		private void TestTryParseRemoteAddressBase(string source, string root, string descendant)
 		{
 			var settingsObject = new PrivateObject(new Settings());
 			var args = new object[] { source, null, null };
@@ -63,13 +42,15 @@ namespace SnowyImageCopy.Test
 			Assert.IsTrue(((string)args[2]).Equals(descendant, StringComparison.Ordinal));
 		}
 
-		private void TryParseRemoteAddressTestBase(string source)
+		private void TestTryParseRemoteAddressBase(string source)
 		{
 			var settingsObject = new PrivateObject(new Settings());
 			var args = new object[] { source, null, null };
 
 			Assert.IsFalse((bool)settingsObject.Invoke("TryParseRemoteAddress", args));
 		}
+
+		#endregion
 
 		#endregion
 	}
