@@ -980,7 +980,7 @@ namespace SnowyImageCopy.Models
 					catch (RemoteFileThumbnailFailedException)
 					{
 						item.CanGetThumbnailRemote = false;
-						_card.ThumbnailFailedPath = item.FilePath;
+						_card.RecordThumbnailFailedPath(item.FilePath);
 					}
 				}
 
