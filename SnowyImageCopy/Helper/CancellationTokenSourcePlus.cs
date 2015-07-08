@@ -77,7 +77,7 @@ namespace SnowyImageCopy.Helper
 		/// <summary>
 		/// Schedules a Cancel operation on this CancellationTokenSource if it has not been disposed.
 		/// </summary>
-		/// <param name="millisecondsDelay">Time span to wait before canceling this CancellationTokenSource</param>
+		/// <param name="millisecondsDelay">Waiting duration before canceling this CancellationTokenSource</param>
 		/// <returns>True if scheduled.</returns>
 		public bool TryCancelAfter(int millisecondsDelay)
 		{
@@ -94,7 +94,7 @@ namespace SnowyImageCopy.Helper
 		/// <summary>
 		/// Schedules a Cancel operation on this CancellationTokenSource if it has not been disposed.
 		/// </summary>
-		/// <param name="delay">Time span to wait before canceling this CancellationTokenSource</param>
+		/// <param name="delay">Waiting duration before canceling this CancellationTokenSource</param>
 		/// <returns>True if scheduled.</returns>
 		public bool TryCancelAfter(TimeSpan delay)
 		{

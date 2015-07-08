@@ -17,7 +17,7 @@ using SnowyImageCopy.Helper;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Check child items inside the viewport of <see cref="ScrollViewer"/> in <see cref="ItemsControl"/>.
+	/// Check child items inside the viewport of ScrollViewer in ItemsControl.
 	/// </summary>
 	[TypeConstraint(typeof(ItemsControl))]
 	public class ItemsControlChildBehavior : Behavior<ItemsControl>
