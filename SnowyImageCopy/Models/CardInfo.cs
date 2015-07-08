@@ -56,6 +56,7 @@ namespace SnowyImageCopy.Models
 
 				_isFirmwareVersion103OrNewer = (versionNumber >= new Version(1, 0, 3)); // If versionNumber == null, false.
 				_isFirmwareVersion202OrNewer = (versionNumber >= new Version(2, 0, 2)); // If versionNumber == null, false.
+				_isFirmwareVersion300OeNewer = (versionNumber >= new Version(3, 0, 0)); // If versionNumber == null, false.
 			}
 		}
 		private string _firmwareVersion;
@@ -63,6 +64,7 @@ namespace SnowyImageCopy.Models
 
 		private bool _isFirmwareVersion103OrNewer; // Equal to or newer than 1.00.03
 		private bool _isFirmwareVersion202OrNewer; // Equal to or newer than 2.00.02
+		private bool _isFirmwareVersion300OeNewer; // Equal to or newer than 3.00.00
 
 		#endregion
 
