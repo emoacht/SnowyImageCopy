@@ -466,8 +466,7 @@ namespace SnowyImageCopy.Models
 
 		private readonly CardInfo _card = new CardInfo();
 
-		private CancellationTokenSource _tokenSourceWorking;
-		private bool _isTokenSourceWorkingDisposed;
+		private CancellationTokenSourcePlus _tokenSourceWorking;
 
 		private DateTime LastCheckCopyTime { get; set; }
 
@@ -770,16 +769,9 @@ namespace SnowyImageCopy.Models
 		{
 			StopAutoTimer();
 
-			if (_isTokenSourceWorkingDisposed || (_tokenSourceWorking == null) || _tokenSourceWorking.IsCancellationRequested)
-				return;
-
-			try
+			if ((_tokenSourceWorking != null) && !_tokenSourceWorking.IsCancellationRequested)
 			{
-				_tokenSourceWorking.Cancel();
-			}
-			catch (ObjectDisposedException ode)
-			{
-				Debug.WriteLine("CancellationTokenSource has been disposed when tried to cancel operation. {0}", ode);
+				_tokenSourceWorking.TryCancel();
 			}
 		}
 
@@ -819,8 +811,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				_tokenSourceWorking = new CancellationTokenSource();
-				_isTokenSourceWorkingDisposed = false;
+				_tokenSourceWorking = new CancellationTokenSourcePlus();
 
 				// Check firmware version.
 				_card.FirmwareVersion = await FileManager.GetFirmwareVersionAsync(_tokenSourceWorking.Token);
@@ -1000,10 +991,7 @@ namespace SnowyImageCopy.Models
 				FileListCoreViewIndex = -1; // No selection
 
 				if (_tokenSourceWorking != null)
-				{
-					_isTokenSourceWorkingDisposed = true;
 					_tokenSourceWorking.Dispose();
-				}
 			}
 		}
 
@@ -1050,8 +1038,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				_tokenSourceWorking = new CancellationTokenSource();
-				_isTokenSourceWorkingDisposed = false;
+				_tokenSourceWorking = new CancellationTokenSourcePlus();
 
 				// Check CID.
 				if (_card.CanGetCid)
@@ -1143,10 +1130,7 @@ namespace SnowyImageCopy.Models
 				FileListCoreViewIndex = -1; // No selection
 
 				if (_tokenSourceWorking != null)
-				{
-					_isTokenSourceWorkingDisposed = true;
 					_tokenSourceWorking.Dispose();
-				}
 			}
 		}
 
@@ -1181,8 +1165,7 @@ namespace SnowyImageCopy.Models
 
 		#region Load & Save & Send
 
-		private CancellationTokenSource _tokenSourceLoading;
-		private bool _isTokenSourceLoadingDisposed;
+		private CancellationTokenSourcePlus _tokenSourceLoading;
 
 		/// <summary>
 		/// Load image data from a local file and set it to current image data.
@@ -1190,22 +1173,14 @@ namespace SnowyImageCopy.Models
 		/// <param name="item">Target item</param>
 		internal async Task LoadSetAsync(FileItemViewModel item)
 		{
-			if (!_isTokenSourceLoadingDisposed && (_tokenSourceLoading != null) && !_tokenSourceLoading.IsCancellationRequested)
+			if ((_tokenSourceLoading != null) && !_tokenSourceLoading.IsCancellationRequested)
 			{
-				try
-				{
-					_tokenSourceLoading.Cancel();
-				}
-				catch (ObjectDisposedException ode)
-				{
-					Debug.WriteLine("CancellationTokenSource has been disposed when tried to cancel operation. {0}", ode);
-				}
+				_tokenSourceLoading.TryCancel();
 			}
 
 			try
 			{
-				_tokenSourceLoading = new CancellationTokenSource();
-				_isTokenSourceLoadingDisposed = false;
+				_tokenSourceLoading = new CancellationTokenSourcePlus();
 
 				byte[] data = null;
 				if (item.IsAvailableLocal && item.CanLoadDataLocal)
@@ -1235,10 +1210,7 @@ namespace SnowyImageCopy.Models
 			finally
 			{
 				if (_tokenSourceLoading != null)
-				{
-					_isTokenSourceLoadingDisposed = true;
 					_tokenSourceLoading.Dispose();
-				}
 			}
 		}
 
