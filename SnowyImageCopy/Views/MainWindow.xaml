@@ -10,7 +10,7 @@
 					   xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
 					   xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
 					   x:Name="MainWindowRoot"
-					   Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
+					   Title="{Binding Source={x:Static views:ProductInfo.ProductInfoMiddle}, Mode=OneWay}"
 					   FontFamily="Segoe UI"
 					   Width="720" Height="480" MinWidth="640" MinHeight="280"
 					   Icon="/SnowyImageCopy;component/Resources/Feather.ico">
