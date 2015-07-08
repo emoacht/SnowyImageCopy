@@ -85,7 +85,7 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 
-		public static Settings Current { get; set; }
+		public static Settings Current { get; private set; }
 
 
 		#region Load/Save
