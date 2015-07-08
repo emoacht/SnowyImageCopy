@@ -324,13 +324,13 @@
 											<RowDefinition/>
 										</Grid.RowDefinitions>
 										<TextBlock>
-											<Run Text="{Binding Directory}"/>
+											<Run Text="{Binding Directory, Mode=OneTime}"/>
 											<LineBreak/>
-											<Run Text="{Binding FileName}"/>
+											<Run Text="{Binding FileName, Mode=OneTime}"/>
 											<LineBreak/>
-											<Run Text="{Binding Date, StringFormat=yyyy/MM/dd}"/>
+											<Run Text="{Binding Date, Mode=OneTime, StringFormat=yyyy/MM/dd}"/>
 											<LineBreak/>
-											<Run Text="{Binding Date, StringFormat=HH\\:mm\\:ss}"/>
+											<Run Text="{Binding Date, Mode=OneTime, StringFormat=HH\\:mm\\:ss}"/>
 										</TextBlock>
 										<TextBlock
 											Grid.Column="0" Grid.Row="1"
