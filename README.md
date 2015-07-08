@@ -18,6 +18,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
+Ver 1.0.1 2015-7-9
+
+ - Changed files in OneDrive that are set to online-only to be shown in thumbnails
+
 Ver 1.0.0 2015-3-31
 
  - First decent release

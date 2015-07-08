@@ -10,7 +10,7 @@
 					   xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
 					   xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
 					   x:Name="MainWindowRoot"
-					   Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
+					   Title="{Binding Source={x:Static views:ProductInfo.ProductInfoMiddle}, Mode=OneWay}"
 					   FontFamily="Segoe UI"
 					   Width="720" Height="480" MinWidth="640" MinHeight="280"
 					   Icon="/SnowyImageCopy;component/Resources/Feather.ico">
@@ -324,13 +324,13 @@
 											<RowDefinition/>
 										</Grid.RowDefinitions>
 										<TextBlock>
-											<Run Text="{Binding Directory}"/>
+											<Run Text="{Binding Directory, Mode=OneTime}"/>
 											<LineBreak/>
-											<Run Text="{Binding FileName}"/>
+											<Run Text="{Binding FileName, Mode=OneTime}"/>
 											<LineBreak/>
-											<Run Text="{Binding Date, StringFormat=yyyy/MM/dd}"/>
+											<Run Text="{Binding Date, Mode=OneTime, StringFormat=yyyy/MM/dd}"/>
 											<LineBreak/>
-											<Run Text="{Binding Date, StringFormat=HH\\:mm\\:ss}"/>
+											<Run Text="{Binding Date, Mode=OneTime, StringFormat=HH\\:mm\\:ss}"/>
 										</TextBlock>
 										<TextBlock
 											Grid.Column="0" Grid.Row="1"
@@ -425,7 +425,7 @@
 					Visibility="{Binding IsBrowserOpen, Converter={StaticResource BooleanToVisibilityConverterKey}}">
 					<WebBrowser Visibility="{Binding Visibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}">
 						<i:Interaction.Behaviors>
-							<behaviors:BrowserBehavior
+							<behaviors:WebBrowserBehavior
 								TargetFile="{Binding Resources.ReadmeFile, Source={x:Static models:ResourceService.Current}}"
 								AlternateText="Read readme."/>
 						</i:Interaction.Behaviors>

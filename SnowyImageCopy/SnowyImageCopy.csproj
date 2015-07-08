@@ -110,6 +110,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\PropertySupport.cs" />
+    <Compile Include="Helper\CancellationTokenSourcePlus.cs" />
     <Compile Include="Helper\FatDateTime.cs" />
     <Compile Include="Helper\NativeWifi.cs" />
     <Compile Include="Helper\VisualTreeHelperAddition.cs" />
@@ -122,13 +123,15 @@
     <Compile Include="Models\Exceptions\RemoteFileThumbnailFailedException.cs" />
     <Compile Include="Models\Exceptions\UnexpectedException.cs" />
     <Compile Include="Models\Exceptions\RemoteConnectionLostException.cs" />
+    <Compile Include="Models\FileItem.cs" />
+    <Compile Include="Models\IFileItem.cs" />
     <Compile Include="Models\NetworkChecker.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Views\Behaviors\BrowserBehavior.cs" />
+    <Compile Include="Views\Behaviors\WebBrowserBehavior.cs" />
     <Compile Include="Views\Behaviors\ExplorerAction.cs" />
     <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
     <Compile Include="Views\Behaviors\ItemsControlChildBehavior.cs" />

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
@@ -20,80 +18,40 @@ namespace SnowyImageCopy.ViewModels
 	{
 		#region Basic
 
-		public string Directory { get; private set; }
-		public string FileName { get; private set; }
-		public int Size { get; private set; } // In bytes
+		public string Directory { get { return _fileItem.Directory; } }
+		public string FileName { get { return _fileItem.FileName; } }
+		public int Size { get { return _fileItem.Size; } } // In bytes
 
-		public bool IsReadOnly { get; set; }
-		public bool IsHidden { get; private set; }
-		public bool IsSystemFile { get; private set; }
-		public bool IsVolume { get; private set; }
-		public bool IsDirectory { get; private set; }
-		public bool IsArchive { get; private set; }
+		public bool IsReadOnly { get { return _fileItem.IsReadOnly; } }
+		public bool IsHidden { get { return _fileItem.IsHidden; } }
+		public bool IsSystemFile { get { return _fileItem.IsSystemFile; } }
+		public bool IsVolume { get { return _fileItem.IsVolume; } }
+		public bool IsDirectory { get { return _fileItem.IsDirectory; } }
+		public bool IsArchive { get { return _fileItem.IsArchive; } }
 
-		public DateTime Date { get; private set; }
-
-		#endregion
-
-
-		#region Thumbnail
-
-		private static readonly BitmapImage _defaultThumbnail =
-			ImageManager.ConvertFrameworkElementToBitmapImage(new ThumbnailBox());
-
-		public BitmapSource Thumbnail
-		{
-			get { return _thumbnail ?? _defaultThumbnail; }
-			set
-			{
-				_thumbnail = value;
-				RaisePropertyChanged();
-			}
-		}
-		private BitmapSource _thumbnail;
-
-		public bool HasThumbnail
-		{
-			get { return _thumbnail != null; }
-		}
+		public DateTime Date { get { return _fileItem.Date; } }
 
 		#endregion
 
 
 		#region Supplementary
 
-		internal bool IsImported { get; private set; }
-
-		internal string FilePath
-		{
-			get { return String.Format("{0}/{1}", Directory, FileName); }
-		}
+		internal string FilePath { get { return _fileItem.FilePath; } }
+		internal string Signature { get { return _fileItem.Signature; } }
 
 		internal string FileNameWithCaseExtension
 		{
 			get
 			{
 				if (!Settings.Current.MakesFileExtensionLowercase)
-					return FileName;
+					return this.FileName;
 
-				var extension = Path.GetExtension(FileName);
+				var extension = Path.GetExtension(this.FileName);
 				if (String.IsNullOrEmpty(extension))
-					return FileName;
+					return this.FileName;
 
-				return Path.GetFileNameWithoutExtension(FileName) + extension.ToLower();
+				return Path.GetFileNameWithoutExtension(this.FileName) + extension.ToLower();
 			}
-		}
-
-		internal string Signature
-		{
-			get { return String.Format("{0}-{1}-{2:yyyyMMddHHmmss}", FilePath, Size, Date); }
-		}
-
-		internal FileExtension FileExtension { get; private set; }
-
-		internal bool IsImageFile
-		{
-			get { return (FileExtension != FileExtension.other); }
 		}
 
 		/// <summary>
@@ -103,7 +61,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				switch (FileExtension)
+				switch (_fileItem.FileExtension)
 				{
 					case FileExtension.jpg:
 					case FileExtension.jpeg:
@@ -127,7 +85,7 @@ namespace SnowyImageCopy.ViewModels
 				if (_canGetThumbnailRemote.HasValue)
 					return _canGetThumbnailRemote.Value;
 
-				switch (FileExtension)
+				switch (_fileItem.FileExtension)
 				{
 					case FileExtension.jpg:
 					case FileExtension.jpeg:
@@ -151,7 +109,7 @@ namespace SnowyImageCopy.ViewModels
 				if (_canLoadDataLocal.HasValue)
 					return _canLoadDataLocal.Value;
 
-				switch (FileExtension)
+				switch (_fileItem.FileExtension)
 				{
 					case FileExtension.jpg:
 					case FileExtension.jpeg:
@@ -181,21 +139,33 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private bool? _canLoadDataLocal;
 
-		private static readonly string[] _flashAirSystemFolders =
-		{
-			"GUPIXINF",
-			"SD_WLAN",
-			"100__TSB",
-		};
-
-		internal bool IsFlashAirSystemFolder
-		{
-			get { return _flashAirSystemFolders.Contains(FileName, StringComparer.OrdinalIgnoreCase); }
-		}
-
 		public override string ToString()
 		{
-			return FileName; // For the case where being called for binding
+			return this.FileName; // For the case where being called for binding
+		}
+
+		#endregion
+
+
+		#region Thumbnail
+
+		private static readonly BitmapImage _defaultThumbnail =
+			ImageManager.ConvertFrameworkElementToBitmapImage(new ThumbnailBox());
+
+		public BitmapSource Thumbnail
+		{
+			get { return _thumbnail ?? _defaultThumbnail; }
+			set
+			{
+				_thumbnail = value;
+				RaisePropertyChanged();
+			}
+		}
+		private BitmapSource _thumbnail;
+
+		public bool HasThumbnail
+		{
+			get { return _thumbnail != null; }
 		}
 
 		#endregion
@@ -210,10 +180,10 @@ namespace SnowyImageCopy.ViewModels
 				switch (Settings.Current.TargetPeriod)
 				{
 					case FilePeriod.Today:
-						return Date.Date == DateTime.Today;
+						return (this.Date.Date == DateTime.Today);
 
 					case FilePeriod.Select:
-						return Settings.Current.TargetDates.Contains(Date.Date);
+						return Settings.Current.TargetDates.Contains(this.Date.Date);
 
 					default: // FilePeriod.All
 						return true;
@@ -223,11 +193,12 @@ namespace SnowyImageCopy.ViewModels
 
 		public bool IsDescendant
 		{
-			get { return Directory.StartsWith(Settings.Current.RemoteDescendant, StringComparison.OrdinalIgnoreCase); }
+			get { return this.Directory.StartsWith(Settings.Current.RemoteDescendant, StringComparison.OrdinalIgnoreCase); }
 		}
 
 		public bool IsAliveRemote { get; set; }
 		public bool IsAliveLocal { get; set; }
+		public bool IsAvailableLocal { get; set; }
 
 		public FileStatus Status
 		{
@@ -259,35 +230,33 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Constructor
 
+		internal IFileItem FileItem
+		{
+			get { return _fileItem; }
+			set { if (value != null) { _fileItem = value; } }
+		}
+		private IFileItem _fileItem;
+
 		internal FileItemViewModel()
 			: this(String.Empty, String.Empty)
 		{ }
 
-		internal FileItemViewModel(string source, string directoryPath)
+		internal FileItemViewModel(string fileEntry, string directoryPath)
+			: this(new FileItem(fileEntry, directoryPath))
+		{ }
+
+		internal FileItemViewModel(IFileItem fileItem)
 		{
-			Import(source, directoryPath);
+			if (fileItem == null)
+				throw new ArgumentNullException("fileItem");
+
+			_fileItem = fileItem;
 
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
 				_resourcesPropertyChangedListener = new PropertyChangedEventListener(ReactResourcesPropertyChanged);
 				PropertyChangedEventManager.AddListener(ResourceService.Current, _resourcesPropertyChangedListener, "Resources");
 			}
-		}
-
-		#endregion
-
-
-		#region IComparable member
-
-		public int CompareTo(FileItemViewModel other)
-		{
-			if (other == null)
-				return 1;
-
-			var comparisonDate = this.Date.CompareTo(other.Date);
-			var comparisonFilePath = String.Compare(this.FilePath, other.FilePath, StringComparison.Ordinal);
-
-			return (comparisonDate != 0) ? comparisonDate : comparisonFilePath;
 		}
 
 		#endregion
@@ -307,124 +276,14 @@ namespace SnowyImageCopy.ViewModels
 		#endregion
 
 
-		#region Import
+		#region IComparable member
 
-		private const char _separator = ','; // Separator character (comma)
-		private static readonly Regex _asciiPattern = new Regex(@"^[\x20-\x7F]+$", RegexOptions.Compiled); // Pattern for ASCII code (alphanumeric symbols)
-
-		/// <summary>
-		/// Import file information from a file list in FlashAir card.
-		/// </summary>
-		/// <param name="source">Source string in the list</param>
-		/// <param name="remoteDirectoryPath">Remote directory path used to get the list</param>
-		internal void Import(string source, string remoteDirectoryPath)
+		public int CompareTo(FileItemViewModel other)
 		{
-			if (String.IsNullOrWhiteSpace(source))
-				return;
+			if (other == null)
+				return 1;
 
-			var sourceWithoutDirectory = source.Trim();
-
-			if (!String.IsNullOrWhiteSpace(remoteDirectoryPath))
-			{
-				// Check if the leading part of source string matches directory path. Be aware that length of 
-				// source string like "WLANSD_FILELIST" may be shorter than that of directory path.
-				if (!source.StartsWith(remoteDirectoryPath, StringComparison.OrdinalIgnoreCase))
-					return;
-
-				Directory = remoteDirectoryPath;
-
-				// Check if directory path is valid.
-				if (!_asciiPattern.IsMatch(Directory) || // This ASCII checking may be needless because response from FlashAir card seems to be encoded by ASCII.
-					Path.GetInvalidPathChars().Concat(new[] { '?' }).Any(x => Directory.Contains(x))) // '?' appears typically when byte array was not correctly encoded.
-					return;
-
-				sourceWithoutDirectory = source.Substring(remoteDirectoryPath.Length).TrimStart();
-			}
-			else
-			{
-				Directory = String.Empty;
-			}
-
-			if (!sourceWithoutDirectory.ElementAt(0).Equals(_separator))
-				return;
-
-			var elements = sourceWithoutDirectory.TrimStart(_separator)
-				.Split(new[] { _separator }, StringSplitOptions.None)
-				.ToList();
-
-			if (elements.Count < 5) // 5 means file name, size, raw attribute, raw data and raw time.
-				return;
-
-			while (elements.Count > 5) // In the case that file name includes separator character
-			{
-				elements[0] = String.Format("{0}{1}{2}", elements[0], _separator, elements[1]);
-				elements.RemoveAt(1);
-			}
-
-			FileName = elements[0].Trim();
-
-			// Check if file name is valid.
-			if (String.IsNullOrWhiteSpace(FileName) ||
-				!_asciiPattern.IsMatch(FileName) || // This ASCII checking may be needless because response from FlashAir card seems to be encoded by ASCII.
-				Path.GetInvalidFileNameChars().Any(x => FileName.Contains(x)))
-				return;
-
-			// Determine size, attribute and date.
-			int rawDate = 0;
-			int rawTime = 0;
-
-			for (int i = 1; i <= 4; i++)
-			{
-				int num;
-				if (!int.TryParse(elements[i], out num))
-					return;
-
-				switch (i)
-				{
-					case 1:
-						// In the case that file size is larger than 2GiB (Int32.MaxValue in bytes), it cannot pass 
-						// Int32.TryParse method and so such file will be ignored.
-						Size = num;
-						break;
-					case 2:
-						SetAttributes(num);
-						break;
-					case 3:
-						rawDate = num;
-						break;
-					case 4:
-						rawTime = num;
-						break;
-				}
-			}
-
-			Date = FatDateTime.ConvertFromDateIntAndTimeIntToDateTime(rawDate, rawTime);
-
-			// Determine file extension.
-			if ((0 < Size) && !IsDirectory && !IsVolume)
-			{
-				FileExtension = Enum.GetValues(typeof(FileExtension))
-					.Cast<FileExtension>()
-					.FirstOrDefault(x =>
-					{
-						var extension = Path.GetExtension(FileName); // Extension will not be null as long as FileName is not null.
-						return extension.Equals(String.Format(".{0}", x), StringComparison.OrdinalIgnoreCase);
-					});
-			}
-
-			IsImported = true;
-		}
-
-		private void SetAttributes(int rawAttribute)
-		{
-			var ba = new BitArray(new[] { rawAttribute }); // This length is always 32 because value is int.
-
-			IsReadOnly = ba[0];   // Bit 0
-			IsHidden = ba[1];     // Bit 1
-			IsSystemFile = ba[2]; // Bit 2
-			IsVolume = ba[3];     // Bit 3
-			IsDirectory = ba[4];  // Bit 4
-			IsArchive = ba[5];    // Bit 5
+			return this.FileItem.CompareTo(other.FileItem);
 		}
 
 		#endregion

@@ -11,7 +11,7 @@ using System.Windows.Interactivity;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Bring selected item of <see cref="Selector"/> into view.
+	/// Bring selected item of Selector into view.
 	/// </summary>
 	[TypeConstraint(typeof(Selector))]
 	public sealed class SelectorSelectedItemBehavior : Behavior<Selector>

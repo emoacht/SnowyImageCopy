@@ -153,7 +153,7 @@ namespace SnowyTool.ViewModels
 		/// <remarks>
 		/// Range: from 60000 to 4294967294
 		/// 300000: Default
-		/// 0: Disable automatic timeout
+		/// 0:      Disable automatic timeout
 		/// </remarks>
 		public uint APPAUTOTIME
 		{
@@ -278,11 +278,7 @@ namespace SnowyTool.ViewModels
 		/// 2: Toshiba
 		/// 3: SanDisk
 		/// </remarks>
-		public int ManufacturerID
-		{
-			get { return _manufacturerID; }
-		}
-		private int _manufacturerID;
+		public int ManufacturerID { get; private set; }
 
 		/// <summary>
 		/// OEM/Application ID (OID)
@@ -291,11 +287,7 @@ namespace SnowyTool.ViewModels
 		/// 16 bits [119:104] -> bytes 1-2 
 		/// 2-character ASCII string
 		/// </remarks>
-		public string OemApplicationID
-		{
-			get { return _oemApplicationID; }
-		}
-		private string _oemApplicationID;
+		public string OemApplicationID { get; private set; }
 
 		/// <summary>
 		/// Product Name (PNM)
@@ -304,11 +296,7 @@ namespace SnowyTool.ViewModels
 		/// 40 bits [103:64] -> bytes 3-7
 		/// 5-character ASCII string
 		/// </remarks>
-		public string ProductName
-		{
-			get { return _productName; }
-		}
-		private string _productName;
+		public string ProductName { get; private set; }
 
 		/// <summary>
 		/// Product Revision (PRV)
@@ -317,11 +305,7 @@ namespace SnowyTool.ViewModels
 		/// 8 bits [63:56] -> bytes 8
 		/// "n.m" revision number: First 4 bits [63:60] for major revision ("n") and second 4 bits [59:56] for minor revision ("m")
 		/// </remarks>
-		public string ProductRevision
-		{
-			get { return _productRevision; }
-		}
-		private string _productRevision;
+		public string ProductRevision { get; private set; }
 
 		/// <summary>
 		/// Product Serial Number (PSN)
@@ -330,11 +314,7 @@ namespace SnowyTool.ViewModels
 		/// 32 bits [55:24] -> bytes 9-12
 		/// 32-bit binary number
 		/// </remarks>
-		public uint ProductSerialNumber
-		{
-			get { return _productSerialNumber; }
-		}
-		private uint _productSerialNumber;
+		public uint ProductSerialNumber { get; private set; }
 
 		/// <summary>
 		/// Manufacturing Date (MDT)
@@ -343,11 +323,7 @@ namespace SnowyTool.ViewModels
 		/// 12 bits [19:8] -> bytes 13 (second half) and 14
 		/// 8 bits [19:12] at the head for count of years from 2000 and 4 bits [11:8] at the tail for month
 		/// </remarks>
-		public DateTime ManufacturingDate
-		{
-			get { return _manufacturingDate; }
-		}
-		private DateTime _manufacturingDate;
+		public DateTime ManufacturingDate { get; private set; }
 
 		// CID register has 128 bits = 16 bytes in total.
 		// 4 bits [23:20] are reserved.
@@ -362,11 +338,7 @@ namespace SnowyTool.ViewModels
 		/// <summary>
 		/// Disk information of associated disk
 		/// </summary>
-		public DiskInfo AssociatedDisk
-		{
-			get { return _associatedDisk; }
-		}
-		private DiskInfo _associatedDisk;
+		public DiskInfo AssociatedDisk { get; private set; }
 
 		/// <summary>
 		/// Remaining parameters in the config file
@@ -412,7 +384,7 @@ namespace SnowyTool.ViewModels
 			if (info == null)
 				throw new ArgumentNullException("info");
 
-			_associatedDisk = info;
+			AssociatedDisk = info;
 
 			var configPath = ComposeConfigPath();
 			if (!File.Exists(configPath))
@@ -593,16 +565,16 @@ namespace SnowyTool.ViewModels
 
 			var bytes = SoapHexBinary.Parse(cid).Value;
 
-			_manufacturerID = bytes[0]; // Bytes 0
-			_oemApplicationID = Encoding.ASCII.GetString(bytes.Skip(1).Take(2).ToArray()); // Bytes 1-2
-			_productName = Encoding.ASCII.GetString(bytes.Skip(3).Take(5).ToArray()); // Bytes 3-7
+			ManufacturerID = bytes[0]; // Bytes 0
+			OemApplicationID = Encoding.ASCII.GetString(bytes.Skip(1).Take(2).ToArray()); // Bytes 1-2
+			ProductName = Encoding.ASCII.GetString(bytes.Skip(3).Take(5).ToArray()); // Bytes 3-7
 
 			var productRevisionBits = new BitArray(new[] { bytes[8] }).Cast<bool>().Reverse().ToArray(); // Bytes 8
 			var major = ConvertFromBitsToInt(productRevisionBits.Take(4).Reverse());
 			var minor = ConvertFromBitsToInt(productRevisionBits.Skip(4).Take(4).Reverse());
-			_productRevision = String.Format("{0}.{1}", major, minor);
+			ProductRevision = String.Format("{0}.{1}", major, minor);
 
-			_productSerialNumber = BitConverter.ToUInt32(bytes, 9); // Bytes 9-12
+			ProductSerialNumber = BitConverter.ToUInt32(bytes, 9); // Bytes 9-12
 
 			var manufacturingDateBits = bytes.Skip(13).Take(2) // Bytes 13-14
 				.SelectMany(x => new BitArray(new[] { x }).Cast<bool>().Reverse())
@@ -613,7 +585,7 @@ namespace SnowyTool.ViewModels
 			var month = ConvertFromBitsToInt(manufacturingDateBits.Skip(8).Take(4).Reverse());
 			if ((year <= 1000) && (month <= 12))
 			{
-				_manufacturingDate = new DateTime(year + 2000, month, 1);
+				ManufacturingDate = new DateTime(year + 2000, month, 1);
 			}
 		}
 

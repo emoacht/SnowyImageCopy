@@ -513,9 +513,9 @@
             <param name="request">Toast request</param>
             <returns>Toast document</returns>
         </member>
-        <member name="F:DesktopToast.ToastManager._waitingTime">
+        <member name="F:DesktopToast.ToastManager._waitingDuration">
             <summary>
-            Waiting time length before showing a toast after the shortcut file is installed
+            Waiting duration before showing a toast after the shortcut file is installed
             </summary>
             <remarks>It seems that roughly 3 seconds are required.</remarks>
         </member>
@@ -639,9 +639,9 @@
             VersionInformation are optional.
             </remarks>
         </member>
-        <member name="P:DesktopToast.ToastRequest.WaitingTime">
+        <member name="P:DesktopToast.ToastRequest.WaitingDuration">
             <summary>
-            Waiting time length before showing a toast after the shortcut file is installed (optional)
+            Waiting duration before showing a toast after the shortcut file is installed (optional)
             </summary>
         </member>
         <member name="T:DesktopToast.ToastResult">

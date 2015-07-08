@@ -56,6 +56,7 @@ namespace SnowyImageCopy.Models
 
 				_isFirmwareVersion103OrNewer = (versionNumber >= new Version(1, 0, 3)); // If versionNumber == null, false.
 				_isFirmwareVersion202OrNewer = (versionNumber >= new Version(2, 0, 2)); // If versionNumber == null, false.
+				_isFirmwareVersion300OeNewer = (versionNumber >= new Version(3, 0, 0)); // If versionNumber == null, false.
 			}
 		}
 		private string _firmwareVersion;
@@ -63,16 +64,14 @@ namespace SnowyImageCopy.Models
 
 		private bool _isFirmwareVersion103OrNewer; // Equal to or newer than 1.00.03
 		private bool _isFirmwareVersion202OrNewer; // Equal to or newer than 2.00.02
+		private bool _isFirmwareVersion300OeNewer; // Equal to or newer than 3.00.00
 
 		#endregion
 
 
 		#region CID/SSID
 
-		public bool CanGetCid
-		{
-			get { return _isFirmwareVersion103OrNewer; }
-		}
+		public bool CanGetCid { get { return _isFirmwareVersion103OrNewer; } }
 
 		/// <summary>
 		/// CID
@@ -124,10 +123,7 @@ namespace SnowyImageCopy.Models
 
 		#region Time stamp of write event
 
-		public bool CanGetWriteTimeStamp
-		{
-			get { return _isFirmwareVersion202OrNewer; }
-		}
+		public bool CanGetWriteTimeStamp { get { return _isFirmwareVersion202OrNewer; } }
 
 		/// <summary>
 		/// Time stamp of write event
@@ -139,24 +135,7 @@ namespace SnowyImageCopy.Models
 
 		#region Thumbnail
 
-		public string ThumbnailFailedPath
-		{
-			set
-			{
-				if (_thumbnailFailedPathes == null)
-					_thumbnailFailedPathes = new List<string>();
-
-				if (!_thumbnailFailedPathes.Contains(value))
-					_thumbnailFailedPathes.Add(value);
-			}
-		}
-
-		public IReadOnlyList<string> ThumbnailFailedPathes
-		{
-			get { return _thumbnailFailedPathes ?? (_thumbnailFailedPathes = new List<string>()); }
-		}
 		private List<string> _thumbnailFailedPathes;
-
 		private const int _thumbnailFailedPathesCountMax = 3;
 
 		public bool CanGetThumbnail
@@ -164,15 +143,21 @@ namespace SnowyImageCopy.Models
 			get { return ((_thumbnailFailedPathes == null) || (_thumbnailFailedPathes.Count < _thumbnailFailedPathesCountMax)); }
 		}
 
+		public void RecordThumbnailFailedPath(string filePath)
+		{
+			if (_thumbnailFailedPathes == null)
+				_thumbnailFailedPathes = new List<string>();
+
+			if (!_thumbnailFailedPathes.Contains(filePath))
+				_thumbnailFailedPathes.Add(filePath);
+		}
+
 		#endregion
 
 
 		#region Upload
 
-		public bool CanGetUpload
-		{
-			get { return _isFirmwareVersion202OrNewer; }
-		}
+		public bool CanGetUpload { get { return _isFirmwareVersion202OrNewer; } }
 
 		/// <summary>
 		/// Upload parameters

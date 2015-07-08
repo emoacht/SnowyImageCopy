@@ -62,7 +62,6 @@ namespace SnowyImageCopy.Helper
 				throw new ArgumentNullException("source");
 
 			var handleBitmap = source.GetHbitmap();
-
 			try
 			{
 				return Imaging.CreateBitmapSourceFromHBitmap(

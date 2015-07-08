@@ -9,7 +9,10 @@ namespace SnowyImageCopy.Models
 	/// <summary>
 	/// Progress information for reporting
 	/// </summary>
-	/// <remarks>This class must be instantiated each time for reporting.</remarks>
+	/// <remarks>
+	/// <para>This class must be instantiated each time for reporting.</para>
+	/// <para>This class should be immutable.</para>
+	/// </remarks>
 	internal class ProgressInfo
 	{
 		/// <summary>

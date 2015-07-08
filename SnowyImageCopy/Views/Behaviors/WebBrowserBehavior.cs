@@ -14,10 +14,10 @@ using System.Windows.Navigation;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Manage <see cref="WebBrowser"/>.
+	/// Manage <see cref="System.Windows.Controls.WebBrowser"/>.
 	/// </summary>
 	[TypeConstraint(typeof(WebBrowser))]
-	public class BrowserBehavior : Behavior<WebBrowser>
+	public class WebBrowserBehavior : Behavior<WebBrowser>
 	{
 		#region Property
 
@@ -33,7 +33,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			DependencyProperty.Register(
 				"TargetFile",
 				typeof(string),
-				typeof(BrowserBehavior),
+				typeof(WebBrowserBehavior),
 				new FrameworkPropertyMetadata(String.Empty));
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			DependencyProperty.Register(
 				"AlternateText",
 				typeof(string),
-				typeof(BrowserBehavior),
+				typeof(WebBrowserBehavior),
 				new FrameworkPropertyMetadata(String.Empty));
 
 		#endregion
@@ -87,7 +87,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			}
 
 			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, TargetFile);
-			if (File.Exists(RemoveAnchor(path)))
+			if (File.Exists(RemoveFragment(path)))
 				this.AssociatedObject.Navigate(path);
 			else
 				this.AssociatedObject.NavigateToString(AlternateText);
@@ -111,19 +111,20 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#region Helper
 
-		private static readonly Regex _anchorPattern = new Regex(@"(?<path>.+\.(?:htm|html))#.*", RegexOptions.Compiled);
+		private static readonly Regex _fragmentPattern = new Regex(@"(?<path>.+\.(?:htm|html))#.*");
 
 		/// <summary>
-		/// Remove anchor at the end of htm/html file path.
+		/// Remove fragment at the end of htm/html file path.
 		/// </summary>
 		/// <param name="filePath">File path</param>
-		/// <returns>File path without anchor</returns>
-		private static string RemoveAnchor(string filePath)
+		/// <returns>File path without fragment</returns>
+		/// <remarks>Uri.GetLeftPart(UriPartial.Path) method does not work for file path.</remarks>
+		private static string RemoveFragment(string filePath)
 		{
 			if (String.IsNullOrWhiteSpace(filePath))
 				return filePath;
 
-			var match = _anchorPattern.Match(filePath);
+			var match = _fragmentPattern.Match(filePath);
 			if (!match.Success)
 				return filePath;
 

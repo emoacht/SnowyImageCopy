@@ -53,9 +53,9 @@ namespace SnowyImageCopy.ViewModels
 
 		public CompositeDisposable Subscription
 		{
-			get { return _subscription ?? (_subscription = new CompositeDisposable()); }
+			get { return _subscription.Value; }
 		}
-		private CompositeDisposable _subscription;
+		private Lazy<CompositeDisposable> _subscription = new Lazy<CompositeDisposable>(() => new CompositeDisposable());
 
 		bool _disposed;
 
@@ -72,8 +72,8 @@ namespace SnowyImageCopy.ViewModels
 
 			if (disposing)
 			{
-				if (_subscription != null)
-					_subscription.Dispose();
+				if (_subscription.IsValueCreated)
+					_subscription.Value.Dispose();
 			}
 
 			_disposed = true;

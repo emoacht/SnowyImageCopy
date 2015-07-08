@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 using SnowyTool.Common;
 using SnowyTool.Models;
+using SnowyTool.Properties;
 
 namespace SnowyTool.ViewModels
 {
@@ -237,13 +238,14 @@ namespace SnowyTool.ViewModels
 		#region Search/Apply
 
 		private bool _isSearching;
+		private bool _isApplying;
 
 		private async Task SearchConfigAsync()
 		{
-			_isSearching = true;
-
 			try
 			{
+				_isSearching = true;
+
 				var drives = await Task.Run(() => DiskSearcher.Search());
 
 				foreach (var drive in drives.Where(x => x.CanBeSD).OrderBy(x => x.PhysicalDrive))
@@ -254,12 +256,12 @@ namespace SnowyTool.ViewModels
 						continue;
 
 					CurrentConfig = configNew;
-					OperationStatus = "Found FlashAir.";
+					OperationStatus = Resources.OperationStatus_Found;
 					return;
 				}
 
 				CurrentConfig = null;
-				OperationStatus = "No FlashAir.";
+				OperationStatus = Resources.OperationStatus_No;
 			}
 			finally
 			{
@@ -268,21 +270,19 @@ namespace SnowyTool.ViewModels
 			}
 		}
 
-		private bool _isApplying;
-
 		private async Task ApplyConfigAsync()
 		{
-			_isApplying = true;
-
 			try
 			{
+				_isApplying = true;
+
 				var configNew = new ConfigViewModel();
 
 				if (!await configNew.ReadAsync(CurrentConfig.AssociatedDisk) ||
 					(configNew.CID != CurrentConfig.CID))
 				{
 					SystemSounds.Hand.Play();
-					OperationStatus = "FlashAir seems changed.";
+					OperationStatus = Resources.OperationStatus_Changed;
 					return;
 				}
 
@@ -291,12 +291,12 @@ namespace SnowyTool.ViewModels
 					await CurrentConfig.WriteAsync();
 
 					SystemSounds.Asterisk.Play();
-					OperationStatus = "Applied new config.";
+					OperationStatus = Resources.OperationStatus_Applied;
 				}
 				catch (Exception ex)
 				{
 					SystemSounds.Hand.Play();
-					OperationStatus = "Failed to apply new config.";
+					OperationStatus = Resources.OperationStatus_Failed;
 					Debug.WriteLine("Failed to apply new config. {0}", ex);
 				}
 			}
