@@ -30,7 +30,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Interval of monitoring network connection during operation
 		/// </summary>
-		private static readonly TimeSpan _monitorInterval = TimeSpan.FromSeconds(2);
+		private static readonly TimeSpan _monitoringInterval = TimeSpan.FromSeconds(2);
 
 		/// <summary>
 		/// The maximum count of retry 
@@ -593,7 +593,7 @@ namespace SnowyImageCopy.Models
 									{
 										((TaskCompletionSource<bool>)s).TrySetResult(true);
 									}
-								}, tcs, _monitorInterval, _monitorInterval))
+								}, tcs, _monitoringInterval, _monitoringInterval))
 								{
 									var monitorTask = tcs.Task;
 
@@ -656,7 +656,7 @@ namespace SnowyImageCopy.Models
 
 												readLengthTotal += readLength;
 
-												monitorTimer.Change(_monitorInterval, _monitorInterval);
+												monitorTimer.Change(_monitoringInterval, _monitoringInterval);
 
 												// Report if read length in total exceeds stepped length.
 												if (stepCurrent / stepTotal * size <= readLengthTotal)
