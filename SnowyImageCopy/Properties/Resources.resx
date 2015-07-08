@@ -281,7 +281,7 @@
     <value>Path</value>
   </data>
   <data name="Options_Recycle" xml:space="preserve">
-    <value>Move to Recycle if image in FlashAir is deleted</value>
+    <value>Move to Recycle Bin if image in FlashAir is deleted</value>
   </data>
   <data name="Options_RemoteAddress" xml:space="preserve">
     <value>FlashAir Address (Copy Source)</value>
