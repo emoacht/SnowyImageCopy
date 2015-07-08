@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -39,7 +40,7 @@ namespace SnowyImageCopy.Helper
 		[DllImport("Wlanapi.dll", SetLastError = true)]
 		private static extern uint WlanGetAvailableNetworkList(
 			IntPtr hClientHandle,
-			[MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
+			[MarshalAs(UnmanagedType.LPStruct)] Guid pInterfaceGuid,
 			uint dwFlags,
 			IntPtr pReserved,
 			out IntPtr ppAvailableNetworkList);
@@ -47,7 +48,7 @@ namespace SnowyImageCopy.Helper
 		[DllImport("Wlanapi.dll", SetLastError = true)]
 		private static extern uint WlanQueryInterface(
 			IntPtr hClientHandle,
-			[MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
+			[MarshalAs(UnmanagedType.LPStruct)] Guid pInterfaceGuid,
 			WLAN_INTF_OPCODE OpCode,
 			IntPtr pReserved,
 			out uint pdwDataSize,
@@ -313,141 +314,169 @@ namespace SnowyImageCopy.Helper
 
 
 		/// <summary>
-		/// Get SSIDs of available wireless networks.
+		/// Enumerate SSIDs of available wireless networks.
 		/// </summary>
 		/// <returns>SSIDs</returns>
-		public static IEnumerable<string> GetAvailableNetworkSsid()
+		public static IEnumerable<string> EnumerateAvailableNetworkSsids()
 		{
-			var clientHandle = IntPtr.Zero;
-			var interfaceList = IntPtr.Zero;
-			var availableNetworkList = IntPtr.Zero;
-
-			try
+			using (var client = new WlanClient())
 			{
-				uint negotiatedVersion;
-				if (WlanOpenHandle(
-					2, // Client version for Windows Vista and Windows Server 2008
-					IntPtr.Zero,
-					out negotiatedVersion,
-					out clientHandle) != ERROR_SUCCESS)
-					yield break;
+				var interfaceInfoList = GetWlanInterfaceInfoList(client.Handle);
 
-				if (WlanEnumInterfaces(
-					clientHandle,
-					IntPtr.Zero,
-					out interfaceList) != ERROR_SUCCESS)
-					yield break;
+				Debug.WriteLine("Interface info count: {0}", interfaceInfoList.Length);
 
-				var interfaceInfoList = new WLAN_INTERFACE_INFO_LIST(interfaceList);
-
-				for (int i = 0; i < interfaceInfoList.dwNumberOfItems; i++)
+				foreach (var interfaceInfo in interfaceInfoList)
 				{
-					var interfaceGuid = interfaceInfoList.InterfaceInfo[i].InterfaceGuid;
+					var availableNetworkList = GetWlanAvailableNetworkList(client.Handle, interfaceInfo.InterfaceGuid);
 
-					if (WlanGetAvailableNetworkList(
-						clientHandle,
-						interfaceGuid,
-						WLAN_AVAILABLE_NETWORK_INCLUDE_ALL_MANUAL_HIDDEN_PROFILES,
-						IntPtr.Zero,
-						out availableNetworkList) != ERROR_SUCCESS)
-						continue;
-
-					var networkList = new WLAN_AVAILABLE_NETWORK_LIST(availableNetworkList);
-
-					for (int j = 0; j < networkList.dwNumberOfItems; j++)
+					foreach (var availableNetwork in availableNetworkList)
 					{
-						var network = networkList.Network[j];
-
 						Debug.WriteLine("Interface: {0}, SSID: {1}, Quality: {2}",
-							interfaceInfoList.InterfaceInfo[i].strInterfaceDescription,
-							network.dot11Ssid.ToSsidString(),
-							network.wlanSignalQuality);
+							interfaceInfo.strInterfaceDescription,
+							availableNetwork.dot11Ssid.ToSsidString(),
+							availableNetwork.wlanSignalQuality);
 
-						yield return network.dot11Ssid.ToSsidString();
+						yield return availableNetwork.dot11Ssid.ToSsidString();
 					}
 				}
-			}
-			finally
-			{
-				if (availableNetworkList != IntPtr.Zero)
-					WlanFreeMemory(availableNetworkList);
-
-				if (interfaceList != IntPtr.Zero)
-					WlanFreeMemory(interfaceList);
-
-				if (clientHandle != IntPtr.Zero)
-					WlanCloseHandle(clientHandle, IntPtr.Zero);
 			}
 		}
 
 		/// <summary>
-		/// Get SSIDs of connected wireless networks.
+		/// Enumerate SSIDs of connected wireless networks.
 		/// </summary>
 		/// <returns>SSIDs</returns>
-		public static IEnumerable<string> GetConnectedNetworkSsid()
+		public static IEnumerable<string> EnumerateConnectedNetworkSsids()
 		{
-			var clientHandle = IntPtr.Zero;
-			var interfaceList = IntPtr.Zero;
-			var queryData = IntPtr.Zero;
-
-			try
+			using (var client = new WlanClient())
 			{
-				uint negotiatedVersion;
-				if (WlanOpenHandle(
-					2, // Client version for Windows Vista and Windows Server 2008
-					IntPtr.Zero,
-					out negotiatedVersion,
-					out clientHandle) != ERROR_SUCCESS)
-					yield break;
+				var interfaceInfoList = GetWlanInterfaceInfoList(client.Handle);
 
-				if (WlanEnumInterfaces(
-					clientHandle,
-					IntPtr.Zero,
-					out interfaceList) != ERROR_SUCCESS)
-					yield break;
+				Debug.WriteLine("Interface info count: {0}", interfaceInfoList.Length);
 
-				var interfaceInfoList = new WLAN_INTERFACE_INFO_LIST(interfaceList);
-
-				for (int i = 0; i < interfaceInfoList.dwNumberOfItems; i++)
+				foreach (var interfaceInfo in interfaceInfoList)
 				{
-					var interfaceGuid = interfaceInfoList.InterfaceInfo[i].InterfaceGuid;
-
-					uint dataSize;
-					if (WlanQueryInterface(
-						clientHandle,
-						interfaceGuid,
-						WLAN_INTF_OPCODE.wlan_intf_opcode_current_connection,
-						IntPtr.Zero,
-						out dataSize,
-						ref queryData,
-						IntPtr.Zero) != ERROR_SUCCESS)
-						continue;
-
-					var connection = (WLAN_CONNECTION_ATTRIBUTES)Marshal.PtrToStructure(queryData, typeof(WLAN_CONNECTION_ATTRIBUTES));
-					if (connection.isState != WLAN_INTERFACE_STATE.wlan_interface_state_connected)
+					var connection = GetWlanConnectionAttributes(client.Handle, interfaceInfo.InterfaceGuid);
+					if (connection.Equals(default(WLAN_CONNECTION_ATTRIBUTES)) ||
+						connection.isState != WLAN_INTERFACE_STATE.wlan_interface_state_connected)
 						continue;
 
 					var association = connection.wlanAssociationAttributes;
 
 					Debug.WriteLine("Interface: {0}, SSID: {1}, Quality: {2}",
-						interfaceInfoList.InterfaceInfo[i].strInterfaceDescription,
+						interfaceInfo.strInterfaceDescription,
 						association.dot11Ssid.ToSsidString(),
 						association.wlanSignalQuality);
 
 					yield return association.dot11Ssid.ToSsidString();
 				}
 			}
+		}
+
+
+		#region Helper
+
+		private sealed class WlanClient : IDisposable
+		{
+			private IntPtr _clientHandle = IntPtr.Zero;
+
+			public IntPtr Handle { get { return _clientHandle; } }
+
+			public WlanClient()
+			{
+				uint negotiatedVersion;
+				var result = WlanOpenHandle(
+					2, // Client version for Windows Vista and Windows Server 2008
+					IntPtr.Zero,
+					out negotiatedVersion,
+					out _clientHandle);
+				if (result != ERROR_SUCCESS)
+					throw new Win32Exception((int)result);
+			}
+
+			public void Dispose()
+			{
+				if (_clientHandle != IntPtr.Zero)
+					WlanCloseHandle(_clientHandle, IntPtr.Zero);
+			}
+		}
+
+		private static WLAN_INTERFACE_INFO[] GetWlanInterfaceInfoList(IntPtr clientHandle)
+		{
+			var interfaceList = IntPtr.Zero;
+			try
+			{
+				var result = WlanEnumInterfaces(
+					clientHandle,
+					IntPtr.Zero,
+					out interfaceList);
+				if (result != ERROR_SUCCESS)
+					throw new Win32Exception((int)result);
+
+				return new WLAN_INTERFACE_INFO_LIST(interfaceList).InterfaceInfo;
+			}
+			finally
+			{
+				if (interfaceList != IntPtr.Zero)
+					WlanFreeMemory(interfaceList);
+			}
+		}
+
+		private static WLAN_AVAILABLE_NETWORK[] GetWlanAvailableNetworkList(IntPtr clientHandle, Guid interfaceGuid)
+		{
+			var availableNetworkList = IntPtr.Zero;
+			try
+			{
+				var result = WlanGetAvailableNetworkList(
+					clientHandle,
+					interfaceGuid,
+					WLAN_AVAILABLE_NETWORK_INCLUDE_ALL_MANUAL_HIDDEN_PROFILES,
+					IntPtr.Zero,
+					out availableNetworkList);
+				if (result != ERROR_SUCCESS)
+					throw new Win32Exception((int)result);
+
+				return new WLAN_AVAILABLE_NETWORK_LIST(availableNetworkList).Network;
+			}
+			finally
+			{
+				if (availableNetworkList != IntPtr.Zero)
+					WlanFreeMemory(availableNetworkList);
+			}
+		}
+
+		private static WLAN_CONNECTION_ATTRIBUTES GetWlanConnectionAttributes(IntPtr clientHandle, Guid interfaceGuid)
+		{
+			var queryData = IntPtr.Zero;
+			try
+			{
+				uint dataSize;
+				var result = WlanQueryInterface(
+					clientHandle,
+					interfaceGuid,
+					WLAN_INTF_OPCODE.wlan_intf_opcode_current_connection,
+					IntPtr.Zero,
+					out dataSize,
+					ref queryData,
+					IntPtr.Zero);
+
+				switch (result)
+				{
+					case ERROR_SUCCESS:
+						return (WLAN_CONNECTION_ATTRIBUTES)Marshal.PtrToStructure(queryData, typeof(WLAN_CONNECTION_ATTRIBUTES));
+					case ERROR_INVALID_STATE: // If not connected to a network, this value will be returned.
+						return default(WLAN_CONNECTION_ATTRIBUTES);
+					default:
+						throw new Win32Exception((int)result);
+				}
+			}
 			finally
 			{
 				if (queryData != IntPtr.Zero)
 					WlanFreeMemory(queryData);
-
-				if (interfaceList != IntPtr.Zero)
-					WlanFreeMemory(interfaceList);
-
-				if (clientHandle != IntPtr.Zero)
-					WlanCloseHandle(clientHandle, IntPtr.Zero);
 			}
 		}
+
+		#endregion
 	}
 }
