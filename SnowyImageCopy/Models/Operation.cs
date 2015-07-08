@@ -374,7 +374,8 @@ namespace SnowyImageCopy.Models
 
 			_isFileListCoreViewThumbnailFilled = FileListCore
 				.Where(x => x.IsTarget && (x.Size != 0))
-				.All(x => x.HasThumbnail || (!(x.IsAliveRemote && x.CanGetThumbnailRemote) && !(x.IsAliveLocal && x.CanLoadDataLocal)));
+				.Where(x => (x.IsAliveRemote && x.CanGetThumbnailRemote) || (x.IsAliveLocal && x.IsAvailableLocal && x.CanLoadDataLocal))
+				.All(x => x.HasThumbnail);
 		}
 
 		internal void StartAutoTimer()
@@ -872,8 +873,6 @@ namespace SnowyImageCopy.Models
 						fileListNew.Remove(itemSame);
 
 						itemOld.IsAliveRemote = true;
-						itemOld.IsAliveLocal = IsCopiedLocal(itemOld);
-						itemOld.Status = itemOld.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
 						itemOld.FileItem = itemSame.FileItem;
 						continue;
 					}
@@ -892,10 +891,17 @@ namespace SnowyImageCopy.Models
 					}
 
 					itemNew.IsAliveRemote = true;
-					itemNew.IsAliveLocal = IsCopiedLocal(itemNew);
-					itemNew.Status = itemNew.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
 
 					FileListCore.Insert(itemNew); // Customized Insert method
+				}
+
+				// Check all local files.
+				foreach (var item in FileListCore)
+				{
+					var info = GetFileInfoLocal(item);
+					item.IsAliveLocal = IsAliveLocal(info, item.Size);
+					item.IsAvailableLocal = IsAvailableLocal(info);
+					item.Status = item.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
 				}
 
 				// Manage lost items.
@@ -936,9 +942,9 @@ namespace SnowyImageCopy.Models
 				}
 
 				// Get thumbnails (from local).
-				foreach (var item in FileListCore)
+				foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))
 				{
-					if (!item.IsTarget || item.HasThumbnail || (item.Status != FileStatus.Copied) || !item.IsAliveLocal || !item.CanLoadDataLocal)
+					if (!item.IsAliveLocal || !item.IsAvailableLocal || !item.CanLoadDataLocal)
 						continue;
 
 					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
@@ -957,7 +963,7 @@ namespace SnowyImageCopy.Models
 					}
 					catch (IOException)
 					{
-						item.CanLoadDataLocal = false;
+						item.IsAvailableLocal = false;
 					}
 					catch (ImageNotSupportedException)
 					{
@@ -966,9 +972,9 @@ namespace SnowyImageCopy.Models
 				}
 
 				// Get thumbnails (from remote).
-				foreach (var item in FileListCore)
+				foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))
 				{
-					if (!item.IsTarget || item.HasThumbnail || (item.Status == FileStatus.Copied) || !item.IsAliveRemote || !item.CanGetThumbnailRemote)
+					if (!item.IsAliveRemote || !item.CanGetThumbnailRemote)
 						continue;
 
 					if (!_card.CanGetThumbnail)
@@ -1104,6 +1110,7 @@ namespace SnowyImageCopy.Models
 
 						item.CopiedTime = DateTime.Now;
 						item.IsAliveLocal = true;
+						item.IsAvailableLocal = true;
 						item.Status = FileStatus.Copied;
 
 						_copyFileCount++;
@@ -1123,7 +1130,7 @@ namespace SnowyImageCopy.Models
 					}
 
 					if (Settings.Current.DeleteOnCopy &&
-						!item.IsReadOnly && IsCopiedLocal(item))
+						!item.IsReadOnly && IsAliveLocal(item))
 					{
 						await FileManager.DeleteFileAsync(item.FilePath, _tokenSourceWorking.Token);
 					}
@@ -1200,11 +1207,9 @@ namespace SnowyImageCopy.Models
 				_tokenSourceLoading = new CancellationTokenSource();
 				_isTokenSourceLoadingDisposed = false;
 
-				var localPath = ComposeLocalPath(item);
-
 				byte[] data = null;
-				if (item.CanLoadDataLocal)
-					data = await FileAddition.ReadAllBytesAsync(localPath, _tokenSourceLoading.Token);
+				if (item.IsAvailableLocal && item.CanLoadDataLocal)
+					data = await FileAddition.ReadAllBytesAsync(ComposeLocalPath(item), _tokenSourceLoading.Token);
 
 				CurrentItem = item;
 				CurrentImageData = data;
@@ -1220,7 +1225,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (IOException)
 			{
-				item.CanLoadDataLocal = false;
+				item.IsAvailableLocal = false;
 			}
 			catch (Exception ex)
 			{
@@ -1340,15 +1345,46 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check if a local file exists.
+		/// Get FileInfo of a local file.
 		/// </summary>
 		/// <param name="item">Target item</param>
-		/// <returns>True if exists</returns>
-		private static bool IsCopiedLocal(FileItemViewModel item)
+		/// <returns>FileInfo</returns>
+		private static FileInfo GetFileInfoLocal(FileItemViewModel item)
 		{
 			var localPath = ComposeLocalPath(item);
 
-			return File.Exists(localPath) && (new FileInfo(localPath).Length == item.Size);
+			return File.Exists(localPath) ? new FileInfo(localPath) : null;
+		}
+
+		/// <summary>
+		/// Check if a local file exists
+		/// </summary>
+		/// <param name="item">Target item</param>
+		/// <returns>True if exists</returns>
+		private static bool IsAliveLocal(FileItemViewModel item)
+		{
+			return IsAliveLocal(GetFileInfoLocal(item), item.Size);
+		}
+
+		/// <summary>
+		/// Check if a local file exists.
+		/// </summary>
+		/// <param name="info">FileInfo of a local file</param>
+		/// <param name="size">File size of a local file</param>
+		/// <returns>True if exists</returns>
+		private static bool IsAliveLocal(FileInfo info, int size)
+		{
+			return (info != null) && (info.Length == size);
+		}
+
+		/// <summary>
+		/// Check if a local file is available (not offline) in relation to OneDrive.
+		/// </summary>
+		/// <param name="info">FileInfo of a local file</param>
+		/// <returns>True if available</returns>
+		private static bool IsAvailableLocal(FileInfo info)
+		{
+			return (info != null) && !info.Attributes.HasFlag(FileAttributes.Offline);
 		}
 
 		#endregion
