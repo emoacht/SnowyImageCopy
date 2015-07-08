@@ -474,7 +474,7 @@ namespace SnowyImageCopy.Models
 		private int _copyFileCount;
 
 
-		#region 1st tier
+		#region 1st layer
 
 		/// <summary>
 		/// Check if content of FlashAir card is updated.
@@ -778,7 +778,7 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 
-		#region 2nd tier
+		#region 2nd layer
 
 		/// <summary>
 		/// Check if ready for operation.

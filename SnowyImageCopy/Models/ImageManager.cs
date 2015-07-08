@@ -697,10 +697,7 @@ namespace SnowyImageCopy.Models
 			{
 				DateTime dateTaken;
 				if (DateTime.TryParse(bitmapMetadata.DateTaken, out dateTaken))
-				{
-					//Debug.WriteLine("Exif DateTaken: {0}", dateTaken);
 					return dateTaken;
-				}
 			}
 
 			return default(DateTime);
@@ -725,10 +722,7 @@ namespace SnowyImageCopy.Models
 					{
 						int orientation;
 						if (int.TryParse(value.ToString(), out orientation))
-						{
-							//Debug.WriteLine("Exif Orientation: {0}", orientation);
 							return orientation;
-						}
 					}
 				}
 			}

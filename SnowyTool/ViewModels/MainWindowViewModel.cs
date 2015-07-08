@@ -238,13 +238,14 @@ namespace SnowyTool.ViewModels
 		#region Search/Apply
 
 		private bool _isSearching;
+		private bool _isApplying;
 
 		private async Task SearchConfigAsync()
 		{
-			_isSearching = true;
-
 			try
 			{
+				_isSearching = true;
+
 				var drives = await Task.Run(() => DiskSearcher.Search());
 
 				foreach (var drive in drives.Where(x => x.CanBeSD).OrderBy(x => x.PhysicalDrive))
@@ -269,14 +270,12 @@ namespace SnowyTool.ViewModels
 			}
 		}
 
-		private bool _isApplying;
-
 		private async Task ApplyConfigAsync()
 		{
-			_isApplying = true;
-
 			try
 			{
+				_isApplying = true;
+
 				var configNew = new ConfigViewModel();
 
 				if (!await configNew.ReadAsync(CurrentConfig.AssociatedDisk) ||
