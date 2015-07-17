@@ -19,8 +19,16 @@ namespace SnowyTool.ViewModels
 	{
 		#region Type
 
-		private class MonitoredMemberAttribute : Attribute
-		{ }
+		[AttributeUsage(AttributeTargets.Property)]
+		private class PersistentMemberAttribute : Attribute
+		{
+			public bool IsMonitored { get; private set; }
+
+			public PersistentMemberAttribute(bool isMonitored = false)
+			{
+				this.IsMonitored = isMonitored;
+			}
+		}
 
 		#endregion
 
@@ -39,7 +47,7 @@ namespace SnowyTool.ViewModels
 		/// 6: Wireless LAN functionality will be set when the card is turned on. Sets the Wireless LAN to Internet pass-thru mode. (FW 2.00.02+)
 		/// Other: Undefined behavior.
 		/// </remarks>
-		[MonitoredMember]
+		[PersistentMember(true)]
 		public int APPMODE
 		{
 			get { return _APPMODE; }
@@ -59,7 +67,7 @@ namespace SnowyTool.ViewModels
 		/// Format: 15 characters
 		/// If this parameter does not exist or empty, default name "flashair" will be used.
 		/// </remarks>
-		[MonitoredMember]
+		[PersistentMember(true)]
 		public string APPNAME
 		{
 			get { return _APPNAME; }
@@ -80,7 +88,7 @@ namespace SnowyTool.ViewModels
 		/// For STA mode, SSID of external Access Point.
 		/// If this parameter is not set, default string "flashair_" will be used.
 		/// </remarks>
-		[MonitoredMember]
+		[PersistentMember(true)]
 		public string APPSSID
 		{
 			get { return _APPSSID; }
@@ -99,7 +107,7 @@ namespace SnowyTool.ViewModels
 		/// Format: 0-64 characters (at least 8 characters are required to enable security functionality) 
 		/// Once rebooted, this value will be saved in hidden area in FlashAir and this value will be masked.
 		/// </remarks>
-		[MonitoredMember]
+		[PersistentMember(true)]
 		public string APPNETWORKKEY
 		{
 			get { return _APPNETWORKKEY; }
@@ -117,7 +125,7 @@ namespace SnowyTool.ViewModels
 		/// <remarks>
 		/// Format: 1-32 characters
 		/// </remarks>
-		[MonitoredMember]
+		[PersistentMember(true)]
 		public string BRGSSID
 		{
 			get { return _BRGSSID; }
@@ -135,7 +143,7 @@ namespace SnowyTool.ViewModels
 		/// <remarks>
 		/// Format: 0-64 characters
 		/// </remarks>
-		[MonitoredMember]
+		[PersistentMember(true)]
 		public string BRGNETWORKKEY
 		{
 			get { return _BRGNETWORKKEY; }
@@ -155,6 +163,7 @@ namespace SnowyTool.ViewModels
 		/// 300000: Default
 		/// 0:      Disable automatic timeout
 		/// </remarks>
+		[PersistentMember]
 		public uint APPAUTOTIME
 		{
 			get { return _APPAUTOTIME; }
@@ -175,6 +184,7 @@ namespace SnowyTool.ViewModels
 		/// 0: Returns the FlashAir's IP Address only if the DNS request is done with the APPNAME or "flashair".
 		/// 1: Returns the FlashAir's IP Address to any DNS requests.
 		/// </remarks>
+		[PersistentMember]
 		public int DNSMODE
 		{
 			get { return _DNSMODE; }
@@ -190,7 +200,7 @@ namespace SnowyTool.ViewModels
 		/// Other: Upload operation disabled.
 		/// If this parameter does not exist, upload operation will be regarded as disabled.
 		/// </remarks>
-		[MonitoredMember]
+		[PersistentMember(true)]
 		public int UPLOAD
 		{
 			get { return _UPLOAD; }
@@ -205,6 +215,7 @@ namespace SnowyTool.ViewModels
 		/// <summary>
 		/// Upload destination directory
 		/// </summary>
+		[PersistentMember]
 		public string UPDIR { get; set; }
 
 		/// <summary>
@@ -214,6 +225,7 @@ namespace SnowyTool.ViewModels
 		/// Full-path of the image to use as the wireless boot screen.
 		/// This image is used when Wireless LAN mode (APPMODE) is 0, 1, or 2.
 		/// </remarks>
+		[PersistentMember]
 		public string CIPATH
 		{
 			get { return _CIPATH; }
@@ -227,6 +239,7 @@ namespace SnowyTool.ViewModels
 		/// <remarks>
 		/// Format: 12-digit hexadecimal number
 		/// </remarks>
+		[PersistentMember]
 		public string MASTERCODE { get; set; }
 
 		/// <summary>
@@ -235,6 +248,7 @@ namespace SnowyTool.ViewModels
 		/// <remarks>
 		/// Format: 32-digit hexadecimal number
 		/// </remarks>
+		[PersistentMember]
 		public string CID
 		{
 			get { return _CID; }
@@ -250,17 +264,20 @@ namespace SnowyTool.ViewModels
 		/// Product code
 		/// </summary>
 		/// <remarks>This is always "FlashAir".</remarks>
+		[PersistentMember]
 		public string PRODUCT { get; set; }
 
 		/// <summary>
 		/// Vendor code
 		/// </summary>
 		/// <remarks>This is always "TOSHIBA".</remarks>
+		[PersistentMember]
 		public string VENDOR { get; set; }
 
 		/// <summary>
 		/// Firmware version
 		/// </summary>
+		[PersistentMember]
 		public string VERSION { get; set; }
 
 		#endregion
@@ -449,13 +466,13 @@ namespace SnowyTool.ViewModels
 
 		#region Import/Export
 
-		private static readonly PropertyInfo[] _writableProperties = typeof(ConfigViewModel)
-			.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
-			.Where(x => x.CanWrite) // CanWrite means not readonly property.
+		private static readonly PropertyInfo[] _persistentProperties = typeof(ConfigViewModel)
+			.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+			.Where(x => x.IsDefined(typeof(PersistentMemberAttribute)))
 			.ToArray();
 
-		private static readonly PropertyInfo[] _monitoredProperties = _writableProperties
-			.Where(x => x.GetCustomAttribute(typeof(MonitoredMemberAttribute)) != null)
+		private static readonly PropertyInfo[] _monitoredProperties = _persistentProperties
+			.Where(x => ((PersistentMemberAttribute)x.GetCustomAttribute(typeof(PersistentMemberAttribute))).IsMonitored)
 			.ToArray();
 
 		private string[] _monitoredValues;
@@ -482,7 +499,7 @@ namespace SnowyTool.ViewModels
 
 				foreach (var c in contents)
 				{
-					var p = _writableProperties.FirstOrDefault(x => c.Key == x.Name);
+					var p = _persistentProperties.FirstOrDefault(x => c.Key == x.Name);
 					if (p == null)
 					{
 						if (!_remaining.Keys.Contains(c.Key))
@@ -504,6 +521,8 @@ namespace SnowyTool.ViewModels
 				}
 
 				_monitoredValues = GetMonitoredValues().ToArray();
+
+				RemoveTemporaryMembers(_remaining); // Remove temporary members added by bug.
 			}
 			finally
 			{
@@ -514,7 +533,7 @@ namespace SnowyTool.ViewModels
 		internal string Export()
 		{
 			// Turn empty string value to null.
-			foreach (var p in _writableProperties)
+			foreach (var p in _persistentProperties)
 			{
 				var value = p.GetValue(this) as string;
 				if (value == null)
@@ -531,7 +550,7 @@ namespace SnowyTool.ViewModels
 			// Compose outcome.
 			var outcome = new List<string>();
 
-			foreach (var p in _writableProperties)
+			foreach (var p in _persistentProperties)
 			{
 				var value = p.GetValue(this);
 				if (value == null)
@@ -549,6 +568,28 @@ namespace SnowyTool.ViewModels
 			outcome.Insert(1, String.Empty);
 
 			return String.Join(Environment.NewLine, outcome);
+		}
+
+		private static readonly string[] _temporaryMemberNames =
+		{
+			"ManufacturerID",
+			"OemApplicationID",
+			"ProductName",
+			"ProductRevision",
+			"ProductSerialNumber",
+			"ManufacturingDate",
+			"AssociatedDisk"
+		};
+
+		private static void RemoveTemporaryMembers(Dictionary<string, string> source)
+		{
+			var sourceNames = source.Select(x => x.Key).ToArray();
+
+			if (!_temporaryMemberNames.All(x => sourceNames.Contains(x)))
+				return;
+
+			foreach (var name in _temporaryMemberNames)
+				source.Remove(name);
 		}
 
 		#endregion
