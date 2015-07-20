@@ -211,7 +211,6 @@
     <Compile Include="Views\Converters\BooleanInverseConverter.cs" />
     <Compile Include="Views\Converters\BooleanInverseToThicknessConverter.cs" />
     <Compile Include="Views\Converters\BooleanInverseToVisibilityConverter.cs" />
-    <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
     <Compile Include="Views\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\FileStatusToBrushConverter.cs" />
     <Compile Include="Views\Converters\FileStatusToStringConverter.cs" />

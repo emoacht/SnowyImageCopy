@@ -21,13 +21,13 @@ namespace SnowyTool.Views.Converters
 			.ToArray();
 
 		/// <summary>
-		/// Return a SolidColorBrush when source Boolean is false.
+		/// Inverse Boolean and convert it to Brush.
 		/// </summary>
-		/// <param name="value">Source Boolean</param>
+		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>
-		/// <param name="parameter">predefined color name</param>
+		/// <param name="parameter">Predefined color name</param>
 		/// <param name="culture"></param>
-		/// <returns>SolidColorBrush of the predefined color</returns>
+		/// <returns>SolidColorBrush of the predefined color if Boolean is false.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (!(value is bool) || (bool)value || (parameter == null))

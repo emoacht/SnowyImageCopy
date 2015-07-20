@@ -16,13 +16,13 @@ namespace SnowyImageCopy.Views.Converters
 	public class BooleanInverseConverter : IValueConverter
 	{
 		/// <summary>
-		/// Inverse Boolean when source Boolean equals to condition Boolean (optional).
+		/// Inverse Boolean.
 		/// </summary>
 		/// <param name="value">Source Boolean</param>
 		/// <param name="targetType"></param>
 		/// <param name="parameter">Condition Boolean string (optional)</param>
 		/// <param name="culture"></param>
-		/// <returns>Boolean</returns>
+		/// <returns>Inversed Boolean except if condition Boolean is given and does not match source Boolean.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			return ConvertBase(value, parameter);

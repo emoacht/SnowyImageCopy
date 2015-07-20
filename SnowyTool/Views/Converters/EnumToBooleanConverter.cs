@@ -10,19 +10,19 @@ using System.Windows.Data;
 namespace SnowyTool.Views.Converters
 {
 	/// <summary>
-	/// Convert Enum to Boolean.
+	/// Convert between Enum and Boolean.
 	/// </summary>
 	[ValueConversion(typeof(Enum), typeof(bool))]
 	public class EnumToBooleanConverter : IValueConverter
 	{
 		/// <summary>
-		/// Return true when source Enum name matches target Enum name string.
+		/// Convert Enum value to Boolean.
 		/// </summary>
-		/// <param name="value">Source Enum name</param>
+		/// <param name="value">Enum value</param>
 		/// <param name="targetType"></param>
 		/// <param name="parameter">Target Enum name string</param>
 		/// <param name="culture"></param>
-		/// <returns>Boolean</returns>
+		/// <returns>True if Enum name matches target Enum name string. False if not.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (!(value is Enum) || (parameter == null))
@@ -32,22 +32,23 @@ namespace SnowyTool.Views.Converters
 		}
 
 		/// <summary>
-		/// Return Enum name when source Boolean is true.
+		/// Convert Boolean to Enum value.
 		/// </summary>
-		/// <param name="value">Source Boolean</param>
+		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>
 		/// <param name="parameter">Target Enum name string</param>
 		/// <param name="culture"></param>
-		/// <returns>Enum name</returns>
+		/// <returns>Target Enum value if Boolean is true.</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (!(value is bool) || !(bool)value || (parameter == null))
 				return DependencyProperty.UnsetValue;
 
-			var name = Enum.GetNames(targetType)
-				.FirstOrDefault(x => x.ToString(CultureInfo.InvariantCulture).Equals(parameter.ToString(), StringComparison.OrdinalIgnoreCase));
+			var enumValue = Enum.GetValues(targetType)
+				.Cast<Enum>()
+				.FirstOrDefault(x => x.ToString().Equals(parameter.ToString(), StringComparison.OrdinalIgnoreCase));
 
-			return name ?? DependencyProperty.UnsetValue;
+			return enumValue ?? DependencyProperty.UnsetValue;
 		}
 	}
 }

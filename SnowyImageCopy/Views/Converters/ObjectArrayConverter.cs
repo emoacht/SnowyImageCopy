@@ -9,7 +9,7 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Convert object array to object to relay the change of objects.
+	/// Convert object array to object for relaying the change of objects.
 	/// </summary>
 	public class ObjectArrayConverter : IMultiValueConverter
 	{

@@ -10,8 +10,7 @@
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
 			<converters:BooleanInverseToThicknessConverter x:Key="BooleanInverseToThicknessConverterKey"/>
 			<converters:BooleanInverseToVisibilityConverter x:Key="BooleanInverseToVisibilityConverterKey"/>
-
-			<converters:EnumToBooleanConverter x:Key="EnumToBooleanConverterKey"/>
+			
 			<converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverterKey"/>
 
 			<converters:FileStatusToBrushConverter x:Key="FileStatusToBrushConverterKey"/>

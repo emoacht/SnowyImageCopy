@@ -9,6 +9,9 @@ using System.Windows.Data;
 
 namespace SnowyTool.Views.Converters
 {
+	/// <summary>
+	/// Convert between Boolean and Nullable Boolean.
+	/// </summary>
 	[ValueConversion(typeof(bool?), typeof(bool))]
 	public class NullableBooleanToBooleanConverter : IValueConverter
 	{

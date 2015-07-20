@@ -10,7 +10,7 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Inverse Boolean and then convert it to Visibility.
+	/// Convert between inversed Boolean and Visibility.
 	/// </summary>
 	[ValueConversion(typeof(bool), typeof(Visibility))]
 	public class BooleanInverseToVisibilityConverter : IValueConverter
