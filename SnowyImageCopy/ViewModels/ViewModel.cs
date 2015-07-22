@@ -19,29 +19,25 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Property name
 
-		private Dictionary<string, string> _propertyNameMap;
+		private Lazy<Dictionary<string, string>> _propertyNameMap = new Lazy<Dictionary<string, string>>(() => new Dictionary<string, string>());
 
-		protected virtual string GetPropertyName([CallerMemberName] string callerPropertyName = null)
+		protected string GetPropertyName([CallerMemberName] string callerPropertyName = null)
 		{
 			if (String.IsNullOrEmpty(callerPropertyName))
 				return null;
 
-			return ((_propertyNameMap != null) && _propertyNameMap.ContainsKey(callerPropertyName))
-				? _propertyNameMap[callerPropertyName]
+			return _propertyNameMap.Value.ContainsKey(callerPropertyName)
+				? _propertyNameMap.Value[callerPropertyName]
 				: null;
 		}
 
-		protected virtual string GetPropertyName<T>(Expression<Func<T>> propertyExpression, [CallerMemberName] string callerPropertyName = null)
+		protected string GetPropertyName<T>(Expression<Func<T>> propertyExpression, [CallerMemberName] string callerPropertyName = null)
 		{
 			if (String.IsNullOrEmpty(callerPropertyName))
 				return null;
 
-			var calledPropertyName = PropertySupport.GetPropertyName(propertyExpression);
-
-			if (_propertyNameMap == null)
-				_propertyNameMap = new Dictionary<string, string>();
-
-			_propertyNameMap.Add(callerPropertyName, calledPropertyName);
+			var calledPropertyName = PropertySupport.GetPropertyName(propertyExpression);			
+			_propertyNameMap.Value.Add(callerPropertyName, calledPropertyName);
 
 			return calledPropertyName;
 		}
@@ -51,13 +47,10 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Dispose
 
-		public CompositeDisposable Subscription
-		{
-			get { return _subscription.Value; }
-		}
+		protected CompositeDisposable Subscription { get { return _subscription.Value; } }
 		private Lazy<CompositeDisposable> _subscription = new Lazy<CompositeDisposable>(() => new CompositeDisposable());
 
-		bool _disposed;
+		private bool _disposed = false;
 
 		public void Dispose()
 		{
