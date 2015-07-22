@@ -21,12 +21,24 @@ namespace SnowyImageCopy.Models.Exceptions
 		public RemoteFileNotFoundException() { }
 		public RemoteFileNotFoundException(string message) : base(message) { }
 		public RemoteFileNotFoundException(string message, Exception inner) : base(message, inner) { }
-		protected RemoteFileNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
 		public RemoteFileNotFoundException(string message, string filePath)
 			: base(message)
 		{
 			this.FilePath = filePath;
+		}
+
+		protected RemoteFileNotFoundException(SerializationInfo info, StreamingContext context)
+			: base(info, context)
+		{
+			this.FilePath = info.GetString("FilePath");
+		}
+
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			base.GetObjectData(info, context);
+
+			info.AddValue("FilePath", this.FilePath);
 		}
 
 		#endregion
