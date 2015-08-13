@@ -5,9 +5,9 @@
 		<ResourceDictionary Source="CustomTheme.xaml"/>
 	</ResourceDictionary.MergedDictionaries>
 
-<!--=================================================
+	<!--==========================================
 	 Custom styles, templates for common controls
-==================================================-->
+	===========================================-->
 
 	<!-- Focus Visual for Button -->
 	<Style x:Key="ButtonFocusVisual">
