@@ -64,9 +64,7 @@ namespace SnowyImageCopy.Models
 		{
 			var handler = this.ErrorsChanged;
 			if (handler != null)
-			{
 				handler(this, new DataErrorsChangedEventArgs(propertyName));
-			}
 		}
 
 		public IEnumerable GetErrors(string propertyName)
@@ -85,109 +83,13 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 
-		public static Settings Current { get; private set; }
+		public static Settings Current { get { return _current; } }
+		private static readonly Settings _current = new Settings();
 
-
-		#region Load/Save
-
-		private const string _settingsFile = "settings.xml";
-
-		private static readonly string _settingsPath = Path.Combine(
-			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-			Assembly.GetExecutingAssembly().GetName().Name,
-			_settingsFile);
-
-		private static bool _isLoaded;
-
-		public static void Load()
-		{
-			try
-			{
-				Current = ReadXmlFile<Settings>(_settingsPath);
-			}
-			catch (FileNotFoundException)
-			{
-				// This exception is normal when this application runs the first time and so no previous settings file exists.
-			}
-			catch (Exception ex)
-			{
-				throw new Exception("Failed to read a XML file.", ex);
-			}
-
-			if (Current == null)
-				Current = GetDefaultSettings();
-
-			_isLoaded = true;
-		}
-
-		public static void Save()
-		{
-			if (!_isLoaded)
-				return;
-
-			try
-			{
-				WriteXmlFile<Settings>(Current, _settingsPath);
-			}
-			catch (Exception ex)
-			{
-				throw new Exception("Failed to write a XML file.", ex);
-			}
-		}
-
-		private static T ReadXmlFile<T>(string filePath) where T : new()
-		{
-			if (!File.Exists(filePath))
-				throw new FileNotFoundException("File seems missing.", filePath);
-
-			using (var fs = new FileStream(filePath, FileMode.Open))
-			{
-				var serializer = new XmlSerializer(typeof(T));
-				return (T)serializer.Deserialize(fs);
-			}
-		}
-
-		private static void WriteXmlFile<T>(T data, string filePath) where T : new()
-		{
-			var folderPath = Path.GetDirectoryName(filePath);
-			if (!String.IsNullOrEmpty(folderPath) && !Directory.Exists(folderPath))
-				Directory.CreateDirectory(folderPath);
-
-			using (var fs = new FileStream(filePath, FileMode.Create))
-			{
-				var serializer = new XmlSerializer(typeof(T));
-				serializer.Serialize(fs, data);
-			}
-		}
-
-		#endregion
-
-
-		#region Window Placement
-
-		public WindowPlacement.WINDOWPLACEMENT? Placement;
-
-		#endregion
+		public WindowPlacement.WINDOWPLACEMENT? Placement { get; set; }
 
 
 		#region Settings
-
-		private static Settings GetDefaultSettings()
-		{
-			return new Settings
-			{
-				TargetPeriod = FilePeriod.All,
-				IsCurrentImageVisible = false,
-				InstantCopy = true,
-				DeleteOnCopy = false,
-				AutoCheckInterval = 30,
-				MakesFileExtensionLowercase = true,
-				MovesFileToRecycle = false,
-				EnablesChooseDeleteOnCopy = false,
-				SelectsReadOnlyFile = false,
-			};
-		}
-
 
 		#region Path
 
@@ -282,7 +184,7 @@ namespace SnowyImageCopy.Models
 				RaisePropertyChanged();
 			}
 		}
-		private FilePeriod _targetPeriod = FilePeriod.All;
+		private FilePeriod _targetPeriod = FilePeriod.All; // Default
 
 		public ObservableCollection<DateTime> TargetDates
 		{
@@ -350,7 +252,7 @@ namespace SnowyImageCopy.Models
 				RaisePropertyChanged();
 			}
 		}
-		private bool _instantCopy;
+		private bool _instantCopy = true; // Default
 
 		public bool DeleteOnCopy
 		{
@@ -389,7 +291,7 @@ namespace SnowyImageCopy.Models
 				RaisePropertyChanged();
 			}
 		}
-		private int _autoCheckInterval;
+		private int _autoCheckInterval = 30; // Default
 
 		#endregion
 
@@ -408,7 +310,7 @@ namespace SnowyImageCopy.Models
 				RaisePropertyChanged();
 			}
 		}
-		private bool _makesFileExtensionLowercase;
+		private bool _makesFileExtensionLowercase = true; // Default
 
 		public bool MovesFileToRecycle
 		{
@@ -472,6 +374,92 @@ namespace SnowyImageCopy.Models
 		private string _cultureName;
 
 		#endregion
+
+		#endregion
+
+
+		#region Load/Save
+
+		public static bool IsLoaded { get; private set; }
+
+		private const string _settingsFileName = "settings.xml";
+		private static readonly string _settingsFilePath = Path.Combine(FolderPathAppData, _settingsFileName);
+
+		public static void Load()
+		{
+			try
+			{
+				if (File.Exists(_settingsFilePath))
+				{
+					using (var fs = new FileStream(_settingsFilePath, FileMode.Open, FileAccess.Read))
+					{
+						var serializer = new XmlSerializer(typeof(Settings));
+						var loaded = (Settings)serializer.Deserialize(fs);
+
+						typeof(Settings)
+							.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+							.Where(x => x.CanWrite)
+							.ToList()
+							.ForEach(x => x.SetValue(Current, x.GetValue(loaded)));
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Failed to load settings.", ex);
+			}
+
+			IsLoaded = true;
+		}
+
+		public static void Save()
+		{
+			if (!IsLoaded)
+				return;
+
+			try
+			{
+				PrepareFolderAppData();
+
+				using (var fs = new FileStream(_settingsFilePath, FileMode.Create, FileAccess.Write))
+				{
+					var serializer = new XmlSerializer(typeof(Settings));
+					serializer.Serialize(fs, Current);
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Failed to save settings.", ex);
+			}
+		}
+
+		#endregion
+
+
+		#region Prepare
+
+		private static string FolderPathAppData
+		{
+			get
+			{
+				if (_folderPathAppData == null)
+				{
+					var pathAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+					if (string.IsNullOrEmpty(pathAppData)) // This should not happen.
+						throw new DirectoryNotFoundException();
+
+					_folderPathAppData = Path.Combine(pathAppData, Assembly.GetExecutingAssembly().GetName().Name);
+				}
+				return _folderPathAppData;
+			}
+		}
+		private static string _folderPathAppData;
+
+		private static void PrepareFolderAppData()
+		{
+			if (!Directory.Exists(FolderPathAppData))
+				Directory.CreateDirectory(FolderPathAppData);
+		}
 
 		#endregion
 	}
