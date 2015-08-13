@@ -76,9 +76,10 @@ namespace SnowyImageCopy.Models
 			{
 				using (var ms = new MemoryStream())
 				{
-					return await ms.WriteAsync(bytes, 0, bytes.Length)
-						.ContinueWith(_ => ReadThumbnailFromExifByImaging(ms))
-						.ConfigureAwait(false);
+					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+
+					// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
+					return ReadThumbnailFromExifByImaging(ms);
 				}
 			}
 			catch (Exception ex)
@@ -110,9 +111,10 @@ namespace SnowyImageCopy.Models
 				using (var fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 				using (var ms = new MemoryStream())
 				{
-					return await fs.CopyToAsync(ms)
-						.ContinueWith(_ => CreateThumbnailFromImageUniform(ms))
-						.ConfigureAwait(false);
+					await fs.CopyToAsync(ms).ConfigureAwait(false);
+
+					// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
+					return CreateThumbnailFromImageUniform(ms);
 				}
 			}
 			catch (Exception ex)
@@ -140,9 +142,10 @@ namespace SnowyImageCopy.Models
 			{
 				using (var ms = new MemoryStream())
 				{
-					return await ms.WriteAsync(bytes, 0, bytes.Length)
-						.ContinueWith(_ => CreateThumbnailFromImageUniform(ms))
-						.ConfigureAwait(false);
+					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+
+					// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
+					return CreateThumbnailFromImageUniform(ms);
 				}
 			}
 			catch (Exception ex)
