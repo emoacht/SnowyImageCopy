@@ -820,7 +820,7 @@ namespace SnowyImageCopy.Models
 				if (_card.CanGetCid)
 					_card.Cid = await FileManager.GetCidAsync(_tokenSourceWorking.Token);
 
-				// Check SSID and check if PC is connected to FlashAir card by wireless network.
+				// Check SSID and check if PC is connected to FlashAir card by a wireless connection.
 				_card.Ssid = await FileManager.GetSsidAsync(_tokenSourceWorking.Token);
 				_card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(_card.Ssid);
 
