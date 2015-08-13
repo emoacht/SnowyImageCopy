@@ -224,8 +224,8 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				if ((ex.GetType() == typeof(RemoteFileNotFoundException)) ||
-					((ex.GetType() == typeof(RemoteConnectionUnableException)) &&
+				if ((ex is RemoteFileNotFoundException) ||
+					((ex is RemoteConnectionUnableException) &&
 					(((RemoteConnectionUnableException)ex).Code == HttpStatusCode.InternalServerError)))
 				{
 					// If image file is not JPEG format or if there is no Exif standardized thumbnail stored,
@@ -677,7 +677,6 @@ namespace SnowyImageCopy.Models
 							}
 						}
 					}
-					// Sort out exceptions.					
 					catch (OperationCanceledException) // Including TaskCanceledException
 					{
 						if (!cancellationToken.IsCancellationRequested)
@@ -698,9 +697,9 @@ namespace SnowyImageCopy.Models
 					}
 					catch (IOException ie)
 					{
-						var inner = ie.InnerException;
-						if ((inner != null) && (inner.GetType() == typeof(WebException)) &&
-							(((WebException)inner).Status == WebExceptionStatus.ConnectionClosed) &&
+						var webException = ie.InnerException as WebException;
+						if ((webException != null) &&
+							(webException.Status == WebExceptionStatus.ConnectionClosed) &&
 							cancellationToken.IsCancellationRequested)
 							// If cancellation has been requested during downloading, this exception may be thrown.
 							throw new OperationCanceledException();
@@ -709,12 +708,12 @@ namespace SnowyImageCopy.Models
 					}
 					catch (HttpRequestException hre)
 					{
-						var inner = hre.InnerException;
-						if ((inner != null) && (inner.GetType() == typeof(WebException)))
+						var webException = hre.InnerException as WebException;
+						if (webException != null)
 							// If unable to connect to FlashAir card, this exception will be thrown.
 							// The Status may vary, such as WebExceptionStatus.NameResolutionFailure,
 							// WebExceptionStatus.ConnectFailure.
-							throw new RemoteConnectionUnableException(((WebException)hre.InnerException).Status);
+							throw new RemoteConnectionUnableException(webException.Status);
 
 						throw;
 					}

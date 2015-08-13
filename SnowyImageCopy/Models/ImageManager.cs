@@ -893,18 +893,17 @@ namespace SnowyImageCopy.Models
 		/// <param name="ex">Exception</param>
 		private static bool IsImageNotSupported(Exception ex)
 		{
-			if (ex.GetType() == typeof(FileFormatException))
+			if (ex is FileFormatException)
 				return true;
 
 			// Windows Imaging Component (WIC) defined error code
-			// This description is: No imaging component suitable to complete this operation was found.
+			// This description is "No imaging component suitable to complete this operation was found."
 			const uint WINCODEC_ERR_COMPONENTNOTFOUND = 0x88982F50;
 
-			if (ex.GetType() == typeof(NotSupportedException))
+			if (ex is NotSupportedException)
 			{
 				var innerException = ex.InnerException;
-				if ((innerException != null) &&
-					(innerException.GetType() == typeof(COMException)) &&
+				if ((innerException is COMException) &&
 					((uint)innerException.HResult == WINCODEC_ERR_COMPONENTNOTFOUND))
 					return true;
 			}

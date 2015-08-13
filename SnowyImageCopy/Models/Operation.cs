@@ -507,15 +507,15 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				if (ex.GetType() == typeof(RemoteConnectionUnableException))
+				if (ex is RemoteConnectionUnableException)
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionUnable;
 				}
-				else if (ex.GetType() == typeof(RemoteConnectionLostException))
+				else if (ex is RemoteConnectionLostException)
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionLost;
 				}
-				else if (ex.GetType() == typeof(TimeoutException))
+				else if (ex is TimeoutException)
 				{
 					OperationStatus = Resources.OperationStatus_TimedOut;
 				}
@@ -581,35 +581,35 @@ namespace SnowyImageCopy.Models
 				if (!IsAutoRunning)
 					SystemSounds.Hand.Play();
 
-				if (ex.GetType() == typeof(RemoteConnectionUnableException))
+				if (ex is RemoteConnectionUnableException)
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionUnable;
 				}
-				else if (ex.GetType() == typeof(RemoteConnectionLostException))
+				else if (ex is RemoteConnectionLostException)
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionLost;
 				}
-				else if (ex.GetType() == typeof(RemoteFileNotFoundException))
+				else if (ex is RemoteFileNotFoundException)
 				{
 					OperationStatus = Resources.OperationStatus_NotFolderFound;
 				}
-				else if (ex.GetType() == typeof(TimeoutException))
+				else if (ex is TimeoutException)
 				{
 					OperationStatus = Resources.OperationStatus_TimedOut;
 				}
-				else if (ex.GetType() == typeof(UnauthorizedAccessException))
+				else if (ex is UnauthorizedAccessException)
 				{
 					OperationStatus = Resources.OperationStatus_UnauthorizedAccess;
 				}
-				else if (ex.GetType() == typeof(CardChangedException))
+				else if (ex is CardChangedException)
 				{
 					OperationStatus = Resources.OperationStatus_NotSameFlashAir;
 				}
-				else if (ex.GetType() == typeof(CardUploadDisabledException))
+				else if (ex is CardUploadDisabledException)
 				{
 					OperationStatus = Resources.OperationStatus_DeleteDisabled;
 				}
-				else if (ex.GetType() == typeof(RemoteFileDeletionFailedException))
+				else if (ex is RemoteFileDeletionFailedException)
 				{
 					OperationStatus = Resources.OperationStatus_DeleteFailed;
 				}
@@ -661,19 +661,19 @@ namespace SnowyImageCopy.Models
 				UpdateProgress(new ProgressInfo(isError: true));
 				SystemSounds.Hand.Play();
 
-				if (ex.GetType() == typeof(RemoteConnectionUnableException))
+				if (ex is RemoteConnectionUnableException)
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionUnable;
 				}
-				else if (ex.GetType() == typeof(RemoteConnectionLostException))
+				else if (ex is RemoteConnectionLostException)
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionLost;
 				}
-				else if (ex.GetType() == typeof(RemoteFileNotFoundException))
+				else if (ex is RemoteFileNotFoundException)
 				{
 					OperationStatus = Resources.OperationStatus_NotFolderFound;
 				}
-				else if (ex.GetType() == typeof(TimeoutException))
+				else if (ex is TimeoutException)
 				{
 					OperationStatus = Resources.OperationStatus_TimedOut;
 				}
@@ -720,31 +720,31 @@ namespace SnowyImageCopy.Models
 				UpdateProgress(new ProgressInfo(isError: true));
 				SystemSounds.Hand.Play();
 
-				if (ex.GetType() == typeof(RemoteConnectionUnableException))
+				if (ex is RemoteConnectionUnableException)
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionUnable;
 				}
-				else if (ex.GetType() == typeof(RemoteConnectionLostException))
+				else if (ex is RemoteConnectionLostException)
 				{
 					OperationStatus = Resources.OperationStatus_ConnectionLost;
 				}
-				else if (ex.GetType() == typeof(TimeoutException))
+				else if (ex is TimeoutException)
 				{
 					OperationStatus = Resources.OperationStatus_TimedOut;
 				}
-				else if (ex.GetType() == typeof(UnauthorizedAccessException))
+				else if (ex is UnauthorizedAccessException)
 				{
 					OperationStatus = Resources.OperationStatus_UnauthorizedAccess;
 				}
-				else if (ex.GetType() == typeof(CardChangedException))
+				else if (ex is CardChangedException)
 				{
 					OperationStatus = Resources.OperationStatus_NotSameFlashAir;
 				}
-				else if (ex.GetType() == typeof(CardUploadDisabledException))
+				else if (ex is CardUploadDisabledException)
 				{
 					OperationStatus = Resources.OperationStatus_DeleteDisabled;
 				}
-				else if (ex.GetType() == typeof(RemoteFileDeletionFailedException))
+				else if (ex is RemoteFileDeletionFailedException)
 				{
 					OperationStatus = Resources.OperationStatus_DeleteFailed;
 				}
