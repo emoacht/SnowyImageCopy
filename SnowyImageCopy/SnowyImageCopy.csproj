@@ -125,6 +125,7 @@
     <Compile Include="Models\Exceptions\RemoteConnectionLostException.cs" />
     <Compile Include="Models\FileItem.cs" />
     <Compile Include="Models\IFileItem.cs" />
+    <Compile Include="Models\LogService.cs" />
     <Compile Include="Models\NetworkChecker.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

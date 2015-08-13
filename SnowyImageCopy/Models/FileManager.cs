@@ -777,35 +777,14 @@ namespace SnowyImageCopy.Models
 		/// <param name="responseBytes">Response byte array</param>
 		private static async Task RecordDownloadStringAsync(string requestPath, byte[] responseBytes)
 		{
-			var filePath = Path.Combine(
-				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				Assembly.GetExecutingAssembly().GetName().Name,
-				"download.log");
-
-			try
+			var result = String.Join(Environment.NewLine, new[]
 			{
-				if (File.Exists(filePath) &&
-					(File.GetLastWriteTime(filePath) < DateTime.Now.AddHours(-1)))
-					File.Delete(filePath);
+				String.Format("request => {0}", requestPath),
+				"response -> ",
+				Encoding.ASCII.GetString(responseBytes)
+			});
 
-				var result = new[]
-				{
-					String.Format("[{0:HH:mm:ss fff}]", DateTime.Now),
-					String.Format("request => {0}", requestPath),
-					"response -> ",
-					Encoding.ASCII.GetString(responseBytes)
-				}
-				.Aggregate(String.Empty, (work, next) => work + next + Environment.NewLine);
-
-				using (var sw = new StreamWriter(filePath, true, Encoding.UTF8))
-				{
-					await sw.WriteAsync(result);
-				}
-			}
-			catch (Exception ex)
-			{
-				Trace.WriteLine(String.Format("Failed to record download log to AppData. {0}", ex));
-			}
+			await LogService.RecordStringAsync("download.log", result);
 		}
 
 		#endregion
