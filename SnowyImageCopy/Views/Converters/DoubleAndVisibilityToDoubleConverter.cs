@@ -41,13 +41,13 @@ namespace SnowyImageCopy.Views.Converters
 				.Select(x => x.Length)
 				.ToArray();
 
-			if (!sourceLengths.Any())
+			if (sourceLengths.Length == 0)
 				return double.NaN; // DependencyProperty.UnsetValue has the same effect.
 
 			if (sourceLengths.Length == 1)
 				return sourceLengths[0];
 
-			var order = ((parameter == null) || (parameter.ToString().Equals(Order.Add.ToString(), StringComparison.OrdinalIgnoreCase)))
+			var order = ((parameter == null) || parameter.ToString().Equals(Order.Add.ToString(), StringComparison.OrdinalIgnoreCase))
 				? Order.Add
 				: Order.Subtract;
 

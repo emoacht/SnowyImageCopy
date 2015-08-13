@@ -105,7 +105,7 @@ namespace SnowyImageCopy.Models
 					.ToArray();
 			}
 
-			return _args.Any() && options.Any() && _args.Intersect(options).Any();
+			return (options != null) && _args.Intersect(options).Any();
 		}
 
 		#endregion

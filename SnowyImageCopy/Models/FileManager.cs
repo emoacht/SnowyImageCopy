@@ -561,8 +561,7 @@ namespace SnowyImageCopy.Models
 							}
 
 							if ((0 < size) &&
-								(!response.Content.Headers.ContentLength.HasValue ||
-								 (response.Content.Headers.ContentLength.Value != size)))
+								(response.Content.Headers.ContentLength != size))
 								throw new RemoteFileInvalidException("Data length does not match!", path);
 
 							// Because of HttpCompletionOption.ResponseHeadersRead option, neither CancellationToken

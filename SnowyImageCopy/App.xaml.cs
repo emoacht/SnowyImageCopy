@@ -31,7 +31,7 @@ namespace SnowyImageCopy
 			if (CommandLine.ShowsUsage)
 			{
 				CommandLine.ShowUsage();
-				this.Shutdown();
+				Application.Current.Shutdown();
 				return;
 			}
 
