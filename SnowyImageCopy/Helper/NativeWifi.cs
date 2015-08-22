@@ -94,7 +94,7 @@ namespace SnowyImageCopy.Helper
 				for (int i = 0; i < dwNumberOfItems; i++)
 				{
 					var interfaceInfo = new IntPtr(ppInterfaceList.ToInt64() + (Marshal.SizeOf(typeof(WLAN_INTERFACE_INFO)) * i) + offset);
-					InterfaceInfo[i] = (WLAN_INTERFACE_INFO)Marshal.PtrToStructure(interfaceInfo, typeof(WLAN_INTERFACE_INFO));
+					InterfaceInfo[i] = Marshal.PtrToStructure<WLAN_INTERFACE_INFO>(interfaceInfo);
 				}
 			}
 		}
@@ -142,7 +142,7 @@ namespace SnowyImageCopy.Helper
 				for (int i = 0; i < dwNumberOfItems; i++)
 				{
 					var availableNetwork = new IntPtr(ppAvailableNetworkList.ToInt64() + (Marshal.SizeOf(typeof(WLAN_AVAILABLE_NETWORK)) * i) + offset);
-					Network[i] = (WLAN_AVAILABLE_NETWORK)Marshal.PtrToStructure(availableNetwork, typeof(WLAN_AVAILABLE_NETWORK));
+					Network[i] = Marshal.PtrToStructure<WLAN_AVAILABLE_NETWORK>(availableNetwork);
 				}
 			}
 		}
@@ -331,11 +331,11 @@ namespace SnowyImageCopy.Helper
 		private const uint ERROR_SUCCESS = 0;
 		private const uint ERROR_INVALID_PARAMETER = 87;
 		private const uint ERROR_INVALID_HANDLE = 6;
+		private const uint ERROR_INVALID_STATE = 5023;
+		private const uint ERROR_NOT_FOUND = 1168;
 		private const uint ERROR_NOT_ENOUGH_MEMORY = 8;
 		private const uint ERROR_ACCESS_DENIED = 5;
-		private const uint ERROR_NOT_FOUND = 1168;
-		private const uint ERROR_REMOTE_SESSION_LIMIT_EXCEEDED = 1220;
-		private const uint ERROR_INVALID_STATE = 5023;
+		private const uint ERROR_NDIS_DOT11_AUTO_CONFIG_ENABLED = 0x80342000;
 		private const uint ERROR_NDIS_DOT11_MEDIA_IN_USE = 0x80342001;
 		private const uint ERROR_NDIS_DOT11_POWER_STATE_INVALID = 0x80342002;
 
@@ -415,16 +415,7 @@ namespace SnowyImageCopy.Helper
 					out negotiatedVersion,
 					out _clientHandle);
 
-				switch (result)
-				{
-					case ERROR_SUCCESS:
-						break;
-					case ERROR_INVALID_PARAMETER:
-					case ERROR_NOT_ENOUGH_MEMORY:
-					case ERROR_REMOTE_SESSION_LIMIT_EXCEEDED:
-					default:
-						throw CreateWin32Exception(result, "WlanOpenHandle");
-				}
+				CheckResult(result, "WlanOpenHandle", true);
 			}
 
 			#region Dispose
@@ -466,16 +457,9 @@ namespace SnowyImageCopy.Helper
 					IntPtr.Zero,
 					out interfaceList);
 
-				switch (result)
-				{
-					case ERROR_SUCCESS:
-						return new WLAN_INTERFACE_INFO_LIST(interfaceList).InterfaceInfo;
-					case ERROR_INVALID_PARAMETER:
-					case ERROR_INVALID_HANDLE:
-					case ERROR_NOT_ENOUGH_MEMORY:
-					default:
-						throw CreateWin32Exception(result, "WlanEnumInterfaces");
-				}
+				return CheckResult(result, "WlanEnumInterfaces", true)
+					? new WLAN_INTERFACE_INFO_LIST(interfaceList).InterfaceInfo
+					: null; // Not to be used
 			}
 			finally
 			{
@@ -496,18 +480,10 @@ namespace SnowyImageCopy.Helper
 					IntPtr.Zero,
 					out availableNetworkList);
 
-				switch (result)
-				{
-					case ERROR_SUCCESS:
-						return new WLAN_AVAILABLE_NETWORK_LIST(availableNetworkList).Network;
-					case ERROR_NDIS_DOT11_POWER_STATE_INVALID: // If the interface is turned off, this value will be returned. 
-					case ERROR_INVALID_PARAMETER:
-						return new WLAN_AVAILABLE_NETWORK[] { };
-					case ERROR_INVALID_HANDLE:
-					case ERROR_NOT_ENOUGH_MEMORY:
-					default:
-						throw CreateWin32Exception(result, "WlanGetAvailableNetworkList");
-				}
+				// ERROR_NDIS_DOT11_POWER_STATE_INVALID will be returned if the interface is turned off.
+				return CheckResult(result, "WlanGetAvailableNetworkList", false)
+					? new WLAN_AVAILABLE_NETWORK_LIST(availableNetworkList).Network
+					: new WLAN_AVAILABLE_NETWORK[] { };
 			}
 			finally
 			{
@@ -531,19 +507,10 @@ namespace SnowyImageCopy.Helper
 					ref queryData,
 					IntPtr.Zero);
 
-				switch (result)
-				{
-					case ERROR_SUCCESS:
-						return (WLAN_CONNECTION_ATTRIBUTES)Marshal.PtrToStructure(queryData, typeof(WLAN_CONNECTION_ATTRIBUTES));
-					case ERROR_INVALID_STATE: // If not connected to a network, this value will be returned.
-					case ERROR_INVALID_PARAMETER:
-					case ERROR_ACCESS_DENIED:
-						return default(WLAN_CONNECTION_ATTRIBUTES);
-					case ERROR_INVALID_HANDLE:
-					case ERROR_NOT_ENOUGH_MEMORY:
-					default:
-						throw CreateWin32Exception(result, "WlanQueryInterface");
-				}
+				// ERROR_INVALID_STATE will be returned if the client is not connected to a network.
+				return CheckResult(result, "WlanQueryInterface", false)
+					? Marshal.PtrToStructure<WLAN_CONNECTION_ATTRIBUTES>(queryData)
+					: default(WLAN_CONNECTION_ATTRIBUTES);
 			}
 			finally
 			{
@@ -552,9 +519,35 @@ namespace SnowyImageCopy.Helper
 			}
 		}
 
+		private static bool CheckResult(uint result, string methodName, bool willThrowOnFailure)
+		{
+			if (result == ERROR_SUCCESS)
+				return true;
+
+			if (!willThrowOnFailure)
+			{
+				switch (result)
+				{
+					case ERROR_INVALID_PARAMETER:
+					case ERROR_INVALID_STATE:
+					case ERROR_NOT_FOUND:
+					case ERROR_NOT_ENOUGH_MEMORY:
+					case ERROR_ACCESS_DENIED:
+					case ERROR_NDIS_DOT11_AUTO_CONFIG_ENABLED:
+					case ERROR_NDIS_DOT11_MEDIA_IN_USE:
+					case ERROR_NDIS_DOT11_POWER_STATE_INVALID:
+						return false;
+
+					case ERROR_INVALID_HANDLE:
+						break;
+				}
+			}
+			throw CreateWin32Exception(result, methodName);
+		}
+
 		private static Win32Exception CreateWin32Exception(uint errorCode, string methodName)
 		{
-			var sb = new StringBuilder(512);
+			var sb = new StringBuilder(512); // This 512 capacity is arbitrary.
 
 			var result = FormatMessage(
 			  FORMAT_MESSAGE_FROM_SYSTEM,
