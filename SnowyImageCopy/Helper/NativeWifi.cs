@@ -55,6 +55,16 @@ namespace SnowyImageCopy.Helper
 			ref IntPtr ppData,
 			IntPtr pWlanOpcodeValueType);
 
+		[DllImport("Kernel32.dll", SetLastError = true)]
+		private static extern uint FormatMessage(
+			uint dwFlags,
+			IntPtr lpSource,
+			uint dwMessageId,
+			uint dwLanguageId,
+			StringBuilder lpBuffer,
+			int nSize,
+			IntPtr Arguments);
+
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 		private struct WLAN_INTERFACE_INFO
 		{
@@ -79,12 +89,12 @@ namespace SnowyImageCopy.Helper
 				dwIndex = (uint)Marshal.ReadInt32(ppInterfaceList, 4);
 				InterfaceInfo = new WLAN_INTERFACE_INFO[dwNumberOfItems];
 
-				int offset = Marshal.SizeOf(typeof(uint)) * 2; // Size of dwNumberOfItems and dwIndex
+				var offset = Marshal.SizeOf(typeof(uint)) * 2; // Size of dwNumberOfItems and dwIndex
 
 				for (int i = 0; i < dwNumberOfItems; i++)
 				{
 					var interfaceInfo = new IntPtr(ppInterfaceList.ToInt64() + (Marshal.SizeOf(typeof(WLAN_INTERFACE_INFO)) * i) + offset);
-					InterfaceInfo[i] = (WLAN_INTERFACE_INFO)Marshal.PtrToStructure(interfaceInfo, typeof(WLAN_INTERFACE_INFO));
+					InterfaceInfo[i] = Marshal.PtrToStructure<WLAN_INTERFACE_INFO>(interfaceInfo);
 				}
 			}
 		}
@@ -127,12 +137,12 @@ namespace SnowyImageCopy.Helper
 				dwIndex = (uint)Marshal.ReadInt32(ppAvailableNetworkList, 4);
 				Network = new WLAN_AVAILABLE_NETWORK[dwNumberOfItems];
 
-				int offset = Marshal.SizeOf(typeof(uint)) * 2; // Size of dwNumberOfItems and dwIndex
+				var offset = Marshal.SizeOf(typeof(uint)) * 2; // Size of dwNumberOfItems and dwIndex
 
 				for (int i = 0; i < dwNumberOfItems; i++)
 				{
 					var availableNetwork = new IntPtr(ppAvailableNetworkList.ToInt64() + (Marshal.SizeOf(typeof(WLAN_AVAILABLE_NETWORK)) * i) + offset);
-					Network[i] = (WLAN_AVAILABLE_NETWORK)Marshal.PtrToStructure(availableNetwork, typeof(WLAN_AVAILABLE_NETWORK));
+					Network[i] = Marshal.PtrToStructure<WLAN_AVAILABLE_NETWORK>(availableNetwork);
 				}
 			}
 		}
@@ -179,8 +189,8 @@ namespace SnowyImageCopy.Helper
 			public DOT11_SSID dot11Ssid;
 			public DOT11_BSS_TYPE dot11BssType;
 
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 6)]
-			public string dot11Bssid; // DOT11_MAC_ADDRESS
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+			public byte[] dot11Bssid; // DOT11_MAC_ADDRESS
 
 			public DOT11_PHY_TYPE dot11PhyType;
 			public uint uDot11PhyIndex;
@@ -226,8 +236,19 @@ namespace SnowyImageCopy.Helper
 
 		private enum DOT11_BSS_TYPE
 		{
+			/// <summary>
+			/// Infrastructure BSS network
+			/// </summary>
 			dot11_BSS_type_infrastructure = 1,
+
+			/// <summary>
+			/// Independent BSS (IBSS) network
+			/// </summary>
 			dot11_BSS_type_independent = 2,
+
+			/// <summary>
+			/// Either infrastructure or IBSS network
+			/// </summary>
 			dot11_BSS_type_any = 3,
 		}
 
@@ -307,34 +328,41 @@ namespace SnowyImageCopy.Helper
 		private const uint WLAN_AVAILABLE_NETWORK_INCLUDE_ALL_ADHOC_PROFILES = 0x00000001;
 		private const uint WLAN_AVAILABLE_NETWORK_INCLUDE_ALL_MANUAL_HIDDEN_PROFILES = 0x00000002;
 
-		private const uint ERROR_SUCCESS = 0U;
-		private const uint ERROR_INVALID_STATE = 5023U;
+		private const uint ERROR_SUCCESS = 0;
+		private const uint ERROR_INVALID_PARAMETER = 87;
+		private const uint ERROR_INVALID_HANDLE = 6;
+		private const uint ERROR_INVALID_STATE = 5023;
+		private const uint ERROR_NOT_FOUND = 1168;
+		private const uint ERROR_NOT_ENOUGH_MEMORY = 8;
+		private const uint ERROR_ACCESS_DENIED = 5;
+		private const uint ERROR_NDIS_DOT11_AUTO_CONFIG_ENABLED = 0x80342000;
+		private const uint ERROR_NDIS_DOT11_MEDIA_IN_USE = 0x80342001;
+		private const uint ERROR_NDIS_DOT11_POWER_STATE_INVALID = 0x80342002;
+
+		private const uint FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000;
 
 		#endregion
 
 
 		/// <summary>
-		/// Enumerate SSIDs of available wireless networks.
+		/// Enumerate SSIDs of available wireless LANs.
 		/// </summary>
 		/// <returns>SSIDs</returns>
 		public static IEnumerable<string> EnumerateAvailableNetworkSsids()
 		{
 			using (var client = new WlanClient())
 			{
-				var interfaceInfoList = GetWlanInterfaceInfoList(client.Handle);
-
-				Debug.WriteLine("Interface info count: {0}", interfaceInfoList.Length);
+				var interfaceInfoList = GetInterfaceInfoList(client.Handle);
 
 				foreach (var interfaceInfo in interfaceInfoList)
 				{
-					var availableNetworkList = GetWlanAvailableNetworkList(client.Handle, interfaceInfo.InterfaceGuid);
+					var availableNetworkList = GetAvailableNetworkList(client.Handle, interfaceInfo.InterfaceGuid);
 
 					foreach (var availableNetwork in availableNetworkList)
 					{
-						Debug.WriteLine("Interface: {0}, SSID: {1}, Quality: {2}",
+						Debug.WriteLine("Interface: {0}, SSID: {1}",
 							interfaceInfo.strInterfaceDescription,
-							availableNetwork.dot11Ssid.ToSsidString(),
-							availableNetwork.wlanSignalQuality);
+							availableNetwork.dot11Ssid.ToSsidString());
 
 						yield return availableNetwork.dot11Ssid.ToSsidString();
 					}
@@ -343,30 +371,26 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Enumerate SSIDs of connected wireless networks.
+		/// Enumerate SSIDs of connected wireless LANs.
 		/// </summary>
 		/// <returns>SSIDs</returns>
 		public static IEnumerable<string> EnumerateConnectedNetworkSsids()
 		{
 			using (var client = new WlanClient())
 			{
-				var interfaceInfoList = GetWlanInterfaceInfoList(client.Handle);
-
-				Debug.WriteLine("Interface info count: {0}", interfaceInfoList.Length);
+				var interfaceInfoList = GetInterfaceInfoList(client.Handle);
 
 				foreach (var interfaceInfo in interfaceInfoList)
 				{
-					var connection = GetWlanConnectionAttributes(client.Handle, interfaceInfo.InterfaceGuid);
-					if (connection.Equals(default(WLAN_CONNECTION_ATTRIBUTES)) ||
-						connection.isState != WLAN_INTERFACE_STATE.wlan_interface_state_connected)
+					var connection = GetConnectionAttributes(client.Handle, interfaceInfo.InterfaceGuid);
+					if (connection.isState != WLAN_INTERFACE_STATE.wlan_interface_state_connected)
 						continue;
 
 					var association = connection.wlanAssociationAttributes;
 
-					Debug.WriteLine("Interface: {0}, SSID: {1}, Quality: {2}",
+					Debug.WriteLine("Interface: {0}, SSID: {1}",
 						interfaceInfo.strInterfaceDescription,
-						association.dot11Ssid.ToSsidString(),
-						association.wlanSignalQuality);
+						association.dot11Ssid.ToSsidString());
 
 					yield return association.dot11Ssid.ToSsidString();
 				}
@@ -374,9 +398,9 @@ namespace SnowyImageCopy.Helper
 		}
 
 
-		#region Helper
+		#region Base
 
-		private sealed class WlanClient : IDisposable
+		private class WlanClient : IDisposable
 		{
 			private IntPtr _clientHandle = IntPtr.Zero;
 
@@ -390,18 +414,40 @@ namespace SnowyImageCopy.Helper
 					IntPtr.Zero,
 					out negotiatedVersion,
 					out _clientHandle);
-				if (result != ERROR_SUCCESS)
-					throw new Win32Exception((int)result);
+
+				CheckResult(result, "WlanOpenHandle", true);
 			}
+
+			#region Dispose
+
+			private bool _disposed = false;
 
 			public void Dispose()
 			{
+				Dispose(true);
+				GC.SuppressFinalize(this);
+			}
+
+			protected virtual void Dispose(bool disposing)
+			{
+				if (_disposed)
+					return;
+
 				if (_clientHandle != IntPtr.Zero)
 					WlanCloseHandle(_clientHandle, IntPtr.Zero);
+
+				_disposed = true;
 			}
+
+			~WlanClient()
+			{
+				Dispose(false);
+			}
+
+			#endregion
 		}
 
-		private static WLAN_INTERFACE_INFO[] GetWlanInterfaceInfoList(IntPtr clientHandle)
+		private static WLAN_INTERFACE_INFO[] GetInterfaceInfoList(IntPtr clientHandle)
 		{
 			var interfaceList = IntPtr.Zero;
 			try
@@ -410,10 +456,10 @@ namespace SnowyImageCopy.Helper
 					clientHandle,
 					IntPtr.Zero,
 					out interfaceList);
-				if (result != ERROR_SUCCESS)
-					throw new Win32Exception((int)result);
 
-				return new WLAN_INTERFACE_INFO_LIST(interfaceList).InterfaceInfo;
+				return CheckResult(result, "WlanEnumInterfaces", true)
+					? new WLAN_INTERFACE_INFO_LIST(interfaceList).InterfaceInfo
+					: null; // Not to be used
 			}
 			finally
 			{
@@ -422,7 +468,7 @@ namespace SnowyImageCopy.Helper
 			}
 		}
 
-		private static WLAN_AVAILABLE_NETWORK[] GetWlanAvailableNetworkList(IntPtr clientHandle, Guid interfaceGuid)
+		private static WLAN_AVAILABLE_NETWORK[] GetAvailableNetworkList(IntPtr clientHandle, Guid interfaceGuid)
 		{
 			var availableNetworkList = IntPtr.Zero;
 			try
@@ -433,10 +479,11 @@ namespace SnowyImageCopy.Helper
 					WLAN_AVAILABLE_NETWORK_INCLUDE_ALL_MANUAL_HIDDEN_PROFILES,
 					IntPtr.Zero,
 					out availableNetworkList);
-				if (result != ERROR_SUCCESS)
-					throw new Win32Exception((int)result);
 
-				return new WLAN_AVAILABLE_NETWORK_LIST(availableNetworkList).Network;
+				// ERROR_NDIS_DOT11_POWER_STATE_INVALID will be returned if the interface is turned off.
+				return CheckResult(result, "WlanGetAvailableNetworkList", false)
+					? new WLAN_AVAILABLE_NETWORK_LIST(availableNetworkList).Network
+					: new WLAN_AVAILABLE_NETWORK[] { };
 			}
 			finally
 			{
@@ -445,7 +492,7 @@ namespace SnowyImageCopy.Helper
 			}
 		}
 
-		private static WLAN_CONNECTION_ATTRIBUTES GetWlanConnectionAttributes(IntPtr clientHandle, Guid interfaceGuid)
+		private static WLAN_CONNECTION_ATTRIBUTES GetConnectionAttributes(IntPtr clientHandle, Guid interfaceGuid)
 		{
 			var queryData = IntPtr.Zero;
 			try
@@ -460,21 +507,62 @@ namespace SnowyImageCopy.Helper
 					ref queryData,
 					IntPtr.Zero);
 
-				switch (result)
-				{
-					case ERROR_SUCCESS:
-						return (WLAN_CONNECTION_ATTRIBUTES)Marshal.PtrToStructure(queryData, typeof(WLAN_CONNECTION_ATTRIBUTES));
-					case ERROR_INVALID_STATE: // If not connected to a network, this value will be returned.
-						return default(WLAN_CONNECTION_ATTRIBUTES);
-					default:
-						throw new Win32Exception((int)result);
-				}
+				// ERROR_INVALID_STATE will be returned if the client is not connected to a network.
+				return CheckResult(result, "WlanQueryInterface", false)
+					? Marshal.PtrToStructure<WLAN_CONNECTION_ATTRIBUTES>(queryData)
+					: default(WLAN_CONNECTION_ATTRIBUTES);
 			}
 			finally
 			{
 				if (queryData != IntPtr.Zero)
 					WlanFreeMemory(queryData);
 			}
+		}
+
+		private static bool CheckResult(uint result, string methodName, bool willThrowOnFailure)
+		{
+			if (result == ERROR_SUCCESS)
+				return true;
+
+			if (!willThrowOnFailure)
+			{
+				switch (result)
+				{
+					case ERROR_INVALID_PARAMETER:
+					case ERROR_INVALID_STATE:
+					case ERROR_NOT_FOUND:
+					case ERROR_NOT_ENOUGH_MEMORY:
+					case ERROR_ACCESS_DENIED:
+					case ERROR_NDIS_DOT11_AUTO_CONFIG_ENABLED:
+					case ERROR_NDIS_DOT11_MEDIA_IN_USE:
+					case ERROR_NDIS_DOT11_POWER_STATE_INVALID:
+						return false;
+
+					case ERROR_INVALID_HANDLE:
+						break;
+				}
+			}
+			throw CreateWin32Exception(result, methodName);
+		}
+
+		private static Win32Exception CreateWin32Exception(uint errorCode, string methodName)
+		{
+			var sb = new StringBuilder(512); // This 512 capacity is arbitrary.
+
+			var result = FormatMessage(
+			  FORMAT_MESSAGE_FROM_SYSTEM,
+			  IntPtr.Zero,
+			  errorCode,
+			  0x0409, // US (English)
+			  sb,
+			  sb.Capacity,
+			  IntPtr.Zero);
+
+			var message = string.Format("Method: {0}, Code: {1}", methodName, errorCode);
+			if (0 < result)
+				message += string.Format(", Message: {0}", sb.ToString());
+
+			return new Win32Exception((int)errorCode, message);
 		}
 
 		#endregion

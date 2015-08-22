@@ -61,8 +61,8 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 
 <div id="title">
 <h1>Snowy</h1>
-<p id="version">Ver 1.0.1</p>
-<p id="date">2015/7/9</p>
+<p id="version">Ver 1.1</p>
+<p id="date">2015/8/22</p>
 </div><!-- end of title -->
 
 <div id="main">
@@ -72,8 +72,8 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 <h2>Requirements</h2>
 
 <ul>
-	<li>Windows 8 or newer</li>
-	<li>Windows 7 (required to install .NET Framework 4.5)</li>
+	<li>Windows 7 or newer</li>
+	<li>.NET Framework 4.5.2</li>
 </ul>
 <p>Tested on Windows 8.1 64bit with SD-WB008G (Class6), SD-WC016G (W-02 Class10) and SD-WE016G (W-03 Class10).</p>
 
@@ -98,8 +98,9 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 <ul>
 	<li>"Delete On Copy" function tries to delete an image in FlashAir after the data is copied to PC.</li>
 	<li>It is essential to test this function with your camera before actual use. Since this function uses <a href="https://flashair-developers.com/en/documents/api/uploadcgi/">upload.cgi</a> of FlashAir and it may cause inconsistency of data between FlashAir and camera, <span style="color:red">file system of FlashAir and stored images might be destroyed.</span> What will happen depends on each camera model.</li>
-	<li>An image with Read-only attribute will not be deleted. In many cases, you need to reboot a camera to make it recognize the deletion by this function.</li>
 	<li>If upload.cgi of FlashAir is disabled, this function will fail. To check or change this setting, insert FlashAir to PC and use included Snowy Tool. Or open CONFIG file in FlashAir and directly check <a href="https://flashair-developers.com/en/documents/api/config/#UPLOAD">UPLOAD</a> parameter.</li>
+	<li>In many cases, you need to reboot a camera to make it recognize the deletion by this function.</li>
+	<li>An image with Read-only attribute will not be deleted. </li>
 	<li>To use this function, turn on "Enable to choose to delete image in FlashAir on copy" button and type "DELETE" (all uppercase) in the text box. "Delete On Copy" button will appear. So change it to on.</li>
 </ul>
 

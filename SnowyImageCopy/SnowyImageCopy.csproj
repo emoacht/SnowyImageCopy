@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SnowyImageCopy</RootNamespace>
     <AssemblyName>SnowyImageCopy</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetPlatformVersion>8.0</TargetPlatformVersion>
     <ApplicationIcon>Resources\Feather.ico</ApplicationIcon>
     <FileAlignment>512</FileAlignment>
@@ -33,6 +33,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -125,6 +126,7 @@
     <Compile Include="Models\Exceptions\RemoteConnectionLostException.cs" />
     <Compile Include="Models\FileItem.cs" />
     <Compile Include="Models\IFileItem.cs" />
+    <Compile Include="Models\LogService.cs" />
     <Compile Include="Models\NetworkChecker.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -211,7 +213,6 @@
     <Compile Include="Views\Converters\BooleanInverseConverter.cs" />
     <Compile Include="Views\Converters\BooleanInverseToThicknessConverter.cs" />
     <Compile Include="Views\Converters\BooleanInverseToVisibilityConverter.cs" />
-    <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
     <Compile Include="Views\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\FileStatusToBrushConverter.cs" />
     <Compile Include="Views\Converters\FileStatusToStringConverter.cs" />
@@ -247,7 +248,9 @@
       <SubType>Code</SubType>
     </Compile>
     <AppDesigner Include="Properties\" />
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\app.manifest">
       <SubType>Designer</SubType>
     </None>

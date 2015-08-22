@@ -76,9 +76,10 @@ namespace SnowyImageCopy.Models
 			{
 				using (var ms = new MemoryStream())
 				{
-					return await ms.WriteAsync(bytes, 0, bytes.Length)
-						.ContinueWith(_ => ReadThumbnailFromExifByImaging(ms))
-						.ConfigureAwait(false);
+					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+
+					// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
+					return ReadThumbnailFromExifByImaging(ms);
 				}
 			}
 			catch (Exception ex)
@@ -110,9 +111,10 @@ namespace SnowyImageCopy.Models
 				using (var fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 				using (var ms = new MemoryStream())
 				{
-					return await fs.CopyToAsync(ms)
-						.ContinueWith(_ => CreateThumbnailFromImageUniform(ms))
-						.ConfigureAwait(false);
+					await fs.CopyToAsync(ms).ConfigureAwait(false);
+
+					// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
+					return CreateThumbnailFromImageUniform(ms);
 				}
 			}
 			catch (Exception ex)
@@ -140,9 +142,10 @@ namespace SnowyImageCopy.Models
 			{
 				using (var ms = new MemoryStream())
 				{
-					return await ms.WriteAsync(bytes, 0, bytes.Length)
-						.ContinueWith(_ => CreateThumbnailFromImageUniform(ms))
-						.ConfigureAwait(false);
+					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+
+					// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
+					return CreateThumbnailFromImageUniform(ms);
 				}
 			}
 			catch (Exception ex)
@@ -890,18 +893,17 @@ namespace SnowyImageCopy.Models
 		/// <param name="ex">Exception</param>
 		private static bool IsImageNotSupported(Exception ex)
 		{
-			if (ex.GetType() == typeof(FileFormatException))
+			if (ex is FileFormatException)
 				return true;
 
 			// Windows Imaging Component (WIC) defined error code
-			// This description is: No imaging component suitable to complete this operation was found.
+			// This description is "No imaging component suitable to complete this operation was found."
 			const uint WINCODEC_ERR_COMPONENTNOTFOUND = 0x88982F50;
 
-			if (ex.GetType() == typeof(NotSupportedException))
+			if (ex is NotSupportedException)
 			{
 				var innerException = ex.InnerException;
-				if ((innerException != null) &&
-					(innerException.GetType() == typeof(COMException)) &&
+				if ((innerException is COMException) &&
 					((uint)innerException.HResult == WINCODEC_ERR_COMPONENTNOTFOUND))
 					return true;
 			}

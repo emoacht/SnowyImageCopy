@@ -16,13 +16,13 @@ namespace SnowyImageCopy.Views.Converters
 	public class BooleanInverseToThicknessConverter : IValueConverter
 	{
 		/// <summary>
-		/// If true, return zero thickness. If false, return thickness given by parameter.
+		/// Inverse Boolean and then convert it to Thickness.
 		/// </summary>
 		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>
 		/// <param name="parameter">Thickness</param>
 		/// <param name="culture"></param>
-		/// <returns>Thickness</returns>
+		/// <returns>Zero thickness if Boolean is true. Thickness given by parameter if false.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (!(value is bool) || !(parameter is Thickness))

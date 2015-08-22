@@ -13,8 +13,6 @@ namespace SnowyImageCopy.Views.Controls
 	[TemplateVisualState(Name = "Pressed", GroupName = "CommonStates")]
 	[TemplateVisualState(Name = "Disabled", GroupName = "CommonStates")]
 	[TemplateVisualState(Name = "Busy", GroupName = "CommonStates")]
-	//[TemplateVisualState(Name = "Focused", GroupName = "FocusedStates")]
-	//[TemplateVisualState(Name = "Unfocused", GroupName = "FocusedStates")]
 	public class BusyButton : Button
 	{
 		#region Property
@@ -38,17 +36,15 @@ namespace SnowyImageCopy.Views.Controls
 		{
 			base.OnPropertyChanged(e);
 
-			//Debug.WriteLine(String.Format("Property changed: {0}", e.Property.Name));
-
-			if ((e.Property == Button.IsMouseOverProperty) ||
-				(e.Property == Button.IsPressedProperty) ||
-				(e.Property == Button.IsKeyboardFocusedProperty) || // This seems to be necessary to catch visual state change by Command.
-				(e.Property == Button.IsEnabledProperty) ||
-				(e.Property == BusyButton.IsBusyProperty))
-				UpdateStates(true);
+			if ((e.Property == IsMouseOverProperty) ||
+				(e.Property == IsKeyboardFocusedProperty) || // This seems to be necessary to catch visual state change by Command.
+				(e.Property == IsPressedProperty) ||
+				(e.Property == IsEnabledProperty) ||
+				(e.Property == IsBusyProperty))
+				UpdateState(true);
 		}
 
-		private void UpdateStates(bool useTransitions)
+		protected virtual void UpdateState(bool useTransitions)
 		{
 			// CommonStates
 			if (IsBusy)
@@ -71,16 +67,6 @@ namespace SnowyImageCopy.Views.Controls
 			{
 				VisualStateManager.GoToState(this, "Normal", useTransitions);
 			}
-
-			//// FocusStates
-			//if (IsKeyboardFocused)
-			//{
-			//	VisualStateManager.GoToState(this, "Focused", useTransitions);
-			//}
-			//else
-			//{
-			//	VisualStateManager.GoToState(this, "Unfocused", useTransitions);
-			//}
 		}
 	}
 }

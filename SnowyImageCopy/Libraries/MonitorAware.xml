@@ -158,13 +158,6 @@
             Color profile changed event args
             </summary>
         </member>
-        <member name="M:MonitorAware.Models.ColorProfileChangedEventArgs.#ctor(System.String,System.String)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="oldPath">Old color profile path</param>
-            <param name="newPath">New color profile path</param>
-        </member>
         <member name="P:MonitorAware.Models.ColorProfileChangedEventArgs.OldPath">
             <summary>
             Old color profile path
@@ -174,6 +167,13 @@
             <summary>
             New color profile path
             </summary>
+        </member>
+        <member name="M:MonitorAware.Models.ColorProfileChangedEventArgs.#ctor(System.String,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="oldPath">Old color profile path</param>
+            <param name="newPath">New color profile path</param>
         </member>
         <member name="T:MonitorAware.Models.ColorProfileChecker">
             <summary>
@@ -198,6 +198,16 @@
         <member name="F:MonitorAware.Models.Dpi.Default">
             <summary>
             Default DPI
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.Dpi.X">
+            <summary>
+            X-axis value of DPI
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.Dpi.Y">
+            <summary>
+            Y-axis value of DPI
             </summary>
         </member>
         <member name="M:MonitorAware.Models.Dpi.#ctor(System.UInt32,System.UInt32)">
@@ -249,16 +259,6 @@
             </summary>
             <returns>String containing X and Y values of this structure</returns>
         </member>
-        <member name="P:MonitorAware.Models.Dpi.X">
-            <summary>
-            X-axis value of DPI
-            </summary>
-        </member>
-        <member name="P:MonitorAware.Models.Dpi.Y">
-            <summary>
-            Y-axis value of DPI
-            </summary>
-        </member>
         <member name="E:MonitorAware.Models.Dpi.PropertyChanged">
             <summary>
             PropertyChanged event
@@ -269,13 +269,6 @@
             DPI changed event args
             </summary>
         </member>
-        <member name="M:MonitorAware.Models.DpiChangedEventArgs.#ctor(MonitorAware.Models.Dpi,MonitorAware.Models.Dpi)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="oldDpi">Old DPI</param>
-            <param name="newDpi">New DPI</param>
-        </member>
         <member name="P:MonitorAware.Models.DpiChangedEventArgs.OldDpi">
             <summary>
             Old DPI
@@ -285,6 +278,13 @@
             <summary>
             New DPI
             </summary>
+        </member>
+        <member name="M:MonitorAware.Models.DpiChangedEventArgs.#ctor(MonitorAware.Models.Dpi,MonitorAware.Models.Dpi)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="oldDpi">Old DPI</param>
+            <param name="newDpi">New DPI</param>
         </member>
         <member name="T:MonitorAware.Models.DpiChecker">
             <summary>
@@ -336,15 +336,193 @@
             <param name="sourceRect">Source Rect</param>
             <returns>DPI struct</returns>
         </member>
+        <member name="M:MonitorAware.Models.DpiChecker.GetNotificationAreaDpi">
+            <summary>
+            Get Per-Monitor DPI of the monitor in which the notification area is contained.
+            </summary>
+            <returns>DPI struct</returns>
+        </member>
         <member name="T:MonitorAware.Models.ExtendedWindowHandler">
             <summary>
             Handler for <see cref="T:MonitorAware.Views.ExtendedWindow"/>
+            </summary>
+        </member>
+        <member name="E:MonitorAware.Models.ExtendedWindowHandler.WindowActivatedChanged">
+            <summary>
+            Window activated changed event
+            </summary> 
+            <remarks>
+            Args true:  Window is being activated.
+            Args false: Window is being deactivated.
+            </remarks>
+        </member>
+        <member name="E:MonitorAware.Models.ExtendedWindowHandler.DwmColorizationColorChanged">
+            <summary>
+            DWM colorization color changed event
+            </summary>
+            <remarks>This event is fired when default Window chrome color is changed.</remarks>
+        </member>
+        <member name="M:MonitorAware.Models.ExtendedWindowHandler.WndProc(System.IntPtr,System.Int32,System.IntPtr,System.IntPtr,System.Boolean@)">
+            <summary>
+            Handle window messages.
+            </summary>
+            <param name="hwnd">The window handle</param>
+            <param name="msg">The message ID</param>
+            <param name="wParam">The message's wParam value</param>
+            <param name="lParam">The message's lParam value</param>
+            <param name="handled">Whether the message was handled</param>
+            <returns>Return value depending on the particular message</returns>
+            <remarks>This is an implementation of System.Windows.Interop.HwndSourceHook.</remarks>
+        </member>
+        <member name="M:MonitorAware.Models.Win32.NativeMacro.GetLoWord(System.UInt32)">
+            <summary>
+            Equivalent to LOWORD
+            </summary>
+            <param name="dword">Dword (unit)</param>
+            <returns>Low-order Word (ushort)</returns>
+        </member>
+        <member name="M:MonitorAware.Models.Win32.NativeMacro.GetHiWord(System.UInt32)">
+            <summary>
+            Equivalent to HIWORD
+            </summary>
+            <param name="dword">Dword (uint)</param>
+            <returns>High-order Word (ushort)</returns>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONULL">
+            <summary>
+            If no display monitor intersects, returns null.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTOPRIMARY">
+            <summary>
+            If no display monitor intersects, returns a handle to the primary display monitor.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONEAREST">
+            <summary>
+            If no display monitor intersects, returns a handle to the display monitor that is nearest to the rectangle.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_DPI_Unaware">
+            <summary>
+            Not DPI aware
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_System_DPI_Aware">
+            <summary>
+            System DPI aware
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware">
+            <summary>
+            Per-Monitor DPI aware
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Effective_DPI">
+            <summary>
+            Effective DPI that incorporates accessibility overrides and matches what Desktop Window Manage (DWM) uses to scale desktop applications
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Angular_DPI">
+            <summary>
+            DPI that ensures rendering at a compliant angular resolution on the screen, without incorporating accessibility overrides
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Raw_DPI">
+            <summary>
+            Linear DPI of the screen as measured on the screen itself
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Default">
+            <summary>
+            Default DPI
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.WA_ACTIVE">
+            <summary>
+            Activated by some method other than a mouse click.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.WA_CLICKACTIVE">
+            <summary>
+            Activated by a mouse click.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.WA_INACTIVE">
+            <summary>
+            Deactivated.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_MAXHIDE">
+            <summary>
+            Some other window is maximized.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_MAXIMIZED">
+            <summary>
+            The window has been maximized.
+            </summary> 
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_MAXSHOW">
+            <summary>
+            Some other window has been restored to its former size.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_MINIMIZED">
+            <summary>
+            The window has been minimized.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_RESTORED">
+            <summary>
+            The window has been resized, but neither the SIZE_MINIMIZED nor SIZE_MAXIMIZED value applies.
             </summary>
         </member>
         <member name="T:MonitorAware.Models.WindowHandler">
             <summary>
             Handler for <see cref="T:System.Windows.Window"/>
             </summary>
+        </member>
+        <member name="T:MonitorAware.Models.WindowHandler.WindowStatus">
+            <summary>
+            Status of a <see cref="T:System.Windows.Window"/>
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.WindowStatus.None">
+            <summary>
+            A Window stands still.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.WindowStatus.LocationChanged">
+            <summary>
+            A Window's location is being changed.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.WindowStatus.SizeChanged">
+            <summary>
+            A Window's size is being changed.
+            </summary>
+        </member>
+        <member name="T:MonitorAware.Models.WindowHandler.WindowInfo">
+            <summary>
+            DPI and other information on a <see cref="T:System.Windows.Window"/>
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.WindowHandler.IsPerMonitorDpiAware">
+            <summary>
+            Whether target Window is Per-Monitor DPI aware (readonly)
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.WindowHandler.SystemDpi">
+            <summary>
+            System DPI (readonly)
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.WindowHandler.MonitorDpi">
+            <summary>
+            Per-Monitor DPI of current monitor (public readonly)
+            </summary>
+            <remarks>This property cannot become a binding target because it has no public setter.</remarks>
         </member>
         <member name="F:MonitorAware.Models.WindowHandler.MonitorDpiPropertyKey">
             <summary>
@@ -356,6 +534,12 @@
             Dependency property for <see cref="P:MonitorAware.Models.WindowHandler.MonitorDpi"/>
             </summary>
         </member>
+        <member name="P:MonitorAware.Models.WindowHandler.WindowDpi">
+            <summary>
+            Per-Monitor DPI of target Window (public readonly)
+            </summary>
+            <remarks>This property cannot become a binding target because it has no public setter.</remarks>
+        </member>
         <member name="F:MonitorAware.Models.WindowHandler.WindowDpiPropertyKey">
             <summary>
             Dependency property key for <see cref="P:MonitorAware.Models.WindowHandler.WindowDpi"/>
@@ -366,6 +550,12 @@
             Dependency property for <see cref="P:MonitorAware.Models.WindowHandler.WindowDpi"/>
             </summary>
         </member>
+        <member name="P:MonitorAware.Models.WindowHandler.ColorProfilePath">
+            <summary>
+            Color profile path of target Window (public readonly)
+            </summary>
+            <remarks>This property cannot become a binding target because it has no public setter.</remarks>
+        </member>
         <member name="F:MonitorAware.Models.WindowHandler.ColorProfilePathPropertyKey">
             <summary>
             Dependency property key for <see cref="P:MonitorAware.Models.WindowHandler.ColorProfilePath"/>
@@ -375,6 +565,20 @@
             <summary>
             Dependency property for <see cref="P:MonitorAware.Models.WindowHandler.ColorProfilePath"/>
             </summary>
+        </member>
+        <member name="E:MonitorAware.Models.WindowHandler.DpiChanged">
+            <summary>
+            DPI changed event
+            </summary>
+            <remarks>This event is fired when DPI of target Window is changed. It is not necessarily the same timing
+            when DPI of the monitor to which target Window belongs is changed.</remarks>
+        </member>
+        <member name="E:MonitorAware.Models.WindowHandler.ColorProfileChanged">
+            <summary>
+            Color profile path changed event
+            </summary>
+            <remarks>This event is fired when color profile path of the monitor to which target Window belongs has
+            changed and Window's move/resize which caused the change has exited.</remarks>
         </member>
         <member name="M:MonitorAware.Models.WindowHandler.#ctor">
             <summary>
@@ -460,221 +664,10 @@
             Object: Block.
             </remarks>
         </member>
-        <member name="P:MonitorAware.Models.WindowHandler.IsPerMonitorDpiAware">
-            <summary>
-            Whether target Window is Per-Monitor DPI aware (readonly)
-            </summary>
-        </member>
-        <member name="P:MonitorAware.Models.WindowHandler.SystemDpi">
-            <summary>
-            System DPI (readonly)
-            </summary>
-        </member>
-        <member name="P:MonitorAware.Models.WindowHandler.MonitorDpi">
-            <summary>
-            Per-Monitor DPI of current monitor (public readonly)
-            </summary>
-            <remarks>This property cannot become a binding target because it has no public setter.</remarks>
-        </member>
-        <member name="P:MonitorAware.Models.WindowHandler.WindowDpi">
-            <summary>
-            Per-Monitor DPI of target Window (public readonly)
-            </summary>
-            <remarks>This property cannot become a binding target because it has no public setter.</remarks>
-        </member>
-        <member name="P:MonitorAware.Models.WindowHandler.ColorProfilePath">
-            <summary>
-            Color profile path of target Window (public readonly)
-            </summary>
-            <remarks>This property cannot become a binding target because it has no public setter.</remarks>
-        </member>
-        <member name="E:MonitorAware.Models.WindowHandler.DpiChanged">
-            <summary>
-            DPI changed event
-            </summary>
-            <remarks>This event is fired when DPI of target Window is changed. It is not necessarily the same timing
-            when DPI of the monitor to which target Window belongs is changed.</remarks>
-        </member>
-        <member name="E:MonitorAware.Models.WindowHandler.ColorProfileChanged">
-            <summary>
-            Color profile path changed event
-            </summary>
-            <remarks>This event is fired when color profile path of the monitor to which target Window belongs has
-            changed and Window's move/resize which caused the change has exited.</remarks>
-        </member>
-        <member name="T:MonitorAware.Models.WindowHandler.WindowStatus">
-            <summary>
-            Status of a <see cref="T:System.Windows.Window"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.WindowHandler.WindowStatus.None">
-            <summary>
-            A Window stands still.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.WindowHandler.WindowStatus.LocationChanged">
-            <summary>
-            A Window's location is being changed.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.WindowHandler.WindowStatus.SizeChanged">
-            <summary>
-            A Window's size is being changed.
-            </summary>
-        </member>
-        <member name="T:MonitorAware.Models.WindowHandler.WindowInfo">
-            <summary>
-            DPI and other information on a <see cref="T:System.Windows.Window"/>
-            </summary>
-        </member>
-        <member name="M:MonitorAware.Models.ExtendedWindowHandler.WndProc(System.IntPtr,System.Int32,System.IntPtr,System.IntPtr,System.Boolean@)">
-            <summary>
-            Handle window messages.
-            </summary>
-            <param name="hwnd">The window handle</param>
-            <param name="msg">The message ID</param>
-            <param name="wParam">The message's wParam value</param>
-            <param name="lParam">The message's lParam value</param>
-            <param name="handled">Whether the message was handled</param>
-            <returns>Return value depending on the particular message</returns>
-            <remarks>This is an implementation of System.Windows.Interop.HwndSourceHook.</remarks>
-        </member>
-        <member name="E:MonitorAware.Models.ExtendedWindowHandler.WindowActivatedChanged">
-            <summary>
-            Window activated changed event
-            </summary> 
-            <remarks>
-            Args true:  Window is being activated.
-            Args false: Window is being deactivated.
-            </remarks>
-        </member>
-        <member name="E:MonitorAware.Models.ExtendedWindowHandler.DwmColorizationColorChanged">
-            <summary>
-            DWM colorization color changed event
-            </summary>
-            <remarks>This event is fired when default Window chrome color is changed.</remarks>
-        </member>
-        <member name="M:MonitorAware.Models.Win32.NativeMacro.GetLoWord(System.UInt32)">
-            <summary>
-            Equivalent to LOWORD
-            </summary>
-            <param name="dword">Dword (unit)</param>
-            <returns>Low-order Word (ushort)</returns>
-        </member>
-        <member name="M:MonitorAware.Models.Win32.NativeMacro.GetHiWord(System.UInt32)">
-            <summary>
-            Equivalent to HIWORD
-            </summary>
-            <param name="dword">Dword (uint)</param>
-            <returns>High-order Word (ushort)</returns>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.WA_ACTIVE">
-            <summary>
-            Activated by some method other than a mouse click.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.WA_CLICKACTIVE">
-            <summary>
-            Activated by a mouse click.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.WA_INACTIVE">
-            <summary>
-            Deactivated.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_MAXHIDE">
-            <summary>
-            Some other window is maximized.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_MAXIMIZED">
-            <summary>
-            The window has been maximized.
-            </summary> 
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_MAXSHOW">
-            <summary>
-            Some other window has been restored to its former size.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_MINIMIZED">
-            <summary>
-            The window has been minimized.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_RESTORED">
-            <summary>
-            The window has been resized, but neither the SIZE_MINIMIZED nor SIZE_MAXIMIZED value applies.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONULL">
-            <summary>
-            If no display monitor intersects, returns null.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTOPRIMARY">
-            <summary>
-            If no display monitor intersects, returns a handle to the primary display monitor.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONEAREST">
-            <summary>
-            If no display monitor intersects, returns a handle to the display monitor that is nearest to the rectangle.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_DPI_Unaware">
-            <summary>
-            Not DPI aware
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_System_DPI_Aware">
-            <summary>
-            System DPI aware
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware">
-            <summary>
-            Per-Monitor DPI aware
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Effective_DPI">
-            <summary>
-            Effective DPI that incorporates accessibility overrides and matches what Desktop Window Manage (DWM) uses to scale desktop applications
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Angular_DPI">
-            <summary>
-            DPI that ensures rendering at a compliant angular resolution on the screen, without incorporating accessibility overrides
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Raw_DPI">
-            <summary>
-            Linear DPI of the screen as measured on the screen itself
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Default">
-            <summary>
-            Default DPI
-            </summary>
-        </member>
         <member name="T:MonitorAware.Views.Controls.DrawingMaximizeIcon">
             <summary>
             Drawing maximize icon
             </summary>
-        </member>
-        <member name="T:MonitorAware.Views.Controls.IDrawingIcon">
-            <summary>
-            Interface for drawing icon
-            </summary>
-        </member>
-        <member name="M:MonitorAware.Views.Controls.IDrawingIcon.Draw(System.Windows.Media.DrawingContext,System.Double,System.Windows.Media.Brush)">
-            <summary>
-            Draw icon.
-            </summary>
-            <param name="drawingContext">DrawingContext of canvas</param>
-            <param name="factor">Factor from default DPI</param>
-            <param name="foreground">Icon foreground Brush</param>
         </member>
         <member name="M:MonitorAware.Views.Controls.DrawingMaximizeIcon.Draw(System.Windows.Media.DrawingContext,System.Double,System.Windows.Media.Brush)">
             <summary>
@@ -715,31 +708,6 @@
             </summary>
             <param name="e"></param>
         </member>
-        <member name="F:MonitorAware.Views.Controls.ExtendedCaptionButton.IsAboutActiveProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.Controls.ExtendedCaptionButton.IsAboutActive"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.Controls.ExtendedCaptionButton.NormalBackgroundProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.Controls.ExtendedCaptionButton.NormalBackground"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.Controls.ExtendedCaptionButton.DeactivatedBackgroundProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.Controls.ExtendedCaptionButton.DeactivatedBackground"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.Controls.ExtendedCaptionButton.IconGeometryProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.Controls.ExtendedCaptionButton.IconGeometry"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.Controls.ExtendedCaptionButton.DrawingIconProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.Controls.ExtendedCaptionButton.DrawingIcon"/>
-            </summary>
-        </member>
         <member name="P:MonitorAware.Views.Controls.ExtendedCaptionButton.IsAboutActive">
             <summary>
             Whether the owner Window is about to be activated (internal)
@@ -749,11 +717,21 @@
             <para>For binding only between code behind.</para>
             </remarks>
         </member>
+        <member name="F:MonitorAware.Views.Controls.ExtendedCaptionButton.IsAboutActiveProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.Controls.ExtendedCaptionButton.IsAboutActive"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.Controls.ExtendedCaptionButton.NormalBackground">
             <summary>
             Caption button background Brush when the owner Window is activated
             </summary>
             <remarks>Default value (Transparent) is to make whole button area hit test visible.</remarks>
+        </member>
+        <member name="F:MonitorAware.Views.Controls.ExtendedCaptionButton.NormalBackgroundProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.Controls.ExtendedCaptionButton.NormalBackground"/>
+            </summary>
         </member>
         <member name="P:MonitorAware.Views.Controls.ExtendedCaptionButton.DeactivatedBackground">
             <summary>
@@ -761,14 +739,29 @@
             </summary>
             <remarks>Default value (Transparent) is to make whole button area hit test visible.</remarks>
         </member>
+        <member name="F:MonitorAware.Views.Controls.ExtendedCaptionButton.DeactivatedBackgroundProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.Controls.ExtendedCaptionButton.DeactivatedBackground"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.Controls.ExtendedCaptionButton.IconGeometry">
             <summary>
             Geometry for button icon
             </summary>
         </member>
+        <member name="F:MonitorAware.Views.Controls.ExtendedCaptionButton.IconGeometryProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.Controls.ExtendedCaptionButton.IconGeometry"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.Controls.ExtendedCaptionButton.DrawingIcon">
             <summary>
             Drawing icon to be used by IconCanvas
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Views.Controls.ExtendedCaptionButton.DrawingIconProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.Controls.ExtendedCaptionButton.DrawingIcon"/>
             </summary>
         </member>
         <member name="T:MonitorAware.Views.Controls.IconCanvas">
@@ -788,14 +781,30 @@
             </summary>
             <param name="e"></param>
         </member>
+        <member name="P:MonitorAware.Views.Controls.IconCanvas.Foreground">
+            <summary>
+            Icon foreground Brush
+            </summary>
+            <remarks>Black by OS's default.</remarks>
+        </member>
         <member name="F:MonitorAware.Views.Controls.IconCanvas.ForegroundProperty">
             <summary>
             Dependency property for <see cref="P:MonitorAware.Views.Controls.IconCanvas.Foreground"/>
             </summary>
         </member>
+        <member name="P:MonitorAware.Views.Controls.IconCanvas.DrawingIcon">
+            <summary>
+            Drawing icon
+            </summary>
+        </member>
         <member name="F:MonitorAware.Views.Controls.IconCanvas.DrawingIconProperty">
             <summary>
             Dependency property for <see cref="P:MonitorAware.Views.Controls.IconCanvas.DrawingIcon"/>
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Views.Controls.IconCanvas.AncestorTransform">
+            <summary>
+            LayoutTransform of ancestor FrameworkElement
             </summary>
         </member>
         <member name="F:MonitorAware.Views.Controls.IconCanvas.AncestorTransformProperty">
@@ -817,21 +826,18 @@
             <param name="factor">Factor from default DPI</param>
             <param name="foreground">Icon foreground Brush</param>
         </member>
-        <member name="P:MonitorAware.Views.Controls.IconCanvas.Foreground">
+        <member name="T:MonitorAware.Views.Controls.IDrawingIcon">
             <summary>
-            Icon foreground Brush
-            </summary>
-            <remarks>Black by OS's default.</remarks>
-        </member>
-        <member name="P:MonitorAware.Views.Controls.IconCanvas.DrawingIcon">
-            <summary>
-            Drawing icon
+            Interface for drawing icon
             </summary>
         </member>
-        <member name="P:MonitorAware.Views.Controls.IconCanvas.AncestorTransform">
+        <member name="M:MonitorAware.Views.Controls.IDrawingIcon.Draw(System.Windows.Media.DrawingContext,System.Double,System.Windows.Media.Brush)">
             <summary>
-            LayoutTransform of ancestor FrameworkElement
+            Draw icon.
             </summary>
+            <param name="drawingContext">DrawingContext of canvas</param>
+            <param name="factor">Factor from default DPI</param>
+            <param name="foreground">Icon foreground Brush</param>
         </member>
         <member name="T:MonitorAware.Views.Controls.FrameworkElementCenterProperty">
             <summary>
@@ -983,6 +989,11 @@
             Default constructor
             </summary>
         </member>
+        <member name="P:MonitorAware.Views.ExtendedWindow.WindowHandler">
+            <summary>
+            Handler for <see cref="T:MonitorAware.Views.ExtendedWindow"/>
+            </summary>
+        </member>
         <member name="M:MonitorAware.Views.ExtendedWindow.OnApplyTemplate">
             <summary>
             OnApplyTemplate
@@ -1011,179 +1022,6 @@
             OnClosed
             </summary>
             <param name="e"></param>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.ThemeProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.Theme"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.ThemeUriProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ThemeUri"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.IsMinimizeVisibleProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.IsMinimizeVisible"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.IsMaximizeVisibleProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.IsMaximizeVisible"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.IsRestoreVisibleProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.IsRestoreVisible"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.KeepsTitleContentMarginProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.KeepsTitleContentMargin"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.BlendsCaptionButtonVisualStyleProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.BlendsCaptionButtonVisualStyle"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.UsesDefaultChromeBackgroundProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.UsesDefaultChromeBackground"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.DefaultChromeBackgroundPropertyKey">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.DefaultChromeBackground"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.DefaultChromeBackgroundProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.DefaultChromeBackground"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeBackgroundProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeBackground"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeForegroundProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeForeground"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow._deactivatedBackground">
-            <summary>
-            Default value of <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedBackground"/>
-            </summary>
-            <remarks>This value seems to have to be defined before dependency property.</remarks>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedBackgroundProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedBackground"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedForegroundProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedForeground"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeBorderThicknessProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeBorderThickness"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow._chromeBorderBrush">
-            <summary>
-            Default value of <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeBorderBrush"/>
-            </summary>
-            <remarks>This value seems to have to be defined before dependency property.</remarks>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeBorderBrushProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeBorderBrush"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.TitleBarBackgroundProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleBarBackground"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.TitleBarNormalHeightProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleBarNormalHeight"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.TitleBarMaximizedHeightProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleBarMaximizedHeight"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.TitleBarPaddingLeftProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleBarPaddingLeft"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.TitleBarPaddingRightProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleBarPaddingRight"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.IconSizeProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.IconSize"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.TitleAlignmentProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleAlignment"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.TitleFontSizeProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleFontSize"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.ContentMarginProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ContentMargin"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.ContentBorderThicknessProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ContentBorderThickness"/>
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow.ContentBorderBrushProperty">
-            <summary>
-            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ContentBorderBrush"/>
-            </summary>
-        </member>
-        <member name="M:MonitorAware.Views.ExtendedWindow.AdjustLayout">
-            <summary>
-            Adjust layout of Window parts.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow._isDueCheckBackground">
-            <summary>
-            Whether checking background is due.
-            </summary>
-            <remarks>Default value must be true to execute initial check.</remarks>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow._isDueCheckDefaultChromeBackground">
-            <summary>
-            Whether checking default chrome background is due.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Views.ExtendedWindow._chromeBackgroundActual">
-            <summary>
-            Chrome background color to be actually used
-            </summary>
-        </member>
-        <member name="P:MonitorAware.Views.ExtendedWindow.WindowHandler">
-            <summary>
-            Handler for <see cref="T:MonitorAware.Views.ExtendedWindow"/>
-            </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ChromeOutmostBorder">
             <summary>
@@ -1240,9 +1078,19 @@
             Window theme out of ExtendedTheme
             </summary>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.ThemeProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.Theme"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ThemeUri">
             <summary>
             Window theme Uri
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.ThemeUriProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ThemeUri"/>
             </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.IsMinimizeVisible">
@@ -1250,14 +1098,29 @@
             Whether minimize button is visible
             </summary>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.IsMinimizeVisibleProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.IsMinimizeVisible"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.IsMaximizeVisible">
             <summary>
             Whether maximize button is visible
             </summary>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.IsMaximizeVisibleProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.IsMaximizeVisible"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.IsRestoreVisible">
             <summary>
             Whether restore button is visible
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.IsRestoreVisibleProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.IsRestoreVisible"/>
             </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.KeepsTitleContentMargin">
@@ -1266,11 +1129,21 @@
             </summary>
             <remarks>False by OS's default.</remarks>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.KeepsTitleContentMarginProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.KeepsTitleContentMargin"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.BlendsCaptionButtonVisualStyle">
             <summary>
             Whether to blend colors for caption buttons' visual style with their normal color
             </summary>
             <remarks>This blending is for the case the colors are translucent.</remarks>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.BlendsCaptionButtonVisualStyleProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.BlendsCaptionButtonVisualStyle"/>
+            </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.UsesDefaultChromeBackground">
             <summary>
@@ -1278,15 +1151,35 @@
             </summary>
             <remarks>Default value must be false to execute initial check.</remarks>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.UsesDefaultChromeBackgroundProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.UsesDefaultChromeBackground"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.DefaultChromeBackground">
             <summary>
             OS's default chrome background Brush when a Window is activated (public readonly)
             </summary>
             <remarks>Default value (SystemColors.ActiveCaptionBrush) is merely for fall back.</remarks>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.DefaultChromeBackgroundPropertyKey">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.DefaultChromeBackground"/>
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.DefaultChromeBackgroundProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.DefaultChromeBackground"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ChromeBackground">
             <summary>
             Chrome background Brush when a Window is activated
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeBackgroundProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeBackground"/>
             </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ChromeForeground">
@@ -1295,11 +1188,27 @@
             </summary>
             <remarks>Black by OS's default.</remarks>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeForegroundProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeForeground"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedBackground">
             <summary>
             Chrome background Brush when a Window is deactivated
             </summary>
             <remarks>Default value (#FFebebeb) is for OS's default.</remarks>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow._deactivatedBackground">
+            <summary>
+            Default value of <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedBackground"/>
+            </summary>
+            <remarks>This value seems to have to be defined before dependency property.</remarks>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedBackgroundProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedBackground"/>
+            </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedForeground">
             <summary>
@@ -1307,11 +1216,21 @@
             </summary>
             <remarks>Black by OS's default.</remarks>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedForegroundProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeDeactivatedForeground"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ChromeBorderThickness">
             <summary>
             Chrome border thickness (chrome outer border)
             </summary>
             <remarks>1 by OS's default.</remarks>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeBorderThicknessProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeBorderThickness"/>
+            </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ChromeBorderBrush">
             <summary>
@@ -1319,9 +1238,25 @@
             </summary>
             <remarks>Default value (#3C000000) is for reproducing OS's default.</remarks>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow._chromeBorderBrush">
+            <summary>
+            Default value of <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeBorderBrush"/>
+            </summary>
+            <remarks>This value seems to have to be defined before dependency property.</remarks>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.ChromeBorderBrushProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ChromeBorderBrush"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.TitleBarBackground">
             <summary>
             Title bar background Brush
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.TitleBarBackgroundProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleBarBackground"/>
             </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.TitleBarNormalHeight">
@@ -1333,9 +1268,19 @@
             SystemParameters.WindowResizeBorderThickness.Top and SystemParameters.WindowNonClientFrameThickness.Top
             which includes chrome border thickness.</remarks>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.TitleBarNormalHeightProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleBarNormalHeight"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.TitleBarMaximizedHeight">
             <summary>
             Title bar height when a Window is maximized
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.TitleBarMaximizedHeightProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleBarMaximizedHeight"/>
             </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.TitleBarPaddingLeft">
@@ -1343,9 +1288,19 @@
             Title bar padding at the left side
             </summary>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.TitleBarPaddingLeftProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleBarPaddingLeft"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.TitleBarPaddingRight">
             <summary>
             Title bar padding at the right side
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.TitleBarPaddingRightProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleBarPaddingRight"/>
             </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.IconSize">
@@ -1353,9 +1308,19 @@
             Size of icon (Window.Icon) in title bar
             </summary>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.IconSizeProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.IconSize"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.TitleAlignment">
             <summary>
             Alignment of title (Window.Title) in title bar
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.TitleAlignmentProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleAlignment"/>
             </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.TitleFontSize">
@@ -1364,11 +1329,21 @@
             </summary>
             <remarks>Default value (14) is for OS's default.</remarks>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.TitleFontSizeProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.TitleFontSize"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ContentMargin">
             <summary>
             Content (Window.Content) margin 
             </summary>
             <remarks>Default value (6,0,6,6) is for reproducing OS's default.</remarks>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.ContentMarginProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ContentMargin"/>
+            </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ContentBorderThickness">
             <summary>
@@ -1376,11 +1351,42 @@
             </summary>
             <remarks>1 by OS's default.</remarks>
         </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.ContentBorderThicknessProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ContentBorderThickness"/>
+            </summary>
+        </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ContentBorderBrush">
             <summary>
             Content border Brush
             </summary>
             <remarks>Default value is the same as that of ChromeBorderBrush.</remarks>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow.ContentBorderBrushProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Views.ExtendedWindow.ContentBorderBrush"/>
+            </summary>
+        </member>
+        <member name="M:MonitorAware.Views.ExtendedWindow.AdjustLayout">
+            <summary>
+            Adjust layout of Window parts.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow._isDueCheckBackground">
+            <summary>
+            Whether checking background is due.
+            </summary>
+            <remarks>Default value must be true to execute initial check.</remarks>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow._isDueCheckDefaultChromeBackground">
+            <summary>
+            Whether checking default chrome background is due.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Views.ExtendedWindow._chromeBackgroundActual">
+            <summary>
+            Chrome background color to be actually used
+            </summary>
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.CaptionButtonBackground">
             <summary>
@@ -1457,6 +1463,11 @@
             Per-Monitor DPI aware window
             </summary>
         </member>
+        <member name="P:MonitorAware.Views.MonitorAwareWindow.WindowHandler">
+            <summary>
+            Handler for <see cref="T:System.Windows.Window"/>
+            </summary>
+        </member>
         <member name="M:MonitorAware.Views.MonitorAwareWindow.OnSourceInitialized(System.EventArgs)">
             <summary>
             OnSourceInitialized
@@ -1468,11 +1479,6 @@
             OnClosed
             </summary>
             <param name="e"></param>
-        </member>
-        <member name="P:MonitorAware.Views.MonitorAwareWindow.WindowHandler">
-            <summary>
-            Handler for <see cref="T:System.Windows.Window"/>
-            </summary>
         </member>
     </members>
 </doc>

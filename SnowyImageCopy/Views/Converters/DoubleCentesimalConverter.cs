@@ -10,7 +10,7 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Convert double of percentage to centesimal double.
+	/// Convert between double representing percentage and centesimal double.
 	/// </summary>
 	[ValueConversion(typeof(double), typeof(double))]
 	public class DoubleCentesimalConverter : IValueConverter
@@ -20,12 +20,12 @@ namespace SnowyImageCopy.Views.Converters
 			if (!(value is double))
 				return DependencyProperty.UnsetValue;
 
-			var buff = (double)value;
+			var sourceValue = (double)value;
 
-			if (buff < 0D)
+			if (sourceValue < 0D)
 				return 0D;
-			if (buff < 100D)
-				return buff / 100D;
+			if (sourceValue < 100D)
+				return sourceValue / 100D;
 			else
 				return 1D;
 		}
@@ -35,12 +35,12 @@ namespace SnowyImageCopy.Views.Converters
 			if (!(value is double))
 				return DependencyProperty.UnsetValue;
 
-			var buff = (double)value;
+			var sourceValue = (double)value;
 
-			if (buff < 0D)
+			if (sourceValue < 0D)
 				return 0D;
-			if (buff < 100D)
-				return buff * 100D;
+			if (sourceValue < 100D)
+				return sourceValue * 100D;
 			else
 				return 100D;
 		}

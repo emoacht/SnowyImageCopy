@@ -13,7 +13,7 @@ namespace SnowyImageCopy.Common
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected virtual void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
+		protected void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
 		{
 			if (propertyExpression == null)
 				throw new ArgumentNullException("propertyExpression");
@@ -25,7 +25,7 @@ namespace SnowyImageCopy.Common
 			this.RaisePropertyChanged(memberExpression.Member.Name);
 		}
 
-		protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+		protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			var handler = this.PropertyChanged;
 			if (handler != null)

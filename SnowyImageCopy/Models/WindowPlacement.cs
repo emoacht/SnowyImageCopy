@@ -18,12 +18,12 @@ namespace SnowyImageCopy.Models
 		#region Win32
 
 		[DllImport("User32.dll", SetLastError = true)]
-		public static extern bool SetWindowPlacement(
+		private static extern bool SetWindowPlacement(
 			IntPtr hWnd,
 			[In] ref WINDOWPLACEMENT lpwndpl);
 
 		[DllImport("User32.dll", SetLastError = true)]
-		public static extern bool GetWindowPlacement(
+		private static extern bool GetWindowPlacement(
 			IntPtr hWnd,
 			out WINDOWPLACEMENT lpwndpl);
 

@@ -224,8 +224,8 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				if ((ex.GetType() == typeof(RemoteFileNotFoundException)) ||
-					((ex.GetType() == typeof(RemoteConnectionUnableException)) &&
+				if ((ex is RemoteFileNotFoundException) ||
+					((ex is RemoteConnectionUnableException) &&
 					(((RemoteConnectionUnableException)ex).Code == HttpStatusCode.InternalServerError)))
 				{
 					// If image file is not JPEG format or if there is no Exif standardized thumbnail stored,
@@ -561,8 +561,7 @@ namespace SnowyImageCopy.Models
 							}
 
 							if ((0 < size) &&
-								(!response.Content.Headers.ContentLength.HasValue ||
-								 (response.Content.Headers.ContentLength.Value != size)))
+								(response.Content.Headers.ContentLength != size))
 								throw new RemoteFileInvalidException("Data length does not match!", path);
 
 							// Because of HttpCompletionOption.ResponseHeadersRead option, neither CancellationToken
@@ -677,7 +676,6 @@ namespace SnowyImageCopy.Models
 							}
 						}
 					}
-					// Sort out exceptions.					
 					catch (OperationCanceledException) // Including TaskCanceledException
 					{
 						if (!cancellationToken.IsCancellationRequested)
@@ -698,9 +696,9 @@ namespace SnowyImageCopy.Models
 					}
 					catch (IOException ie)
 					{
-						var inner = ie.InnerException;
-						if ((inner != null) && (inner.GetType() == typeof(WebException)) &&
-							(((WebException)inner).Status == WebExceptionStatus.ConnectionClosed) &&
+						var webException = ie.InnerException as WebException;
+						if ((webException != null) &&
+							(webException.Status == WebExceptionStatus.ConnectionClosed) &&
 							cancellationToken.IsCancellationRequested)
 							// If cancellation has been requested during downloading, this exception may be thrown.
 							throw new OperationCanceledException();
@@ -709,12 +707,12 @@ namespace SnowyImageCopy.Models
 					}
 					catch (HttpRequestException hre)
 					{
-						var inner = hre.InnerException;
-						if ((inner != null) && (inner.GetType() == typeof(WebException)))
+						var webException = hre.InnerException as WebException;
+						if (webException != null)
 							// If unable to connect to FlashAir card, this exception will be thrown.
 							// The Status may vary, such as WebExceptionStatus.NameResolutionFailure,
 							// WebExceptionStatus.ConnectFailure.
-							throw new RemoteConnectionUnableException(((WebException)hre.InnerException).Status);
+							throw new RemoteConnectionUnableException(webException.Status);
 
 						throw;
 					}
@@ -777,35 +775,14 @@ namespace SnowyImageCopy.Models
 		/// <param name="responseBytes">Response byte array</param>
 		private static async Task RecordDownloadStringAsync(string requestPath, byte[] responseBytes)
 		{
-			var filePath = Path.Combine(
-				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				Assembly.GetExecutingAssembly().GetName().Name,
-				"download.log");
-
-			try
+			var result = String.Join(Environment.NewLine, new[]
 			{
-				if (File.Exists(filePath) &&
-					(File.GetLastWriteTime(filePath) < DateTime.Now.AddHours(-1)))
-					File.Delete(filePath);
+				String.Format("request => {0}", requestPath),
+				"response -> ",
+				Encoding.ASCII.GetString(responseBytes)
+			});
 
-				var result = new[]
-				{
-					String.Format("[{0:HH:mm:ss fff}]", DateTime.Now),
-					String.Format("request => {0}", requestPath),
-					"response -> ",
-					Encoding.ASCII.GetString(responseBytes)
-				}
-				.Aggregate(String.Empty, (work, next) => work + next + Environment.NewLine);
-
-				using (var sw = new StreamWriter(filePath, true, Encoding.UTF8))
-				{
-					await sw.WriteAsync(result);
-				}
-			}
-			catch (Exception ex)
-			{
-				Trace.WriteLine(String.Format("Failed to record download log to AppData. {0}", ex));
-			}
+			await LogService.RecordStringAsync("download.log", result);
 		}
 
 		#endregion
