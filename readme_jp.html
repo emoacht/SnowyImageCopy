@@ -61,8 +61,8 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 
 <div id="title">
 <h1>Snowy</h1>
-<p id="version">Ver 1.0.1</p>
-<p id="date">2015/7/9</p>
+<p id="version">Ver 1.1</p>
+<p id="date">2015/8/22</p>
 </div><!-- end of title -->
 
 <div id="main">
@@ -72,8 +72,8 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 <h2>動作条件</h2>
 
 <ul>
-	<li>Windows 8以降</li>
-	<li>Windows 7 (.NET Framework 4.5のインストールが必要)</li>
+	<li>Windows 7以降</li>
+	<li>.NET Framework 4.5.2</li>
 </ul>
 <p>Windows 8.1 64bit上でSD-WB008G (Class6)、SD-WC016G (W-02 Class10)とSD-WE016G (W-03 Class10)を相手に動作確認しています。</p>
 
@@ -98,8 +98,9 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 <ul>
 	<li>"コピー後に削除"機能はFlashAir内のイメージを、そのデータがPCにコピーされた後に削除するよう試みます。</li>
 	<li>実際に使う前にこの機能をカメラと共にテストすることが必須です。この機能はFlashAirの<a href="https://flashair-developers.com/ja/documents/api/uploadcgi/">upload.cgi</a>を使用しますが、これはFlashAirとカメラの間でデータの不整合を起こし得るため、<span style="color:red">FlashAirのファイルシステムと保存されたイメージが破壊されるかもしれません。</span>何が起きるかは個々のカメラ機種によります。</li>
-	<li>読み取り専用の属性が付いたイメージは削除されません。多くの場合、この機能による削除を認識させるにはカメラを再起動させる必要があります。</li>
 	<li>FlashAirのupload.cgiが無効になっている場合、この機能は失敗します。この設定を確認または変更するには、FlashAirをPCに挿入して同梱のSnowy Toolを使ってください。またはFlashAir内のCONFIGファイルを開いて、<a href="https://flashair-developers.com/ja/documents/api/config/#UPLOAD">UPLOAD</a>パラメーターを直接確認してください。</li>
+	<li>多くの場合、この機能による削除を認識させるにはカメラを再起動させる必要があります。</li>
+	<li>読み取り専用の属性が付いたイメージは削除されません。</li>
 	<li>この機能を使うには、"コピー後にFlashAir内のイメージの削除を選べるようにする"ボタンをオンにし、テキストボックスに"DELETE"（全て大文字）と入力してください。"コピー後に削除"ボタンが現れるので、これをオンにしてください。</li>
 </ul>
 
