@@ -53,7 +53,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="card">FlashAir card information</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>File list</returns>
-		internal static async Task<List<IFileItem>> GetFileListRootAsync(CardInfo card, CancellationToken cancellationToken)
+		internal static async Task<IEnumerable<IFileItem>> GetFileListRootAsync(CardInfo card, CancellationToken cancellationToken)
 		{
 			try
 			{
@@ -136,7 +136,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>File list</returns>
 		/// <remarks>This method is not actually used.</remarks>
-		internal static async Task<List<IFileItem>> GetFileListAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
+		internal static async Task<IEnumerable<IFileItem>> GetFileListAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
 		{
 			if (String.IsNullOrWhiteSpace(remoteDirectoryPath))
 				throw new ArgumentNullException("remoteDirectoryPath");

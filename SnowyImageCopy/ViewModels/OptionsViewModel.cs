@@ -97,30 +97,26 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Date
 
-		public List<FilePeriodViewModel> FilePeriodList
+		public IReadOnlyCollection<FilePeriodViewModel> FilePeriodList
 		{
 			get
 			{
 				if (_filePeriodList == null)
 				{
-					_filePeriodList = Enum.GetValues(typeof(FilePeriod)).OfType<FilePeriod>()
+					_filePeriodList = Enum.GetValues(typeof(FilePeriod))
+						.Cast<FilePeriod>()
 						.Select(x => new FilePeriodViewModel { Period = x })
-						.ToList();
+						.ToArray();
 				}
 
 				return _filePeriodList;
 			}
-			set
-			{
-				_filePeriodList = value;
-				RaisePropertyChanged();
-			}
 		}
-		private List<FilePeriodViewModel> _filePeriodList;
+		private FilePeriodViewModel[] _filePeriodList;
 
 		public FilePeriodViewModel FilePeriodSelected
 		{
-			get { return FilePeriodList.FirstOrDefault(x => x.Period == Settings.Current.TargetPeriod); }
+			get { return FilePeriodList.Single(x => x.Period == Settings.Current.TargetPeriod); }
 			set
 			{
 				Settings.Current.TargetPeriod = value.Period;
