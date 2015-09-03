@@ -38,14 +38,6 @@ namespace SnowyImageCopy.Helper
 			out IntPtr ppInterfaceList);
 
 		[DllImport("Wlanapi.dll", SetLastError = true)]
-		private static extern uint WlanGetAvailableNetworkList(
-			IntPtr hClientHandle,
-			[MarshalAs(UnmanagedType.LPStruct)] Guid pInterfaceGuid,
-			uint dwFlags,
-			IntPtr pReserved,
-			out IntPtr ppAvailableNetworkList);
-
-		[DllImport("Wlanapi.dll", SetLastError = true)]
 		private static extern uint WlanQueryInterface(
 			IntPtr hClientHandle,
 			[MarshalAs(UnmanagedType.LPStruct)] Guid pInterfaceGuid,
@@ -95,54 +87,6 @@ namespace SnowyImageCopy.Helper
 				{
 					var interfaceInfo = new IntPtr(ppInterfaceList.ToInt64() + (Marshal.SizeOf(typeof(WLAN_INTERFACE_INFO)) * i) + offset);
 					InterfaceInfo[i] = Marshal.PtrToStructure<WLAN_INTERFACE_INFO>(interfaceInfo);
-				}
-			}
-		}
-
-		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-		private struct WLAN_AVAILABLE_NETWORK
-		{
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-			public string strProfileName;
-
-			public DOT11_SSID dot11Ssid;
-			public DOT11_BSS_TYPE dot11BssType;
-			public uint uNumberOfBssids;
-			public bool bNetworkConnectable;
-			public uint wlanNotConnectableReason;
-			public uint uNumberOfPhyTypes;
-
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-			public DOT11_PHY_TYPE[] dot11PhyTypes;
-
-			public bool bMorePhyTypes;
-			public uint wlanSignalQuality;
-			public bool bSecurityEnabled;
-			public DOT11_AUTH_ALGORITHM dot11DefaultAuthAlgorithm;
-			public DOT11_CIPHER_ALGORITHM dot11DefaultCipherAlgorithm;
-			public uint dwFlags;
-			public uint dwReserved;
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
-		private struct WLAN_AVAILABLE_NETWORK_LIST
-		{
-			public uint dwNumberOfItems;
-			public uint dwIndex;
-			public WLAN_AVAILABLE_NETWORK[] Network;
-
-			public WLAN_AVAILABLE_NETWORK_LIST(IntPtr ppAvailableNetworkList)
-			{
-				dwNumberOfItems = (uint)Marshal.ReadInt32(ppAvailableNetworkList, 0);
-				dwIndex = (uint)Marshal.ReadInt32(ppAvailableNetworkList, 4);
-				Network = new WLAN_AVAILABLE_NETWORK[dwNumberOfItems];
-
-				var offset = Marshal.SizeOf(typeof(uint)) * 2; // Size of dwNumberOfItems and dwIndex
-
-				for (int i = 0; i < dwNumberOfItems; i++)
-				{
-					var availableNetwork = new IntPtr(ppAvailableNetworkList.ToInt64() + (Marshal.SizeOf(typeof(WLAN_AVAILABLE_NETWORK)) * i) + offset);
-					Network[i] = Marshal.PtrToStructure<WLAN_AVAILABLE_NETWORK>(availableNetwork);
 				}
 			}
 		}
@@ -325,9 +269,6 @@ namespace SnowyImageCopy.Helper
 			wlan_intf_opcode_ihv_end = 0x3fffffff
 		}
 
-		private const uint WLAN_AVAILABLE_NETWORK_INCLUDE_ALL_ADHOC_PROFILES = 0x00000001;
-		private const uint WLAN_AVAILABLE_NETWORK_INCLUDE_ALL_MANUAL_HIDDEN_PROFILES = 0x00000002;
-
 		private const uint ERROR_SUCCESS = 0;
 		private const uint ERROR_INVALID_PARAMETER = 87;
 		private const uint ERROR_INVALID_HANDLE = 6;
@@ -335,6 +276,8 @@ namespace SnowyImageCopy.Helper
 		private const uint ERROR_NOT_FOUND = 1168;
 		private const uint ERROR_NOT_ENOUGH_MEMORY = 8;
 		private const uint ERROR_ACCESS_DENIED = 5;
+		private const uint ERROR_NOT_SUPPORTED = 50;
+		private const uint ERROR_SERVICE_NOT_ACTIVE = 1062;
 		private const uint ERROR_NDIS_DOT11_AUTO_CONFIG_ENABLED = 0x80342000;
 		private const uint ERROR_NDIS_DOT11_MEDIA_IN_USE = 0x80342001;
 		private const uint ERROR_NDIS_DOT11_POWER_STATE_INVALID = 0x80342002;
@@ -343,32 +286,6 @@ namespace SnowyImageCopy.Helper
 
 		#endregion
 
-
-		/// <summary>
-		/// Enumerate SSIDs of available wireless LANs.
-		/// </summary>
-		/// <returns>SSIDs</returns>
-		public static IEnumerable<string> EnumerateAvailableNetworkSsids()
-		{
-			using (var client = new WlanClient())
-			{
-				var interfaceInfoList = GetInterfaceInfoList(client.Handle);
-
-				foreach (var interfaceInfo in interfaceInfoList)
-				{
-					var availableNetworkList = GetAvailableNetworkList(client.Handle, interfaceInfo.InterfaceGuid);
-
-					foreach (var availableNetwork in availableNetworkList)
-					{
-						Debug.WriteLine("Interface: {0}, SSID: {1}",
-							interfaceInfo.strInterfaceDescription,
-							availableNetwork.dot11Ssid.ToSsidString());
-
-						yield return availableNetwork.dot11Ssid.ToSsidString();
-					}
-				}
-			}
-		}
 
 		/// <summary>
 		/// Enumerate SSIDs of connected wireless LANs.
@@ -468,30 +385,6 @@ namespace SnowyImageCopy.Helper
 			}
 		}
 
-		private static WLAN_AVAILABLE_NETWORK[] GetAvailableNetworkList(IntPtr clientHandle, Guid interfaceGuid)
-		{
-			var availableNetworkList = IntPtr.Zero;
-			try
-			{
-				var result = WlanGetAvailableNetworkList(
-					clientHandle,
-					interfaceGuid,
-					WLAN_AVAILABLE_NETWORK_INCLUDE_ALL_MANUAL_HIDDEN_PROFILES,
-					IntPtr.Zero,
-					out availableNetworkList);
-
-				// ERROR_NDIS_DOT11_POWER_STATE_INVALID will be returned if the interface is turned off.
-				return CheckResult(result, "WlanGetAvailableNetworkList", false)
-					? new WLAN_AVAILABLE_NETWORK_LIST(availableNetworkList).Network
-					: new WLAN_AVAILABLE_NETWORK[] { };
-			}
-			finally
-			{
-				if (availableNetworkList != IntPtr.Zero)
-					WlanFreeMemory(availableNetworkList);
-			}
-		}
-
 		private static WLAN_CONNECTION_ATTRIBUTES GetConnectionAttributes(IntPtr clientHandle, Guid interfaceGuid)
 		{
 			var queryData = IntPtr.Zero;
@@ -533,6 +426,8 @@ namespace SnowyImageCopy.Helper
 					case ERROR_NOT_FOUND:
 					case ERROR_NOT_ENOUGH_MEMORY:
 					case ERROR_ACCESS_DENIED:
+					case ERROR_NOT_SUPPORTED:
+					case ERROR_SERVICE_NOT_ACTIVE:
 					case ERROR_NDIS_DOT11_AUTO_CONFIG_ENABLED:
 					case ERROR_NDIS_DOT11_MEDIA_IN_USE:
 					case ERROR_NDIS_DOT11_POWER_STATE_INVALID:

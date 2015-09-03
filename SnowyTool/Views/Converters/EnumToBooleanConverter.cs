@@ -41,7 +41,7 @@ namespace SnowyTool.Views.Converters
 		/// <returns>Target Enum value if Boolean is true.</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool) || !(bool)value || (parameter == null))
+			if (!(value is bool) || !(bool)value || !targetType.IsEnum || (parameter == null))
 				return DependencyProperty.UnsetValue;
 
 			var enumValue = Enum.GetValues(targetType)
