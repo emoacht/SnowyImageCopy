@@ -845,7 +845,7 @@ namespace SnowyImageCopy.Models
 				}
 				else
 				{
-					var signatures = FileListCore.Select(x => x.Signature).ToArray();
+					var signatures = new HashSet<string>(FileListCore.Select(x => x.Signature));
 					isChanged = !fileListNew.Select(x => x.Signature).Any(x => signatures.Contains(x));
 				}
 

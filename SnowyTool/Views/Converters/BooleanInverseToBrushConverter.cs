@@ -16,9 +16,8 @@ namespace SnowyTool.Views.Converters
 	[ValueConversion(typeof(bool), typeof(Brush))]
 	public class BooleanInverseToBrushConverter : IValueConverter
 	{
-		private readonly string[] _predefinedColorNames = typeof(Colors).GetProperties()
-			.Select(x => x.Name)
-			.ToArray();
+		private readonly HashSet<string> _predefinedColorNames =
+			new HashSet<string>(typeof(Colors).GetProperties().Select(x => x.Name));
 
 		/// <summary>
 		/// Inverse Boolean and convert it to Brush.

@@ -135,7 +135,7 @@ namespace SnowyImageCopy.Models
 
 		#region Thumbnail
 
-		private List<string> _thumbnailFailedPathes;
+		private HashSet<string> _thumbnailFailedPathes;
 		private const int _thumbnailFailedPathesCountMax = 3;
 
 		public bool CanGetThumbnail
@@ -146,7 +146,7 @@ namespace SnowyImageCopy.Models
 		public void RecordThumbnailFailedPath(string filePath)
 		{
 			if (_thumbnailFailedPathes == null)
-				_thumbnailFailedPathes = new List<string>();
+				_thumbnailFailedPathes = new HashSet<string>();
 
 			if (!_thumbnailFailedPathes.Contains(filePath))
 				_thumbnailFailedPathes.Add(filePath);
