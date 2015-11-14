@@ -47,16 +47,6 @@ namespace SnowyImageCopy.Helper
 			ref IntPtr ppData,
 			IntPtr pWlanOpcodeValueType);
 
-		[DllImport("Kernel32.dll", SetLastError = true)]
-		private static extern uint FormatMessage(
-			uint dwFlags,
-			IntPtr lpSource,
-			uint dwMessageId,
-			uint dwLanguageId,
-			StringBuilder lpBuffer,
-			int nSize,
-			IntPtr Arguments);
-
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 		private struct WLAN_INTERFACE_INFO
 		{
@@ -78,14 +68,15 @@ namespace SnowyImageCopy.Helper
 			public WLAN_INTERFACE_INFO_LIST(IntPtr ppInterfaceList)
 			{
 				dwNumberOfItems = (uint)Marshal.ReadInt32(ppInterfaceList, 0);
-				dwIndex = (uint)Marshal.ReadInt32(ppInterfaceList, 4);
+				dwIndex = (uint)Marshal.ReadInt32(ppInterfaceList, 4 /* Offset for dwNumberOfItems */);
 				InterfaceInfo = new WLAN_INTERFACE_INFO[dwNumberOfItems];
-
-				var offset = Marshal.SizeOf(typeof(uint)) * 2; // Size of dwNumberOfItems and dwIndex
 
 				for (int i = 0; i < dwNumberOfItems; i++)
 				{
-					var interfaceInfo = new IntPtr(ppInterfaceList.ToInt64() + (Marshal.SizeOf(typeof(WLAN_INTERFACE_INFO)) * i) + offset);
+					var interfaceInfo = new IntPtr(ppInterfaceList.ToInt64()
+						+ 8 /* Offset for dwNumberOfItems and dwIndex */
+						+ (Marshal.SizeOf(typeof(WLAN_INTERFACE_INFO)) * i) /* Offset for preceding items */);
+
 					InterfaceInfo[i] = Marshal.PtrToStructure<WLAN_INTERFACE_INFO>(interfaceInfo);
 				}
 			}
@@ -99,17 +90,51 @@ namespace SnowyImageCopy.Helper
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
 			public byte[] ucSSID;
 
-			public byte[] ToSsidBytes()
+			public byte[] ToBytes()
 			{
 				return (ucSSID != null)
 					? ucSSID.Take((int)uSSIDLength).ToArray()
 					: null;
 			}
 
-			public string ToSsidString()
+			private static Encoding _encoding =
+				Encoding.GetEncoding(65001, // UTF-8 code page
+					EncoderFallback.ReplacementFallback,
+					DecoderFallback.ExceptionFallback);
+
+			public override string ToString()
 			{
-				return (ucSSID != null)
-					? Encoding.UTF8.GetString(ToSsidBytes())
+				if (ucSSID == null)
+					return null;
+
+				try
+				{
+					return _encoding.GetString(ToBytes());
+				}
+				catch (DecoderFallbackException)
+				{
+					return null;
+				}
+			}
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		private struct DOT11_MAC_ADDRESS
+		{
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+			public byte[] ucDot11MacAddress;
+
+			public byte[] ToBytes()
+			{
+				return (ucDot11MacAddress != null)
+					? ucDot11MacAddress.ToArray()
+					: null;
+			}
+
+			public override string ToString()
+			{
+				return (ucDot11MacAddress != null)
+					? BitConverter.ToString(ucDot11MacAddress).Replace('-', ':')
 					: null;
 			}
 		}
@@ -132,10 +157,7 @@ namespace SnowyImageCopy.Helper
 		{
 			public DOT11_SSID dot11Ssid;
 			public DOT11_BSS_TYPE dot11BssType;
-
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-			public byte[] dot11Bssid; // DOT11_MAC_ADDRESS
-
+			public DOT11_MAC_ADDRESS dot11Bssid;
 			public DOT11_PHY_TYPE dot11PhyType;
 			public uint uDot11PhyIndex;
 			public uint wlanSignalQuality;
@@ -270,19 +292,6 @@ namespace SnowyImageCopy.Helper
 		}
 
 		private const uint ERROR_SUCCESS = 0;
-		private const uint ERROR_INVALID_PARAMETER = 87;
-		private const uint ERROR_INVALID_HANDLE = 6;
-		private const uint ERROR_INVALID_STATE = 5023;
-		private const uint ERROR_NOT_FOUND = 1168;
-		private const uint ERROR_NOT_ENOUGH_MEMORY = 8;
-		private const uint ERROR_ACCESS_DENIED = 5;
-		private const uint ERROR_NOT_SUPPORTED = 50;
-		private const uint ERROR_SERVICE_NOT_ACTIVE = 1062;
-		private const uint ERROR_NDIS_DOT11_AUTO_CONFIG_ENABLED = 0x80342000;
-		private const uint ERROR_NDIS_DOT11_MEDIA_IN_USE = 0x80342001;
-		private const uint ERROR_NDIS_DOT11_POWER_STATE_INVALID = 0x80342002;
-
-		private const uint FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000;
 
 		#endregion
 
@@ -304,12 +313,16 @@ namespace SnowyImageCopy.Helper
 						continue;
 
 					var association = connection.wlanAssociationAttributes;
+					if (string.IsNullOrEmpty(association.dot11Ssid.ToString()))
+						continue;
 
-					Debug.WriteLine("Interface: {0}, SSID: {1}",
+					Debug.WriteLine("Interface: {0}, SSID: {1}, BSSID: {2}, Signal: {3}",
 						interfaceInfo.strInterfaceDescription,
-						association.dot11Ssid.ToSsidString());
+						association.dot11Ssid,
+						association.dot11Bssid,
+						association.wlanSignalQuality);
 
-					yield return association.dot11Ssid.ToSsidString();
+					yield return association.dot11Ssid.ToString();
 				}
 			}
 		}
@@ -332,7 +345,8 @@ namespace SnowyImageCopy.Helper
 					out negotiatedVersion,
 					out _clientHandle);
 
-				CheckResult(result, "WlanOpenHandle", true);
+				if (result != ERROR_SUCCESS)
+					throw new Win32Exception((int)result);
 			}
 
 			#region Dispose
@@ -374,9 +388,9 @@ namespace SnowyImageCopy.Helper
 					IntPtr.Zero,
 					out interfaceList);
 
-				return CheckResult(result, "WlanEnumInterfaces", true)
+				return (result == ERROR_SUCCESS)
 					? new WLAN_INTERFACE_INFO_LIST(interfaceList).InterfaceInfo
-					: null; // Not to be used
+					: new WLAN_INTERFACE_INFO[0];
 			}
 			finally
 			{
@@ -400,8 +414,7 @@ namespace SnowyImageCopy.Helper
 					ref queryData,
 					IntPtr.Zero);
 
-				// ERROR_INVALID_STATE will be returned if the client is not connected to a network.
-				return CheckResult(result, "WlanQueryInterface", false)
+				return (result == ERROR_SUCCESS)
 					? Marshal.PtrToStructure<WLAN_CONNECTION_ATTRIBUTES>(queryData)
 					: default(WLAN_CONNECTION_ATTRIBUTES);
 			}
@@ -410,54 +423,6 @@ namespace SnowyImageCopy.Helper
 				if (queryData != IntPtr.Zero)
 					WlanFreeMemory(queryData);
 			}
-		}
-
-		private static bool CheckResult(uint result, string methodName, bool willThrowOnFailure)
-		{
-			if (result == ERROR_SUCCESS)
-				return true;
-
-			if (!willThrowOnFailure)
-			{
-				switch (result)
-				{
-					case ERROR_INVALID_PARAMETER:
-					case ERROR_INVALID_STATE:
-					case ERROR_NOT_FOUND:
-					case ERROR_NOT_ENOUGH_MEMORY:
-					case ERROR_ACCESS_DENIED:
-					case ERROR_NOT_SUPPORTED:
-					case ERROR_SERVICE_NOT_ACTIVE:
-					case ERROR_NDIS_DOT11_AUTO_CONFIG_ENABLED:
-					case ERROR_NDIS_DOT11_MEDIA_IN_USE:
-					case ERROR_NDIS_DOT11_POWER_STATE_INVALID:
-						return false;
-
-					case ERROR_INVALID_HANDLE:
-						break;
-				}
-			}
-			throw CreateWin32Exception(result, methodName);
-		}
-
-		private static Win32Exception CreateWin32Exception(uint errorCode, string methodName)
-		{
-			var sb = new StringBuilder(512); // This 512 capacity is arbitrary.
-
-			var result = FormatMessage(
-			  FORMAT_MESSAGE_FROM_SYSTEM,
-			  IntPtr.Zero,
-			  errorCode,
-			  0x0409, // US (English)
-			  sb,
-			  sb.Capacity,
-			  IntPtr.Zero);
-
-			var message = string.Format("Method: {0}, Code: {1}", methodName, errorCode);
-			if (0 < result)
-				message += string.Format(", Message: {0}", sb.ToString());
-
-			return new Win32Exception((int)errorCode, message);
 		}
 
 		#endregion
