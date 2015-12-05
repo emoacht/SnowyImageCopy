@@ -38,7 +38,6 @@ namespace SnowyImageCopy.Views.Controls
 					OnValueMaximumChanged));
 		}
 
-
 		#region Template Part
 
 		private Path _circlePathBox;
@@ -46,7 +45,6 @@ namespace SnowyImageCopy.Views.Controls
 		private ArcSegment _circleArcSegment;
 
 		#endregion
-
 
 		#region Property
 
@@ -147,7 +145,6 @@ namespace SnowyImageCopy.Views.Controls
 				});
 
 		#endregion
-
 
 		public override void OnApplyTemplate()
 		{

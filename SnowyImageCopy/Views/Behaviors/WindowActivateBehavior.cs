@@ -48,7 +48,6 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#endregion
 
-
 		protected override void OnAttached()
 		{
 			base.OnAttached();
@@ -62,7 +61,6 @@ namespace SnowyImageCopy.Views.Behaviors
 
 			this.AssociatedObject.Activated -= OnActivatedChanged;
 		}
-
 
 		private void OnActivatedChanged(object sender, EventArgs e)
 		{

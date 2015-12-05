@@ -44,7 +44,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Method (Internal)
 
 		/// <summary>
@@ -504,7 +503,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Method (Private)
 
 		private static async Task<string> DownloadStringAsync(HttpClient client, string path, CardInfo card, CancellationToken cancellationToken)
@@ -735,7 +733,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region Helper
 

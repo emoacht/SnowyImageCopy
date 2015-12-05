@@ -82,12 +82,10 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		public static Settings Current { get { return _current; } }
 		private static readonly Settings _current = new Settings();
 
 		public WindowPlacement.WINDOWPLACEMENT? Placement { get; set; }
-
 
 		#region Settings
 
@@ -169,7 +167,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Date
 
 		public FilePeriod TargetPeriod
@@ -204,7 +201,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Current image
 
 		public bool IsCurrentImageVisible
@@ -236,7 +232,6 @@ namespace SnowyImageCopy.Models
 		private double _currentImageWidth = ImageManager.ThumbnailSize.Width;
 
 		#endregion
-
 
 		#region Dashboard
 
@@ -276,7 +271,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Auto check
 
 		public int AutoCheckInterval
@@ -294,7 +288,6 @@ namespace SnowyImageCopy.Models
 		private int _autoCheckInterval = 30; // Default
 
 		#endregion
-
 
 		#region File
 
@@ -359,7 +352,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Culture
 
 		public string CultureName
@@ -376,7 +368,6 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 		#endregion
-
 
 		#region Load/Save
 
@@ -434,7 +425,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region Prepare
 

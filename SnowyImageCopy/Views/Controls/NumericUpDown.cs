@@ -49,7 +49,6 @@ namespace SnowyImageCopy.Views.Controls
 
 		#endregion
 
-
 		#region Property
 
 		public double Value
@@ -172,13 +171,11 @@ namespace SnowyImageCopy.Views.Controls
 
 		#endregion
 
-
 		private enum Direction
 		{
 			Down,
 			Up,
 		}
-
 
 		public override void OnApplyTemplate()
 		{

@@ -33,7 +33,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Supplementary
 
 		internal string FilePath { get { return _fileItem.FilePath; } }
@@ -146,7 +145,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Thumbnail
 
 		private static readonly BitmapImage _defaultThumbnail =
@@ -169,7 +167,6 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		#endregion
-
 
 		#region Operation
 
@@ -227,7 +224,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Constructor
 
 		internal IFileItem FileItem
@@ -261,7 +257,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Event Listener
 
 		private PropertyChangedEventListener _resourcesPropertyChangedListener;
@@ -274,7 +269,6 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		#endregion
-
 
 		#region IComparable member
 

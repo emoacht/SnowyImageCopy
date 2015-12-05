@@ -84,7 +84,6 @@ namespace SnowyImageCopy.Helper
 
 		#endregion
 
-
 		/// <summary>
 		/// Move a specified file to Recycle.
 		/// </summary>

@@ -15,7 +15,6 @@ namespace SnowyImageCopy.Views.Controls
 			this.Initialized += OnInitialized;
 			this.IsVisibleChanged += OnVisibleChanged;
 		}
-		
 
 		#region Property
 
@@ -36,10 +35,9 @@ namespace SnowyImageCopy.Views.Controls
 
 		#endregion
 
-
 		private GridLength _rightColumnWidth; // Width of Column at the right of this splitter
 		private GridLength _bottomRowHeight; // Height of Row at the bottom of this splitter
-		
+
 		private void OnInitialized(object sender, EventArgs e)
 		{
 			var parent = base.Parent as Grid;

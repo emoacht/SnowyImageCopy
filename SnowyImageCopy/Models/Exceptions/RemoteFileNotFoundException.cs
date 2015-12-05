@@ -15,7 +15,6 @@ namespace SnowyImageCopy.Models.Exceptions
 	{
 		public string FilePath { get; private set; }
 
-
 		#region Constructor
 
 		public RemoteFileNotFoundException() { }

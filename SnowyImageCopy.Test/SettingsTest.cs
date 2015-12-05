@@ -29,7 +29,6 @@ namespace SnowyImageCopy.Test
 			TestTryParseRemoteAddressBase(@"http://flashair_0123456/"); // Too long host name
 		}
 
-
 		#region Base
 
 		private void TestTryParseRemoteAddressBase(string source, string root, string descendant)

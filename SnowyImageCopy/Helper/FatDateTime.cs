@@ -95,7 +95,6 @@ namespace SnowyImageCopy.Helper
 			return ConvertFromBitsToInt(baTime);
 		}
 
-
 		#region Helper
 
 		/// <summary>

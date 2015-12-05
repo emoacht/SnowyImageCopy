@@ -53,7 +53,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Operation
 
 		public Operation Op
@@ -90,7 +89,6 @@ namespace SnowyImageCopy.ViewModels
 		private int _fileListCoreViewIndex = -1; // No selection
 
 		#endregion
-
 
 		#region Current image
 
@@ -252,7 +250,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Command
 
 		#region Check & Copy Command
@@ -288,7 +285,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Check & Copy Auto Command
 
 		public DelegateCommand CheckCopyAutoCommand
@@ -321,7 +317,6 @@ namespace SnowyImageCopy.ViewModels
 		private bool _isCheckCopyAutoRunning;
 
 		#endregion
-
 
 		#region Check Command
 
@@ -356,7 +351,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Copy Command
 
 		public DelegateCommand CopyCommand
@@ -390,7 +384,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Stop Command
 
 		public DelegateCommand StopCommand
@@ -410,7 +403,6 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		#endregion
-
 
 		#region Save Desktop Command
 
@@ -432,7 +424,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Send Clipboard Command
 
 		public DelegateCommand SendClipboardCommand
@@ -453,7 +444,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		private void RaiseCanExecuteChanged()
 		{
 			// This method is static.
@@ -461,7 +451,6 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		#endregion
-
 
 		#region Browser
 
@@ -486,7 +475,6 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		#endregion
-
 
 		#region Constructor
 
@@ -553,7 +541,6 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		#endregion
-
 
 		#region Event Listener
 
@@ -631,7 +618,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Settings
 
 		private PropertyChangedEventListener _settingsPropertyChangedListener;
@@ -675,7 +661,6 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		#endregion
-
 
 		#region Operation
 

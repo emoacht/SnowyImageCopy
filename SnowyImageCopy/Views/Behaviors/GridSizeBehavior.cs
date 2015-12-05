@@ -98,7 +98,6 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#endregion
 
-
 		protected override void OnAttached()
 		{
 			base.OnAttached();
@@ -120,7 +119,6 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			AdjustSize();
 		}
-
 
 		private void AdjustSize()
 		{

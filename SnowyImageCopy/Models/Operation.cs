@@ -53,7 +53,6 @@ namespace SnowyImageCopy.Models
 			MainWindowViewModelInstance = mainWindowViewModelInstance;
 		}
 
-
 		#region Access to MainWindowViewModel member
 
 		private string OperationStatus
@@ -95,7 +94,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Constant
 
 		/// <summary>
@@ -119,7 +117,6 @@ namespace SnowyImageCopy.Models
 		private readonly TimeSpan _copyToastShortestDuration = TimeSpan.FromSeconds(30);
 
 		#endregion
-
 
 		#region Operation state
 
@@ -194,7 +191,6 @@ namespace SnowyImageCopy.Models
 		private bool _isSendingClipboard;
 
 		#endregion
-
 
 		#region Progress
 
@@ -360,7 +356,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Auto check
 
 		private DispatcherTimer _autoTimer;
@@ -461,7 +456,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Check & Copy
 
 		private readonly CardInfo _card = new CardInfo();
@@ -472,7 +466,6 @@ namespace SnowyImageCopy.Models
 
 		internal DateTime CopyStartTime { get; private set; }
 		private int _copyFileCount;
-
 
 		#region 1st layer
 
@@ -776,7 +769,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region 2nd layer
 
@@ -1162,7 +1154,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Load & Save & Send
 
 		private CancellationTokenSourcePlus _tokenSourceLoading;
@@ -1286,7 +1277,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region Helper
 

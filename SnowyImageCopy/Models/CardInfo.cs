@@ -35,7 +35,6 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-
 		#region Firmware version
 
 		/// <summary>
@@ -67,7 +66,6 @@ namespace SnowyImageCopy.Models
 		private bool _isFirmwareVersion300OeNewer; // Equal to or newer than 3.00.00
 
 		#endregion
-
 
 		#region CID/SSID
 
@@ -120,7 +118,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Time stamp of write event
 
 		public bool CanGetWriteTimeStamp { get { return _isFirmwareVersion202OrNewer; } }
@@ -131,7 +128,6 @@ namespace SnowyImageCopy.Models
 		public int WriteTimeStamp { get; set; }
 
 		#endregion
-
 
 		#region Thumbnail
 
@@ -153,7 +149,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region Upload
 
@@ -183,7 +178,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region Helper
 

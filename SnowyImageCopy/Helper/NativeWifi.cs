@@ -295,7 +295,6 @@ namespace SnowyImageCopy.Helper
 
 		#endregion
 
-
 		/// <summary>
 		/// Enumerate SSIDs of connected wireless LANs.
 		/// </summary>
@@ -326,7 +325,6 @@ namespace SnowyImageCopy.Helper
 				}
 			}
 		}
-
 
 		#region Base
 

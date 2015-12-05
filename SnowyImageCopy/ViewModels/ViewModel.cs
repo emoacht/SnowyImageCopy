@@ -16,7 +16,6 @@ namespace SnowyImageCopy.ViewModels
 		public ViewModel()
 		{ }
 
-
 		#region Property name
 
 		private Lazy<Dictionary<string, string>> _propertyNameMap = new Lazy<Dictionary<string, string>>(() => new Dictionary<string, string>());
@@ -36,14 +35,13 @@ namespace SnowyImageCopy.ViewModels
 			if (String.IsNullOrEmpty(callerPropertyName))
 				return null;
 
-			var calledPropertyName = PropertySupport.GetPropertyName(propertyExpression);			
+			var calledPropertyName = PropertySupport.GetPropertyName(propertyExpression);
 			_propertyNameMap.Value.Add(callerPropertyName, calledPropertyName);
 
 			return calledPropertyName;
 		}
 
 		#endregion
-
 
 		#region Dispose
 

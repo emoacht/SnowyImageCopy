@@ -22,7 +22,7 @@ namespace SnowyImageCopy.Models
 			{
 				var content = string.Format("[Date: {0:HH:mm:ss fff}]", DateTime.Now) + Environment.NewLine
 					+ result.TrimEnd() + Environment.NewLine + Environment.NewLine;
-				
+
 				PrepareFolderAppData();
 
 				var filePath = Path.Combine(FolderPathAppData, fileName);
@@ -41,7 +41,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Exception
 
 		private const string _exceptionFileName = "exception.log";
@@ -50,7 +49,7 @@ namespace SnowyImageCopy.Models
 		{
 			var content = string.Format("[Date: {0} Sender: {1}]", DateTime.Now, sender) + Environment.NewLine
 				+ exception + Environment.NewLine + Environment.NewLine;
-			
+
 			RecordAppData(_exceptionFileName, content);
 			RecordDesktop(_exceptionFileName, content);
 		}
@@ -126,7 +125,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region Prepare
 

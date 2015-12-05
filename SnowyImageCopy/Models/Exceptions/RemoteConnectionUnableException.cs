@@ -17,7 +17,6 @@ namespace SnowyImageCopy.Models.Exceptions
 		public HttpStatusCode Code { get; private set; }
 		public WebExceptionStatus Status { get; private set; }
 
-
 		#region Constructor
 
 		public RemoteConnectionUnableException() { }

@@ -40,7 +40,6 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public bool IsError { get; private set; }
 
-
 		#region Constructor
 
 		public ProgressInfo(int currentValue, int totalValue, TimeSpan elapsedTime, bool isFirst)

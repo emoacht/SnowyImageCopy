@@ -39,7 +39,6 @@ namespace SnowyImageCopy.Views.Controls
 					}));
 		}
 
-
 		#region Property
 
 		public String MessageText
@@ -87,7 +86,6 @@ namespace SnowyImageCopy.Views.Controls
 					(d, e) => ((CheckTextBox)d).ReflectChecked((bool)e.NewValue)));
 
 		#endregion
-
 
 		#region Message
 
@@ -147,7 +145,6 @@ namespace SnowyImageCopy.Views.Controls
 		}
 
 		#endregion
-
 
 		#region Check
 

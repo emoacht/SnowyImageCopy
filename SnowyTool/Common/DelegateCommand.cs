@@ -12,7 +12,6 @@ namespace SnowyTool.Common
 		private readonly Action _execute;
 		private readonly Func<bool> _canExecute;
 
-
 		#region Constructor
 
 		public DelegateCommand(Action execute)
@@ -32,7 +31,6 @@ namespace SnowyTool.Common
 
 		#endregion
 
-
 		#region Execute
 
 		public void Execute()
@@ -46,7 +44,6 @@ namespace SnowyTool.Common
 		}
 
 		#endregion
-
 
 		#region CanExecute
 

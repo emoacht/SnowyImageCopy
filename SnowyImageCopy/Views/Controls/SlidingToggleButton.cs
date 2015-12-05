@@ -29,7 +29,6 @@ namespace SnowyImageCopy.Views.Controls
 					OnWidthChanged));
 		}
 
-
 		#region Template Part
 
 		private TextBox _backgroundTextBox;
@@ -38,7 +37,6 @@ namespace SnowyImageCopy.Views.Controls
 		private TextBlock _foregroundTextBlock;
 
 		#endregion
-
 
 		#region Property
 
@@ -191,7 +189,6 @@ namespace SnowyImageCopy.Views.Controls
 					OnAppearanceChanged));
 
 		#endregion
-
 
 		public override void OnApplyTemplate()
 		{

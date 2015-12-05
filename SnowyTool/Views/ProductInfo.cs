@@ -15,7 +15,6 @@ namespace SnowyTool.Views
 		private static readonly Assembly _assembly = Assembly.GetExecutingAssembly();
 		public static readonly Version Version = _assembly.GetName().Version;
 
-
 		#region Assembly attributes
 
 		public static string Title
@@ -91,7 +90,6 @@ namespace SnowyTool.Views
 		private static string _trademark;
 
 		#endregion
-
 
 		public static string ProductInfoLong
 		{

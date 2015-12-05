@@ -26,7 +26,6 @@ namespace SnowyTool
 				this.DispatcherUnhandledException += OnDispatcherUnhandledException;
 		}
 
-
 		#region Exception
 
 		private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

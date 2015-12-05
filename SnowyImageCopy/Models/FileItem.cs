@@ -35,7 +35,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Supplementary
 
 		public bool IsImported { get; private set; }
@@ -71,7 +70,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Constructor
 
 		public FileItem(string fileEntry, string directoryPath)
@@ -80,7 +78,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region Import
 
@@ -204,7 +201,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region IComparable member
 

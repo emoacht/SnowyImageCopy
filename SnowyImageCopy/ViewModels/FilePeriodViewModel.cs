@@ -23,7 +23,6 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 
-
 		#region Event Listener
 
 		private PropertyChangedEventListener _resourcesPropertyChangedListener;
@@ -36,7 +35,6 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		#endregion
-
 
 		public FilePeriod Period
 		{
@@ -59,7 +57,6 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 		private string _description;
-
 
 		private void SetDescription(FilePeriod period)
 		{

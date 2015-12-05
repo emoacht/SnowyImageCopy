@@ -18,7 +18,6 @@ namespace SnowyImageCopy.Helper
 
 		private readonly object _locker = new object();
 
-
 		#region Dispose
 
 		public bool IsDisposed { get { return _isDisposed; } }
@@ -37,7 +36,6 @@ namespace SnowyImageCopy.Helper
 		}
 
 		#endregion
-
 
 		#region Cancel
 

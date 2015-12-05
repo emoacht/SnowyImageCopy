@@ -28,7 +28,6 @@ namespace SnowyImageCopy.Views.Controls
 
 		#endregion
 
-
 		public ThumbnailBox()
 		{
 			InitializeComponent();

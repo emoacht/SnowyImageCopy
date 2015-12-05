@@ -39,7 +39,6 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 
-
 		#region PropertyChanged event of item
 
 		/// <summary>
