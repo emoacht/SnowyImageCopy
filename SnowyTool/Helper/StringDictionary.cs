@@ -23,26 +23,13 @@ namespace SnowyTool.Helper
 				throw new ArgumentNullException("source");
 
 			if (Char.IsWhiteSpace(separator))
-				throw new ArgumentException("The separator is invalid.", "separator");
+				throw new ArgumentException("The separator must not be white space.", "separator");
 
-			var content = new Dictionary<string, string>();
-
-			var lines = source.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-
-			foreach (var line in lines)
-			{
-				// Find key and value.
-				// (String.Split method may mistakenly separate value which includes same char as separator)
-				var indexSeparator = line.IndexOf(separator);
-
-				// Check if separator is found and key has at least one letter.
-				if (indexSeparator < 1)
-					continue;
-
-				content.Add(line.Substring(0, indexSeparator), line.Substring(indexSeparator + 1));
-			}
-
-			return content;
+			return source.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+				.Select(x => x.Split(new[] { separator }, 2))
+				.Where(x => x.Length == 2)
+				.Where(x => !String.IsNullOrWhiteSpace(x[0]))
+				.ToDictionary(x => x[0], x => x[1]);
 		}
 	}
 }

@@ -13,97 +13,71 @@ namespace SnowyImageCopy.Views
 	public static class ProductInfo
 	{
 		private static readonly Assembly _assembly = Assembly.GetExecutingAssembly();
-		public static readonly Version Version = _assembly.GetName().Version;
+
+		public static Version Version
+		{
+			get { return _version; }
+		}
+		private static readonly Version _version = _assembly.GetName().Version;
 
 		#region Assembly attributes
 
 		public static string Title
 		{
-			get
-			{
-				if (String.IsNullOrEmpty(_title))
-					_title = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyTitleAttribute))).Title;
-
-				return _title;
-			}
+			get { return _title ?? (_title = GetAttribute<AssemblyTitleAttribute>(_assembly).Title); }
 		}
 		private static string _title;
 
 		public static string Description
 		{
-			get
-			{
-				if (String.IsNullOrEmpty(_description))
-					_description = ((AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyDescriptionAttribute))).Description;
-
-				return _description;
-			}
+			get { return _description ?? (_description = GetAttribute<AssemblyDescriptionAttribute>(_assembly).Description); }
 		}
 		private static string _description;
 
 		public static string Company
 		{
-			get
-			{
-				if (String.IsNullOrEmpty(_company))
-					_company = ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyCompanyAttribute))).Company;
-
-				return _company;
-			}
+			get { return _company ?? (_company = GetAttribute<AssemblyCompanyAttribute>(_assembly).Company); }
 		}
 		private static string _company;
 
 		public static string Product
 		{
-			get
-			{
-				if (String.IsNullOrEmpty(_product))
-					_product = ((AssemblyProductAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyProductAttribute))).Product;
-
-				return _product;
-			}
+			get { return _product ?? (_product = GetAttribute<AssemblyProductAttribute>(_assembly).Product); }
 		}
 		private static string _product;
 
 		public static string Copyright
 		{
-			get
-			{
-				if (String.IsNullOrEmpty(_copyright))
-					_copyright = ((AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyCopyrightAttribute))).Copyright;
-
-				return _copyright;
-			}
+			get { return _copyright ?? (_copyright = GetAttribute<AssemblyCopyrightAttribute>(_assembly).Copyright); }
 		}
 		private static string _copyright;
 
 		public static string Trademark
 		{
-			get
-			{
-				if (String.IsNullOrEmpty(_trademark))
-					_trademark = ((AssemblyTrademarkAttribute)Attribute.GetCustomAttribute(_assembly, typeof(AssemblyTrademarkAttribute))).Trademark;
-
-				return _trademark;
-			}
+			get { return _trademark ?? (_trademark = GetAttribute<AssemblyTrademarkAttribute>(_assembly).Trademark); }
 		}
 		private static string _trademark;
+
+		private static T GetAttribute<T>(Assembly assembly) where T : Attribute
+		{
+			return (T)Attribute.GetCustomAttribute(assembly, typeof(T));
+		}
 
 		#endregion
 
 		public static string ProductInfoLong
 		{
-			get { return String.Format("{0} {1}", Title, Version); }
+			get { return String.Format("{0} {1}", Title, ProductInfo.Version); }
 		}
 
 		public static string ProductInfoMiddle
 		{
-			get { return String.Format("{0} {1}", Title, Version.ToString(3)); }
+			get { return String.Format("{0} {1}", Title, ProductInfo.Version.ToString(3)); }
 		}
 
 		public static string ProductInfoShort
 		{
-			get { return String.Format("{0} {1}", Title, Version.ToString(2)); }
+			get { return String.Format("{0} {1}", Title, ProductInfo.Version.ToString(2)); }
 		}
 	}
 }
