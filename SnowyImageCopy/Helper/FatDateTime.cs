@@ -50,7 +50,7 @@ namespace SnowyImageCopy.Helper
 			catch (ArgumentOutOfRangeException)
 			{
 				// If time stamp of source folder or file is weird, date or time parameters may become invalid
-				// and so this Exception will be thrown.
+				// and so this exception will be thrown.
 				return default(DateTime);
 			}
 		}

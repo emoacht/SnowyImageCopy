@@ -58,9 +58,9 @@ namespace SnowyTool.Views
 		}
 		private static string _trademark;
 
-		private static T GetAttribute<T>(Assembly assembly) where T : Attribute
+		private static TAttribute GetAttribute<TAttribute>(Assembly assembly) where TAttribute : Attribute
 		{
-			return (T)Attribute.GetCustomAttribute(assembly, typeof(T));
+			return (TAttribute)Attribute.GetCustomAttribute(assembly, typeof(TAttribute));
 		}
 
 		#endregion
