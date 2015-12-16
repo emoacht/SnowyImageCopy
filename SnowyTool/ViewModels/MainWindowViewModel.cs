@@ -30,7 +30,6 @@ namespace SnowyTool.ViewModels
 
 		#endregion
 
-
 		#region Config
 
 		/// <summary>
@@ -171,7 +170,6 @@ namespace SnowyTool.ViewModels
 
 		#endregion
 
-
 		#region Command
 
 		#region Search Command
@@ -193,7 +191,6 @@ namespace SnowyTool.ViewModels
 		}
 
 		#endregion
-
 
 		#region Apply Command
 
@@ -217,7 +214,6 @@ namespace SnowyTool.ViewModels
 
 		#endregion
 
-
 		#region Constructor
 
 		public MainWindowViewModel()
@@ -233,7 +229,6 @@ namespace SnowyTool.ViewModels
 		}
 
 		#endregion
-
 
 		#region Search/Apply
 

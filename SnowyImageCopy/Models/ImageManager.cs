@@ -28,7 +28,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Read/Create Thumbnail (Internal)
 
 		/// <summary>
@@ -161,7 +160,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Read/Create Thumbnail (Private)
 
 		/// <summary>
@@ -284,7 +282,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Convert FrameworkElement to BitmapImage
 
 		/// <summary>
@@ -373,7 +370,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region Convert byte array to BitmapSource
 
@@ -622,7 +618,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Exif (Internal)
 
 		/// <summary>
@@ -683,7 +678,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Exif (Private)
 
 		/// <summary>
@@ -734,7 +728,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region General
 
@@ -883,7 +876,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region Helper
 

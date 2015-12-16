@@ -36,7 +36,6 @@ namespace SnowyImageCopy.ViewModels
 			// MainWindow may be null when Options is instantiated.
 		}
 
-
 		#region Event Listener
 
 		private PropertyChangedEventListener _operationPropertyChangedListener;
@@ -65,7 +64,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Operation
 
 		public bool IsCheckingOrCopying
@@ -81,19 +79,16 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		public Settings SettingsCurrent
 		{
 			get { return Settings.Current; }
 		}
-
 
 		#region Path
 
 		// Left to View.
 
 		#endregion
-
 
 		#region Date
 
@@ -126,20 +121,17 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-
 		#region Auto Check
 
 		// Left to View.
 
 		#endregion
 
-
 		#region File
 
 		// Left to View.
 
 		#endregion
-
 
 		#region Language
 
@@ -184,7 +176,6 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		#endregion
-
 
 		#region Info
 

@@ -70,7 +70,6 @@ namespace SnowyImageCopy.Test
 			TestImportBase("/DCIM/100___012345678901234567890123456789", "IMG_012345678901234567890123456789.JPG", 1922840, true, DateTime.Today);
 		}
 
-
 		#region Base
 
 		private void TestImportBase(
@@ -145,7 +144,6 @@ namespace SnowyImageCopy.Test
 		#endregion
 
 		#endregion
-
 
 		#region CompareTo
 

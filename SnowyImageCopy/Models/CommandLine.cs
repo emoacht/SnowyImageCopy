@@ -26,7 +26,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		/// <summary>
 		/// Whether to show command line usage
 		/// </summary>
@@ -71,7 +70,6 @@ namespace SnowyImageCopy.Models
 			get { return new[] { "/recordlog", "-recordlog", "/r", "-r" }; }
 		}
 
-
 		public static void ShowUsage()
 		{
 			if (!AttachConsole(ATTACH_PARENT_PROCESS))
@@ -89,7 +87,6 @@ namespace SnowyImageCopy.Models
 
 			FreeConsole();
 		}
-
 
 		#region Helper
 

@@ -34,7 +34,6 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#endregion
 
-
 		protected override void Invoke(object parameter)
 		{
 			var initialPath = FolderPath;

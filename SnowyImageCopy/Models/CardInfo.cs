@@ -35,7 +35,6 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-
 		#region Firmware version
 
 		/// <summary>
@@ -67,7 +66,6 @@ namespace SnowyImageCopy.Models
 		private bool _isFirmwareVersion300OeNewer; // Equal to or newer than 3.00.00
 
 		#endregion
-
 
 		#region CID/SSID
 
@@ -120,7 +118,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Time stamp of write event
 
 		public bool CanGetWriteTimeStamp { get { return _isFirmwareVersion202OrNewer; } }
@@ -132,10 +129,9 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Thumbnail
 
-		private List<string> _thumbnailFailedPathes;
+		private HashSet<string> _thumbnailFailedPathes;
 		private const int _thumbnailFailedPathesCountMax = 3;
 
 		public bool CanGetThumbnail
@@ -146,14 +142,13 @@ namespace SnowyImageCopy.Models
 		public void RecordThumbnailFailedPath(string filePath)
 		{
 			if (_thumbnailFailedPathes == null)
-				_thumbnailFailedPathes = new List<string>();
+				_thumbnailFailedPathes = new HashSet<string>();
 
 			if (!_thumbnailFailedPathes.Contains(filePath))
 				_thumbnailFailedPathes.Add(filePath);
 		}
 
 		#endregion
-
 
 		#region Upload
 
@@ -183,7 +178,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region Helper
 

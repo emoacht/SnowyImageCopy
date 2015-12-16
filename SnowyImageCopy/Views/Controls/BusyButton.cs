@@ -31,7 +31,6 @@ namespace SnowyImageCopy.Views.Controls
 
 		#endregion
 
-
 		protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
 		{
 			base.OnPropertyChanged(e);

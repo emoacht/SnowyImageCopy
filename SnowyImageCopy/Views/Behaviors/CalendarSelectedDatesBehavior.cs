@@ -35,7 +35,6 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#endregion
 
-
 		protected override void OnAttached()
 		{
 			base.OnAttached();
@@ -54,7 +53,6 @@ namespace SnowyImageCopy.Views.Behaviors
 			this.AssociatedObject.Loaded -= OnLoaded;
 			this.AssociatedObject.SelectedDatesChanged -= OnSelectedDatesChanged;
 		}
-
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
 		{

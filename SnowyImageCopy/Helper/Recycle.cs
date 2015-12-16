@@ -25,22 +25,27 @@ namespace SnowyImageCopy.Helper
 		/// Several of return values are based on pre-Win32 error codes, which in some cases overlap 
 		/// common Win32 error codes without matching their meaning.</remarks>
 		[DllImport("Shell32.dll", EntryPoint = "SHFileOperationW")]
-		private static extern int SHFileOperation
-			(ref SHFILEOPSTRUCT lpFileOp);
+		private static extern int SHFileOperation(ref SHFILEOPSTRUCT lpFileOp);
 
 		[StructLayout(LayoutKind.Sequential)]
 		private struct SHFILEOPSTRUCT
 		{
 			public IntPtr hwnd;
 			public FO wFunc;
+
 			[MarshalAs(UnmanagedType.LPWStr)]
 			public string pFrom;
+
 			[MarshalAs(UnmanagedType.LPWStr)]
 			public string pTo;
+
 			public FOF fFlags;
+
 			[MarshalAs(UnmanagedType.Bool)]
 			public bool fAnyOperationsAborted;
+
 			public IntPtr hNameMappings;
+
 			[MarshalAs(UnmanagedType.LPWStr)]
 			public string lpszProgressTitle;
 		}
@@ -83,7 +88,6 @@ namespace SnowyImageCopy.Helper
 		}
 
 		#endregion
-
 
 		/// <summary>
 		/// Move a specified file to Recycle.

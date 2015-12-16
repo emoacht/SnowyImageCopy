@@ -30,7 +30,6 @@ namespace SnowyImageCopy.Views.Behaviors
 			this.AssociatedObject.SelectionChanged -= OnSelectionChanged;
 		}
 
-
 		private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			var selector = sender as Selector;

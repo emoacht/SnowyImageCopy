@@ -44,7 +44,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Method (Internal)
 
 		/// <summary>
@@ -504,7 +503,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		#region Method (Private)
 
 		private static async Task<string> DownloadStringAsync(HttpClient client, string path, CardInfo card, CancellationToken cancellationToken)
@@ -554,7 +552,7 @@ namespace SnowyImageCopy.Models
 								case HttpStatusCode.BadRequest:
 									throw new RemoteConnectionUnableException(response.StatusCode);
 								case HttpStatusCode.NotFound:
-									// This exception does not always mean that the specified file is missing.
+									// This status code does not always mean that the specified file is missing.
 									throw new RemoteFileNotFoundException("File is missing or request cannot be handled!", path);
 								default:
 									throw new HttpRequestException(String.Format("StatusCode: {0}", response.StatusCode));
@@ -710,7 +708,7 @@ namespace SnowyImageCopy.Models
 						var webException = hre.InnerException as WebException;
 						if (webException != null)
 							// If unable to connect to FlashAir card, this exception will be thrown.
-							// The Status may vary, such as WebExceptionStatus.NameResolutionFailure,
+							// The status may vary, such as WebExceptionStatus.NameResolutionFailure,
 							// WebExceptionStatus.ConnectFailure.
 							throw new RemoteConnectionUnableException(webException.Status);
 
@@ -735,7 +733,6 @@ namespace SnowyImageCopy.Models
 		}
 
 		#endregion
-
 
 		#region Helper
 
@@ -775,14 +772,12 @@ namespace SnowyImageCopy.Models
 		/// <param name="responseBytes">Response byte array</param>
 		private static async Task RecordDownloadStringAsync(string requestPath, byte[] responseBytes)
 		{
-			var result = String.Join(Environment.NewLine, new[]
-			{
-				String.Format("request => {0}", requestPath),
-				"response -> ",
-				Encoding.ASCII.GetString(responseBytes)
-			});
-
-			await LogService.RecordStringAsync("download.log", result);
+			var sb = new StringBuilder();
+			sb.AppendLine(String.Format("request => {0}", requestPath));
+			sb.AppendLine("response -> ");
+			sb.AppendLine(Encoding.ASCII.GetString(responseBytes));
+			
+			await LogService.RecordStringAsync("download.log", sb.ToString());
 		}
 
 		#endregion

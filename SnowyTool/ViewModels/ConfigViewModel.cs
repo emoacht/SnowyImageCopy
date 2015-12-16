@@ -32,7 +32,6 @@ namespace SnowyTool.ViewModels
 
 		#endregion
 
-
 		#region Property (Raw)
 
 		/// <summary>
@@ -282,7 +281,6 @@ namespace SnowyTool.ViewModels
 
 		#endregion
 
-
 		#region Property (Content of CID)
 
 		/// <summary>
@@ -349,7 +347,6 @@ namespace SnowyTool.ViewModels
 
 		#endregion
 
-
 		#region Supplementary
 
 		/// <summary>
@@ -388,7 +385,6 @@ namespace SnowyTool.ViewModels
 		}
 
 		#endregion
-
 
 		#region Read/Write
 
@@ -462,7 +458,6 @@ namespace SnowyTool.ViewModels
 		}
 
 		#endregion
-
 
 		#region Import/Export
 
@@ -594,7 +589,6 @@ namespace SnowyTool.ViewModels
 
 		#endregion
 
-
 		#region Parse CID
 
 		private static readonly Regex _asciiPattern = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
@@ -638,7 +632,6 @@ namespace SnowyTool.ViewModels
 		}
 
 		#endregion
-
 
 		#region Helper
 

@@ -33,7 +33,6 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#endregion
 
-
 		protected override void Invoke(object parameter)
 		{
 			if (Sound == null)

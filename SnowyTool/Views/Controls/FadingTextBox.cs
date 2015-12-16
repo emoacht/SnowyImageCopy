@@ -32,7 +32,6 @@ namespace SnowyTool.Views.Controls
 					}));
 		}
 
-
 		#region Property
 
 		public double FadeOutTime // sec
@@ -51,7 +50,6 @@ namespace SnowyTool.Views.Controls
 					(d, baseValue) => Math.Max((double)baseValue, _fadingTime)));
 
 		#endregion
-
 
 		private DispatcherTimer _fadingTimer;
 

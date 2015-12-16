@@ -34,7 +34,6 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#endregion
 
-
 		private void SetLanguage(string ietfLanguageTag)
 		{
 			if (String.IsNullOrEmpty(ietfLanguageTag))

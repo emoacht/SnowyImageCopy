@@ -50,7 +50,6 @@ namespace SnowyImageCopy
 			Settings.Save();
 		}
 
-
 		#region Exception
 
 		private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

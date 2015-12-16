@@ -74,7 +74,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-
 		public void Load(Window window, bool isNormal = true)
 		{
 			if (Settings.Current.Placement == null)

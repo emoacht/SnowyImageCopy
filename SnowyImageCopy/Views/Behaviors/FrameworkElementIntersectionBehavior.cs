@@ -95,7 +95,6 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#endregion
 
-
 		private void CheckIntersection()
 		{
 			if ((this.AssociatedObject == null) || (TargetFrameworkElement == null))

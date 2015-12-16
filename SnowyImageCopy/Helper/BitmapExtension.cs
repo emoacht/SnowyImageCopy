@@ -24,7 +24,6 @@ namespace SnowyImageCopy.Helper
 
 		#endregion
 
-
 		/// <summary>
 		/// Convert a Bitmap to a BitmapImage.
 		/// </summary>

@@ -16,17 +16,17 @@ namespace SnowyImageCopy.Helper
 		/// <summary>
 		/// Convert a BitmapImage to a Bitmap.
 		/// </summary>
-		/// <typeparam name="T">BitmapEncoder</typeparam>
+		/// <typeparam name="TEncoder">BitmapEncoder</typeparam>
 		/// <param name="source">Source System.Windows.Media.Imaging.BitmapImage</param>
 		/// <returns>Outcome System.Drawing.Bitmap</returns>
-		public static System.Drawing.Bitmap ToBitmap<T>(this BitmapImage source) where T : BitmapEncoder, new()
+		public static System.Drawing.Bitmap ToBitmap<TEncoder>(this BitmapImage source) where TEncoder : BitmapEncoder, new()
 		{
 			if (source == null)
 				throw new ArgumentNullException("source");
 
 			using (var ms = new MemoryStream())
 			{
-				var encoder = new T();
+				var encoder = new TEncoder();
 				encoder.Frames.Add(BitmapFrame.Create(source));
 				encoder.Save(ms);
 				ms.Seek(0, SeekOrigin.Begin);
@@ -38,10 +38,10 @@ namespace SnowyImageCopy.Helper
 		/// <summary>
 		/// Save a BitmapImage to a specified file.
 		/// </summary>
-		/// <typeparam name="T">BitmapEncoder</typeparam>
+		/// <typeparam name="TEncoder">BitmapEncoder</typeparam>
 		/// <param name="source">BitmapImage</param>
 		/// <param name="filePath">File path</param>
-		public static void Save<T>(this BitmapImage source, string filePath) where T : BitmapEncoder, new()
+		public static void Save<TEncoder>(this BitmapImage source, string filePath) where TEncoder : BitmapEncoder, new()
 		{
 			if (source == null)
 				throw new ArgumentNullException("source");
@@ -51,7 +51,7 @@ namespace SnowyImageCopy.Helper
 
 			using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
 			{
-				var encoder = new T();
+				var encoder = new TEncoder();
 				encoder.Frames.Add(BitmapFrame.Create(source));
 				encoder.Save(fs);
 			}
@@ -60,17 +60,17 @@ namespace SnowyImageCopy.Helper
 		/// <summary>
 		/// Get codec info from a BitmapImage.
 		/// </summary>
-		/// <typeparam name="T">BitmapEncoder</typeparam>
+		/// <typeparam name="TEncoder">BitmapEncoder</typeparam>
 		/// <param name="source">BitmapImage</param>
 		/// <returns>Codec info</returns>
-		public static BitmapCodecInfo GetCodecInfo<T>(this BitmapImage source) where T : BitmapEncoder, new()
+		public static BitmapCodecInfo GetCodecInfo<TEncoder>(this BitmapImage source) where TEncoder : BitmapEncoder, new()
 		{
 			if (source == null)
 				throw new ArgumentNullException("source");
 
 			using (var ms = new MemoryStream())
 			{
-				var encoder = new T();
+				var encoder = new TEncoder();
 				encoder.Frames.Add(BitmapFrame.Create(source));
 				encoder.Save(ms);
 				ms.Seek(0, SeekOrigin.Begin);

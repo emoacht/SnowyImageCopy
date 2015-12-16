@@ -24,7 +24,6 @@ namespace SnowyImageCopy.Views
 			this.InitializeComponent();
 		}
 
-
 		#region Property
 
 		public bool IsWindowPlacementReliable
@@ -40,7 +39,6 @@ namespace SnowyImageCopy.Views
 				new FrameworkPropertyMetadata(false));
 
 		#endregion
-
 
 		private MainWindowViewModel _mainWindowViewModel;
 

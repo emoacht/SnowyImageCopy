@@ -47,7 +47,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			_viewer = VisualTreeHelperAddition.GetDescendants<ScrollViewer>(this.AssociatedObject).FirstOrDefault();
 			if (_viewer == null)
 				return;
-			
+
 			CheckChild(); // Initial check
 
 			_subscription.Add(Observable.FromEventPattern<ScrollChangedEventHandler, ScrollChangedEventArgs>(

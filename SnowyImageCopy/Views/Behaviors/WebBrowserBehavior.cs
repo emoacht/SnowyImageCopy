@@ -53,7 +53,6 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#endregion
 
-
 		protected override void OnAttached()
 		{
 			base.OnAttached();
@@ -72,7 +71,6 @@ namespace SnowyImageCopy.Views.Behaviors
 			this.AssociatedObject.IsVisibleChanged -= OnIsVisibleChanged;
 			this.AssociatedObject.Navigating -= OnNavigating;
 		}
-
 
 		private bool _isApplying;
 
@@ -107,7 +105,6 @@ namespace SnowyImageCopy.Views.Behaviors
 			e.Cancel = true;
 			Process.Start(e.Uri.OriginalString);
 		}
-
 
 		#region Helper
 
