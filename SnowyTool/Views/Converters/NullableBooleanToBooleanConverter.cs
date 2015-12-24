@@ -25,15 +25,7 @@ namespace SnowyTool.Views.Converters
 		/// <returns>Boolean</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			bool? source = null;
-			if (value != null)
-			{
-				bool buff;
-				source = bool.TryParse(value.ToString(), out buff)
-					? buff
-					: (bool?)null;
-			}
-
+			var source = FindBoolean(value);
 			if (!source.HasValue)
 				return false;
 
@@ -64,15 +56,15 @@ namespace SnowyTool.Views.Converters
 			return condition.Value;
 		}
 
-		private static bool? FindBoolean(object parameter)
+		private static bool? FindBoolean(object source)
 		{
-			if (parameter == null)
-				return null;
+			if (source is bool)
+				return (bool)source;
 
-			if (parameter.ToString().Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase))
+			if (bool.TrueString.Equals(source as string, StringComparison.OrdinalIgnoreCase))
 				return true;
 
-			if (parameter.ToString().Equals(Boolean.FalseString, StringComparison.OrdinalIgnoreCase))
+			if (bool.FalseString.Equals(source as string, StringComparison.OrdinalIgnoreCase))
 				return false;
 
 			return null;

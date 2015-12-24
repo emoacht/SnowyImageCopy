@@ -25,10 +25,18 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>Visibility.Visible if Enum name matches target Enum name string. Visibility.Collapsed if not.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Enum) || (parameter == null))
+			if (!(value is Enum))
 				return DependencyProperty.UnsetValue;
 
-			return value.ToString().Equals(parameter.ToString(), StringComparison.OrdinalIgnoreCase)
+			var enumType = value.GetType();
+
+			if ((parameter == null) || !Enum.IsDefined(enumType, parameter))
+				return DependencyProperty.UnsetValue;
+
+			if (!(parameter is Enum))
+				parameter = Enum.Parse(enumType, parameter.ToString());
+
+			return (((Enum)value).Equals(parameter))
 				? Visibility.Visible
 				: Visibility.Collapsed;
 		}

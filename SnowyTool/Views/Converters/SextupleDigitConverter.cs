@@ -19,20 +19,32 @@ namespace SnowyTool.Views.Converters
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			ulong sourceValue;
-			if ((value == null) || (!ulong.TryParse(value.ToString(), out sourceValue)))
+			var source = FindULong(value);
+			if (!source.HasValue)
 				return DependencyProperty.UnsetValue;
 
-			return sourceValue / _sextupleDigitFactor;
+			return source.Value / _sextupleDigitFactor;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			ulong sourceValue;
-			if ((value == null) || (!ulong.TryParse(value.ToString(), out sourceValue)))
+			var source = FindULong(value);
+			if (!source.HasValue)
 				return DependencyProperty.UnsetValue;
 
-			return sourceValue * _sextupleDigitFactor;
+			return source.Value * _sextupleDigitFactor;
+		}
+
+		private static ulong? FindULong(object source)
+		{
+			if (source is ulong)
+				return (ulong)source;
+
+			ulong buff;
+			if (ulong.TryParse(source as string, out buff))
+				return buff;
+
+			return null;
 		}
 	}
 }
