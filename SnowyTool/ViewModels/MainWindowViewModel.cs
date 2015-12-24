@@ -241,13 +241,13 @@ namespace SnowyTool.ViewModels
 			{
 				_isSearching = true;
 
-				var drives = await Task.Run(() => DiskSearcher.Search());
+				var disks = await Task.Run(() => DiskSearcher.Search());
 
-				foreach (var drive in drives.Where(x => x.CanBeSD).OrderBy(x => x.PhysicalDrive))
+				foreach (var disk in disks.Where(x => x.CanBeSD).OrderBy(x => x.PhysicalDrive))
 				{
 					var configNew = new ConfigViewModel();
 
-					if (!await configNew.ReadAsync(drive))
+					if (!await configNew.ReadAsync(disk))
 						continue;
 
 					CurrentConfig = configNew;

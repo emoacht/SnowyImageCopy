@@ -21,117 +21,88 @@ namespace SnowyTool.Models
 		/// <returns>Array of disk information</returns>
 		internal static DiskInfo[] Search()
 		{
-			var diskGroup = new List<DiskInfo>();
-
-			SearchDiskDrive(ref diskGroup);
-			SearchPhysicalDisk(ref diskGroup);
-
-			return diskGroup.ToArray();
+			return SearchByDiskDrive().SupplementByPhysicalDisk().ToArray();
 		}
 
 		/// <summary>
-		/// Search drives by WMI (Win32_DiskDrive, Win32_DiskPartition, Win32_LogicalDisk).
+		/// Search disk information by WMI (Win32_DiskDrive, Win32_DiskPartition, Win32_LogicalDisk).
 		/// </summary>
-		/// <param name="diskGroup">List of disk information</param>
-		private static void SearchDiskDrive(ref List<DiskInfo> diskGroup)
+		/// <returns>Enumeration of disk information</returns>
+		private static IEnumerable<DiskInfo> SearchByDiskDrive()
 		{
-			var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive");
-
-			foreach (var drive in searcher.Get())
+			using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive"))
 			{
-				if (drive["Index"] == null) // Index number of physical drive
-					continue;
-
-				int index;
-				if (!int.TryParse(drive["Index"].ToString(), out index))
-					continue;
-
-				var info = new DiskInfo();
-				info.PhysicalDrive = index;
-
-				if (drive["MediaType"] != null)
+				foreach (ManagementObject disk in searcher.Get()) // Casting to ManagementObject is for GetRelated method.
 				{
-					info.MediaType = drive["MediaType"].ToString();
-				}
-
-				if (drive["Size"] != null)
-				{
-					ulong numSize;
-					if (ulong.TryParse(drive["Size"].ToString(), out numSize))
-						info.Size = numSize;
-				}
-
-				var driveLetters = new List<string>();
-
-				foreach (var diskPartition in ((ManagementObject)drive).GetRelated("Win32_DiskPartition"))
-				{
-					if ((diskPartition["DiskIndex"] == null) || // Index number of physical drive
-						(diskPartition["DiskIndex"].ToString() != info.PhysicalDrive.ToString(CultureInfo.InvariantCulture)))
+					if (!(disk["Index"] is uint)) // Index represents index number of physical drive.
 						continue;
 
-					foreach (var logicalDisk in ((ManagementObject)diskPartition).GetRelated("Win32_LogicalDisk"))
+					var info = new DiskInfo();
+					info.PhysicalDrive = (uint)disk["Index"];
+					info.MediaType = disk["MediaType"] as string;
+					info.Size = (disk["Size"] is ulong) ? (ulong)disk["Size"] : 0L;
+
+					var driveLetters = new List<string>();
+
+					foreach (ManagementObject diskPartition in disk.GetRelated("Win32_DiskPartition")) // Casting to ManagementObject is for GetRelated method.
 					{
-						if (logicalDisk["DeviceID"] == null) // Drive letter
+						if (!(diskPartition["DiskIndex"] is uint) || // DiskIndex represents index number of physical drive.
+							((uint)diskPartition["DiskIndex"] != info.PhysicalDrive))
 							continue;
 
-						var driveLetter = logicalDisk["DeviceID"].ToString().Trim();
-
-						if (String.IsNullOrEmpty(driveLetter) || !driveLetter.EndsWith(':'.ToString(CultureInfo.InvariantCulture)))
-							continue;
-
-						driveLetters.Add(driveLetter);
-
-						if (logicalDisk["DriveType"] != null)
+						foreach (var logicalDisk in diskPartition.GetRelated("Win32_LogicalDisk"))
 						{
-							uint numType;
-							if (!uint.TryParse(logicalDisk["DriveType"].ToString(), out numType))
-								continue;
+							var driveLetter = logicalDisk["DeviceID"] as string; // Drive letter
+							if (!String.IsNullOrWhiteSpace(driveLetter) &&
+								driveLetter.Trim().EndsWith(':'.ToString(CultureInfo.InvariantCulture)))
+							{
+								driveLetters.Add(driveLetter.Trim());
+							}
 
-							info.DriveType = numType;
+							if ((info.DriveType == 0) && (logicalDisk["DriveType"] is uint))
+							{
+								info.DriveType = (uint)logicalDisk["DriveType"];
+							}
 						}
 					}
+
+					if (!driveLetters.Any())
+						continue;
+
+					info.DriveLetters = driveLetters.ToArray();
+
+					yield return info;
 				}
-
-				if (!driveLetters.Any())
-					continue;
-
-				info.DriveLetters = driveLetters.ToArray();
-
-				diskGroup.Add(info);
 			}
 		}
 
 		/// <summary>
-		/// Search drives and supplement information by WMI (MSFT_PhysicalDisk).
+		/// Supplement disk information by WMI (MSFT_PhysicalDisk).
 		/// </summary>
-		/// <param name="diskGroup">List of disk information</param>
+		/// <param name="source">Enumeration of disk information</param>
+		/// <returns>Enumeration of disk information</returns>
 		/// <remarks>Windows Storage Management API is only available for Windows 8 or newer.</remarks>
-		private static void SearchPhysicalDisk(ref List<DiskInfo> diskGroup)
+		private static IEnumerable<DiskInfo> SupplementByPhysicalDisk(this IEnumerable<DiskInfo> source)
 		{
-			if (!OsVersion.IsEightOrNewer)
-				return;
+			var canUseStorageManagement = OsVersion.IsEightOrNewer;
 
-			var searcher = new ManagementObjectSearcher(@"\\.\Root\Microsoft\Windows\Storage", "SELECT * FROM MSFT_PhysicalDisk");
-
-			foreach (var drive in searcher.Get())
+			foreach (var info in source)
 			{
-				if (drive["DeviceId"] == null) // Index number of physical drive
-					continue;
-
-				int numId;
-				if (!int.TryParse(drive["DeviceId"].ToString(), out numId))
-					continue;
-
-				var info = diskGroup.FirstOrDefault(x => x.PhysicalDrive == numId);
-				if (info == null)
-					continue;
-
-				if (drive["BusType"] != null)
+				if (canUseStorageManagement)
 				{
-					ushort numType;
-					if (ushort.TryParse(drive["BusType"].ToString(), out numType))
-						info.BusType = numType;
+					using (var searcher = new ManagementObjectSearcher(
+						@"\\.\Root\Microsoft\Windows\Storage",
+						String.Format("SELECT * FROM MSFT_PhysicalDisk WHERE DeviceId = {0}", info.PhysicalDrive))) // DeviceId represents index number of physical drive.
+					{
+						var disk = searcher.Get().Cast<ManagementObject>().FirstOrDefault();
+						if ((disk != null) && (disk["BusType"] is ushort))
+						{
+							info.BusType = (ushort)disk["BusType"];
+						}
+					}
 				}
+
+				yield return info;
 			}
 		}
 	}
