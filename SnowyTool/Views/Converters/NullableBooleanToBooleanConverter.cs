@@ -10,7 +10,7 @@ using System.Windows.Data;
 namespace SnowyTool.Views.Converters
 {
 	/// <summary>
-	/// Convert between Boolean and Nullable Boolean.
+	/// Convert Nullable Boolean to Boolean.
 	/// </summary>
 	[ValueConversion(typeof(bool?), typeof(bool))]
 	public class NullableBooleanToBooleanConverter : IValueConverter
@@ -20,7 +20,7 @@ namespace SnowyTool.Views.Converters
 		/// </summary>
 		/// <param name="value">Nullable Boolean</param>
 		/// <param name="targetType"></param>
-		/// <param name="parameter">Condition Boolean string</param>
+		/// <param name="parameter">Condition Boolean or Boolean string (case-insensitive)</param>
 		/// <param name="culture"></param>
 		/// <returns>Boolean</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -35,13 +35,13 @@ namespace SnowyTool.Views.Converters
 
 			return condition.Value == source.Value;
 		}
-
+		
 		/// <summary>
 		/// Convert Boolean to Nullable Boolean.
 		/// </summary>
 		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>
-		/// <param name="parameter">Condition Boolean string</param>
+		/// <param name="parameter">Condition Boolean or Boolean string (case-insensitive)</param>
 		/// <param name="culture"></param>
 		/// <returns>Nullable Boolean</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -53,7 +53,7 @@ namespace SnowyTool.Views.Converters
 			if (!condition.HasValue)
 				return DependencyProperty.UnsetValue;
 
-			return condition.Value;
+			return condition;
 		}
 
 		private static bool? FindBoolean(object source)

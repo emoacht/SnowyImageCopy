@@ -27,16 +27,13 @@ namespace SnowyImageCopy.Views.Converters
 		/// </summary>
 		/// <param name="values">Double or Visibility</param>
 		/// <param name="targetType"></param>
-		/// <param name="parameter">Order to add/subtract</param>
+		/// <param name="parameter">Order string ("Add" or "Subtract", case-insensitive)</param>
 		/// <param name="culture"></param>
 		/// <returns>Double</returns>
+		/// <remarks>If order string is null, it will be regarded as "Add".</remarks>
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
-			var lengths = values.OfType<double>().Select((x, i) => new { Index = i, Length = x });
-			var visibilities = values.OfType<Visibility>().Select((x, i) => new { Index = i, Visibility = x });
-
-			var sourceLengths = lengths
-				.Join(visibilities, x => x.Index, y => y.Index, (x, y) => new { x.Length, y.Visibility })
+			var sourceLengths = Enumerable.Zip(values.OfType<double>(), values.OfType<Visibility>(), (x, y) => new { Length = x, Visibility = y })
 				.Where(x => x.Visibility == Visibility.Visible)
 				.Select(x => x.Length)
 				.ToArray();

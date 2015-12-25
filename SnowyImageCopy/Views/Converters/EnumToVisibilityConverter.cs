@@ -20,23 +20,22 @@ namespace SnowyImageCopy.Views.Converters
 		/// </summary>
 		/// <param name="value">Enum value</param>
 		/// <param name="targetType"></param>
-		/// <param name="parameter">Target Enum name string</param>
+		/// <param name="parameter">Condition Enum name string (case-insensitive)</param>
 		/// <param name="culture"></param>
-		/// <returns>Visibility.Visible if Enum name matches target Enum name string. Visibility.Collapsed if not.</returns>
+		/// <returns>Visibility.Visible if Enum value matches condition Enum value. Visibility.Collapsed if not.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Enum))
+			if (!(value is Enum) || !(parameter is string))
 				return DependencyProperty.UnsetValue;
 
-			var enumType = value.GetType();
+			var condition = Enum.GetValues(value.GetType())
+				.Cast<Enum>()
+				.FirstOrDefault(x => x.ToString().Equals((string)parameter, StringComparison.OrdinalIgnoreCase));
 
-			if ((parameter == null) || !Enum.IsDefined(enumType, parameter))
+			if (condition == null)
 				return DependencyProperty.UnsetValue;
 
-			if (!(parameter is Enum))
-				parameter = Enum.Parse(enumType, parameter.ToString());
-
-			return (((Enum)value).Equals(parameter))
+			return ((Enum)value).Equals(condition)
 				? Visibility.Visible
 				: Visibility.Collapsed;
 		}

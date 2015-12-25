@@ -23,7 +23,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// <param name="parameter"></param>
 		/// <param name="culture"></param>
 		/// <returns>Formatted string</returns>
-		/// <remarks>The Seconds will be rounded up.</remarks>
+		/// <remarks>The seconds will be rounded up.</remarks>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (!(value is TimeSpan))
