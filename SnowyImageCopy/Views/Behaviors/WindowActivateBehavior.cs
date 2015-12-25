@@ -36,7 +36,7 @@ namespace SnowyImageCopy.Views.Behaviors
 						if ((bool)e.NewValue)
 						{
 							var window = ((WindowActivateBehavior)d).AssociatedObject;
-							if (window.IsActive == false)
+							if (!window.IsActive)
 							{
 								if (window.WindowState == WindowState.Minimized)
 									window.WindowState = WindowState.Normal;
