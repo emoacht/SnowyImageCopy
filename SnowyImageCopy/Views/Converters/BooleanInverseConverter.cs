@@ -52,11 +52,9 @@ namespace SnowyImageCopy.Views.Converters
 			if (source is bool)
 				return (bool)source;
 
-			if (bool.TrueString.Equals(source as string, StringComparison.OrdinalIgnoreCase))
-				return true;
-
-			if (bool.FalseString.Equals(source as string, StringComparison.OrdinalIgnoreCase))
-				return false;
+			bool buff;
+			if (bool.TryParse(source as string, out buff))
+				return buff;
 
 			return null;
 		}
