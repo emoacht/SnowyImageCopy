@@ -35,7 +35,7 @@ namespace SnowyTool.Views.Converters
 
 			return condition.Value == source.Value;
 		}
-		
+
 		/// <summary>
 		/// Convert Boolean to Nullable Boolean.
 		/// </summary>
