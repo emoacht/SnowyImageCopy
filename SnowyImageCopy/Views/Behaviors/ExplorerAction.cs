@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interactivity;
+using Shell32;
 
 namespace SnowyImageCopy.Views.Behaviors
 {
@@ -45,7 +46,7 @@ namespace SnowyImageCopy.Views.Behaviors
 					initialPath = parent;
 			}
 
-			Process.Start("Explorer.exe", String.Format(@"/e, {0}", initialPath));
+			new Shell().Explore(initialPath);
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace SnowyImageCopy.Models
 		private static readonly TimeSpan _monitorInterval = TimeSpan.FromSeconds(2);
 
 		/// <summary>
-		/// The maximum count of retry 
+		/// The maximum count of retry
 		/// </summary>
 		private const int _retryCountMax = 3;
 
@@ -776,7 +776,7 @@ namespace SnowyImageCopy.Models
 			sb.AppendLine(String.Format("request => {0}", requestPath));
 			sb.AppendLine("response -> ");
 			sb.AppendLine(Encoding.ASCII.GetString(responseBytes));
-			
+
 			await LogService.RecordStringAsync("download.log", sb.ToString());
 		}
 

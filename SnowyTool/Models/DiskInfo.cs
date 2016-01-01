@@ -19,7 +19,7 @@ namespace SnowyTool.Models
 		/// "Index" in Wi32_DiskDrive
 		/// "DeviceId" in MSFT_PhysicalDisk
 		/// </remarks>
-		public int PhysicalDrive { get; set; }
+		public uint PhysicalDrive { get; set; }
 
 		/// <summary>
 		/// Size (Bytes) by WMI (Win32_DiskDrive)

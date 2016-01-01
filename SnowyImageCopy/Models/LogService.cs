@@ -140,6 +140,7 @@ namespace SnowyImageCopy.Models
 
 					_folderPathAppData = Path.Combine(pathAppData, Assembly.GetExecutingAssembly().GetName().Name);
 				}
+
 				return _folderPathAppData;
 			}
 		}

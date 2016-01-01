@@ -717,9 +717,7 @@ namespace SnowyImageCopy.Models
 					var value = bitmapMetadata.GetQuery(queryOrientation);
 					if (value != null)
 					{
-						int orientation;
-						if (int.TryParse(value.ToString(), out orientation))
-							return orientation;
+						return (ushort)value; // Orientation is defined as 16-bit unsigned integer in the specification.
 					}
 				}
 			}

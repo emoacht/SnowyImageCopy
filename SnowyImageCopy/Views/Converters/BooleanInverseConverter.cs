@@ -20,7 +20,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// </summary>
 		/// <param name="value">Source Boolean</param>
 		/// <param name="targetType"></param>
-		/// <param name="parameter">Condition Boolean string (optional)</param>
+		/// <param name="parameter">Condition Boolean or Boolean string (optional, case-insensitive)</param>
 		/// <param name="culture"></param>
 		/// <returns>Inversed Boolean except if condition Boolean is given and does not match source Boolean.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -47,16 +47,14 @@ namespace SnowyImageCopy.Views.Converters
 			return !sourceValue;
 		}
 
-		private static bool? FindBoolean(object parameter)
+		private static bool? FindBoolean(object source)
 		{
-			if (parameter == null)
-				return null;
+			if (source is bool)
+				return (bool)source;
 
-			if (parameter.ToString().Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase))
-				return true;
-
-			if (parameter.ToString().Equals(Boolean.FalseString, StringComparison.OrdinalIgnoreCase))
-				return false;
+			bool buff;
+			if (bool.TryParse(source as string, out buff))
+				return buff;
 
 			return null;
 		}

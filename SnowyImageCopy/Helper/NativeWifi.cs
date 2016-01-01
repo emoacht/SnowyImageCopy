@@ -16,28 +16,28 @@ namespace SnowyImageCopy.Helper
 	{
 		#region Win32
 
-		[DllImport("Wlanapi.dll", SetLastError = true)]
+		[DllImport("Wlanapi.dll")]
 		private static extern uint WlanOpenHandle(
 			uint dwClientVersion,
 			IntPtr pReserved,
 			out uint pdwNegotiatedVersion,
 			out IntPtr phClientHandle);
 
-		[DllImport("Wlanapi.dll", SetLastError = true)]
+		[DllImport("Wlanapi.dll")]
 		private static extern uint WlanCloseHandle(
 			IntPtr hClientHandle,
 			IntPtr pReserved);
 
-		[DllImport("Wlanapi.dll", SetLastError = true)]
+		[DllImport("Wlanapi.dll")]
 		private static extern void WlanFreeMemory(IntPtr pMemory);
 
-		[DllImport("Wlanapi.dll", SetLastError = true)]
+		[DllImport("Wlanapi.dll")]
 		private static extern uint WlanEnumInterfaces(
 			IntPtr hClientHandle,
 			IntPtr pReserved,
 			out IntPtr ppInterfaceList);
 
-		[DllImport("Wlanapi.dll", SetLastError = true)]
+		[DllImport("Wlanapi.dll")]
 		private static extern uint WlanQueryInterface(
 			IntPtr hClientHandle,
 			[MarshalAs(UnmanagedType.LPStruct)] Guid pInterfaceGuid,

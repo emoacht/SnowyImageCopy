@@ -10,7 +10,7 @@ using System.Windows.Data;
 namespace SnowyTool.Views.Converters
 {
 	/// <summary>
-	/// Convert between Boolean and Nullable Boolean.
+	/// Convert Nullable Boolean to Boolean.
 	/// </summary>
 	[ValueConversion(typeof(bool?), typeof(bool))]
 	public class NullableBooleanToBooleanConverter : IValueConverter
@@ -20,20 +20,12 @@ namespace SnowyTool.Views.Converters
 		/// </summary>
 		/// <param name="value">Nullable Boolean</param>
 		/// <param name="targetType"></param>
-		/// <param name="parameter">Condition Boolean string</param>
+		/// <param name="parameter">Condition Boolean or Boolean string (case-insensitive)</param>
 		/// <param name="culture"></param>
 		/// <returns>Boolean</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			bool? source = null;
-			if (value != null)
-			{
-				bool buff;
-				source = bool.TryParse(value.ToString(), out buff)
-					? buff
-					: (bool?)null;
-			}
-
+			var source = FindBoolean(value);
 			if (!source.HasValue)
 				return false;
 
@@ -49,7 +41,7 @@ namespace SnowyTool.Views.Converters
 		/// </summary>
 		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>
-		/// <param name="parameter">Condition Boolean string</param>
+		/// <param name="parameter">Condition Boolean or Boolean string (case-insensitive)</param>
 		/// <param name="culture"></param>
 		/// <returns>Nullable Boolean</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -61,19 +53,17 @@ namespace SnowyTool.Views.Converters
 			if (!condition.HasValue)
 				return DependencyProperty.UnsetValue;
 
-			return condition.Value;
+			return condition;
 		}
 
-		private static bool? FindBoolean(object parameter)
+		private static bool? FindBoolean(object source)
 		{
-			if (parameter == null)
-				return null;
+			if (source is bool)
+				return (bool)source;
 
-			if (parameter.ToString().Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase))
-				return true;
-
-			if (parameter.ToString().Equals(Boolean.FalseString, StringComparison.OrdinalIgnoreCase))
-				return false;
+			bool buff;
+			if (bool.TryParse(source as string, out buff))
+				return buff;
 
 			return null;
 		}
