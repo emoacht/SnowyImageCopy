@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{955F89E2-FC76-4F3F-BE63-250A7B8E0277}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,6 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowyTool", "SnowyTool\Snow
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowyImageCopy.Test", "SnowyImageCopy.Test\SnowyImageCopy.Test.csproj", "{FBFE3C9C-8D09-4ABF-82C6-C9B6D0B27AEB}"
 	ProjectSection(ProjectDependencies) = postProject
+		{BB8A7F03-E29D-4023-BD7B-FE2988FF4D77} = {BB8A7F03-E29D-4023-BD7B-FE2988FF4D77}
 		{55DF0585-A26E-489E-BD94-4E6A50A83E23} = {55DF0585-A26E-489E-BD94-4E6A50A83E23}
 	EndProjectSection
 EndProject

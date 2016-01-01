@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -101,9 +99,9 @@ namespace SnowyTool.ViewModels
 
 		/// <summary>
 		/// Network security key corresponding to APPSSID
-		/// </summary> 
+		/// </summary>
 		/// <remarks>
-		/// Format: 0-64 characters (at least 8 characters are required to enable security functionality) 
+		/// Format: 0-64 characters (at least 8 characters are required to enable security functionality)
 		/// Once rebooted, this value will be saved in hidden area in FlashAir and this value will be masked.
 		/// </remarks>
 		[PersistentMember(true)]
@@ -250,14 +248,10 @@ namespace SnowyTool.ViewModels
 		[PersistentMember]
 		public string CID
 		{
-			get { return _CID; }
-			set
-			{
-				_CID = value;
-				ParseCID(value);
-			}
+			get { return _CID.Source; }
+			set { _CID.Import(value); }
 		}
-		private string _CID;
+		private readonly CidInfo _CID = new CidInfo();
 
 		/// <summary>
 		/// Product code
@@ -284,66 +278,34 @@ namespace SnowyTool.ViewModels
 		#region Property (Content of CID)
 
 		/// <summary>
-		/// Manufacturer ID (MID)
-		/// </summary> 
-		/// <remarks>
-		/// 8 bits [127:120] -> bytes 0
-		/// 8-bit binary number
-		/// 1: Panasonic
-		/// 2: Toshiba
-		/// 3: SanDisk
-		/// </remarks>
-		public int ManufacturerID { get; private set; }
+		/// Manufacturer ID
+		/// </summary>
+		public int ManufacturerID { get { return _CID.ManufacturerID; } }
 
 		/// <summary>
-		/// OEM/Application ID (OID)
+		/// OEM/Application ID
 		/// </summary>
-		/// <remarks>
-		/// 16 bits [119:104] -> bytes 1-2 
-		/// 2-character ASCII string
-		/// </remarks>
-		public string OemApplicationID { get; private set; }
+		public string OemApplicationID { get { return _CID.OemApplicationID; } }
 
 		/// <summary>
-		/// Product Name (PNM)
+		/// Product Name
 		/// </summary>
-		/// <remarks>
-		/// 40 bits [103:64] -> bytes 3-7
-		/// 5-character ASCII string
-		/// </remarks>
-		public string ProductName { get; private set; }
+		public string ProductName { get { return _CID.ProductName; } }
 
 		/// <summary>
-		/// Product Revision (PRV)
+		/// Product Revision
 		/// </summary>
-		/// <remarks>
-		/// 8 bits [63:56] -> bytes 8
-		/// "n.m" revision number: First 4 bits [63:60] for major revision ("n") and second 4 bits [59:56] for minor revision ("m")
-		/// </remarks>
-		public string ProductRevision { get; private set; }
+		public string ProductRevision { get { return _CID.ProductRevision; } }
 
 		/// <summary>
-		/// Product Serial Number (PSN)
+		/// Product Serial Number
 		/// </summary>
-		/// <remarks>
-		/// 32 bits [55:24] -> bytes 9-12
-		/// 32-bit binary number
-		/// </remarks>
-		public uint ProductSerialNumber { get; private set; }
+		public uint ProductSerialNumber { get { return _CID.ProductSerialNumber; } }
 
 		/// <summary>
-		/// Manufacturing Date (MDT)
+		/// Manufacturing Date
 		/// </summary>
-		/// <remarks>
-		/// 12 bits [19:8] -> bytes 13 (second half) and 14
-		/// 8 bits [19:12] at the head for count of years from 2000 and 4 bits [11:8] at the tail for month
-		/// </remarks>
-		public DateTime ManufacturingDate { get; private set; }
-
-		// CID register has 128 bits = 16 bytes in total.
-		// 4 bits [23:20] are reserved.
-		// 7 bits [7:1] are for CRC7 checksum.
-		// 1 bit [0:0] is not used and always 1.
+		public DateTime ManufacturingDate { get { return _CID.ManufacturingDate; } }
 
 		#endregion
 
@@ -585,50 +547,6 @@ namespace SnowyTool.ViewModels
 
 			foreach (var name in _temporaryMemberNames)
 				source.Remove(name);
-		}
-
-		#endregion
-
-		#region Parse CID
-
-		private static readonly Regex _asciiPattern = new Regex("^[\x20-\x7F]{32}$", RegexOptions.Compiled); // Pattern for string in ASCII code (alphanumeric symbols)
-
-		private void ParseCID(string cid)
-		{
-			if (String.IsNullOrWhiteSpace(cid) || !_asciiPattern.IsMatch(cid))
-				return;
-
-			var bytes = SoapHexBinary.Parse(cid).Value;
-
-			ManufacturerID = bytes[0]; // Bytes 0
-			OemApplicationID = Encoding.ASCII.GetString(bytes.Skip(1).Take(2).ToArray()); // Bytes 1-2
-			ProductName = Encoding.ASCII.GetString(bytes.Skip(3).Take(5).ToArray()); // Bytes 3-7
-
-			var productRevisionBits = new BitArray(new[] { bytes[8] }).Cast<bool>().Reverse().ToArray(); // Bytes 8
-			var major = ConvertFromBitsToInt(productRevisionBits.Take(4).Reverse());
-			var minor = ConvertFromBitsToInt(productRevisionBits.Skip(4).Take(4).Reverse());
-			ProductRevision = String.Format("{0}.{1}", major, minor);
-
-			ProductSerialNumber = BitConverter.ToUInt32(bytes, 9); // Bytes 9-12
-
-			var manufacturingDateBits = bytes.Skip(13).Take(2) // Bytes 13-14
-				.SelectMany(x => new BitArray(new[] { x }).Cast<bool>().Reverse())
-				.Skip(4) // Skip reserved field.
-				.ToArray();
-
-			var year = ConvertFromBitsToInt(manufacturingDateBits.Take(8).Reverse());
-			var month = ConvertFromBitsToInt(manufacturingDateBits.Skip(8).Take(4).Reverse());
-			if ((year <= 1000) && (month <= 12))
-			{
-				ManufacturingDate = new DateTime(year + 2000, month, 1);
-			}
-		}
-
-		private static int ConvertFromBitsToInt(IEnumerable<bool> source)
-		{
-			var buff = new int[1];
-			new BitArray(source.ToArray()).CopyTo(buff, 0);
-			return buff[0];
 		}
 
 		#endregion
