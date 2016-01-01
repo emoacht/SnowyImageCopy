@@ -55,3 +55,5 @@ using System.Windows;
 [assembly: AssemblyVersion("1.1.0.6")]
 [assembly: AssemblyFileVersion("1.1.0.6")]
 
+// For unit test
+[assembly: InternalsVisibleTo("SnowyImageCopy.Test")]
