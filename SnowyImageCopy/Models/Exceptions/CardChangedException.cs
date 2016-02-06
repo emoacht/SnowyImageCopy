@@ -11,7 +11,7 @@ namespace SnowyImageCopy.Models.Exceptions
 	/// Exception when FlashAir card is changed
 	/// </summary>
 	[Serializable]
-	public class CardChangedException : Exception
+	internal class CardChangedException : Exception
 	{
 		public CardChangedException() { }
 		public CardChangedException(string message) : base(message) { }

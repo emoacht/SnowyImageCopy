@@ -11,7 +11,7 @@ namespace SnowyImageCopy.Models.Exceptions
 	/// Exception when failed to get a thumbnail of a remote file in FlashAir card
 	/// </summary>
 	[Serializable]
-	public class RemoteFileThumbnailFailedException : Exception
+	internal class RemoteFileThumbnailFailedException : Exception
 	{
 		public string FilePath { get; private set; }
 
