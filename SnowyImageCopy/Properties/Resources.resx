@@ -238,6 +238,9 @@
   <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
     <value>Enable to choose to delete image in FlashAir on copy</value>
   </data>
+  <data name="Options_CreateDatedFolder" xml:space="preserve">
+    <value>Create folder for each date</value>
+  </data>
   <data name="Options_Date" xml:space="preserve">
     <value>Date</value>
   </data>

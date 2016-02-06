@@ -1289,9 +1289,11 @@ namespace SnowyImageCopy.Models
 		/// <returns>Local file path</returns>
 		private static string ComposeLocalPath(FileItemViewModel item)
 		{
-			var folderName = (item.Date != default(DateTime))
-				? item.Date.ToString("yyyyMMdd")
-				: _unknownFolderName;
+			var folderName = Settings.Current.CreatesDatedFolder
+				? (item.Date != default(DateTime))
+					? item.Date.ToString("yyyyMMdd")
+					: _unknownFolderName
+				: string.Empty;
 
 			return Path.Combine(Settings.Current.LocalFolder, folderName, item.FileNameWithCaseExtension);
 		}

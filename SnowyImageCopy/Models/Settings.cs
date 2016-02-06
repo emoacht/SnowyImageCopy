@@ -333,6 +333,20 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _selectsReadOnlyFile;
 
+		public bool CreatesDatedFolder
+		{
+			get { return _createsDatedFolder; }
+			set
+			{
+				if (_createsDatedFolder == value)
+					return;
+
+				_createsDatedFolder = value;
+				RaisePropertyChanged();
+			}
+		}
+		private bool _createsDatedFolder = true; // Default;
+
 		public bool EnablesChooseDeleteOnCopy
 		{
 			get { return _enablesChooseDeleteOnCopy; }
