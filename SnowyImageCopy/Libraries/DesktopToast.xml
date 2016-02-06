@@ -15,6 +15,14 @@
             </summary>
             <remarks>Windows 8 = version 6.2</remarks>
         </member>
+        <member name="M:DesktopToast.Helper.OsVersion.GetOsVersionByWmi">
+            <summary>
+            Get OS version.
+            </summary>
+            <returns>OS version</returns>
+            <remarks>Even on Windows 8.1 or newer, WMI seems not affected by the application manifest and so
+            always returns correct version number.</remarks>
+        </member>
         <member name="T:DesktopToast.Helper.ShellLink">
             <summary>
             A wrapper class for IShellLink Interface added with AppUserModelID
@@ -24,10 +32,77 @@
             Originally from http://www.vbaccelerator.com/home/NET/Code/Libraries/Shell_Projects/Creating_and_Modifying_Shortcuts/article.asp
             </remarks>
         </member>
-        <member name="F:DesktopToast.Helper.ShellLink.MAX_PATH">
+        <member name="T:DesktopToast.Helper.ShellLink.IShellLinkW">
             <summary>
-            Maximum path length limitation
+            IShellLink Interface
             </summary>
+        </member>
+        <member name="T:DesktopToast.Helper.ShellLink.CShellLink">
+            <summary>
+            ShellLink CoClass (Shell link object)
+            </summary>
+        </member>
+        <member name="T:DesktopToast.Helper.ShellLink.WIN32_FIND_DATAW">
+            <summary>
+            WIN32_FIND_DATAW Structure
+            </summary>
+        </member>
+        <member name="T:DesktopToast.Helper.ShellLink.IPropertyStore">
+            <summary>
+            IPropertyStore Interface
+            </summary>
+        </member>
+        <member name="T:DesktopToast.Helper.ShellLink.PropertyKey">
+            <summary>
+            PropertyKey Structure
+            </summary>
+            <remarks>
+            Narrowed down from PropertyKey.cs of Windows API Code Pack 1.1
+            </remarks>
+        </member>
+        <member name="M:DesktopToast.Helper.ShellLink.PropertyKey.#ctor(System.Guid,System.Int32)">
+            <summary>
+            Constructor with Format ID as Guid value
+            </summary>
+            <param name="formatId">Format ID</param>
+            <param name="propertyId">Property ID</param>
+        </member>
+        <member name="M:DesktopToast.Helper.ShellLink.PropertyKey.#ctor(System.String,System.Int32)">
+            <summary>
+            Constructor with Format ID as string value
+            </summary>
+            <param name="formatId">Format ID</param>
+            <param name="propertyId">Property ID</param>
+        </member>
+        <member name="T:DesktopToast.Helper.ShellLink.PropVariant">
+            <summary>
+            PropVariant Class (only for string value)
+            </summary>
+            <remarks>
+            Narrowed down from PropVariant.cs of Windows API Code Pack 1.1
+            Originally from http://blogs.msdn.com/b/adamroot/archive/2008/04/11/interop-with-propvariants-in-net.aspx
+            </remarks>
+        </member>
+        <member name="P:DesktopToast.Helper.ShellLink.PropVariant.VarType">
+            <summary>
+            Value type (System.Runtime.InteropServices.VarEnum)
+            </summary>
+        </member>
+        <member name="P:DesktopToast.Helper.ShellLink.PropVariant.IsNullOrEmpty">
+            <summary>
+            Whether value is empty or null
+            </summary>
+        </member>
+        <member name="P:DesktopToast.Helper.ShellLink.PropVariant.Value">
+            <summary>
+            Value (only for string value)
+            </summary>
+        </member>
+        <member name="M:DesktopToast.Helper.ShellLink.PropVariant.#ctor(System.String)">
+            <summary>
+            Constructor with string value
+            </summary>
+            <param name="value">String value</param>
         </member>
         <member name="F:DesktopToast.Helper.ShellLink.ArgumentsKey">
             <summary>
@@ -53,45 +128,30 @@
             Type = String (VT_LPWSTR)
             </remarks>
         </member>
+        <member name="T:DesktopToast.Helper.ShellLink.STGM">
+            <summary>
+            STGM Constants
+            </summary>
+        </member>
+        <member name="T:DesktopToast.Helper.ShellLink.SLGP">
+            <summary>
+            SLGP Flags
+            </summary>
+        </member>
+        <member name="T:DesktopToast.Helper.ShellLink.SW">
+            <summary>
+            SW (ShowWindow command)
+            </summary>
+        </member>
         <member name="F:DesktopToast.Helper.ShellLink.shellLink">
             <summary>
             Shell link object
             </summary>
         </member>
-        <member name="M:DesktopToast.Helper.ShellLink.#ctor">
+        <member name="F:DesktopToast.Helper.ShellLink.MAX_PATH">
             <summary>
-            Default constructor
+            Maximum path length limitation
             </summary>
-        </member>
-        <member name="M:DesktopToast.Helper.ShellLink.#ctor(System.String)">
-            <summary>
-            Constructor with creating shell link object and loading shortcut file
-            </summary>
-            <param name="shortcutPath">Shortcut file path</param>
-        </member>
-        <member name="M:DesktopToast.Helper.ShellLink.Load(System.String)">
-            <summary>
-            Load shortcut file.
-            </summary>
-            <param name="shortcutPath">Shortcut file path</param>
-        </member>
-        <member name="M:DesktopToast.Helper.ShellLink.Save">
-            <summary>
-            Save shortcut file.
-            </summary>
-        </member>
-        <member name="M:DesktopToast.Helper.ShellLink.Save(System.String)">
-            <summary>
-            Save shortcut file.
-            </summary>
-            <param name="shortcutPath">Shortcut file path</param>
-        </member>
-        <member name="M:DesktopToast.Helper.ShellLink.VerifySucceeded(System.UInt32)">
-            <summary>
-            Verify if operation succeeded.
-            </summary>
-            <param name="hresult">HRESULT</param>
-            <remarks>This method is from Sending toast notifications from desktop apps sample.</remarks>
         </member>
         <member name="P:DesktopToast.Helper.ShellLink.ShortcutPath">
             <summary>
@@ -160,92 +220,40 @@
             as other properties by IShellLink.</para>
             </remarks>
         </member>
-        <member name="T:DesktopToast.Helper.ShellLink.IShellLinkW">
+        <member name="M:DesktopToast.Helper.ShellLink.#ctor">
             <summary>
-            IShellLink Interface
+            Default constructor
             </summary>
         </member>
-        <member name="T:DesktopToast.Helper.ShellLink.CShellLink">
+        <member name="M:DesktopToast.Helper.ShellLink.#ctor(System.String)">
             <summary>
-            ShellLink CoClass (Shell link object)
+            Constructor with creating shell link object and loading shortcut file
+            </summary>
+            <param name="shortcutPath">Shortcut file path</param>
+        </member>
+        <member name="M:DesktopToast.Helper.ShellLink.Load(System.String)">
+            <summary>
+            Load shortcut file.
+            </summary>
+            <param name="shortcutPath">Shortcut file path</param>
+        </member>
+        <member name="M:DesktopToast.Helper.ShellLink.Save">
+            <summary>
+            Save shortcut file.
             </summary>
         </member>
-        <member name="T:DesktopToast.Helper.ShellLink.WIN32_FIND_DATAW">
+        <member name="M:DesktopToast.Helper.ShellLink.Save(System.String)">
             <summary>
-            WIN32_FIND_DATAW Structure
+            Save shortcut file.
             </summary>
+            <param name="shortcutPath">Shortcut file path</param>
         </member>
-        <member name="T:DesktopToast.Helper.ShellLink.IPropertyStore">
+        <member name="M:DesktopToast.Helper.ShellLink.VerifySucceeded(System.UInt32)">
             <summary>
-            IPropertyStore Interface
+            Verify if operation succeeded.
             </summary>
-        </member>
-        <member name="T:DesktopToast.Helper.ShellLink.PropertyKey">
-            <summary>
-            PropertyKey Structure
-            </summary>
-            <remarks>
-            Narrowed down from PropertyKey.cs of Windows API Code Pack 1.1
-            </remarks>
-        </member>
-        <member name="M:DesktopToast.Helper.ShellLink.PropertyKey.#ctor(System.Guid,System.Int32)">
-            <summary>
-            Constructor with Format ID as Guid value
-            </summary>
-            <param name="formatId">Format ID</param>
-            <param name="propertyId">Property ID</param>
-        </member>
-        <member name="M:DesktopToast.Helper.ShellLink.PropertyKey.#ctor(System.String,System.Int32)">
-            <summary>
-            Constructor with Format ID as string value
-            </summary>
-            <param name="formatId">Format ID</param>
-            <param name="propertyId">Property ID</param>
-        </member>
-        <member name="T:DesktopToast.Helper.ShellLink.PropVariant">
-            <summary>
-            PropVariant Class (only for string value)
-            </summary>
-            <remarks>
-            Narrowed down from PropVariant.cs of Windows API Code Pack 1.1
-            Originally from http://blogs.msdn.com/b/adamroot/archive/2008/04/11/interop-with-propvariants-in-net.aspx
-            </remarks>
-        </member>
-        <member name="M:DesktopToast.Helper.ShellLink.PropVariant.#ctor(System.String)">
-            <summary>
-            Constructor with string value
-            </summary>
-            <param name="value">String value</param>
-        </member>
-        <member name="P:DesktopToast.Helper.ShellLink.PropVariant.VarType">
-            <summary>
-            Value type (System.Runtime.InteropServices.VarEnum)
-            </summary>
-        </member>
-        <member name="P:DesktopToast.Helper.ShellLink.PropVariant.IsNullOrEmpty">
-            <summary>
-            Whether value is empty or null
-            </summary>
-        </member>
-        <member name="P:DesktopToast.Helper.ShellLink.PropVariant.Value">
-            <summary>
-            Value (only for string value)
-            </summary>
-        </member>
-        <member name="T:DesktopToast.Helper.ShellLink.STGM">
-            <summary>
-            STGM Constants
-            </summary>
-        </member>
-        <member name="T:DesktopToast.Helper.ShellLink.SLGP">
-            <summary>
-            SLGP Flags
-            </summary>
-        </member>
-        <member name="T:DesktopToast.Helper.ShellLink.SW">
-            <summary>
-            SW (ShowWindow command)
-            </summary>
+            <param name="hresult">HRESULT</param>
+            <remarks>This method is from Sending toast notifications from desktop apps sample.</remarks>
         </member>
         <member name="T:DesktopToast.Helper.Shortcut">
             <summary>
@@ -330,7 +338,7 @@
         <member name="F:DesktopToast.ShortcutWindowState.Normal">
             <summary>
             Activates and displays a window. If the window is minimized or maximized, the system restores
-            it to its original size and position. 
+            it to its original size and position.
             </summary>
         </member>
         <member name="F:DesktopToast.ShortcutWindowState.Maximized">
@@ -481,26 +489,26 @@
         </member>
         <member name="T:DesktopToast.ToastManager">
             <summary>
-            Show toast notifications.
+            Manages toast notifications.
             </summary>
         </member>
         <member name="M:DesktopToast.ToastManager.ShowAsync(DesktopToast.ToastRequest)">
             <summary>
-            Show a toast.
+            Shows a toast.
             </summary>
             <param name="request">Toast request</param>
             <returns>Result of showing a toast</returns>
         </member>
         <member name="M:DesktopToast.ToastManager.ShowAsync(System.String)">
             <summary>
-            Show a toast using JSON format.
+            Shows a toast using JSON format.
             </summary>
             <param name="requestJson">Toast request in JSON format</param>
             <returns>Result of showing a toast</returns>
         </member>
         <member name="M:DesktopToast.ToastManager.ShowAsync(Windows.Data.Xml.Dom.XmlDocument,System.String)">
             <summary>
-            Show a toast without toast request.
+            Shows a toast without toast request.
             </summary>
             <param name="document">Toast document</param>
             <param name="appId">AppUserModelID</param>
@@ -508,7 +516,7 @@
         </member>
         <member name="M:DesktopToast.ToastManager.PrepareToastDocument(DesktopToast.ToastRequest)">
             <summary>
-            Prepare a toast document.
+            Prepares a toast document.
             </summary>
             <param name="request">Toast request</param>
             <returns>Toast document</returns>
@@ -521,13 +529,13 @@
         </member>
         <member name="M:DesktopToast.ToastManager.CheckInstallShortcut(DesktopToast.ToastRequest)">
             <summary>
-            Check and install a shortcut file in Start menu.
+            Checks and installs a shortcut file in Start menu.
             </summary>
             <param name="request">Toast request</param>
         </member>
         <member name="M:DesktopToast.ToastManager.ShowBaseAsync(Windows.Data.Xml.Dom.XmlDocument,System.String)">
             <summary>
-            Show a toast.
+            Shows a toast.
             </summary>
             <param name="document">Toast document</param>
             <param name="appId">AppUserModelID</param>
@@ -537,23 +545,6 @@
             <summary>
             Toast request container
             </summary>
-        </member>
-        <member name="M:DesktopToast.ToastRequest.#ctor">
-            <summary>
-            Default constructor
-            </summary>
-        </member>
-        <member name="M:DesktopToast.ToastRequest.Import(System.String)">
-            <summary>
-            Import from a request in JSON format.
-            </summary>
-            <param name="requestJson">Request in JSON format</param>
-        </member>
-        <member name="M:DesktopToast.ToastRequest.Export">
-            <summary>
-            Export a request in JSON format.
-            </summary>
-            <returns>Request in JSON format</returns>
         </member>
         <member name="P:DesktopToast.ToastRequest.ToastHeadline">
             <summary>
@@ -643,6 +634,23 @@
             <summary>
             Waiting duration before showing a toast after the shortcut file is installed (optional)
             </summary>
+        </member>
+        <member name="M:DesktopToast.ToastRequest.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DesktopToast.ToastRequest.Import(System.String)">
+            <summary>
+            Imports from a request in JSON format.
+            </summary>
+            <param name="requestJson">Request in JSON format</param>
+        </member>
+        <member name="M:DesktopToast.ToastRequest.Export">
+            <summary>
+            Exports a request in JSON format.
+            </summary>
+            <returns>Request in JSON format</returns>
         </member>
         <member name="T:DesktopToast.ToastResult">
             <summary>
