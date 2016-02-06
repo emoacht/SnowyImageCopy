@@ -18,6 +18,11 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
+Ver 1.2.0 2016-2-6
+
+ - Added option to create dated folder
+ - Fixed a few bugs
+
 Ver 1.1.0 2015-8-22
 
  - Fixed a bug in SnowyTool that writes unnecessary lines to CONFIG file

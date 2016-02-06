@@ -12,7 +12,7 @@ using System.Windows.Interactivity;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Get/Set SelectedDates property of <see cref="System.Windows.Controls.Calendar"/> as Dependency Property.
+	/// Gets/Sets SelectedDates property of <see cref="System.Windows.Controls.Calendar"/> as Dependency Property.
 	/// </summary>
 	[TypeConstraint(typeof(Calendar))]
 	public class CalendarSelectedDatesBehavior : Behavior<Calendar>
@@ -61,7 +61,7 @@ namespace SnowyImageCopy.Views.Behaviors
 
 			var associatedSelectedDates = this.AssociatedObject.SelectedDates; // SelectedDates property of Calendar
 
-			// Make a cache of SelectedDates because SelectedDates will be changed by OnSelectedDatesChanged 
+			// Make a cache of SelectedDates because SelectedDates will be changed by OnSelectedDatesChanged
 			// during OnLoaded.
 			var selectedDatesCache = SelectedDates.ToArray();
 
@@ -90,7 +90,7 @@ namespace SnowyImageCopy.Views.Behaviors
 
 			SelectedDates = new ObservableCollection<DateTime>(SelectedDates.Distinct());
 
-			// Release mouse capture because Calendar control captures mouse when it is clicked and so 
+			// Release mouse capture because Calendar control captures mouse when it is clicked and so
 			// prevents other controls from responding to the first click after it.
 			Mouse.Capture(null);
 		}

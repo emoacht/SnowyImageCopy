@@ -11,7 +11,7 @@ namespace SnowyImageCopy.Models.Exceptions
 	/// Exception when upload.cgi of FlashAir card is disabled
 	/// </summary>
 	[Serializable]
-	public class CardUploadDisabledException : Exception
+	internal class CardUploadDisabledException : Exception
 	{
 		public CardUploadDisabledException() { }
 		public CardUploadDisabledException(string message) : base(message) { }

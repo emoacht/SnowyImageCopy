@@ -15,7 +15,7 @@ using SnowyImageCopy.Models.Exceptions;
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// Read/Create/Convert images.
+	/// Reads/Creates/Converts images.
 	/// </summary>
 	internal static class ImageManager
 	{
@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Models
 		#region Read/Create Thumbnail (Internal)
 
 		/// <summary>
-		/// Read a thumbnail in metadata from a specified file.
+		/// Reads a thumbnail in metadata from a specified file.
 		/// </summary>
 		/// <param name="localPath">Local file path</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -62,7 +62,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Read a thumbnail in metadata from byte array.
+		/// Reads a thumbnail in metadata from byte array.
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -93,7 +93,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Create a thumbnail from a specified file.
+		/// Creates a thumbnail from a specified file.
 		/// </summary>
 		/// <param name="localPath">Local file path</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -128,7 +128,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Create a thumbnail from byte array.
+		/// Creates a thumbnail from byte array.
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -163,7 +163,7 @@ namespace SnowyImageCopy.Models
 		#region Read/Create Thumbnail (Private)
 
 		/// <summary>
-		/// Read a thumbnail in metadata by System.Drawing.
+		/// Reads a thumbnail in metadata by System.Drawing.
 		/// </summary>
 		/// <param name="stream">Stream</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -190,7 +190,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Read a thumbnail in metadata by System.Windows.Media.Imaging.
+		/// Reads a thumbnail in metadata by System.Windows.Media.Imaging.
 		/// </summary>
 		/// <param name="stream">Stream</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -216,7 +216,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Create a thumbnail from image applying Uniform transformation.
+		/// Creates a thumbnail from image applying Uniform transformation.
 		/// </summary>
 		/// <param name="stream">Stream</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -258,7 +258,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Create a thumbnail from image applying UniformToFill transformation.
+		/// Creates a thumbnail from image applying UniformToFill transformation.
 		/// </summary>
 		/// <param name="stream">Stream</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -285,7 +285,7 @@ namespace SnowyImageCopy.Models
 		#region Convert FrameworkElement to BitmapImage
 
 		/// <summary>
-		/// Convert a FrameworkElement to BitmapImage.
+		/// Converts a FrameworkElement to BitmapImage.
 		/// </summary>
 		/// <param name="element">FrameworkElement</param>
 		/// <returns>BitmapImage of FrameworkElement</returns>
@@ -295,7 +295,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Convert a FrameworkElement to BitmapImage.
+		/// Converts a FrameworkElement to BitmapImage.
 		/// </summary>
 		/// <param name="element">FrameworkElement</param>
 		/// <param name="targetWidth">Target width</param>
@@ -306,7 +306,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Convert a FrameworkElement to BitmapImage.
+		/// Converts a FrameworkElement to BitmapImage.
 		/// </summary>
 		/// <param name="element">FrameworkElement</param>
 		/// <param name="outerSize">Target outer size</param>
@@ -374,7 +374,7 @@ namespace SnowyImageCopy.Models
 		#region Convert byte array to BitmapSource
 
 		/// <summary>
-		/// Convert byte array to BitmapSource.
+		/// Converts byte array to BitmapSource.
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>BitmapSource</returns>
@@ -384,7 +384,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Convert byte array to BitmapSource.
+		/// Converts byte array to BitmapSource.
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <param name="targetWidth">Target width</param>
@@ -397,7 +397,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Convert byte array to BitmapSource.
+		/// Converts byte array to BitmapSource.
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <param name="targetWidth">Target width</param>
@@ -438,7 +438,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Convert byte array to BitmapSource applying Uniform transformation.
+		/// Converts byte array to BitmapSource applying Uniform transformation.
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <param name="outerSize">Target outer size</param>
@@ -476,7 +476,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Convert Stream to BitmapSource.
+		/// Converts Stream to BitmapSource.
 		/// </summary>
 		/// <param name="stream">Stream</param>
 		/// <param name="outerSize">Target outer size</param>
@@ -509,7 +509,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Resize BitmapSource and reflect Exif orientation to BitmapSource.
+		/// Resizes BitmapSource and reflect Exif orientation to BitmapSource.
 		/// </summary>
 		/// <param name="bitmapSource">Source BitmapSource</param>
 		/// <param name="outerSize">Target outer size</param>
@@ -583,7 +583,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get color profile from BitmapFrame.
+		/// Gets color profile from BitmapFrame.
 		/// </summary>
 		/// <param name="bitmapFrame">BitmapFrame</param>
 		/// <returns>Color profile</returns>
@@ -595,7 +595,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Convert color profile of BitmapSource for color management.
+		/// Converts color profile of BitmapSource for color management.
 		/// </summary>
 		/// <param name="bitmapSource">Source BitmapSource</param>
 		/// <param name="sourceProfile">Source color profile</param>
@@ -621,7 +621,7 @@ namespace SnowyImageCopy.Models
 		#region Exif (Internal)
 
 		/// <summary>
-		/// Get date of image taken in Exif metadata from byte array.
+		/// Gets date of image taken in Exif metadata from byte array.
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>Date of image taken</returns>
@@ -649,7 +649,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get orientation in Exif metadata from byte array.
+		/// Gets orientation in Exif metadata from byte array.
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>Orientation</returns>
@@ -681,7 +681,7 @@ namespace SnowyImageCopy.Models
 		#region Exif (Private)
 
 		/// <summary>
-		/// Get date of image taken in Exif metadata from BitmapFrame.
+		/// Gets date of image taken in Exif metadata from BitmapFrame.
 		/// </summary>
 		/// <param name="bitmapFrame">BitmapFrame</param>
 		/// <returns>Date of image taken</returns>
@@ -701,7 +701,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get orientation in Exif metadata from BitmapFrame.
+		/// Gets orientation in Exif metadata from BitmapFrame.
 		/// </summary>
 		/// <param name="bitmapFrame">BitmapFrame</param>
 		/// <returns>Orientation</returns>
@@ -730,7 +730,7 @@ namespace SnowyImageCopy.Models
 		#region General
 
 		/// <summary>
-		/// Convert stream to BitmapImage.
+		/// Converts stream to BitmapImage.
 		/// </summary>
 		/// <param name="stream">Stream</param>
 		/// <returns>BitmapImage</returns>
@@ -740,7 +740,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Convert stream to BitmapImage.
+		/// Converts stream to BitmapImage.
 		/// </summary>
 		/// <param name="stream">Stream</param>
 		/// <param name="targetSize">Target size</param>
@@ -768,7 +768,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Convert stream to BitmapImage applying Uniform transformation.
+		/// Converts stream to BitmapImage applying Uniform transformation.
 		/// </summary>
 		/// <param name="stream">Stream</param>
 		/// <param name="outerSize">Target outer size</param>
@@ -789,7 +789,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get size of rectangle that inscribes outer rectangle for Uniform transformation.
+		/// Gets size of rectangle that inscribes outer rectangle for Uniform transformation.
 		/// </summary>
 		/// <param name="originWidth">Original image width</param>
 		/// <param name="originHeight">Original image height</param>
@@ -831,7 +831,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Crop BitmapSource for UniformToFill transformation.
+		/// Crops BitmapSource for UniformToFill transformation.
 		/// </summary>
 		/// <param name="bitmapSource">BitmapSource</param>
 		/// <param name="innerSize">Inner size</param>
@@ -878,7 +878,7 @@ namespace SnowyImageCopy.Models
 		#region Helper
 
 		/// <summary>
-		/// Check if an exception is thrown because image format is not supported by PC.
+		/// Checks if an exception is thrown because image format is not supported by PC.
 		/// </summary>
 		/// <param name="ex">Exception</param>
 		private static bool IsImageNotSupported(Exception ex)

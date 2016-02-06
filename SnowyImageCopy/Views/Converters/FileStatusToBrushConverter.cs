@@ -13,7 +13,7 @@ using SnowyImageCopy.Models;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Convert FileStatus to corresponding Brush.
+	/// Converts FileStatus to corresponding Brush.
 	/// </summary>
 	[ValueConversion(typeof(FileStatus), typeof(Brush))]
 	public class FileStatusToBrushConverter : IValueConverter

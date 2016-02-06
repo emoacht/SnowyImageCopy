@@ -11,7 +11,7 @@ using SnowyImageCopy.Properties;
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// Switch this application's Resources (languages).
+	/// Switches this application's Resources (languages).
 	/// </summary>
 	/// <remarks>
 	/// This logic is based on http://grabacr.net/archives/1647
@@ -70,7 +70,7 @@ namespace SnowyImageCopy.Models
 		private CultureInfo[] _supportedCultures;
 
 		/// <summary>
-		/// Change Culture of this application's Resources by Culture name
+		/// Changes Culture of this application's Resources by Culture name
 		/// </summary>
 		/// <param name="cultureName">Culture name</param>
 		public void ChangeCulture(string cultureName)

@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace SnowyImageCopy.Helper
 {
 	/// <summary>
-	/// Manage date and time based on FAT file system.
+	/// Manages date and time based on FAT file system.
 	/// </summary>
 	public class FatDateTime
 	{
 		/// <summary>
-		/// Convert int representing date and int representing time to <see cref="DateTime"/>.
+		/// Converts int representing date and int representing time to <see cref="DateTime"/>.
 		/// </summary>
 		/// <param name="sourceDate">Source int representing date</param>
 		/// <param name="sourceTime">Source int representing time</param>
@@ -56,7 +56,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Convert <see cref="DateTime"/> to int representing date.
+		/// Converts <see cref="DateTime"/> to int representing date.
 		/// </summary>
 		/// <param name="source">Source DateTime</param>
 		/// <returns>Outcome int representing date</returns>
@@ -76,7 +76,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Convert <see cref="DateTime"/> to int representing time.
+		/// Converts <see cref="DateTime"/> to int representing time.
 		/// </summary>
 		/// <param name="source">Source DateTime</param>
 		/// <returns>Outcome int representing time</returns>
@@ -98,7 +98,7 @@ namespace SnowyImageCopy.Helper
 		#region Helper
 
 		/// <summary>
-		/// Convert bits to int.
+		/// Converts bits to int.
 		/// </summary>
 		/// <param name="source">Source BitArray</param>
 		/// <returns>Outcome int</returns>
@@ -108,7 +108,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Convert bits to int.
+		/// Converts bits to int.
 		/// </summary>
 		/// <param name="source">Source bits</param>
 		/// <returns>Outcome int</returns>
@@ -120,7 +120,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Copy bits from BitArray to BitArray.
+		/// Copies bits from BitArray to BitArray.
 		/// </summary>
 		/// <param name="source">Source BitArray</param>
 		/// <param name="target">Target BitArray</param>

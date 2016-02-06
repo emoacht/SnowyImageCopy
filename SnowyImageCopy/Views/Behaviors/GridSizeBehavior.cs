@@ -10,7 +10,7 @@ using System.Windows.Interactivity;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Relay change of Grid size.
+	/// Relays change of Grid size.
 	/// </summary>
 	[TypeConstraint(typeof(Grid))]
 	public class GridSizeBehavior : Behavior<Grid>

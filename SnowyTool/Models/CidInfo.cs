@@ -126,7 +126,7 @@ namespace SnowyTool.Models
 		}
 
 		/// <summary>
-		/// Convert from sequence of bits to 32-bit integer.
+		/// Converts from sequence of bits to 32-bit integer.
 		/// </summary>
 		/// <param name="source">Source sequence of bits</param>
 		/// <returns>32-bit integer</returns>

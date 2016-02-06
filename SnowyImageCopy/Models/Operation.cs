@@ -23,7 +23,7 @@ using SnowyImageCopy.ViewModels;
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// Run operations.
+	/// Runs operations.
 	/// </summary>
 	public class Operation : NotificationObject
 	{
@@ -432,7 +432,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Execute auto check by timer.
+		/// Executes auto check by timer.
 		/// </summary>
 		/// <returns>False if failed</returns>
 		private async Task<bool> ExecuteAutoCheckAsync()
@@ -470,7 +470,7 @@ namespace SnowyImageCopy.Models
 		#region 1st layer
 
 		/// <summary>
-		/// Check if content of FlashAir card is updated.
+		/// Checks if content of FlashAir card is updated.
 		/// </summary>
 		/// <returns>
 		/// True:  If completed and content found updated.
@@ -524,7 +524,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check & Copy files in FlashAir card.
+		/// Checks & Copies files in FlashAir card.
 		/// </summary>
 		/// <returns>
 		/// True:  If completed.
@@ -624,7 +624,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check files in FlashAir card.
+		/// Checks files in FlashAir card.
 		/// </summary>
 		internal async Task CheckFileAsync()
 		{
@@ -684,7 +684,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Copy files from FlashAir card.
+		/// Copies files from FlashAir card.
 		/// </summary>
 		internal async Task CopyFileAsync()
 		{
@@ -756,7 +756,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Stop operation.
+		/// Stops operation.
 		/// </summary>
 		internal void Stop()
 		{
@@ -773,7 +773,7 @@ namespace SnowyImageCopy.Models
 		#region 2nd layer
 
 		/// <summary>
-		/// Check if ready for operation.
+		/// Checks if ready for operation.
 		/// </summary>
 		/// <returns>True if ready</returns>
 		private bool IsReady()
@@ -795,7 +795,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check files in FlashAir card.
+		/// Checks files in FlashAir card.
 		/// </summary>
 		private async Task CheckFileBaseAsync()
 		{
@@ -988,7 +988,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check files to be copied from FlashAir card.
+		/// Checks files to be copied from FlashAir card.
 		/// </summary>
 		/// <param name="changesToBeCopied">Whether to change file status if a file meets conditions to be copied</param>
 		/// <returns>True if any file to be copied is contained</returns>
@@ -1012,7 +1012,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Copy files from FlashAir card.
+		/// Copies files from FlashAir card.
 		/// </summary>
 		/// <param name="progress">Progress</param>
 		private async Task CopyFileBaseAsync(IProgress<ProgressInfo> progress)
@@ -1127,7 +1127,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Show a toast to notify completion of copying.
+		/// Shows a toast to notify completion of copying.
 		/// </summary>
 		private async Task ShowToastAsync()
 		{
@@ -1159,7 +1159,7 @@ namespace SnowyImageCopy.Models
 		private CancellationTokenSourcePlus _tokenSourceLoading;
 
 		/// <summary>
-		/// Load image data from a local file and set it to current image data.
+		/// Loads image data from a local file and set it to current image data.
 		/// </summary>
 		/// <param name="item">Target item</param>
 		internal async Task LoadSetAsync(FileItemViewModel item)
@@ -1206,7 +1206,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Save current image data on desktop.
+		/// Saves current image data on desktop.
 		/// </summary>
 		internal async Task SaveDesktopAsync()
 		{
@@ -1235,7 +1235,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Send current image data to clipboard.
+		/// Sends current image data to clipboard.
 		/// </summary>
 		internal async Task SendClipboardAsync()
 		{
@@ -1283,21 +1283,23 @@ namespace SnowyImageCopy.Models
 		private const string _unknownFolderName = "Unknown"; // Folder name for an item whose date or time is invalid
 
 		/// <summary>
-		/// Compose local file path to a specified local folder.
+		/// Composes local file path to a specified local folder.
 		/// </summary>
 		/// <param name="item">Target item</param>
 		/// <returns>Local file path</returns>
 		private static string ComposeLocalPath(FileItemViewModel item)
 		{
-			var folderName = (item.Date != default(DateTime))
-				? item.Date.ToString("yyyyMMdd")
-				: _unknownFolderName;
+			var folderName = Settings.Current.CreatesDatedFolder
+				? (item.Date != default(DateTime))
+					? item.Date.ToString("yyyyMMdd")
+					: _unknownFolderName
+				: string.Empty;
 
 			return Path.Combine(Settings.Current.LocalFolder, folderName, item.FileNameWithCaseExtension);
 		}
 
 		/// <summary>
-		/// Compose local file path to desktop.
+		/// Composes local file path to desktop.
 		/// </summary>
 		/// <param name="item">Target item</param>
 		/// <returns>Local file path</returns>
@@ -1307,7 +1309,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get FileInfo of a local file.
+		/// Gets FileInfo of a local file.
 		/// </summary>
 		/// <param name="item">Target item</param>
 		/// <returns>FileInfo</returns>
@@ -1319,7 +1321,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check if a local file exists
+		/// Checks if a local file exists
 		/// </summary>
 		/// <param name="item">Target item</param>
 		/// <returns>True if exists</returns>
@@ -1329,7 +1331,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check if a local file exists.
+		/// Checks if a local file exists.
 		/// </summary>
 		/// <param name="info">FileInfo of a local file</param>
 		/// <param name="size">File size of a local file</param>
@@ -1340,7 +1342,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check if a local file is available (not offline) in relation to OneDrive.
+		/// Checks if a local file is available (not offline) in relation to OneDrive.
 		/// </summary>
 		/// <param name="info">FileInfo of a local file</param>
 		/// <returns>True if available</returns>

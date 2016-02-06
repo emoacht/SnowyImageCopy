@@ -11,7 +11,7 @@
         </member>
         <member name="M:MonitorAware.Helper.BrushExtension.IsTransparent(System.Windows.Media.Brush)">
             <summary>
-            Check if a Brush is Transparent.
+            Checks if a Brush is Transparent.
             </summary>
             <param name="source">Source Brush</param>
             <returns>True if Transparent</returns>
@@ -23,14 +23,14 @@
         </member>
         <member name="M:MonitorAware.Helper.ColorExtension.ToOpaque(System.Windows.Media.Color)">
             <summary>
-            Convert a Color to an opaque Color using white background.
+            Converts a Color to an opaque Color using white background.
             </summary>
             <param name="source">Source Color</param>
             <returns>Opaque Color</returns>
         </member>
         <member name="M:MonitorAware.Helper.ColorExtension.ToBlended(System.Windows.Media.Color,System.Windows.Media.Color,System.Double)">
             <summary>
-            Convert two Colors to a blended Color ignoring alpha channel.
+            Converts two Colors to a blended Color ignoring alpha channel.
             </summary>
             <param name="source">Source Color</param>
             <param name="target">Target Color</param>
@@ -40,7 +40,7 @@
         </member>
         <member name="M:MonitorAware.Helper.ColorExtension.BlendColor(System.Windows.Media.Color,System.Windows.Media.Color,System.Double)">
             <summary>
-            Blend two Colors.
+            Blends two Colors.
             </summary>
             <param name="color1">1st Color</param>
             <param name="color2">2nd Color</param>
@@ -55,7 +55,7 @@
         </member>
         <member name="M:MonitorAware.Helper.DoubleExtension.ToRounded(System.Double,System.Double)">
             <summary>
-            Convert a double to a preliminarily rounded double to prevent a FrameworkElement from getting blurred by ScaleTransform.
+            Converts a double to a preliminarily rounded double to prevent a FrameworkElement from getting blurred by ScaleTransform.
             </summary>
             <param name="source">Source double</param>
             <param name="factor">Factor of ScaleTransform</param>
@@ -68,7 +68,7 @@
         </member>
         <member name="M:MonitorAware.Helper.EnumAddition.IsDefined(System.Type,System.String,System.StringComparison)">
             <summary>
-            Check if a specified string exists in the names of a specified Enum.
+            Checks if a specified string exists in the names of a specified Enum.
             </summary>
             <param name="enumType">Enum type</param>
             <param name="value">Source string</param>
@@ -78,7 +78,7 @@
         </member>
         <member name="M:MonitorAware.Helper.EnumAddition.Parse(System.Type,System.String,System.StringComparison)">
             <summary>
-            Convert a specified string to the equivalent object of a specified Enum.
+            Converts a specified string to the equivalent object of a specified Enum.
             </summary>
             <param name="enumType">Enum type</param>
             <param name="value">Source string</param>
@@ -88,7 +88,7 @@
         </member>
         <member name="M:MonitorAware.Helper.EnumAddition.TryParse``1(System.String,``0@,System.StringComparison)">
             <summary>
-            Convert a specified string to the equivalent object of a specified Enum.
+            Converts a specified string to the equivalent object of a specified Enum.
             </summary>
             <typeparam name="TEnum">Enum type</typeparam>
             <param name="value">Source string</param>
@@ -127,7 +127,7 @@
         </member>
         <member name="M:MonitorAware.Helper.ResourceExtension.ApplyResource(System.Windows.Application,System.String,System.String)">
             <summary>
-            Add/Remove resources to/from <see cref="T:System.Windows.Application"/> resources.
+            Adds/Removes resources to/from <see cref="T:System.Windows.Application"/> resources.
             </summary>
             <param name="app">Target Application</param>
             <param name="newUriString">Uri string of new resources to be added</param>
@@ -135,7 +135,7 @@
         </member>
         <member name="M:MonitorAware.Helper.ResourceExtension.ApplyResource(System.Windows.Controls.ContentControl,System.String,System.String)">
             <summary>
-            Add/Remove resources to/from <see cref="T:System.Windows.Controls.ContentControl"/> resources.
+            Adds/Removes resources to/from <see cref="T:System.Windows.Controls.ContentControl"/> resources.
             </summary>
             <param name="control">Target ContentControl</param>
             <param name="newUriString">Uri string of new resources to be added</param>
@@ -148,7 +148,7 @@
         </member>
         <member name="M:MonitorAware.Helper.WindowChromeColor.GetChromeColor">
             <summary>
-            Get OS's window chrome color.
+            Gets OS's window chrome color.
             </summary>
             <returns>Window chrome color</returns>
             <remarks>This method is intended to get window chrome color of Windows 8 or newer.</remarks>
@@ -177,12 +177,12 @@
         </member>
         <member name="T:MonitorAware.Models.ColorProfileChecker">
             <summary>
-            Check color profile.
+            Checks color profile.
             </summary>
         </member>
         <member name="M:MonitorAware.Models.ColorProfileChecker.GetColorProfilePath(System.Windows.Media.Visual)">
             <summary>
-            Get color profile file path used by the monitor to which a specified Window belongs.
+            Gets color profile file path used by the monitor to which a specified Window belongs.
             </summary>
             <param name="sourceVisual">Source Window</param>
             <returns>Color profile file path</returns>
@@ -249,13 +249,13 @@
         </member>
         <member name="M:MonitorAware.Models.Dpi.GetHashCode">
             <summary>
-            Get hash code.
+            Gets hash code.
             </summary>
             <returns>Hash code for this structure</returns>
         </member>
         <member name="M:MonitorAware.Models.Dpi.ToString">
             <summary>
-            Create string representation.
+            Creates string representation.
             </summary>
             <returns>String containing X and Y values of this structure</returns>
         </member>
@@ -288,18 +288,18 @@
         </member>
         <member name="T:MonitorAware.Models.DpiChecker">
             <summary>
-            Check DPI.
+            Checks DPI.
             </summary>
         </member>
         <member name="M:MonitorAware.Models.DpiChecker.IsPerMonitorDpiAware">
             <summary>
-            Check if current process is Per-Monitor DPI aware.
+            Checks if current process is Per-Monitor DPI aware.
             </summary>
             <returns>True if Per-Monitor DPI aware</returns>
         </member>
         <member name="M:MonitorAware.Models.DpiChecker.GetDpiAwareness">
             <summary>
-            Get DPI awareness of current process.
+            Gets DPI awareness of current process.
             </summary>
             <returns>If succeeded, Nullable PROCESS_DPI_AWARENESS. If failed, null.</returns>
         </member>
@@ -311,34 +311,34 @@
         </member>
         <member name="M:MonitorAware.Models.DpiChecker.GetSystemDpi(System.Windows.Media.Visual)">
             <summary>
-            Get system DPI.
+            Gets system DPI.
             </summary>
             <param name="sourceVisual">Source Visual</param>
             <returns>DPI struct</returns>
         </member>
         <member name="M:MonitorAware.Models.DpiChecker.GetSystemDpi">
             <summary>
-            Get system DPI.
+            Gets system DPI.
             </summary>
             <returns>DPI struct</returns>
         </member>
         <member name="M:MonitorAware.Models.DpiChecker.GetDpiFromVisual(System.Windows.Media.Visual)">
             <summary>
-            Get Per-Monitor DPI of the monitor to which a specified Window belongs.
+            Gets Per-Monitor DPI of the monitor to which a specified Window belongs.
             </summary>
             <param name="sourceVisual">Source Visual</param>
             <returns>DPI struct</returns>
         </member>
         <member name="M:MonitorAware.Models.DpiChecker.GetDpiFromRect(System.Windows.Rect)">
             <summary>
-            Get Per-Monitor DPI of the monitor to which a specified Rect belongs.
+            Gets Per-Monitor DPI of the monitor to which a specified Rect belongs.
             </summary>
             <param name="sourceRect">Source Rect</param>
             <returns>DPI struct</returns>
         </member>
         <member name="M:MonitorAware.Models.DpiChecker.GetNotificationAreaDpi">
             <summary>
-            Get Per-Monitor DPI of the monitor in which the notification area is contained.
+            Gets Per-Monitor DPI of the monitor in which the notification area is contained.
             </summary>
             <returns>DPI struct</returns>
         </member>
@@ -350,7 +350,7 @@
         <member name="E:MonitorAware.Models.ExtendedWindowHandler.WindowActivatedChanged">
             <summary>
             Window activated changed event
-            </summary> 
+            </summary>
             <remarks>
             Args true:  Window is being activated.
             Args false: Window is being deactivated.
@@ -364,7 +364,7 @@
         </member>
         <member name="M:MonitorAware.Models.ExtendedWindowHandler.WndProc(System.IntPtr,System.Int32,System.IntPtr,System.IntPtr,System.Boolean@)">
             <summary>
-            Handle window messages.
+            Handles window messages.
             </summary>
             <param name="hwnd">The window handle</param>
             <param name="msg">The message ID</param>
@@ -461,7 +461,7 @@
         <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_MAXIMIZED">
             <summary>
             The window has been maximized.
-            </summary> 
+            </summary>
         </member>
         <member name="F:MonitorAware.Models.Win32.NativeMethod.SIZE_MAXSHOW">
             <summary>
@@ -620,7 +620,7 @@
         </member>
         <member name="F:MonitorAware.Models.WindowHandler._baseSize">
             <summary>
-            Size of target Window to be the base for calculating due size when DPI changed 
+            Size of target Window to be the base for calculating due size when DPI changed
             </summary>
         </member>
         <member name="F:MonitorAware.Models.WindowHandler._isEnteredSizeMove">
@@ -645,7 +645,7 @@
         </member>
         <member name="M:MonitorAware.Models.WindowHandler.WndProc(System.IntPtr,System.Int32,System.IntPtr,System.IntPtr,System.Boolean@)">
             <summary>
-            Handle window messages.
+            Handles window messages.
             </summary>
             <param name="hwnd">The window handle</param>
             <param name="msg">The message ID</param>
@@ -671,7 +671,7 @@
         </member>
         <member name="M:MonitorAware.Views.Controls.DrawingMaximizeIcon.Draw(System.Windows.Media.DrawingContext,System.Double,System.Windows.Media.Brush)">
             <summary>
-            Draw maximize icon.
+            Draws maximize icon.
             </summary>
             <param name="drawingContext">DrawingContext of canvas</param>
             <param name="factor">Factor from default DPI</param>
@@ -685,7 +685,7 @@
         </member>
         <member name="M:MonitorAware.Views.Controls.DrawingRestoreIcon.Draw(System.Windows.Media.DrawingContext,System.Double,System.Windows.Media.Brush)">
             <summary>
-            Draw restore icon.
+            Draws restore icon.
             </summary>
             <param name="drawingContext">DrawingContext of canvas</param>
             <param name="factor">Factor from default DPI</param>
@@ -820,7 +820,7 @@
         </member>
         <member name="M:MonitorAware.Views.Controls.IconCanvas.Draw(System.Windows.Media.DrawingContext,System.Double,System.Windows.Media.Brush)">
             <summary>
-            Draw fallback icon.
+            Draws fallback icon.
             </summary>
             <param name="drawingContext">DrawingContext of canvas</param>
             <param name="factor">Factor from default DPI</param>
@@ -833,7 +833,7 @@
         </member>
         <member name="M:MonitorAware.Views.Controls.IDrawingIcon.Draw(System.Windows.Media.DrawingContext,System.Double,System.Windows.Media.Brush)">
             <summary>
-            Draw icon.
+            Draws icon.
             </summary>
             <param name="drawingContext">DrawingContext of canvas</param>
             <param name="factor">Factor from default DPI</param>
@@ -846,14 +846,14 @@
         </member>
         <member name="M:MonitorAware.Views.Controls.FrameworkElementCenterProperty.GetAttachedProperty(System.Windows.FrameworkElement)">
             <summary>
-            Get AttachedProperty.
+            Gets AttachedProperty.
             </summary>
             <param name="element">Owner <see cref="T:System.Windows.FrameworkElement"/></param>
             <returns>AttachedProperty</returns>
         </member>
         <member name="M:MonitorAware.Views.Controls.FrameworkElementCenterProperty.SetAttachedProperty(System.Windows.FrameworkElement,MonitorAware.Views.Controls.FrameworkElementCenterProperty)">
             <summary>
-            Set AttachedProperty.
+            Sets AttachedProperty.
             </summary>
             <param name="element">Owner <see cref="T:System.Windows.FrameworkElement"/></param>
             <param name="attachedProperty">AttachedProperty</param>
@@ -881,12 +881,12 @@
         </member>
         <member name="T:MonitorAware.Views.Converters.DoubleMultiplyConverter">
             <summary>
-            Convert double to multiplied double.
+            Converts double to multiplied double.
             </summary>
         </member>
         <member name="M:MonitorAware.Views.Converters.DoubleMultiplyConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
             <summary>
-            Convert double to multiplied double.
+            Converts double to multiplied double.
             </summary>
             <param name="value">Source double</param>
             <param name="targetType"></param>
@@ -896,7 +896,7 @@
         </member>
         <member name="M:MonitorAware.Views.Converters.DoubleMultiplyConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
             <summary>
-            Convert double to divided double.
+            Converts double to divided double.
             </summary>
             <param name="value">Source double</param>
             <param name="targetType"></param>
@@ -906,12 +906,12 @@
         </member>
         <member name="T:MonitorAware.Views.Converters.DoubleSumConverter">
             <summary>
-            Convert doubles to summed double.
+            Converts doubles to summed double.
             </summary>
         </member>
         <member name="M:MonitorAware.Views.Converters.DoubleSumConverter.Convert(System.Object[],System.Type,System.Object,System.Globalization.CultureInfo)">
             <summary>
-            Convert doubles to summed double.
+            Converts doubles to summed double.
             </summary>
             <param name="values">Source doubles</param>
             <param name="targetType"></param>
@@ -931,12 +931,12 @@
         </member>
         <member name="T:MonitorAware.Views.Converters.ObjectToVisibilityConverter">
             <summary>
-            Convert whether object is null to Visibility.
+            Converts whether object is null to Visibility.
             </summary>
         </member>
         <member name="M:MonitorAware.Views.Converters.ObjectToVisibilityConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
             <summary>
-            Convert whether object is null to Visibility.
+            Converts whether object is null to Visibility.
             </summary>
             <param name="value">Source object</param>
             <param name="targetType"></param>
@@ -1263,8 +1263,8 @@
             <summary>
             Title bar height when a Window is other than maximized
             </summary>
-            <remarks>This height includes neither chrome outer border thickness nor chrome inner border thickness. 
-            By OS's default, title bar height (when a window is maximized) will be sum of 
+            <remarks>This height includes neither chrome outer border thickness nor chrome inner border thickness.
+            By OS's default, title bar height (when a window is maximized) will be sum of
             SystemParameters.WindowResizeBorderThickness.Top and SystemParameters.WindowNonClientFrameThickness.Top
             which includes chrome border thickness.</remarks>
         </member>
@@ -1336,7 +1336,7 @@
         </member>
         <member name="P:MonitorAware.Views.ExtendedWindow.ContentMargin">
             <summary>
-            Content (Window.Content) margin 
+            Content (Window.Content) margin
             </summary>
             <remarks>Default value (6,0,6,6) is for reproducing OS's default.</remarks>
         </member>
@@ -1369,7 +1369,7 @@
         </member>
         <member name="M:MonitorAware.Views.ExtendedWindow.AdjustLayout">
             <summary>
-            Adjust layout of Window parts.
+            Adjusts layout of Window parts.
             </summary>
         </member>
         <member name="F:MonitorAware.Views.ExtendedWindow._isDueCheckBackground">
@@ -1430,20 +1430,20 @@
         </member>
         <member name="M:MonitorAware.Views.MonitorAwareProperty.CreateInstanceCore">
             <summary>
-            Implement <see cref="M:System.Windows.Freezable.CreateInstanceCore">Freezable.CreateInstanceCore</see>.
+            Implements <see cref="M:System.Windows.Freezable.CreateInstanceCore">Freezable.CreateInstanceCore</see>.
             </summary>
             <returns>New Freezable</returns>
         </member>
         <member name="M:MonitorAware.Views.MonitorAwareProperty.GetAttachedProperty(System.Windows.Window)">
             <summary>
-            Get AttachedProperty.
+            Gets AttachedProperty.
             </summary>
             <param name="window">Owner <see cref="T:System.Windows.Window"/></param>
             <returns>AttachedProperty</returns>
         </member>
         <member name="M:MonitorAware.Views.MonitorAwareProperty.SetAttachedProperty(System.Windows.Window,MonitorAware.Views.MonitorAwareProperty)">
             <summary>
-            Set AttachedProperty.
+            Sets AttachedProperty.
             </summary>
             <param name="window">Owner <see cref="T:System.Windows.Window"/></param>
             <param name="attachedProperty">AttachedProperty</param>

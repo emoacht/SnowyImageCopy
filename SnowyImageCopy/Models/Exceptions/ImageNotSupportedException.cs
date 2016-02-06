@@ -11,7 +11,7 @@ namespace SnowyImageCopy.Models.Exceptions
 	/// Exception when image format is not supported by PC
 	/// </summary>
 	[Serializable]
-	public class ImageNotSupportedException : Exception
+	internal class ImageNotSupportedException : Exception
 	{
 		public ImageNotSupportedException() { }
 		public ImageNotSupportedException(string message) : base(message) { }

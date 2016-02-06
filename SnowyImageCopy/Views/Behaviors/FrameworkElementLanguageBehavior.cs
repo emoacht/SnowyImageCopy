@@ -11,7 +11,7 @@ using System.Windows.Markup;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Set FrameworkElement language.
+	/// Sets FrameworkElement language.
 	/// </summary>
 	[TypeConstraint(typeof(FrameworkElement))]
 	public class FrameworkElementLanguageBehavior : Behavior<FrameworkElement>

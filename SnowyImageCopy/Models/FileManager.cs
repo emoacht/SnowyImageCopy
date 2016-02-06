@@ -16,7 +16,7 @@ using SnowyImageCopy.Models.Exceptions;
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// Manage FlashAir card.
+	/// Manages FlashAir card.
 	/// </summary>
 	internal static class FileManager
 	{
@@ -47,7 +47,7 @@ namespace SnowyImageCopy.Models
 		#region Method (Internal)
 
 		/// <summary>
-		/// Get a list of all files recursively from root folder of FlashAir card.
+		/// Gets a list of all files recursively from root folder of FlashAir card.
 		/// </summary>
 		/// <param name="card">FlashAir card information</param>
 		/// <param name="cancellationToken">CancellationToken</param>
@@ -69,7 +69,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get a list of all files recursively in a specified directory in FlashAir card.
+		/// Gets a list of all files recursively in a specified directory in FlashAir card.
 		/// </summary>
 		/// <param name="client">HttpClient</param>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
@@ -107,7 +107,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get a list of files in a specified directory in FlashAir card.
+		/// Gets a list of files in a specified directory in FlashAir card.
 		/// </summary>
 		/// <param name="client">HttpClient</param>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
@@ -128,7 +128,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get a list of files in a specified directory in FlashAir card.
+		/// Gets a list of files in a specified directory in FlashAir card.
 		/// </summary>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
 		/// <param name="card">FlashAir card information</param>
@@ -162,7 +162,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get the number of files in a specified directory in FlashAir card.
+		/// Gets the number of files in a specified directory in FlashAir card.
 		/// </summary>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
 		/// <param name="card">FlashAir card information</param>
@@ -194,7 +194,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get a thumbnail of a specified image file in FlashAir card.
+		/// Gets a thumbnail of a specified image file in FlashAir card.
 		/// </summary>
 		/// <param name="remoteFilePath">Remote file path</param>
 		/// <param name="card">FlashAir card information</param>
@@ -240,7 +240,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get file data of a specified remote file in FlashAir card and save it in local folder.
+		/// Gets file data of a specified remote file in FlashAir card and save it in local folder.
 		/// </summary>
 		/// <param name="remoteFilePath">Remote file path</param>
 		/// <param name="localFilePath">Local file path</param>
@@ -298,7 +298,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Delete a specified remote file in FlashAir card.
+		/// Deletes a specified remote file in FlashAir card.
 		/// </summary>
 		/// <param name="remoteFilePath">Remote file path</param>
 		/// <param name="cancellationToken">CancellationToken</param>
@@ -334,7 +334,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get firmware version of FlashAir card.
+		/// Gets firmware version of FlashAir card.
 		/// </summary>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <remarks>Firmware version</remarks>
@@ -357,7 +357,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get CID of FlashAir card.
+		/// Gets CID of FlashAir card.
 		/// </summary>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>If succeeded, CID. If failed, empty string.</returns>
@@ -384,7 +384,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get SSID of FlashAir card.
+		/// Gets SSID of FlashAir card.
 		/// </summary>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>SSID</returns>
@@ -407,7 +407,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check update status of FlashAir card.
+		/// Checks update status of FlashAir card.
 		/// </summary>
 		/// <returns>True if update status is set</returns>
 		internal static async Task<bool> CheckUpdateStatusAsync()
@@ -433,7 +433,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get time stamp of write event in FlashAir card.
+		/// Gets time stamp of write event in FlashAir card.
 		/// </summary>
 		/// <returns>If succeeded, time stamp (msec). If failed, -1.</returns>
 		internal static async Task<int> GetWriteTimeStampAsync()
@@ -442,7 +442,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get time stamp of write event in FlashAir card.
+		/// Gets time stamp of write event in FlashAir card.
 		/// </summary>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>If succeeded, time stamp (msec). If failed, -1.</returns>
@@ -474,7 +474,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Get Upload parameters of FlashAir card.
+		/// Gets Upload parameters of FlashAir card.
 		/// </summary>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>If succeeded, Upload parameters (string). If failed, empty string.</returns>
@@ -753,7 +753,7 @@ namespace SnowyImageCopy.Models
 			};
 
 		/// <summary>
-		/// Compose remote path in FlashAir card inserting CGI command string.
+		/// Composes remote path in FlashAir card inserting CGI command string.
 		/// </summary>
 		/// <param name="command">CGI command type</param>
 		/// <param name="remotePath">Source remote path</param>
@@ -766,7 +766,7 @@ namespace SnowyImageCopy.Models
 		private static readonly bool _recordsDownloadString = Debugger.IsAttached || CommandLine.RecordsDownloadLog;
 
 		/// <summary>
-		/// Record result of DownloadStringAsync method.
+		/// Records result of DownloadStringAsync method.
 		/// </summary>
 		/// <param name="requestPath">Request path</param>
 		/// <param name="responseBytes">Response byte array</param>

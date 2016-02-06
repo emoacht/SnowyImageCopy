@@ -12,7 +12,7 @@ using Shell32;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Open folder by Explorer.
+	/// Opens folder by Explorer.
 	/// </summary>
 	public class ExplorerAction : TriggerAction<DependencyObject>
 	{

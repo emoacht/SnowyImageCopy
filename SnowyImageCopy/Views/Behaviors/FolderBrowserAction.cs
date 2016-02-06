@@ -10,7 +10,7 @@ using System.Windows.Interactivity;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Open folder browser dialog.
+	/// Opens folder browser dialog.
 	/// </summary>
 	public class FolderBrowserAction : TriggerAction<DependencyObject>
 	{

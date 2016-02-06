@@ -10,7 +10,7 @@ namespace SnowyImageCopy.Common
 	public class PropertySupport
 	{
 		/// <summary>
-		/// Get property name from a specified property expression.
+		/// Gets property name from a specified property expression.
 		/// </summary>
 		/// <typeparam name="T">Object type containing the property specified in a property expression</typeparam>
 		/// <param name="propertyExpression">Property expression</param>

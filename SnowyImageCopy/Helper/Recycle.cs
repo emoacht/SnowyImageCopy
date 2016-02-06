@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SnowyImageCopy.Helper
 {
 	/// <summary>
-	/// Manage Recycle.
+	/// Manages Recycle.
 	/// </summary>
 	public static class Recycle
 	{
@@ -21,8 +21,8 @@ namespace SnowyImageCopy.Helper
 		/// </summary>
 		/// <param name="lpFileOp"></param>
 		/// <returns>Error code (0 if successful)</returns>
-		/// <remarks>MSDN says don't use GetLastError to examine the return values of this function. 
-		/// Several of return values are based on pre-Win32 error codes, which in some cases overlap 
+		/// <remarks>MSDN says don't use GetLastError to examine the return values of this function.
+		/// Several of return values are based on pre-Win32 error codes, which in some cases overlap
 		/// common Win32 error codes without matching their meaning.</remarks>
 		[DllImport("Shell32.dll", EntryPoint = "SHFileOperationW")]
 		private static extern int SHFileOperation(ref SHFILEOPSTRUCT lpFileOp);
@@ -90,7 +90,7 @@ namespace SnowyImageCopy.Helper
 		#endregion
 
 		/// <summary>
-		/// Move a specified file to Recycle.
+		/// Moves a specified file to Recycle.
 		/// </summary>
 		/// <param name="filePath">File path</param>
 		public static void MoveToRecycle(string filePath)
@@ -102,7 +102,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Move specified files to Recycle.
+		/// Moves specified files to Recycle.
 		/// </summary>
 		/// <param name="filePaths">File paths</param>
 		public static void MoveToRecycle(string[] filePaths)

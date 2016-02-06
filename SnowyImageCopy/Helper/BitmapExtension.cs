@@ -25,7 +25,7 @@ namespace SnowyImageCopy.Helper
 		#endregion
 
 		/// <summary>
-		/// Convert a Bitmap to a BitmapImage.
+		/// Converts a Bitmap to a BitmapImage.
 		/// </summary>
 		/// <param name="source">Source System.Drawing.Bitmap</param>
 		/// <returns>Outcome System.Windows.Media.Imaging.BitmapImage</returns>
@@ -51,7 +51,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Convert a Bitmap to a BitmapSource.
+		/// Converts a Bitmap to a BitmapSource.
 		/// </summary>
 		/// <param name="source">Source System.Drawing.Bitmap</param>
 		/// <returns>Outcome System.Windows.Media.Imaging.BitmapSource</returns>

@@ -153,7 +153,7 @@ namespace SnowyImageCopy.Test
 			var baseTime = DateTime.Now;
 
 			var instances = new List<FileItem>
-			{						
+			{
 				CreateFileItem("/DCIM/141___01", "IMG_5982.JPG", 2209469, 32, baseTime.AddMonths(1)), // 5
 				CreateFileItem("/DCIM/100___01", "IMG_6256.JPG", 2209461, 32, baseTime), // 0
 				CreateFileItem("/DCIM/100___01", "IMG_1358.JPG", 2209461, 32, baseTime.AddHours(1)), // 2

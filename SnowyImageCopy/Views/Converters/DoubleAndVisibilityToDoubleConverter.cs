@@ -10,7 +10,7 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Convert pairs of double and Visibility to double.
+	/// Converts pairs of double and Visibility to double.
 	/// </summary>
 	public class DoubleAndVisibilityToDoubleConverter : IMultiValueConverter
 	{
@@ -21,7 +21,7 @@ namespace SnowyImageCopy.Views.Converters
 		}
 
 		/// <summary>
-		/// Add/Subtract the second and subsequent double to/from the first double. Values have to
+		/// Adds/Subtracts the second and subsequent double to/from the first double. Values have to
 		/// be pairs of double and Visibility. If a Visibility is not Visibility.Visible, the paired
 		/// double will be ignored.
 		/// </summary>

@@ -11,12 +11,12 @@ using SnowyImageCopy.Helper;
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// Check network connection.
+	/// Checks network connection.
 	/// </summary>
 	internal static class NetworkChecker
 	{
 		/// <summary>
-		/// Check if PC is connected to a network.
+		/// Checks if PC is connected to a network.
 		/// </summary>
 		internal static bool IsNetworkConnected()
 		{
@@ -24,7 +24,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check if PC is connected to a network and if applicable, a specified wireless LAN.
+		/// Checks if PC is connected to a network and if applicable, a specified wireless LAN.
 		/// </summary>
 		/// <param name="card">FlashAir card information</param>
 		/// <returns>True if connected</returns>
@@ -40,7 +40,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Check if PC is connected to a specified wireless LAN.
+		/// Checks if PC is connected to a specified wireless LAN.
 		/// </summary>
 		/// <param name="ssid">SSID of wireless LAN</param>
 		/// <returns>True if connected</returns>

@@ -234,6 +234,9 @@
   <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
     <value>コピー後にFlashAir内のイメージの削除を選べるようにする</value>
   </data>
+  <data name="Options_CreateDatedFolder" xml:space="preserve">
+    <value>日付ごとのフォルダーを作成する</value>
+  </data>
   <data name="Options_Date" xml:space="preserve">
     <value>日付</value>
   </data>
