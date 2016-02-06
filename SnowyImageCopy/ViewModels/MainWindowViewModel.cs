@@ -195,7 +195,7 @@ namespace SnowyImageCopy.ViewModels
 		private BitmapSource _currentImage;
 
 		/// <summary>
-		/// Set current image.
+		/// Sets current image.
 		/// </summary>
 		/// <remarks>In Design mode, this method causes NullReferenceException.</remarks>
 		private async void SetCurrentImage()

@@ -16,7 +16,7 @@ namespace SnowyImageCopy.Helper
 		private const int _defaultCopyBufferSize = 81920; // 80KiB is actual default buffer size in System.IO.File class.
 
 		/// <summary>
-		/// Read all bytes from a specified file asynchronously.
+		/// Reads all bytes from a specified file asynchronously.
 		/// </summary>
 		/// <param name="filePath">File path</param>
 		/// <returns>Byte array of file</returns>
@@ -26,7 +26,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Read all bytes from a specified file asynchronously.
+		/// Reads all bytes from a specified file asynchronously.
 		/// </summary>
 		/// <param name="filePath">File path</param>
 		/// <param name="cancellationToken">CancellationToken</param>
@@ -37,7 +37,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Read all bytes from a specified file asynchronously.
+		/// Reads all bytes from a specified file asynchronously.
 		/// </summary>
 		/// <param name="filePath">File path</param>
 		/// <param name="bufferSize">Buffer size</param>

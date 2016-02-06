@@ -10,13 +10,13 @@ using System.Windows.Data;
 namespace SnowyTool.Views.Converters
 {
 	/// <summary>
-	/// Convert between Enum and Boolean.
+	/// Converts between Enum and Boolean.
 	/// </summary>
 	[ValueConversion(typeof(Enum), typeof(bool))]
 	public class EnumToBooleanConverter : IValueConverter
 	{
 		/// <summary>
-		/// Convert Enum value to Boolean.
+		/// Converts Enum value to Boolean.
 		/// </summary>
 		/// <param name="value">Enum value</param>
 		/// <param name="targetType"></param>
@@ -36,7 +36,7 @@ namespace SnowyTool.Views.Converters
 		}
 
 		/// <summary>
-		/// Convert Boolean to Enum value.
+		/// Converts Boolean to Enum value.
 		/// </summary>
 		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>

@@ -11,7 +11,7 @@ using MonitorAware.Models;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Check intersection of multiple FrameworkElements.
+	/// Checks intersection of multiple FrameworkElements.
 	/// </summary>
 	[TypeConstraint(typeof(FrameworkElement))]
 	public class FrameworkElementIntersectionBehavior : Behavior<FrameworkElement>
@@ -108,7 +108,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			if (!baseElement.IsVisible) // If not visible, PointToScreen method will fail.
 				return false;
 
-			// Compute factor from default DPI to Window DPI. 
+			// Compute factor from default DPI to Window DPI.
 			var factor = new { X = (double)WindowDpi.X / Dpi.Default.X, Y = (double)WindowDpi.Y / Dpi.Default.Y };
 
 			var baseElementLocation = baseElement.PointToScreen(default(Point));

@@ -9,52 +9,52 @@ namespace SnowyImageCopy.Models
 		None = 0,
 
 		/// <summary>
-		/// Get file list in a specified directory in FlashAir card.
+		/// Gets file list in a specified directory in FlashAir card.
 		/// </summary>
 		GetFileList,
 
 		/// <summary>
-		/// Get the number of files in a specified directory in FlashAir card.
+		/// Gets the number of files in a specified directory in FlashAir card.
 		/// </summary>
 		GetFileNum,
 
 		/// <summary>
-		/// Get thumbnail of a specified image file in FlashAir card.
+		/// Gets thumbnail of a specified image file in FlashAir card.
 		/// </summary>
 		GetThumbnail,
 
 		/// <summary>
-		/// Get firmware version of FlashAir card.
+		/// Gets firmware version of FlashAir card.
 		/// </summary>
 		GetFirmwareVersion,
 
 		/// <summary>
-		/// Get CID (Card Identification number register) of FlashAir card.
+		/// Gets CID (Card Identification number register) of FlashAir card.
 		/// </summary>
 		GetCid,
 
 		/// <summary>
-		/// Get SSID of FlashAir card.
+		/// Gets SSID of FlashAir card.
 		/// </summary>
 		GetSsid,
 
 		/// <summary>
-		/// Get update status of FlashAir card.
+		/// Gets update status of FlashAir card.
 		/// </summary>
 		GetUpdateStatus,
 
 		/// <summary>
-		/// Get time stamp of write event in FlashAir card.
+		/// Gets time stamp of write event in FlashAir card.
 		/// </summary>
 		GetWriteTimeStamp,
 
 		/// <summary>
-		/// Get Upload parameters of FlashAir card.
+		/// Gets Upload parameters of FlashAir card.
 		/// </summary>
 		GetUpload,
 
 		/// <summary>
-		/// Delete a specified file in FlashAir card.
+		/// Deletes a specified file in FlashAir card.
 		/// </summary>
 		DeleteFile,
 	}

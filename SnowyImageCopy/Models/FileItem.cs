@@ -85,7 +85,7 @@ namespace SnowyImageCopy.Models
 		private static readonly Regex _asciiPattern = new Regex(@"^[\x20-\x7F]+$", RegexOptions.Compiled); // Pattern for ASCII code (alphanumeric symbols)
 
 		/// <summary>
-		/// Import file entry from a file list in FlashAir card.
+		/// Imports file entry from a file list in FlashAir card.
 		/// </summary>
 		/// <param name="fileEntry">File entry from the list</param>
 		/// <param name="directoryPath">Remote directory path used to get the list</param>
@@ -99,7 +99,7 @@ namespace SnowyImageCopy.Models
 
 			if (!String.IsNullOrWhiteSpace(directoryPath))
 			{
-				// Check if the leading part of file entry matches directory path. Be aware that the length of 
+				// Check if the leading part of file entry matches directory path. Be aware that the length of
 				// file entry like "WLANSD_FILELIST" may be shorter than that of directory path.
 				if (!fileEntry.StartsWith(directoryPath, StringComparison.OrdinalIgnoreCase))
 					return false;
@@ -155,7 +155,7 @@ namespace SnowyImageCopy.Models
 				switch (i)
 				{
 					case 1:
-						// In the case that file size is larger than 2GiB (Int32.MaxValue in bytes), it cannot pass 
+						// In the case that file size is larger than 2GiB (Int32.MaxValue in bytes), it cannot pass
 						// Int32.TryParse method and so such file will be ignored.
 						Size = num;
 						break;

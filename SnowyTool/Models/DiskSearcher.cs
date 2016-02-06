@@ -11,12 +11,12 @@ using SnowyTool.Helper;
 namespace SnowyTool.Models
 {
 	/// <summary>
-	/// Search disks.
+	/// Searches disks.
 	/// </summary>
 	internal static class DiskSearcher
 	{
 		/// <summary>
-		/// Search disks by WMI.
+		/// Searches disks by WMI.
 		/// </summary>
 		/// <returns>Array of disk information</returns>
 		internal static DiskInfo[] Search()
@@ -25,7 +25,7 @@ namespace SnowyTool.Models
 		}
 
 		/// <summary>
-		/// Search disk information by WMI (Win32_DiskDrive, Win32_DiskPartition, Win32_LogicalDisk).
+		/// Searches disk information by WMI (Win32_DiskDrive, Win32_DiskPartition, Win32_LogicalDisk).
 		/// </summary>
 		/// <returns>Enumeration of disk information</returns>
 		private static IEnumerable<DiskInfo> SearchByDiskDrive()
@@ -77,7 +77,7 @@ namespace SnowyTool.Models
 		}
 
 		/// <summary>
-		/// Supplement disk information by WMI (MSFT_PhysicalDisk).
+		/// Supplements disk information by WMI (MSFT_PhysicalDisk).
 		/// </summary>
 		/// <param name="source">Enumeration of disk information</param>
 		/// <returns>Enumeration of disk information</returns>

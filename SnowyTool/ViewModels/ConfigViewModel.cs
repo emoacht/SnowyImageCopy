@@ -351,7 +351,7 @@ namespace SnowyTool.ViewModels
 		#region Read/Write
 
 		/// <summary>
-		/// Read Config file.
+		/// Reads Config file.
 		/// </summary>
 		/// <remarks>True if completed</remarks>
 		internal async Task<bool> ReadAsync(DiskInfo info)
@@ -381,7 +381,7 @@ namespace SnowyTool.ViewModels
 		}
 
 		/// <summary>
-		/// Write Config file.
+		/// Writes Config file.
 		/// </summary>
 		internal async Task WriteAsync()
 		{

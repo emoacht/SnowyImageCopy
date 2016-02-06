@@ -10,13 +10,13 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Inverse Boolean.
+	/// Inverses Boolean.
 	/// </summary>
 	[ValueConversion(typeof(bool), typeof(bool))]
 	public class BooleanInverseConverter : IValueConverter
 	{
 		/// <summary>
-		/// Inverse Boolean.
+		/// Inverses Boolean.
 		/// </summary>
 		/// <param name="value">Source Boolean</param>
 		/// <param name="targetType"></param>

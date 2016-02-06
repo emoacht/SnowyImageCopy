@@ -14,7 +14,7 @@ namespace SnowyImageCopy.Helper
 	public static class VisualTreeHelperAddition
 	{
 		/// <summary>
-		/// Get descendant visuals of a specified visual.
+		/// Gets descendant visuals of a specified visual.
 		/// </summary>
 		/// <param name="reference">Parent visual</param>
 		/// <returns>Descendant visuals</returns>
@@ -42,7 +42,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Get descendant visuals of a specified visual.
+		/// Gets descendant visuals of a specified visual.
 		/// </summary>
 		/// <typeparam name="T">Type of descendant visuals</typeparam>
 		/// <param name="reference">Parent visual</param>
@@ -72,7 +72,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Get ancestor visuals of a specified visual.
+		/// Gets ancestor visuals of a specified visual.
 		/// </summary>
 		/// <param name="reference">Child visual</param>
 		/// <returns>Ancestor visuals</returns>
@@ -94,7 +94,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Get ancestor visuals of a specified visual.
+		/// Gets ancestor visuals of a specified visual.
 		/// </summary>
 		/// <typeparam name="T">Type of ancestor visuals</typeparam>
 		/// <param name="reference">Child visual</param>

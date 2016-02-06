@@ -17,7 +17,7 @@ using SnowyImageCopy.Helper;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Check child items inside the viewport of ScrollViewer in ItemsControl.
+	/// Checks child items inside the viewport of ScrollViewer in ItemsControl.
 	/// </summary>
 	[TypeConstraint(typeof(ItemsControl))]
 	public class ItemsControlChildBehavior : Behavior<ItemsControl>
@@ -203,7 +203,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		}
 
 		/// <summary>
-		/// Check if a specified child item is intersected with the viewport.
+		/// Checks if a specified child item is intersected with the viewport.
 		/// </summary>
 		/// <param name="viewportRect">Viewport Rect</param>
 		/// <param name="child">Child item</param>
@@ -224,7 +224,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		}
 
 		/// <summary>
-		/// Store information on intersection to a specified child item's Tag property.
+		/// Stores information on intersection to a specified child item's Tag property.
 		/// </summary>
 		/// <param name="isIntersected">Information on intersection</param>
 		/// <param name="child">Child item</param>

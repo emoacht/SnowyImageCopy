@@ -10,13 +10,13 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Inverse Boolean and then convert it to Thickness.
+	/// Inverses Boolean and then converts it to Thickness.
 	/// </summary>
 	[ValueConversion(typeof(bool), typeof(Thickness))]
 	public class BooleanInverseToThicknessConverter : IValueConverter
 	{
 		/// <summary>
-		/// Inverse Boolean and then convert it to Thickness.
+		/// Inverses Boolean and then converts it to Thickness.
 		/// </summary>
 		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>

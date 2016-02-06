@@ -296,7 +296,7 @@ namespace SnowyImageCopy.Helper
 		#endregion
 
 		/// <summary>
-		/// Enumerate SSIDs of connected wireless LANs.
+		/// Enumerates SSIDs of connected wireless LANs.
 		/// </summary>
 		/// <returns>SSIDs</returns>
 		public static IEnumerable<string> EnumerateConnectedNetworkSsids()

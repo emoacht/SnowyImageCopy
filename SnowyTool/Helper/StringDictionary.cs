@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace SnowyTool.Helper
 {
 	/// <summary>
-	/// Parse string to Dictionary.
+	/// Parses string to Dictionary.
 	/// </summary>
 	public static class StringDictionary
 	{
 		/// <summary>
-		/// Parse string divided by new lines and separator in each line to Dictionary.
+		/// Parses string divided by new lines and separator in each line to Dictionary.
 		/// </summary>
 		/// <param name="source">Source string</param>
 		/// <param name="separator">Separator char</param>

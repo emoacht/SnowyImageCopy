@@ -10,13 +10,13 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Convert Enum to Visibility.
+	/// Converts Enum to Visibility.
 	/// </summary>
 	[ValueConversion(typeof(Enum), typeof(Visibility))]
 	public class EnumToVisibilityConverter : IValueConverter
 	{
 		/// <summary>
-		/// Convert Enum value to Visibility.
+		/// Converts Enum value to Visibility.
 		/// </summary>
 		/// <param name="value">Enum value</param>
 		/// <param name="targetType"></param>

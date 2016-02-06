@@ -11,7 +11,7 @@ using System.Windows.Media;
 namespace SnowyTool.Views.Converters
 {
 	/// <summary>
-	/// Inverse Boolean and convert it to Brush.
+	/// Inverses Boolean and converts it to Brush.
 	/// </summary>
 	[ValueConversion(typeof(bool), typeof(Brush))]
 	public class BooleanInverseToBrushConverter : IValueConverter
@@ -20,7 +20,7 @@ namespace SnowyTool.Views.Converters
 			new HashSet<string>(typeof(Colors).GetProperties().Select(x => x.Name.ToLower()));
 
 		/// <summary>
-		/// Inverse Boolean and convert it to Brush.
+		/// Inverses Boolean and converts it to Brush.
 		/// </summary>
 		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>

@@ -9,7 +9,7 @@ using System.Windows.Interactivity;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Activate Window.
+	/// Activates attached Window.
 	/// </summary>
 	[TypeConstraint(typeof(Window))]
 	public class WindowActivateBehavior : Behavior<Window>
@@ -17,7 +17,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		#region Property
 
 		/// <summary>
-		/// Whether activating Window is requested
+		/// Whether activating attached Window is requested
 		/// </summary>
 		public bool IsRequested
 		{
@@ -64,7 +64,7 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		private void OnActivatedChanged(object sender, EventArgs e)
 		{
-			// When Window is activated, clear the flag to prepare for next request.
+			// When attached Window is activated, clear the flag to prepare for next request.
 			if (this.AssociatedObject.IsActive)
 				IsRequested = false;
 		}

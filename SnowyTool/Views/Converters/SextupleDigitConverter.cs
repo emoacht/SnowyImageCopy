@@ -10,7 +10,7 @@ using System.Windows.Data;
 namespace SnowyTool.Views.Converters
 {
 	/// <summary>
-	/// Convert ulong to ulong divided by 1048576.
+	/// Converts ulong to ulong divided by 1048576.
 	/// </summary>
 	[ValueConversion(typeof(ulong), typeof(ulong))]
 	public class SextupleDigitConverter : IValueConverter

@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Manage <see cref="System.Windows.Controls.WebBrowser"/>.
+	/// Manages <see cref="System.Windows.Controls.WebBrowser"/>.
 	/// </summary>
 	[TypeConstraint(typeof(WebBrowser))]
 	public class WebBrowserBehavior : Behavior<WebBrowser>
@@ -111,7 +111,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		private static readonly Regex _fragmentPattern = new Regex(@"(?<path>.+\.(?:htm|html))#.*");
 
 		/// <summary>
-		/// Remove fragment at the end of htm/html file path.
+		/// Removes fragment at the end of htm/html file path.
 		/// </summary>
 		/// <param name="filePath">File path</param>
 		/// <returns>File path without fragment</returns>

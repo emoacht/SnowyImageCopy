@@ -10,13 +10,13 @@ using System.Windows.Data;
 namespace SnowyTool.Views.Converters
 {
 	/// <summary>
-	/// Convert Nullable Boolean to Boolean.
+	/// Converts Nullable Boolean to Boolean.
 	/// </summary>
 	[ValueConversion(typeof(bool?), typeof(bool))]
 	public class NullableBooleanToBooleanConverter : IValueConverter
 	{
 		/// <summary>
-		/// Convert Nullable Boolean to Boolean.
+		/// Converts Nullable Boolean to Boolean.
 		/// </summary>
 		/// <param name="value">Nullable Boolean</param>
 		/// <param name="targetType"></param>
@@ -37,7 +37,7 @@ namespace SnowyTool.Views.Converters
 		}
 
 		/// <summary>
-		/// Convert Boolean to Nullable Boolean.
+		/// Converts Boolean to Nullable Boolean.
 		/// </summary>
 		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>

@@ -10,13 +10,13 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Convert TimeSpan to formatted string.
+	/// Converts TimeSpan to formatted string.
 	/// </summary>
 	[ValueConversion(typeof(TimeSpan), typeof(string))]
 	public class TimeSpanToStringConverter : IValueConverter
 	{
 		/// <summary>
-		/// Convert TimeSpan to formatted string.
+		/// Converts TimeSpan to formatted string.
 		/// </summary>
 		/// <param name="value">TimeSpan</param>
 		/// <param name="targetType"></param>

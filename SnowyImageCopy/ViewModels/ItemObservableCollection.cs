@@ -17,7 +17,7 @@ namespace SnowyImageCopy.ViewModels
 		private readonly object _locker = new object();
 
 		/// <summary>
-		/// Insert new item to correct position in order to minimize the necessity of sorting.
+		/// Inserts new item to correct position in order to minimize the necessity of sorting.
 		/// </summary>
 		/// <param name="item">New item to collection</param>
 		public void Insert(T item)
@@ -42,7 +42,7 @@ namespace SnowyImageCopy.ViewModels
 		#region PropertyChanged event of item
 
 		/// <summary>
-		/// Add or remove an event handler for PropertyChanged event of each item.
+		/// Adds/Removes an event handler for PropertyChanged event of each item.
 		/// </summary>
 		protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
 		{
@@ -58,7 +58,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		/// <summary>
-		/// Remove all event handlers for PropertyChanged event of all items.
+		/// Removes all event handlers for PropertyChanged event of all items.
 		/// </summary>
 		protected override void ClearItems()
 		{
