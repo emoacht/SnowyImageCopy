@@ -364,6 +364,20 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _enablesChooseDeleteOnCopy;
 
+		public bool CopyJpegsOnly
+		{
+			get { return _copyJpegsOnly; }
+			set
+			{
+				if (_copyJpegsOnly == value)
+					return;
+
+				_copyJpegsOnly = value;
+				RaisePropertyChanged();
+			}
+		}
+		private bool _copyJpegsOnly = true; // Default
+
 		#endregion
 
 		#region Culture

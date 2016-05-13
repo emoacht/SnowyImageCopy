@@ -255,6 +255,9 @@
   <data name="Options_ExtensionLowercase" xml:space="preserve">
     <value>ファイル拡張子を小文字にする</value>
   </data>
+  <data name="Options_CopyJpegsOnly" xml:space="preserve">
+    <value>コピーJPEGファイルだけ</value>
+  </data>
   <data name="Options_File" xml:space="preserve">
     <value>ファイル</value>
   </data>

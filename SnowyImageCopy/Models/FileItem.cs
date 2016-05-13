@@ -56,6 +56,12 @@ namespace SnowyImageCopy.Models
 			get { return (FileExtension != FileExtension.other); }
 		}
 
+		// NYGG
+		public bool IsJpeg
+		{
+			get { return FileExtension == FileExtension.jpg || FileExtension == FileExtension.jpeg; }
+		}
+
 		private static readonly string[] _flashAirSystemFolders =
 		{
 			"GUPIXINF",
