@@ -39,7 +39,7 @@ namespace SnowyImageCopy.Models
 
 		public bool IsImported { get; private set; }
 
-		public string FilePath
+        public string FilePath
 		{
 			get { return _filePath ?? (_filePath = String.Format("{0}/{1}", Directory, FileName)); }
 		}
@@ -56,7 +56,13 @@ namespace SnowyImageCopy.Models
 			get { return (FileExtension != FileExtension.other); }
 		}
 
-		private static readonly string[] _flashAirSystemFolders =
+        // NYGG
+        public bool IsJpeg
+        {
+            get { return FileExtension == FileExtension.jpg || FileExtension == FileExtension.jpeg; }
+        }
+
+        private static readonly string[] _flashAirSystemFolders =
 		{
 			"GUPIXINF",
 			"SD_WLAN",
