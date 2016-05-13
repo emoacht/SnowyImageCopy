@@ -92,7 +92,7 @@ namespace SnowyImageCopy.Models
 
 				if (!itemList[i].IsDirectory)
 				{
-					if (!itemList[i].IsImageFile)
+					if (!itemList[i].IsImageFile || (Settings.Current.CopyJpegsOnly && !itemList[i].IsJpeg))
 					{
 						itemList.Remove(itemList[i]);
 					}

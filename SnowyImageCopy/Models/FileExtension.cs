@@ -22,7 +22,7 @@ namespace SnowyImageCopy.Models
 		kdc, // Kodac raw (Microsoft Camera Codec Pack supports some models)
 		rwl, // Leica raw
 		nef, // Nikon raw (Microsoft Camera Codec Pack supports some models)
-		orf, // Olympus raw (Microsoft Camera Codec Pack supports some models)
+        orf, // Olympus raw (Microsoft Camera Codec Pack supports some models)
 		rw2, // Panasonic raw (Microsoft Camera Codec Pack supports some models)
 		pef, // Pentax raw (Microsoft Camera Codec Pack supports some models)
 		srw, // Samsung raw (Microsoft Camera Codec Pack supports some models)
