@@ -55,8 +55,7 @@ namespace SnowyImageCopy.Models
 		{
 			get { return (FileExtension != FileExtension.other); }
 		}
-
-		// NYGG
+		
 		public bool IsJpeg
 		{
 			get { return FileExtension == FileExtension.jpg || FileExtension == FileExtension.jpeg; }
@@ -180,7 +179,7 @@ namespace SnowyImageCopy.Models
 			Date = FatDateTime.ConvertFromDateIntAndTimeIntToDateTime(rawDate, rawTime);
 
 			// Determine file extension.
-			if ((0 < Size) && !IsDirectory && !IsVolume)
+			if (!IsDirectory && !IsVolume)
 			{
 				FileExtension = Enum.GetValues(typeof(FileExtension))
 					.Cast<FileExtension>()

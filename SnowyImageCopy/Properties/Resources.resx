@@ -259,8 +259,8 @@
   <data name="Options_ExtensionLowercase" xml:space="preserve">
     <value>Make file extension lowercase</value>
   </data>
-  <data name="Options_CopyJpegsOnly" xml:space="preserve">
-    <value>Copy JPEGs only</value>
+  <data name="Options_HandleJpegFileOnly" xml:space="preserve">
+    <value>Handle JPEG images only</value>
   </data>
   <data name="Options_File" xml:space="preserve">
     <value>File</value>

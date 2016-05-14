@@ -304,7 +304,7 @@ namespace SnowyImageCopy.Models
 			}
 		}
 		private bool _makesFileExtensionLowercase = true; // Default
-
+		
 		public bool MovesFileToRecycle
 		{
 			get { return _movesFileToRecycle; }
@@ -332,6 +332,20 @@ namespace SnowyImageCopy.Models
 			}
 		}
 		private bool _selectsReadOnlyFile;
+		
+		public bool HandlesJpegFileOnly
+		{
+			get { return _handlesJpegFileOnly; }
+			set
+			{
+				if (_handlesJpegFileOnly == value)
+					return;
+
+				_handlesJpegFileOnly = value;
+				RaisePropertyChanged();
+			}
+		}
+		private bool _handlesJpegFileOnly;
 
 		public bool CreatesDatedFolder
 		{
@@ -363,20 +377,6 @@ namespace SnowyImageCopy.Models
 			}
 		}
 		private bool _enablesChooseDeleteOnCopy;
-
-		public bool CopyJpegsOnly
-		{
-			get { return _copyJpegsOnly; }
-			set
-			{
-				if (_copyJpegsOnly == value)
-					return;
-
-				_copyJpegsOnly = value;
-				RaisePropertyChanged();
-			}
-		}
-		private bool _copyJpegsOnly = true; // Default
 
 		#endregion
 

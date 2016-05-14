@@ -182,19 +182,6 @@
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
-							  Header="{Binding Resources.Options_CopyJpegsOnly, Source={x:Static models:ResourceService.Current}}">
-						<controls:SlidingToggleButton
-							Width="60" Height="24"
-							TextChecked="ON"
-							TextUnchecked="OFF"
-							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
-							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
-							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
-							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
-							IsChecked="{Binding SettingsCurrent.CopyJpegsOnly, Mode=TwoWay}"/>
-					</GroupBox>
-
-					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
 							  Header="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							x:Name="RecycleButton"
@@ -219,6 +206,19 @@
 							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
 							IsChecked="{Binding SettingsCurrent.SelectsReadOnlyFile, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+							  Header="{Binding Resources.Options_HandleJpegFileOnly, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							Width="60" Height="24"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.HandlesJpegFileOnly, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
