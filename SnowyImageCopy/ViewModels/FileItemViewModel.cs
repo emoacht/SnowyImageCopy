@@ -58,19 +58,7 @@ namespace SnowyImageCopy.ViewModels
 		/// </summary>
 		internal bool CanReadExif
 		{
-			get
-			{
-				switch (_fileItem.FileExtension)
-				{
-					case FileExtension.jpg:
-					case FileExtension.jpeg:
-					case FileExtension.tif:
-					case FileExtension.tiff:
-						return true;
-					default:
-						return false;
-				}
-			}
+			get { return _fileItem.IsJpeg || _fileItem.IsTiff; }
 		}
 
 		/// <summary>
@@ -84,14 +72,7 @@ namespace SnowyImageCopy.ViewModels
 				if (_canGetThumbnailRemote.HasValue)
 					return _canGetThumbnailRemote.Value;
 
-				switch (_fileItem.FileExtension)
-				{
-					case FileExtension.jpg:
-					case FileExtension.jpeg:
-						return true;
-					default:
-						return false;
-				}
+				return _fileItem.IsJpeg;
 			}
 			set { _canGetThumbnailRemote = value; }
 		}
@@ -108,31 +89,7 @@ namespace SnowyImageCopy.ViewModels
 				if (_canLoadDataLocal.HasValue)
 					return _canLoadDataLocal.Value;
 
-				switch (_fileItem.FileExtension)
-				{
-					case FileExtension.jpg:
-					case FileExtension.jpeg:
-					case FileExtension.bmp:
-					case FileExtension.png:
-					case FileExtension.tif:
-					case FileExtension.tiff:
-					case FileExtension.raw:
-					case FileExtension.dng:
-					case FileExtension.cr2:
-					case FileExtension.crw:
-					case FileExtension.erf:
-					case FileExtension.raf:
-					case FileExtension.kdc:
-					case FileExtension.nef:
-					case FileExtension.orf:
-					case FileExtension.rw2:
-					case FileExtension.pef:
-					case FileExtension.srw:
-					case FileExtension.arw:
-						return true;
-					default:
-						return false;
-				}
+				return _fileItem.IsLoadable;
 			}
 			set { _canLoadDataLocal = value; }
 		}

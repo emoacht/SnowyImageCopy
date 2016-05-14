@@ -304,7 +304,7 @@ namespace SnowyImageCopy.Models
 			}
 		}
 		private bool _makesFileExtensionLowercase = true; // Default
-		
+
 		public bool MovesFileToRecycle
 		{
 			get { return _movesFileToRecycle; }
@@ -332,7 +332,7 @@ namespace SnowyImageCopy.Models
 			}
 		}
 		private bool _selectsReadOnlyFile;
-		
+
 		public bool HandlesJpegFileOnly
 		{
 			get { return _handlesJpegFileOnly; }

@@ -28,6 +28,8 @@ namespace SnowyImageCopy.Models
 		string Signature { get; }
 		bool IsImageFile { get; }
 		bool IsJpeg { get; }
+		bool IsTiff { get; }
+		bool IsLoadable { get; }
 		bool IsFlashAirSystemFolder { get; }
 	}
 }

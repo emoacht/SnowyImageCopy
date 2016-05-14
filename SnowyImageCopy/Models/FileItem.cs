@@ -51,15 +51,10 @@ namespace SnowyImageCopy.Models
 		}
 		private string _signature;
 
-		public bool IsImageFile
-		{
-			get { return (FileExtension != FileExtension.other); }
-		}
-		
-		public bool IsJpeg
-		{
-			get { return FileExtension == FileExtension.jpg || FileExtension == FileExtension.jpeg; }
-		}
+		public bool IsImageFile { get; private set; }
+		public bool IsJpeg { get; private set; }
+		public bool IsTiff { get; private set; }
+		public bool IsLoadable { get; private set; }
 
 		private static readonly string[] _flashAirSystemFolders =
 		{
@@ -181,13 +176,8 @@ namespace SnowyImageCopy.Models
 			// Determine file extension.
 			if (!IsDirectory && !IsVolume)
 			{
-				FileExtension = Enum.GetValues(typeof(FileExtension))
-					.Cast<FileExtension>()
-					.FirstOrDefault(x =>
-					{
-						var extension = Path.GetExtension(FileName); // Extension will not be null as long as FileName is not null.
-						return extension.Equals(String.Format(".{0}", x), StringComparison.OrdinalIgnoreCase);
-					});
+				var extension = Path.GetExtension(FileName);
+				SetFileExtension(extension);
 			}
 
 			return true;
@@ -203,6 +193,47 @@ namespace SnowyImageCopy.Models
 			IsVolume = ba[3];     // Bit 3
 			IsDirectory = ba[4];  // Bit 4
 			IsArchive = ba[5];    // Bit 5
+		}
+
+		private void SetFileExtension(string extension)
+		{
+			FileExtension = Enum.GetValues(typeof(FileExtension))
+				.Cast<FileExtension>()
+				.FirstOrDefault(x => String.Equals(extension, String.Format(".{0}", x), StringComparison.OrdinalIgnoreCase));
+
+			if (FileExtension == FileExtension.other)
+				return;
+
+			IsImageFile = true;
+
+			switch (FileExtension)
+			{
+				case FileExtension.jpg:
+				case FileExtension.jpeg:
+					IsLoadable = IsJpeg = true;
+					break;
+				case FileExtension.tif:
+				case FileExtension.tiff:
+					IsLoadable = IsTiff = true;
+					break;
+				case FileExtension.bmp:
+				case FileExtension.png:
+				case FileExtension.raw:
+				case FileExtension.dng:
+				case FileExtension.cr2:
+				case FileExtension.crw:
+				case FileExtension.erf:
+				case FileExtension.raf:
+				case FileExtension.kdc:
+				case FileExtension.nef:
+				case FileExtension.orf:
+				case FileExtension.rw2:
+				case FileExtension.pef:
+				case FileExtension.srw:
+				case FileExtension.arw:
+					IsLoadable = true;
+					break;
+			}
 		}
 
 		#endregion
