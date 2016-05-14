@@ -516,8 +516,8 @@ namespace SnowyImageCopy.ViewModels
 
 			Subscription.Add(Observable.FromEvent
 				(
-					handler => _targetDateChanged += handler,
-					handler => _targetDateChanged -= handler
+					handler => _targetConditionChanged += handler,
+					handler => _targetConditionChanged -= handler
 				)
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
@@ -637,8 +637,13 @@ namespace SnowyImageCopy.ViewModels
 			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).TargetDates); }
 		}
 
+		private string CaseJpegFileOnly
+		{
+			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).HandlesJpegFileOnly); }
+		}
+
 		private event Action _autoCheckIntervalChanged;
-		private event Action _targetDateChanged;
+		private event Action _targetConditionChanged;
 
 		private void ReactSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -652,9 +657,9 @@ namespace SnowyImageCopy.ViewModels
 				if (handler != null)
 					handler();
 			}
-			else if ((propertyName == CaseTargetPeriod) || (propertyName == CaseTargetDates))
+			else if ((propertyName == CaseTargetPeriod) || (propertyName == CaseTargetDates) || (propertyName == CaseJpegFileOnly))
 			{
-				var handler = _targetDateChanged;
+				var handler = _targetConditionChanged;
 				if (handler != null)
 					handler();
 			}

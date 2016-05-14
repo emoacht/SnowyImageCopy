@@ -174,6 +174,9 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
+				if (Settings.Current.HandlesJpegFileOnly && !_fileItem.IsJpeg)
+					return false;
+
 				switch (Settings.Current.TargetPeriod)
 				{
 					case FilePeriod.Today:
