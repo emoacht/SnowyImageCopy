@@ -317,11 +317,11 @@ namespace SnowyImageCopy.Models
 			}
 			else
 			{
-				var sizeCopiedLatest = (info != null) ? (long)info.CurrentValue : 0L;
+				var sizeCopiedLatest = (long)(info?.CurrentValue).GetValueOrDefault();
 
 				ProgressCopiedAll = (double)(_sizeCopiedAll + sizeCopiedLatest) * 100D / (double)_sizeOverall;
 
-				//Debug.WriteLine("ProgressCopiedAll: {0}", ProgressCopiedAll);
+				//Debug.WriteLine($"ProgressCopiedAll: {ProgressCopiedAll}");
 			}
 		}
 
@@ -350,7 +350,7 @@ namespace SnowyImageCopy.Models
 				RemainingTime = TimeSpan.FromSeconds((double)(_sizeToBeCopiedCurrent - sizeCopiedLatest) * elapsedTimeLatest.TotalSeconds / (double)sizeCopiedLatest);
 				ProgressState = TaskbarItemProgressState.Normal;
 
-				//Debug.WriteLine("ProgressCopiedCurrent: {0} RemainingTime: {1}", ProgressCopiedCurrent, RemainingTime);
+				//Debug.WriteLine($"ProgressCopiedCurrent: {ProgressCopiedCurrent} RemainingTime: {RemainingTime}");
 			}
 		}
 
@@ -515,7 +515,7 @@ namespace SnowyImageCopy.Models
 				else
 				{
 					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine("Failed to check if content is updated. {0}", ex);
+					Debug.WriteLine($"Failed to check if content is updated.\r\n{ex}");
 					throw new UnexpectedException("Failed to check if content is updated.", ex);
 				}
 			}
@@ -609,7 +609,7 @@ namespace SnowyImageCopy.Models
 				else
 				{
 					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine("Failed to check & copy files. {0}", ex);
+					Debug.WriteLine($"Failed to check & copy files.\r\n{ex}");
 					throw new UnexpectedException("Failed to check & copy files.", ex);
 				}
 			}
@@ -673,7 +673,7 @@ namespace SnowyImageCopy.Models
 				else
 				{
 					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine("Failed to check files. {0}", ex);
+					Debug.WriteLine($"Failed to check files.\r\n{ex}");
 					throw new UnexpectedException("Failed to check files.", ex);
 				}
 			}
@@ -744,7 +744,7 @@ namespace SnowyImageCopy.Models
 				else
 				{
 					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine("Failed to copy files. {0}", ex);
+					Debug.WriteLine($"Failed to copy files.\r\n{ex}");
 					throw new UnexpectedException("Failed to copy files.", ex);
 				}
 			}
@@ -761,11 +761,7 @@ namespace SnowyImageCopy.Models
 		internal void Stop()
 		{
 			StopAutoTimer();
-
-			if ((_tokenSourceWorking != null) && !_tokenSourceWorking.IsCancellationRequested)
-			{
-				_tokenSourceWorking.TryCancel();
-			}
+			_tokenSourceWorking?.TryCancel(); // Canceling already canceled source will be simply ignored.
 		}
 
 		#endregion
@@ -904,7 +900,7 @@ namespace SnowyImageCopy.Models
 							}
 							catch (Exception ex)
 							{
-								Debug.WriteLine("Failed to move a file to Recycle. {0}", ex);
+								Debug.WriteLine($"Failed to move a file to Recycle.\r\n{ex}");
 								item.Status = FileStatus.NotCopied;
 								continue;
 							}
@@ -981,9 +977,7 @@ namespace SnowyImageCopy.Models
 			finally
 			{
 				FileListCoreViewIndex = -1; // No selection
-
-				if (_tokenSourceWorking != null)
-					_tokenSourceWorking.Dispose();
+				_tokenSourceWorking?.Dispose();
 			}
 		}
 
@@ -1064,7 +1058,7 @@ namespace SnowyImageCopy.Models
 						var localPath = ComposeLocalPath(item);
 
 						var localDirectory = Path.GetDirectoryName(localPath);
-						if (!String.IsNullOrEmpty(localDirectory) && !Directory.Exists(localDirectory))
+						if (!string.IsNullOrEmpty(localDirectory) && !Directory.Exists(localDirectory))
 							Directory.CreateDirectory(localDirectory);
 
 						var data = await FileManager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, _card, _tokenSourceWorking.Token);
@@ -1115,14 +1109,12 @@ namespace SnowyImageCopy.Models
 					}
 				}
 
-				OperationStatus = String.Format(Resources.OperationStatus_CopyCompleted, _copyFileCount, (int)(DateTime.Now - CopyStartTime).TotalSeconds);
+				OperationStatus = string.Format(Resources.OperationStatus_CopyCompleted, _copyFileCount, (int)(DateTime.Now - CopyStartTime).TotalSeconds);
 			}
 			finally
 			{
 				FileListCoreViewIndex = -1; // No selection
-
-				if (_tokenSourceWorking != null)
-					_tokenSourceWorking.Dispose();
+				_tokenSourceWorking?.Dispose();
 			}
 		}
 
@@ -1138,7 +1130,7 @@ namespace SnowyImageCopy.Models
 			{
 				ToastHeadline = Resources.ToastHeadline_CopyCompleted,
 				ToastBody = Resources.ToastBody_CopyCompleted,
-				ToastBodyExtra = String.Format(Resources.ToastBodyExtra_CopyCompleted, _copyFileCount, (int)(DateTime.Now - CopyStartTime).TotalSeconds),
+				ToastBodyExtra = string.Format(Resources.ToastBodyExtra_CopyCompleted, _copyFileCount, (int)(DateTime.Now - CopyStartTime).TotalSeconds),
 				ShortcutFileName = Properties.Settings.Default.ShortcutFileName,
 				ShortcutTargetFilePath = Assembly.GetExecutingAssembly().Location,
 				AppId = Properties.Settings.Default.AppId
@@ -1164,10 +1156,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="item">Target item</param>
 		internal async Task LoadSetAsync(FileItemViewModel item)
 		{
-			if ((_tokenSourceLoading != null) && !_tokenSourceLoading.IsCancellationRequested)
-			{
-				_tokenSourceLoading.TryCancel();
-			}
+			_tokenSourceLoading?.TryCancel(); // Canceling already canceled source will be simply ignored.
 
 			try
 			{
@@ -1195,13 +1184,12 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to load image data from local file. {0}", ex);
+				Debug.WriteLine($"Failed to load image data from local file.\r\n{ex}");
 				throw new UnexpectedException("Failed to load image data from local file.", ex);
 			}
 			finally
 			{
-				if (_tokenSourceLoading != null)
-					_tokenSourceLoading.Dispose();
+				_tokenSourceLoading?.Dispose();
 			}
 		}
 
@@ -1226,7 +1214,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to save image data on desktop. {0}", ex);
+				Debug.WriteLine($"Failed to save image data on desktop.\r\n{ex}");
 			}
 			finally
 			{
@@ -1268,7 +1256,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to send image data to clipboard. {0}", ex);
+				Debug.WriteLine($"Failed to send image data to clipboard.\r\n{ex}");
 			}
 			finally
 			{

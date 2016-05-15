@@ -26,7 +26,7 @@ namespace SnowyImageCopy.ViewModels
 				_mainWindowViewModelInstance = value;
 
 				_operationPropertyChangedListener = new PropertyChangedEventListener(ReactOperationPropertyChanged);
-				PropertyChangedEventManager.AddListener(MainWindowViewModelInstance.Op, _operationPropertyChangedListener, String.Empty);
+				PropertyChangedEventManager.AddListener(MainWindowViewModelInstance.Op, _operationPropertyChangedListener, string.Empty);
 			}
 		}
 		private MainWindowViewModel _mainWindowViewModelInstance;
@@ -40,23 +40,13 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener _operationPropertyChangedListener;
 
-		private string CaseIsChecking
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsChecking); }
-		}
-
-		private string CaseIsCopying
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsCopying); }
-		}
-
 		private void ReactOperationPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			//Debug.WriteLine("Operation property changed (OptionsViewModel): {0} {1}", sender, e.PropertyName);
+			//Debug.WriteLine($"Operation property changed (OptionsViewModel): {sender} {e.PropertyName}");
 
 			var propertyName = e.PropertyName;
 
-			if ((propertyName == CaseIsChecking) || (propertyName == CaseIsCopying))
+			if ((propertyName == nameof(Operation.IsChecking)) || (propertyName == nameof(Operation.IsCopying)))
 			{
 				IsCheckingOrCopying = MainWindowViewModelInstance.Op.IsChecking || MainWindowViewModelInstance.Op.IsCopying;
 			}
@@ -79,10 +69,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-		public Settings SettingsCurrent
-		{
-			get { return Settings.Current; }
-		}
+		public Settings SettingsCurrent => Settings.Current;
 
 		#region Path
 
@@ -103,7 +90,6 @@ namespace SnowyImageCopy.ViewModels
 						.Select(x => new FilePeriodViewModel { Period = x })
 						.ToArray();
 				}
-
 				return _filePeriodList;
 			}
 		}
@@ -144,13 +130,12 @@ namespace SnowyImageCopy.ViewModels
 			{
 				if (_cultureMap == null)
 				{
-					_cultureMap = new[] { new KeyValuePair<string, string>(String.Empty, _cultureNameAuto) }
+					_cultureMap = new[] { new KeyValuePair<string, string>(string.Empty, _cultureNameAuto) }
 						.Concat(ResourceService.Current.SupportedCultures
 							.Select(x => new KeyValuePair<string, string>(x.Name, x.EnglishName)) // Or NativeName
 							.OrderBy(x => x.Value))
 						.ToDictionary(x => x.Key, x => x.Value);
 				}
-
 				return _cultureMap.Select(x => x.Value).ToArray();
 			}
 		}

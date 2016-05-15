@@ -19,7 +19,7 @@ namespace SnowyImageCopy.ViewModels
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
 				_resourcesPropertyChangedListener = new PropertyChangedEventListener(ReactResourcesPropertyChanged);
-				PropertyChangedEventManager.AddListener(ResourceService.Current, _resourcesPropertyChangedListener, "Resources");
+				PropertyChangedEventManager.AddListener(ResourceService.Current, _resourcesPropertyChangedListener, nameof(ResourceService.Resources));
 			}
 		}
 
@@ -29,7 +29,7 @@ namespace SnowyImageCopy.ViewModels
 
 		private void ReactResourcesPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			//Debug.WriteLine("Resources property changed: {0} {1}", sender, e.PropertyName);
+			//Debug.WriteLine($"Resources property changed: {sender} {e.PropertyName}");
 
 			SetDescription(Period);
 		}

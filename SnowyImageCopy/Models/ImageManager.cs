@@ -37,8 +37,8 @@ namespace SnowyImageCopy.Models
 		/// <returns>BitmapImage of thumbnail</returns>
 		internal static async Task<BitmapImage> ReadThumbnailAsync(string localPath)
 		{
-			if (String.IsNullOrWhiteSpace(localPath))
-				throw new ArgumentNullException("localPath");
+			if (string.IsNullOrWhiteSpace(localPath))
+				throw new ArgumentNullException(nameof(localPath));
 
 			if (!File.Exists(localPath))
 				throw new FileNotFoundException("File seems missing.", localPath);
@@ -52,7 +52,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to read a thumbnail. {0}", ex);
+				Debug.WriteLine($"Failed to read a thumbnail.\r\n{ex}");
 
 				if (IsImageNotSupported(ex))
 					throw new ImageNotSupportedException();
@@ -69,7 +69,7 @@ namespace SnowyImageCopy.Models
 		internal static async Task<BitmapImage> ReadThumbnailAsync(byte[] bytes)
 		{
 			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException("bytes");
+				throw new ArgumentNullException(nameof(bytes));
 
 			try
 			{
@@ -83,7 +83,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to read a thumbnail. {0}", ex);
+				Debug.WriteLine($"Failed to read a thumbnail.\r\n{ex}");
 
 				if (IsImageNotSupported(ex))
 					throw new ImageNotSupportedException();
@@ -99,8 +99,8 @@ namespace SnowyImageCopy.Models
 		/// <returns>BitmapImage of thumbnail</returns>
 		internal static async Task<BitmapImage> CreateThumbnailAsync(string localPath)
 		{
-			if (String.IsNullOrWhiteSpace(localPath))
-				throw new ArgumentNullException("localPath");
+			if (string.IsNullOrWhiteSpace(localPath))
+				throw new ArgumentNullException(nameof(localPath));
 
 			if (!File.Exists(localPath))
 				throw new FileNotFoundException("File seems missing.", localPath);
@@ -118,7 +118,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to create a thumbnail. {0}", ex);
+				Debug.WriteLine($"Failed to create a thumbnail.\r\n{ex}");
 
 				if (IsImageNotSupported(ex))
 					throw new ImageNotSupportedException();
@@ -135,7 +135,7 @@ namespace SnowyImageCopy.Models
 		internal static async Task<BitmapImage> CreateThumbnailAsync(byte[] bytes)
 		{
 			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException("bytes");
+				throw new ArgumentNullException(nameof(bytes));
 
 			try
 			{
@@ -149,7 +149,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to create a thumbnail. {0}", ex);
+				Debug.WriteLine($"Failed to create a thumbnail.\r\n{ex}");
 
 				if (IsImageNotSupported(ex))
 					throw new ImageNotSupportedException();
@@ -315,9 +315,9 @@ namespace SnowyImageCopy.Models
 		/// So, there is not much merit in making asynchronous version.</remarks>
 		internal static BitmapImage ConvertFrameworkElementToBitmapImage(FrameworkElement element, Size outerSize)
 		{
-			if (Double.IsNaN(element.Width) || (element.Width <= 0) ||
-				Double.IsNaN(element.Height) || (element.Height <= 0))
-				throw new ArgumentException("The element is invalid.", "element");
+			if (double.IsNaN(element.Width) || (element.Width <= 0) ||
+				double.IsNaN(element.Height) || (element.Height <= 0))
+				throw new ArgumentException("The element is invalid.", nameof(element));
 
 			try
 			{
@@ -364,7 +364,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to convert a FrameworkElement to BitmapImage. {0}", ex);
+				Debug.WriteLine($"Failed to convert a FrameworkElement to BitmapImage.\r\n{ex}");
 				throw;
 			}
 		}
@@ -408,7 +408,7 @@ namespace SnowyImageCopy.Models
 		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes, double targetWidth, double targetHeight, bool willReadExif, ColorContext destinationProfile = null)
 		{
 			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException("bytes");
+				throw new ArgumentNullException(nameof(bytes));
 
 			var targetSize = new Size(targetWidth, targetHeight);
 
@@ -428,7 +428,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to convert byte array to BitmapSource. {0}", ex);
+				Debug.WriteLine($"Failed to convert byte array to BitmapSource.\r\n{ex}");
 
 				if (IsImageNotSupported(ex))
 					throw new ImageNotSupportedException();
@@ -448,7 +448,7 @@ namespace SnowyImageCopy.Models
 		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceUniformAsync(byte[] bytes, Size outerSize, bool willReadExif, ColorContext destinationProfile = null)
 		{
 			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException("bytes");
+				throw new ArgumentNullException(nameof(bytes));
 
 			try
 			{
@@ -466,7 +466,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to convert byte array to BitmapSource. {0}", ex);
+				Debug.WriteLine($"Failed to convert byte array to BitmapSource.\r\n{ex}");
 
 				if (IsImageNotSupported(ex))
 					throw new ImageNotSupportedException();
@@ -628,7 +628,7 @@ namespace SnowyImageCopy.Models
 		internal static async Task<DateTime> GetExifDateTakenAsync(byte[] bytes)
 		{
 			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException("bytes");
+				throw new ArgumentNullException(nameof(bytes));
 
 			using (var ms = new MemoryStream(bytes)) // This MemoryStream will not be changed.
 			{
@@ -638,7 +638,7 @@ namespace SnowyImageCopy.Models
 				}
 				catch (Exception ex)
 				{
-					Debug.WriteLine("Failed to get DateTaken from metadata. {0}", ex);
+					Debug.WriteLine($"Failed to get DateTaken from metadata.\r\n{ex}");
 
 					if (IsImageNotSupported(ex))
 						return default(DateTime);
@@ -656,7 +656,7 @@ namespace SnowyImageCopy.Models
 		internal static async Task<int> GetExifOrientationAsync(byte[] bytes)
 		{
 			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException("bytes");
+				throw new ArgumentNullException(nameof(bytes));
 
 			using (var ms = new MemoryStream(bytes)) // This MemoryStream will not be changed.
 			{
@@ -666,7 +666,7 @@ namespace SnowyImageCopy.Models
 				}
 				catch (Exception ex)
 				{
-					Debug.WriteLine("Failed to get Orientation from metadata. {0}", ex);
+					Debug.WriteLine($"Failed to get Orientation from metadata.\r\n{ex}");
 
 					if (IsImageNotSupported(ex))
 						return 0;

@@ -32,7 +32,7 @@ namespace SnowyImageCopy.Helper
 		public static BitmapImage ToBitmapImage(this System.Drawing.Bitmap source)
 		{
 			if (source == null)
-				throw new ArgumentNullException("source");
+				throw new ArgumentNullException(nameof(source));
 
 			using (var ms = new MemoryStream())
 			{
@@ -58,7 +58,7 @@ namespace SnowyImageCopy.Helper
 		public static BitmapSource ToBitmapSource(this System.Drawing.Bitmap source)
 		{
 			if (source == null)
-				throw new ArgumentNullException("source");
+				throw new ArgumentNullException(nameof(source));
 
 			var handleBitmap = source.GetHbitmap();
 			try

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reactive.Disposables;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,33 +13,6 @@ namespace SnowyImageCopy.ViewModels
 	{
 		public ViewModel()
 		{ }
-
-		#region Property name
-
-		private Lazy<Dictionary<string, string>> _propertyNameMap = new Lazy<Dictionary<string, string>>(() => new Dictionary<string, string>());
-
-		protected string GetPropertyName([CallerMemberName] string callerPropertyName = null)
-		{
-			if (String.IsNullOrEmpty(callerPropertyName))
-				return null;
-
-			return _propertyNameMap.Value.ContainsKey(callerPropertyName)
-				? _propertyNameMap.Value[callerPropertyName]
-				: null;
-		}
-
-		protected string GetPropertyName<T>(Expression<Func<T>> propertyExpression, [CallerMemberName] string callerPropertyName = null)
-		{
-			if (String.IsNullOrEmpty(callerPropertyName))
-				return null;
-
-			var calledPropertyName = PropertySupport.GetPropertyName(propertyExpression);
-			_propertyNameMap.Value.Add(callerPropertyName, calledPropertyName);
-
-			return calledPropertyName;
-		}
-
-		#endregion
 
 		#region Dispose
 

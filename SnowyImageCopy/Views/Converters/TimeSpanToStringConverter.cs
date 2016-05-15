@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Views.Converters
 
 			var timeSpan = TimeSpan.FromSeconds(Math.Ceiling(((TimeSpan)value).TotalSeconds));
 
-			return String.Format("{0:D2}:{1:D2}", (int)Math.Floor(timeSpan.TotalMinutes), timeSpan.Seconds);
+			return $"{(int)Math.Floor(timeSpan.TotalMinutes):D2}:{timeSpan.Seconds:D2}";
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

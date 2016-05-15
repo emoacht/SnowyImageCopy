@@ -29,14 +29,14 @@ namespace SnowyImageCopy.Views.Behaviors
 				typeof(string),
 				typeof(FrameworkElementLanguageBehavior),
 				new FrameworkPropertyMetadata(
-					String.Empty,
+					string.Empty,
 					(d, e) => ((FrameworkElementLanguageBehavior)d).SetLanguage((string)e.NewValue)));
 
 		#endregion
 
 		private void SetLanguage(string ietfLanguageTag)
 		{
-			if (String.IsNullOrEmpty(ietfLanguageTag))
+			if (string.IsNullOrEmpty(ietfLanguageTag))
 				return;
 
 			try

@@ -35,10 +35,7 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		protected override void Invoke(object parameter)
 		{
-			if (Sound == null)
-				return;
-
-			Sound.Play();
+			Sound?.Play();
 		}
 	}
 }

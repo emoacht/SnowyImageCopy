@@ -39,16 +39,10 @@ namespace SnowyImageCopy.Models
 
 		public bool IsImported { get; private set; }
 
-		public string FilePath
-		{
-			get { return _filePath ?? (_filePath = String.Format("{0}/{1}", Directory, FileName)); }
-		}
+		public string FilePath => _filePath ?? (_filePath = $"{Directory}/{FileName}");
 		private string _filePath;
 
-		public string Signature
-		{
-			get { return _signature ?? (_signature = String.Format("{0:yyyyMMddHHmmss}{1}{2}", Date, FilePath, Size)); }
-		}
+		public string Signature => _signature ?? (_signature = $"{Date:yyyyMMddHHmmss}{FilePath}{Size}");
 		private string _signature;
 
 		public bool IsImageFile { get; private set; }
@@ -92,12 +86,12 @@ namespace SnowyImageCopy.Models
 		/// <returns>True if successfully imported</returns>
 		private bool Import(string fileEntry, string directoryPath)
 		{
-			if (String.IsNullOrWhiteSpace(fileEntry))
+			if (string.IsNullOrWhiteSpace(fileEntry))
 				return false;
 
 			var fileEntryWithoutDirectory = fileEntry.Trim();
 
-			if (!String.IsNullOrWhiteSpace(directoryPath))
+			if (!string.IsNullOrWhiteSpace(directoryPath))
 			{
 				// Check if the leading part of file entry matches directory path. Be aware that the length of
 				// file entry like "WLANSD_FILELIST" may be shorter than that of directory path.
@@ -115,7 +109,7 @@ namespace SnowyImageCopy.Models
 			}
 			else
 			{
-				Directory = String.Empty;
+				Directory = string.Empty;
 			}
 
 			if (!fileEntryWithoutDirectory.ElementAt(0).Equals(_separator))
@@ -130,14 +124,14 @@ namespace SnowyImageCopy.Models
 
 			while (elements.Count > 5) // In the case that file name includes separator character
 			{
-				elements[0] = String.Format("{0}{1}{2}", elements[0], _separator, elements[1]);
+				elements[0] = $"{elements[0]}{_separator}{elements[1]}";
 				elements.RemoveAt(1);
 			}
 
 			FileName = elements[0].Trim();
 
 			// Check if file name is valid.
-			if (String.IsNullOrWhiteSpace(FileName) ||
+			if (string.IsNullOrWhiteSpace(FileName) ||
 				!_asciiPattern.IsMatch(FileName) || // This ASCII checking may be needless because response from FlashAir card seems to be encoded by ASCII.
 				Path.GetInvalidFileNameChars().Any(x => FileName.Contains(x)))
 				return false;
@@ -199,7 +193,7 @@ namespace SnowyImageCopy.Models
 		{
 			FileExtension = Enum.GetValues(typeof(FileExtension))
 				.Cast<FileExtension>()
-				.FirstOrDefault(x => String.Equals(extension, String.Format(".{0}", x), StringComparison.OrdinalIgnoreCase));
+				.FirstOrDefault(x => string.Equals(extension, $".{x}", StringComparison.OrdinalIgnoreCase));
 
 			if (FileExtension == FileExtension.other)
 				return;
@@ -249,7 +243,7 @@ namespace SnowyImageCopy.Models
 			if (dateComparison != 0)
 				return dateComparison;
 
-			var filePathComparison = String.Compare(this.FilePath, other.FilePath, StringComparison.Ordinal);
+			var filePathComparison = string.Compare(this.FilePath, other.FilePath, StringComparison.Ordinal);
 			if (filePathComparison != 0)
 				return filePathComparison;
 

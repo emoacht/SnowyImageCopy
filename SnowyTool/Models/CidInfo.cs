@@ -91,7 +91,7 @@ namespace SnowyTool.Models
 		{
 			this.Source = source;
 
-			if (String.IsNullOrWhiteSpace(source) || !_asciiPattern.IsMatch(source))
+			if (string.IsNullOrWhiteSpace(source) || !_asciiPattern.IsMatch(source))
 				return;
 
 			var bytes = SoapHexBinary.Parse(source).Value;
@@ -103,7 +103,7 @@ namespace SnowyTool.Models
 			var productRevisionBits = new BitArray(new[] { bytes[8] }).Cast<bool>().Reverse().ToArray(); // Bytes 8
 			var major = ConvertFromBitsToInt(productRevisionBits.Take(4).Reverse());
 			var minor = ConvertFromBitsToInt(productRevisionBits.Skip(4).Take(4).Reverse());
-			ProductRevision = String.Format("{0}.{1}", major, minor);
+			ProductRevision = $"{major}.{minor}";
 
 			var productSerialNumberBytes = bytes.Skip(9).Take(4); // Bytes 9-12
 			if (BitConverter.IsLittleEndian)

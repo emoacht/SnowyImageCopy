@@ -42,7 +42,7 @@ namespace SnowyTool
 		{
 			const string fileName = "exception.log";
 
-			var content = String.Format(@"[Date: {0} Sender: {1}]", DateTime.Now, sender) + Environment.NewLine
+			var content = $"[Date: {DateTime.Now} Sender: {sender}]" + Environment.NewLine
 				+ exception + Environment.NewLine + Environment.NewLine;
 
 			Trace.WriteLine(content);
@@ -62,7 +62,7 @@ namespace SnowyTool
 			}
 			catch (Exception ex)
 			{
-				Trace.WriteLine(String.Format("Failed to record exception to AppData. {0}", ex));
+				Trace.WriteLine($"Failed to record exception to AppData.\r\n{ex}");
 			}
 		}
 

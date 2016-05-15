@@ -40,7 +40,7 @@ namespace SnowyImageCopy.Views
 			// Binding in xaml will not work because MainWindowViewModel may be null when Options is instantiated.
 			ChooseDeleteOnCopyButton.SetBinding(
 				SlidingToggleButton.IsCheckedCopyProperty,
-				new Binding("IsBrowserOpen")
+				new Binding(nameof(MainWindowViewModel.IsBrowserOpen))
 				{
 					Source = mainWindowViewModelInstance,
 					Mode = BindingMode.OneWayToSource,

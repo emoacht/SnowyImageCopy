@@ -30,14 +30,14 @@ namespace SnowyImageCopy.Models.Exceptions
 		protected RemoteFileNotFoundException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
-			this.FilePath = info.GetString("FilePath");
+			this.FilePath = info.GetString(nameof(FilePath));
 		}
 
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			base.GetObjectData(info, context);
 
-			info.AddValue("FilePath", this.FilePath);
+			info.AddValue(nameof(FilePath), this.FilePath);
 		}
 
 		#endregion

@@ -13,8 +13,8 @@ namespace SnowyImageCopy.Test
 		[TestMethod]
 		public void TestTryParseRemoteAddressValid()
 		{
-			TestTryParseRemoteAddressBase(@"http://flashair/", @"http://flashair/", String.Empty);
-			TestTryParseRemoteAddressBase(@"http://flashair_012345/", @"http://flashair_012345/", String.Empty);
+			TestTryParseRemoteAddressBase(@"http://flashair/", @"http://flashair/", string.Empty);
+			TestTryParseRemoteAddressBase(@"http://flashair_012345/", @"http://flashair_012345/", string.Empty);
 			TestTryParseRemoteAddressBase(@"http://flashair/dcim", @"http://flashair/", @"dcim");
 			TestTryParseRemoteAddressBase(@"https://flashair//dcim/", @"https://flashair/", @"dcim/");
 			TestTryParseRemoteAddressBase(@"http://flashair/dcim//161___01", @"http://flashair/", @"dcim/161___01");

@@ -53,7 +53,7 @@ namespace SnowyTool.Models
 						foreach (var logicalDisk in diskPartition.GetRelated("Win32_LogicalDisk"))
 						{
 							var driveLetter = logicalDisk["DeviceID"] as string; // Drive letter
-							if (!String.IsNullOrWhiteSpace(driveLetter) &&
+							if (!string.IsNullOrWhiteSpace(driveLetter) &&
 								driveLetter.Trim().EndsWith(':'.ToString(CultureInfo.InvariantCulture)))
 							{
 								driveLetters.Add(driveLetter.Trim());
@@ -92,10 +92,10 @@ namespace SnowyTool.Models
 				{
 					using (var searcher = new ManagementObjectSearcher(
 						@"\\.\Root\Microsoft\Windows\Storage",
-						String.Format("SELECT * FROM MSFT_PhysicalDisk WHERE DeviceId = {0}", info.PhysicalDrive))) // DeviceId represents index number of physical drive.
+						$"SELECT * FROM MSFT_PhysicalDisk WHERE DeviceId = {info.PhysicalDrive}")) // DeviceId represents index number of physical drive.
 					{
 						var disk = searcher.Get().Cast<ManagementObject>().FirstOrDefault();
-						if ((disk != null) && (disk["BusType"] is ushort))
+						if (disk?["BusType"] is ushort)
 						{
 							info.BusType = (ushort)disk["BusType"];
 						}

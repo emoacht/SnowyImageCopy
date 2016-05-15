@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -95,7 +94,7 @@ namespace SnowyImageCopy.Helper
 		/// <param name="filePath">File path</param>
 		public static void MoveToRecycle(string filePath)
 		{
-			if (String.IsNullOrWhiteSpace(filePath))
+			if (string.IsNullOrWhiteSpace(filePath))
 				return;
 
 			MoveToRecycle(new[] { filePath });
@@ -110,7 +109,7 @@ namespace SnowyImageCopy.Helper
 			if ((filePaths == null) || !filePaths.Any())
 				return;
 
-			var filePathCombined = String.Join("\0", filePaths) + '\0' + '\0';
+			var filePathCombined = string.Join("\0", filePaths) + '\0' + '\0';
 
 			var sh = new SHFILEOPSTRUCT
 			{
@@ -128,7 +127,7 @@ namespace SnowyImageCopy.Helper
 			var result = SHFileOperation(ref sh);
 
 			if (result != 0) // 0 means success or user canceled operation (it will never happen in this application).
-				throw new Win32Exception(String.Format("Failed to move files to Recycle. Error code: {0} File paths: {1}", result, String.Join(",", filePaths)));
+				throw new Win32Exception($"Failed to move files to Recycle. Error code: {result} File paths: {string.Join(",", filePaths)}");
 		}
 	}
 }

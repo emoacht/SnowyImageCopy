@@ -37,9 +37,9 @@ namespace SnowyTool.ViewModels
 		/// </summary>
 		private class ModeSet
 		{
-			public int AppMode { get; private set; }
-			public LanModeOption LanMode { get; private set; }
-			public LanStartupModeOption LanStartupMode { get; private set; }
+			public int AppMode { get; }
+			public LanModeOption LanMode { get; }
+			public LanStartupModeOption LanStartupMode { get; }
 
 			public ModeSet(int appMode, LanModeOption lanMode, LanStartupModeOption lanStartupMode)
 			{
@@ -88,7 +88,7 @@ namespace SnowyTool.ViewModels
 				}
 
 				RaisePropertyChanged();
-				RaisePropertyChanged(() => IsUploadEnabled);
+				RaisePropertyChanged(nameof(IsUploadEnabled));
 			}
 		}
 		private ConfigViewModel _currentConfig;
@@ -164,7 +164,7 @@ namespace SnowyTool.ViewModels
 
 		private void OnCurrentConfigPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == "IsChanged")
+			if (e.PropertyName == nameof(ConfigViewModel.IsChanged))
 				DelegateCommand.RaiseCanExecuteChanged();
 		}
 
@@ -221,7 +221,7 @@ namespace SnowyTool.ViewModels
 			InitializeTask = InitializeAsync();
 		}
 
-		private Task InitializeTask { get; set; }
+		private Task InitializeTask { get; }
 
 		private async Task InitializeAsync()
 		{
@@ -292,7 +292,7 @@ namespace SnowyTool.ViewModels
 				{
 					SystemSounds.Hand.Play();
 					OperationStatus = Resources.OperationStatus_Failed;
-					Debug.WriteLine("Failed to apply new config. {0}", ex);
+					Debug.WriteLine($"Failed to apply new config.\r\n{ex}");
 				}
 			}
 			finally

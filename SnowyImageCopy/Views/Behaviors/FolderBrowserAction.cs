@@ -29,7 +29,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"Explanation",
 				typeof(string),
 				typeof(FolderBrowserAction),
-				new FrameworkPropertyMetadata(String.Empty));
+				new FrameworkPropertyMetadata(string.Empty));
 
 		/// <summary>
 		/// Folder path specified in the dialog.
@@ -45,7 +45,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				typeof(string),
 				typeof(FolderBrowserAction),
 				new FrameworkPropertyMetadata(
-					String.Empty,
+					string.Empty,
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
 		#endregion
@@ -54,14 +54,14 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			var initialPath = FolderPath;
 
-			if (!String.IsNullOrEmpty(initialPath) && !Directory.Exists(initialPath))
+			if (!string.IsNullOrEmpty(initialPath) && !Directory.Exists(initialPath))
 			{
 				var parent = Path.GetDirectoryName(initialPath);
-				if (!String.IsNullOrEmpty(parent))
+				if (!string.IsNullOrEmpty(parent))
 					initialPath = parent;
 			}
 
-			using (var fbd = new System.Windows.Forms.FolderBrowserDialog()
+			using (var fbd = new System.Windows.Forms.FolderBrowserDialog
 			{
 				Description = Explanation,
 				SelectedPath = initialPath,

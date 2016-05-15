@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SnowyImageCopy.Common;
-
 namespace SnowyImageCopy.ViewModels
 {
 	public class ItemObservableCollection<T> : ObservableCollection<T>
@@ -74,18 +72,8 @@ namespace SnowyImageCopy.ViewModels
 			ItemPropertyChangedSender = sender as T;
 			ItemPropertyChangedEventArgs = e;
 
-			base.OnPropertyChanged(new PropertyChangedEventArgs(NameItemPropertyChangedSender));
+			base.OnPropertyChanged(new PropertyChangedEventArgs(nameof(ItemPropertyChangedSender)));
 		}
-
-		private string NameItemPropertyChangedSender
-		{
-			get
-			{
-				return _nameItemPropertyChangedSender ?? (_nameItemPropertyChangedSender =
-					PropertySupport.GetPropertyName(() => ItemPropertyChangedSender));
-			}
-		}
-		private string _nameItemPropertyChangedSender;
 
 		/// <summary>
 		/// Item which fired a PropertyChanged event

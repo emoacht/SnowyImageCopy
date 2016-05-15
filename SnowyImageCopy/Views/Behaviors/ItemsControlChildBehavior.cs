@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -69,14 +68,14 @@ namespace SnowyImageCopy.Views.Behaviors
 			_subscription.Add(collectionChanged
 				.Where(x => x.EventArgs.Action != NotifyCollectionChangedAction.Reset)
 				.Where(x => x.EventArgs.NewItems != null)
-				//.Do(x => Debug.WriteLine("CollectionChanged ({0})!", x.EventArgs.Action))
+				//.Do(x => Debug.WriteLine($"CollectionChanged ({x.EventArgs.Action})!"))
 				.Delay(TimeSpan.FromMilliseconds(10)) // Waiting time for child to perform Measure method
 				.ObserveOn(SynchronizationContext.Current)
 				.Subscribe(x => CheckChild(x.EventArgs.NewItems.Cast<object>())));
 
 			_subscription.Add(collectionChanged
 				.Where(x => x.EventArgs.Action == NotifyCollectionChangedAction.Reset)
-				//.Do(x => Debug.WriteLine("CollectionChanged ({0})!", x.EventArgs.Action))
+				//.Do(x => Debug.WriteLine($"CollectionChanged ({x.EventArgs.Action})!"))
 				.Throttle(TimeSpan.FromMilliseconds(10))
 				.ObserveOn(SynchronizationContext.Current)
 				.Subscribe(_ => CheckChild()));

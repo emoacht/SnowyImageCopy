@@ -18,10 +18,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Checks if PC is connected to a network.
 		/// </summary>
-		internal static bool IsNetworkConnected()
-		{
-			return NetworkInterface.GetIsNetworkAvailable();
-		}
+		internal static bool IsNetworkConnected() => NetworkInterface.GetIsNetworkAvailable();
 
 		/// <summary>
 		/// Checks if PC is connected to a network and if applicable, a specified wireless LAN.
@@ -33,7 +30,7 @@ namespace SnowyImageCopy.Models
 			if (!NetworkInterface.GetIsNetworkAvailable())
 				return false;
 
-			if ((card == null) || String.IsNullOrWhiteSpace(card.Ssid) || !card.IsWirelessConnected)
+			if ((card == null) || string.IsNullOrWhiteSpace(card.Ssid) || !card.IsWirelessConnected)
 				return true;
 
 			return IsWirelessNetworkConnected(card.Ssid);
@@ -46,7 +43,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>True if connected</returns>
 		internal static bool IsWirelessNetworkConnected(string ssid)
 		{
-			if (String.IsNullOrWhiteSpace(ssid))
+			if (string.IsNullOrWhiteSpace(ssid))
 				return false;
 
 			if (NetworkInterface.GetAllNetworkInterfaces()

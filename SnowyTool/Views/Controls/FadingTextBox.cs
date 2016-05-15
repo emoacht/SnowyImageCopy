@@ -19,16 +19,16 @@ namespace SnowyTool.Views.Controls
 			TextBox.TextProperty.OverrideMetadata(
 				typeof(FadingTextBox),
 				new FrameworkPropertyMetadata(
-					String.Empty,
+					string.Empty,
 					null,
 					(d, baseValue) =>
 					{
 						// Using coerceValueCallback instead of propertyChangedCallback is for the case that 
 						// source value is the same.
-						if (!String.IsNullOrEmpty((String)baseValue))
+						if (!string.IsNullOrEmpty((string)baseValue))
 							((FadingTextBox)d).ManageText();
 
-						return (String)baseValue;
+						return (string)baseValue;
 					}));
 		}
 
@@ -86,7 +86,7 @@ namespace SnowyTool.Views.Controls
 
 			if (_remainingTime <= 0D)
 			{
-				this.Text = String.Empty;
+				this.Text = string.Empty;
 				_fadingTimer.Stop();
 			}
 			else if (_remainingTime <= _fadingTime)

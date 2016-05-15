@@ -51,8 +51,8 @@ namespace SnowyTool.ViewModels
 			set
 			{
 				_APPMODE = value;
-				RaisePropertyChanged(() => IsChanged);
-				RaisePropertyChanged(() => IsInternetPassThruEnabled);
+				RaisePropertyChanged(nameof(IsChanged));
+				RaisePropertyChanged(nameof(IsInternetPassThruEnabled));
 			}
 		}
 		private int _APPMODE = 4; // Default
@@ -71,7 +71,7 @@ namespace SnowyTool.ViewModels
 			set
 			{
 				_APPNAME = GetNullOrLimited(value, 15);
-				RaisePropertyChanged(() => IsChanged);
+				RaisePropertyChanged(nameof(IsChanged));
 			}
 		}
 		private string _APPNAME;
@@ -92,7 +92,7 @@ namespace SnowyTool.ViewModels
 			set
 			{
 				_APPSSID = GetNullOrLimited(value, 32);
-				RaisePropertyChanged(() => IsChanged);
+				RaisePropertyChanged(nameof(IsChanged));
 			}
 		}
 		private string _APPSSID;
@@ -111,7 +111,7 @@ namespace SnowyTool.ViewModels
 			set
 			{
 				_APPNETWORKKEY = GetNullOrLimited(value, 64);
-				RaisePropertyChanged(() => IsChanged);
+				RaisePropertyChanged(nameof(IsChanged));
 			}
 		}
 		private string _APPNETWORKKEY;
@@ -129,7 +129,7 @@ namespace SnowyTool.ViewModels
 			set
 			{
 				_BRGSSID = GetNullOrLimited(value, 32);
-				RaisePropertyChanged(() => IsChanged);
+				RaisePropertyChanged(nameof(IsChanged));
 			}
 		}
 		private string _BRGSSID;
@@ -147,7 +147,7 @@ namespace SnowyTool.ViewModels
 			set
 			{
 				_BRGNETWORKKEY = GetNullOrLimited(value, 64);
-				RaisePropertyChanged(() => IsChanged);
+				RaisePropertyChanged(nameof(IsChanged));
 			}
 		}
 		private string _BRGNETWORKKEY;
@@ -182,12 +182,7 @@ namespace SnowyTool.ViewModels
 		/// 1: Returns the FlashAir's IP Address to any DNS requests.
 		/// </remarks>
 		[PersistentMember]
-		public int DNSMODE
-		{
-			get { return _DNSMODE; }
-			set { _DNSMODE = value; }
-		}
-		private int _DNSMODE = 1; // Default
+		public int DNSMODE { get; set; } = 1; // Default
 
 		/// <summary>
 		/// Upload operation enabled flag
@@ -204,7 +199,7 @@ namespace SnowyTool.ViewModels
 			set
 			{
 				_UPLOAD = value;
-				RaisePropertyChanged(() => IsChanged);
+				RaisePropertyChanged(nameof(IsChanged));
 			}
 		}
 		private int _UPLOAD = 0; // Disabled
@@ -223,12 +218,7 @@ namespace SnowyTool.ViewModels
 		/// This image is used when Wireless LAN mode (APPMODE) is 0, 1, or 2.
 		/// </remarks>
 		[PersistentMember]
-		public string CIPATH
-		{
-			get { return _CIPATH; }
-			set { _CIPATH = value; }
-		}
-		private string _CIPATH = "/DCIM/100__TSB/FA000001.JPG"; // Default
+		public string CIPATH { get; set; } = "/DCIM/100__TSB/FA000001.JPG"; // Default
 
 		/// <summary>
 		/// Master Code to set SSID and network security key
@@ -280,32 +270,32 @@ namespace SnowyTool.ViewModels
 		/// <summary>
 		/// Manufacturer ID
 		/// </summary>
-		public int ManufacturerID { get { return _CID.ManufacturerID; } }
+		public int ManufacturerID => _CID.ManufacturerID;
 
 		/// <summary>
 		/// OEM/Application ID
 		/// </summary>
-		public string OemApplicationID { get { return _CID.OemApplicationID; } }
+		public string OemApplicationID => _CID.OemApplicationID;
 
 		/// <summary>
 		/// Product Name
 		/// </summary>
-		public string ProductName { get { return _CID.ProductName; } }
+		public string ProductName => _CID.ProductName;
 
 		/// <summary>
 		/// Product Revision
 		/// </summary>
-		public string ProductRevision { get { return _CID.ProductRevision; } }
+		public string ProductRevision => _CID.ProductRevision;
 
 		/// <summary>
 		/// Product Serial Number
 		/// </summary>
-		public uint ProductSerialNumber { get { return _CID.ProductSerialNumber; } }
+		public uint ProductSerialNumber => _CID.ProductSerialNumber;
 
 		/// <summary>
 		/// Manufacturing Date
 		/// </summary>
-		public DateTime ManufacturingDate { get { return _CID.ManufacturingDate; } }
+		public DateTime ManufacturingDate => _CID.ManufacturingDate;
 
 		#endregion
 
@@ -357,7 +347,7 @@ namespace SnowyTool.ViewModels
 		internal async Task<bool> ReadAsync(DiskInfo info)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			AssociatedDisk = info;
 
@@ -375,7 +365,7 @@ namespace SnowyTool.ViewModels
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to read config file. {0}", ex);
+				Debug.WriteLine($"Failed to read config file.\r\n{ex}");
 				return false;
 			}
 		}
@@ -407,7 +397,7 @@ namespace SnowyTool.ViewModels
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to write config file. {0}", ex);
+				Debug.WriteLine($"Failed to write config file.\r\n{ex}");
 				throw;
 			}
 		}
@@ -438,7 +428,7 @@ namespace SnowyTool.ViewModels
 		{
 			return _monitoredProperties
 				.Select(x => x.GetValue(this))
-				.Select(x => (x != null) ? x.ToString() : String.Empty);
+				.Select(x => x?.ToString() ?? string.Empty);
 		}
 
 		private const char _separator = '=';
@@ -469,11 +459,11 @@ namespace SnowyTool.ViewModels
 					{
 						p.SetValue(this, Convert.ChangeType(c.Value, p.PropertyType));
 
-						Debug.WriteLine("Imported {0}: {1}", p.Name, p.GetValue(this));
+						Debug.WriteLine($"Imported {p.Name}: {p.GetValue(this)}");
 					}
 					catch (Exception ex)
 					{
-						throw new Exception(String.Format("Failed to import value ({0}). ", p.Name), ex);
+						throw new Exception($"Failed to import value ({p.Name}).", ex);
 					}
 				}
 
@@ -496,7 +486,7 @@ namespace SnowyTool.ViewModels
 				if (value == null)
 					continue;
 
-				if (String.IsNullOrWhiteSpace(value))
+				if (string.IsNullOrWhiteSpace(value))
 					p.SetValue(this, null);
 			}
 
@@ -513,18 +503,18 @@ namespace SnowyTool.ViewModels
 				if (value == null)
 					continue;
 
-				outcome.Add(String.Format("{0}{1}{2}", p.Name, _separator, value));
+				outcome.Add($"{p.Name}{_separator}{value}");
 			}
 
 			if (_remaining.Any())
-				outcome.AddRange(_remaining.Select(x => String.Format("{0}{1}{2}", x.Key, _separator, x.Value)));
+				outcome.AddRange(_remaining.Select(x => $"{x.Key}{_separator}{x.Value}"));
 
 			outcome.Sort();
 
 			outcome.Insert(0, "[Vendor]");
-			outcome.Insert(1, String.Empty);
+			outcome.Insert(1, string.Empty);
 
-			return String.Join(Environment.NewLine, outcome);
+			return string.Join(Environment.NewLine, outcome);
 		}
 
 		private static readonly string[] _temporaryMemberNames =
@@ -556,9 +546,9 @@ namespace SnowyTool.ViewModels
 		private static string GetNullOrLimited(string source, int maxLength)
 		{
 			if (maxLength < 0)
-				throw new ArgumentOutOfRangeException("maxLength");
+				throw new ArgumentOutOfRangeException(nameof(maxLength));
 
-			if (String.IsNullOrWhiteSpace(source))
+			if (string.IsNullOrWhiteSpace(source))
 				return null;
 
 			return (source.Length <= maxLength)
@@ -568,7 +558,7 @@ namespace SnowyTool.ViewModels
 
 		private static void ConformNullOrEmpty(ref string a, ref string b)
 		{
-			if (String.IsNullOrEmpty(a) && String.IsNullOrEmpty(b))
+			if (string.IsNullOrEmpty(a) && string.IsNullOrEmpty(b))
 			{
 				a = null;
 				b = null;
@@ -576,10 +566,10 @@ namespace SnowyTool.ViewModels
 			else
 			{
 				if (a == null)
-					a = String.Empty;
+					a = string.Empty;
 
 				if (b == null)
-					b = String.Empty;
+					b = string.Empty;
 			}
 		}
 

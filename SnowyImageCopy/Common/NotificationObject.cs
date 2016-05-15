@@ -16,20 +16,18 @@ namespace SnowyImageCopy.Common
 		protected void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
 		{
 			if (propertyExpression == null)
-				throw new ArgumentNullException("propertyExpression");
+				throw new ArgumentNullException(nameof(propertyExpression));
 
 			var memberExpression = propertyExpression.Body as MemberExpression;
 			if (memberExpression == null)
-				throw new ArgumentException("The expression is not a member access expression.", "propertyExpression");
+				throw new ArgumentException("The expression is not a member access expression.", nameof(propertyExpression));
 
 			this.RaisePropertyChanged(memberExpression.Member.Name);
 		}
 
 		protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
 		{
-			var handler = this.PropertyChanged;
-			if (handler != null)
-				handler(this, new PropertyChangedEventArgs(propertyName));
+			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

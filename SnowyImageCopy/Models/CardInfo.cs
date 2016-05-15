@@ -69,7 +69,7 @@ namespace SnowyImageCopy.Models
 
 		#region CID/SSID
 
-		public bool CanGetCid { get { return _isFirmwareVersion103OrNewer; } }
+		public bool CanGetCid => _isFirmwareVersion103OrNewer;
 
 		/// <summary>
 		/// CID
@@ -120,7 +120,7 @@ namespace SnowyImageCopy.Models
 
 		#region Time stamp of write event
 
-		public bool CanGetWriteTimeStamp { get { return _isFirmwareVersion202OrNewer; } }
+		public bool CanGetWriteTimeStamp => _isFirmwareVersion202OrNewer;
 
 		/// <summary>
 		/// Time stamp of write event
@@ -152,7 +152,7 @@ namespace SnowyImageCopy.Models
 
 		#region Upload
 
-		public bool CanGetUpload { get { return _isFirmwareVersion202OrNewer; } }
+		public bool CanGetUpload => _isFirmwareVersion202OrNewer;
 
 		/// <summary>
 		/// Upload parameters
@@ -168,7 +168,7 @@ namespace SnowyImageCopy.Models
 		{
 			get
 			{
-				if (!CanGetUpload || String.IsNullOrWhiteSpace(Upload))
+				if (!CanGetUpload || string.IsNullOrWhiteSpace(Upload))
 					return false;
 
 				// 1:     Uploading is enabled.
@@ -185,7 +185,7 @@ namespace SnowyImageCopy.Models
 
 		private static Version FindVersionNumber(string source)
 		{
-			if (String.IsNullOrWhiteSpace(source))
+			if (string.IsNullOrWhiteSpace(source))
 				return null;
 
 			var match = _versionPattern.Match(source);

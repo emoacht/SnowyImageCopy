@@ -136,8 +136,8 @@ namespace SnowyImageCopy.Models
 		/// <remarks>This method is not actually used.</remarks>
 		internal static async Task<IEnumerable<IFileItem>> GetFileListAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
 		{
-			if (String.IsNullOrWhiteSpace(remoteDirectoryPath))
-				throw new ArgumentNullException("remoteDirectoryPath");
+			if (string.IsNullOrWhiteSpace(remoteDirectoryPath))
+				throw new ArgumentNullException(nameof(remoteDirectoryPath));
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.GetFileList, remoteDirectoryPath);
 
@@ -170,8 +170,8 @@ namespace SnowyImageCopy.Models
 		/// <remarks>This method is not actually used.</remarks>
 		internal static async Task<int> GetFileNumAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
 		{
-			if (String.IsNullOrWhiteSpace(remoteDirectoryPath))
-				throw new ArgumentNullException("remoteDirectoryPath");
+			if (string.IsNullOrWhiteSpace(remoteDirectoryPath))
+				throw new ArgumentNullException(nameof(remoteDirectoryPath));
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.GetFileNum, remoteDirectoryPath);
 
@@ -201,8 +201,8 @@ namespace SnowyImageCopy.Models
 		/// <returns>Thumbnail of image file</returns>
 		internal static async Task<BitmapSource> GetThumbnailAsync(string remoteFilePath, CardInfo card, CancellationToken cancellationToken)
 		{
-			if (String.IsNullOrWhiteSpace(remoteFilePath))
-				throw new ArgumentNullException("remoteFilePath");
+			if (string.IsNullOrWhiteSpace(remoteFilePath))
+				throw new ArgumentNullException(nameof(remoteFilePath));
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.GetThumbnail, remoteFilePath);
 
@@ -252,11 +252,11 @@ namespace SnowyImageCopy.Models
 		/// <returns>Byte array of file</returns>
 		internal static async Task<byte[]> GetSaveFileAsync(string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool canReadExif, IProgress<ProgressInfo> progress, CardInfo card, CancellationToken cancellationToken)
 		{
-			if (String.IsNullOrWhiteSpace(remoteFilePath))
-				throw new ArgumentNullException("remoteFilePath");
+			if (string.IsNullOrWhiteSpace(remoteFilePath))
+				throw new ArgumentNullException(nameof(remoteFilePath));
 
-			if (String.IsNullOrWhiteSpace(localFilePath))
-				throw new ArgumentNullException("localFilePath");
+			if (string.IsNullOrWhiteSpace(localFilePath))
+				throw new ArgumentNullException(nameof(localFilePath));
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.None, remoteFilePath);
 
@@ -303,8 +303,8 @@ namespace SnowyImageCopy.Models
 		/// <param name="cancellationToken">CancellationToken</param>
 		internal static async Task DeleteFileAsync(string remoteFilePath, CancellationToken cancellationToken)
 		{
-			if (String.IsNullOrWhiteSpace(remoteFilePath))
-				throw new ArgumentNullException("remoteFilePath");
+			if (string.IsNullOrWhiteSpace(remoteFilePath))
+				throw new ArgumentNullException(nameof(remoteFilePath));
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.DeleteFile, remoteFilePath);
 
@@ -317,7 +317,7 @@ namespace SnowyImageCopy.Models
 					// "SUCCESS": If succeeded.
 					// "ERROR":   If failed.
 					if (!result.Equals("SUCCESS", StringComparison.Ordinal))
-						throw new RemoteFileDeletionFailedException(String.Format("Result: {0}", result), remotePath);
+						throw new RemoteFileDeletionFailedException($"Result: {result}", remotePath);
 				}
 			}
 			catch (RemoteFileNotFoundException)
@@ -339,7 +339,7 @@ namespace SnowyImageCopy.Models
 		/// <remarks>Firmware version</remarks>
 		internal static async Task<string> GetFirmwareVersionAsync(CancellationToken cancellationToken)
 		{
-			var remotePath = ComposeRemotePath(FileManagerCommand.GetFirmwareVersion, String.Empty);
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetFirmwareVersion, string.Empty);
 
 			try
 			{
@@ -362,7 +362,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>If succeeded, CID. If failed, empty string.</returns>
 		internal static async Task<string> GetCidAsync(CancellationToken cancellationToken)
 		{
-			var remotePath = ComposeRemotePath(FileManagerCommand.GetCid, String.Empty);
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetCid, string.Empty);
 
 			try
 			{
@@ -373,7 +373,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (RemoteConnectionUnableException)
 			{
-				return String.Empty;
+				return string.Empty;
 			}
 			catch
 			{
@@ -389,7 +389,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>SSID</returns>
 		internal static async Task<string> GetSsidAsync(CancellationToken cancellationToken)
 		{
-			var remotePath = ComposeRemotePath(FileManagerCommand.GetSsid, String.Empty);
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetSsid, string.Empty);
 
 			try
 			{
@@ -411,7 +411,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>True if update status is set</returns>
 		internal static async Task<bool> CheckUpdateStatusAsync()
 		{
-			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpdateStatus, String.Empty);
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpdateStatus, string.Empty);
 
 			try
 			{
@@ -448,7 +448,7 @@ namespace SnowyImageCopy.Models
 		/// <remarks>If no write event occurred since FlashAir card started running, this value will be 0.</remarks>
 		internal static async Task<int> GetWriteTimeStampAsync(CancellationToken cancellationToken)
 		{
-			var remotePath = ComposeRemotePath(FileManagerCommand.GetWriteTimeStamp, String.Empty);
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetWriteTimeStamp, string.Empty);
 
 			try
 			{
@@ -479,7 +479,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>If succeeded, Upload parameters (string). If failed, empty string.</returns>
 		internal static async Task<string> GetUploadAsync(CancellationToken cancellationToken)
 		{
-			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpload, String.Empty);
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpload, string.Empty);
 
 			try
 			{
@@ -491,7 +491,7 @@ namespace SnowyImageCopy.Models
 			catch (RemoteConnectionUnableException)
 			{
 				// If request for Upload parameters is not supported, StatusCode will be HttpStatusCode.BadRequest.
-				return String.Empty;
+				return string.Empty;
 			}
 			catch
 			{
@@ -554,7 +554,7 @@ namespace SnowyImageCopy.Models
 									// This status code does not always mean that the specified file is missing.
 									throw new RemoteFileNotFoundException("File is missing or request cannot be handled!", path);
 								default:
-									throw new HttpRequestException(String.Format("StatusCode: {0}", response.StatusCode));
+									throw new HttpRequestException($"StatusCode: {response.StatusCode}");
 							}
 
 							if ((0 < size) &&
@@ -576,7 +576,7 @@ namespace SnowyImageCopy.Models
 							{
 								// If CancellationTokenSource has been disposed during operation (it unlikely happens),
 								// this exception will be thrown.
-								Debug.WriteLine("CancellationTokenSource has been disposed when tried to register delegate. {0}", ode);
+								Debug.WriteLine($"CancellationTokenSource has been disposed when tried to register delegate.\r\n{ode}");
 							}
 							using (ctr)
 							{
@@ -721,7 +721,7 @@ namespace SnowyImageCopy.Models
 				}
 				catch (Exception ex)
 				{
-					Debug.WriteLine("Failed to download byte array. {0}", ex);
+					Debug.WriteLine($"Failed to download byte array.\r\n{ex}");
 					throw;
 				}
 
@@ -738,7 +738,7 @@ namespace SnowyImageCopy.Models
 		private static readonly IReadOnlyDictionary<FileManagerCommand, string> _commandMap =
 			new Dictionary<FileManagerCommand, string>
 			{
-				{FileManagerCommand.None, String.Empty},
+				{FileManagerCommand.None, string.Empty},
 				{FileManagerCommand.GetFileList, @"command.cgi?op=100&DIR=/"},
 				{FileManagerCommand.GetFileNum, @"command.cgi?op=101&DIR=/"},
 				{FileManagerCommand.GetThumbnail, @"thumbnail.cgi?/"},
@@ -762,7 +762,8 @@ namespace SnowyImageCopy.Models
 			return Settings.Current.RemoteRoot + _commandMap[command] + remotePath.TrimStart('/');
 		}
 
-		private static readonly bool _recordsDownloadString = Debugger.IsAttached || CommandLine.RecordsDownloadLog;
+		private static readonly bool _recordsDownloadString = CommandLine.RecordsDownloadLog
+			|| Debugger.IsAttached; // When this application runs in a debugger, download log will be always recorded.
 
 		/// <summary>
 		/// Records result of DownloadStringAsync method.
@@ -772,7 +773,7 @@ namespace SnowyImageCopy.Models
 		private static async Task RecordDownloadStringAsync(string requestPath, byte[] responseBytes)
 		{
 			var sb = new StringBuilder();
-			sb.AppendLine(String.Format("request => {0}", requestPath));
+			sb.AppendLine($"request => {requestPath}");
 			sb.AppendLine("response -> ");
 			sb.AppendLine(Encoding.ASCII.GetString(responseBytes));
 
