@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		private void SetLanguage(string ietfLanguageTag)
 		{
 			if (string.IsNullOrEmpty(ietfLanguageTag))
-				return;
+				ietfLanguageTag = CultureInfo.CurrentUICulture.ToString();
 
 			try
 			{
