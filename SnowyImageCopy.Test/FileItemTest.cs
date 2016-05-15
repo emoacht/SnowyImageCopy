@@ -18,16 +18,25 @@ namespace SnowyImageCopy.Test
 		[TestMethod]
 		public void TestImportDirectory()
 		{
-			TestImportBase("/DCIM,100__TSB,0,16,17181,18432", "/DCIM", "/DCIM", "100__TSB", 0, false, false, false, false, true, false, new DateTime(2013, 8, 29, 9, 0, 0));
+			TestImportBase("/DCIM,100__TSB,0,16,17181,18432", "/DCIM", "/DCIM", "100__TSB", 0, false, false, false, false, true, false, new DateTime(2013, 8, 29, 9, 0, 0), false);
 		}
 
 		/// <summary>
 		/// File case
 		/// </summary>
 		[TestMethod]
-		public void TestImportFile()
+		public void TestImportFile1()
 		{
-			TestImportBase("/DCIM/160___01,IMG_6221.JPG,2299469,32,17953,20181", "/DCIM/160___01", "/DCIM/160___01", "IMG_6221.JPG", 2299469, false, false, false, false, false, true, new DateTime(2015, 1, 1, 9, 54, 42));
+			TestImportBase("/DCIM/160___01,IMG_6221.JPG,2299469,32,17953,20181", "/DCIM/160___01", "/DCIM/160___01", "IMG_6221.JPG", 2299469, false, false, false, false, false, true, new DateTime(2015, 1, 1, 9, 54, 42), true);
+		}
+
+		/// <summary>
+		/// File case
+		/// </summary>
+		[TestMethod]
+		public void TestImportFile2()
+		{
+			TestImportBase("/DCIM/170___02,IMG_0058.CR2,25235506,32,18607,35600", "/DCIM/170___02", "/DCIM/170___02", "IMG_0058.CR2", 25235506, false, false, false, false, false, true, new DateTime(2016, 5, 15, 17, 24, 32), false);
 		}
 
 		/// <summary>
@@ -55,7 +64,7 @@ namespace SnowyImageCopy.Test
 		public void TestImportInvalidSize()
 		{
 			var size = (long)Int32.MaxValue * 2;
-			var fileEntry = String.Format("/DCIM/150___03,IMG_3862.CR2,{0},32,17519,31985", size);
+			var fileEntry = $"/DCIM/150___03,IMG_3862.CR2,{size},32,17519,31985";
 
 			TestImportBase(fileEntry, "/DCIM/150___03", "/DCIM/150___03", "IMG_3862.CR2", 0, default(DateTime), false);
 		}
@@ -80,7 +89,7 @@ namespace SnowyImageCopy.Test
 			DateTime date,
 			bool isImported = true)
 		{
-			var fileEntry = String.Format("{0},{1},{2},{3},{4},{5}",
+			var fileEntry = string.Format("{0},{1},{2},{3},{4},{5}",
 				directoryPath,
 				fileName,
 				size,
@@ -122,6 +131,7 @@ namespace SnowyImageCopy.Test
 			bool isDirectory,
 			bool isArchive,
 			DateTime date,
+			bool isJpeg,
 			bool isImported = true)
 		{
 			var instance = new FileItem(fileEntry, directoryPath);
@@ -138,6 +148,7 @@ namespace SnowyImageCopy.Test
 			Assert.AreEqual(isArchive, instance.IsArchive);
 
 			Assert.AreEqual(date, instance.Date);
+			Assert.AreEqual(isJpeg, instance.IsJpeg);
 			Assert.AreEqual(isImported, instance.IsImported);
 		}
 
@@ -173,7 +184,7 @@ namespace SnowyImageCopy.Test
 
 		private FileItem CreateFileItem(string directoryPath, string fileName, int size, int attributes, DateTime date)
 		{
-			var fileEntry = String.Format("{0},{1},{2},{3},{4},{5}",
+			var fileEntry = string.Format("{0},{1},{2},{3},{4},{5}",
 				directoryPath,
 				fileName,
 				size,
