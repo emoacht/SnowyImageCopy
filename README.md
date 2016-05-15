@@ -12,7 +12,7 @@ Tested on Windows 8.1 64bit with SD-WB008G (Class6), SD-WC016G (W-02 Class10) an
 
 ##Development
 
-This app is a WPF app developed in C# with Visual Studio Professional 2013.
+This app is a WPF app developed in C# with Visual Studio Community 2015.
 
 As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
