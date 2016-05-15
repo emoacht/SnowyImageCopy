@@ -18,6 +18,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ##History
 
+Ver 1.2.2 2016-5-15
+
+ - Added option to handle JPEG images only
+
 Ver 1.2.0 2016-2-6
 
  - Added option to create dated folder
