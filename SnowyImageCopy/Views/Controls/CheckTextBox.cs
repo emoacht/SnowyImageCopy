@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,12 +19,12 @@ namespace SnowyImageCopy.Views.Controls
 			TextBox.TextProperty.OverrideMetadata(
 				typeof(CheckTextBox),
 				new FrameworkPropertyMetadata(
-					String.Empty,
+					string.Empty,
 					(d, e) =>
 					{
 						var textBox = (CheckTextBox)d;
 
-						textBox.CompareText(textBox.CheckText, (String)e.NewValue);
+						textBox.CompareText(textBox.CheckText, (string)e.NewValue);
 					}));
 
 			TextBox.VisibilityProperty.OverrideMetadata(
@@ -41,17 +40,17 @@ namespace SnowyImageCopy.Views.Controls
 
 		#region Property
 
-		public String MessageText
+		public string MessageText
 		{
-			get { return (String)GetValue(MessageTextProperty); }
+			get { return (string)GetValue(MessageTextProperty); }
 			set { SetValue(MessageTextProperty, value); }
 		}
 		public static readonly DependencyProperty MessageTextProperty =
 			DependencyProperty.Register(
 				"MessageText",
-				typeof(String),
+				typeof(string),
 				typeof(CheckTextBox),
-				new FrameworkPropertyMetadata(String.Empty));
+				new FrameworkPropertyMetadata(string.Empty));
 
 		public string CheckText
 		{
@@ -64,12 +63,12 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(string),
 				typeof(CheckTextBox),
 				new FrameworkPropertyMetadata(
-					String.Empty,
+					string.Empty,
 					(d, e) =>
 					{
 						var textBox = (CheckTextBox)d;
 
-						textBox.CompareText((String)e.NewValue, textBox.Text);
+						textBox.CompareText((string)e.NewValue, textBox.Text);
 					}));
 
 		public bool IsChecked
@@ -95,12 +94,12 @@ namespace SnowyImageCopy.Views.Controls
 		{
 			base.OnPropertyChanged(e);
 
-			if ((e.Property != VisibilityProperty) || String.IsNullOrEmpty(MessageText))
+			if ((e.Property != VisibilityProperty) || string.IsNullOrEmpty(MessageText))
 				return;
 
 			if ((Visibility)e.NewValue == Visibility.Visible)
 			{
-				if (String.IsNullOrWhiteSpace(this.Text))
+				if (string.IsNullOrWhiteSpace(this.Text))
 				{
 					_isMessage = true;
 					this.Text = MessageText;
@@ -111,7 +110,7 @@ namespace SnowyImageCopy.Views.Controls
 				if (_isMessage)
 				{
 					_isMessage = false;
-					this.Text = String.Empty;
+					this.Text = string.Empty;
 				}
 			}
 		}
@@ -120,13 +119,13 @@ namespace SnowyImageCopy.Views.Controls
 		{
 			base.OnGotFocus(e);
 
-			if (String.IsNullOrEmpty(MessageText))
+			if (string.IsNullOrEmpty(MessageText))
 				return;
 
 			if ((this.Visibility == Visibility.Visible) && _isMessage)
 			{
 				_isMessage = false;
-				this.Text = String.Empty;
+				this.Text = string.Empty;
 			}
 		}
 
@@ -134,10 +133,10 @@ namespace SnowyImageCopy.Views.Controls
 		{
 			base.OnLostFocus(e);
 
-			if (String.IsNullOrEmpty(MessageText))
+			if (string.IsNullOrEmpty(MessageText))
 				return;
 
-			if ((this.Visibility == Visibility.Visible) && String.IsNullOrWhiteSpace(this.Text))
+			if ((this.Visibility == Visibility.Visible) && string.IsNullOrWhiteSpace(this.Text))
 			{
 				_isMessage = true;
 				this.Text = MessageText;
@@ -183,7 +182,7 @@ namespace SnowyImageCopy.Views.Controls
 				}
 				else
 				{
-					this.Text = String.Empty;
+					this.Text = string.Empty;
 				}
 			}
 			finally

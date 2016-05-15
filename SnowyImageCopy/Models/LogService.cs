@@ -20,7 +20,7 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				var content = string.Format("[Date: {0:HH:mm:ss fff}]", DateTime.Now) + Environment.NewLine
+				var content = $"[Date: {DateTime.Now:HH:mm:ss fff}]" + Environment.NewLine
 					+ result.TrimEnd() + Environment.NewLine + Environment.NewLine;
 
 				PrepareFolderAppData();
@@ -35,7 +35,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Trace.WriteLine(string.Format("Failed to record log to AppData.\r\n{0}", ex));
+				Trace.WriteLine($"Failed to record log to AppData.\r\n{ex}");
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace SnowyImageCopy.Models
 
 		public static void RecordException(object sender, Exception exception)
 		{
-			var content = string.Format("[Date: {0} Sender: {1}]", DateTime.Now, sender) + Environment.NewLine
+			var content = $"[Date: {DateTime.Now} Sender: {sender}]" + Environment.NewLine
 				+ exception + Environment.NewLine + Environment.NewLine;
 
 			RecordAppData(_exceptionFileName, content);
@@ -66,7 +66,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Trace.WriteLine(string.Format("Failed to record log to AppData.\r\n{0}", ex));
+				Trace.WriteLine($"Failed to record log to AppData.\r\n{ex}");
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				Trace.WriteLine(string.Format("Failed to record log to Desktop.\r\n{0}", ex));
+				Trace.WriteLine($"Failed to record log to Desktop.\r\n{ex}");
 			}
 		}
 
@@ -140,7 +140,6 @@ namespace SnowyImageCopy.Models
 
 					_folderPathAppData = Path.Combine(pathAppData, Assembly.GetExecutingAssembly().GetName().Name);
 				}
-
 				return _folderPathAppData;
 			}
 		}

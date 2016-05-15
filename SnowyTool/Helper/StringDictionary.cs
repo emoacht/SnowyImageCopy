@@ -19,16 +19,16 @@ namespace SnowyTool.Helper
 		/// <returns>Dictionary of Key string and value string</returns>
 		public static Dictionary<string, string> Parse(string source, char separator)
 		{
-			if (String.IsNullOrWhiteSpace(source))
-				throw new ArgumentNullException("source");
+			if (string.IsNullOrWhiteSpace(source))
+				throw new ArgumentNullException(nameof(source));
 
-			if (Char.IsWhiteSpace(separator))
-				throw new ArgumentException("The separator must not be white space.", "separator");
+			if (char.IsWhiteSpace(separator))
+				throw new ArgumentException("The separator must not be white space.", nameof(separator));
 
 			return source.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
 				.Select(x => x.Split(new[] { separator }, 2))
 				.Where(x => x.Length == 2)
-				.Where(x => !String.IsNullOrWhiteSpace(x[0]))
+				.Where(x => !string.IsNullOrWhiteSpace(x[0]))
 				.ToDictionary(x => x[0], x => x[1]);
 		}
 	}

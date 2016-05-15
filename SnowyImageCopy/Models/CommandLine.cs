@@ -29,46 +29,25 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Whether to show command line usage
 		/// </summary>
-		public static bool ShowsUsage
-		{
-			get { return CheckArgs("/?", "-?"); }
-		}
+		public static bool ShowsUsage => CheckArgs("/?", "-?");
 
 		/// <summary>
 		/// Whether to start auto check at startup of this application
 		/// </summary>
-		public static bool StartsAutoCheck
-		{
-			get { return CheckArgs(StartsAutoCheckOptions); }
-		}
-		private static string[] StartsAutoCheckOptions
-		{
-			get { return new[] { "/autocheck", "-autocheck", "/a", "-a" }; }
-		}
+		public static bool StartsAutoCheck => CheckArgs(StartsAutoCheckOptions);
+		private static string[] StartsAutoCheckOptions => new[] { "/autocheck", "-autocheck", "/a", "-a" };
 
 		/// <summary>
 		/// Whether to make window state minimized at startup of this application
 		/// </summary>
-		public static bool MakesWindowStateMinimized
-		{
-			get { return CheckArgs(MakesWindowStateMinimizedOptions); }
-		}
-		private static string[] MakesWindowStateMinimizedOptions
-		{
-			get { return new[] { "/minimized", "-minimized", "/m", "-m" }; }
-		}
+		public static bool MakesWindowStateMinimized => CheckArgs(MakesWindowStateMinimizedOptions);		
+		private static string[] MakesWindowStateMinimizedOptions => new[] { "/minimized", "-minimized", "/m", "-m" };
 
 		/// <summary>
 		/// Whether to record download log
 		/// </summary>
-		public static bool RecordsDownloadLog
-		{
-			get { return CheckArgs(RecordsDownloadLogOptions); }
-		}
-		private static string[] RecordsDownloadLogOptions
-		{
-			get { return new[] { "/recordlog", "-recordlog", "/r", "-r" }; }
-		}
+		public static bool RecordsDownloadLog => CheckArgs(RecordsDownloadLogOptions);
+		private static string[] RecordsDownloadLogOptions => new[] { "/recordlog", "-recordlog", "/r", "-r" };
 
 		public static void ShowUsage()
 		{
@@ -101,7 +80,6 @@ namespace SnowyImageCopy.Models
 					.Select(x => x.ToLower())
 					.ToArray();
 			}
-
 			return (options != null) && _args.Intersect(options).Any();
 		}
 

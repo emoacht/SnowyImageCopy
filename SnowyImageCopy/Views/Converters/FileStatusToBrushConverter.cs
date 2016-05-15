@@ -35,7 +35,6 @@ namespace SnowyImageCopy.Views.Converters
 						{FileStatus.Recycled, (Color)App.Current.Resources["FileItemStatus.RecycledColor"]},
 					};
 				}
-
 				return _statusColorMap;
 			}
 		}

@@ -90,17 +90,12 @@ namespace SnowyImageCopy.Helper
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
 			public byte[] ucSSID;
 
-			public byte[] ToBytes()
-			{
-				return (ucSSID != null)
-					? ucSSID.Take((int)uSSIDLength).ToArray()
-					: null;
-			}
+			public byte[] ToBytes() => ucSSID?.Take((int)uSSIDLength).ToArray();
 
-			private static Encoding _encoding =
+			private static Lazy<Encoding> _encoding = new Lazy<Encoding>(() =>
 				Encoding.GetEncoding(65001, // UTF-8 code page
 					EncoderFallback.ReplacementFallback,
-					DecoderFallback.ExceptionFallback);
+					DecoderFallback.ExceptionFallback));
 
 			public override string ToString()
 			{
@@ -109,7 +104,7 @@ namespace SnowyImageCopy.Helper
 
 				try
 				{
-					return _encoding.GetString(ToBytes());
+					return _encoding.Value.GetString(ToBytes());
 				}
 				catch (DecoderFallbackException)
 				{
@@ -124,12 +119,7 @@ namespace SnowyImageCopy.Helper
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
 			public byte[] ucDot11MacAddress;
 
-			public byte[] ToBytes()
-			{
-				return (ucDot11MacAddress != null)
-					? ucDot11MacAddress.ToArray()
-					: null;
-			}
+			public byte[] ToBytes() => ucDot11MacAddress?.ToArray();
 
 			public override string ToString()
 			{
@@ -332,7 +322,7 @@ namespace SnowyImageCopy.Helper
 		{
 			private IntPtr _clientHandle = IntPtr.Zero;
 
-			public IntPtr Handle { get { return _clientHandle; } }
+			public IntPtr Handle => _clientHandle;
 
 			public WlanClient()
 			{

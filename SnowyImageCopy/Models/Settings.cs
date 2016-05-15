@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Models
 
 		private bool ValidateProperty(object value, [CallerMemberName] string propertyName = null)
 		{
-			if (String.IsNullOrEmpty(propertyName))
+			if (string.IsNullOrEmpty(propertyName))
 				return false;
 
 			var context = new ValidationContext(this) { MemberName = propertyName };
@@ -62,9 +62,7 @@ namespace SnowyImageCopy.Models
 
 		private void RaiseErrorsChanged(string propertyName)
 		{
-			var handler = this.ErrorsChanged;
-			if (handler != null)
-				handler(this, new DataErrorsChangedEventArgs(propertyName));
+			this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
 		}
 
 		public IEnumerable GetErrors(string propertyName)
@@ -75,15 +73,11 @@ namespace SnowyImageCopy.Models
 			return _errors[propertyName];
 		}
 
-		public bool HasErrors
-		{
-			get { return _errors.Any(); }
-		}
+		public bool HasErrors => _errors.Any();
 
 		#endregion
 
-		public static Settings Current { get { return _current; } }
-		private static readonly Settings _current = new Settings();
+		public static Settings Current { get; } = new Settings();
 
 		public WindowPlacement.WINDOWPLACEMENT? Placement { get; set; }
 
@@ -111,16 +105,10 @@ namespace SnowyImageCopy.Models
 		}
 		private string _remoteAddress = @"http://flashair/"; // Default FlashAir Url
 
-		public string RemoteRoot
-		{
-			get { return _remoteRoot ?? _remoteAddress; }
-		}
+		public string RemoteRoot => _remoteRoot ?? _remoteAddress;
 		private string _remoteRoot;
 
-		public string RemoteDescendant
-		{
-			get { return _remoteDescendant ?? String.Empty; }
-		}
+		public string RemoteDescendant => _remoteDescendant ?? string.Empty;
 		private string _remoteDescendant;
 
 		private static readonly Regex _rootPattern = new Regex(@"^https?://((?!/)\S){1,15}/", RegexOptions.Compiled);
@@ -140,7 +128,7 @@ namespace SnowyImageCopy.Models
 			root = match.Value;
 
 			descendant = source.Substring(match.Length).TrimStart('/');
-			descendant = Regex.Replace(descendant, @"\s+", String.Empty);
+			descendant = Regex.Replace(descendant, @"\s+", string.Empty);
 			descendant = Regex.Replace(descendant, "/{2,}", "/");
 			return true;
 		}

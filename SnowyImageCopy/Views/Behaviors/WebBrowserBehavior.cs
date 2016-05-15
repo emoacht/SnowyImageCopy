@@ -34,7 +34,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"TargetFile",
 				typeof(string),
 				typeof(WebBrowserBehavior),
-				new FrameworkPropertyMetadata(String.Empty));
+				new FrameworkPropertyMetadata(string.Empty));
 
 		/// <summary>
 		/// Alternate text when target file does not exist
@@ -49,7 +49,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"AlternateText",
 				typeof(string),
 				typeof(WebBrowserBehavior),
-				new FrameworkPropertyMetadata(String.Empty));
+				new FrameworkPropertyMetadata(string.Empty));
 
 		#endregion
 
@@ -118,7 +118,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		/// <remarks>Uri.GetLeftPart(UriPartial.Path) method does not work for file path.</remarks>
 		private static string RemoveFragment(string filePath)
 		{
-			if (String.IsNullOrWhiteSpace(filePath))
+			if (string.IsNullOrWhiteSpace(filePath))
 				return filePath;
 
 			var match = _fragmentPattern.Match(filePath);

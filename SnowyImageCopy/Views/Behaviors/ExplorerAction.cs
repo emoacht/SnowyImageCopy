@@ -30,7 +30,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"FolderPath",
 				typeof(string),
 				typeof(ExplorerAction),
-				new FrameworkPropertyMetadata(String.Empty));
+				new FrameworkPropertyMetadata(string.Empty));
 
 		#endregion
 
@@ -38,10 +38,10 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			var initialPath = FolderPath;
 
-			if (!String.IsNullOrEmpty(initialPath) && !Directory.Exists(initialPath))
+			if (!string.IsNullOrEmpty(initialPath) && !Directory.Exists(initialPath))
 			{
 				var parent = Path.GetDirectoryName(initialPath);
-				if (!String.IsNullOrEmpty(parent))
+				if (!string.IsNullOrEmpty(parent))
 					initialPath = parent;
 			}
 

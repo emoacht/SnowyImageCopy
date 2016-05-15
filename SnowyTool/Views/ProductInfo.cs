@@ -13,12 +13,7 @@ namespace SnowyTool.Views
 	public static class ProductInfo
 	{
 		private static readonly Assembly _assembly = Assembly.GetExecutingAssembly();
-
-		public static Version Version
-		{
-			get { return _version; }
-		}
-		private static readonly Version _version = _assembly.GetName().Version;
+		public static Version Version { get; } = _assembly.GetName().Version;
 
 		#region Assembly attributes
 
@@ -65,19 +60,8 @@ namespace SnowyTool.Views
 
 		#endregion
 
-		public static string ProductInfoLong
-		{
-			get { return String.Format("{0} {1}", Title, ProductInfo.Version); }
-		}
-
-		public static string ProductInfoMiddle
-		{
-			get { return String.Format("{0} {1}", Title, ProductInfo.Version.ToString(3)); }
-		}
-
-		public static string ProductInfoShort
-		{
-			get { return String.Format("{0} {1}", Title, ProductInfo.Version.ToString(2)); }
-		}
+		public static string ProductInfoLong => $"{Title} {ProductInfo.Version}";
+		public static string ProductInfoMiddle => $"{Title} {ProductInfo.Version.ToString(3)}";
+		public static string ProductInfoShort => $"{Title} {ProductInfo.Version.ToString(2)}";
 	}
 }

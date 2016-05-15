@@ -18,8 +18,7 @@ namespace SnowyImageCopy.Models
 	/// </remarks>
 	public class ResourceService : NotificationObject
 	{
-		public static ResourceService Current { get { return _current; } }
-		private static readonly ResourceService _current = new ResourceService();
+		public static ResourceService Current { get; } = new ResourceService();
 
 		private ResourceService()
 		{ }
@@ -27,8 +26,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Resources to be referred for binding
 		/// </summary>
-		public Resources Resources { get { return _resources; } }
-		private readonly Resources _resources = new Resources();
+		public Resources Resources { get; } = new Resources();
 
 		/// <summary>
 		/// Supported Culture names
@@ -63,7 +61,6 @@ namespace SnowyImageCopy.Models
 						.Where(x => x != null)
 						.ToArray();
 				}
-
 				return _supportedCultures;
 			}
 		}
@@ -81,7 +78,7 @@ namespace SnowyImageCopy.Models
 			Resources.Culture = culture;
 
 			// Notify this application's Resources is changed.
-			RaisePropertyChanged("Resources");
+			RaisePropertyChanged(nameof(Resources));
 		}
 	}
 }

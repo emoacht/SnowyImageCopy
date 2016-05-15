@@ -33,14 +33,11 @@ namespace SnowyImageCopy.Views.Behaviors
 		private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			var selector = sender as Selector;
-			if ((selector == null) || (selector.SelectedItem == null))
+			if (selector?.SelectedItem == null)
 				return;
 
 			var item = selector.ItemContainerGenerator.ContainerFromItem(selector.SelectedItem) as FrameworkElement;
-			if (item == null)
-				return;
-
-			item.BringIntoView();
+			item?.BringIntoView();
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace SnowyImageCopy.Helper
 
 		#region Dispose
 
-		public bool IsDisposed { get { return _isDisposed; } }
+		public bool IsDisposed => _isDisposed;
 		private bool _isDisposed = false;
 
 		protected override void Dispose(bool disposing)

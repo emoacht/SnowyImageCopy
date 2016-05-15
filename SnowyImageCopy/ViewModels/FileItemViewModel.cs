@@ -18,25 +18,25 @@ namespace SnowyImageCopy.ViewModels
 	{
 		#region Basic
 
-		public string Directory { get { return _fileItem.Directory; } }
-		public string FileName { get { return _fileItem.FileName; } }
-		public int Size { get { return _fileItem.Size; } } // In bytes
+		public string Directory => _fileItem.Directory;
+		public string FileName => _fileItem.FileName;
+		public int Size => _fileItem.Size; // In bytes
 
-		public bool IsReadOnly { get { return _fileItem.IsReadOnly; } }
-		public bool IsHidden { get { return _fileItem.IsHidden; } }
-		public bool IsSystemFile { get { return _fileItem.IsSystemFile; } }
-		public bool IsVolume { get { return _fileItem.IsVolume; } }
-		public bool IsDirectory { get { return _fileItem.IsDirectory; } }
-		public bool IsArchive { get { return _fileItem.IsArchive; } }
+		public bool IsReadOnly => _fileItem.IsReadOnly;
+		public bool IsHidden => _fileItem.IsHidden;
+		public bool IsSystemFile => _fileItem.IsSystemFile;
+		public bool IsVolume => _fileItem.IsVolume;
+		public bool IsDirectory => _fileItem.IsDirectory;
+		public bool IsArchive => _fileItem.IsArchive;
 
-		public DateTime Date { get { return _fileItem.Date; } }
+		public DateTime Date => _fileItem.Date;
 
 		#endregion
 
 		#region Supplementary
 
-		internal string FilePath { get { return _fileItem.FilePath; } }
-		internal string Signature { get { return _fileItem.Signature; } }
+		internal string FilePath => _fileItem.FilePath;
+		internal string Signature => _fileItem.Signature;
 
 		internal string FileNameWithCaseExtension
 		{
@@ -46,7 +46,7 @@ namespace SnowyImageCopy.ViewModels
 					return this.FileName;
 
 				var extension = Path.GetExtension(this.FileName);
-				if (String.IsNullOrEmpty(extension))
+				if (string.IsNullOrEmpty(extension))
 					return this.FileName;
 
 				return Path.GetFileNameWithoutExtension(this.FileName) + extension.ToLower();
@@ -56,10 +56,7 @@ namespace SnowyImageCopy.ViewModels
 		/// <summary>
 		/// Whether can read Exif metadata
 		/// </summary>
-		internal bool CanReadExif
-		{
-			get { return _fileItem.IsJpeg || _fileItem.IsTiff; }
-		}
+		internal bool CanReadExif => _fileItem.IsJpeg || _fileItem.IsTiff;
 
 		/// <summary>
 		/// Whether can get a thumbnail of a remote file
@@ -95,10 +92,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private bool? _canLoadDataLocal;
 
-		public override string ToString()
-		{
-			return this.FileName; // For the case where being called for binding
-		}
+		public override string ToString() => this.FileName; // For the case where being called for binding
 
 		#endregion
 
@@ -118,10 +112,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private BitmapSource _thumbnail;
 
-		public bool HasThumbnail
-		{
-			get { return _thumbnail != null; }
-		}
+		public bool HasThumbnail => (_thumbnail != null);
 
 		#endregion
 
@@ -194,7 +185,7 @@ namespace SnowyImageCopy.ViewModels
 		private IFileItem _fileItem;
 
 		internal FileItemViewModel()
-			: this(String.Empty, String.Empty)
+			: this(string.Empty, string.Empty)
 		{ }
 
 		internal FileItemViewModel(string fileEntry, string directoryPath)
@@ -204,14 +195,14 @@ namespace SnowyImageCopy.ViewModels
 		internal FileItemViewModel(IFileItem fileItem)
 		{
 			if (fileItem == null)
-				throw new ArgumentNullException("fileItem");
+				throw new ArgumentNullException(nameof(fileItem));
 
 			_fileItem = fileItem;
 
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
 				_resourcesPropertyChangedListener = new PropertyChangedEventListener(ReactResourcesPropertyChanged);
-				PropertyChangedEventManager.AddListener(ResourceService.Current, _resourcesPropertyChangedListener, "Resources");
+				PropertyChangedEventManager.AddListener(ResourceService.Current, _resourcesPropertyChangedListener, nameof(ResourceService.Resources));
 			}
 		}
 
@@ -223,9 +214,9 @@ namespace SnowyImageCopy.ViewModels
 
 		private void ReactResourcesPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			//Debug.WriteLine("Resources property changed: {0} {1}", sender, e.PropertyName);
+			//Debug.WriteLine($"Resources property changed: {sender} {e.PropertyName}");
 
-			RaisePropertyChanged(() => Status);
+			RaisePropertyChanged(nameof(Status));
 		}
 
 		#endregion

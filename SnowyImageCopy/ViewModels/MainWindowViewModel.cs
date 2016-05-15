@@ -35,10 +35,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private string _operationStatus;
 
-		public Settings SettingsCurrent
-		{
-			get { return Settings.Current; }
-		}
+		public Settings SettingsCurrent => Settings.Current;
 
 		public bool IsWindowActivateRequested
 		{
@@ -55,11 +52,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Operation
 
-		public Operation Op
-		{
-			get { return _op ?? (_op = new Operation(this)); }
-		}
-		private Operation _op;
+		public Operation Op { get; }
 
 		public ItemObservableCollection<FileItemViewModel> FileListCore
 		{
@@ -124,10 +117,7 @@ namespace SnowyImageCopy.ViewModels
 					return;
 
 				_currentFrameSize = value;
-
-				var handler = _currentFrameSizeChanged;
-				if (handler != null)
-					handler();
+				_currentFrameSizeChanged?.Invoke();
 			}
 		}
 		private Size _currentFrameSize = Size.Empty;
@@ -181,7 +171,6 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				_currentImage = value;
-
 				if (_currentImage != null)
 				{
 					// Width and PixelWidth of BitmapImage are almost the same except fractional part
@@ -444,11 +433,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-		private void RaiseCanExecuteChanged()
-		{
-			// This method is static.
-			DelegateCommand.RaiseCanExecuteChanged();
-		}
+		private void RaiseCanExecuteChanged() => DelegateCommand.RaiseCanExecuteChanged();
 
 		#endregion
 
@@ -480,19 +465,19 @@ namespace SnowyImageCopy.ViewModels
 
 		public MainWindowViewModel()
 		{
-			SetSample(1);
+			Op = new Operation(this);
 
 			// Add event listeners.
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
 				_fileListPropertyChangedListener = new PropertyChangedEventListener(FileListPropertyChanged);
-				PropertyChangedEventManager.AddListener(FileListCore, _fileListPropertyChangedListener, String.Empty);
+				PropertyChangedEventManager.AddListener(FileListCore, _fileListPropertyChangedListener, string.Empty);
 
 				_settingsPropertyChangedListener = new PropertyChangedEventListener(ReactSettingsPropertyChanged);
-				PropertyChangedEventManager.AddListener(Settings.Current, _settingsPropertyChangedListener, String.Empty);
+				PropertyChangedEventManager.AddListener(Settings.Current, _settingsPropertyChangedListener, string.Empty);
 
 				_operationPropertyChangedListener = new PropertyChangedEventListener(ReactOperationPropertyChanged);
-				PropertyChangedEventManager.AddListener(Op, _operationPropertyChangedListener, String.Empty);
+				PropertyChangedEventManager.AddListener(Op, _operationPropertyChangedListener, string.Empty);
 			}
 
 			// Subscribe event handlers.
@@ -526,16 +511,15 @@ namespace SnowyImageCopy.ViewModels
 					FileListCoreView.Refresh();
 					Op.UpdateProgress();
 				}));
+
+			SetSample(1);
 		}
 
 		private void SetSample(int number = 1)
 		{
 			Enumerable.Range(0, number)
-				.Select(x =>
-				{
-					var source = String.Format("/DCIM,SAMPLE{0}.JPG,0,0,0,0", ((0 < x) ? x.ToString(CultureInfo.InvariantCulture) : String.Empty));
-					return new FileItemViewModel(source, "/DCIM");
-				})
+				.Select(x => (1 < number) ? x.ToString(CultureInfo.InvariantCulture) : string.Empty)
+				.Select(x => new FileItemViewModel($"/DCIM,SAMPLE{x}.JPG,0,0,0,0", "/DCIM"))
 				.ToList()
 				.ForEach(x => FileListCore.Insert(x));
 		}
@@ -548,34 +532,19 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener _fileListPropertyChangedListener;
 
-		private string CaseItemPropertyChangedSender
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(ItemObservableCollection<FileItemViewModel>)).ItemPropertyChangedSender); }
-		}
-
-		private string CaseIsSelected
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(FileItemViewModel)).IsSelected); }
-		}
-
-		private string CaseStatus
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(FileItemViewModel)).Status); }
-		}
-
 		private async void FileListPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			//Debug.WriteLine("File List property changed: {0} {1}", sender, e.PropertyName);
+			//Debug.WriteLine($"File List property changed: {sender} {e.PropertyName}");
 
-			if (e.PropertyName != CaseItemPropertyChangedSender)
+			if (e.PropertyName != nameof(ItemObservableCollection<FileItemViewModel>.ItemPropertyChangedSender))
 				return;
 
 			var item = ((ItemObservableCollection<FileItemViewModel>)sender).ItemPropertyChangedSender;
 			var propertyName = ((ItemObservableCollection<FileItemViewModel>)sender).ItemPropertyChangedEventArgs.PropertyName;
 
-			//Debug.WriteLine(String.Format("ItemPropertyChanged: {0} {1}", item.FileName, propertyName));
+			//Debug.WriteLine($"ItemPropertyChanged: {item.FileName} {propertyName}");
 
-			if (propertyName == CaseIsSelected)
+			if (propertyName == nameof(FileItemViewModel.IsSelected))
 			{
 				switch (item.Status)
 				{
@@ -601,7 +570,7 @@ namespace SnowyImageCopy.ViewModels
 						break;
 				}
 			}
-			else if (propertyName == CaseStatus)
+			else if (propertyName == nameof(FileItemViewModel.Status))
 			{
 				switch (item.Status)
 				{
@@ -622,46 +591,23 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener _settingsPropertyChangedListener;
 
-		private string CaseAutoCheckInterval
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).AutoCheckInterval); }
-		}
-
-		private string CaseTargetPeriod
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).TargetPeriod); }
-		}
-
-		private string CaseTargetDates
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).TargetDates); }
-		}
-
-		private string CaseJpegFileOnly
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(Settings)).HandlesJpegFileOnly); }
-		}
-
 		private event Action _autoCheckIntervalChanged;
 		private event Action _targetConditionChanged;
 
 		private void ReactSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			//Debug.WriteLine("Settings property changed: {0} {1}", sender, e.PropertyName);
+			//Debug.WriteLine($"Settings property changed: {sender} {e.PropertyName}");
 
 			var propertyName = e.PropertyName;
 
-			if (propertyName == CaseAutoCheckInterval)
+			if (propertyName == nameof(Settings.AutoCheckInterval))
 			{
-				var handler = _autoCheckIntervalChanged;
-				if (handler != null)
-					handler();
+				_autoCheckIntervalChanged?.Invoke();
 			}
-			else if ((propertyName == CaseTargetPeriod) || (propertyName == CaseTargetDates) || (propertyName == CaseJpegFileOnly))
+			else if ((propertyName == nameof(Settings.TargetPeriod)) || (propertyName == nameof(Settings.TargetDates))
+				|| (propertyName == nameof(Settings.HandlesJpegFileOnly)))
 			{
-				var handler = _targetConditionChanged;
-				if (handler != null)
-					handler();
+				_targetConditionChanged?.Invoke();
 			}
 		}
 
@@ -671,53 +617,28 @@ namespace SnowyImageCopy.ViewModels
 
 		private PropertyChangedEventListener _operationPropertyChangedListener;
 
-		private string CaseIsChecking
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsChecking); }
-		}
-
-		private string CaseIsCopying
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsCopying); }
-		}
-
-		private string CaseIsAutoRunning
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsAutoRunning); }
-		}
-
-		private string CaseIsSavingDesktop
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsSavingDesktop); }
-		}
-
-		private string CaseIsSendingClipboard
-		{
-			get { return GetPropertyName() ?? GetPropertyName(() => (default(Operation)).IsSendingClipboard); }
-		}
-
 		private void ReactOperationPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			//Debug.WriteLine("Operation property changed (MainWindowViewModel): {0} {1}", sender, e.PropertyName);
+			//Debug.WriteLine($"Operation property changed (MainWindowViewModel): {sender} {e.PropertyName}");
 
 			var propertyName = e.PropertyName;
 
-			if (propertyName == CaseIsChecking)
+			if (propertyName == nameof(Operation.IsChecking))
 			{
 				RaiseCanExecuteChanged();
 				ManageBrowserOpen(Op.IsChecking);
 			}
-			else if (propertyName == CaseIsCopying)
+			else if (propertyName == nameof(Operation.IsCopying))
 			{
 				RaiseCanExecuteChanged();
 				ManageBrowserOpen(Op.IsCopying);
 			}
-			else if (propertyName == CaseIsAutoRunning)
+			else if (propertyName == nameof(Operation.IsAutoRunning))
 			{
 				RaiseCanExecuteChanged();
 				ManageBrowserOpen(Op.IsAutoRunning);
 			}
-			else if ((propertyName == CaseIsSavingDesktop) || (propertyName == CaseIsSendingClipboard))
+			else if ((propertyName == nameof(Operation.IsSavingDesktop)) || (propertyName == nameof(Operation.IsSendingClipboard)))
 			{
 				RaiseCanExecuteChanged();
 			}

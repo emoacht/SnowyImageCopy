@@ -18,27 +18,27 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Current value
 		/// </summary>
-		public int CurrentValue { get; private set; }
+		public int CurrentValue { get; }
 
 		/// <summary>
 		/// Total value
 		/// </summary>
-		public int TotalValue { get; private set; }
+		public int TotalValue { get; }
 
 		/// <summary>
 		/// Elapsed time since operation started
 		/// </summary>
-		public TimeSpan ElapsedTime { get; private set; }
+		public TimeSpan ElapsedTime { get; }
 
 		/// <summary>
 		/// Whether this report is the first among a group of reports
 		/// </summary>
-		public bool IsFirst { get; private set; }
+		public bool IsFirst { get; }
 
 		/// <summary>
 		/// Whether this report is for an error
 		/// </summary>
-		public bool IsError { get; private set; }
+		public bool IsError { get; }
 
 		#region Constructor
 

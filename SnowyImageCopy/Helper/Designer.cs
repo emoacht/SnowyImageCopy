@@ -26,7 +26,6 @@ namespace SnowyImageCopy.Helper
 						.FromProperty(DesignerProperties.IsInDesignModeProperty, typeof(FrameworkElement))
 						.Metadata.DefaultValue;
 				}
-
 				return _isInDesignMode.Value;
 			}
 		}
