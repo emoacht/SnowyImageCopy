@@ -137,6 +137,7 @@ App_Data/*.ldf
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/.vs/config/applicationhost.config
 
 # =========================
 # Windows detritus
