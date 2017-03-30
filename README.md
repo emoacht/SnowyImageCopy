@@ -3,20 +3,20 @@
 
 Snowy is a Windows desktop app to copy images from FlashAir by a wireless connection. You can copy images in bulk or select from thumbnails one by one. Also you can make this app check new images automatically at a regular interval.
 
-##Requirements
+## Requirements
 
  * Windows 7 or newer
  * .NET Framework 4.5.2
 
 Tested on Windows 8.1 64bit with SD-WB008G (Class6), SD-WC016G (W-02 Class10) and SD-WE016G (W-03 Class10).
 
-##Development
+## Development
 
 This app is a WPF app developed in C# with Visual Studio Community 2015.
 
 As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
-##History
+## History
 
 Ver 1.2.2 2016-5-15
 
@@ -87,11 +87,11 @@ Ver 0.9.0 2014-04-10
 
  - Initial release
 
-##License
+## License
 
  - MIT License
 
-##Other
+## Other
 
  - Libraries: [Reactive Extensions][2], [WPF Monitor Aware Window][3], [Desktop Toast][4]
 
