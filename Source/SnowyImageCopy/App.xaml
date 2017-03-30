@@ -1,0 +1,34 @@
+﻿<Application x:Class="SnowyImageCopy.App"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:converters="clr-namespace:SnowyImageCopy.Views.Converters">
+
+	<Application.Resources>
+		<ResourceDictionary>
+			<!-- Converters -->
+			<converters:BooleanInverseConverter x:Key="BooleanInverseConverterKey"/>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
+			<converters:BooleanInverseToThicknessConverter x:Key="BooleanInverseToThicknessConverterKey"/>
+			<converters:BooleanInverseToVisibilityConverter x:Key="BooleanInverseToVisibilityConverterKey"/>
+			
+			<converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverterKey"/>
+
+			<converters:FileStatusToBrushConverter x:Key="FileStatusToBrushConverterKey"/>
+			<converters:FileStatusToStringConverter x:Key="FileStatusToStringConverterKey"/>
+
+			<converters:DoubleCentesimalConverter x:Key="DoubleCentesimalConverterKey"/>
+			<converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey"/>
+			<converters:DoubleAndVisibilityToDoubleConverter x:Key="DoubleAndVisibilityToDoubleConverterKey"/>
+			<converters:ObjectArrayConverter x:Key="ObjectArrayConverterKey"/>
+
+			<!-- Styles, Templates -->
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Views/Styles/DefaultTheme.xaml"/>
+				<ResourceDictionary Source="/Views/Styles/CustomTheme.xaml"/>
+				<ResourceDictionary Source="/Views/Styles/CommonControls.xaml"/>
+				<ResourceDictionary Source="/Views/Styles/CustomControls.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+		</ResourceDictionary>
+	</Application.Resources>
+</Application>

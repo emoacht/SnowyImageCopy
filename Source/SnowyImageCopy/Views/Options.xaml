@@ -1,0 +1,298 @@
+﻿<UserControl x:Class="SnowyImageCopy.Views.Options"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+			 xmlns:ma="clr-namespace:MonitorAware.Views;assembly=MonitorAware"
+			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
+			 xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
+			 xmlns:models="clr-namespace:SnowyImageCopy.Models"
+			 xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
+			 xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
+			 mc:Ignorable="d"
+			 d:DesignHeight="800" d:DesignWidth="250"
+			 Loaded="OnLoaded">
+	<UserControl.Resources>
+		<ControlTemplate x:Key="ItemGroupTemplate" TargetType="{x:Type GroupBox}">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<Border BorderThickness="0,0,0,1"
+						BorderBrush="{StaticResource OptionHeader.Border}"
+						SnapsToDevicePixels="True">
+					<TextBlock Margin="6,2,0,2"
+							   FontSize="15"
+							   Foreground="{StaticResource OptionHeader.Foreground}"
+							   Text="{Binding Header, RelativeSource={RelativeSource AncestorType=GroupBox}}"/>
+				</Border>
+				<Grid Grid.Row="1">
+					<ContentPresenter/>
+				</Grid>
+			</Grid>
+		</ControlTemplate>
+
+		<ControlTemplate x:Key="ItemDetailedTemplate" TargetType="{x:Type GroupBox}">
+			<DockPanel Margin="0,4">
+				<Grid DockPanel.Dock="Right"
+					  Margin="4,0,0,0">
+					<ContentPresenter VerticalAlignment="Top"/>
+				</Grid>
+				<TextBlock DockPanel.Dock="Left"
+						   TextWrapping="Wrap"
+						   Text="{Binding Header, RelativeSource={RelativeSource AncestorType=GroupBox}}"/>
+			</DockPanel>
+		</ControlTemplate>
+	</UserControl.Resources>
+
+	<Grid x:Name="LayoutRoot">
+		<StackPanel Width="234"
+					Margin="8,2,8,0">
+
+			<!-- Path -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_Path, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<TextBlock Text="{Binding Resources.Options_RemoteAddress, Source={x:Static models:ResourceService.Current}}"/>
+					<TextBox HorizontalAlignment="Stretch"
+							 Margin="0,4,0,6" Padding="2"
+							 VerticalContentAlignment="Center"
+							 Text="{Binding SettingsCurrent.RemoteAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"
+							 IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
+
+					<TextBlock Text="{Binding Resources.Options_LocalFolder, Source={x:Static models:ResourceService.Current}}"/>
+					<TextBox x:Name="LocalFolderPath"
+							 HorizontalAlignment="Stretch"
+							 Margin="0,4,0,4" Padding="2"
+							 VerticalContentAlignment="Center"
+							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"
+							 IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+						<Button	Margin="0,0,4,0"
+								Padding="8,2,8,2"
+								Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}"
+								IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"
+								Style="{StaticResource ButtonBaseStyle}">
+							<i:Interaction.Triggers>
+								<i:EventTrigger EventName="Click">
+									<behaviors:FolderBrowserAction
+										Explanation="{Binding Resources.Options_LocalFolderExplanation, Source={x:Static models:ResourceService.Current}}"
+										FolderPath="{Binding Text, ElementName=LocalFolderPath}"/>
+								</i:EventTrigger>
+							</i:Interaction.Triggers>
+						</Button>
+						<Button	Padding="8,2,8,2"
+								Content="{Binding Resources.Options_OpenByExplorer, Source={x:Static models:ResourceService.Current}}"
+								Style="{StaticResource ButtonBaseStyle}">
+							<i:Interaction.Triggers>
+								<i:EventTrigger EventName="Click">
+									<behaviors:ExplorerAction
+										FolderPath="{Binding Text, ElementName=LocalFolderPath}"/>
+								</i:EventTrigger>
+							</i:Interaction.Triggers>
+						</Button>
+					</StackPanel>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- Date -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_Date, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<ListBox HorizontalAlignment="Left"
+							 BorderThickness="0"
+							 Background="{x:Null}"
+							 ItemsSource="{Binding FilePeriodList, Mode=OneWay}"
+							 SelectedItem="{Binding FilePeriodSelected, Mode=TwoWay}">
+						<ListBox.Resources>
+							<Style TargetType="{x:Type ListBoxItem}" >
+								<Setter Property="Template">
+									<Setter.Value>
+										<ControlTemplate>
+											<RadioButton
+												Margin="0,4,0,4"
+												Content="{Binding Description, Mode=OneWay}"
+												IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+							</Style>
+						</ListBox.Resources>
+					</ListBox>
+					<Grid Height="216"
+						  Margin="-4,0,0,2"
+						  Visibility="{Binding SettingsCurrent.TargetPeriod, Converter={StaticResource EnumToVisibilityConverterKey}, ConverterParameter=Select, Mode=OneWay}">
+						<Calendar
+							x:Name="DateCalendar"
+							HorizontalAlignment="Left" VerticalAlignment="Stretch"
+							SelectionMode="MultipleRange" IsTodayHighlighted="False"
+							DisplayDateEnd="{Binding Source={x:Static sys:DateTime.Today}, Mode=OneWay}">
+							<Calendar.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform ScaleX="1.3" ScaleY="1.3" CenterX="0" CenterY="0"/>
+								</TransformGroup>
+							</Calendar.RenderTransform>
+
+							<i:Interaction.Behaviors>
+								<behaviors:CalendarSelectedDatesBehavior SelectedDates="{Binding SettingsCurrent.TargetDates}"/>
+								<behaviors:FrameworkElementLanguageBehavior IetfLanguageTag="{Binding SettingsCurrent.CultureName}"/>
+							</i:Interaction.Behaviors>
+						</Calendar>
+					</Grid>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- Auto Check -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_AutoCheck, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock
+							VerticalAlignment="Center"
+							Text="{Binding Resources.Options_AutoCheckInterval, Source={x:Static models:ResourceService.Current}}"/>
+						<controls:NumericUpDown
+							Width="90" Height="24"
+							Margin="4"
+							Minimum="1" Middle="10" Maximum="180" Frequency="10" LowerFrequency="1" HigherFrequency="10"
+							Value="{Binding SettingsCurrent.AutoCheckInterval}"/>
+					</StackPanel>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- File -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_File, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+							  Header="{Binding Resources.Options_ExtensionLowercase, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							Width="60" Height="24"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.MakesFileExtensionLowercase, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+							  Header="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							x:Name="RecycleButton"
+							Width="60" Height="24"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.MovesFileToRecycle, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+							  Header="{Binding Resources.Options_SelectReadOnly, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							Width="60" Height="24"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.SelectsReadOnlyFile, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+							  Header="{Binding Resources.Options_HandleJpegFileOnly, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							Width="60" Height="24"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.HandlesJpegFileOnly, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+							  Header="{Binding Resources.Options_CreateDatedFolder, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							Width="60" Height="24"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.CreatesDatedFolder, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+							  Header="{Binding Resources.Options_ChooseDeleteOnCopy, Source={x:Static models:ResourceService.Current}}">
+						<StackPanel>
+							<controls:SlidingToggleButton
+								x:Name="ChooseDeleteOnCopyButton"
+								Width="60" Height="24"
+								TextChecked="ON"
+								TextUnchecked="OFF"
+								ForegroundChecked="{StaticResource Sliding.CheckedSecond.Foreground}"
+								ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+								BackgroundChecked="{StaticResource Sliding.CheckedSecond.Background}"
+								BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+								IsChecked="{Binding IsChecked, ElementName= RecycleButton, Converter={StaticResource BooleanInverseConverterKey}, ConverterParameter=True}"/>
+							<controls:CheckTextBox
+								Margin="0,4,0,0" Padding="2,0"
+								VerticalContentAlignment="Center"
+								IsUndoEnabled="False"
+								CheckText="DELETE"
+								Visibility="{Binding IsChecked, ElementName=ChooseDeleteOnCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
+								IsChecked="{Binding SettingsCurrent.EnablesChooseDeleteOnCopy, Mode=TwoWay}"/>
+						</StackPanel>
+					</GroupBox>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- Language -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_Language, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<ComboBox Margin="0,4,0,4"
+							  ItemsSource="{Binding Cultures}"
+							  SelectedIndex="{Binding CultureSeletedIndex}"
+							  IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- Info -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_Info, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<TextBlock Margin="0,0,0,4">
+						<Run Text="{Binding Source={x:Static views:ProductInfo.Title}, Mode=OneWay}"/>
+						<Run Text="{Binding Source={x:Static views:ProductInfo.Version}, Mode=OneWay}"/>
+						<Run Text="("/><Run Text="Project Site"
+							 TextDecorations="Underline" Cursor="Hand">
+							<i:Interaction.Triggers>
+								<i:EventTrigger EventName="MouseDown">
+									<ei:LaunchUriOrFileAction Path="{Binding Resources.ProjectSite, Source={x:Static models:ResourceService.Current}}"/>
+								</i:EventTrigger>
+							</i:Interaction.Triggers>
+						</Run><Run Text=")"/>
+					</TextBlock>
+
+					<TextBlock Margin="0,0,0,4">
+						<Run Text="{Binding WindowHandler.SystemDpi.X, RelativeSource={RelativeSource AncestorType=ma:MonitorAwareWindow}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
+						<Run Text="{Binding WindowHandler.MonitorDpi.X, RelativeSource={RelativeSource AncestorType=ma:MonitorAwareWindow}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
+					</TextBlock>
+				</StackPanel>
+			</GroupBox>
+		</StackPanel>
+	</Grid>
+</UserControl>
