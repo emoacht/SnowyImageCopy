@@ -1,5 +1,4 @@
-﻿Snowy
-=====
+﻿# Snowy
 
 Snowy is a Windows desktop app to copy images from FlashAir by a wireless connection. You can copy images in bulk or select from thumbnails one by one. Also you can make this app check new images automatically at a regular interval.
 
