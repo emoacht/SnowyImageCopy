@@ -387,43 +387,44 @@ namespace SnowyImageCopy.Models
 
 		#region Load/Save
 
-		public static bool IsLoaded { get; private set; }
-
 		private const string _settingsFileName = "settings.xml";
 		private static readonly string _settingsFilePath = Path.Combine(FolderPathAppData, _settingsFileName);
 
 		public static void Load()
 		{
+			var fileInfo = new FileInfo(_settingsFilePath);
+			if (!fileInfo.Exists || (fileInfo.Length == 0))
+				return;
+
 			try
 			{
-				if (File.Exists(_settingsFilePath))
+				using (var fs = new FileStream(_settingsFilePath, FileMode.Open, FileAccess.Read))
 				{
-					using (var fs = new FileStream(_settingsFilePath, FileMode.Open, FileAccess.Read))
-					{
-						var serializer = new XmlSerializer(typeof(Settings));
-						var loaded = (Settings)serializer.Deserialize(fs);
+					var serializer = new XmlSerializer(typeof(Settings));
+					var loaded = (Settings)serializer.Deserialize(fs);
 
-						typeof(Settings)
-							.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-							.Where(x => x.CanWrite)
-							.ToList()
-							.ForEach(x => x.SetValue(Current, x.GetValue(loaded)));
-					}
+					typeof(Settings)
+						.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+						.Where(x => x.CanWrite)
+						.ToList()
+						.ForEach(x => x.SetValue(Current, x.GetValue(loaded)));
 				}
 			}
 			catch (Exception ex)
 			{
+				try
+				{
+					File.Delete(_settingsFilePath);
+				}
+				catch
+				{ }
+
 				throw new Exception("Failed to load settings.", ex);
 			}
-
-			IsLoaded = true;
 		}
 
 		public static void Save()
 		{
-			if (!IsLoaded)
-				return;
-
 			try
 			{
 				PrepareFolderAppData();
