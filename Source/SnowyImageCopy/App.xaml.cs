@@ -31,7 +31,7 @@ namespace SnowyImageCopy
 			if (CommandLine.ShowsUsage)
 			{
 				CommandLine.ShowUsage();
-				Application.Current.Shutdown();
+				Application.Current.Shutdown(1);
 				return;
 			}
 
@@ -47,7 +47,8 @@ namespace SnowyImageCopy
 		{
 			base.OnExit(e);
 
-			Settings.Save();
+			if (e.ApplicationExitCode == 0) // Only when normal shutdown
+				Settings.Save();
 		}
 
 		#region Exception
@@ -62,7 +63,7 @@ namespace SnowyImageCopy
 			LogService.RecordException(sender, e.Exception);
 
 			e.Handled = true;
-			Application.Current.Shutdown();
+			Application.Current.Shutdown(1);
 		}
 
 		#endregion
