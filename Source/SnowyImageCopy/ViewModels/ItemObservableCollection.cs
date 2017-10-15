@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace SnowyImageCopy.ViewModels
 {
@@ -13,6 +14,13 @@ namespace SnowyImageCopy.ViewModels
 		where T : class, INotifyPropertyChanged, IComparable<T>
 	{
 		private readonly object _locker = new object();
+
+		public ItemObservableCollection()
+		{
+			BindingOperations.EnableCollectionSynchronization(this, _locker);
+		}
+
+		#region Method
 
 		/// <summary>
 		/// Inserts new item to correct position in order to minimize the necessity of sorting.
@@ -24,26 +32,68 @@ namespace SnowyImageCopy.ViewModels
 			{
 				int index = 0;
 
-				for (int i = this.Count - 1; i >= 0; i--)
+				for (int i = Count - 1; i >= 0; i--)
 				{
-					if (this[i].CompareTo(item) < 0)
+					if (Items[i].CompareTo(item) < 0)
 					{
 						index = i + 1;
 						break;
 					}
 				}
 
-				base.Insert(index, item);
+				base.InsertItem(index, item);
 			}
 		}
 
-		#region PropertyChanged event of item
+		protected override void InsertItem(int index, T item)
+		{
+			lock (_locker)
+			{
+				base.InsertItem(index, item);
+			}
+		}
 
-		/// <summary>
-		/// Adds/Removes an event handler for PropertyChanged event of each item.
-		/// </summary>
+		protected override void RemoveItem(int index)
+		{
+			lock (_locker)
+			{
+				base.RemoveItem(index);
+			}
+		}
+
+		protected override void MoveItem(int oldIndex, int newIndex)
+		{
+			lock (_locker)
+			{
+				base.MoveItem(oldIndex, newIndex);
+			}
+		}
+
+		protected override void SetItem(int index, T item)
+		{
+			lock (_locker)
+			{
+				base.SetItem(index, item);
+			}
+		}
+
+		protected override void ClearItems()
+		{
+			// Remove event handlers for PropertyChanged event of items.
+			foreach (T item in Items)
+				item.PropertyChanged -= OnItemPropertyChanged;
+
+			lock (_locker)
+			{
+				base.ClearItems();
+			}
+		}
+
+		#endregion
+		
 		protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
 		{
+			// Add/Remove event handlers for PropertyChanged event of items.
 			if (e.OldItems != null)
 				foreach (T item in e.OldItems)
 					item.PropertyChanged -= OnItemPropertyChanged;
@@ -52,27 +102,31 @@ namespace SnowyImageCopy.ViewModels
 				foreach (T item in e.NewItems)
 					item.PropertyChanged += OnItemPropertyChanged;
 
-			base.OnCollectionChanged(e);
+			lock (_locker)
+			{
+				base.OnCollectionChanged(e);
+			}
 		}
 
-		/// <summary>
-		/// Removes all event handlers for PropertyChanged event of all items.
-		/// </summary>
-		protected override void ClearItems()
+		protected override void OnPropertyChanged(PropertyChangedEventArgs e)
 		{
-			if (this.Items != null)
-				foreach (T item in this.Items)
-					item.PropertyChanged -= OnItemPropertyChanged;
-
-			base.ClearItems();
+			lock (_locker)
+			{
+				base.OnPropertyChanged(e);
+			}
 		}
+
+		#region PropertyChanged event of item
 
 		private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			ItemPropertyChangedSender = sender as T;
-			ItemPropertyChangedEventArgs = e;
+			lock (_locker)
+			{
+				ItemPropertyChangedSender = sender as T;
+				ItemPropertyChangedEventArgs = e;
 
-			base.OnPropertyChanged(new PropertyChangedEventArgs(nameof(ItemPropertyChangedSender)));
+				base.OnPropertyChanged(new PropertyChangedEventArgs(nameof(ItemPropertyChangedSender)));
+			}
 		}
 
 		/// <summary>

@@ -92,6 +92,18 @@ namespace SnowyImageCopy.Models
 			set { MainWindowViewModelInstance.IsWindowActivateRequested = value; }
 		}
 
+		private void InvokeSafely(Action action)
+		{
+			if (!Application.Current.Dispatcher.CheckAccess())
+			{
+				Application.Current.Dispatcher.Invoke(action);
+			}
+			else
+			{
+				action.Invoke();
+			}
+		}
+
 		#endregion
 
 		#region Constant
@@ -866,20 +878,23 @@ namespace SnowyImageCopy.Models
 						itemOld.IsAliveRemote = false;
 					}
 
-					// Add new items.
-					var isLeadOff = true;
-					foreach (var itemNew in fileListNew)
+					// Add new items (This operation may be heavy).
+					await Task.Run(() =>
 					{
-						if (isLeadOff)
+						var isLeadOff = true;
+						foreach (var itemNew in fileListNew)
 						{
-							FileListCoreViewIndex = FileListCoreView.IndexOf(itemNew);
-							isLeadOff = false;
+							if (isLeadOff)
+							{
+								InvokeSafely(() => FileListCoreViewIndex = FileListCoreView.IndexOf(itemNew));
+								isLeadOff = false;
+							}
+
+							itemNew.IsAliveRemote = true;
+
+							FileListCore.Insert(itemNew); // Customized Insert method
 						}
-
-						itemNew.IsAliveRemote = true;
-
-						FileListCore.Insert(itemNew); // Customized Insert method
-					}
+					});
 
 					// Check all local files.
 					foreach (var item in FileListCore)
