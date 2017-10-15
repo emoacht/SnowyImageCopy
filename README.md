@@ -17,6 +17,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ## History
 
+Ver 1.3.0 2017-10-16
+
+ - Added settings for timeout duration
+
 Ver 1.2.2 2016-5-15
 
  - Added option to handle JPEG images only
