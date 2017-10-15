@@ -485,9 +485,14 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_Checking;
 
-					var isUpdated = _card.CanGetWriteTimeStamp
-						? (await FileManager.GetWriteTimeStampAsync() != _card.WriteTimeStamp)
-						: await FileManager.CheckUpdateStatusAsync();
+					var isUpdated = false;
+
+					using (var manager = new FileManager())
+					{
+						isUpdated = _card.CanGetWriteTimeStamp
+							? (await manager.GetWriteTimeStampAsync(CancellationToken.None) != _card.WriteTimeStamp)
+							: await manager.CheckUpdateStatusAsync();
+					}
 
 					OperationStatus = Resources.OperationStatus_Completed;
 					return isUpdated;
@@ -799,176 +804,179 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				_tokenSourceWorking = new CancellationTokenSourcePlus();
-
-				// Check firmware version.
-				_card.FirmwareVersion = await FileManager.GetFirmwareVersionAsync(_tokenSourceWorking.Token);
-
-				// Check CID.
-				if (_card.CanGetCid)
-					_card.Cid = await FileManager.GetCidAsync(_tokenSourceWorking.Token);
-
-				// Check SSID and check if PC is connected to FlashAir card by a wireless connection.
-				_card.Ssid = await FileManager.GetSsidAsync(_tokenSourceWorking.Token);
-				_card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(_card.Ssid);
-
-				// Get all items.
-				var fileListNew = (await FileManager.GetFileListRootAsync(_card, _tokenSourceWorking.Token))
-					.Select(fileItem => new FileItemViewModel(fileItem))
-					.ToList();
-				fileListNew.Sort();
-
-				// Record time stamp of write event.
-				if (_card.CanGetWriteTimeStamp)
-					_card.WriteTimeStamp = await FileManager.GetWriteTimeStampAsync(_tokenSourceWorking.Token);
-
-				// Check if any sample is in old items.
-				var isSample = FileListCore.Any(x => x.Size == 0);
-
-				// Check if FlashAir card is changed.
-				bool isChanged;
-				if (_card.IsChanged.HasValue)
+				using (var manager = new FileManager())
 				{
-					isChanged = _card.IsChanged.Value;
-				}
-				else
-				{
-					var signatures = new HashSet<string>(FileListCore.Select(x => x.Signature));
-					isChanged = !fileListNew.Select(x => x.Signature).Any(x => signatures.Contains(x));
-				}
+					_tokenSourceWorking = new CancellationTokenSourcePlus();
 
-				if (isSample || isChanged)
-					FileListCore.Clear();
+					// Check firmware version.
+					_card.FirmwareVersion = await manager.GetFirmwareVersionAsync(_tokenSourceWorking.Token);
 
-				// Check old items.
-				foreach (var itemOld in FileListCore)
-				{
-					var itemSame = fileListNew.FirstOrDefault(x =>
-						x.FilePath.Equals(itemOld.FilePath, StringComparison.OrdinalIgnoreCase) &&
-						(x.Size == itemOld.Size));
+					// Check CID.
+					if (_card.CanGetCid)
+						_card.Cid = await manager.GetCidAsync(_tokenSourceWorking.Token);
 
-					if (itemSame != null)
+					// Check SSID and check if PC is connected to FlashAir card by a wireless connection.
+					_card.Ssid = await manager.GetSsidAsync(_tokenSourceWorking.Token);
+					_card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(_card.Ssid);
+
+					// Get all items.
+					var fileListNew = (await manager.GetFileListRootAsync(_card, _tokenSourceWorking.Token))
+						.Select(fileItem => new FileItemViewModel(fileItem))
+						.ToList();
+					fileListNew.Sort();
+
+					// Record time stamp of write event.
+					if (_card.CanGetWriteTimeStamp)
+						_card.WriteTimeStamp = await manager.GetWriteTimeStampAsync(_tokenSourceWorking.Token);
+
+					// Check if any sample is in old items.
+					var isSample = FileListCore.Any(x => x.Size == 0);
+
+					// Check if FlashAir card is changed.
+					bool isChanged;
+					if (_card.IsChanged.HasValue)
 					{
-						fileListNew.Remove(itemSame);
-
-						itemOld.IsAliveRemote = true;
-						itemOld.FileItem = itemSame.FileItem;
-						continue;
+						isChanged = _card.IsChanged.Value;
+					}
+					else
+					{
+						var signatures = new HashSet<string>(FileListCore.Select(x => x.Signature));
+						isChanged = !fileListNew.Select(x => x.Signature).Any(x => signatures.Contains(x));
 					}
 
-					itemOld.IsAliveRemote = false;
-				}
+					if (isSample || isChanged)
+						FileListCore.Clear();
 
-				// Add new items.
-				var isLeadOff = true;
-				foreach (var itemNew in fileListNew)
-				{
-					if (isLeadOff)
+					// Check old items.
+					foreach (var itemOld in FileListCore)
 					{
-						FileListCoreViewIndex = FileListCoreView.IndexOf(itemNew);
-						isLeadOff = false;
-					}
+						var itemSame = fileListNew.FirstOrDefault(x =>
+							x.FilePath.Equals(itemOld.FilePath, StringComparison.OrdinalIgnoreCase) &&
+							(x.Size == itemOld.Size));
 
-					itemNew.IsAliveRemote = true;
-
-					FileListCore.Insert(itemNew); // Customized Insert method
-				}
-
-				// Check all local files.
-				foreach (var item in FileListCore)
-				{
-					var info = GetFileInfoLocal(item);
-					item.IsAliveLocal = IsAliveLocal(info, item.Size);
-					item.IsAvailableLocal = IsAvailableLocal(info);
-					item.Status = item.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
-				}
-
-				// Manage lost items.
-				var itemsLost = FileListCore.Where(x => !x.IsAliveRemote).ToArray();
-				if (itemsLost.Any())
-				{
-					if (Settings.Current.MovesFileToRecycle)
-					{
-						foreach (var item in itemsLost)
+						if (itemSame != null)
 						{
-							if (!item.IsDescendant || (item.Status != FileStatus.Copied))
+							fileListNew.Remove(itemSame);
+
+							itemOld.IsAliveRemote = true;
+							itemOld.FileItem = itemSame.FileItem;
+							continue;
+						}
+
+						itemOld.IsAliveRemote = false;
+					}
+
+					// Add new items.
+					var isLeadOff = true;
+					foreach (var itemNew in fileListNew)
+					{
+						if (isLeadOff)
+						{
+							FileListCoreViewIndex = FileListCoreView.IndexOf(itemNew);
+							isLeadOff = false;
+						}
+
+						itemNew.IsAliveRemote = true;
+
+						FileListCore.Insert(itemNew); // Customized Insert method
+					}
+
+					// Check all local files.
+					foreach (var item in FileListCore)
+					{
+						var info = GetFileInfoLocal(item);
+						item.IsAliveLocal = IsAliveLocal(info, item.Size);
+						item.IsAvailableLocal = IsAvailableLocal(info);
+						item.Status = item.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
+					}
+
+					// Manage lost items.
+					var itemsLost = FileListCore.Where(x => !x.IsAliveRemote).ToArray();
+					if (itemsLost.Any())
+					{
+						if (Settings.Current.MovesFileToRecycle)
+						{
+							foreach (var item in itemsLost)
+							{
+								if (!item.IsDescendant || (item.Status != FileStatus.Copied))
+									continue;
+
+								try
+								{
+									Recycle.MoveToRecycle(ComposeLocalPath(item));
+								}
+								catch (Exception ex)
+								{
+									Debug.WriteLine($"Failed to move a file to Recycle.\r\n{ex}");
+									item.Status = FileStatus.NotCopied;
+									continue;
+								}
+
+								item.Status = FileStatus.Recycled;
+							}
+						}
+
+						for (int i = itemsLost.Length - 1; i >= 0; i--)
+						{
+							var item = itemsLost[i];
+							if (item.IsDescendant &&
+								((item.Status == FileStatus.Copied) || (item.Status == FileStatus.Recycled)))
 								continue;
 
-							try
-							{
-								Recycle.MoveToRecycle(ComposeLocalPath(item));
-							}
-							catch (Exception ex)
-							{
-								Debug.WriteLine($"Failed to move a file to Recycle.\r\n{ex}");
-								item.Status = FileStatus.NotCopied;
-								continue;
-							}
-
-							item.Status = FileStatus.Recycled;
+							FileListCore.Remove(item);
 						}
 					}
 
-					for (int i = itemsLost.Length - 1; i >= 0; i--)
+					// Get thumbnails (from local).
+					foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))
 					{
-						var item = itemsLost[i];
-						if (item.IsDescendant &&
-							((item.Status == FileStatus.Copied) || (item.Status == FileStatus.Recycled)))
+						if (!item.IsAliveLocal || !item.IsAvailableLocal || !item.CanLoadDataLocal)
 							continue;
 
-						FileListCore.Remove(item);
+						_tokenSourceWorking.Token.ThrowIfCancellationRequested();
+
+						try
+						{
+							if (item.CanReadExif)
+								item.Thumbnail = await ImageManager.ReadThumbnailAsync(ComposeLocalPath(item));
+							else if (item.CanLoadDataLocal)
+								item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
+						}
+						catch (FileNotFoundException)
+						{
+							item.Status = FileStatus.NotCopied;
+							item.IsAliveLocal = false;
+						}
+						catch (IOException)
+						{
+							item.IsAvailableLocal = false;
+						}
+						catch (ImageNotSupportedException)
+						{
+							item.CanLoadDataLocal = false;
+						}
 					}
-				}
 
-				// Get thumbnails (from local).
-				foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))
-				{
-					if (!item.IsAliveLocal || !item.IsAvailableLocal || !item.CanLoadDataLocal)
-						continue;
-
-					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
-
-					try
+					// Get thumbnails (from remote).
+					foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))
 					{
-						if (item.CanReadExif)
-							item.Thumbnail = await ImageManager.ReadThumbnailAsync(ComposeLocalPath(item));
-						else if (item.CanLoadDataLocal)
-							item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
-					}
-					catch (FileNotFoundException)
-					{
-						item.Status = FileStatus.NotCopied;
-						item.IsAliveLocal = false;
-					}
-					catch (IOException)
-					{
-						item.IsAvailableLocal = false;
-					}
-					catch (ImageNotSupportedException)
-					{
-						item.CanLoadDataLocal = false;
-					}
-				}
+						if (!item.IsAliveRemote || !item.CanGetThumbnailRemote)
+							continue;
 
-				// Get thumbnails (from remote).
-				foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))
-				{
-					if (!item.IsAliveRemote || !item.CanGetThumbnailRemote)
-						continue;
+						if (!_card.CanGetThumbnail)
+							continue;
 
-					if (!_card.CanGetThumbnail)
-						continue;
+						_tokenSourceWorking.Token.ThrowIfCancellationRequested();
 
-					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
-
-					try
-					{
-						item.Thumbnail = await FileManager.GetThumbnailAsync(item.FilePath, _card, _tokenSourceWorking.Token);
-					}
-					catch (RemoteFileThumbnailFailedException)
-					{
-						item.CanGetThumbnailRemote = false;
-						_card.RecordThumbnailFailedPath(item.FilePath);
+						try
+						{
+							item.Thumbnail = await manager.GetThumbnailAsync(item.FilePath, _card, _tokenSourceWorking.Token);
+						}
+						catch (RemoteFileThumbnailFailedException)
+						{
+							item.CanGetThumbnailRemote = false;
+							_card.RecordThumbnailFailedPath(item.FilePath);
+						}
 					}
 				}
 
@@ -1024,88 +1032,91 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				_tokenSourceWorking = new CancellationTokenSourcePlus();
-
-				// Check CID.
-				if (_card.CanGetCid)
+				using (var manager = new FileManager())
 				{
-					if (await FileManager.GetCidAsync(_tokenSourceWorking.Token) != _card.Cid)
-						throw new CardChangedException();
-				}
+					_tokenSourceWorking = new CancellationTokenSourcePlus();
 
-				// Check if upload.cgi is disabled.
-				if (Settings.Current.DeleteOnCopy && _card.CanGetUpload)
-				{
-					_card.Upload = await FileManager.GetUploadAsync(_tokenSourceWorking.Token);
-					if (_card.IsUploadDisabled)
-						throw new CardUploadDisabledException();
-				}
-
-				while (true)
-				{
-					var item = FileListCore.FirstOrDefault(x => x.IsTarget && (x.Status == FileStatus.ToBeCopied));
-					if (item == null)
-						break; // Copy completed.
-
-					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
-
-					try
+					// Check CID.
+					if (_card.CanGetCid)
 					{
-						item.Status = FileStatus.Copying;
+						if (await manager.GetCidAsync(_tokenSourceWorking.Token) != _card.Cid)
+							throw new CardChangedException();
+					}
 
-						FileListCoreViewIndex = FileListCoreView.IndexOf(item);
+					// Check if upload.cgi is disabled.
+					if (Settings.Current.DeleteOnCopy && _card.CanGetUpload)
+					{
+						_card.Upload = await manager.GetUploadAsync(_tokenSourceWorking.Token);
+						if (_card.IsUploadDisabled)
+							throw new CardUploadDisabledException();
+					}
 
-						var localPath = ComposeLocalPath(item);
+					while (true)
+					{
+						var item = FileListCore.FirstOrDefault(x => x.IsTarget && (x.Status == FileStatus.ToBeCopied));
+						if (item == null)
+							break; // Copy completed.
 
-						var localDirectory = Path.GetDirectoryName(localPath);
-						if (!string.IsNullOrEmpty(localDirectory) && !Directory.Exists(localDirectory))
-							Directory.CreateDirectory(localDirectory);
+						_tokenSourceWorking.Token.ThrowIfCancellationRequested();
 
-						var data = await FileManager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, _card, _tokenSourceWorking.Token);
-
-						CurrentItem = item;
-						CurrentImageData = data;
-
-						if (!item.HasThumbnail)
+						try
 						{
-							try
+							item.Status = FileStatus.Copying;
+
+							FileListCoreViewIndex = FileListCoreView.IndexOf(item);
+
+							var localPath = ComposeLocalPath(item);
+
+							var localDirectory = Path.GetDirectoryName(localPath);
+							if (!string.IsNullOrEmpty(localDirectory) && !Directory.Exists(localDirectory))
+								Directory.CreateDirectory(localDirectory);
+
+							var data = await manager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, _card, _tokenSourceWorking.Token);
+
+							CurrentItem = item;
+							CurrentImageData = data;
+
+							if (!item.HasThumbnail)
 							{
-								if (item.CanReadExif)
-									item.Thumbnail = await ImageManager.ReadThumbnailAsync(CurrentImageData);
-								else if (item.CanLoadDataLocal)
-									item.Thumbnail = await ImageManager.CreateThumbnailAsync(CurrentImageData);
+								try
+								{
+									if (item.CanReadExif)
+										item.Thumbnail = await ImageManager.ReadThumbnailAsync(CurrentImageData);
+									else if (item.CanLoadDataLocal)
+										item.Thumbnail = await ImageManager.CreateThumbnailAsync(CurrentImageData);
+								}
+								catch (ImageNotSupportedException)
+								{
+									item.CanLoadDataLocal = false;
+								}
 							}
-							catch (ImageNotSupportedException)
-							{
-								item.CanLoadDataLocal = false;
-							}
+
+							item.CopiedTime = DateTime.Now;
+							item.IsAliveLocal = true;
+							item.IsAvailableLocal = true;
+							item.Status = FileStatus.Copied;
+
+							_copyFileCount++;
+						}
+						catch (RemoteFileNotFoundException)
+						{
+							item.IsAliveRemote = false;
+						}
+						catch (RemoteFileInvalidException)
+						{
+							item.Status = FileStatus.Weird;
+						}
+						catch
+						{
+							item.Status = FileStatus.ToBeCopied; // Revert to status before copying.
+							throw;
 						}
 
-						item.CopiedTime = DateTime.Now;
-						item.IsAliveLocal = true;
-						item.IsAvailableLocal = true;
-						item.Status = FileStatus.Copied;
-
-						_copyFileCount++;
-					}
-					catch (RemoteFileNotFoundException)
-					{
-						item.IsAliveRemote = false;
-					}
-					catch (RemoteFileInvalidException)
-					{
-						item.Status = FileStatus.Weird;
-					}
-					catch
-					{
-						item.Status = FileStatus.ToBeCopied; // Revert to status before copying.
-						throw;
-					}
-
-					if (Settings.Current.DeleteOnCopy &&
-						!item.IsReadOnly && IsAliveLocal(item))
-					{
-						await FileManager.DeleteFileAsync(item.FilePath, _tokenSourceWorking.Token);
+						if (Settings.Current.DeleteOnCopy &&
+							!item.IsReadOnly && IsAliveLocal(item))
+						{
+							await manager.DeleteFileAsync(item.FilePath, _tokenSourceWorking.Token);
+						}
 					}
 				}
 
