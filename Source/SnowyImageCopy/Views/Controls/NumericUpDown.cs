@@ -68,13 +68,7 @@ namespace SnowyImageCopy.Views.Controls
 					(d, baseValue) =>
 					{
 						var numeric = (NumericUpDown)d;
-
-						if ((double)baseValue < numeric.Minimum)
-							return numeric.Minimum;
-						if (numeric.Maximum < (double)baseValue)
-							return numeric.Maximum;
-
-						return (double)baseValue;
+						return Math.Max(numeric.Minimum, Math.Min(numeric.Maximum, (double)baseValue));
 					}));
 
 		public double Minimum
@@ -183,6 +177,8 @@ namespace SnowyImageCopy.Views.Controls
 
 			UpButton = this.GetTemplateChild("PART_UpButton") as RepeatButton;
 			DownButton = this.GetTemplateChild("PART_DownButton") as RepeatButton;
+
+			ChangeCanChangeValue(); // For the case where Value is already at Minimum or Maximum
 		}
 
 		private static void OnPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
@@ -253,8 +249,8 @@ namespace SnowyImageCopy.Views.Controls
 			if ((UpButton == null) || (DownButton == null))
 				return;
 
-			DownButton.IsEnabled = (Value > Minimum);
 			UpButton.IsEnabled = (Value < Maximum);
+			DownButton.IsEnabled = (Value > Minimum);
 		}
 	}
 }

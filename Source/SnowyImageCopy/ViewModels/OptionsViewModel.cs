@@ -71,12 +71,6 @@ namespace SnowyImageCopy.ViewModels
 
 		public Settings SettingsCurrent => Settings.Current;
 
-		#region Path
-
-		// Left to View.
-
-		#endregion
-
 		#region Date
 
 		public IReadOnlyCollection<FilePeriodViewModel> FilePeriodList
@@ -104,18 +98,6 @@ namespace SnowyImageCopy.ViewModels
 				RaisePropertyChanged();
 			}
 		}
-
-		#endregion
-
-		#region Auto Check
-
-		// Left to View.
-
-		#endregion
-
-		#region File
-
-		// Left to View.
 
 		#endregion
 
@@ -159,12 +141,6 @@ namespace SnowyImageCopy.ViewModels
 				RaisePropertyChanged();
 			}
 		}
-
-		#endregion
-
-		#region Info
-
-		// Left to View.
 
 		#endregion
 	}

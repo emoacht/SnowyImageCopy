@@ -313,4 +313,10 @@
   <data name="ToastHeadline_CopyCompleted" xml:space="preserve">
     <value>Copy Completed</value>
   </data>
+  <data name="Options_Timeout" xml:space="preserve">
+    <value>Timeout</value>
+  </data>
+  <data name="Options_TimeoutDuration" xml:space="preserve">
+    <value>Timeout Duration</value>
+  </data>
 </root>

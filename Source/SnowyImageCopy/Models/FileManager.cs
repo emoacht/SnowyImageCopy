@@ -22,11 +22,6 @@ namespace SnowyImageCopy.Models
 		#region Constant
 
 		/// <summary>
-		/// Timeout duration for operation
-		/// </summary>
-		private static readonly TimeSpan _timeoutDuration = TimeSpan.FromSeconds(10);
-
-		/// <summary>
 		/// Interval to monitor network connection during operation
 		/// </summary>
 		private static readonly TimeSpan _monitorInterval = TimeSpan.FromSeconds(2);
@@ -566,6 +561,7 @@ namespace SnowyImageCopy.Models
 
 		private static async Task<byte[]> DownloadBytesAsync(HttpClient client, string path, int size, IProgress<ProgressInfo> progress, CardInfo card, CancellationToken cancellationToken)
 		{
+			var timeoutDuration = TimeSpan.FromSeconds(Settings.Current.TimeoutDuration);
 			int retryCount = 0;
 
 			while (true)
@@ -636,7 +632,7 @@ namespace SnowyImageCopy.Models
 									{
 										// Route without progress reporting
 										var readTask = Task.Run(async () => await response.Content.ReadAsByteArrayAsync());
-										var timeoutTask = Task.Delay(_timeoutDuration);
+										var timeoutTask = Task.Delay(timeoutDuration);
 
 										var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
 										if (completedTask == timeoutTask)
@@ -674,7 +670,7 @@ namespace SnowyImageCopy.Models
 											{
 												// CancellationToken in overload of ReadAsync method will not work for response content.
 												var readTask = Task.Run(async () => await stream.ReadAsync(buffer, 0, buffer.Length));
-												var timeoutTask = Task.Delay(_timeoutDuration);
+												var timeoutTask = Task.Delay(timeoutDuration);
 
 												var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
 												if (completedTask == timeoutTask)

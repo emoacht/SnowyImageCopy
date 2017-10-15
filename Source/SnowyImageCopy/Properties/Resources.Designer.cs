@@ -593,6 +593,24 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Timeout.
+        /// </summary>
+        public static string Options_Timeout {
+            get {
+                return ResourceManager.GetString("Options_Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout Duration.
+        /// </summary>
+        public static string Options_TimeoutDuration {
+            get {
+                return ResourceManager.GetString("Options_TimeoutDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to http://emoacht.github.io/SnowyImageCopy/index.html.
         /// </summary>
         public static string ProjectSite {

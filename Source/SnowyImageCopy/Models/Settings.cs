@@ -260,7 +260,7 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 		#region Auto check
-
+		
 		public int AutoCheckInterval
 		{
 			get { return _autoCheckInterval; }
@@ -274,6 +274,25 @@ namespace SnowyImageCopy.Models
 			}
 		}
 		private int _autoCheckInterval = 30; // Default
+
+		#endregion
+
+		#region Timeout
+
+		// XmlSerializer cannot work with TimeSpan.
+		public int TimeoutDuration
+		{
+			get { return _timeoutDuration; }
+			set
+			{
+				if (_timeoutDuration == value)
+					return;
+
+				_timeoutDuration = value;
+				RaisePropertyChanged();
+			}
+		}
+		private int _timeoutDuration = 10; // Default
 
 		#endregion
 

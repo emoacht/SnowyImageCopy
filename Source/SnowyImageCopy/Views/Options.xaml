@@ -164,6 +164,23 @@
 				</StackPanel>
 			</GroupBox>
 
+			<!-- Timeout -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_Timeout, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock
+							VerticalAlignment="Center"
+							Text="{Binding Resources.Options_TimeoutDuration, Source={x:Static models:ResourceService.Current}}"/>
+						<controls:NumericUpDown
+							Width="90" Height="24"
+							Margin="4"
+							Minimum="10" Maximum="60" Frequency="10"
+							Value="{Binding SettingsCurrent.TimeoutDuration}"/>
+					</StackPanel>
+				</StackPanel>
+			</GroupBox>
+
 			<!-- File -->
 			<GroupBox Template="{StaticResource ItemGroupTemplate}"
 					  Header="{Binding Resources.Options_File, Source={x:Static models:ResourceService.Current}}">
