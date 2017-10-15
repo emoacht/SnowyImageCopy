@@ -378,9 +378,9 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>BitmapSource</returns>
-		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes)
+		internal static Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes)
 		{
-			return await ConvertBytesToBitmapSourceAsync(bytes, 0D, 0D, false).ConfigureAwait(false);
+			return ConvertBytesToBitmapSourceAsync(bytes, 0D, 0D, false);
 		}
 
 		/// <summary>
@@ -391,9 +391,9 @@ namespace SnowyImageCopy.Models
 		/// <param name="willReadExif">Whether Exif metadata will be read from byte array</param>
 		/// <param name="destinationProfile">Destination color profile for color management</param>
 		/// <returns>BitmapSource</returns>
-		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes, double targetWidth, bool willReadExif, ColorContext destinationProfile = null)
+		internal static Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes, double targetWidth, bool willReadExif, ColorContext destinationProfile = null)
 		{
-			return await ConvertBytesToBitmapSourceAsync(bytes, targetWidth, 0D, willReadExif, destinationProfile).ConfigureAwait(false);
+			return ConvertBytesToBitmapSourceAsync(bytes, targetWidth, 0D, willReadExif, destinationProfile);
 		}
 
 		/// <summary>

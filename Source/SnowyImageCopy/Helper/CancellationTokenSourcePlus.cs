@@ -40,7 +40,7 @@ namespace SnowyImageCopy.Helper
 		#region Cancel
 
 		/// <summary>
-		/// Communicates a Cancel request on this CancellationTokenSource if it has not been disposed.
+		/// Communicates a cancel request if this CancellationTokenSource has not been disposed.
 		/// </summary>
 		/// <returns>True if communicated.</returns>
 		public bool TryCancel()
@@ -56,7 +56,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Communicates a Cancel request on this CancellationTokenSource if it has not been disposed.
+		/// Communicates a cancel request if this CancellationTokenSource has not been disposed.
 		/// </summary>
 		/// <param name="throwOnFirstException">Whether exceptions should immediately propagate</param>
 		/// <returns>True if communicated.</returns>
@@ -73,7 +73,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Schedules a Cancel operation on this CancellationTokenSource if it has not been disposed.
+		/// Schedules a cancel operation if this CancellationTokenSource has not been disposed.
 		/// </summary>
 		/// <param name="millisecondsDelay">Waiting duration before canceling this CancellationTokenSource</param>
 		/// <returns>True if scheduled.</returns>
@@ -90,7 +90,7 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Schedules a Cancel operation on this CancellationTokenSource if it has not been disposed.
+		/// Schedules a cancel operation if this CancellationTokenSource has not been disposed.
 		/// </summary>
 		/// <param name="delay">Waiting duration before canceling this CancellationTokenSource</param>
 		/// <returns>True if scheduled.</returns>

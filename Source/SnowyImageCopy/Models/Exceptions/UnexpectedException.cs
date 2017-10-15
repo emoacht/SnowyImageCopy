@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SnowyImageCopy.Models.Exceptions
 {
 	/// <summary>
-	/// Exception when an exception which has not been expected so far happened
+	/// Exception when an exception which has not been expected so far is thrown
 	/// </summary>
 	/// <remarks>This exception is for debugging purpose.</remarks>
 	[Serializable]

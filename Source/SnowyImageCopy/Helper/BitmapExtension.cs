@@ -60,9 +60,11 @@ namespace SnowyImageCopy.Helper
 			if (source == null)
 				throw new ArgumentNullException(nameof(source));
 
-			var handleBitmap = source.GetHbitmap();
+			var handleBitmap = IntPtr.Zero;
 			try
 			{
+				handleBitmap = source.GetHbitmap();
+
 				return Imaging.CreateBitmapSourceFromHBitmap(
 					handleBitmap,
 					IntPtr.Zero,
@@ -71,7 +73,8 @@ namespace SnowyImageCopy.Helper
 			}
 			finally
 			{
-				DeleteObject(handleBitmap);
+				if (handleBitmap != IntPtr.Zero)
+					DeleteObject(handleBitmap);
 			}
 		}
 	}

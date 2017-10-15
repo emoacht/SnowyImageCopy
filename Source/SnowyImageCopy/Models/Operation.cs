@@ -632,7 +632,7 @@ namespace SnowyImageCopy.Models
 			}
 			finally
 			{
-				// In case any exception happened.
+				// In case any exception is thrown.
 				IsChecking = false;
 				IsCopying = false;
 			}
@@ -767,7 +767,7 @@ namespace SnowyImageCopy.Models
 			}
 			finally
 			{
-				// In case any exception happened.
+				// In case any exception is thrown.
 				IsCopying = false;
 			}
 		}

@@ -20,9 +20,9 @@ namespace SnowyImageCopy.Helper
 		/// </summary>
 		/// <param name="filePath">File path</param>
 		/// <returns>Byte array of file</returns>
-		public static async Task<byte[]> ReadAllBytesAsync(string filePath)
+		public static Task<byte[]> ReadAllBytesAsync(string filePath)
 		{
-			return await ReadAllBytesAsync(filePath, _defaultCopyBufferSize, CancellationToken.None);
+			return ReadAllBytesAsync(filePath, _defaultCopyBufferSize, CancellationToken.None);
 		}
 
 		/// <summary>
@@ -31,9 +31,9 @@ namespace SnowyImageCopy.Helper
 		/// <param name="filePath">File path</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>Byte array of file</returns>
-		public static async Task<byte[]> ReadAllBytesAsync(string filePath, CancellationToken cancellationToken)
+		public static Task<byte[]> ReadAllBytesAsync(string filePath, CancellationToken cancellationToken)
 		{
-			return await ReadAllBytesAsync(filePath, _defaultCopyBufferSize, cancellationToken);
+			return ReadAllBytesAsync(filePath, _defaultCopyBufferSize, cancellationToken);
 		}
 
 		/// <summary>
