@@ -92,7 +92,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private bool? _canLoadDataLocal;
 
-		public override string ToString() => this.FileName; // For the case where being called for binding
+		public override string ToString() => this.FileName; // For the case when being called for binding
 
 		#endregion
 

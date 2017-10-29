@@ -13,8 +13,7 @@
 			 xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
 			 xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
 			 mc:Ignorable="d"
-			 d:DesignHeight="800" d:DesignWidth="250"
-			 Loaded="OnLoaded">
+			 d:DesignHeight="800" d:DesignWidth="250">
 	<UserControl.Resources>
 		<ControlTemplate x:Key="ItemGroupTemplate" TargetType="{x:Type GroupBox}">
 			<Grid>

@@ -23,15 +23,14 @@ namespace SnowyImageCopy.Views
 			InitializeComponent();
 
 			this.DataContext = new OptionsViewModel();
+			this.Loaded += OnLoaded;
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
 		{
-			var window = Window.GetWindow(this);
-			if (window == null)
-				return;
+			this.Loaded -= OnLoaded;
 
-			var mainWindowViewModelInstance = window.DataContext as MainWindowViewModel;
+			var mainWindowViewModelInstance = Window.GetWindow(this)?.DataContext as MainWindowViewModel;
 			if (mainWindowViewModelInstance == null)
 				return;
 

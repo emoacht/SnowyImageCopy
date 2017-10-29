@@ -589,7 +589,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>Color profile</returns>
 		private static ColorContext GetColorProfile(BitmapFrame bitmapFrame)
 		{
-			return ((bitmapFrame.ColorContexts != null) && bitmapFrame.ColorContexts.Any())
+			return (bitmapFrame.ColorContexts?.Count > 0)
 				? bitmapFrame.ColorContexts.First()
 				: new ColorContext(PixelFormats.Bgra32);
 		}
