@@ -17,6 +17,9 @@ namespace SnowyImageCopy.ViewModels
 
 		public ItemObservableCollection()
 		{
+			// If BindingOperations.EnableCollectionSynchronization method is used, locking is required
+			// when collection members are changed (not when a property value of a member is changed)
+			// according to http://10rem.net/blog/2012/01/20/wpf-45-cross-thread-collection-synchronization-redux
 			BindingOperations.EnableCollectionSynchronization(this, _locker);
 		}
 
@@ -90,15 +93,15 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		#endregion
-		
+
 		protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
 		{
 			// Add/Remove event handlers for PropertyChanged event of items.
-			if (e.OldItems != null)
+			if (e.OldItems?.Count > 0)
 				foreach (T item in e.OldItems)
 					item.PropertyChanged -= OnItemPropertyChanged;
 
-			if (e.NewItems != null) // e.NewItems seems not to become null.
+			if (e.NewItems?.Count > 0)
 				foreach (T item in e.NewItems)
 					item.PropertyChanged += OnItemPropertyChanged;
 
@@ -108,25 +111,14 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 
-		protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-		{
-			lock (_locker)
-			{
-				base.OnPropertyChanged(e);
-			}
-		}
-
 		#region PropertyChanged event of item
 
 		private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			lock (_locker)
-			{
-				ItemPropertyChangedSender = sender as T;
-				ItemPropertyChangedEventArgs = e;
+			ItemPropertyChangedSender = sender as T;
+			ItemPropertyChangedEventArgs = e;
 
-				base.OnPropertyChanged(new PropertyChangedEventArgs(nameof(ItemPropertyChangedSender)));
-			}
+			base.OnPropertyChanged(new PropertyChangedEventArgs(nameof(ItemPropertyChangedSender)));
 		}
 
 		/// <summary>

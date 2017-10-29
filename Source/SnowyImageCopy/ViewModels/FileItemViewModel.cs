@@ -139,10 +139,8 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 
-		public bool IsDescendant
-		{
-			get { return this.Directory.StartsWith(Settings.Current.RemoteDescendant, StringComparison.OrdinalIgnoreCase); }
-		}
+		public bool IsDescendant =>
+			this.Directory.StartsWith(Settings.Current.RemoteDescendant, StringComparison.OrdinalIgnoreCase);
 
 		public bool IsAliveRemote { get; set; }
 		public bool IsAliveLocal { get; set; }
@@ -197,7 +195,7 @@ namespace SnowyImageCopy.ViewModels
 			if (fileItem == null)
 				throw new ArgumentNullException(nameof(fileItem));
 
-			_fileItem = fileItem;
+			this._fileItem = fileItem;
 
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{
@@ -223,13 +221,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region IComparable member
 
-		public int CompareTo(FileItemViewModel other)
-		{
-			if (other == null)
-				return 1;
-
-			return this.FileItem.CompareTo(other.FileItem);
-		}
+		public int CompareTo(FileItemViewModel other) => _fileItem.CompareTo(other?.FileItem);
 
 		#endregion
 	}

@@ -841,46 +841,46 @@ namespace SnowyImageCopy.Models
 					if (_card.CanGetWriteTimeStamp)
 						_card.WriteTimeStamp = await manager.GetWriteTimeStampAsync(_tokenSourceWorking.Token);
 
-					// Check if any sample is in old items.
-					var isSample = FileListCore.Any(x => x.Size == 0);
-
-					// Check if FlashAir card is changed.
-					bool isChanged;
-					if (_card.IsChanged.HasValue)
-					{
-						isChanged = _card.IsChanged.Value;
-					}
-					else
-					{
-						var signatures = new HashSet<string>(FileListCore.Select(x => x.Signature));
-						isChanged = !fileListNew.Select(x => x.Signature).Any(x => signatures.Contains(x));
-					}
-
-					if (isSample || isChanged)
-						FileListCore.Clear();
-
-					// Check old items.
-					foreach (var itemOld in FileListCore)
-					{
-						var itemSame = fileListNew.FirstOrDefault(x =>
-							x.FilePath.Equals(itemOld.FilePath, StringComparison.OrdinalIgnoreCase) &&
-							(x.Size == itemOld.Size));
-
-						if (itemSame != null)
-						{
-							fileListNew.Remove(itemSame);
-
-							itemOld.IsAliveRemote = true;
-							itemOld.FileItem = itemSame.FileItem;
-							continue;
-						}
-
-						itemOld.IsAliveRemote = false;
-					}
-
-					// Add new items (This operation may be heavy).
 					await Task.Run(() =>
 					{
+						// Check if any sample is in old items.
+						var isSample = FileListCore.Any(x => x.Size == 0);
+
+						// Check if FlashAir card is changed.
+						bool isChanged;
+						if (_card.IsChanged.HasValue)
+						{
+							isChanged = _card.IsChanged.Value;
+						}
+						else
+						{
+							var signaturesOld = new HashSet<string>(FileListCore.Select(x => x.Signature));
+							isChanged = !fileListNew.Select(x => x.Signature).Any(x => signaturesOld.Contains(x));
+						}
+
+						if (isSample || isChanged)
+							FileListCore.Clear();
+
+						// Check old items.
+						foreach (var itemOld in FileListCore)
+						{
+							var itemSameIndex = fileListNew.IndexOf(x =>
+								x.FilePath.Equals(itemOld.FilePath, StringComparison.OrdinalIgnoreCase) &&
+								(x.Size == itemOld.Size));
+
+							if (itemSameIndex >= 0)
+							{
+								itemOld.IsAliveRemote = true;
+								itemOld.FileItem = fileListNew[itemSameIndex].FileItem;
+
+								fileListNew.RemoveAt(itemSameIndex);
+								continue;
+							}
+
+							itemOld.IsAliveRemote = false;
+						}
+
+						// Add new items (This operation may be heavy).
 						var isLeadOff = true;
 						foreach (var itemNew in fileListNew)
 						{
@@ -894,53 +894,50 @@ namespace SnowyImageCopy.Models
 
 							FileListCore.Insert(itemNew); // Customized Insert method
 						}
-					});
 
-					// Check all local files.
-					foreach (var item in FileListCore)
-					{
-						var info = GetFileInfoLocal(item);
-						item.IsAliveLocal = IsAliveLocal(info, item.Size);
-						item.IsAvailableLocal = IsAvailableLocal(info);
-						item.Status = item.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
-					}
-
-					// Manage lost items.
-					var itemsLost = FileListCore.Where(x => !x.IsAliveRemote).ToArray();
-					if (itemsLost.Any())
-					{
-						if (Settings.Current.MovesFileToRecycle)
+						// Check all local files.
+						foreach (var item in FileListCore)
 						{
-							foreach (var item in itemsLost)
-							{
-								if (!item.IsDescendant || (item.Status != FileStatus.Copied))
-									continue;
+							var info = GetFileInfoLocal(item);
+							item.IsAliveLocal = IsAliveLocal(info, item.Size);
+							item.IsAvailableLocal = IsAvailableLocal(info);
+							item.Status = item.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
+						}
 
+						// Manage deleted items.
+						var itemDeletedPairs = FileListCore
+							.Select((x, Index) => !x.IsAliveRemote ? new { Item = x, Index } : null)
+							.Where(x => x != null)
+							.OrderByDescending(x => x.Index)
+							.ToArray();
+
+						foreach (var itemDeletedPair in itemDeletedPairs)
+						{
+							var item = itemDeletedPair.Item;
+
+							if (Settings.Current.MovesFileToRecycle &&
+								item.IsDescendant &&
+								(item.Status == FileStatus.Copied))
+							{
 								try
 								{
 									Recycle.MoveToRecycle(ComposeLocalPath(item));
+									item.Status = FileStatus.Recycled;
 								}
 								catch (Exception ex)
 								{
 									Debug.WriteLine($"Failed to move a file to Recycle.\r\n{ex}");
 									item.Status = FileStatus.NotCopied;
-									continue;
 								}
+							}
 
-								item.Status = FileStatus.Recycled;
+							if (!item.IsDescendant ||
+								((item.Status != FileStatus.Copied) && (item.Status != FileStatus.Recycled)))
+							{
+								FileListCore.RemoveAt(itemDeletedPair.Index);
 							}
 						}
-
-						for (int i = itemsLost.Length - 1; i >= 0; i--)
-						{
-							var item = itemsLost[i];
-							if (item.IsDescendant &&
-								((item.Status == FileStatus.Copied) || (item.Status == FileStatus.Recycled)))
-								continue;
-
-							FileListCore.Remove(item);
-						}
-					}
+					});
 
 					// Get thumbnails (from local).
 					foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))

@@ -150,7 +150,7 @@ namespace SnowyImageCopy.Models
 				if (itemList[i].IsHidden || itemList[i].IsSystemFile || itemList[i].IsVolume ||
 					itemList[i].IsFlashAirSystemFolder)
 				{
-					itemList.Remove(itemList[i]);
+					itemList.RemoveAt(i);
 					continue;
 				}
 
@@ -158,13 +158,13 @@ namespace SnowyImageCopy.Models
 				{
 					if (!itemList[i].IsImageFile)
 					{
-						itemList.Remove(itemList[i]);
+						itemList.RemoveAt(i);
 					}
 					continue;
 				}
 
 				var path = itemList[i].FilePath;
-				itemList.Remove(itemList[i]);
+				itemList.RemoveAt(i);
 				itemList.AddRange(await GetFileListAllAsync(client, path, card, cancellationToken));
 			}
 			return itemList;
