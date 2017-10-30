@@ -142,14 +142,7 @@ namespace SnowyImageCopy.Models
 				return _localFolder ?? (_localFolder =
 					Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), _defaultLocalFolder));
 			}
-			set
-			{
-				if (_localFolder == value)
-					return;
-
-				_localFolder = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _localFolder, value); }
 		}
 		private string _localFolder;
 
@@ -160,14 +153,7 @@ namespace SnowyImageCopy.Models
 		public FilePeriod TargetPeriod
 		{
 			get { return _targetPeriod; }
-			set
-			{
-				if (_targetPeriod == value)
-					return;
-
-				_targetPeriod = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _targetPeriod, value); }
 		}
 		private FilePeriod _targetPeriod = FilePeriod.All; // Default
 
@@ -194,14 +180,7 @@ namespace SnowyImageCopy.Models
 		public bool IsCurrentImageVisible
 		{
 			get { return _isCurrentImageVisible; }
-			set
-			{
-				if (_isCurrentImageVisible == value)
-					return;
-
-				_isCurrentImageVisible = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isCurrentImageVisible, value); }
 		}
 		private bool _isCurrentImageVisible;
 
@@ -226,14 +205,7 @@ namespace SnowyImageCopy.Models
 		public bool InstantCopy
 		{
 			get { return _instantCopy; }
-			set
-			{
-				if (_instantCopy == value)
-					return;
-
-				_instantCopy = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _instantCopy, value); }
 		}
 		private bool _instantCopy = true; // Default
 
@@ -246,32 +218,18 @@ namespace SnowyImageCopy.Models
 
 				return _deleteOnCopy;
 			}
-			set
-			{
-				if (_deleteOnCopy == value)
-					return;
-
-				_deleteOnCopy = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _deleteOnCopy, value); }
 		}
 		private bool _deleteOnCopy;
 
 		#endregion
 
 		#region Auto check
-		
+
 		public int AutoCheckInterval
 		{
 			get { return _autoCheckInterval; }
-			set
-			{
-				if (_autoCheckInterval == value)
-					return;
-
-				_autoCheckInterval = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _autoCheckInterval, value); }
 		}
 		private int _autoCheckInterval = 30; // Default
 
@@ -283,14 +241,7 @@ namespace SnowyImageCopy.Models
 		public int TimeoutDuration
 		{
 			get { return _timeoutDuration; }
-			set
-			{
-				if (_timeoutDuration == value)
-					return;
-
-				_timeoutDuration = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _timeoutDuration, value); }
 		}
 		private int _timeoutDuration = 10; // Default
 
@@ -301,70 +252,35 @@ namespace SnowyImageCopy.Models
 		public bool MakesFileExtensionLowercase
 		{
 			get { return _makesFileExtensionLowercase; }
-			set
-			{
-				if (_makesFileExtensionLowercase == value)
-					return;
-
-				_makesFileExtensionLowercase = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _makesFileExtensionLowercase, value); }
 		}
 		private bool _makesFileExtensionLowercase = true; // Default
 
 		public bool MovesFileToRecycle
 		{
 			get { return _movesFileToRecycle; }
-			set
-			{
-				if (_movesFileToRecycle == value)
-					return;
-
-				_movesFileToRecycle = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _movesFileToRecycle, value); }
 		}
 		private bool _movesFileToRecycle;
 
 		public bool SelectsReadOnlyFile
 		{
 			get { return _selectsReadOnlyFile; }
-			set
-			{
-				if (_selectsReadOnlyFile == value)
-					return;
-
-				_selectsReadOnlyFile = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _selectsReadOnlyFile, value); }
 		}
 		private bool _selectsReadOnlyFile;
 
 		public bool HandlesJpegFileOnly
 		{
 			get { return _handlesJpegFileOnly; }
-			set
-			{
-				if (_handlesJpegFileOnly == value)
-					return;
-
-				_handlesJpegFileOnly = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _handlesJpegFileOnly, value); }
 		}
 		private bool _handlesJpegFileOnly;
 
 		public bool CreatesDatedFolder
 		{
 			get { return _createsDatedFolder; }
-			set
-			{
-				if (_createsDatedFolder == value)
-					return;
-
-				_createsDatedFolder = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _createsDatedFolder, value); }
 		}
 		private bool _createsDatedFolder = true; // Default;
 
@@ -373,11 +289,7 @@ namespace SnowyImageCopy.Models
 			get { return _enablesChooseDeleteOnCopy; }
 			set
 			{
-				if (_enablesChooseDeleteOnCopy == value)
-					return;
-
-				_enablesChooseDeleteOnCopy = value;
-				RaisePropertyChanged();
+				SetPropertyValue(ref _enablesChooseDeleteOnCopy, value);
 
 				if (!value)
 					DeleteOnCopy = false;
@@ -392,11 +304,7 @@ namespace SnowyImageCopy.Models
 		public string CultureName
 		{
 			get { return _cultureName; }
-			set
-			{
-				_cultureName = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _cultureName, value); }
 		}
 		private string _cultureName;
 

@@ -27,11 +27,7 @@ namespace SnowyImageCopy.ViewModels
 		public string OperationStatus
 		{
 			get { return _operationStatus; }
-			set
-			{
-				_operationStatus = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _operationStatus, value); }
 		}
 		private string _operationStatus;
 
@@ -40,11 +36,7 @@ namespace SnowyImageCopy.ViewModels
 		public bool IsWindowActivateRequested
 		{
 			get { return _isWindowActivateRequested; }
-			set
-			{
-				_isWindowActivateRequested = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isWindowActivateRequested, value); }
 		}
 		private bool _isWindowActivateRequested;
 
@@ -73,11 +65,7 @@ namespace SnowyImageCopy.ViewModels
 		public int FileListCoreViewIndex
 		{
 			get { return _fileListCoreViewIndex; }
-			set
-			{
-				_fileListCoreViewIndex = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _fileListCoreViewIndex, value); }
 		}
 		private int _fileListCoreViewIndex = -1; // No selection
 
@@ -264,11 +252,7 @@ namespace SnowyImageCopy.ViewModels
 		public bool IsCheckCopyRunning
 		{
 			get { return _isCheckCopyRunning; }
-			set
-			{
-				_isCheckCopyRunning = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isCheckCopyRunning, value); }
 		}
 		private bool _isCheckCopyRunning;
 
@@ -297,11 +281,7 @@ namespace SnowyImageCopy.ViewModels
 		public bool IsCheckCopyAutoRunning
 		{
 			get { return _isCheckCopyAutoRunning; }
-			set
-			{
-				_isCheckCopyAutoRunning = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isCheckCopyAutoRunning, value); }
 		}
 		private bool _isCheckCopyAutoRunning;
 
@@ -330,11 +310,7 @@ namespace SnowyImageCopy.ViewModels
 		public bool IsCheckRunning
 		{
 			get { return _isCheckRunning; }
-			set
-			{
-				_isCheckRunning = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isCheckRunning, value); }
 		}
 		private bool _isCheckRunning;
 
@@ -363,11 +339,7 @@ namespace SnowyImageCopy.ViewModels
 		public bool IsCopyRunning
 		{
 			get { return _isCopyRunning; }
-			set
-			{
-				_isCopyRunning = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isCopyRunning, value); }
 		}
 		private bool _isCopyRunning;
 
@@ -444,8 +416,7 @@ namespace SnowyImageCopy.ViewModels
 			get { return _isBrowserOpen; }
 			set
 			{
-				_isBrowserOpen = value;
-				RaisePropertyChanged();
+				SetPropertyValue(ref _isBrowserOpen, value);
 
 				if (value)
 					Op.Stop();

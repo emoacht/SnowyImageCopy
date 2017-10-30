@@ -149,11 +149,7 @@ namespace SnowyImageCopy.ViewModels
 		public FileStatus Status
 		{
 			get { return _status; }
-			set
-			{
-				_status = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _status, value); }
 		}
 		private FileStatus _status = FileStatus.Unknown;
 

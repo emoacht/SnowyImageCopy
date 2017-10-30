@@ -13,6 +13,15 @@ namespace SnowyTool.Common
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
+		protected void SetPropertyValue<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+		{
+			if (EqualityComparer<T>.Default.Equals(storage, value))
+				return;
+
+			storage = value;
+			RaisePropertyChanged(propertyName);
+		}
+
 		protected void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
 		{
 			if (propertyExpression == null)
@@ -22,12 +31,10 @@ namespace SnowyTool.Common
 			if (memberExpression == null)
 				throw new ArgumentException("The expression is not a member access expression.", nameof(propertyExpression));
 
-			this.RaisePropertyChanged(memberExpression.Member.Name);
+			RaisePropertyChanged(memberExpression.Member.Name);
 		}
 
-		protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
+		protected void RaisePropertyChanged([CallerMemberName] string propertyName = null) =>
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 }

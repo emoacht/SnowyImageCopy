@@ -138,11 +138,7 @@ namespace SnowyImageCopy.Models
 		public bool IsChecking
 		{
 			get { return _isChecking; }
-			set
-			{
-				_isChecking = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isChecking, value); }
 		}
 		private bool _isChecking;
 
@@ -152,11 +148,7 @@ namespace SnowyImageCopy.Models
 		public bool IsCopying
 		{
 			get { return _isCopying; }
-			set
-			{
-				_isCopying = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isCopying, value); }
 		}
 		private bool _isCopying;
 
@@ -166,11 +158,7 @@ namespace SnowyImageCopy.Models
 		internal bool IsAutoRunning
 		{
 			get { return _isAutoRunning; }
-			set
-			{
-				_isAutoRunning = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isAutoRunning, value); }
 		}
 		private bool _isAutoRunning;
 
@@ -180,11 +168,7 @@ namespace SnowyImageCopy.Models
 		internal bool IsSavingDesktop
 		{
 			get { return _isSavingDesktop; }
-			set
-			{
-				_isSavingDesktop = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isSavingDesktop, value); }
 		}
 		private bool _isSavingDesktop;
 
@@ -194,11 +178,7 @@ namespace SnowyImageCopy.Models
 		internal bool IsSendingClipboard
 		{
 			get { return _isSendingClipboard; }
-			set
-			{
-				_isSendingClipboard = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isSendingClipboard, value); }
 		}
 		private bool _isSendingClipboard;
 
@@ -212,11 +192,7 @@ namespace SnowyImageCopy.Models
 		public double ProgressCopiedAll
 		{
 			get { return _progressCopiedAll; }
-			set
-			{
-				_progressCopiedAll = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _progressCopiedAll, value); }
 		}
 		private double _progressCopiedAll = 40; // Sample percentage
 
@@ -226,11 +202,7 @@ namespace SnowyImageCopy.Models
 		public double ProgressCopiedCurrent
 		{
 			get { return _progressCopiedCurrent; }
-			set
-			{
-				_progressCopiedCurrent = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _progressCopiedCurrent, value); }
 		}
 		private double _progressCopiedCurrent = 60; // Sample percentage
 
@@ -240,11 +212,7 @@ namespace SnowyImageCopy.Models
 		public TimeSpan RemainingTime
 		{
 			get { return _remainingTime; }
-			set
-			{
-				_remainingTime = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _remainingTime, value); }
 		}
 		private TimeSpan _remainingTime;
 
@@ -254,14 +222,7 @@ namespace SnowyImageCopy.Models
 		public TaskbarItemProgressState ProgressState
 		{
 			get { return _progressState; }
-			set
-			{
-				if (_progressState == value)
-					return;
-
-				_progressState = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _progressState, value); }
 		}
 		private TaskbarItemProgressState _progressState;
 

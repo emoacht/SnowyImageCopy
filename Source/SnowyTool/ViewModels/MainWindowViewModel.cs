@@ -20,11 +20,7 @@ namespace SnowyTool.ViewModels
 		public string OperationStatus
 		{
 			get { return _operationStatus; }
-			set
-			{
-				_operationStatus = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _operationStatus, value); }
 		}
 		private string _operationStatus;
 

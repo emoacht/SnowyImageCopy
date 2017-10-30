@@ -50,11 +50,7 @@ namespace SnowyImageCopy.ViewModels
 		public string Description
 		{
 			get { return _description; }
-			set
-			{
-				_description = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _description, value); }
 		}
 		private string _description;
 

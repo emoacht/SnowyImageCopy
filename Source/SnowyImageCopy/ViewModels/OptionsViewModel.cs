@@ -59,11 +59,7 @@ namespace SnowyImageCopy.ViewModels
 		public bool IsCheckingOrCopying
 		{
 			get { return _isCheckingOrCopying; }
-			set
-			{
-				_isCheckingOrCopying = value;
-				RaisePropertyChanged();
-			}
+			set { SetPropertyValue(ref _isCheckingOrCopying, value); }
 		}
 		private bool _isCheckingOrCopying;
 
