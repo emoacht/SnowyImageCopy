@@ -25,16 +25,6 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>Inversed Boolean except if condition Boolean is given and does not match source Boolean.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			return ConvertBase(value, parameter);
-		}
-
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			return ConvertBase(value, parameter);
-		}
-
-		private static object ConvertBase(object value, object parameter)
-		{
 			if (!(value is bool))
 				return DependencyProperty.UnsetValue;
 
@@ -45,6 +35,11 @@ namespace SnowyImageCopy.Views.Converters
 				return Binding.DoNothing; // DependencyProperty.UnsetValue will not work well.
 
 			return !sourceValue;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return Convert(value, targetType, parameter, culture);
 		}
 
 		private static bool? FindBoolean(object source)

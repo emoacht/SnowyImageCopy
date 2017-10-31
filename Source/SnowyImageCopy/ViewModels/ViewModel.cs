@@ -16,7 +16,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Dispose
 
-		protected CompositeDisposable Subscription { get { return _subscription.Value; } }
+		protected CompositeDisposable Subscription => _subscription.Value;
 		private Lazy<CompositeDisposable> _subscription = new Lazy<CompositeDisposable>(() => new CompositeDisposable());
 
 		private bool _disposed = false;

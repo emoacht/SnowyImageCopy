@@ -114,10 +114,10 @@ namespace SnowyImageCopy.Views.Behaviors
 			var baseElementLocation = baseElement.PointToScreen(default(Point));
 
 			var expandedRect = new Rect(
-					baseElementLocation.X - ExpandedMargin.Left * factor.X,
-					baseElementLocation.Y - ExpandedMargin.Top * factor.Y,
-					(baseElement.ActualWidth + ExpandedMargin.Left + ExpandedMargin.Right) * factor.X,
-					(baseElement.ActualHeight + ExpandedMargin.Top + ExpandedMargin.Bottom) * factor.Y);
+				baseElementLocation.X - ExpandedMargin.Left * factor.X,
+				baseElementLocation.Y - ExpandedMargin.Top * factor.Y,
+				(baseElement.ActualWidth + ExpandedMargin.Left + ExpandedMargin.Right) * factor.X,
+				(baseElement.ActualHeight + ExpandedMargin.Top + ExpandedMargin.Bottom) * factor.Y);
 
 			var rects = new[] { expandedRect }
 				.Concat(targetElements
