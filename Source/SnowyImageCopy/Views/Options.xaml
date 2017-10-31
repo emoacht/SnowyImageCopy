@@ -36,7 +36,20 @@
 			</Grid>
 		</ControlTemplate>
 
-		<ControlTemplate x:Key="ItemDetailedTemplate" TargetType="{x:Type GroupBox}">
+		<ControlTemplate x:Key="ItemDetailedCenterTemplate" TargetType="{x:Type GroupBox}">
+			<DockPanel Margin="0,4">
+				<Grid DockPanel.Dock="Right"
+					  Margin="4,0,0,0">
+					<ContentPresenter VerticalAlignment="Center"/>
+				</Grid>
+				<TextBlock DockPanel.Dock="Left"
+						   VerticalAlignment="Center"
+						   TextWrapping="Wrap"
+						   Text="{Binding Header, RelativeSource={RelativeSource AncestorType=GroupBox}}"/>
+			</DockPanel>
+		</ControlTemplate>
+
+		<ControlTemplate x:Key="ItemDetailedTopTemplate" TargetType="{x:Type GroupBox}">
 			<DockPanel Margin="0,4">
 				<Grid DockPanel.Dock="Right"
 					  Margin="4,0,0,0">
@@ -145,37 +158,25 @@
 				</StackPanel>
 			</GroupBox>
 
-			<!-- Auto Check -->
+			<!-- Connection -->
 			<GroupBox Template="{StaticResource ItemGroupTemplate}"
-					  Header="{Binding Resources.Options_AutoCheck, Source={x:Static models:ResourceService.Current}}">
+					  Header="{Binding Resources.Options_Connection, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock
-							VerticalAlignment="Center"
-							Text="{Binding Resources.Options_AutoCheckInterval, Source={x:Static models:ResourceService.Current}}"/>
+					<GroupBox Template="{StaticResource ItemDetailedCenterTemplate}"
+							  Header="{Binding Resources.Options_AutoCheckInterval, Source={x:Static models:ResourceService.Current}}">
 						<controls:NumericUpDown
-							Width="90" Height="24"
-							Margin="4"
+							Width="90" Height="24"							
 							Minimum="1" Middle="10" Maximum="180" Frequency="10" LowerFrequency="1" HigherFrequency="10"
 							Value="{Binding SettingsCurrent.AutoCheckInterval}"/>
-					</StackPanel>
-				</StackPanel>
-			</GroupBox>
+					</GroupBox>
 
-			<!-- Timeout -->
-			<GroupBox Template="{StaticResource ItemGroupTemplate}"
-					  Header="{Binding Resources.Options_Timeout, Source={x:Static models:ResourceService.Current}}">
-				<StackPanel Margin="4">
-					<StackPanel Orientation="Horizontal">
-						<TextBlock
-							VerticalAlignment="Center"
-							Text="{Binding Resources.Options_TimeoutDuration, Source={x:Static models:ResourceService.Current}}"/>
+					<GroupBox Template="{StaticResource ItemDetailedCenterTemplate}"
+							  Header="{Binding Resources.Options_TimeoutDuration, Source={x:Static models:ResourceService.Current}}">
 						<controls:NumericUpDown
-							Width="90" Height="24"
-							Margin="4"
+							Width="90" Height="24"							
 							Minimum="10" Maximum="60" Frequency="10"
 							Value="{Binding SettingsCurrent.TimeoutDuration}"/>
-					</StackPanel>
+					</GroupBox>
 				</StackPanel>
 			</GroupBox>
 
@@ -183,7 +184,7 @@
 			<GroupBox Template="{StaticResource ItemGroupTemplate}"
 					  Header="{Binding Resources.Options_File, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
-					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_ExtensionLowercase, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Width="60" Height="24"
@@ -196,7 +197,7 @@
 							IsChecked="{Binding SettingsCurrent.MakesFileExtensionLowercase, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							x:Name="RecycleButton"
@@ -210,7 +211,7 @@
 							IsChecked="{Binding SettingsCurrent.MovesFileToRecycle, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_SelectReadOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Width="60" Height="24"
@@ -223,7 +224,7 @@
 							IsChecked="{Binding SettingsCurrent.SelectsReadOnlyFile, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_HandleJpegFileOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Width="60" Height="24"
@@ -236,7 +237,7 @@
 							IsChecked="{Binding SettingsCurrent.HandlesJpegFileOnly, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_CreateDatedFolder, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Width="60" Height="24"
@@ -249,7 +250,7 @@
 							IsChecked="{Binding SettingsCurrent.CreatesDatedFolder, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTemplate}"
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_ChooseDeleteOnCopy, Source={x:Static models:ResourceService.Current}}">
 						<StackPanel>
 							<controls:SlidingToggleButton

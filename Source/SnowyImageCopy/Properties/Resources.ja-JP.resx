@@ -129,14 +129,20 @@
   <data name="Command_Copy" xml:space="preserve">
     <value>コピー</value>
   </data>
+  <data name="Command_Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="Options_DeleteOnCopy" xml:space="preserve">
+    <value>コピー後に削除</value>
+  </data>
+  <data name="Options_InstantCopy" xml:space="preserve">
+    <value>すぐコピー</value>
+  </data>
   <data name="Command_Save" xml:space="preserve">
     <value>デスクトップへ</value>
   </data>
   <data name="Command_Send" xml:space="preserve">
     <value>クリップボードへ</value>
-  </data>
-  <data name="Command_Stop" xml:space="preserve">
-    <value>停止</value>
   </data>
   <data name="CurrentImage" xml:space="preserve">
     <value>現在のイメージ</value>
@@ -222,20 +228,23 @@
   <data name="Options" xml:space="preserve">
     <value>オプション</value>
   </data>
-  <data name="Options_AutoCheck" xml:space="preserve">
-    <value>自動チェック</value>
+  <data name="Options_Path" xml:space="preserve">
+    <value>パス</value>
   </data>
-  <data name="Options_AutoCheckInterval" xml:space="preserve">
-    <value>自動チェック間隔</value>
+  <data name="Options_RemoteAddress" xml:space="preserve">
+    <value>FlashAirアドレス (コピー元)</value>
+  </data>
+  <data name="Options_LocalFolder" xml:space="preserve">
+    <value>ローカルフォルダー (コピー先)</value>
   </data>
   <data name="Options_Browse" xml:space="preserve">
     <value>参照</value>
   </data>
-  <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
-    <value>コピー後にFlashAir内のイメージの削除を選べるようにする</value>
+  <data name="Options_OpenByExplorer" xml:space="preserve">
+    <value>エクスプローラーで開く</value>
   </data>
-  <data name="Options_CreateDatedFolder" xml:space="preserve">
-    <value>日付ごとのフォルダーを作成する</value>
+  <data name="Options_LocalFolderExplanation" xml:space="preserve">
+    <value>イメージをコピーするフォルダーを指定してください。</value>
   </data>
   <data name="Options_Date" xml:space="preserve">
     <value>日付</value>
@@ -243,53 +252,47 @@
   <data name="Options_DateAll" xml:space="preserve">
     <value>全部</value>
   </data>
-  <data name="Options_DateSelect" xml:space="preserve">
-    <value>カレンダーから選択</value>
-  </data>
   <data name="Options_DateToday" xml:space="preserve">
     <value>今日</value>
   </data>
-  <data name="Options_DeleteOnCopy" xml:space="preserve">
-    <value>コピー後に削除</value>
+  <data name="Options_DateSelect" xml:space="preserve">
+    <value>カレンダーから選択</value>
   </data>
-  <data name="Options_ExtensionLowercase" xml:space="preserve">
-    <value>ファイル拡張子を小文字にする</value>
+  <data name="Options_Connection" xml:space="preserve">
+    <value>接続</value>
   </data>
-  <data name="Options_HandleJpegFileOnly" xml:space="preserve">
-    <value>JPEGイメージのみを扱う</value>
+  <data name="Options_AutoCheckInterval" xml:space="preserve">
+    <value>自動チェック間隔</value>
+  </data>
+  <data name="Options_TimeoutDuration" xml:space="preserve">
+    <value>タイムアウト時間</value>
   </data>
   <data name="Options_File" xml:space="preserve">
     <value>ファイル</value>
   </data>
-  <data name="Options_Info" xml:space="preserve">
-    <value>情報</value>
-  </data>
-  <data name="Options_InstantCopy" xml:space="preserve">
-    <value>すぐコピー</value>
-  </data>
-  <data name="Options_Language" xml:space="preserve">
-    <value>言語</value>
-  </data>
-  <data name="Options_LocalFolder" xml:space="preserve">
-    <value>ローカルフォルダー (コピー先)</value>
-  </data>
-  <data name="Options_LocalFolderExplanation" xml:space="preserve">
-    <value>イメージをコピーするフォルダーを指定してください。</value>
-  </data>
-  <data name="Options_OpenByExplorer" xml:space="preserve">
-    <value>エクスプローラーで開く</value>
-  </data>
-  <data name="Options_Path" xml:space="preserve">
-    <value>パス</value>
+  <data name="Options_ExtensionLowercase" xml:space="preserve">
+    <value>ファイル拡張子を小文字にする</value>
   </data>
   <data name="Options_Recycle" xml:space="preserve">
     <value>FlashAir内のイメージが削除されたらごみ箱に移動する</value>
   </data>
-  <data name="Options_RemoteAddress" xml:space="preserve">
-    <value>FlashAirアドレス (コピー元)</value>
-  </data>
   <data name="Options_SelectReadOnly" xml:space="preserve">
     <value>チェック後に読み取り専用のイメージだけを選択する</value>
+  </data>
+  <data name="Options_HandleJpegFileOnly" xml:space="preserve">
+    <value>JPEGイメージのみを扱う</value>
+  </data>
+  <data name="Options_CreateDatedFolder" xml:space="preserve">
+    <value>日付ごとのフォルダーを作成する</value>
+  </data>
+  <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
+    <value>コピー後にFlashAir内のイメージの削除を選べるようにする</value>
+  </data>
+  <data name="Options_Language" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="Options_Info" xml:space="preserve">
+    <value>情報</value>
   </data>
   <data name="ProjectSite" xml:space="preserve">
     <value>http://emoacht.github.io/SnowyImageCopy/index_jp.html</value>
@@ -308,11 +311,5 @@
   </data>
   <data name="ToastHeadline_CopyCompleted" xml:space="preserve">
     <value>コピー完了</value>
-  </data>
-  <data name="Options_Timeout" xml:space="preserve">
-    <value>タイムアウト</value>
-  </data>
-  <data name="Options_TimeoutDuration" xml:space="preserve">
-    <value>タイムアウト時間</value>
   </data>
 </root>

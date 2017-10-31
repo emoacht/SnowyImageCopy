@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Feather" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Feather.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Command_Check" xml:space="preserve">
     <value>Check</value>
   </data>
@@ -129,21 +133,23 @@
   <data name="Command_Copy" xml:space="preserve">
     <value>Copy</value>
   </data>
+  <data name="Command_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Options_DeleteOnCopy" xml:space="preserve">
+    <value>Delete On Copy</value>
+  </data>
+  <data name="Options_InstantCopy" xml:space="preserve">
+    <value>Instant Copy</value>
+  </data>
   <data name="Command_Save" xml:space="preserve">
     <value>To Desktop</value>
   </data>
   <data name="Command_Send" xml:space="preserve">
     <value>To Clipboard</value>
   </data>
-  <data name="Command_Stop" xml:space="preserve">
-    <value>Stop</value>
-  </data>
   <data name="CurrentImage" xml:space="preserve">
     <value>Current Image</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Feather" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Feather.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FileStatus_Copied" xml:space="preserve">
     <value>Copied</value>
@@ -226,20 +232,23 @@
   <data name="Options" xml:space="preserve">
     <value>Options</value>
   </data>
-  <data name="Options_AutoCheck" xml:space="preserve">
-    <value>Auto Check</value>
+  <data name="Options_Path" xml:space="preserve">
+    <value>Path</value>
   </data>
-  <data name="Options_AutoCheckInterval" xml:space="preserve">
-    <value>Auto Check Interval</value>
+  <data name="Options_RemoteAddress" xml:space="preserve">
+    <value>FlashAir Address (Copy Source)</value>
+  </data>
+  <data name="Options_LocalFolder" xml:space="preserve">
+    <value>Local Folder (Copy Destination)</value>
   </data>
   <data name="Options_Browse" xml:space="preserve">
     <value>Browse</value>
   </data>
-  <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
-    <value>Enable to choose to delete image in FlashAir on copy</value>
+  <data name="Options_OpenByExplorer" xml:space="preserve">
+    <value>Open by Explorer</value>
   </data>
-  <data name="Options_CreateDatedFolder" xml:space="preserve">
-    <value>Create folder for each date</value>
+  <data name="Options_LocalFolderExplanation" xml:space="preserve">
+    <value>Specify a folder to copy images.</value>
   </data>
   <data name="Options_Date" xml:space="preserve">
     <value>Date</value>
@@ -247,53 +256,47 @@
   <data name="Options_DateAll" xml:space="preserve">
     <value>All</value>
   </data>
-  <data name="Options_DateSelect" xml:space="preserve">
-    <value>Select from calendar</value>
-  </data>
   <data name="Options_DateToday" xml:space="preserve">
     <value>Today</value>
   </data>
-  <data name="Options_DeleteOnCopy" xml:space="preserve">
-    <value>Delete On Copy</value>
+  <data name="Options_DateSelect" xml:space="preserve">
+    <value>Select from calendar</value>
   </data>
-  <data name="Options_ExtensionLowercase" xml:space="preserve">
-    <value>Make file extension lowercase</value>
+  <data name="Options_Connection" xml:space="preserve">
+    <value>Connection</value>
   </data>
-  <data name="Options_HandleJpegFileOnly" xml:space="preserve">
-    <value>Handle JPEG images only</value>
+  <data name="Options_AutoCheckInterval" xml:space="preserve">
+    <value>Auto Check Interval</value>
+  </data>
+  <data name="Options_TimeoutDuration" xml:space="preserve">
+    <value>Timeout Duration</value>
   </data>
   <data name="Options_File" xml:space="preserve">
     <value>File</value>
   </data>
-  <data name="Options_Info" xml:space="preserve">
-    <value>Info</value>
-  </data>
-  <data name="Options_InstantCopy" xml:space="preserve">
-    <value>Instant Copy</value>
-  </data>
-  <data name="Options_Language" xml:space="preserve">
-    <value>Language</value>
-  </data>
-  <data name="Options_LocalFolder" xml:space="preserve">
-    <value>Local Folder (Copy Destination)</value>
-  </data>
-  <data name="Options_LocalFolderExplanation" xml:space="preserve">
-    <value>Specify a folder to copy images.</value>
-  </data>
-  <data name="Options_OpenByExplorer" xml:space="preserve">
-    <value>Open by Explorer</value>
-  </data>
-  <data name="Options_Path" xml:space="preserve">
-    <value>Path</value>
+  <data name="Options_ExtensionLowercase" xml:space="preserve">
+    <value>Make file extension lowercase</value>
   </data>
   <data name="Options_Recycle" xml:space="preserve">
     <value>Move to Recycle Bin if image in FlashAir is deleted</value>
   </data>
-  <data name="Options_RemoteAddress" xml:space="preserve">
-    <value>FlashAir Address (Copy Source)</value>
-  </data>
   <data name="Options_SelectReadOnly" xml:space="preserve">
     <value>Select only Read-only image on check</value>
+  </data>
+  <data name="Options_HandleJpegFileOnly" xml:space="preserve">
+    <value>Handle JPEG images only</value>
+  </data>
+  <data name="Options_CreateDatedFolder" xml:space="preserve">
+    <value>Create folder for each date</value>
+  </data>
+  <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
+    <value>Enable to choose to delete image in FlashAir on copy</value>
+  </data>
+  <data name="Options_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Options_Info" xml:space="preserve">
+    <value>Info</value>
   </data>
   <data name="ProjectSite" xml:space="preserve">
     <value>http://emoacht.github.io/SnowyImageCopy/index.html</value>
@@ -312,11 +315,5 @@
   </data>
   <data name="ToastHeadline_CopyCompleted" xml:space="preserve">
     <value>Copy Completed</value>
-  </data>
-  <data name="Options_Timeout" xml:space="preserve">
-    <value>Timeout</value>
-  </data>
-  <data name="Options_TimeoutDuration" xml:space="preserve">
-    <value>Timeout Duration</value>
   </data>
 </root>

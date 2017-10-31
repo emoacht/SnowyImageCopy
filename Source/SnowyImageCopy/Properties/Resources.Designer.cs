@@ -386,15 +386,6 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Auto Check.
-        /// </summary>
-        public static string Options_AutoCheck {
-            get {
-                return ResourceManager.GetString("Options_AutoCheck", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Auto Check Interval.
         /// </summary>
         public static string Options_AutoCheckInterval {
@@ -418,6 +409,15 @@ namespace SnowyImageCopy.Properties {
         public static string Options_ChooseDeleteOnCopy {
             get {
                 return ResourceManager.GetString("Options_ChooseDeleteOnCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection.
+        /// </summary>
+        public static string Options_Connection {
+            get {
+                return ResourceManager.GetString("Options_Connection", resourceCulture);
             }
         }
         
@@ -589,15 +589,6 @@ namespace SnowyImageCopy.Properties {
         public static string Options_SelectReadOnly {
             get {
                 return ResourceManager.GetString("Options_SelectReadOnly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Timeout.
-        /// </summary>
-        public static string Options_Timeout {
-            get {
-                return ResourceManager.GetString("Options_Timeout", resourceCulture);
             }
         }
         
