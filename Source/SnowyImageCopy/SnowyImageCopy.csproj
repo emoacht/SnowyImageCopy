@@ -186,7 +186,7 @@
     <Compile Include="Models\FilePeriod.cs" />
     <Compile Include="Models\FileStatus.cs" />
     <Compile Include="Models\ImageManager.cs" />
-    <Compile Include="Models\Operation.cs" />
+    <Compile Include="Models\Operator.cs" />
     <Compile Include="Models\ProgressInfo.cs" />
     <Compile Include="Models\ResourceService.cs" />
     <Compile Include="Models\Settings.cs" />

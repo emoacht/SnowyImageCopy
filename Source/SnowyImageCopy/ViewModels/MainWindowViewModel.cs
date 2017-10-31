@@ -44,7 +44,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Operation
 
-		public Operation Op { get; }
+		public Operator Op { get; }
 
 		public ItemObservableCollection<FileItemViewModel> FileListCore
 		{
@@ -68,6 +68,123 @@ namespace SnowyImageCopy.ViewModels
 			set { SetPropertyValue(ref _fileListCoreViewIndex, value); }
 		}
 		private int _fileListCoreViewIndex = -1; // No selection
+
+		public bool IsCheckAndCopyOngoing => Op.IsChecking && Op.IsCopying;
+		public bool IsCheckAndCopyAutoOngoing => Op.IsAutoRunning;
+		public bool IsCheckOrCopyOngoing => Op.IsChecking || Op.IsCopying;
+		public bool IsCheckOngoing => Op.IsChecking && !Op.IsCopying;
+		public bool IsCopyOngoing => !Op.IsChecking && Op.IsCopying;
+
+		private bool IsNoOngoing => !Op.IsChecking && !Op.IsCopying && !Op.IsAutoRunning;
+		private bool IsAnyOngoing => Op.IsChecking || Op.IsCopying || Op.IsAutoRunning;
+
+		private void ManageOperationState()
+		{
+			RaisePropertyChanged(nameof(IsCheckAndCopyOngoing));
+			RaisePropertyChanged(nameof(IsCheckAndCopyAutoOngoing));
+			RaisePropertyChanged(nameof(IsCheckOrCopyOngoing));
+			RaisePropertyChanged(nameof(IsCheckOngoing));
+			RaisePropertyChanged(nameof(IsCopyOngoing));
+
+			RaiseCanExecuteChanged();
+		}
+
+		#endregion
+
+		#region Command
+
+		#region Check & Copy Command
+
+		public DelegateCommand CheckAndCopyCommand
+		{
+			get { return _checkAndCopyCommand ?? (_checkAndCopyCommand = new DelegateCommand(CheckAndCopyExecute, CanCheckAndCopyExecute)); }
+		}
+		private DelegateCommand _checkAndCopyCommand;
+
+		private async void CheckAndCopyExecute() => await Op.CheckCopyFileAsync();
+		private bool CanCheckAndCopyExecute() => IsNoOngoing;
+
+		#endregion
+
+		#region Check & Copy Auto Command
+
+		public DelegateCommand CheckAndCopyAutoCommand
+		{
+			get { return _checkAndCopyAutoCommand ?? (_checkAndCopyAutoCommand = new DelegateCommand(CheckAndCopyAutoExecute, CanCheckAndCopyAutoExecute)); }
+		}
+		private DelegateCommand _checkAndCopyAutoCommand;
+
+		private void CheckAndCopyAutoExecute() => Op.StartAutoTimer();
+		private bool CanCheckAndCopyAutoExecute() => IsNoOngoing;
+
+		#endregion
+
+		#region Check Command
+
+		public DelegateCommand CheckCommand
+		{
+			get { return _checkFileCommand ?? (_checkFileCommand = new DelegateCommand(CheckExecute, CanCheckExecute)); }
+		}
+		private DelegateCommand _checkFileCommand;
+
+		private async void CheckExecute() => await Op.CheckFileAsync();
+		private bool CanCheckExecute() => IsNoOngoing;
+
+		#endregion
+
+		#region Copy Command
+
+		public DelegateCommand CopyCommand
+		{
+			get { return _copyCommand ?? (_copyCommand = new DelegateCommand(CopyExecute, CanCopyExecute)); }
+		}
+		private DelegateCommand _copyCommand;
+
+		private async void CopyExecute() => await Op.CopyFileAsync();
+		private bool CanCopyExecute() => IsNoOngoing;
+
+		#endregion
+
+		#region Stop Command
+
+		public DelegateCommand StopCommand
+		{
+			get { return _stopCommand ?? (_stopCommand = new DelegateCommand(StopExecute, CanStopExecute)); }
+		}
+		private DelegateCommand _stopCommand;
+
+		private void StopExecute() => Op.Stop();
+		private bool CanStopExecute() => IsAnyOngoing;
+
+		#endregion
+
+		#region Save Desktop Command
+
+		public DelegateCommand SaveDesktopCommand
+		{
+			get { return _saveDesktopCommand ?? (_saveDesktopCommand = new DelegateCommand(SaveDesktopExecute, CanSaveDesktopExecute)); }
+		}
+		private DelegateCommand _saveDesktopCommand;
+
+		private async void SaveDesktopExecute() => await Op.SaveDesktopAsync();
+		private bool CanSaveDesktopExecute() => (CurrentImageData != null) && !Op.IsSavingDesktop;
+
+		#endregion
+
+		#region Send Clipboard Command
+
+		public DelegateCommand SendClipboardCommand
+		{
+			get { return _sendClipboardCommand ?? (_sendClipboardCommand = new DelegateCommand(SendClipboardExecute, CanSendClipboardExecute)); }
+		}
+		private DelegateCommand _sendClipboardCommand;
+
+		private async void SendClipboardExecute() => await Op.SendClipboardAsync();
+		private bool CanSendClipboardExecute() => (CurrentImageData != null) && !Op.IsSendingClipboard;
+
+		#endregion
+
+		private void RaiseCanExecuteChanged() => DelegateCommand.RaiseCanExecuteChanged();
 
 		#endregion
 
@@ -227,188 +344,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-		#region Command
-
-		#region Check & Copy Command
-
-		public DelegateCommand CheckCopyCommand
-		{
-			get { return _checkCopyCommand ?? (_checkCopyCommand = new DelegateCommand(CheckCopyExecute, CanCheckCopyExecute)); }
-		}
-		private DelegateCommand _checkCopyCommand;
-
-		private async void CheckCopyExecute()
-		{
-			await Op.CheckCopyFileAsync();
-		}
-
-		private bool CanCheckCopyExecute()
-		{
-			IsCheckCopyRunning = Op.IsChecking && Op.IsCopying;
-
-			return !Op.IsChecking && !Op.IsCopying && !Op.IsAutoRunning;
-		}
-
-		public bool IsCheckCopyRunning
-		{
-			get { return _isCheckCopyRunning; }
-			set { SetPropertyValue(ref _isCheckCopyRunning, value); }
-		}
-		private bool _isCheckCopyRunning;
-
-		#endregion
-
-		#region Check & Copy Auto Command
-
-		public DelegateCommand CheckCopyAutoCommand
-		{
-			get { return _checkCopyAutoCommand ?? (_checkCopyAutoCommand = new DelegateCommand(CheckCopyAutoExecute, CanCheckCopyAutoExecute)); }
-		}
-		private DelegateCommand _checkCopyAutoCommand;
-
-		private void CheckCopyAutoExecute()
-		{
-			Op.StartAutoTimer();
-		}
-
-		private bool CanCheckCopyAutoExecute()
-		{
-			IsCheckCopyAutoRunning = Op.IsAutoRunning;
-
-			return !Op.IsChecking && !Op.IsCopying && !Op.IsAutoRunning;
-		}
-
-		public bool IsCheckCopyAutoRunning
-		{
-			get { return _isCheckCopyAutoRunning; }
-			set { SetPropertyValue(ref _isCheckCopyAutoRunning, value); }
-		}
-		private bool _isCheckCopyAutoRunning;
-
-		#endregion
-
-		#region Check Command
-
-		public DelegateCommand CheckCommand
-		{
-			get { return _checkFileCommand ?? (_checkFileCommand = new DelegateCommand(CheckExecute, CanCheckExecute)); }
-		}
-		private DelegateCommand _checkFileCommand;
-
-		private async void CheckExecute()
-		{
-			await Op.CheckFileAsync();
-		}
-
-		private bool CanCheckExecute()
-		{
-			IsCheckRunning = Op.IsChecking && !Op.IsCopying;
-
-			return !Op.IsChecking && !Op.IsCopying && !Op.IsAutoRunning;
-		}
-
-		public bool IsCheckRunning
-		{
-			get { return _isCheckRunning; }
-			set { SetPropertyValue(ref _isCheckRunning, value); }
-		}
-		private bool _isCheckRunning;
-
-		#endregion
-
-		#region Copy Command
-
-		public DelegateCommand CopyCommand
-		{
-			get { return _copyCommand ?? (_copyCommand = new DelegateCommand(CopyExecute, CanCopyExecute)); }
-		}
-		private DelegateCommand _copyCommand;
-
-		private async void CopyExecute()
-		{
-			await Op.CopyFileAsync();
-		}
-
-		private bool CanCopyExecute()
-		{
-			IsCopyRunning = !Op.IsChecking && Op.IsCopying;
-
-			return !Op.IsChecking && !Op.IsCopying && !Op.IsAutoRunning;
-		}
-
-		public bool IsCopyRunning
-		{
-			get { return _isCopyRunning; }
-			set { SetPropertyValue(ref _isCopyRunning, value); }
-		}
-		private bool _isCopyRunning;
-
-		#endregion
-
-		#region Stop Command
-
-		public DelegateCommand StopCommand
-		{
-			get { return _stopCommand ?? (_stopCommand = new DelegateCommand(StopExecute, CanStopExecute)); }
-		}
-		private DelegateCommand _stopCommand;
-
-		private void StopExecute()
-		{
-			Op.Stop();
-		}
-
-		private bool CanStopExecute()
-		{
-			return Op.IsChecking || Op.IsCopying || Op.IsAutoRunning;
-		}
-
-		#endregion
-
-		#region Save Desktop Command
-
-		public DelegateCommand SaveDesktopCommand
-		{
-			get { return _saveDesktopCommand ?? (_saveDesktopCommand = new DelegateCommand(SaveDesktopExecute, CanSaveDesktopExecute)); }
-		}
-		private DelegateCommand _saveDesktopCommand;
-
-		private async void SaveDesktopExecute()
-		{
-			await Op.SaveDesktopAsync();
-		}
-
-		private bool CanSaveDesktopExecute()
-		{
-			return (CurrentImageData != null) && !Op.IsSavingDesktop;
-		}
-
-		#endregion
-
-		#region Send Clipboard Command
-
-		public DelegateCommand SendClipboardCommand
-		{
-			get { return _sendClipboardCommand ?? (_sendClipboardCommand = new DelegateCommand(SendClipboardExecute, CanSendClipboardExecute)); }
-		}
-		private DelegateCommand _sendClipboardCommand;
-
-		private async void SendClipboardExecute()
-		{
-			await Op.SendClipboardAsync();
-		}
-
-		private bool CanSendClipboardExecute()
-		{
-			return (CurrentImageData != null) && !Op.IsSendingClipboard;
-		}
-
-		#endregion
-
-		private void RaiseCanExecuteChanged() => DelegateCommand.RaiseCanExecuteChanged();
-
-		#endregion
-
 		#region Browser
 
 		public bool IsBrowserOpen
@@ -424,9 +359,9 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private bool _isBrowserOpen;
 
-		private void ManageBrowserOpen(bool isRunning)
+		private void ManageBrowserOpen(bool isOngoing)
 		{
-			if (isRunning)
+			if (isOngoing)
 				IsBrowserOpen = false;
 		}
 
@@ -436,7 +371,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public MainWindowViewModel()
 		{
-			Op = new Operation(this);
+			Op = new Operator(this);
 
 			// Add event listeners.
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
@@ -594,24 +529,24 @@ namespace SnowyImageCopy.ViewModels
 
 			var propertyName = e.PropertyName;
 
-			if (propertyName == nameof(Operation.IsChecking))
+			if (propertyName == nameof(Operator.IsChecking))
 			{
-				RaiseCanExecuteChanged();
+				ManageOperationState();
 				ManageBrowserOpen(Op.IsChecking);
 			}
-			else if (propertyName == nameof(Operation.IsCopying))
+			else if (propertyName == nameof(Operator.IsCopying))
 			{
-				RaiseCanExecuteChanged();
+				ManageOperationState();
 				ManageBrowserOpen(Op.IsCopying);
 			}
-			else if (propertyName == nameof(Operation.IsAutoRunning))
+			else if (propertyName == nameof(Operator.IsAutoRunning))
 			{
-				RaiseCanExecuteChanged();
+				ManageOperationState();
 				ManageBrowserOpen(Op.IsAutoRunning);
 			}
-			else if ((propertyName == nameof(Operation.IsSavingDesktop)) || (propertyName == nameof(Operation.IsSendingClipboard)))
+			else if ((propertyName == nameof(Operator.IsSavingDesktop)) || (propertyName == nameof(Operator.IsSendingClipboard)))
 			{
-				RaiseCanExecuteChanged();
+				ManageOperationState();
 			}
 		}
 

@@ -23,73 +23,59 @@ using SnowyImageCopy.ViewModels;
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// Runs operations.
+	/// Operates.
 	/// </summary>
-	public class Operation : NotificationObject
+	public class Operator : NotificationObject
 	{
-		/// <summary>
-		/// Instance of MainWindowViewModel
-		/// </summary>
-		private MainWindowViewModel MainWindowViewModelInstance
+		private readonly MainWindowViewModel _mainWindowViewModel;
+
+		public Operator(MainWindowViewModel mainWindowViewModel)
 		{
-			get { return _mainWindowViewModelInstance; }
-			set
+			this._mainWindowViewModel = mainWindowViewModel;
+
+			if (!Designer.IsInDesignMode) // ListCollectionView may be null in Design mode.
 			{
-				if ((_mainWindowViewModelInstance != null) || (value == null))
-					return;
-
-				_mainWindowViewModelInstance = value;
-
-				if (!Designer.IsInDesignMode) // ListCollectionView may be null in Design mode.
-				{
-					FileListCoreView.CurrentChanged += (sender, e) => CheckFileListCoreViewThumbnail();
-				}
+				FileListCoreView.CurrentChanged += (sender, e) => CheckFileListCoreViewThumbnail();
 			}
-		}
-		private MainWindowViewModel _mainWindowViewModelInstance;
-
-		public Operation(MainWindowViewModel mainWindowViewModelInstance)
-		{
-			MainWindowViewModelInstance = mainWindowViewModelInstance;
 		}
 
 		#region Access to MainWindowViewModel member
 
 		private string OperationStatus
 		{
-			set { MainWindowViewModelInstance.OperationStatus = value; }
+			set { _mainWindowViewModel.OperationStatus = value; }
 		}
 
 		private ItemObservableCollection<FileItemViewModel> FileListCore
 		{
-			get { return MainWindowViewModelInstance.FileListCore; }
+			get { return _mainWindowViewModel.FileListCore; }
 		}
 
 		private ListCollectionView FileListCoreView
 		{
-			get { return MainWindowViewModelInstance.FileListCoreView; }
+			get { return _mainWindowViewModel.FileListCoreView; }
 		}
 
 		private int FileListCoreViewIndex
 		{
-			set { MainWindowViewModelInstance.FileListCoreViewIndex = value; }
+			set { _mainWindowViewModel.FileListCoreViewIndex = value; }
 		}
 
 		private FileItemViewModel CurrentItem
 		{
-			get { return MainWindowViewModelInstance.CurrentItem; }
-			set { MainWindowViewModelInstance.CurrentItem = value; }
+			get { return _mainWindowViewModel.CurrentItem; }
+			set { _mainWindowViewModel.CurrentItem = value; }
 		}
 
 		private byte[] CurrentImageData
 		{
-			get { return MainWindowViewModelInstance.CurrentImageData; }
-			set { MainWindowViewModelInstance.CurrentImageData = value; }
+			get { return _mainWindowViewModel.CurrentImageData; }
+			set { _mainWindowViewModel.CurrentImageData = value; }
 		}
 
 		private bool IsWindowActivateRequested
 		{
-			set { MainWindowViewModelInstance.IsWindowActivateRequested = value; }
+			set { _mainWindowViewModel.IsWindowActivateRequested = value; }
 		}
 
 		private void InvokeSafely(Action action)
@@ -133,7 +119,7 @@ namespace SnowyImageCopy.Models
 		#region Operation state
 
 		/// <summary>
-		/// Checking files in FlashAir card
+		/// Whether checking files in FlashAir card
 		/// </summary>
 		public bool IsChecking
 		{
@@ -143,7 +129,7 @@ namespace SnowyImageCopy.Models
 		private bool _isChecking;
 
 		/// <summary>
-		/// Copying files from FlashAir card
+		/// Whether copying files from FlashAir card
 		/// </summary>
 		public bool IsCopying
 		{
@@ -153,7 +139,7 @@ namespace SnowyImageCopy.Models
 		private bool _isCopying;
 
 		/// <summary>
-		/// Running timer for auto check
+		/// Whether running timer for auto check
 		/// </summary>
 		internal bool IsAutoRunning
 		{
@@ -163,7 +149,7 @@ namespace SnowyImageCopy.Models
 		private bool _isAutoRunning;
 
 		/// <summary>
-		/// Saving current image data on desktop
+		/// Whether saving current image data on desktop
 		/// </summary>
 		internal bool IsSavingDesktop
 		{
@@ -173,7 +159,7 @@ namespace SnowyImageCopy.Models
 		private bool _isSavingDesktop;
 
 		/// <summary>
-		/// Sending current image data to clipboard
+		/// Whether sending current image data to clipboard
 		/// </summary>
 		internal bool IsSendingClipboard
 		{

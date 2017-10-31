@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 
 using SnowyImageCopy.ViewModels;
 using SnowyImageCopy.Views.Controls;
+using SnowyImageCopy.Views.Converters;
 
 namespace SnowyImageCopy.Views
 {
@@ -30,19 +31,46 @@ namespace SnowyImageCopy.Views
 		{
 			this.Loaded -= OnLoaded;
 
-			var mainWindowViewModelInstance = Window.GetWindow(this)?.DataContext as MainWindowViewModel;
-			if (mainWindowViewModelInstance == null)
+			var mainWindowViewModel = Window.GetWindow(this)?.DataContext as MainWindowViewModel;
+			if (mainWindowViewModel == null)
 				return;
 
-			((OptionsViewModel)this.DataContext).MainWindowViewModelInstance = mainWindowViewModelInstance;
-
 			// Binding in xaml will not work because MainWindowViewModel may be null when Options is instantiated.
+			var booleanInverseConverter = new BooleanInverseConverter();
+
+			RemoteAddressTextBox.SetBinding(
+				UIElement.IsEnabledProperty,
+				new Binding(nameof(MainWindowViewModel.IsCheckOrCopyOngoing))
+				{
+					Source = mainWindowViewModel,
+					Mode = BindingMode.OneWay,
+					Converter = booleanInverseConverter
+				});
+
+			LocalFolderTextBox.SetBinding(
+				UIElement.IsEnabledProperty,
+				new Binding(nameof(MainWindowViewModel.IsCheckOrCopyOngoing))
+				{
+					Source = mainWindowViewModel,
+					Mode = BindingMode.OneWay,
+					Converter = booleanInverseConverter
+				});
+
 			ChooseDeleteOnCopyButton.SetBinding(
 				SlidingToggleButton.IsCheckedCopyProperty,
 				new Binding(nameof(MainWindowViewModel.IsBrowserOpen))
 				{
-					Source = mainWindowViewModelInstance,
+					Source = mainWindowViewModel,
 					Mode = BindingMode.OneWayToSource,
+				});
+
+			LanguageComboBox.SetBinding(
+				UIElement.IsEnabledProperty,
+				new Binding(nameof(MainWindowViewModel.IsCheckOrCopyOngoing))
+				{
+					Source = mainWindowViewModel,
+					Mode = BindingMode.OneWay,
+					Converter = booleanInverseConverter
 				});
 		}
 	}

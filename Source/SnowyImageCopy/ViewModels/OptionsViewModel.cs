@@ -1,69 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SnowyImageCopy.Common;
 using SnowyImageCopy.Models;
 
 namespace SnowyImageCopy.ViewModels
 {
 	public class OptionsViewModel : ViewModel
 	{
-		/// <summary>
-		/// Instance of MainWindowViewModel
-		/// </summary>
-		public MainWindowViewModel MainWindowViewModelInstance
-		{
-			get { return _mainWindowViewModelInstance; }
-			set
-			{
-				if (_mainWindowViewModelInstance != null)
-					return;
-
-				_mainWindowViewModelInstance = value;
-
-				_operationPropertyChangedListener = new PropertyChangedEventListener(ReactOperationPropertyChanged);
-				PropertyChangedEventManager.AddListener(MainWindowViewModelInstance.Op, _operationPropertyChangedListener, string.Empty);
-			}
-		}
-		private MainWindowViewModel _mainWindowViewModelInstance;
-
 		public OptionsViewModel()
-		{
-			// MainWindow may be null when Options is instantiated.
-		}
-
-		#region Event Listener
-
-		private PropertyChangedEventListener _operationPropertyChangedListener;
-
-		private void ReactOperationPropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			//Debug.WriteLine($"Operation property changed (OptionsViewModel): {sender} {e.PropertyName}");
-
-			var propertyName = e.PropertyName;
-
-			if ((propertyName == nameof(Operation.IsChecking)) || (propertyName == nameof(Operation.IsCopying)))
-			{
-				IsCheckingOrCopying = MainWindowViewModelInstance.Op.IsChecking || MainWindowViewModelInstance.Op.IsCopying;
-			}
-		}
-
-		#endregion
-
-		#region Operation
-
-		public bool IsCheckingOrCopying
-		{
-			get { return _isCheckingOrCopying; }
-			set { SetPropertyValue(ref _isCheckingOrCopying, value); }
-		}
-		private bool _isCheckingOrCopying;
-
-		#endregion
+		{ }
 
 		public Settings SettingsCurrent => Settings.Current;
 

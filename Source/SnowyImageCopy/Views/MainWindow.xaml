@@ -79,8 +79,8 @@
 							Margin="0,0,2,2"
 							FontSize="15"
 							Content="{Binding Resources.Command_CheckCopy, Source={x:Static models:ResourceService.Current}}"
-							Command="{Binding CheckCopyCommand}"
-							IsBusy="{Binding IsCheckCopyRunning, Mode=OneWay}">
+							Command="{Binding CheckAndCopyCommand}"
+							IsBusy="{Binding IsCheckAndCopyOngoing, Mode=OneWay}">
 						</controls:BusyButton>
 						<controls:BusyButton
 							Grid.Column="2" Grid.Row="0"
@@ -88,8 +88,8 @@
 							Margin="0,0,2,2"
 							FontSize="15"
 							Content="{Binding Resources.Command_CheckCopyAuto, Source={x:Static models:ResourceService.Current}}"
-							Command="{Binding CheckCopyAutoCommand}"
-							IsBusy="{Binding IsCheckCopyAutoRunning, Mode=OneWay}"/>
+							Command="{Binding CheckAndCopyAutoCommand}"
+							IsBusy="{Binding IsCheckAndCopyAutoOngoing, Mode=OneWay}"/>
 						<controls:BusyButton
 							Grid.Row="1" Grid.Column="0"
 							Width="100" Height="40"
@@ -97,7 +97,7 @@
 							FontSize="15"
 							Content="{Binding Resources.Command_Check, Source={x:Static models:ResourceService.Current}}"
 							Command="{Binding CheckCommand}"
-							IsBusy="{Binding IsCheckRunning, Mode=OneWay}">
+							IsBusy="{Binding IsCheckOngoing, Mode=OneWay}">
 						</controls:BusyButton>
 						<controls:BusyButton
 							Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"
@@ -106,7 +106,7 @@
 							FontSize="15"
 							Content="{Binding Resources.Command_Copy, Source={x:Static models:ResourceService.Current}}"
 							Command="{Binding CopyCommand}"
-							IsBusy="{Binding IsCopyRunning, Mode=OneWay}"/>
+							IsBusy="{Binding IsCopyOngoing, Mode=OneWay}"/>
 						<controls:BusyButton
 							Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
 							Width="60" Height="82"

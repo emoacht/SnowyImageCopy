@@ -58,30 +58,29 @@
 					  Header="{Binding Resources.Options_Path, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
 					<TextBlock Text="{Binding Resources.Options_RemoteAddress, Source={x:Static models:ResourceService.Current}}"/>
-					<TextBox HorizontalAlignment="Stretch"
+					<TextBox x:Name="RemoteAddressTextBox"
+							 HorizontalAlignment="Stretch"
 							 Margin="0,4,0,6" Padding="2"
 							 VerticalContentAlignment="Center"
-							 Text="{Binding SettingsCurrent.RemoteAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"
-							 IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
+							 Text="{Binding SettingsCurrent.RemoteAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
 
 					<TextBlock Text="{Binding Resources.Options_LocalFolder, Source={x:Static models:ResourceService.Current}}"/>
-					<TextBox x:Name="LocalFolderPath"
+					<TextBox x:Name="LocalFolderTextBox"
 							 HorizontalAlignment="Stretch"
 							 Margin="0,4,0,4" Padding="2"
 							 VerticalContentAlignment="Center"
-							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"
-							 IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
+							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 						<Button	Margin="0,0,4,0"
 								Padding="8,2,8,2"
 								Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}"
-								IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"
+								IsEnabled="{Binding IsEnabled, ElementName=LocalFolderTextBox, Mode=OneWay}"
 								Style="{StaticResource ButtonBaseStyle}">
 							<i:Interaction.Triggers>
 								<i:EventTrigger EventName="Click">
 									<behaviors:FolderBrowserAction
 										Explanation="{Binding Resources.Options_LocalFolderExplanation, Source={x:Static models:ResourceService.Current}}"
-										FolderPath="{Binding Text, ElementName=LocalFolderPath}"/>
+										FolderPath="{Binding Text, ElementName=LocalFolderTextBox}"/>
 								</i:EventTrigger>
 							</i:Interaction.Triggers>
 						</Button>
@@ -91,7 +90,7 @@
 							<i:Interaction.Triggers>
 								<i:EventTrigger EventName="Click">
 									<behaviors:ExplorerAction
-										FolderPath="{Binding Text, ElementName=LocalFolderPath}"/>
+										FolderPath="{Binding Text, ElementName=LocalFolderTextBox}"/>
 								</i:EventTrigger>
 							</i:Interaction.Triggers>
 						</Button>
@@ -279,10 +278,10 @@
 			<GroupBox Template="{StaticResource ItemGroupTemplate}"
 					  Header="{Binding Resources.Options_Language, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
-					<ComboBox Margin="0,4,0,4"
+					<ComboBox x:Name="LanguageComboBox"
+							  Margin="0,4,0,4"
 							  ItemsSource="{Binding Cultures}"
-							  SelectedIndex="{Binding CultureSeletedIndex}"
-							  IsEnabled="{Binding IsCheckingOrCopying, Converter={StaticResource BooleanInverseConverterKey}}"/>
+							  SelectedIndex="{Binding CultureSeletedIndex}"/>
 				</StackPanel>
 			</GroupBox>
 
