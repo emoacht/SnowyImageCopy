@@ -129,27 +129,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		#region Thumbnail
-
-		private HashSet<string> _thumbnailFailedPathes;
-		private const int _thumbnailFailedPathesCountMax = 3;
-
-		public bool CanGetThumbnail
-		{
-			get { return ((_thumbnailFailedPathes == null) || (_thumbnailFailedPathes.Count < _thumbnailFailedPathesCountMax)); }
-		}
-
-		public void RecordThumbnailFailedPath(string filePath)
-		{
-			if (_thumbnailFailedPathes == null)
-				_thumbnailFailedPathes = new HashSet<string>();
-
-			if (!_thumbnailFailedPathes.Contains(filePath))
-				_thumbnailFailedPathes.Add(filePath);
-		}
-
-		#endregion
-
 		#region Upload
 
 		public bool CanGetUpload => _isFirmwareVersion202OrNewer;

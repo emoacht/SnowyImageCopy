@@ -919,9 +919,6 @@ namespace SnowyImageCopy.Models
 						if (!item.IsAliveRemote || !item.CanGetThumbnailRemote)
 							continue;
 
-						if (!_card.CanGetThumbnail)
-							continue;
-
 						_tokenSourceWorking.Token.ThrowIfCancellationRequested();
 
 						try
@@ -931,7 +928,6 @@ namespace SnowyImageCopy.Models
 						catch (RemoteFileThumbnailFailedException)
 						{
 							item.CanGetThumbnailRemote = false;
-							_card.RecordThumbnailFailedPath(item.FilePath);
 						}
 					}
 				}
