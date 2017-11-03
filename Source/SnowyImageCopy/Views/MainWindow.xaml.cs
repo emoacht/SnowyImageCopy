@@ -48,7 +48,7 @@ namespace SnowyImageCopy.Views
 
 			IsWindowPlacementReliable = true; // This must be set before loading WindowPlacement.
 
-			new WindowPlacement().Load(this, !CommandLine.MakesWindowStateMinimized);
+			WindowPlacement.Load(this, !CommandLine.MakesWindowStateMinimized);
 
 			_mainWindowViewModel = this.DataContext as MainWindowViewModel;
 			if (_mainWindowViewModel == null)
@@ -76,7 +76,7 @@ namespace SnowyImageCopy.Views
 			if (e.Cancel)
 				return;
 
-			new WindowPlacement().Save(this);
+			WindowPlacement.Save(this);
 		}
 	}
 }

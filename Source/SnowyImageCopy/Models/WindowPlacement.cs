@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
+using System.Xml;
 
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
-	/// Loads/Saves this application's window size and position.
+	/// This application's window size and position
 	/// </summary>
-	/// <remarks>This class must be public because the instance will be handled by XmlSerializer.</remarks>
-	public class WindowPlacement
+	internal class WindowPlacement
 	{
 		#region Win32
 
@@ -29,7 +32,7 @@ namespace SnowyImageCopy.Models
 
 		[Serializable]
 		[StructLayout(LayoutKind.Sequential)]
-		public struct WINDOWPLACEMENT
+		private struct WINDOWPLACEMENT
 		{
 			public int length;
 			public int flags;
@@ -41,7 +44,7 @@ namespace SnowyImageCopy.Models
 
 		[Serializable]
 		[StructLayout(LayoutKind.Sequential)]
-		public struct POINT
+		private struct POINT
 		{
 			public int x;
 			public int y;
@@ -49,7 +52,7 @@ namespace SnowyImageCopy.Models
 
 		[Serializable]
 		[StructLayout(LayoutKind.Sequential)]
-		public struct RECT
+		private struct RECT
 		{
 			public int left;
 			public int top;
@@ -57,7 +60,7 @@ namespace SnowyImageCopy.Models
 			public int bottom;
 		}
 
-		public enum SW
+		private enum SW
 		{
 			SW_HIDE = 0,
 			SW_SHOWNORMAL = 1,
@@ -74,14 +77,15 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		public void Load(Window window, bool isNormal = true)
+		#region Load/Save
+
+		public static void Load(Window window, bool isNormal = true)
 		{
-			if (Settings.Current.Placement == null)
+			WINDOWPLACEMENT placement;
+			if (!TryLoad(out placement))
 				return;
 
 			var handle = new WindowInteropHelper(window).Handle;
-
-			var placement = (WINDOWPLACEMENT)Settings.Current.Placement;
 
 			placement.length = Marshal.SizeOf(typeof(WINDOWPLACEMENT));
 			placement.flags = 0; // No flag set
@@ -90,14 +94,66 @@ namespace SnowyImageCopy.Models
 			SetWindowPlacement(handle, ref placement);
 		}
 
-		public void Save(Window window)
+		public static void Save(Window window)
 		{
 			var handle = new WindowInteropHelper(window).Handle;
 
 			WINDOWPLACEMENT placement;
 			GetWindowPlacement(handle, out placement);
 
-			Settings.Current.Placement = placement;
+			Save(placement);
 		}
+
+		private const string _placementFileName = "placement.xml";
+		private static readonly string _placementFilePath = Path.Combine(FolderService.FolderAppDataPath, _placementFileName);
+
+		private static bool TryLoad<T>(out T placement)
+		{
+			var fileInfo = new FileInfo(_placementFilePath);
+			if (!fileInfo.Exists || (fileInfo.Length == 0))
+			{
+				placement = default(T);
+				return false;
+			}
+
+			try
+			{
+				using (var sr = new StreamReader(_placementFilePath, Encoding.UTF8))
+				using (var xr = XmlReader.Create(sr))
+				{
+					var serializer = new DataContractSerializer(typeof(T));
+					placement = (T)serializer.ReadObject(xr);
+					return true;
+				}
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Failed to load window placement.\r\n{ex}");
+				placement = default(T);
+				return false;
+			}
+		}
+
+		private static void Save<T>(T placement)
+		{
+			try
+			{
+				FolderService.AssureFolderAppData();
+
+				using (var sw = new StreamWriter(_placementFilePath, false, Encoding.UTF8)) // BOM will be emitted.
+				using (var xw = XmlWriter.Create(sw, new XmlWriterSettings { Indent = true }))
+				{
+					var serializer = new DataContractSerializer(typeof(T));
+					serializer.WriteObject(xw, placement);
+					xw.Flush();
+				}
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Failed to save window placement.\r\n{ex}");
+			}
+		}
+
+		#endregion
 	}
 }

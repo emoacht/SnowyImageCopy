@@ -31,12 +31,11 @@ namespace SnowyImageCopy
 			if (CommandLine.ShowsUsage)
 			{
 				CommandLine.ShowUsage();
-				Application.Current.Shutdown(1);
+				Application.Current.Shutdown(1); // This exit code is for unusual shutdown.
 				return;
 			}
 
-			Settings.Load();
-
+			Settings.Current.Start();
 			ResourceService.Current.ChangeCulture(Settings.Current.CultureName);
 
 			this.MainWindow = new MainWindow();
@@ -45,10 +44,9 @@ namespace SnowyImageCopy
 
 		protected override void OnExit(ExitEventArgs e)
 		{
-			base.OnExit(e);
+			Settings.Current.Stop();
 
-			if (e.ApplicationExitCode == 0) // Only when normal shutdown
-				Settings.Save();
+			base.OnExit(e);
 		}
 
 		#region Exception
@@ -63,7 +61,7 @@ namespace SnowyImageCopy
 			LogService.RecordException(sender, e.Exception);
 
 			e.Handled = true;
-			Application.Current.Shutdown(1);
+			Application.Current.Shutdown(1); // This exit code is for unusual shutdown.
 		}
 
 		#endregion

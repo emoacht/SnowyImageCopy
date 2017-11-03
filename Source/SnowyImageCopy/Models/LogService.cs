@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,9 +22,9 @@ namespace SnowyImageCopy.Models
 				var content = $"[Date: {DateTime.Now:HH:mm:ss fff}]" + Environment.NewLine
 					+ result.TrimEnd() + Environment.NewLine + Environment.NewLine;
 
-				PrepareFolderAppData();
+				FolderService.AssureFolderAppData();
 
-				var filePath = Path.Combine(FolderPathAppData, fileName);
+				var filePath = Path.Combine(FolderService.FolderAppDataPath, fileName);
 
 				if (File.Exists(filePath) && (File.GetLastWriteTime(filePath) < DateTime.Now.AddHours(-1)))
 					File.Delete(filePath);
@@ -58,9 +57,9 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				PrepareFolderAppData();
+				FolderService.AssureFolderAppData();
 
-				var filePathAppData = Path.Combine(FolderPathAppData, fileName);
+				var filePathAppData = Path.Combine(FolderService.FolderAppDataPath, fileName);
 
 				UpdateText(filePathAppData, content);
 			}
@@ -122,33 +121,6 @@ namespace SnowyImageCopy.Models
 				if (++count >= sectionCount)
 					yield break;
 			}
-		}
-
-		#endregion
-
-		#region Prepare
-
-		private static string FolderPathAppData
-		{
-			get
-			{
-				if (_folderPathAppData == null)
-				{
-					var pathAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-					if (string.IsNullOrEmpty(pathAppData)) // This should not happen.
-						throw new DirectoryNotFoundException();
-
-					_folderPathAppData = Path.Combine(pathAppData, Assembly.GetExecutingAssembly().GetName().Name);
-				}
-				return _folderPathAppData;
-			}
-		}
-		private static string _folderPathAppData;
-
-		private static void PrepareFolderAppData()
-		{
-			if (!Directory.Exists(FolderPathAppData))
-				Directory.CreateDirectory(FolderPathAppData);
 		}
 
 		#endregion

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -28,6 +29,18 @@ namespace SnowyImageCopy.Models
 		/// Holder of property name (key) and validation error messages (value)
 		/// </summary>
 		private readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
+
+		public bool HasErrors => _errors.Any();
+
+		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+		public IEnumerable GetErrors(string propertyName)
+		{
+			if (string.IsNullOrEmpty(propertyName) || !_errors.ContainsKey(propertyName))
+				return null;
+
+			return _errors[propertyName];
+		}
 
 		private bool ValidateProperty(object value, [CallerMemberName] string propertyName = null)
 		{
@@ -54,34 +67,20 @@ namespace SnowyImageCopy.Models
 			}
 
 			RaiseErrorsChanged(propertyName);
-
 			return isValidated;
 		}
 
-		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-		private void RaiseErrorsChanged(string propertyName)
-		{
-			this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-		}
-
-		public IEnumerable GetErrors(string propertyName)
-		{
-			if (string.IsNullOrEmpty(propertyName) || !_errors.ContainsKey(propertyName))
-				return null;
-
-			return _errors[propertyName];
-		}
-
-		public bool HasErrors => _errors.Any();
+		private void RaiseErrorsChanged(string propertyName) =>
+			ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
 
 		#endregion
 
 		public static Settings Current { get; } = new Settings();
 
-		public WindowPlacement.WINDOWPLACEMENT? Placement { get; set; }
+		private Settings()
+		{ }
 
-		#region Settings
+		#region Values
 
 		#region Path
 
@@ -101,6 +100,7 @@ namespace SnowyImageCopy.Models
 				_remoteAddress = root + descendant;
 				_remoteRoot = root;
 				_remoteDescendant = "/" + descendant.TrimEnd('/');
+				RaisePropertyChanged();
 			}
 		}
 		private string _remoteAddress = @"http://flashair/"; // Default FlashAir Url
@@ -224,8 +224,9 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		#region Auto check
+		#region Connection
 
+		// XmlSerializer cannot work with TimeSpan.
 		public int AutoCheckInterval
 		{
 			get { return _autoCheckInterval; }
@@ -233,11 +234,6 @@ namespace SnowyImageCopy.Models
 		}
 		private int _autoCheckInterval = 30; // Default
 
-		#endregion
-
-		#region Timeout
-
-		// XmlSerializer cannot work with TimeSpan.
 		public int TimeoutDuration
 		{
 			get { return _timeoutDuration; }
@@ -312,12 +308,31 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		#region Load/Save
+		#region Start/Stop
+
+		private IDisposable _subscription;
+
+		public void Start()
+		{
+			Load(Current);
+
+			_subscription = Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+				handler => handler.Invoke,
+				handler => PropertyChanged += handler,
+				handler => PropertyChanged -= handler)
+				.Throttle(TimeSpan.FromSeconds(1))
+				.Subscribe(_ => Save(Current));
+		}
+
+		public void Stop()
+		{
+			_subscription.Dispose();
+		}
 
 		private const string _settingsFileName = "settings.xml";
-		private static readonly string _settingsFilePath = Path.Combine(FolderPathAppData, _settingsFileName);
+		private static readonly string _settingsFilePath = Path.Combine(FolderService.FolderAppDataPath, _settingsFileName);
 
-		public static void Load()
+		private static void Load<T>(T instance) where T : class
 		{
 			var fileInfo = new FileInfo(_settingsFilePath);
 			if (!fileInfo.Exists || (fileInfo.Length == 0))
@@ -327,14 +342,14 @@ namespace SnowyImageCopy.Models
 			{
 				using (var fs = new FileStream(_settingsFilePath, FileMode.Open, FileAccess.Read))
 				{
-					var serializer = new XmlSerializer(typeof(Settings));
-					var loaded = (Settings)serializer.Deserialize(fs);
+					var serializer = new XmlSerializer(typeof(T));
+					var loaded = (T)serializer.Deserialize(fs);
 
-					typeof(Settings)
+					typeof(T)
 						.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
 						.Where(x => x.CanWrite)
 						.ToList()
-						.ForEach(x => x.SetValue(Current, x.GetValue(loaded)));
+						.ForEach(x => x.SetValue(instance, x.GetValue(loaded)));
 				}
 			}
 			catch (Exception ex)
@@ -350,49 +365,22 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-		public static void Save()
+		private static void Save<T>(T instance) where T : class
 		{
 			try
 			{
-				PrepareFolderAppData();
+				FolderService.AssureFolderAppData();
 
 				using (var fs = new FileStream(_settingsFilePath, FileMode.Create, FileAccess.Write))
 				{
-					var serializer = new XmlSerializer(typeof(Settings));
-					serializer.Serialize(fs, Current);
+					var serializer = new XmlSerializer(typeof(T));
+					serializer.Serialize(fs, instance);
 				}
 			}
 			catch (Exception ex)
 			{
 				throw new Exception("Failed to save settings.", ex);
 			}
-		}
-
-		#endregion
-
-		#region Prepare
-
-		private static string FolderPathAppData
-		{
-			get
-			{
-				if (_folderPathAppData == null)
-				{
-					var pathAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-					if (string.IsNullOrEmpty(pathAppData)) // This should not happen.
-						throw new DirectoryNotFoundException();
-
-					_folderPathAppData = Path.Combine(pathAppData, Assembly.GetExecutingAssembly().GetName().Name);
-				}
-				return _folderPathAppData;
-			}
-		}
-		private static string _folderPathAppData;
-
-		private static void PrepareFolderAppData()
-		{
-			if (!Directory.Exists(FolderPathAppData))
-				Directory.CreateDirectory(FolderPathAppData);
 		}
 
 		#endregion

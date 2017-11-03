@@ -93,13 +93,13 @@
       <HintPath>..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -114,42 +114,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Helper\CancellationTokenSourcePlus.cs" />
-    <Compile Include="Helper\EnumerableExtension.cs" />
-    <Compile Include="Helper\FatDateTime.cs" />
-    <Compile Include="Helper\NativeWifi.cs" />
-    <Compile Include="Helper\VisualTreeHelperAddition.cs" />
-    <Compile Include="Models\CardInfo.cs" />
-    <Compile Include="Models\CommandLine.cs" />
-    <Compile Include="Models\Exceptions\CardChangedException.cs" />
-    <Compile Include="Models\Exceptions\CardUploadDisabledException.cs" />
-    <Compile Include="Models\Exceptions\ImageNotSupportedException.cs" />
-    <Compile Include="Models\Exceptions\RemoteFileDeletionFailedException.cs" />
-    <Compile Include="Models\Exceptions\RemoteFileThumbnailFailedException.cs" />
-    <Compile Include="Models\Exceptions\UnexpectedException.cs" />
-    <Compile Include="Models\Exceptions\RemoteConnectionLostException.cs" />
-    <Compile Include="Models\FileItem.cs" />
-    <Compile Include="Models\IFileItem.cs" />
-    <Compile Include="Models\LogService.cs" />
-    <Compile Include="Models\NetworkChecker.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Views\Behaviors\WebBrowserBehavior.cs" />
-    <Compile Include="Views\Behaviors\ExplorerAction.cs" />
-    <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
-    <Compile Include="Views\Behaviors\ItemsControlChildBehavior.cs" />
-    <Compile Include="Views\Behaviors\SystemSoundPlayAction.cs" />
-    <Compile Include="Views\Behaviors\WindowActivateBehavior.cs" />
-    <Compile Include="Views\Controls\BusyButton.cs" />
-    <Compile Include="Views\Controls\CheckTextBox.cs" />
-    <Compile Include="Views\Controls\CircularProgressBar.cs" />
-    <Compile Include="Views\Controls\NumericUpDown.cs" />
-    <Compile Include="Views\Controls\SlidingToggleButton.cs" />
-    <Compile Include="Views\Converters\DoubleCentesimalConverter.cs" />
-    <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
     <Compile Include="Views\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
@@ -175,12 +144,19 @@
     <Compile Include="Helper\FileAddition.cs" />
     <Compile Include="Helper\OsVersion.cs" />
     <Compile Include="Helper\Recycle.cs" />
-    <Compile Include="Models\Exceptions\RemoteFileInvalidException.cs" />
-    <Compile Include="Models\Exceptions\RemoteFileNotFoundException.cs" />
-    <Compile Include="Models\Exceptions\RemoteConnectionUnableException.cs" />
+    <Compile Include="Helper\CancellationTokenSourcePlus.cs" />
+    <Compile Include="Helper\EnumerableExtension.cs" />
+    <Compile Include="Helper\FatDateTime.cs" />
+    <Compile Include="Helper\NativeWifi.cs" />
+    <Compile Include="Helper\VisualTreeHelperAddition.cs" />
+    <Compile Include="Models\CardInfo.cs" />
+    <Compile Include="Models\CommandLine.cs" />
+    <Compile Include="Models\FileItem.cs" />
+    <Compile Include="Models\IFileItem.cs" />
+    <Compile Include="Models\FolderService.cs" />
+    <Compile Include="Models\LogService.cs" />
+    <Compile Include="Models\NetworkChecker.cs" />
     <Compile Include="Models\FileExtension.cs" />
-    <Compile Include="ViewModels\FileItemViewModel.cs" />
-    <Compile Include="ViewModels\ItemObservableCollection.cs" />
     <Compile Include="Models\FileManager.cs" />
     <Compile Include="Models\FileManagerCommand.cs" />
     <Compile Include="Models\FilePeriod.cs" />
@@ -191,6 +167,16 @@
     <Compile Include="Models\ResourceService.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\WindowPlacement.cs" />
+    <Compile Include="Models\Exceptions\RemoteFileInvalidException.cs" />
+    <Compile Include="Models\Exceptions\RemoteFileNotFoundException.cs" />
+    <Compile Include="Models\Exceptions\RemoteConnectionUnableException.cs" />
+    <Compile Include="Models\Exceptions\CardChangedException.cs" />
+    <Compile Include="Models\Exceptions\CardUploadDisabledException.cs" />
+    <Compile Include="Models\Exceptions\ImageNotSupportedException.cs" />
+    <Compile Include="Models\Exceptions\RemoteFileDeletionFailedException.cs" />
+    <Compile Include="Models\Exceptions\RemoteFileThumbnailFailedException.cs" />
+    <Compile Include="Models\Exceptions\UnexpectedException.cs" />
+    <Compile Include="Models\Exceptions\RemoteConnectionLostException.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -201,6 +187,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.ja-JP.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\FileItemViewModel.cs" />
+    <Compile Include="ViewModels\ItemObservableCollection.cs" />
     <Compile Include="ViewModels\FilePeriodViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
@@ -210,6 +198,19 @@
     <Compile Include="Views\Behaviors\FrameworkElementIntersectionBehavior.cs" />
     <Compile Include="Views\Behaviors\GridSizeBehavior.cs" />
     <Compile Include="Views\Behaviors\SelectorSelectedItemBehavior.cs" />
+    <Compile Include="Views\Behaviors\WebBrowserBehavior.cs" />
+    <Compile Include="Views\Behaviors\ExplorerAction.cs" />
+    <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
+    <Compile Include="Views\Behaviors\ItemsControlChildBehavior.cs" />
+    <Compile Include="Views\Behaviors\SystemSoundPlayAction.cs" />
+    <Compile Include="Views\Behaviors\WindowActivateBehavior.cs" />
+    <Compile Include="Views\Controls\BusyButton.cs" />
+    <Compile Include="Views\Controls\CheckTextBox.cs" />
+    <Compile Include="Views\Controls\CircularProgressBar.cs" />
+    <Compile Include="Views\Controls\NumericUpDown.cs" />
+    <Compile Include="Views\Controls\SlidingToggleButton.cs" />
+    <Compile Include="Views\Converters\DoubleCentesimalConverter.cs" />
+    <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
     <Compile Include="Views\Controls\HideableGridSplitter.cs" />
     <Compile Include="Views\Controls\ThumbnailBox.xaml.cs">
       <DependentUpon>ThumbnailBox.xaml</DependentUpon>
