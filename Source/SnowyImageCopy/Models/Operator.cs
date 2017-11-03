@@ -39,7 +39,7 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-		#region Access to MainWindowViewModel member
+		#region Access to MainWindowViewModel
 
 		private string OperationStatus
 		{
@@ -73,10 +73,7 @@ namespace SnowyImageCopy.Models
 			set { _mainWindowViewModel.CurrentImageData = value; }
 		}
 
-		private bool IsWindowActivateRequested
-		{
-			set { _mainWindowViewModel.IsWindowActivateRequested = value; }
-		}
+		public event EventHandler ActivateRequested;
 
 		private void InvokeSafely(Action action)
 		{
@@ -1109,7 +1106,7 @@ namespace SnowyImageCopy.Models
 			var result = await ToastManager.ShowAsync(request);
 
 			if (result == ToastResult.Activated)
-				IsWindowActivateRequested = true; // Activating Window is requested.
+				ActivateRequested?.Invoke(this, EventArgs.Empty);
 		}
 
 		#endregion

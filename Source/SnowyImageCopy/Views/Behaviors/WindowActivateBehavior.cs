@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interactivity;
+
+using Expression = System.Linq.Expressions.Expression;
 
 namespace SnowyImageCopy.Views.Behaviors
 {
@@ -17,34 +20,34 @@ namespace SnowyImageCopy.Views.Behaviors
 		#region Property
 
 		/// <summary>
-		/// Whether activating attached Window is requested
+		/// Sender of an event to be listened
 		/// </summary>
-		public bool IsRequested
+		public object SenderObject
 		{
-			get { return (bool)GetValue(IsRequestedProperty); }
-			set { SetValue(IsRequestedProperty, value); }
+			get { return (object)GetValue(SenderObjectProperty); }
+			set { SetValue(SenderObjectProperty, value); }
 		}
-		public static readonly DependencyProperty IsRequestedProperty =
+		public static readonly DependencyProperty SenderObjectProperty =
 			DependencyProperty.Register(
-				"IsRequested",
-				typeof(bool),
+				"SenderObject",
+				typeof(object),
 				typeof(WindowActivateBehavior),
-				new FrameworkPropertyMetadata(
-					false,
-					(d, e) =>
-					{
-						if ((bool)e.NewValue)
-						{
-							var window = ((WindowActivateBehavior)d).AssociatedObject;
-							if (!window.IsActive)
-							{
-								if (window.WindowState == WindowState.Minimized)
-									window.WindowState = WindowState.Normal;
+				new FrameworkPropertyMetadata(null));
 
-								window.Activate();
-							}
-						}
-					}));
+		/// <summary>
+		/// Name of an event to be listened
+		/// </summary>
+		public string EventName
+		{
+			get { return (string)GetValue(EventNameProperty); }
+			set { SetValue(EventNameProperty, value); }
+		}
+		public static readonly DependencyProperty EventNameProperty =
+			DependencyProperty.Register(
+				"EventName",
+				typeof(string),
+				typeof(WindowActivateBehavior),
+				new FrameworkPropertyMetadata(null));
 
 		#endregion
 
@@ -52,21 +55,63 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			base.OnAttached();
 
-			this.AssociatedObject.Activated += OnActivatedChanged;
+			AddHandler();
 		}
 
 		protected override void OnDetaching()
 		{
 			base.OnDetaching();
 
-			this.AssociatedObject.Activated -= OnActivatedChanged;
+			RemoveHandler();
 		}
 
-		private void OnActivatedChanged(object sender, EventArgs e)
+		private EventInfo _eventInfo;
+		private Delegate _handler;
+
+		private void AddHandler()
 		{
-			// When attached Window is activated, clear the flag to prepare for next request.
-			if (this.AssociatedObject.IsActive)
-				IsRequested = false;
+			if ((SenderObject == null) || string.IsNullOrEmpty(EventName))
+				return;
+
+			_eventInfo = SenderObject.GetType().GetEvent(EventName);
+			if (_eventInfo == null)
+				return;
+
+			_handler = CreateDelegate(_eventInfo, Activate);
+			_eventInfo.AddEventHandler(SenderObject, _handler);
+		}
+
+		private void RemoveHandler()
+		{
+			if ((SenderObject == null) || (_eventInfo == null))
+				return;
+
+			_eventInfo.RemoveEventHandler(SenderObject, _handler);
+		}
+
+		private static Delegate CreateDelegate(EventInfo eventInfo, Action action)
+		{
+			var handlerType = eventInfo.EventHandlerType;
+			var parameters = handlerType.GetMethod("Invoke").GetParameters()
+				.Select(x => Expression.Parameter(x.ParameterType, x.Name))
+				.ToArray();
+
+			var body = Expression.Call(Expression.Constant(action), action.GetType().GetMethod("Invoke"));
+			var lambda = Expression.Lambda(body, parameters);
+
+			return Delegate.CreateDelegate(handlerType, lambda.Compile(), "Invoke", false);
+		}
+
+		private void Activate()
+		{
+			var window = this.AssociatedObject;
+			if (window.IsActive)
+				return;
+
+			if (window.WindowState == WindowState.Minimized)
+				window.WindowState = WindowState.Normal;
+
+			window.Activate();
 		}
 	}
 }

@@ -33,12 +33,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public Settings SettingsCurrent => Settings.Current;
 
-		public bool IsWindowActivateRequested
-		{
-			get { return _isWindowActivateRequested; }
-			set { SetPropertyValue(ref _isWindowActivateRequested, value); }
-		}
-		private bool _isWindowActivateRequested;
+		public event EventHandler ActivateRequested;
 
 		#endregion
 
@@ -388,13 +383,13 @@ namespace SnowyImageCopy.ViewModels
 
 			// Subscribe event handlers.
 			Subscription.Add(Observable.FromEvent
-				(
-					handler => _currentFrameSizeChanged += handler,
-					handler => _currentFrameSizeChanged -= handler
-				)
-				.Throttle(TimeSpan.FromMilliseconds(50))
-				.ObserveOn(SynchronizationContext.Current)
-				.Subscribe(_ => SetCurrentImage()));
+			  (
+				  handler => _currentFrameSizeChanged += handler,
+				  handler => _currentFrameSizeChanged -= handler
+			  )
+			  .Throttle(TimeSpan.FromMilliseconds(50))
+			  .ObserveOn(SynchronizationContext.Current)
+			  .Subscribe(_ => SetCurrentImage()));
 
 			Subscription.Add(Observable.FromEvent
 				(
@@ -417,6 +412,14 @@ namespace SnowyImageCopy.ViewModels
 					FileListCoreView.Refresh();
 					Op.UpdateProgress();
 				}));
+
+			Subscription.Add(Observable.FromEventPattern
+				(
+					handler => Op.ActivateRequested += handler,
+					handler => Op.ActivateRequested -= handler
+				)
+				.ObserveOn(SynchronizationContext.Current)
+				.Subscribe(_ => ActivateRequested?.Invoke(this, EventArgs.Empty)));
 
 			SetSample(1);
 		}

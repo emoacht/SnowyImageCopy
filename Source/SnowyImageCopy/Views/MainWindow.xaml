@@ -24,7 +24,7 @@
 	</Window.TaskbarItemInfo>
 
 	<i:Interaction.Behaviors>
-		<behaviors:WindowActivateBehavior IsRequested="{Binding IsWindowActivateRequested, Mode=TwoWay}"/>
+		<behaviors:WindowActivateBehavior SenderObject="{Binding}" EventName="ActivateRequested"/>
 	</i:Interaction.Behaviors>
 
 	<Grid x:Name="LayoutRoot"
