@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 using SnowyImageCopy.Common;
+using SnowyImageCopy.Helper;
 
 namespace SnowyImageCopy.Models
 {
@@ -139,12 +140,28 @@ namespace SnowyImageCopy.Models
 		{
 			get
 			{
-				return _localFolder ?? (_localFolder =
-					Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), _defaultLocalFolder));
+				if (string.IsNullOrEmpty(_localFolder))
+					_localFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), _defaultLocalFolder);
+
+				return _localFolder;
 			}
-			set { SetPropertyValue(ref _localFolder, value); }
+			set
+			{
+				string buff;
+				if (string.IsNullOrEmpty(value))
+				{
+					buff = value;
+				}
+				else if (!TryNormalizeLocalFolder(value, out buff))
+					return;
+
+				SetPropertyValue(ref _localFolder, buff);
+			}
 		}
 		private string _localFolder;
+
+		private bool TryNormalizeLocalFolder(string source, out string normalized) =>
+			PathAddition.TryNormalizeDirectoryPath(source, out normalized);
 
 		#endregion
 

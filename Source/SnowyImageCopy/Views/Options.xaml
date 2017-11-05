@@ -75,14 +75,14 @@
 							 HorizontalAlignment="Stretch"
 							 Margin="0,4,0,6" Padding="2"
 							 VerticalContentAlignment="Center"
-							 Text="{Binding SettingsCurrent.RemoteAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+							 Text="{Binding SettingsCurrent.RemoteAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
 
 					<TextBlock Text="{Binding Resources.Options_LocalFolder, Source={x:Static models:ResourceService.Current}}"/>
 					<TextBox x:Name="LocalFolderTextBox"
 							 HorizontalAlignment="Stretch"
 							 Margin="0,4,0,4" Padding="2"
 							 VerticalContentAlignment="Center"
-							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 						<Button	Margin="0,0,4,0"
 								Padding="8,2,8,2"
