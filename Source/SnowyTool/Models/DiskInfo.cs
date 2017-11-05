@@ -87,9 +87,6 @@ namespace SnowyTool.Models
 		/// <summary>
 		/// Whether this disk can be SD
 		/// </summary>
-		public bool CanBeSD
-		{
-			get { return ((BusType == 12) || (DriveType == 2) || MediaType.ToLower().Contains("removable")); }
-		}
+		public bool CanBeSD => (BusType == 12) || (DriveType == 2) || MediaType.ToLower().Contains("removable");
 	}
 }

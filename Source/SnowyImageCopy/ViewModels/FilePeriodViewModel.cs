@@ -23,14 +23,12 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 
-		#region Event Listener
+		#region Event listener
 
 		private PropertyChangedEventListener _resourcesPropertyChangedListener;
 
 		private void ReactResourcesPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			//Debug.WriteLine($"Resources property changed: {sender} {e.PropertyName}");
-
 			SetDescription(Period);
 		}
 

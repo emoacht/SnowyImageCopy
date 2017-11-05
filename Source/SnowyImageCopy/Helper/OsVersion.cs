@@ -20,9 +20,8 @@ namespace SnowyImageCopy.Helper
 			get
 			{
 				if (!_isEightOrNewer.HasValue)
-				{
-					_isEightOrNewer = new Version(6, 2) <= Environment.OSVersion.Version;
-				}
+					_isEightOrNewer = (new Version(6, 2) <= Environment.OSVersion.Version);
+
 				return _isEightOrNewer.Value;
 			}
 		}

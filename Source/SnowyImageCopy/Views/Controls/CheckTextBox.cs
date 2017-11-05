@@ -27,7 +27,7 @@ namespace SnowyImageCopy.Views.Controls
 						textBox.CompareText(textBox.CheckText, (string)e.NewValue);
 					}));
 
-			TextBox.VisibilityProperty.OverrideMetadata(
+			UIElement.VisibilityProperty.OverrideMetadata(
 				typeof(CheckTextBox),
 				new FrameworkPropertyMetadata(
 					Visibility.Visible,

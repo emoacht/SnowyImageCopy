@@ -14,10 +14,6 @@ namespace SnowyTool.Common
 
 		#region Constructor
 
-		public DelegateCommand(Action execute)
-			: this(execute, () => true)
-		{ }
-
 		public DelegateCommand(Action execute, Func<bool> canExecute)
 		{
 			if (execute == null)
@@ -33,29 +29,15 @@ namespace SnowyTool.Common
 
 		#region Execute
 
-		public void Execute()
-		{
-			this._execute();
-		}
-
-		void ICommand.Execute(object parameter)
-		{
-			this.Execute();
-		}
+		public void Execute() => this._execute();
+		void ICommand.Execute(object parameter) => this.Execute();
 
 		#endregion
 
 		#region CanExecute
 
-		public bool CanExecute()
-		{
-			return this._canExecute();
-		}
-
-		bool ICommand.CanExecute(object parameter)
-		{
-			return this.CanExecute();
-		}
+		public bool CanExecute() => this._canExecute();
+		bool ICommand.CanExecute(object parameter) => this.CanExecute();
 
 		public event EventHandler CanExecuteChanged
 		{

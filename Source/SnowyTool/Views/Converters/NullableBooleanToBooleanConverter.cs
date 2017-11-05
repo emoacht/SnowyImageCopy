@@ -33,7 +33,7 @@ namespace SnowyTool.Views.Converters
 			if (!condition.HasValue)
 				return DependencyProperty.UnsetValue;
 
-			return condition.Value == source.Value;
+			return (condition.Value == source.Value);
 		}
 
 		/// <summary>

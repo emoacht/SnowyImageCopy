@@ -57,10 +57,8 @@ namespace SnowyImageCopy.Models
 			"100__TSB",
 		};
 
-		public bool IsFlashAirSystemFolder
-		{
-			get { return _flashAirSystemFolders.Contains(FileName, StringComparer.OrdinalIgnoreCase); }
-		}
+		public bool IsFlashAirSystemFolder =>
+			_flashAirSystemFolders.Contains(FileName, StringComparer.OrdinalIgnoreCase);
 
 		#endregion
 

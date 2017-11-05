@@ -68,8 +68,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>BitmapImage of thumbnail</returns>
 		internal static async Task<BitmapImage> ReadThumbnailAsync(byte[] bytes)
 		{
-			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException(nameof(bytes));
+			ThrowIfNullOrEmpty(bytes, nameof(bytes));
 
 			try
 			{
@@ -134,8 +133,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>BitmapImage of thumbnail</returns>
 		internal static async Task<BitmapImage> CreateThumbnailAsync(byte[] bytes)
 		{
-			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException(nameof(bytes));
+			ThrowIfNullOrEmpty(bytes, nameof(bytes));
 
 			try
 			{
@@ -407,8 +405,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>BitmapSource</returns>
 		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes, double targetWidth, double targetHeight, bool willReadExif, ColorContext destinationProfile = null)
 		{
-			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException(nameof(bytes));
+			ThrowIfNullOrEmpty(bytes, nameof(bytes));
 
 			var targetSize = new Size(targetWidth, targetHeight);
 
@@ -447,8 +444,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>BitmapSource</returns>
 		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceUniformAsync(byte[] bytes, Size outerSize, bool willReadExif, ColorContext destinationProfile = null)
 		{
-			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException(nameof(bytes));
+			ThrowIfNullOrEmpty(bytes, nameof(bytes));
 
 			try
 			{
@@ -627,8 +623,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>Date of image taken</returns>
 		internal static async Task<DateTime> GetExifDateTakenAsync(byte[] bytes)
 		{
-			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException(nameof(bytes));
+			ThrowIfNullOrEmpty(bytes, nameof(bytes));
 
 			using (var ms = new MemoryStream(bytes)) // This MemoryStream will not be changed.
 			{
@@ -655,8 +650,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>Orientation</returns>
 		internal static async Task<int> GetExifOrientationAsync(byte[] bytes)
 		{
-			if ((bytes == null) || !bytes.Any())
-				throw new ArgumentNullException(nameof(bytes));
+			ThrowIfNullOrEmpty(bytes, nameof(bytes));
 
 			using (var ms = new MemoryStream(bytes)) // This MemoryStream will not be changed.
 			{
@@ -716,9 +710,7 @@ namespace SnowyImageCopy.Models
 				{
 					var value = bitmapMetadata.GetQuery(queryOrientation);
 					if (value != null)
-					{
 						return (ushort)value; // Orientation is defined as 16-bit unsigned integer in the specification.
-					}
 				}
 			}
 
@@ -876,6 +868,12 @@ namespace SnowyImageCopy.Models
 		#endregion
 
 		#region Helper
+
+		private static void ThrowIfNullOrEmpty<T>(ICollection<T> source, string name)
+		{
+			if (!(source?.Count > 0))
+				throw new ArgumentNullException(name);
+		}
 
 		/// <summary>
 		/// Checks if an exception is thrown because image format is not supported by PC.

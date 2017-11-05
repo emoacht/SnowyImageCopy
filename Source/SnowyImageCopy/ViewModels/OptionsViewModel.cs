@@ -71,8 +71,7 @@ namespace SnowyImageCopy.ViewModels
 			get
 			{
 				var index = _cultureMap.Select(x => x.Key).ToList().FindIndex(x => x == Settings.Current.CultureName);
-
-				return (0 <= index) ? index : 0;
+				return Math.Max(0, index);
 			}
 			set
 			{

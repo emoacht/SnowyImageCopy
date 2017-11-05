@@ -41,11 +41,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public Operator Op { get; }
 
-		public ItemObservableCollection<FileItemViewModel> FileListCore
-		{
-			get { return _fileListCore ?? (_fileListCore = new ItemObservableCollection<FileItemViewModel>()); }
-		}
-		private ItemObservableCollection<FileItemViewModel> _fileListCore;
+		public ItemObservableCollection<FileItemViewModel> FileListCore { get; } = new ItemObservableCollection<FileItemViewModel>();
 
 		public ListCollectionView FileListCoreView
 		{
@@ -90,10 +86,8 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Check & Copy Command
 
-		public DelegateCommand CheckAndCopyCommand
-		{
-			get { return _checkAndCopyCommand ?? (_checkAndCopyCommand = new DelegateCommand(CheckAndCopyExecute, CanCheckAndCopyExecute)); }
-		}
+		public DelegateCommand CheckAndCopyCommand =>
+			_checkAndCopyCommand ?? (_checkAndCopyCommand = new DelegateCommand(CheckAndCopyExecute, CanCheckAndCopyExecute));
 		private DelegateCommand _checkAndCopyCommand;
 
 		private async void CheckAndCopyExecute() => await Op.CheckCopyFileAsync();
@@ -103,10 +97,8 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Check & Copy Auto Command
 
-		public DelegateCommand CheckAndCopyAutoCommand
-		{
-			get { return _checkAndCopyAutoCommand ?? (_checkAndCopyAutoCommand = new DelegateCommand(CheckAndCopyAutoExecute, CanCheckAndCopyAutoExecute)); }
-		}
+		public DelegateCommand CheckAndCopyAutoCommand =>
+			_checkAndCopyAutoCommand ?? (_checkAndCopyAutoCommand = new DelegateCommand(CheckAndCopyAutoExecute, CanCheckAndCopyAutoExecute));
 		private DelegateCommand _checkAndCopyAutoCommand;
 
 		private void CheckAndCopyAutoExecute() => Op.StartAutoTimer();
@@ -116,10 +108,8 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Check Command
 
-		public DelegateCommand CheckCommand
-		{
-			get { return _checkFileCommand ?? (_checkFileCommand = new DelegateCommand(CheckExecute, CanCheckExecute)); }
-		}
+		public DelegateCommand CheckCommand =>
+			_checkFileCommand ?? (_checkFileCommand = new DelegateCommand(CheckExecute, CanCheckExecute));
 		private DelegateCommand _checkFileCommand;
 
 		private async void CheckExecute() => await Op.CheckFileAsync();
@@ -129,10 +119,8 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Copy Command
 
-		public DelegateCommand CopyCommand
-		{
-			get { return _copyCommand ?? (_copyCommand = new DelegateCommand(CopyExecute, CanCopyExecute)); }
-		}
+		public DelegateCommand CopyCommand =>
+			_copyCommand ?? (_copyCommand = new DelegateCommand(CopyExecute, CanCopyExecute));
 		private DelegateCommand _copyCommand;
 
 		private async void CopyExecute() => await Op.CopyFileAsync();
@@ -142,10 +130,8 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Stop Command
 
-		public DelegateCommand StopCommand
-		{
-			get { return _stopCommand ?? (_stopCommand = new DelegateCommand(StopExecute, CanStopExecute)); }
-		}
+		public DelegateCommand StopCommand =>
+			_stopCommand ?? (_stopCommand = new DelegateCommand(StopExecute, CanStopExecute));
 		private DelegateCommand _stopCommand;
 
 		private void StopExecute() => Op.Stop();
@@ -155,10 +141,8 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Save Desktop Command
 
-		public DelegateCommand SaveDesktopCommand
-		{
-			get { return _saveDesktopCommand ?? (_saveDesktopCommand = new DelegateCommand(SaveDesktopExecute, CanSaveDesktopExecute)); }
-		}
+		public DelegateCommand SaveDesktopCommand =>
+			_saveDesktopCommand ?? (_saveDesktopCommand = new DelegateCommand(SaveDesktopExecute, CanSaveDesktopExecute));
 		private DelegateCommand _saveDesktopCommand;
 
 		private async void SaveDesktopExecute() => await Op.SaveDesktopAsync();
@@ -168,10 +152,8 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Send Clipboard Command
 
-		public DelegateCommand SendClipboardCommand
-		{
-			get { return _sendClipboardCommand ?? (_sendClipboardCommand = new DelegateCommand(SendClipboardExecute, CanSendClipboardExecute)); }
-		}
+		public DelegateCommand SendClipboardCommand =>
+			_sendClipboardCommand ?? (_sendClipboardCommand = new DelegateCommand(SendClipboardExecute, CanSendClipboardExecute));
 		private DelegateCommand _sendClipboardCommand;
 
 		private async void SendClipboardExecute() => await Op.SendClipboardAsync();
@@ -233,9 +215,10 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				_dataLocker.EnterReadLock();
 				try
 				{
+					_dataLocker.EnterReadLock();
+
 					return _currentImageData;
 				}
 				finally
@@ -245,9 +228,10 @@ namespace SnowyImageCopy.ViewModels
 			}
 			set
 			{
-				_dataLocker.EnterWriteLock();
 				try
 				{
+					_dataLocker.EnterWriteLock();
+
 					_currentImageData = value;
 				}
 				finally
@@ -377,8 +361,8 @@ namespace SnowyImageCopy.ViewModels
 				_settingsPropertyChangedListener = new PropertyChangedEventListener(ReactSettingsPropertyChanged);
 				PropertyChangedEventManager.AddListener(Settings.Current, _settingsPropertyChangedListener, string.Empty);
 
-				_operationPropertyChangedListener = new PropertyChangedEventListener(ReactOperationPropertyChanged);
-				PropertyChangedEventManager.AddListener(Op, _operationPropertyChangedListener, string.Empty);
+				_operatorPropertyChangedListener = new PropertyChangedEventListener(ReactOperatorPropertyChanged);
+				PropertyChangedEventManager.AddListener(Op, _operatorPropertyChangedListener, string.Empty);
 			}
 
 			// Subscribe event handlers.
@@ -435,7 +419,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-		#region Event Listener
+		#region Event listener
 
 		#region FileItem
 
@@ -443,15 +427,11 @@ namespace SnowyImageCopy.ViewModels
 
 		private async void FileListPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			//Debug.WriteLine($"File List property changed: {sender} {e.PropertyName}");
-
 			if (e.PropertyName != nameof(ItemObservableCollection<FileItemViewModel>.ItemPropertyChangedSender))
 				return;
 
 			var item = ((ItemObservableCollection<FileItemViewModel>)sender).ItemPropertyChangedSender;
 			var propertyName = ((ItemObservableCollection<FileItemViewModel>)sender).ItemPropertyChangedEventArgs.PropertyName;
-
-			//Debug.WriteLine($"ItemPropertyChanged: {item.FileName} {propertyName}");
 
 			if (propertyName == nameof(FileItemViewModel.IsSelected))
 			{
@@ -505,8 +485,6 @@ namespace SnowyImageCopy.ViewModels
 
 		private void ReactSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			//Debug.WriteLine($"Settings property changed: {sender} {e.PropertyName}");
-
 			var propertyName = e.PropertyName;
 
 			if (propertyName == nameof(Settings.AutoCheckInterval))
@@ -522,14 +500,12 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-		#region Operation
+		#region Operator
 
-		private PropertyChangedEventListener _operationPropertyChangedListener;
+		private PropertyChangedEventListener _operatorPropertyChangedListener;
 
-		private void ReactOperationPropertyChanged(object sender, PropertyChangedEventArgs e)
+		private void ReactOperatorPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			//Debug.WriteLine($"Operation property changed (MainWindowViewModel): {sender} {e.PropertyName}");
-
 			var propertyName = e.PropertyName;
 
 			if (propertyName == nameof(Operator.IsChecking))

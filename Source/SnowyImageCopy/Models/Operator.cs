@@ -1254,10 +1254,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="item">Target item</param>
 		/// <returns>Local file path</returns>
-		private static string ComposeDesktopPath(FileItemViewModel item)
-		{
-			return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), item.FileNameWithCaseExtension);
-		}
+		private static string ComposeDesktopPath(FileItemViewModel item) =>
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), item.FileNameWithCaseExtension);
 
 		/// <summary>
 		/// Gets FileInfo of a local file.
@@ -1268,7 +1266,9 @@ namespace SnowyImageCopy.Models
 		{
 			var localPath = ComposeLocalPath(item);
 
-			return File.Exists(localPath) ? new FileInfo(localPath) : null;
+			return File.Exists(localPath) // File.Exists method is more robust than FileInfo constructor.
+				? new FileInfo(localPath)
+				: null;
 		}
 
 		/// <summary>
@@ -1276,10 +1276,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="item">Target item</param>
 		/// <returns>True if exists</returns>
-		private static bool IsAliveLocal(FileItemViewModel item)
-		{
-			return IsAliveLocal(GetFileInfoLocal(item), item.Size);
-		}
+		private static bool IsAliveLocal(FileItemViewModel item) =>
+			IsAliveLocal(GetFileInfoLocal(item), item.Size);
 
 		/// <summary>
 		/// Checks if a local file exists.
@@ -1287,20 +1285,16 @@ namespace SnowyImageCopy.Models
 		/// <param name="info">FileInfo of a local file</param>
 		/// <param name="size">File size of a local file</param>
 		/// <returns>True if exists</returns>
-		private static bool IsAliveLocal(FileInfo info, int size)
-		{
-			return (info != null) && (info.Length == size);
-		}
+		private static bool IsAliveLocal(FileInfo info, int size) =>
+			(info != null) && (info.Length == size);
 
 		/// <summary>
 		/// Checks if a local file is available (not offline) in relation to OneDrive.
 		/// </summary>
 		/// <param name="info">FileInfo of a local file</param>
 		/// <returns>True if available</returns>
-		private static bool IsAvailableLocal(FileInfo info)
-		{
-			return (info != null) && !info.Attributes.HasFlag(FileAttributes.Offline);
-		}
+		private static bool IsAvailableLocal(FileInfo info) =>
+			(info != null) && !info.Attributes.HasFlag(FileAttributes.Offline);
 
 		#endregion
 	}

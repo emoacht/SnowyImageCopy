@@ -40,9 +40,14 @@ namespace SnowyImageCopy.Views.Behaviors
 
 			if (!string.IsNullOrEmpty(initialPath) && !Directory.Exists(initialPath))
 			{
-				var parent = Path.GetDirectoryName(initialPath);
-				if (!string.IsNullOrEmpty(parent))
-					initialPath = parent;
+				try
+				{
+					var parent = Path.GetDirectoryName(initialPath);
+					if (!string.IsNullOrEmpty(parent))
+						initialPath = parent;
+				}
+				catch (ArgumentException)
+				{ }
 			}
 
 			new Shell().Explore(initialPath);

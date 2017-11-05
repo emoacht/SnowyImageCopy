@@ -312,10 +312,8 @@ namespace SnowyTool.ViewModels
 		/// <remarks>This is to hold unusable parameters (LOCK, APPINFO) and unknown ones.</remarks>
 		private readonly Dictionary<string, string> _remaining = new Dictionary<string, string>();
 
-		public bool IsChanged
-		{
-			get { return !_isImporting && !GetMonitoredValues().SequenceEqual(_monitoredValues); }
-		}
+		public bool IsChanged =>
+			!_isImporting && !GetMonitoredValues().SequenceEqual(_monitoredValues);
 
 		private static readonly Regex _versionPattern = new Regex(@"[1-9]\.\d{2}\.\d{2}$", RegexOptions.Compiled); // Pattern for firmware version (number part)
 
@@ -331,10 +329,8 @@ namespace SnowyTool.ViewModels
 			}
 		}
 
-		public bool IsInternetPassThruEnabled
-		{
-			get { return IsInternetPassThruReady && ((APPMODE == 3) || (APPMODE == 6)); }
-		}
+		public bool IsInternetPassThruEnabled =>
+			IsInternetPassThruReady && ((APPMODE == 3) || (APPMODE == 6));
 
 		#endregion
 
@@ -424,12 +420,9 @@ namespace SnowyTool.ViewModels
 
 		private string[] _monitoredValues;
 
-		private IEnumerable<string> GetMonitoredValues()
-		{
-			return _monitoredProperties
-				.Select(x => x.GetValue(this))
-				.Select(x => x?.ToString() ?? string.Empty);
-		}
+		private IEnumerable<string> GetMonitoredValues() => _monitoredProperties
+			.Select(x => x.GetValue(this))
+			.Select(x => x?.ToString() ?? string.Empty);
 
 		private const char _separator = '=';
 		private bool _isImporting;
@@ -438,10 +431,10 @@ namespace SnowyTool.ViewModels
 		{
 			var contents = StringDictionary.Parse(configContent, _separator);
 
-			_isImporting = true;
-
 			try
 			{
+				_isImporting = true;
+
 				_remaining.Clear();
 
 				foreach (var c in contents)

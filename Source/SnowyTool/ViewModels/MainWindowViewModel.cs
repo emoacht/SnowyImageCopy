@@ -170,41 +170,23 @@ namespace SnowyTool.ViewModels
 
 		#region Search Command
 
-		public DelegateCommand SearchCommand
-		{
-			get { return _searchCommand ?? (_searchCommand = new DelegateCommand(SearchExecute, CanSearchExecute)); }
-		}
+		public DelegateCommand SearchCommand =>
+			_searchCommand ?? (_searchCommand = new DelegateCommand(SearchExecute, CanSearchExecute));
 		private DelegateCommand _searchCommand;
 
-		private async void SearchExecute()
-		{
-			await SearchConfigAsync();
-		}
-
-		private bool CanSearchExecute()
-		{
-			return !_isSearching;
-		}
+		private async void SearchExecute() => await SearchConfigAsync();
+		private bool CanSearchExecute() => !_isSearching;
 
 		#endregion
 
 		#region Apply Command
 
-		public DelegateCommand ApplyCommand
-		{
-			get { return _applyCommand ?? (_applyCommand = new DelegateCommand(ApplyExecute, CanApplyExecute)); }
-		}
+		public DelegateCommand ApplyCommand =>
+			_applyCommand ?? (_applyCommand = new DelegateCommand(ApplyExecute, CanApplyExecute));
 		private DelegateCommand _applyCommand;
 
-		private async void ApplyExecute()
-		{
-			await ApplyConfigAsync();
-		}
-
-		private bool CanApplyExecute()
-		{
-			return !_isApplying && (CurrentConfig != null) && CurrentConfig.IsChanged;
-		}
+		private async void ApplyExecute() => await ApplyConfigAsync();
+		private bool CanApplyExecute() => !_isApplying && (CurrentConfig != null) && CurrentConfig.IsChanged;
 
 		#endregion
 
@@ -219,10 +201,7 @@ namespace SnowyTool.ViewModels
 
 		private Task InitializeTask { get; }
 
-		private async Task InitializeAsync()
-		{
-			await SearchConfigAsync();
-		}
+		private async Task InitializeAsync() => await SearchConfigAsync();
 
 		#endregion
 

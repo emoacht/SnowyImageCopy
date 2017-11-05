@@ -11,15 +11,20 @@ namespace SnowyTool.Helper
 	/// </summary>
 	public static class OsVersion
 	{
-		private static readonly Version _ver = Environment.OSVersion.Version;
-
 		/// <summary>
 		/// Whether OS is Windows 8 or newer
 		/// </summary>
 		/// <remarks>Windows 8 = version 6.2</remarks>
 		public static bool IsEightOrNewer
 		{
-			get { return ((6 == _ver.Major) && (2 <= _ver.Minor)) || (7 <= _ver.Major); }
+			get
+			{
+				if (!_isEightOrNewer.HasValue)
+					_isEightOrNewer = (new Version(6, 2) <= Environment.OSVersion.Version);
+
+				return _isEightOrNewer.Value;
+			}
 		}
+		private static bool? _isEightOrNewer;
 	}
 }
