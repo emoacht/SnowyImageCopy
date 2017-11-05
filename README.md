@@ -17,6 +17,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ## History
 
+Ver 1.3.2 2017-11-5
+
+ - Improved smoothness of populating images when checking FlashAir
+
 Ver 1.3.0 2017-10-16
 
  - Added settings for timeout duration
@@ -63,7 +67,7 @@ Ver 0.9.7 2014-12-4
 
 Ver 0.9.6 2014-10-1
 
- - Added function to delete image in FlashAir upon copy
+ - Added function to delete image in FlashAir on copy
 
 Ver 0.9.5 2014-09-12
 
@@ -99,6 +103,6 @@ Ver 0.9.0 2014-04-10
  - Libraries: [Reactive Extensions][2], [WPF Monitor Aware Window][3], [Desktop Toast][4]
 
 [1]: https://www.flashair-developers.com/en/
-[2]: http://rx.codeplex.com/
+[2]: https://github.com/Reactive-Extensions/Rx.NET
 [3]: https://github.com/emoacht/WpfMonitorAware
 [4]: https://github.com/emoacht/DesktopToast
