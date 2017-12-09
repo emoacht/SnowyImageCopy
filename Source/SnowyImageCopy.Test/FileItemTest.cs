@@ -13,70 +13,171 @@ namespace SnowyImageCopy.Test
 		#region Import
 
 		/// <summary>
-		/// Directory case
+		/// Directory 1
 		/// </summary>
 		[TestMethod]
-		public void TestImportDirectory()
+		public void TestImportDirectory1()
 		{
-			TestImportBase("/DCIM,100__TSB,0,16,17181,18432", "/DCIM", "/DCIM", "100__TSB", 0, false, false, false, false, true, false, new DateTime(2013, 8, 29, 9, 0, 0), false);
+			TestImportBase(
+				fileEntry: "/DCIM,100__TSB,0,16,17181,18432",
+				directoryPath: "/DCIM",
+				directory: "/DCIM",
+				fileName: "100__TSB",
+				size: 0,
+				date: new DateTime(2013, 8, 29, 9, 0, 0),
+				isReadOnly: false,
+				isHidden: false,
+				isSystem: false,
+				isVolume: false,
+				isDirectory: true,
+				isArchive: false,
+				isFlashAirSystem: false,
+				isJpeg: false);
 		}
 
 		/// <summary>
-		/// File case
+		/// Directory 2
+		/// </summary>
+		[TestMethod]
+		public void TestImportDirectory2()
+		{
+			TestImportBase(
+				directoryPath: "",
+				fileName: "DCIM",
+				size: 0,
+				isFile: false,
+				date: DateTime.Today);
+		}
+
+		/// <summary>
+		/// File 1
 		/// </summary>
 		[TestMethod]
 		public void TestImportFile1()
 		{
-			TestImportBase("/DCIM/160___01,IMG_6221.JPG,2299469,32,17953,20181", "/DCIM/160___01", "/DCIM/160___01", "IMG_6221.JPG", 2299469, false, false, false, false, false, true, new DateTime(2015, 1, 1, 9, 54, 42), true);
+			TestImportBase(
+				fileEntry: "/DCIM/160___01,IMG_6221.JPG,2299469,32,17953,20181",
+				directoryPath: "/DCIM/160___01",
+				directory: "/DCIM/160___01",
+				fileName: "IMG_6221.JPG",
+				size: 2299469,
+				date: new DateTime(2015, 1, 1, 9, 54, 42),
+				isReadOnly: false,
+				isHidden: false,
+				isSystem: false,
+				isVolume: false,
+				isDirectory: false,
+				isArchive: true,
+				isFlashAirSystem: false,
+				isJpeg: true);
 		}
 
 		/// <summary>
-		/// File case
+		/// File 2
 		/// </summary>
 		[TestMethod]
 		public void TestImportFile2()
 		{
-			TestImportBase("/DCIM/170___02,IMG_0058.CR2,25235506,32,18607,35600", "/DCIM/170___02", "/DCIM/170___02", "IMG_0058.CR2", 25235506, false, false, false, false, false, true, new DateTime(2016, 5, 15, 17, 24, 32), false);
+			TestImportBase(
+				fileEntry: "/DCIM/170___02,IMG_0058.CR2,25235506,32,18607,35600",
+				directoryPath: "/DCIM/170___02",
+				directory: "/DCIM/170___02",
+				fileName: "IMG_0058.CR2",
+				size: 25235506,
+				date: new DateTime(2016, 5, 15, 17, 24, 32),
+				isReadOnly: false,
+				isHidden: false,
+				isSystem: false,
+				isVolume: false,
+				isDirectory: false,
+				isArchive: true,
+				isFlashAirSystem: false,
+				isJpeg: false);
 		}
 
 		/// <summary>
-		/// File case without attributes
+		/// File 3
 		/// </summary>
 		[TestMethod]
-		public void TestImportFileWithoutAttributes()
+		public void TestImportFile3()
 		{
-			TestImportBase("/DCIM/150___03,IMG_6837.JPG,2747563,32,17513,39513", "/DCIM/150___03", "/DCIM/150___03", "IMG_6837.JPG", 2747563, new DateTime(2014, 3, 9, 19, 18, 50));
+			TestImportBase(
+				fileEntry: "/DCIM/150___03,IMG_6837.JPG,2747563,32,17513,39513",
+				directoryPath: "/DCIM/150___03",
+				directory: "/DCIM/150___03",
+				fileName: "IMG_6837.JPG",
+				size: 2747563,
+				date: new DateTime(2014, 3, 9, 19, 18, 50));
 		}
 
 		/// <summary>
-		/// Invalid date case
+		/// File 4
 		/// </summary>
 		[TestMethod]
-		public void TestImportInvalidDate()
+		public void TestImportFile4()
 		{
-			TestImportBase(",DCIM,0,16,17852,17", "", "", "DCIM", 0, default(DateTime));
+			TestImportBase(
+				directoryPath: "/DCIM/100___012345678901234567890123456789",
+				fileName: "IMG_012345678901234567890123456789.JPG",
+				size: 1922840,
+				isFile: true,
+				date: DateTime.Today);
 		}
 
 		/// <summary>
-		/// Invalid size case
+		/// FlashAir system file
+		/// </summary>
+		[TestMethod]
+		public void TestImportFlashAirSystemFile()
+		{
+			TestImportBase(
+				fileEntry: $"/DCIM/100__TSB,FA000001.JPG,128751,32,17181,18432",
+				directoryPath: "/DCIM/100__TSB",
+				directory: "/DCIM/100__TSB",
+				fileName: "FA000001.JPG",
+				size: 128751,
+				date: new DateTime(2013, 8, 29, 9, 0, 0),
+				isReadOnly: false,
+				isHidden: false,
+				isSystem: false,
+				isVolume: false,
+				isDirectory: false,
+				isArchive: true,
+				isFlashAirSystem: true,
+				isJpeg: true);
+		}
+
+		/// <summary>
+		/// Valid date
+		/// </summary>
+		[TestMethod]
+		public void TestImportValidDate()
+		{
+			TestImportBase(
+				fileEntry: ",DCIM,0,16,17852,17",
+				directoryPath: "",
+				directory: "",
+				fileName: "DCIM",
+				size: 0,
+				date: default(DateTime));
+		}
+
+		/// <summary>
+		/// Invalid size
 		/// </summary>
 		[TestMethod]
 		public void TestImportInvalidSize()
 		{
 			var size = (long)Int32.MaxValue * 2;
-			var fileEntry = $"/DCIM/150___03,IMG_3862.CR2,{size},32,17519,31985";
 
-			TestImportBase(fileEntry, "/DCIM/150___03", "/DCIM/150___03", "IMG_3862.CR2", 0, default(DateTime), false);
-		}
-
-		/// <summary>
-		/// Other cases
-		/// </summary>
-		[TestMethod]
-		public void TestImportOther()
-		{
-			TestImportBase("", "DCIM", 0, false, DateTime.Today);
-			TestImportBase("/DCIM/100___012345678901234567890123456789", "IMG_012345678901234567890123456789.JPG", 1922840, true, DateTime.Today);
+			TestImportBase(
+				fileEntry: $"/DCIM/150___03,IMG_3862.CR2,{size},32,17519,31985",
+				directoryPath: "/DCIM/150___03",
+				directory: "/DCIM/150___03",
+				fileName: "IMG_3862.CR2",
+				size: 0,
+				date: default(DateTime),
+				isImported: false);
 		}
 
 		#region Base
@@ -111,11 +212,12 @@ namespace SnowyImageCopy.Test
 		{
 			var instance = new FileItem(fileEntry, directoryPath);
 
-			Assert.AreEqual(directory, instance.Directory);
-			Assert.AreEqual(fileName, instance.FileName);
-			Assert.AreEqual(size, instance.Size);
-			Assert.AreEqual(date, instance.Date);
-			Assert.AreEqual(isImported, instance.IsImported);
+			Assert.AreEqual(directory, instance.Directory, nameof(directory));
+			Assert.AreEqual(fileName, instance.FileName, nameof(fileName));
+			Assert.AreEqual(size, instance.Size, nameof(size));
+			Assert.AreEqual(date, instance.Date, nameof(date));
+
+			Assert.AreEqual(isImported, instance.IsImported, nameof(isImported));
 		}
 
 		private void TestImportBase(
@@ -124,32 +226,35 @@ namespace SnowyImageCopy.Test
 			string directory,
 			string fileName,
 			int size,
+			DateTime date,
 			bool isReadOnly,
 			bool isHidden,
-			bool isSystemFile,
+			bool isSystem,
 			bool isVolume,
 			bool isDirectory,
 			bool isArchive,
-			DateTime date,
+			bool isFlashAirSystem,
 			bool isJpeg,
 			bool isImported = true)
 		{
 			var instance = new FileItem(fileEntry, directoryPath);
 
-			Assert.AreEqual(directory, instance.Directory);
-			Assert.AreEqual(fileName, instance.FileName);
-			Assert.AreEqual(size, instance.Size);
+			Assert.AreEqual(directory, instance.Directory, nameof(directory));
+			Assert.AreEqual(fileName, instance.FileName, nameof(fileName));
+			Assert.AreEqual(size, instance.Size, nameof(size));
+			Assert.AreEqual(date, instance.Date, nameof(date));
 
-			Assert.AreEqual(isReadOnly, instance.IsReadOnly);
-			Assert.AreEqual(isHidden, instance.IsHidden);
-			Assert.AreEqual(isSystemFile, instance.IsSystemFile);
-			Assert.AreEqual(isVolume, instance.IsVolume);
-			Assert.AreEqual(isDirectory, instance.IsDirectory);
-			Assert.AreEqual(isArchive, instance.IsArchive);
+			Assert.AreEqual(isReadOnly, instance.IsReadOnly, nameof(isReadOnly));
+			Assert.AreEqual(isHidden, instance.IsHidden, nameof(isHidden));
+			Assert.AreEqual(isSystem, instance.IsSystem, nameof(isSystem));
+			Assert.AreEqual(isVolume, instance.IsVolume, nameof(isVolume));
+			Assert.AreEqual(isDirectory, instance.IsDirectory, nameof(isDirectory));
+			Assert.AreEqual(isArchive, instance.IsArchive, nameof(isArchive));
 
-			Assert.AreEqual(date, instance.Date);
-			Assert.AreEqual(isJpeg, instance.IsJpeg);
-			Assert.AreEqual(isImported, instance.IsImported);
+			Assert.AreEqual(isFlashAirSystem, instance.IsFlashAirSystem, nameof(isFlashAirSystem));
+			Assert.AreEqual(isJpeg, instance.IsJpeg, nameof(isJpeg));
+
+			Assert.AreEqual(isImported, instance.IsImported, nameof(isImported));
 		}
 
 		#endregion
