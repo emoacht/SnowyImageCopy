@@ -148,7 +148,7 @@ namespace SnowyImageCopy.Models
 			for (int i = itemList.Count - 1; 0 <= i; i--)
 			{
 				if (itemList[i].IsHidden || itemList[i].IsSystemFile || itemList[i].IsVolume ||
-					itemList[i].IsFlashAirSystemFolder)
+					itemList[i].IsFlashAirSystem)
 				{
 					itemList.RemoveAt(i);
 					continue;

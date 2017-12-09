@@ -50,15 +50,11 @@ namespace SnowyImageCopy.Models
 		public bool IsTiff { get; private set; }
 		public bool IsLoadable { get; private set; }
 
-		private static readonly string[] _flashAirSystemFolders =
-		{
-			"GUPIXINF",
-			"SD_WLAN",
-			"100__TSB",
-		};
-
-		public bool IsFlashAirSystemFolder =>
-			_flashAirSystemFolders.Contains(FileName, StringComparer.OrdinalIgnoreCase);
+		public bool IsFlashAirSystem =>
+			string.Equals(FileName, "GUPIXINF", StringComparison.OrdinalIgnoreCase)
+			|| string.Equals(FileName, "SD_WLAN", StringComparison.OrdinalIgnoreCase)
+			|| (string.Equals(FileName, "FA000001.JPG", StringComparison.OrdinalIgnoreCase) /* Control image file */
+				&& Directory.EndsWith("100__TSB", StringComparison.OrdinalIgnoreCase));
 
 		#endregion
 

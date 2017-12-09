@@ -30,6 +30,6 @@ namespace SnowyImageCopy.Models
 		bool IsJpeg { get; }
 		bool IsTiff { get; }
 		bool IsLoadable { get; }
-		bool IsFlashAirSystemFolder { get; }
+		bool IsFlashAirSystem { get; }
 	}
 }
