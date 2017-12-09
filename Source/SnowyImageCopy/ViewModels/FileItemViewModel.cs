@@ -24,7 +24,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public bool IsReadOnly => _fileItem.IsReadOnly;
 		public bool IsHidden => _fileItem.IsHidden;
-		public bool IsSystemFile => _fileItem.IsSystemFile;
+		public bool IsSystem => _fileItem.IsSystem;
 		public bool IsVolume => _fileItem.IsVolume;
 		public bool IsDirectory => _fileItem.IsDirectory;
 		public bool IsArchive => _fileItem.IsArchive;

@@ -14,7 +14,7 @@ namespace SnowyImageCopy.Models
 
 		bool IsReadOnly { get; }
 		bool IsHidden { get; }
-		bool IsSystemFile { get; }
+		bool IsSystem { get; }
 		bool IsVolume { get; }
 		bool IsDirectory { get; }
 		bool IsArchive { get; }

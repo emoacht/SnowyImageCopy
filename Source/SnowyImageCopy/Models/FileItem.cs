@@ -25,7 +25,7 @@ namespace SnowyImageCopy.Models
 
 		public bool IsReadOnly { get; private set; }
 		public bool IsHidden { get; private set; }
-		public bool IsSystemFile { get; private set; }
+		public bool IsSystem { get; private set; }
 		public bool IsVolume { get; private set; }
 		public bool IsDirectory { get; private set; }
 		public bool IsArchive { get; private set; }
@@ -85,7 +85,11 @@ namespace SnowyImageCopy.Models
 
 			var fileEntryWithoutDirectory = fileEntry.Trim();
 
-			if (!string.IsNullOrWhiteSpace(directoryPath))
+			if (string.IsNullOrWhiteSpace(directoryPath))
+			{
+				Directory = string.Empty;
+			}
+			else
 			{
 				// Check if the leading part of file entry matches directory path. Be aware that the length of
 				// file entry like "WLANSD_FILELIST" may be shorter than that of directory path.
@@ -100,10 +104,6 @@ namespace SnowyImageCopy.Models
 					return false;
 
 				fileEntryWithoutDirectory = fileEntry.Substring(directoryPath.Length).TrimStart();
-			}
-			else
-			{
-				Directory = string.Empty;
 			}
 
 			if (!fileEntryWithoutDirectory.ElementAt(0).Equals(_separator))
@@ -175,12 +175,12 @@ namespace SnowyImageCopy.Models
 		{
 			var ba = new BitArray(new[] { rawAttribute }); // This length is always 32 because value is int.
 
-			IsReadOnly = ba[0];   // Bit 0
-			IsHidden = ba[1];     // Bit 1
-			IsSystemFile = ba[2]; // Bit 2
-			IsVolume = ba[3];     // Bit 3
-			IsDirectory = ba[4];  // Bit 4
-			IsArchive = ba[5];    // Bit 5
+			IsReadOnly = ba[0];  // Bit 0
+			IsHidden = ba[1];    // Bit 1
+			IsSystem = ba[2];    // Bit 2
+			IsVolume = ba[3];    // Bit 3
+			IsDirectory = ba[4]; // Bit 4
+			IsArchive = ba[5];   // Bit 5
 		}
 
 		private void SetFileExtension(string extension)

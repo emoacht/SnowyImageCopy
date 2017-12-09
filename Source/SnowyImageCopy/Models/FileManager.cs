@@ -147,23 +147,25 @@ namespace SnowyImageCopy.Models
 
 			for (int i = itemList.Count - 1; 0 <= i; i--)
 			{
-				if (itemList[i].IsHidden || itemList[i].IsSystemFile || itemList[i].IsVolume ||
-					itemList[i].IsFlashAirSystem)
+				var item = itemList[i];
+
+				if (item.IsHidden || item.IsSystem || item.IsVolume ||
+					item.IsFlashAirSystem)
 				{
 					itemList.RemoveAt(i);
 					continue;
 				}
 
-				if (!itemList[i].IsDirectory)
+				if (!item.IsDirectory)
 				{
-					if (!itemList[i].IsImageFile)
+					if (!item.IsImageFile)
 					{
 						itemList.RemoveAt(i);
 					}
 					continue;
 				}
 
-				var path = itemList[i].FilePath;
+				var path = item.FilePath;
 				itemList.RemoveAt(i);
 				itemList.AddRange(await GetFileListAllAsync(client, path, card, cancellationToken));
 			}
