@@ -17,6 +17,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ## History
 
+Ver 1.3.3 2017-12-10
+
+ - Changed how to determine FlashAir system folder/file
+
 Ver 1.3.2 2017-11-5
 
  - Improved smoothness of populating images when checking FlashAir
