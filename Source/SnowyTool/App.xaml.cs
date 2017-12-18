@@ -47,18 +47,18 @@ namespace SnowyTool
 
 			Trace.WriteLine(content);
 
-			var filePathAppData = Path.Combine(
+			var appDataFilePath = Path.Combine(
 				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				Assembly.GetExecutingAssembly().GetName().Name,
 				fileName);
 
 			try
 			{
-				var folderPathAppData = Path.GetDirectoryName(filePathAppData);
-				if (!Directory.Exists(folderPathAppData))
-					Directory.CreateDirectory(folderPathAppData);
+				var appDataFolderPath = Path.GetDirectoryName(appDataFilePath);
+				if (!Directory.Exists(appDataFolderPath))
+					Directory.CreateDirectory(appDataFolderPath);
 
-				File.AppendAllText(filePathAppData, content);
+				File.AppendAllText(appDataFilePath, content);
 			}
 			catch (Exception ex)
 			{

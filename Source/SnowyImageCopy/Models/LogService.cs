@@ -22,9 +22,9 @@ namespace SnowyImageCopy.Models
 				var content = $"[Date: {DateTime.Now:HH:mm:ss fff}]" + Environment.NewLine
 					+ result.TrimEnd() + Environment.NewLine + Environment.NewLine;
 
-				FolderService.AssureFolderAppData();
+				FolderService.AssureAppDataFolder();
 
-				var filePath = Path.Combine(FolderService.FolderAppDataPath, fileName);
+				var filePath = Path.Combine(FolderService.AppDataFolderPath, fileName);
 
 				if (File.Exists(filePath) && (File.GetLastWriteTime(filePath) < DateTime.Now.AddHours(-1)))
 					File.Delete(filePath);
@@ -57,11 +57,11 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				FolderService.AssureFolderAppData();
+				FolderService.AssureAppDataFolder();
 
-				var filePathAppData = Path.Combine(FolderService.FolderAppDataPath, fileName);
+				var appDataFilePath = Path.Combine(FolderService.AppDataFolderPath, fileName);
 
-				UpdateText(filePathAppData, content);
+				UpdateText(appDataFilePath, content);
 			}
 			catch (Exception ex)
 			{
@@ -71,17 +71,17 @@ namespace SnowyImageCopy.Models
 
 		private static void RecordDesktop(string fileName, string content)
 		{
-			var result = MessageBox.Show(SnowyImageCopy.Properties.Resources.RecordException, ProductInfo.Product, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.Yes);
+			var result = MessageBox.Show(Properties.Resources.RecordException, ProductInfo.Product, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.Yes);
 			if (result != MessageBoxResult.Yes)
 				return;
 
 			try
 			{
-				var filePathDesktop = Path.Combine(
+				var desktopFilePath = Path.Combine(
 					Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
 					fileName);
 
-				UpdateText(filePathDesktop, content);
+				UpdateText(desktopFilePath, content);
 			}
 			catch (Exception ex)
 			{

@@ -105,7 +105,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		private const string _placementFileName = "placement.xml";
-		private static readonly string _placementFilePath = Path.Combine(FolderService.FolderAppDataPath, _placementFileName);
+		private static readonly string _placementFilePath = Path.Combine(FolderService.AppDataFolderPath, _placementFileName);
 
 		private static bool TryLoad<T>(out T placement)
 		{
@@ -138,7 +138,7 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				FolderService.AssureFolderAppData();
+				FolderService.AssureAppDataFolder();
 
 				using (var sw = new StreamWriter(_placementFilePath, false, Encoding.UTF8)) // BOM will be emitted.
 				using (var xw = XmlWriter.Create(sw, new XmlWriterSettings { Indent = true }))

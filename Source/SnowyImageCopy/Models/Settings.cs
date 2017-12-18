@@ -347,7 +347,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		private const string _settingsFileName = "settings.xml";
-		private static readonly string _settingsFilePath = Path.Combine(FolderService.FolderAppDataPath, _settingsFileName);
+		private static readonly string _settingsFilePath = Path.Combine(FolderService.AppDataFolderPath, _settingsFileName);
 
 		private static void Load<T>(T instance) where T : class
 		{
@@ -386,7 +386,7 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				FolderService.AssureFolderAppData();
+				FolderService.AssureAppDataFolder();
 
 				using (var fs = new FileStream(_settingsFilePath, FileMode.Create, FileAccess.Write))
 				{
