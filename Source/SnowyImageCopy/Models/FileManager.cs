@@ -586,6 +586,7 @@ namespace SnowyImageCopy.Models
 								case HttpStatusCode.Unauthorized:
 								case HttpStatusCode.InternalServerError:
 								case HttpStatusCode.BadRequest:
+								case HttpStatusCode.ServiceUnavailable:
 									throw new RemoteConnectionUnableException(response.StatusCode);
 								case HttpStatusCode.NotFound:
 									// This status code does not always mean that the specified file is missing.
