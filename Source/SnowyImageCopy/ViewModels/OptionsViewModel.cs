@@ -48,7 +48,7 @@ namespace SnowyImageCopy.ViewModels
 		#region Language
 
 		private Dictionary<string, string> _cultureMap;
-		private const string _cultureNameAuto = "(auto)";
+		private const string CultureNameAuto = "(auto)";
 
 		public string[] Cultures
 		{
@@ -56,7 +56,7 @@ namespace SnowyImageCopy.ViewModels
 			{
 				if (_cultureMap == null)
 				{
-					_cultureMap = new[] { new KeyValuePair<string, string>(string.Empty, _cultureNameAuto) }
+					_cultureMap = new[] { new KeyValuePair<string, string>(string.Empty, CultureNameAuto) }
 						.Concat(ResourceService.Current.SupportedCultures
 							.Select(x => new KeyValuePair<string, string>(x.Name, x.EnglishName)) // Or NativeName
 							.OrderBy(x => x.Value))

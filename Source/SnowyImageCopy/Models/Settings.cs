@@ -81,7 +81,7 @@ namespace SnowyImageCopy.Models
 		private Settings()
 		{ }
 
-		#region Values
+		#region Settings
 
 		#region Path
 
@@ -134,14 +134,14 @@ namespace SnowyImageCopy.Models
 			return true;
 		}
 
-		private const string _defaultLocalFolder = "FlashAirImages"; // Default local folder name
+		private const string DefaultLocalFolder = "FlashAirImages"; // Default local folder name
 
 		public string LocalFolder
 		{
 			get
 			{
 				if (string.IsNullOrEmpty(_localFolder))
-					_localFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), _defaultLocalFolder);
+					_localFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), DefaultLocalFolder);
 
 				return _localFolder;
 			}
@@ -346,8 +346,8 @@ namespace SnowyImageCopy.Models
 			_subscription.Dispose();
 		}
 
-		private const string _settingsFileName = "settings.xml";
-		private static readonly string _settingsFilePath = Path.Combine(FolderService.AppDataFolderPath, _settingsFileName);
+		private const string SettingsFileName = "settings.xml";
+		private static readonly string _settingsFilePath = Path.Combine(FolderService.AppDataFolderPath, SettingsFileName);
 
 		private static void Load<T>(T instance) where T : class
 		{
@@ -362,8 +362,7 @@ namespace SnowyImageCopy.Models
 					var serializer = new XmlSerializer(typeof(T));
 					var loaded = (T)serializer.Deserialize(fs);
 
-					typeof(T)
-						.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+					typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
 						.Where(x => x.CanWrite)
 						.ToList()
 						.ForEach(x => x.SetValue(instance, x.GetValue(loaded)));

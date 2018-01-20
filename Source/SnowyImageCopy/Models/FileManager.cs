@@ -27,14 +27,14 @@ namespace SnowyImageCopy.Models
 		private static readonly TimeSpan _monitorInterval = TimeSpan.FromSeconds(2);
 
 		/// <summary>
-		/// The maximum count of retry
-		/// </summary>
-		private const int _retryCountMax = 3;
-
-		/// <summary>
 		/// Interval of retry
 		/// </summary>
 		private static readonly TimeSpan _retryInterval = TimeSpan.FromMilliseconds(500);
+
+		/// <summary>
+		/// The maximum count of retry
+		/// </summary>
+		private const int MaxRetryCount = 3;
 
 		#endregion
 
@@ -767,7 +767,7 @@ namespace SnowyImageCopy.Models
 				}
 				catch (RemoteConnectionUnableException)
 				{
-					if (retryCount >= _retryCountMax)
+					if (retryCount >= MaxRetryCount)
 						throw;
 				}
 				catch (Exception ex)
@@ -816,6 +816,8 @@ namespace SnowyImageCopy.Models
 		private static readonly bool _recordsDownloadString = CommandLine.RecordsDownloadLog
 			|| Debugger.IsAttached; // When this application runs in a debugger, download log will be always recorded.
 
+		private const string DownloadFileName = "download.log";
+
 		/// <summary>
 		/// Records result of DownloadStringAsync method.
 		/// </summary>
@@ -828,7 +830,7 @@ namespace SnowyImageCopy.Models
 			sb.AppendLine("response -> ");
 			sb.AppendLine(Encoding.ASCII.GetString(responseBytes));
 
-			await LogService.RecordStringAsync("download.log", sb.ToString());
+			await LogService.RecordAsync(DownloadFileName, sb.ToString());
 		}
 
 		#endregion

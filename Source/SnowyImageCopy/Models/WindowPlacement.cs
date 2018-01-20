@@ -104,8 +104,8 @@ namespace SnowyImageCopy.Models
 			Save(placement);
 		}
 
-		private const string _placementFileName = "placement.xml";
-		private static readonly string _placementFilePath = Path.Combine(FolderService.AppDataFolderPath, _placementFileName);
+		private const string PlacementFileName = "placement.xml";
+		private static readonly string _placementFilePath = Path.Combine(FolderService.AppDataFolderPath, PlacementFileName);
 
 		private static bool TryLoad<T>(out T placement)
 		{

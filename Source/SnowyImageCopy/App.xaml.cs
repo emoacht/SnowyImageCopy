@@ -31,7 +31,7 @@ namespace SnowyImageCopy
 			if (CommandLine.ShowsUsage)
 			{
 				CommandLine.ShowUsage();
-				Application.Current.Shutdown(1); // This exit code is for unusual shutdown.
+				this.Shutdown(0); // This shutdown is expected behavior.
 				return;
 			}
 
@@ -61,7 +61,7 @@ namespace SnowyImageCopy
 			LogService.RecordException(sender, e.Exception);
 
 			e.Handled = true;
-			Application.Current.Shutdown(1); // This exit code is for unusual shutdown.
+			this.Shutdown(1); // This shutdown is for unusual case.
 		}
 
 		#endregion

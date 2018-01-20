@@ -38,10 +38,10 @@ namespace SnowyTool
 			RecordException(sender, e.Exception);
 		}
 
+		private const string ExceptionFileName = "exception.log";
+
 		private void RecordException(object sender, Exception exception)
 		{
-			const string fileName = "exception.log";
-
 			var content = $"[Date: {DateTime.Now} Sender: {sender}]" + Environment.NewLine
 				+ exception + Environment.NewLine + Environment.NewLine;
 
@@ -50,7 +50,7 @@ namespace SnowyTool
 			var appDataFilePath = Path.Combine(
 				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				Assembly.GetExecutingAssembly().GetName().Name,
-				fileName);
+				ExceptionFileName);
 
 			try
 			{

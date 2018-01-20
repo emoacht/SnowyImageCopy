@@ -15,7 +15,7 @@ namespace SnowyImageCopy.Models
 	{
 		#region General
 
-		public static async Task RecordStringAsync(string fileName, string result)
+		public static async Task RecordAsync(string fileName, string result)
 		{
 			try
 			{
@@ -42,15 +42,15 @@ namespace SnowyImageCopy.Models
 
 		#region Exception
 
-		private const string _exceptionFileName = "exception.log";
+		private const string ExceptionFileName = "exception.log";
 
 		public static void RecordException(object sender, Exception exception)
 		{
 			var content = $"[Date: {DateTime.Now} Sender: {sender}]" + Environment.NewLine
 				+ exception + Environment.NewLine + Environment.NewLine;
 
-			RecordAppData(_exceptionFileName, content);
-			RecordDesktop(_exceptionFileName, content);
+			RecordAppData(ExceptionFileName, content);
+			RecordDesktop(ExceptionFileName, content);
 		}
 
 		private static void RecordAppData(string fileName, string content)
@@ -71,7 +71,12 @@ namespace SnowyImageCopy.Models
 
 		private static void RecordDesktop(string fileName, string content)
 		{
-			var result = MessageBox.Show(Properties.Resources.RecordException, ProductInfo.Product, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.Yes);
+			var result = MessageBox.Show(
+				Properties.Resources.RecordException,
+				ProductInfo.Product,
+				MessageBoxButton.YesNo,
+				MessageBoxImage.Error,
+				MessageBoxResult.Yes);
 			if (result != MessageBoxResult.Yes)
 				return;
 
@@ -89,6 +94,8 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
+		private const int MaxSectionCount = 10;
+
 		private static void UpdateText(string filePath, string newContent)
 		{
 			string oldContent = null;
@@ -100,10 +107,10 @@ namespace SnowyImageCopy.Models
 			}
 
 			using (var sw = new StreamWriter(filePath, false, Encoding.UTF8)) // BOM will be emitted.
-				sw.Write(string.Join(Environment.NewLine, GetLastLines(oldContent, "[Date:", 9).Reverse()) + newContent);
+				sw.Write(string.Join(Environment.NewLine, EnumerateLastLines(oldContent, "[Date:", MaxSectionCount - 1).Reverse()) + newContent);
 		}
 
-		private static IEnumerable<string> GetLastLines(string source, string sectionHeader, int sectionCount)
+		private static IEnumerable<string> EnumerateLastLines(string source, string sectionHeader, int sectionCount)
 		{
 			if (string.IsNullOrEmpty(source))
 				yield break;

@@ -69,7 +69,7 @@ namespace SnowyImageCopy.Models
 
 		#region Import
 
-		private const char _separator = ','; // Separator character (comma)
+		private const char Separator = ','; // Separator character (comma)
 		private static readonly Regex _asciiPattern = new Regex(@"^[\x20-\x7F]+$", RegexOptions.Compiled); // Pattern for ASCII code (alphanumeric symbols)
 
 		/// <summary>
@@ -106,11 +106,11 @@ namespace SnowyImageCopy.Models
 				fileEntryWithoutDirectory = fileEntry.Substring(directoryPath.Length).TrimStart();
 			}
 
-			if (!fileEntryWithoutDirectory.ElementAt(0).Equals(_separator))
+			if (!fileEntryWithoutDirectory.ElementAt(0).Equals(Separator))
 				return false;
 
-			var elements = fileEntryWithoutDirectory.TrimStart(_separator)
-				.Split(new[] { _separator }, StringSplitOptions.None)
+			var elements = fileEntryWithoutDirectory.TrimStart(Separator)
+				.Split(new[] { Separator }, StringSplitOptions.None)
 				.ToList();
 
 			if (elements.Count < 5) // 5 means file name, size, raw attribute, raw data and raw time.
@@ -118,7 +118,7 @@ namespace SnowyImageCopy.Models
 
 			while (elements.Count > 5) // In the case that file name includes separator character
 			{
-				elements[0] = $"{elements[0]}{_separator}{elements[1]}";
+				elements[0] = $"{elements[0]}{Separator}{elements[1]}";
 				elements.RemoveAt(1);
 			}
 

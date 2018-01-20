@@ -13,7 +13,7 @@ namespace SnowyImageCopy.Helper
 	/// </summary>
 	public static class FileAddition
 	{
-		private const int _defaultCopyBufferSize = 81920; // 80KiB is actual default buffer size in System.IO.File class.
+		private const int DefaultCopyBufferSize = 81920; // 80KiB is actual default buffer size in System.IO.File class.
 
 		/// <summary>
 		/// Reads all bytes from a specified file asynchronously.
@@ -22,7 +22,7 @@ namespace SnowyImageCopy.Helper
 		/// <returns>Byte array of file</returns>
 		public static Task<byte[]> ReadAllBytesAsync(string filePath)
 		{
-			return ReadAllBytesAsync(filePath, _defaultCopyBufferSize, CancellationToken.None);
+			return ReadAllBytesAsync(filePath, DefaultCopyBufferSize, CancellationToken.None);
 		}
 
 		/// <summary>
@@ -33,7 +33,7 @@ namespace SnowyImageCopy.Helper
 		/// <returns>Byte array of file</returns>
 		public static Task<byte[]> ReadAllBytesAsync(string filePath, CancellationToken cancellationToken)
 		{
-			return ReadAllBytesAsync(filePath, _defaultCopyBufferSize, cancellationToken);
+			return ReadAllBytesAsync(filePath, DefaultCopyBufferSize, cancellationToken);
 		}
 
 		/// <summary>

@@ -424,12 +424,12 @@ namespace SnowyTool.ViewModels
 			.Select(x => x.GetValue(this))
 			.Select(x => x?.ToString() ?? string.Empty);
 
-		private const char _separator = '=';
+		private const char Separator = '=';
 		private bool _isImporting;
 
 		internal void Import(string configContent)
 		{
-			var contents = StringDictionary.Parse(configContent, _separator);
+			var contents = StringDictionary.Parse(configContent, Separator);
 
 			try
 			{
@@ -496,11 +496,11 @@ namespace SnowyTool.ViewModels
 				if (value == null)
 					continue;
 
-				outcome.Add($"{p.Name}{_separator}{value}");
+				outcome.Add($"{p.Name}{Separator}{value}");
 			}
 
 			if (_remaining.Any())
-				outcome.AddRange(_remaining.Select(x => $"{x.Key}{_separator}{x.Value}"));
+				outcome.AddRange(_remaining.Select(x => $"{x.Key}{Separator}{x.Value}"));
 
 			outcome.Sort();
 
