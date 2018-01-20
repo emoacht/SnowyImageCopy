@@ -17,6 +17,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ## History
 
+Ver 1.3.4 2018-1-20
+
+ - Fixed exception when camera is turned off
+
 Ver 1.3.3 2017-12-10
 
  - Changed how to determine FlashAir system folder/file
