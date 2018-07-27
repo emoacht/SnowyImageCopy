@@ -152,16 +152,13 @@ namespace SnowyImageCopy.Models
 				{
 					buff = value;
 				}
-				else if (!TryNormalizeLocalFolder(value, out buff))
+				else if (!PathAddition.TryNormalizeCheckPath(value, out buff))
 					return;
 
 				SetPropertyValue(ref _localFolder, buff);
 			}
 		}
 		private string _localFolder;
-
-		private bool TryNormalizeLocalFolder(string source, out string normalized) =>
-			PathAddition.TryNormalizeDirectoryPath(source, out normalized);
 
 		#endregion
 
