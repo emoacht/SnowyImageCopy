@@ -245,8 +245,7 @@ namespace SnowyImageCopy.Models
 			{
 				var fileNum = await DownloadStringAsync(client, remotePath, card, cancellationToken).ConfigureAwait(false);
 
-				int num;
-				return int.TryParse(fileNum, out num) ? num : 0;
+				return int.TryParse(fileNum, out var num) ? num : 0;
 			}
 			catch
 			{
@@ -495,8 +494,7 @@ namespace SnowyImageCopy.Models
 			{
 				var timeStamp = await DownloadStringAsync(client, remotePath, null, cancellationToken).ConfigureAwait(false);
 
-				int num;
-				return int.TryParse(timeStamp, out num) ? num : -1;
+				return int.TryParse(timeStamp, out var num) ? num : -1;
 			}
 			catch (RemoteConnectionUnableException)
 			{
@@ -746,17 +744,14 @@ namespace SnowyImageCopy.Models
 					}
 					catch (HttpRequestException hre)
 					{
-						var we = hre.InnerException as WebException;
-						if (we != null)
+						if (hre.InnerException is WebException we)
 						{
 							// If unable to connect to FlashAir card, this exception will be thrown.
 							// The status may vary, such as WebExceptionStatus.NameResolutionFailure,
 							// WebExceptionStatus.ConnectFailure.
 							throw new RemoteConnectionUnableException(we.Status);
 						}
-
-						var ode = hre.InnerException as ObjectDisposedException;
-						if (ode != null)
+						if (hre.InnerException is ObjectDisposedException ode)
 						{
 							// If lost connection to FlashAir card, this exception may be thrown.
 							// Error message: Error while copying content to a stream.

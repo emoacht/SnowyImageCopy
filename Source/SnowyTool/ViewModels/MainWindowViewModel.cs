@@ -19,8 +19,8 @@ namespace SnowyTool.ViewModels
 
 		public string OperationStatus
 		{
-			get { return _operationStatus; }
-			set { SetPropertyValue(ref _operationStatus, value); }
+			get => _operationStatus;
+			set => SetPropertyValue(ref _operationStatus, value);
 		}
 		private string _operationStatus;
 
@@ -57,7 +57,7 @@ namespace SnowyTool.ViewModels
 
 		public ConfigViewModel CurrentConfig
 		{
-			get { return _currentConfig; }
+			get => _currentConfig;
 			set
 			{
 				if (_currentConfig != null)
@@ -91,7 +91,7 @@ namespace SnowyTool.ViewModels
 
 		public LanModeOption CurrentLanMode
 		{
-			get { return _currentLanMode; }
+			get => _currentLanMode;
 			set
 			{
 				if (_currentLanMode == value)
@@ -116,7 +116,7 @@ namespace SnowyTool.ViewModels
 
 		public LanStartupModeOption CurrentLanStartupMode
 		{
-			get { return _currentLanStartupMode; }
+			get => _currentLanStartupMode;
 			set
 			{
 				if (_currentLanStartupMode == value)

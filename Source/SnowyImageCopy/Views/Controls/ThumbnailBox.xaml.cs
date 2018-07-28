@@ -22,8 +22,8 @@ namespace SnowyImageCopy.Views.Controls
 		/// </summary>
 		public Brush StrokeBrush
 		{
-			get { return Box.Stroke; }
-			set { Box.Stroke = value; }
+			get => Box.Stroke;
+			set => Box.Stroke = value;
 		}
 
 		#endregion

@@ -683,11 +683,9 @@ namespace SnowyImageCopy.Models
 		{
 			//const string queryDateTaken = "System.Photo.DateTaken";
 
-			var bitmapMetadata = bitmapFrame.Metadata as BitmapMetadata;
-			if (bitmapMetadata != null)
+			if (bitmapFrame.Metadata is BitmapMetadata bitmapMetadata)
 			{
-				DateTime dateTaken;
-				if (DateTime.TryParse(bitmapMetadata.DateTaken, out dateTaken))
+				if (DateTime.TryParse(bitmapMetadata.DateTaken, out var dateTaken))
 					return dateTaken;
 			}
 
@@ -703,8 +701,7 @@ namespace SnowyImageCopy.Models
 		{
 			const string queryOrientation = "System.Photo.Orientation";
 
-			var bitmapMetadata = bitmapFrame.Metadata as BitmapMetadata;
-			if (bitmapMetadata != null)
+			if (bitmapFrame.Metadata is BitmapMetadata bitmapMetadata)
 			{
 				if (bitmapMetadata.ContainsQuery(queryOrientation))
 				{

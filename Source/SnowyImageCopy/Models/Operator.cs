@@ -43,34 +43,34 @@ namespace SnowyImageCopy.Models
 
 		private string OperationStatus
 		{
-			set { _mainWindowViewModel.OperationStatus = value; }
+			set => _mainWindowViewModel.OperationStatus = value;
 		}
 
 		private ItemObservableCollection<FileItemViewModel> FileListCore
 		{
-			get { return _mainWindowViewModel.FileListCore; }
+			get => _mainWindowViewModel.FileListCore;
 		}
 
 		private ListCollectionView FileListCoreView
 		{
-			get { return _mainWindowViewModel.FileListCoreView; }
+			get => _mainWindowViewModel.FileListCoreView;
 		}
 
 		private int FileListCoreViewIndex
 		{
-			set { _mainWindowViewModel.FileListCoreViewIndex = value; }
+			set => _mainWindowViewModel.FileListCoreViewIndex = value;
 		}
 
 		private FileItemViewModel CurrentItem
 		{
-			get { return _mainWindowViewModel.CurrentItem; }
-			set { _mainWindowViewModel.CurrentItem = value; }
+			get => _mainWindowViewModel.CurrentItem;
+			set => _mainWindowViewModel.CurrentItem = value;
 		}
 
 		private byte[] CurrentImageData
 		{
-			get { return _mainWindowViewModel.CurrentImageData; }
-			set { _mainWindowViewModel.CurrentImageData = value; }
+			get => _mainWindowViewModel.CurrentImageData;
+			set => _mainWindowViewModel.CurrentImageData = value;
 		}
 
 		public event EventHandler ActivateRequested;
@@ -120,8 +120,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public bool IsChecking
 		{
-			get { return _isChecking; }
-			set { SetPropertyValue(ref _isChecking, value); }
+			get => _isChecking;
+			set => SetPropertyValue(ref _isChecking, value);
 		}
 		private bool _isChecking;
 
@@ -130,8 +130,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public bool IsCopying
 		{
-			get { return _isCopying; }
-			set { SetPropertyValue(ref _isCopying, value); }
+			get => _isCopying;
+			set => SetPropertyValue(ref _isCopying, value);
 		}
 		private bool _isCopying;
 
@@ -140,8 +140,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		internal bool IsAutoRunning
 		{
-			get { return _isAutoRunning; }
-			set { SetPropertyValue(ref _isAutoRunning, value); }
+			get => _isAutoRunning;
+			set => SetPropertyValue(ref _isAutoRunning, value);
 		}
 		private bool _isAutoRunning;
 
@@ -150,8 +150,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		internal bool IsSavingDesktop
 		{
-			get { return _isSavingDesktop; }
-			set { SetPropertyValue(ref _isSavingDesktop, value); }
+			get => _isSavingDesktop;
+			set => SetPropertyValue(ref _isSavingDesktop, value);
 		}
 		private bool _isSavingDesktop;
 
@@ -160,8 +160,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		internal bool IsSendingClipboard
 		{
-			get { return _isSendingClipboard; }
-			set { SetPropertyValue(ref _isSendingClipboard, value); }
+			get => _isSendingClipboard;
+			set => SetPropertyValue(ref _isSendingClipboard, value);
 		}
 		private bool _isSendingClipboard;
 
@@ -174,8 +174,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public double ProgressCopiedAll
 		{
-			get { return _progressCopiedAll; }
-			set { SetPropertyValue(ref _progressCopiedAll, value); }
+			get => _progressCopiedAll;
+			set => SetPropertyValue(ref _progressCopiedAll, value);
 		}
 		private double _progressCopiedAll = 40; // Sample percentage
 
@@ -184,8 +184,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public double ProgressCopiedCurrent
 		{
-			get { return _progressCopiedCurrent; }
-			set { SetPropertyValue(ref _progressCopiedCurrent, value); }
+			get => _progressCopiedCurrent;
+			set => SetPropertyValue(ref _progressCopiedCurrent, value);
 		}
 		private double _progressCopiedCurrent = 60; // Sample percentage
 
@@ -194,8 +194,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public TimeSpan RemainingTime
 		{
-			get { return _remainingTime; }
-			set { SetPropertyValue(ref _remainingTime, value); }
+			get => _remainingTime;
+			set => SetPropertyValue(ref _remainingTime, value);
 		}
 		private TimeSpan _remainingTime;
 
@@ -204,8 +204,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public TaskbarItemProgressState ProgressState
 		{
-			get { return _progressState; }
-			set { SetPropertyValue(ref _progressState, value); }
+			get => _progressState;
+			set => SetPropertyValue(ref _progressState, value);
 		}
 		private TaskbarItemProgressState _progressState;
 

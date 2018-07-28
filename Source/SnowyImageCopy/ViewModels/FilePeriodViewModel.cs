@@ -36,7 +36,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public FilePeriod Period
 		{
-			get { return _period; }
+			get => _period;
 			set
 			{
 				_period = value;
@@ -47,8 +47,8 @@ namespace SnowyImageCopy.ViewModels
 
 		public string Description
 		{
-			get { return _description; }
-			set { SetPropertyValue(ref _description, value); }
+			get => _description;
+			set => SetPropertyValue(ref _description, value);
 		}
 		private string _description;
 

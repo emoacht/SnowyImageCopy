@@ -17,7 +17,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private RepeatButton UpButton
 		{
-			get { return _upButton; }
+			get => _upButton;
 			set
 			{
 				if (_upButton != null)
@@ -33,7 +33,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private RepeatButton DownButton
 		{
-			get { return _downButton; }
+			get => _downButton;
 			set
 			{
 				if (_downButton != null)

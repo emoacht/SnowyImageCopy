@@ -81,8 +81,7 @@ namespace SnowyImageCopy.Models
 
 		public static void Load(Window window, bool isNormal = true)
 		{
-			WINDOWPLACEMENT placement;
-			if (!TryLoad(out placement))
+			if (!TryLoad(out WINDOWPLACEMENT placement))
 				return;
 
 			var handle = new WindowInteropHelper(window).Handle;
@@ -98,8 +97,7 @@ namespace SnowyImageCopy.Models
 		{
 			var handle = new WindowInteropHelper(window).Handle;
 
-			WINDOWPLACEMENT placement;
-			GetWindowPlacement(handle, out placement);
+			GetWindowPlacement(handle, out WINDOWPLACEMENT placement);
 
 			Save(placement);
 		}
