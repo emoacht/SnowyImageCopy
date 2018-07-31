@@ -17,6 +17,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ## History
 
+Ver 1.3.6 2018-8-1
+
+ - Modified to allow UNC path
+
 Ver 1.3.4 2018-1-20
 
  - Fixed exception when camera is turned off

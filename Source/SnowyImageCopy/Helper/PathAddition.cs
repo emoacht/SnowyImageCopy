@@ -12,38 +12,69 @@ namespace SnowyImageCopy.Helper
 	/// </summary>
 	public static class PathAddition
 	{
-		public static bool TryNormalizeDirectoryPath(string source, out string normalized)
+		public static bool TryNormalizePath(string source, out string normalized)
 		{
 			normalized = null;
 
-			if (source == null)
+			if (string.IsNullOrEmpty(source))
 				return false;
 
-			int endIndex = -1;
+			int endIndex = 0;
 			for (int i = source.Length - 1; i >= 0; i--)
 			{
 				if (IsWhiteSpaceOrQuotationChar(source[i]))
+				{
+					if (i == 0)
+						return false;
+
 					continue;
+				}
 
 				endIndex = i;
 				break;
 			}
 
-			var buff = new StringBuilder(source.Length);
+			bool IsDriveRoot(int i) => (i + 2 <= endIndex)
+				&& IsDriveChar(source[i]) // A to Z
+				&& (source[i + 1] == Path.VolumeSeparatorChar) // :
+				&& (source[i + 2] == Path.DirectorySeparatorChar); // \
 
+			bool IsUnc(int i) => (i + 1 <= endIndex)
+				&& (source[i] == Path.DirectorySeparatorChar) // \
+				&& (source[i + 1] == Path.DirectorySeparatorChar); // \
+
+			var buff = new StringBuilder(endIndex + 1);
+
+			int startIndex = 0;
 			for (int i = 0; i <= endIndex; i++)
 			{
-				if (buff.Length == 0)
+				if (IsWhiteSpaceOrQuotationChar(source[i]))
+					continue;
+
+				int length = 0;
+				if (IsDriveRoot(i))
 				{
-					if (IsWhiteSpaceOrQuotationChar(source[i]))
-						continue;
+					length = 3;
+				}
+				else if (IsUnc(i))
+				{
+					length = 2;
 				}
 				else
 				{
-					if ((source[i] == Path.DirectorySeparatorChar) &&
-						(buff[buff.Length - 1] == Path.DirectorySeparatorChar))
-						continue;
+					return false;
 				}
+
+				buff.Append(source, i, length);
+				startIndex = i + length;
+				break;
+			}
+
+			for (int i = startIndex; i <= endIndex; i++)
+			{
+				if ((source[i] == Path.DirectorySeparatorChar) &&
+					(buff[buff.Length - 1] == Path.DirectorySeparatorChar))
+					continue;
 
 				if (Path.GetInvalidPathChars().Contains(source[i])) // Invalid path char includes double quotation mark.
 					return false;
@@ -52,34 +83,13 @@ namespace SnowyImageCopy.Helper
 			}
 
 			normalized = buff.ToString();
-
-			if (!IsValidDriveRoot(normalized))
-				return false;
-
-			return Directory.Exists(Path.GetPathRoot(normalized));
+			return true;
 		}
 
 		private static bool IsWhiteSpaceOrQuotationChar(char value) =>
 			char.IsWhiteSpace(value) || (value == '\'') || (value == '"');
 
-		/// <summary>
-		/// Checks if a specified path starts with a drive root.
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		/// <remarks>This is alternate method to Path.IsPathRooted method. It is specialized for
-		/// a drive root which includes a drive letter.</remarks>
-		private static bool IsValidDriveRoot(string value)
-		{
-			if (value.Length < 3)
-				return false;
-
-			return IsValidDriveChar(value[0])
-				&& (value[1] == Path.VolumeSeparatorChar) // :
-				&& (value[2] == Path.DirectorySeparatorChar); // \
-		}
-
-		private static bool IsValidDriveChar(char value) =>
+		private static bool IsDriveChar(char value) =>
 			('A' <= value && value <= 'Z') || ('a' <= value && value <= 'z');
 
 		/// <summary>

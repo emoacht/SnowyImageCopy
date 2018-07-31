@@ -35,7 +35,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public FilePeriodViewModel FilePeriodSelected
 		{
-			get { return FilePeriodList.Single(x => x.Period == Settings.Current.TargetPeriod); }
+			get => FilePeriodList.Single(x => x.Period == Settings.Current.TargetPeriod);
 			set
 			{
 				Settings.Current.TargetPeriod = value.Period;

@@ -19,7 +19,7 @@ namespace SnowyImageCopy.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -296,6 +296,24 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Path of local folder is wrong..
+        /// </summary>
+        public static string OperationStatus_LocalFolderInvalid {
+            get {
+                return ResourceManager.GetString("OperationStatus_LocalFolderInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Access to local folder is denied..
+        /// </summary>
+        public static string OperationStatus_LocalFolderUnauthorized {
+            get {
+                return ResourceManager.GetString("OperationStatus_LocalFolderUnauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No date is selected in calendar..
         /// </summary>
         public static string OperationStatus_NoDateCalender {
@@ -355,15 +373,6 @@ namespace SnowyImageCopy.Properties {
         public static string OperationStatus_TimedOut {
             get {
                 return ResourceManager.GetString("OperationStatus_TimedOut", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot access local folder..
-        /// </summary>
-        public static string OperationStatus_UnauthorizedAccess {
-            get {
-                return ResourceManager.GetString("OperationStatus_UnauthorizedAccess", resourceCulture);
             }
         }
         

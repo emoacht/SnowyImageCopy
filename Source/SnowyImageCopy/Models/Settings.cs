@@ -87,15 +87,13 @@ namespace SnowyImageCopy.Models
 
 		public string RemoteAddress
 		{
-			get { return _remoteAddress; }
+			get => _remoteAddress;
 			set
 			{
 				if (_remoteAddress == value)
 					return;
 
-				string root;
-				string descendant;
-				if (!TryParseRemoteAddress(value, out root, out descendant))
+				if (!TryParseRemoteAddress(value, out var root, out var descendant))
 					return;
 
 				_remoteAddress = root + descendant;
@@ -152,16 +150,27 @@ namespace SnowyImageCopy.Models
 				{
 					buff = value;
 				}
-				else if (!TryNormalizeLocalFolder(value, out buff))
+				else if (!PathAddition.TryNormalizePath(value, out buff))
 					return;
 
 				SetPropertyValue(ref _localFolder, buff);
+				CheckLocalFolderValid();
 			}
 		}
 		private string _localFolder;
 
-		private bool TryNormalizeLocalFolder(string source, out string normalized) =>
-			PathAddition.TryNormalizeDirectoryPath(source, out normalized);
+		[XmlIgnore]
+		public bool IsLocalFolderValid
+		{
+			get => _isLocalFolderValid;
+			private set => SetPropertyValue(ref _isLocalFolderValid, value);
+		}
+		private bool _isLocalFolderValid = true;
+
+		internal bool CheckLocalFolderValid()
+		{
+			return IsLocalFolderValid = Directory.Exists(Path.GetPathRoot(LocalFolder));
+		}
 
 		#endregion
 
@@ -169,14 +178,14 @@ namespace SnowyImageCopy.Models
 
 		public FilePeriod TargetPeriod
 		{
-			get { return _targetPeriod; }
-			set { SetPropertyValue(ref _targetPeriod, value); }
+			get => _targetPeriod;
+			set => SetPropertyValue(ref _targetPeriod, value);
 		}
 		private FilePeriod _targetPeriod = FilePeriod.All; // Default
 
 		public ObservableCollection<DateTime> TargetDates
 		{
-			get { return _targetDates ?? (_targetDates = new ObservableCollection<DateTime>()); }
+			get => _targetDates ?? (_targetDates = new ObservableCollection<DateTime>());
 			set
 			{
 				if ((_targetDates != null) && (_targetDates == value))
@@ -196,14 +205,14 @@ namespace SnowyImageCopy.Models
 
 		public bool IsCurrentImageVisible
 		{
-			get { return _isCurrentImageVisible; }
-			set { SetPropertyValue(ref _isCurrentImageVisible, value); }
+			get => _isCurrentImageVisible;
+			set => SetPropertyValue(ref _isCurrentImageVisible, value);
 		}
 		private bool _isCurrentImageVisible;
 
 		public double CurrentImageWidth
 		{
-			get { return _currentImageWidth; }
+			get => _currentImageWidth;
 			set
 			{
 				if (value < ImageManager.ThumbnailSize.Width)
@@ -221,8 +230,8 @@ namespace SnowyImageCopy.Models
 
 		public bool InstantCopy
 		{
-			get { return _instantCopy; }
-			set { SetPropertyValue(ref _instantCopy, value); }
+			get => _instantCopy;
+			set => SetPropertyValue(ref _instantCopy, value);
 		}
 		private bool _instantCopy = true; // Default
 
@@ -235,7 +244,7 @@ namespace SnowyImageCopy.Models
 
 				return _deleteOnCopy;
 			}
-			set { SetPropertyValue(ref _deleteOnCopy, value); }
+			set => SetPropertyValue(ref _deleteOnCopy, value);
 		}
 		private bool _deleteOnCopy;
 
@@ -246,15 +255,15 @@ namespace SnowyImageCopy.Models
 		// XmlSerializer cannot work with TimeSpan.
 		public int AutoCheckInterval
 		{
-			get { return _autoCheckInterval; }
-			set { SetPropertyValue(ref _autoCheckInterval, value); }
+			get => _autoCheckInterval;
+			set => SetPropertyValue(ref _autoCheckInterval, value);
 		}
 		private int _autoCheckInterval = 30; // Default
 
 		public int TimeoutDuration
 		{
-			get { return _timeoutDuration; }
-			set { SetPropertyValue(ref _timeoutDuration, value); }
+			get => _timeoutDuration;
+			set => SetPropertyValue(ref _timeoutDuration, value);
 		}
 		private int _timeoutDuration = 10; // Default
 
@@ -264,42 +273,42 @@ namespace SnowyImageCopy.Models
 
 		public bool MakesFileExtensionLowercase
 		{
-			get { return _makesFileExtensionLowercase; }
-			set { SetPropertyValue(ref _makesFileExtensionLowercase, value); }
+			get => _makesFileExtensionLowercase;
+			set => SetPropertyValue(ref _makesFileExtensionLowercase, value);
 		}
 		private bool _makesFileExtensionLowercase = true; // Default
 
 		public bool MovesFileToRecycle
 		{
-			get { return _movesFileToRecycle; }
-			set { SetPropertyValue(ref _movesFileToRecycle, value); }
+			get => _movesFileToRecycle;
+			set => SetPropertyValue(ref _movesFileToRecycle, value);
 		}
 		private bool _movesFileToRecycle;
 
 		public bool SelectsReadOnlyFile
 		{
-			get { return _selectsReadOnlyFile; }
-			set { SetPropertyValue(ref _selectsReadOnlyFile, value); }
+			get => _selectsReadOnlyFile;
+			set => SetPropertyValue(ref _selectsReadOnlyFile, value);
 		}
 		private bool _selectsReadOnlyFile;
 
 		public bool HandlesJpegFileOnly
 		{
-			get { return _handlesJpegFileOnly; }
-			set { SetPropertyValue(ref _handlesJpegFileOnly, value); }
+			get => _handlesJpegFileOnly;
+			set => SetPropertyValue(ref _handlesJpegFileOnly, value);
 		}
 		private bool _handlesJpegFileOnly;
 
 		public bool CreatesDatedFolder
 		{
-			get { return _createsDatedFolder; }
-			set { SetPropertyValue(ref _createsDatedFolder, value); }
+			get => _createsDatedFolder;
+			set => SetPropertyValue(ref _createsDatedFolder, value);
 		}
 		private bool _createsDatedFolder = true; // Default;
 
 		public bool EnablesChooseDeleteOnCopy
 		{
-			get { return _enablesChooseDeleteOnCopy; }
+			get => _enablesChooseDeleteOnCopy;
 			set
 			{
 				SetPropertyValue(ref _enablesChooseDeleteOnCopy, value);
@@ -316,8 +325,8 @@ namespace SnowyImageCopy.Models
 
 		public string CultureName
 		{
-			get { return _cultureName; }
-			set { SetPropertyValue(ref _cultureName, value); }
+			get => _cultureName;
+			set => SetPropertyValue(ref _cultureName, value);
 		}
 		private string _cultureName;
 

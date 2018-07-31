@@ -61,8 +61,7 @@ namespace SnowyTool.Views.Converters
 			if (source is bool)
 				return (bool)source;
 
-			bool buff;
-			if (bool.TryParse(source as string, out buff))
+			if (bool.TryParse(source as string, out var buff))
 				return buff;
 
 			return null;

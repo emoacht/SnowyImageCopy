@@ -136,8 +136,7 @@ namespace SnowyImageCopy.Models
 
 			for (int i = 1; i <= 4; i++)
 			{
-				int num;
-				if (!int.TryParse(elements[i], out num))
+				if (!int.TryParse(elements[i], out var num))
 					return false;
 
 				switch (i)

@@ -97,14 +97,14 @@ namespace SnowyImageCopy.Helper
 			if (string.IsNullOrWhiteSpace(filePath))
 				return;
 
-			MoveToRecycle(new[] { filePath });
+			MoveToRecycle(filePath);
 		}
 
 		/// <summary>
 		/// Moves specified files to Recycle.
 		/// </summary>
 		/// <param name="filePaths">File paths</param>
-		public static void MoveToRecycle(string[] filePaths)
+		public static void MoveToRecycle(params string[] filePaths)
 		{
 			if (!(filePaths?.Length > 0))
 				return;

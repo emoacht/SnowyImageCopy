@@ -60,6 +60,11 @@
 						   Text="{Binding Header, RelativeSource={RelativeSource AncestorType=GroupBox}}"/>
 			</DockPanel>
 		</ControlTemplate>
+
+		<x:Array x:Key="BrushSet" Type="{x:Type Brush}">
+			<SolidColorBrush Color="Black"/>
+			<SolidColorBrush Color="Red"/>
+		</x:Array>
 	</UserControl.Resources>
 
 	<Grid x:Name="LayoutRoot">
@@ -82,6 +87,7 @@
 							 HorizontalAlignment="Stretch"
 							 Margin="0,4,0,4" Padding="2"
 							 VerticalContentAlignment="Center"
+							 Foreground="{Binding SettingsCurrent.IsLocalFolderValid, Mode=OneWay, Converter={StaticResource BooleanToBrushConverterKey}, ConverterParameter={StaticResource BrushSet}}"
 							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 						<Button	Margin="0,0,4,0"

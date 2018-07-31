@@ -7,10 +7,11 @@
 		<ResourceDictionary>
 			<!-- Converters -->
 			<converters:BooleanInverseConverter x:Key="BooleanInverseConverterKey"/>
-			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
 			<converters:BooleanInverseToThicknessConverter x:Key="BooleanInverseToThicknessConverterKey"/>
 			<converters:BooleanInverseToVisibilityConverter x:Key="BooleanInverseToVisibilityConverterKey"/>
-			
+			<converters:BooleanToBrushConverter x:Key="BooleanToBrushConverterKey"/>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
+
 			<converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverterKey"/>
 
 			<converters:FileStatusToBrushConverter x:Key="FileStatusToBrushConverterKey"/>

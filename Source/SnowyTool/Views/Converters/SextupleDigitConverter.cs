@@ -19,10 +19,10 @@ namespace SnowyTool.Views.Converters
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is ulong))
+			if (!(value is ulong sourceValue))
 				return DependencyProperty.UnsetValue;
 
-			return (ulong)value / SextupleDigitFactor;
+			return sourceValue / SextupleDigitFactor;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -26,12 +26,12 @@ namespace SnowyImageCopy.Views.Converters
 		/// <remarks>The seconds will be rounded up.</remarks>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is TimeSpan))
+			if (!(value is TimeSpan sourceValue))
 				return DependencyProperty.UnsetValue;
 
-			var timeSpan = TimeSpan.FromSeconds(Math.Ceiling(((TimeSpan)value).TotalSeconds));
+			var rounded = TimeSpan.FromSeconds(Math.Ceiling(sourceValue.TotalSeconds));
 
-			return $"{(int)Math.Floor(timeSpan.TotalMinutes):D2}:{timeSpan.Seconds:D2}";
+			return $"{(int)Math.Floor(rounded.TotalMinutes):D2}:{rounded.Seconds:D2}";
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

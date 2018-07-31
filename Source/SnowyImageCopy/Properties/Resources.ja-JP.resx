@@ -219,8 +219,11 @@
   <data name="OperationStatus_TimedOut" xml:space="preserve">
     <value>接続がタイムアウトしました。</value>
   </data>
-  <data name="OperationStatus_UnauthorizedAccess" xml:space="preserve">
-    <value>ローカルフォルダーにアクセスできません。</value>
+  <data name="OperationStatus_LocalFolderInvalid" xml:space="preserve">
+    <value>ローカルフォルダーのパスが間違っています。</value>
+  </data>
+  <data name="OperationStatus_LocalFolderUnauthorized" xml:space="preserve">
+    <value>ローカルフォルダーへのアクセスが拒否されました。</value>
   </data>
   <data name="OperationStatus_WaitingAutoCheck" xml:space="preserve">
     <value>自動チェック時間まで待機中です。</value>

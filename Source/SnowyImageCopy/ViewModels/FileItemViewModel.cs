@@ -71,7 +71,7 @@ namespace SnowyImageCopy.ViewModels
 
 				return _fileItem.IsJpeg;
 			}
-			set { _canGetThumbnailRemote = value; }
+			set => _canGetThumbnailRemote = value;
 		}
 		private bool? _canGetThumbnailRemote;
 
@@ -88,7 +88,7 @@ namespace SnowyImageCopy.ViewModels
 
 				return _fileItem.IsLoadable;
 			}
-			set { _canLoadDataLocal = value; }
+			set => _canLoadDataLocal = value;
 		}
 		private bool? _canLoadDataLocal;
 
@@ -103,7 +103,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public BitmapSource Thumbnail
 		{
-			get { return _thumbnail ?? _defaultThumbnail; }
+			get => _thumbnail ?? _defaultThumbnail;
 			set
 			{
 				_thumbnail = value;
@@ -148,14 +148,14 @@ namespace SnowyImageCopy.ViewModels
 
 		public FileStatus Status
 		{
-			get { return _status; }
-			set { SetPropertyValue(ref _status, value); }
+			get => _status;
+			set => SetPropertyValue(ref _status, value);
 		}
 		private FileStatus _status = FileStatus.Unknown;
 
 		public bool IsSelected
 		{
-			get { return false; } // Always false
+			get => false; // Always false
 			set
 			{
 				if (!value)
@@ -173,7 +173,7 @@ namespace SnowyImageCopy.ViewModels
 
 		internal IFileItem FileItem
 		{
-			get { return _fileItem; }
+			get => _fileItem;
 			set { if (value != null) { _fileItem = value; } }
 		}
 		private IFileItem _fileItem;
@@ -188,10 +188,7 @@ namespace SnowyImageCopy.ViewModels
 
 		internal FileItemViewModel(IFileItem fileItem)
 		{
-			if (fileItem == null)
-				throw new ArgumentNullException(nameof(fileItem));
-
-			this._fileItem = fileItem;
+			this._fileItem = fileItem ?? throw new ArgumentNullException(nameof(fileItem));
 
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
 			{

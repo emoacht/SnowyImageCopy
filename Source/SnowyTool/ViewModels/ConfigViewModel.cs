@@ -47,7 +47,7 @@ namespace SnowyTool.ViewModels
 		[PersistentMember(true)]
 		public int APPMODE
 		{
-			get { return _APPMODE; }
+			get => _APPMODE;
 			set
 			{
 				_APPMODE = value;
@@ -67,7 +67,7 @@ namespace SnowyTool.ViewModels
 		[PersistentMember(true)]
 		public string APPNAME
 		{
-			get { return _APPNAME; }
+			get => _APPNAME;
 			set
 			{
 				_APPNAME = GetNullOrLimited(value, 15);
@@ -88,7 +88,7 @@ namespace SnowyTool.ViewModels
 		[PersistentMember(true)]
 		public string APPSSID
 		{
-			get { return _APPSSID; }
+			get => _APPSSID;
 			set
 			{
 				_APPSSID = GetNullOrLimited(value, 32);
@@ -107,7 +107,7 @@ namespace SnowyTool.ViewModels
 		[PersistentMember(true)]
 		public string APPNETWORKKEY
 		{
-			get { return _APPNETWORKKEY; }
+			get => _APPNETWORKKEY;
 			set
 			{
 				_APPNETWORKKEY = GetNullOrLimited(value, 64);
@@ -125,7 +125,7 @@ namespace SnowyTool.ViewModels
 		[PersistentMember(true)]
 		public string BRGSSID
 		{
-			get { return _BRGSSID; }
+			get => _BRGSSID;
 			set
 			{
 				_BRGSSID = GetNullOrLimited(value, 32);
@@ -143,7 +143,7 @@ namespace SnowyTool.ViewModels
 		[PersistentMember(true)]
 		public string BRGNETWORKKEY
 		{
-			get { return _BRGNETWORKKEY; }
+			get => _BRGNETWORKKEY;
 			set
 			{
 				_BRGNETWORKKEY = GetNullOrLimited(value, 64);
@@ -163,7 +163,7 @@ namespace SnowyTool.ViewModels
 		[PersistentMember]
 		public uint APPAUTOTIME
 		{
-			get { return _APPAUTOTIME; }
+			get => _APPAUTOTIME;
 			set
 			{
 				if ((value != 0) && ((value < 60000) || (4294967294 < value)))
@@ -195,7 +195,7 @@ namespace SnowyTool.ViewModels
 		[PersistentMember(true)]
 		public int UPLOAD
 		{
-			get { return _UPLOAD; }
+			get => _UPLOAD;
 			set
 			{
 				_UPLOAD = value;
@@ -238,8 +238,8 @@ namespace SnowyTool.ViewModels
 		[PersistentMember]
 		public string CID
 		{
-			get { return _CID.Source; }
-			set { _CID.Import(value); }
+			get => _CID.Source;
+			set => _CID.Import(value);
 		}
 		private readonly CidInfo _CID = new CidInfo();
 
@@ -342,10 +342,7 @@ namespace SnowyTool.ViewModels
 		/// <remarks>True if completed</remarks>
 		internal async Task<bool> ReadAsync(DiskInfo info)
 		{
-			if (info == null)
-				throw new ArgumentNullException(nameof(info));
-
-			AssociatedDisk = info;
+			AssociatedDisk = info ?? throw new ArgumentNullException(nameof(info));
 
 			var configPath = ComposeConfigPath();
 			if (!File.Exists(configPath))

@@ -16,13 +16,8 @@ namespace SnowyTool.Common
 
 		public DelegateCommand(Action execute, Func<bool> canExecute)
 		{
-			if (execute == null)
-				throw new ArgumentNullException(nameof(execute));
-			if (canExecute == null)
-				throw new ArgumentNullException(nameof(canExecute));
-
-			this._execute = execute;
-			this._canExecute = canExecute;
+			this._execute = execute ?? throw new ArgumentNullException(nameof(execute));
+			this._canExecute = canExecute ?? throw new ArgumentNullException(nameof(canExecute));
 		}
 
 		#endregion

@@ -17,10 +17,8 @@ namespace SnowyImageCopy.Views.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is double))
+			if (!(value is double sourceValue))
 				return DependencyProperty.UnsetValue;
-
-			var sourceValue = (double)value;
 
 			if (sourceValue < 0D)
 				return 0D;
@@ -32,10 +30,8 @@ namespace SnowyImageCopy.Views.Converters
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is double))
+			if (!(value is double sourceValue))
 				return DependencyProperty.UnsetValue;
-
-			var sourceValue = (double)value;
 
 			if (sourceValue < 0D)
 				return 0D;

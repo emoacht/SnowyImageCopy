@@ -42,7 +42,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public string FirmwareVersion
 		{
-			get { return _firmwareVersion; }
+			get => _firmwareVersion;
 			set
 			{
 				_isFirmwareVersionChanged = (_firmwareVersion != value);
@@ -76,7 +76,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public string Cid
 		{
-			get { return _cid; }
+			get => _cid;
 			set
 			{
 				_isCidChanged = (_cid != value);
@@ -94,7 +94,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public string Ssid
 		{
-			get { return _ssid; }
+			get => _ssid;
 			set
 			{
 				_isSsidChanged = (_ssid != value);

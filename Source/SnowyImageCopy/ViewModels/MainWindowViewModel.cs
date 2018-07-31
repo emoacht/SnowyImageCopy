@@ -26,8 +26,8 @@ namespace SnowyImageCopy.ViewModels
 
 		public string OperationStatus
 		{
-			get { return _operationStatus; }
-			set { SetPropertyValue(ref _operationStatus, value); }
+			get => _operationStatus;
+			set => SetPropertyValue(ref _operationStatus, value);
 		}
 		private string _operationStatus;
 
@@ -55,8 +55,8 @@ namespace SnowyImageCopy.ViewModels
 
 		public int FileListCoreViewIndex
 		{
-			get { return _fileListCoreViewIndex; }
-			set { SetPropertyValue(ref _fileListCoreViewIndex, value); }
+			get => _fileListCoreViewIndex;
+			set => SetPropertyValue(ref _fileListCoreViewIndex, value);
 		}
 		private int _fileListCoreViewIndex = -1; // No selection
 
@@ -169,7 +169,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public bool IsCurrentImageVisible
 		{
-			get { return Settings.Current.IsCurrentImageVisible; }
+			get => Settings.Current.IsCurrentImageVisible;
 			set
 			{
 				Settings.Current.IsCurrentImageVisible = value;
@@ -182,7 +182,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public double CurrentImageWidth
 		{
-			get { return Settings.Current.CurrentImageWidth; }
+			get => Settings.Current.CurrentImageWidth;
 			set
 			{
 				Settings.Current.CurrentImageWidth = value;
@@ -192,7 +192,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public Size CurrentFrameSize
 		{
-			get { return _currentFrameSize; }
+			get => _currentFrameSize;
 			set
 			{
 				if (_currentFrameSize == value) // This check is necessary to prevent resizing loop.
@@ -251,7 +251,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public BitmapSource CurrentImage
 		{
-			get { return _currentImage ?? (_currentImage = GetDefaultCurrentImage()); }
+			get => _currentImage ?? (_currentImage = GetDefaultCurrentImage());
 			set
 			{
 				_currentImage = value;
@@ -310,7 +310,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public ColorContext DestinationColorProfile
 		{
-			get { return _destinationColorProfile ?? new ColorContext(PixelFormats.Bgra32); }
+			get => _destinationColorProfile ?? new ColorContext(PixelFormats.Bgra32);
 			set
 			{
 				_destinationColorProfile = value;
@@ -327,7 +327,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public bool IsBrowserOpen
 		{
-			get { return _isBrowserOpen; }
+			get => _isBrowserOpen;
 			set
 			{
 				SetPropertyValue(ref _isBrowserOpen, value);

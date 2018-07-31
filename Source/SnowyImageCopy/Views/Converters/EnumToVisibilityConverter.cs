@@ -16,7 +16,7 @@ namespace SnowyImageCopy.Views.Converters
 	public class EnumToVisibilityConverter : IValueConverter
 	{
 		/// <summary>
-		/// Converts Enum value to Visibility.
+		/// Converts Enum to Visibility.
 		/// </summary>
 		/// <param name="value">Enum value</param>
 		/// <param name="targetType"></param>
@@ -25,12 +25,12 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>Visibility.Visible if Enum value matches condition Enum value. Visibility.Collapsed if not.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Enum) || !(parameter is string))
+			if (!(value is Enum) || !(parameter is string conditionString))
 				return DependencyProperty.UnsetValue;
 
 			var condition = Enum.GetValues(value.GetType())
 				.Cast<Enum>()
-				.FirstOrDefault(x => x.ToString().Equals((string)parameter, StringComparison.OrdinalIgnoreCase));
+				.FirstOrDefault(x => x.ToString().Equals(conditionString, StringComparison.OrdinalIgnoreCase));
 
 			if (condition == null)
 				return DependencyProperty.UnsetValue;

@@ -326,11 +326,10 @@ namespace SnowyImageCopy.Helper
 
 			public WlanClient()
 			{
-				uint negotiatedVersion;
 				var result = WlanOpenHandle(
 					2, // Client version for Windows Vista and Windows Server 2008
 					IntPtr.Zero,
-					out negotiatedVersion,
+					out _,
 					out _clientHandle);
 
 				if (result != ERROR_SUCCESS)
@@ -392,13 +391,12 @@ namespace SnowyImageCopy.Helper
 			var queryData = IntPtr.Zero;
 			try
 			{
-				uint dataSize;
 				var result = WlanQueryInterface(
 					clientHandle,
 					interfaceGuid,
 					WLAN_INTF_OPCODE.wlan_intf_opcode_current_connection,
 					IntPtr.Zero,
-					out dataSize,
+					out _,
 					ref queryData,
 					IntPtr.Zero);
 

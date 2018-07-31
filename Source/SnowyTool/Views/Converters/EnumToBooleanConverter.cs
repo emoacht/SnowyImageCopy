@@ -25,10 +25,10 @@ namespace SnowyTool.Views.Converters
 		/// <returns>True if Enum value matches condition Enum value. False if not.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Enum) || !(parameter is string))
+			if (!(value is Enum) || !(parameter is string conditionString))
 				return DependencyProperty.UnsetValue;
 
-			var condition = GetEnumValue(value.GetType(), (string)parameter);
+			var condition = GetEnumValue(value.GetType(), conditionString);
 			if (condition == null)
 				return DependencyProperty.UnsetValue;
 
