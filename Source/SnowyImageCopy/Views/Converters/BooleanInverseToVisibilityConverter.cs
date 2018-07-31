@@ -17,18 +17,18 @@ namespace SnowyImageCopy.Views.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool))
+			if (!(value is bool sourceValue))
 				return DependencyProperty.UnsetValue;
 
-			return !(bool)value ? Visibility.Visible : Visibility.Collapsed;
+			return !sourceValue ? Visibility.Visible : Visibility.Collapsed;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Visibility))
+			if (!(value is Visibility sourceValue))
 				return DependencyProperty.UnsetValue;
 
-			return ((Visibility)value != Visibility.Visible);
+			return (sourceValue != Visibility.Visible);
 		}
 	}
 }

@@ -42,13 +42,11 @@ namespace SnowyImageCopy.Views.Converters
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is FileStatus))
+			if (!(value is FileStatus status))
 				return DependencyProperty.UnsetValue;
 
-			var status = (FileStatus)value;
-
-			return StatusColorMap.Keys.Contains(status)
-				? new SolidColorBrush(StatusColorMap[status])
+			return StatusColorMap.TryGetValue(status, out Color statusColor)
+				? new SolidColorBrush(statusColor)
 				: Brushes.LightGray; // Fallback
 		}
 

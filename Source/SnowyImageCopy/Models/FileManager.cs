@@ -820,12 +820,12 @@ namespace SnowyImageCopy.Models
 		/// <param name="responseBytes">Response byte array</param>
 		private static async Task RecordDownloadStringAsync(string requestPath, byte[] responseBytes)
 		{
-			var sb = new StringBuilder();
-			sb.AppendLine($"request => {requestPath}");
-			sb.AppendLine("response -> ");
-			sb.AppendLine(Encoding.ASCII.GetString(responseBytes));
+			var buff = new StringBuilder();
+			buff.AppendLine($"request => {requestPath}");
+			buff.AppendLine("response -> ");
+			buff.AppendLine(Encoding.ASCII.GetString(responseBytes));
 
-			await LogService.RecordAsync(DownloadFileName, sb.ToString());
+			await LogService.RecordAsync(DownloadFileName, buff.ToString());
 		}
 
 		#endregion

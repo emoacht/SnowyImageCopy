@@ -25,10 +25,10 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>Zero thickness if Boolean is true. Thickness given by parameter if false.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool) || !(parameter is Thickness))
+			if (!(value is bool sourceValue) || !(parameter is Thickness thickness))
 				return DependencyProperty.UnsetValue;
 
-			return (bool)value ? new Thickness(0) : (Thickness)parameter;
+			return sourceValue ? new Thickness(0) : thickness;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

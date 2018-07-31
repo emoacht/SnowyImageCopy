@@ -20,10 +20,10 @@ namespace SnowyImageCopy.Views.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is FileStatus))
+			if (!(value is FileStatus status))
 				return DependencyProperty.UnsetValue;
 
-			switch ((FileStatus)value)
+			switch (status)
 			{
 				case FileStatus.NotCopied:
 					return Resources.FileStatus_NotCopied;
