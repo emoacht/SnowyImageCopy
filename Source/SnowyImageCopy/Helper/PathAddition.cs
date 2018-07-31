@@ -12,10 +12,6 @@ namespace SnowyImageCopy.Helper
 	/// </summary>
 	public static class PathAddition
 	{
-		public static bool TryNormalizeCheckPath(string source, out string normalized) =>
-			TryNormalizePath(source, out normalized)
-			&& Directory.Exists(Path.GetPathRoot(normalized));
-
 		public static bool TryNormalizePath(string source, out string normalized)
 		{
 			normalized = null;

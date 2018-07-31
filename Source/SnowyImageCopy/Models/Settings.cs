@@ -150,13 +150,27 @@ namespace SnowyImageCopy.Models
 				{
 					buff = value;
 				}
-				else if (!PathAddition.TryNormalizeCheckPath(value, out buff))
+				else if (!PathAddition.TryNormalizePath(value, out buff))
 					return;
 
 				SetPropertyValue(ref _localFolder, buff);
+				CheckLocalFolderValid();
 			}
 		}
 		private string _localFolder;
+
+		[XmlIgnore]
+		public bool IsLocalFolderValid
+		{
+			get => _isLocalFolderValid;
+			private set => SetPropertyValue(ref _isLocalFolderValid, value);
+		}
+		private bool _isLocalFolderValid = true;
+
+		internal bool CheckLocalFolderValid()
+		{
+			return IsLocalFolderValid = Directory.Exists(Path.GetPathRoot(LocalFolder));
+		}
 
 		#endregion
 

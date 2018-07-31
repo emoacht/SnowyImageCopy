@@ -493,7 +493,7 @@ namespace SnowyImageCopy.Models
 		/// </returns>
 		internal async Task<bool> CheckCopyFileAsync()
 		{
-			if (!IsReady())
+			if (!(await CheckReadyAsync()))
 				return true; // This is true case.
 
 			try
@@ -553,7 +553,7 @@ namespace SnowyImageCopy.Models
 				}
 				else if (ex is UnauthorizedAccessException)
 				{
-					OperationStatus = Resources.OperationStatus_UnauthorizedAccess;
+					OperationStatus = Resources.OperationStatus_LocalFolderUnauthorized;
 				}
 				else if (ex is CardChangedException)
 				{
@@ -589,7 +589,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		internal async Task CheckFileAsync()
 		{
-			if (!IsReady())
+			if (!(await CheckReadyAsync()))
 				return;
 
 			try
@@ -649,7 +649,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		internal async Task CopyFileAsync()
 		{
-			if (!IsReady())
+			if (!(await CheckReadyAsync()))
 				return;
 
 			try
@@ -688,7 +688,7 @@ namespace SnowyImageCopy.Models
 				}
 				else if (ex is UnauthorizedAccessException)
 				{
-					OperationStatus = Resources.OperationStatus_UnauthorizedAccess;
+					OperationStatus = Resources.OperationStatus_LocalFolderUnauthorized;
 				}
 				else if (ex is CardChangedException)
 				{
@@ -733,18 +733,24 @@ namespace SnowyImageCopy.Models
 		/// Checks if ready for operation.
 		/// </summary>
 		/// <returns>True if ready</returns>
-		private bool IsReady()
+		private async Task<bool> CheckReadyAsync()
 		{
+			if ((Settings.Current.TargetPeriod == FilePeriod.Select) &&
+				!Settings.Current.TargetDates.Any())
+			{
+				OperationStatus = Resources.OperationStatus_NoDateCalender;
+				return false;
+			}
+
 			if (!NetworkChecker.IsNetworkConnected())
 			{
 				OperationStatus = Resources.OperationStatus_NoNetwork;
 				return false;
 			}
 
-			if ((Settings.Current.TargetPeriod == FilePeriod.Select) &&
-				!Settings.Current.TargetDates.Any())
+			if (!(await Task.Run(() => Settings.Current.CheckLocalFolderValid())))
 			{
-				OperationStatus = Resources.OperationStatus_NoDateCalender;
+				OperationStatus = Resources.OperationStatus_LocalFolderInvalid;
 				return false;
 			}
 
