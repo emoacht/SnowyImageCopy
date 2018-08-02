@@ -34,20 +34,20 @@ namespace SnowyTool.Models
 			{
 				foreach (ManagementObject disk in searcher.Get()) // Casting to ManagementObject is for GetRelated method.
 				{
-					if (!(disk["Index"] is uint)) // Index represents index number of physical drive.
+					if (!(disk["Index"] is uint index)) // Index represents index number of physical drive.
 						continue;
 
 					var info = new DiskInfo();
-					info.PhysicalDrive = (uint)disk["Index"];
+					info.PhysicalDrive = index;
 					info.MediaType = disk["MediaType"] as string;
-					info.Size = (disk["Size"] is ulong) ? (ulong)disk["Size"] : 0L;
+					info.Size = (disk["Size"] is ulong size) ? size : 0L;
 
 					var driveLetters = new List<string>();
 
 					foreach (ManagementObject diskPartition in disk.GetRelated("Win32_DiskPartition")) // Casting to ManagementObject is for GetRelated method.
 					{
-						if (!(diskPartition["DiskIndex"] is uint) || // DiskIndex represents index number of physical drive.
-							((uint)diskPartition["DiskIndex"] != info.PhysicalDrive))
+						if (!(diskPartition["DiskIndex"] is uint diskIndex) || // DiskIndex represents index number of physical drive.
+							(diskIndex != info.PhysicalDrive))
 							continue;
 
 						foreach (var logicalDisk in diskPartition.GetRelated("Win32_LogicalDisk"))
@@ -59,9 +59,9 @@ namespace SnowyTool.Models
 								driveLetters.Add(driveLetter.Trim());
 							}
 
-							if ((info.DriveType == 0) && (logicalDisk["DriveType"] is uint))
+							if ((info.DriveType == 0) && (logicalDisk["DriveType"] is uint driveType))
 							{
-								info.DriveType = (uint)logicalDisk["DriveType"];
+								info.DriveType = driveType;
 							}
 						}
 					}
@@ -95,9 +95,9 @@ namespace SnowyTool.Models
 						$"SELECT * FROM MSFT_PhysicalDisk WHERE DeviceId = {info.PhysicalDrive}")) // DeviceId represents index number of physical drive.
 					{
 						var disk = searcher.Get().Cast<ManagementObject>().FirstOrDefault();
-						if (disk?["BusType"] is ushort)
+						if (disk?["BusType"] is ushort busType)
 						{
-							info.BusType = (ushort)disk["BusType"];
+							info.BusType = busType;
 						}
 					}
 				}

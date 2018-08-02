@@ -42,10 +42,10 @@ namespace SnowyImageCopy.Views.Converters
 
 		private static bool? FindBoolean(object source)
 		{
-			if (source is bool)
-				return (bool)source;
+			if (source is bool buff)
+				return buff;
 
-			if (bool.TryParse(source as string, out var buff))
+			if (bool.TryParse(source as string, out buff))
 				return buff;
 
 			return null;

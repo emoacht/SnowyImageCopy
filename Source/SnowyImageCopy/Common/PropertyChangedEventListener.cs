@@ -22,8 +22,7 @@ namespace SnowyImageCopy.Common
 			if (managerType != typeof(PropertyChangedEventManager))
 				return false;
 
-			var pce = e as PropertyChangedEventArgs;
-			if (pce == null)
+			if (!(e is PropertyChangedEventArgs pce))
 				return false;
 
 			this._propertyChangedAction(sender, pce);

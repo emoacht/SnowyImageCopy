@@ -46,7 +46,7 @@ namespace SnowyTool.Views.Converters
 		/// <returns>Nullable Boolean</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool) || !(bool)value)
+			if (!(value is bool sourceValue) || !sourceValue)
 				return DependencyProperty.UnsetValue;
 
 			var condition = FindBoolean(parameter);
@@ -58,10 +58,10 @@ namespace SnowyTool.Views.Converters
 
 		private static bool? FindBoolean(object source)
 		{
-			if (source is bool)
-				return (bool)source;
+			if (source is bool buff)
+				return buff;
 
-			if (bool.TryParse(source as string, out var buff))
+			if (bool.TryParse(source as string, out buff))
 				return buff;
 
 			return null;

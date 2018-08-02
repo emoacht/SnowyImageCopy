@@ -27,8 +27,7 @@ namespace SnowyTool.Common
 			if (propertyExpression == null)
 				throw new ArgumentNullException(nameof(propertyExpression));
 
-			var memberExpression = propertyExpression.Body as MemberExpression;
-			if (memberExpression == null)
+			if (!(propertyExpression.Body is MemberExpression memberExpression))
 				throw new ArgumentException("The expression is not a member access expression.", nameof(propertyExpression));
 
 			RaisePropertyChanged(memberExpression.Member.Name);
