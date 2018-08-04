@@ -25,14 +25,14 @@ namespace SnowyTool.Views.Converters
 		/// <returns>True if Enum value matches condition Enum value. False if not.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Enum) || !(parameter is string conditionString))
+			if (!(value is Enum sourceValue) || !(parameter is string conditionString))
 				return DependencyProperty.UnsetValue;
 
 			var condition = GetEnumValue(value.GetType(), conditionString);
 			if (condition == null)
 				return DependencyProperty.UnsetValue;
 
-			return ((Enum)value).Equals(condition);
+			return sourceValue.Equals(condition);
 		}
 
 		/// <summary>
@@ -45,10 +45,10 @@ namespace SnowyTool.Views.Converters
 		/// <returns>Condition Enum value if Boolean is true</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool sourceValue) || !sourceValue || !targetType.IsEnum || !(parameter is string))
+			if (!(value is bool sourceValue) || !sourceValue || !targetType.IsEnum || !(parameter is string conditionString))
 				return DependencyProperty.UnsetValue;
 
-			var condition = GetEnumValue(targetType, (string)parameter);
+			var condition = GetEnumValue(targetType, conditionString);
 			if (condition == null)
 				return DependencyProperty.UnsetValue;
 

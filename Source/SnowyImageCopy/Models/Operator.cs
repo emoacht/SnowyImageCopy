@@ -824,10 +824,11 @@ namespace SnowyImageCopy.Models
 								itemOld.FileItem = fileListNew[itemSameIndex].FileItem;
 
 								fileListNew.RemoveAt(itemSameIndex);
-								continue;
 							}
-
-							itemOld.IsAliveRemote = false;
+							else
+							{
+								itemOld.IsAliveRemote = false;
+							}
 						}
 
 						// Add new items (This operation may be heavy).

@@ -44,9 +44,9 @@ namespace SnowyImageCopy.Views.Converters
 			if (sourceLengths.Length == 1)
 				return sourceLengths[0];
 
-			var order = ((parameter == null) || parameter.ToString().Equals(Order.Add.ToString(), StringComparison.OrdinalIgnoreCase))
-				? Order.Add
-				: Order.Subtract;
+			var order = Enum.TryParse(parameter as string, true, out Order parsed)
+				? parsed
+				: Order.Add; // Fallback
 
 			double sum = 0D;
 			switch (order)

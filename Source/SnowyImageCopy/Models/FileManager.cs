@@ -280,19 +280,21 @@ namespace SnowyImageCopy.Models
 				// This exception should not be thrown because thumbnail data is directly provided by FlashAir card.
 				return null;
 			}
-			catch (Exception ex)
+			catch (RemoteFileNotFoundException)
 			{
-				if ((ex is RemoteFileNotFoundException) ||
-					((ex is RemoteConnectionUnableException) &&
-					(((RemoteConnectionUnableException)ex).Code == HttpStatusCode.InternalServerError)))
-				{
-					// If image file is not JPEG format or if there is no Exif standardized thumbnail stored,
-					// StatusCode will be HttpStatusCode.NotFound. Or it may be HttpStatusCode.InternalServerError
-					// when image file is non-standard JPEG format.
-					Debug.WriteLine("Image file may not be JPEG format or may contain no thumbnail.");
-					throw new RemoteFileThumbnailFailedException(remotePath);
-				}
-
+				// If the format of image file is not JPEG or if there is no Exif standardized thumbnail stored,
+				// StatusCode will be HttpStatusCode.NotFound.
+				Debug.WriteLine("Image file is not JPEG format or does not contain standardized thumbnail.");
+				throw new RemoteFileThumbnailFailedException(remotePath);
+			}
+			catch (RemoteConnectionUnableException rcue) when (rcue.Code == HttpStatusCode.InternalServerError)
+			{
+				// If image file is non-standard JPEG format, StatusCode may be HttpStatusCode.InternalServerError.
+				Debug.WriteLine("Image file is non-standard JPEG format.");
+				throw new RemoteFileThumbnailFailedException(remotePath);
+			}
+			catch
+			{
 				Debug.WriteLine("Failed to get a thumbnail.");
 				throw;
 			}
@@ -709,55 +711,38 @@ namespace SnowyImageCopy.Models
 							}
 						}
 					}
-					catch (OperationCanceledException) // Including TaskCanceledException
+					catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
 					{
-						if (!cancellationToken.IsCancellationRequested)
-						{
-							// If cancellation has not been requested, the reason of this exception must be timeout.
-							// This is for response header only.
-							throw new TimeoutException("Reading response header timed out!");
-						}
-						throw;
+						// OperationCanceledException includes the case of TaskCanceledException.
+						// If cancellation has not been requested, the reason of this exception must be timeout.
+						// This is for response header only.
+						throw new TimeoutException("Reading response header timed out!");
 					}
-					catch (ObjectDisposedException)
+					catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
 					{
-						if (cancellationToken.IsCancellationRequested)
-						{
-							// If cancellation has been requested, the reason of this exception must be cancellation.
-							// This is for response content only.
-							throw new OperationCanceledException();
-						}
-						throw;
+						// If cancellation has been requested, the reason of this exception must be cancellation.
+						// This is for response content only.
+						throw new OperationCanceledException();
 					}
-					catch (IOException ie)
+					catch (IOException ie) when (cancellationToken.IsCancellationRequested
+						&& (ie.InnerException is WebException we)
+						&& (we.Status == WebExceptionStatus.ConnectionClosed))
 					{
-						if (cancellationToken.IsCancellationRequested)
-						{
-							var we = ie.InnerException as WebException;
-							if (we?.Status == WebExceptionStatus.ConnectionClosed)
-							{
-								// If cancellation has been requested during downloading, this exception may be thrown.
-								throw new OperationCanceledException();
-							}
-						}
-						throw;
+						// If cancellation has been requested while downloading, this exception may be thrown.
+						throw new OperationCanceledException();
 					}
-					catch (HttpRequestException hre)
+					catch (HttpRequestException hre) when (hre.InnerException is WebException we)
 					{
-						if (hre.InnerException is WebException we)
-						{
-							// If unable to connect to FlashAir card, this exception will be thrown.
-							// The status may vary, such as WebExceptionStatus.NameResolutionFailure,
-							// WebExceptionStatus.ConnectFailure.
-							throw new RemoteConnectionUnableException(we.Status);
-						}
-						if (hre.InnerException is ObjectDisposedException ode)
-						{
-							// If lost connection to FlashAir card, this exception may be thrown.
-							// Error message: Error while copying content to a stream.
-							throw new RemoteConnectionLostException("Connection lost!");
-						}
-						throw;
+						// If unable to connect to FlashAir card, this exception will be thrown.
+						// The status may vary, such as WebExceptionStatus.NameResolutionFailure,
+						// WebExceptionStatus.ConnectFailure.
+						throw new RemoteConnectionUnableException(we.Status);
+					}
+					catch (HttpRequestException hre) when (hre.InnerException is ObjectDisposedException)
+					{
+						// If lost connection to FlashAir card, this exception may be thrown.
+						// Error message: Error while copying content to a stream.
+						throw new RemoteConnectionLostException("Connection lost!");
 					}
 				}
 				catch (RemoteConnectionUnableException)

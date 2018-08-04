@@ -50,13 +50,13 @@ namespace SnowyImageCopy.Models
 					return await Task.Run(() => ReadThumbnailFromExifByImaging(fs));
 				}
 			}
+			catch (Exception ex) when (IsImageNotSupported(ex))
+			{
+				throw new ImageNotSupportedException();
+			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine($"Failed to read a thumbnail.\r\n{ex}");
-
-				if (IsImageNotSupported(ex))
-					throw new ImageNotSupportedException();
-
 				throw;
 			}
 		}
@@ -80,13 +80,13 @@ namespace SnowyImageCopy.Models
 					return ReadThumbnailFromExifByImaging(ms);
 				}
 			}
+			catch (Exception ex) when (IsImageNotSupported(ex))
+			{
+				throw new ImageNotSupportedException();
+			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine($"Failed to read a thumbnail.\r\n{ex}");
-
-				if (IsImageNotSupported(ex))
-					throw new ImageNotSupportedException();
-
 				throw;
 			}
 		}
@@ -115,13 +115,13 @@ namespace SnowyImageCopy.Models
 					return CreateThumbnailFromImageUniform(ms);
 				}
 			}
+			catch (Exception ex) when (IsImageNotSupported(ex))
+			{
+				throw new ImageNotSupportedException();
+			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine($"Failed to create a thumbnail.\r\n{ex}");
-
-				if (IsImageNotSupported(ex))
-					throw new ImageNotSupportedException();
-
 				throw;
 			}
 		}
@@ -145,13 +145,13 @@ namespace SnowyImageCopy.Models
 					return CreateThumbnailFromImageUniform(ms);
 				}
 			}
+			catch (Exception ex) when (IsImageNotSupported(ex))
+			{
+				throw new ImageNotSupportedException();
+			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine($"Failed to create a thumbnail.\r\n{ex}");
-
-				if (IsImageNotSupported(ex))
-					throw new ImageNotSupportedException();
-
 				throw;
 			}
 		}
@@ -415,21 +415,22 @@ namespace SnowyImageCopy.Models
 				{
 					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
-					if (willReadExif || (destinationProfile != null))
+					return await Task.Run(() =>
 					{
-						return await Task.Run(() => ConvertStreamToBitmapSource(ms, targetSize, willReadExif, destinationProfile));
-					}
-
-					return await Task.Run(() => ConvertStreamToBitmapImage(ms, targetSize));
+						if (willReadExif || (destinationProfile != null))
+							return ConvertStreamToBitmapSource(ms, targetSize, willReadExif, destinationProfile);
+						else
+							return ConvertStreamToBitmapImage(ms, targetSize);
+					});
 				}
+			}
+			catch (Exception ex) when (IsImageNotSupported(ex))
+			{
+				throw new ImageNotSupportedException();
 			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine($"Failed to convert byte array to BitmapSource.\r\n{ex}");
-
-				if (IsImageNotSupported(ex))
-					throw new ImageNotSupportedException();
-
 				throw;
 			}
 		}
@@ -452,21 +453,22 @@ namespace SnowyImageCopy.Models
 				{
 					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
-					if (willReadExif || (destinationProfile != null))
+					return await Task.Run(() =>
 					{
-						return await Task.Run(() => ConvertStreamToBitmapSource(ms, outerSize, willReadExif, destinationProfile));
-					}
-
-					return await Task.Run(() => ConvertStreamToBitmapImageUniform(ms, outerSize));
+						if (willReadExif || (destinationProfile != null))
+							return ConvertStreamToBitmapSource(ms, outerSize, willReadExif, destinationProfile);
+						else
+							return ConvertStreamToBitmapImageUniform(ms, outerSize);
+					});
 				}
+			}
+			catch (Exception ex) when (IsImageNotSupported(ex))
+			{
+				throw new ImageNotSupportedException();
 			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine($"Failed to convert byte array to BitmapSource.\r\n{ex}");
-
-				if (IsImageNotSupported(ex))
-					throw new ImageNotSupportedException();
-
 				throw;
 			}
 		}
@@ -631,13 +633,13 @@ namespace SnowyImageCopy.Models
 				{
 					return await Task.Run(() => GetExifDateTaken(BitmapFrame.Create(ms)));
 				}
+				catch (Exception ex) when (IsImageNotSupported(ex))
+				{
+					return default(DateTime);
+				}
 				catch (Exception ex)
 				{
 					Debug.WriteLine($"Failed to get DateTaken from metadata.\r\n{ex}");
-
-					if (IsImageNotSupported(ex))
-						return default(DateTime);
-
 					throw;
 				}
 			}
@@ -658,13 +660,13 @@ namespace SnowyImageCopy.Models
 				{
 					return await Task.Run(() => GetExifOrientation(BitmapFrame.Create(ms)));
 				}
+				catch (Exception ex) when (IsImageNotSupported(ex))
+				{
+					return 0;
+				}
 				catch (Exception ex)
 				{
 					Debug.WriteLine($"Failed to get Orientation from metadata.\r\n{ex}");
-
-					if (IsImageNotSupported(ex))
-						return 0;
-
 					throw;
 				}
 			}
@@ -683,13 +685,10 @@ namespace SnowyImageCopy.Models
 		{
 			//const string queryDateTaken = "System.Photo.DateTaken";
 
-			if (bitmapFrame.Metadata is BitmapMetadata bitmapMetadata)
-			{
-				if (DateTime.TryParse(bitmapMetadata.DateTaken, out var dateTaken))
-					return dateTaken;
-			}
-
-			return default(DateTime);
+			return (bitmapFrame.Metadata is BitmapMetadata metadata)
+				&& DateTime.TryParse(metadata.DateTaken, out DateTime dateTaken)
+				? dateTaken
+				: default(DateTime);
 		}
 
 		/// <summary>
@@ -701,17 +700,11 @@ namespace SnowyImageCopy.Models
 		{
 			const string queryOrientation = "System.Photo.Orientation";
 
-			if (bitmapFrame.Metadata is BitmapMetadata bitmapMetadata)
-			{
-				if (bitmapMetadata.ContainsQuery(queryOrientation))
-				{
-					var value = bitmapMetadata.GetQuery(queryOrientation);
-					if (value != null)
-						return (ushort)value; // Orientation is defined as 16-bit unsigned integer in the specification.
-				}
-			}
-
-			return 0;
+			return (bitmapFrame.Metadata is BitmapMetadata metadata)
+				&& metadata.ContainsQuery(queryOrientation)
+				&& (metadata.GetQuery(queryOrientation) is ushort orientation)
+				? orientation // Orientation is defined as 16-bit unsigned integer in the specification.
+				: 0;
 		}
 
 		#endregion
@@ -885,13 +878,10 @@ namespace SnowyImageCopy.Models
 			// This description is "No imaging component suitable to complete this operation was found."
 			const uint WINCODEC_ERR_COMPONENTNOTFOUND = 0x88982F50;
 
-			if (ex is NotSupportedException)
-			{
-				var innerException = ex.InnerException;
-				if ((innerException is COMException) &&
-					((uint)innerException.HResult == WINCODEC_ERR_COMPONENTNOTFOUND))
-					return true;
-			}
+			if ((ex is NotSupportedException) &&
+				(ex.InnerException is COMException) &&
+				((uint)ex.InnerException.HResult == WINCODEC_ERR_COMPONENTNOTFOUND))
+				return true;
 
 			return false;
 		}

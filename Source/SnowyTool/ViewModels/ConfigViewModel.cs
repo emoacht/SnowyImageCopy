@@ -472,8 +472,7 @@ namespace SnowyTool.ViewModels
 			// Turn empty string value to null.
 			foreach (var p in _persistentProperties)
 			{
-				var value = p.GetValue(this) as string;
-				if (value == null)
+				if (!(p.GetValue(this) is string value))
 					continue;
 
 				if (string.IsNullOrWhiteSpace(value))
