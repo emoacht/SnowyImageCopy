@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -887,52 +888,81 @@ namespace SnowyImageCopy.Models
 					}
 				});
 
-				// Get thumbnails (from local).
-				foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))
+				// Fill thumbnails.
+				var itemsDueLocal = new List<FileItemViewModel>(FileListCore.Count);
+				using (var itemsDueRemote = new BlockingCollection<FileItemViewModel>(FileListCore.Count))
 				{
-					if (!item.IsAliveLocal || !item.IsAvailableLocal || !item.CanLoadDataLocal)
-						continue;
+					foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))
+					{
+						if (item.IsAliveLocal && item.IsAvailableLocal && item.CanLoadDataLocal)
+						{
+							itemsDueLocal.Add(item);
+						}
+						else if (item.IsAliveRemote && item.CanGetThumbnailRemote)
+						{
+							itemsDueRemote.Add(item);
+						}
+					}
 
-					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
+					// Get thumbnails from local.
+					var getLocalTask = Task.Run(async () =>
+					{
+						foreach (var item in itemsDueLocal)
+						{
+							_tokenSourceWorking.Token.ThrowIfCancellationRequested();
 
-					try
-					{
-						if (item.CanReadExif)
-							item.Thumbnail = await ImageManager.ReadThumbnailAsync(ComposeLocalPath(item));
-						else if (item.CanLoadDataLocal)
-							item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
-					}
-					catch (FileNotFoundException)
-					{
-						item.Status = FileStatus.NotCopied;
-						item.IsAliveLocal = false;
-					}
-					catch (IOException)
-					{
-						item.IsAvailableLocal = false;
-					}
-					catch (ImageNotSupportedException)
-					{
-						item.CanLoadDataLocal = false;
-					}
-				}
+							try
+							{
+								if (item.CanReadExif)
+									item.Thumbnail = await ImageManager.ReadThumbnailAsync(ComposeLocalPath(item));
+								else if (item.CanLoadDataLocal)
+									item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
 
-				// Get thumbnails (from remote).
-				foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))
-				{
-					if (!item.IsAliveRemote || !item.CanGetThumbnailRemote)
-						continue;
+							}
+							catch (Exception ex)
+							{
+								if (ex is FileNotFoundException)
+								{
+									item.Status = FileStatus.NotCopied;
+									item.IsAliveLocal = false;
+								}
+								else if (ex is IOException)
+								{
+									item.IsAvailableLocal = false;
+								}
+								else if (ex is ImageNotSupportedException)
+								{
+									item.CanLoadDataLocal = false;
+								}
 
-					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
+								if (item.IsAliveRemote && item.CanGetThumbnailRemote)
+								{
+									itemsDueRemote.Add(item);
+								}
+							}
+						}
+						itemsDueRemote.CompleteAdding();
+					}, _tokenSourceWorking.Token);
 
-					try
+					// Get thumbnails from remote.
+					var getRemoteTask = Task.Run(async () =>
 					{
-						item.Thumbnail = await _manager.GetThumbnailAsync(item.FilePath, _card, _tokenSourceWorking.Token);
-					}
-					catch (RemoteFileThumbnailFailedException)
-					{
-						item.CanGetThumbnailRemote = false;
-					}
+						foreach (var item in itemsDueRemote.GetConsumingEnumerable(_tokenSourceWorking.Token))
+						{
+							_tokenSourceWorking.Token.ThrowIfCancellationRequested();
+
+							try
+							{
+								item.Thumbnail = await _manager.GetThumbnailAsync(item.FilePath, _card, _tokenSourceWorking.Token);
+							}
+							catch (RemoteFileThumbnailFailedException)
+							{
+								item.CanGetThumbnailRemote = false;
+							}
+						}
+					}, _tokenSourceWorking.Token);
+
+					await Task.WhenAll(getLocalTask, getRemoteTask);
 				}
 
 				OperationStatus = Resources.OperationStatus_CheckCompleted;
