@@ -191,6 +191,19 @@
 					  Header="{Binding Resources.Options_File, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+							  Header="{Binding Resources.Options_OrderFromNewer, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							Width="60" Height="24"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.OrdersFromNewer, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_ExtensionLowercase, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Width="60" Height="24"
@@ -201,20 +214,6 @@
 							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
 							IsChecked="{Binding SettingsCurrent.MakesFileExtensionLowercase, Mode=TwoWay}"/>
-					</GroupBox>
-
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
-							  Header="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}">
-						<controls:SlidingToggleButton
-							x:Name="RecycleButton"
-							Width="60" Height="24"
-							TextChecked="ON"
-							TextUnchecked="OFF"
-							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
-							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
-							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
-							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
-							IsChecked="{Binding SettingsCurrent.MovesFileToRecycle, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
@@ -254,6 +253,20 @@
 							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
 							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
 							IsChecked="{Binding SettingsCurrent.CreatesDatedFolder, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+							  Header="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							x:Name="RecycleButton"
+							Width="60" Height="24"
+							TextChecked="ON"
+							TextUnchecked="OFF"
+							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
+							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
+							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
+							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							IsChecked="{Binding SettingsCurrent.MovesFileToRecycle, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"

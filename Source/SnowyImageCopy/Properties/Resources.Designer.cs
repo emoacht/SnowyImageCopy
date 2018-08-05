@@ -566,6 +566,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Order from newer image.
+        /// </summary>
+        public static string Options_OrderFromNewer {
+            get {
+                return ResourceManager.GetString("Options_OrderFromNewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Path.
         /// </summary>
         public static string Options_Path {

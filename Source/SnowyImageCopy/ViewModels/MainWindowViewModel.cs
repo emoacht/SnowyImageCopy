@@ -492,10 +492,15 @@ namespace SnowyImageCopy.ViewModels
 			{
 				_autoCheckIntervalChanged?.Invoke();
 			}
-			else if ((propertyName == nameof(Settings.TargetPeriod)) || (propertyName == nameof(Settings.TargetDates))
+			else if ((propertyName == nameof(Settings.TargetPeriod))
+				|| (propertyName == nameof(Settings.TargetDates))
 				|| (propertyName == nameof(Settings.HandlesJpegFileOnly)))
 			{
 				_targetConditionChanged?.Invoke();
+			}
+			else if (propertyName == nameof(Settings.OrdersFromNewer))
+			{
+				FileListCore.Clear();
 			}
 		}
 

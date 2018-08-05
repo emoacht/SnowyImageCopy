@@ -271,19 +271,25 @@ namespace SnowyImageCopy.Models
 
 		#region File
 
+		public bool OrdersFromNewer
+		{
+			get => !FileItem.OrderByAscendingDate;
+			set
+			{
+				if (FileItem.OrderByAscendingDate != value)
+					return;
+
+				FileItem.OrderByAscendingDate = !value;
+				RaisePropertyChanged();
+			}
+		}
+
 		public bool MakesFileExtensionLowercase
 		{
 			get => _makesFileExtensionLowercase;
 			set => SetPropertyValue(ref _makesFileExtensionLowercase, value);
 		}
 		private bool _makesFileExtensionLowercase = true; // Default
-
-		public bool MovesFileToRecycle
-		{
-			get => _movesFileToRecycle;
-			set => SetPropertyValue(ref _movesFileToRecycle, value);
-		}
-		private bool _movesFileToRecycle;
 
 		public bool SelectsReadOnlyFile
 		{
@@ -305,6 +311,13 @@ namespace SnowyImageCopy.Models
 			set => SetPropertyValue(ref _createsDatedFolder, value);
 		}
 		private bool _createsDatedFolder = true; // Default;
+
+		public bool MovesFileToRecycle
+		{
+			get => _movesFileToRecycle;
+			set => SetPropertyValue(ref _movesFileToRecycle, value);
+		}
+		private bool _movesFileToRecycle;
 
 		public bool EnablesChooseDeleteOnCopy
 		{
