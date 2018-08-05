@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SnowyImageCopy.Common;
 using SnowyImageCopy.Models;
 
 namespace SnowyImageCopy.ViewModels
 {
-	public class OptionsViewModel : ViewModel
+	public class OptionsViewModel : NotificationObject
 	{
 		public OptionsViewModel()
 		{ }

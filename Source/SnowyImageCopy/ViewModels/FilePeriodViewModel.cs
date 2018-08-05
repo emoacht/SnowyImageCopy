@@ -12,7 +12,7 @@ using SnowyImageCopy.Properties;
 
 namespace SnowyImageCopy.ViewModels
 {
-	public class FilePeriodViewModel : ViewModel
+	public class FilePeriodViewModel : NotificationObject
 	{
 		public FilePeriodViewModel()
 		{

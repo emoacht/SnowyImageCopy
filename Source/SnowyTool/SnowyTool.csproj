@@ -105,7 +105,6 @@
     <Compile Include="Models\LanStartupModeOption.cs" />
     <Compile Include="ViewModels\ConfigViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\Controls\FadingTextBox.cs" />
     <Compile Include="Views\Converters\BooleanInverseToBrushConverter.cs" />
     <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />

@@ -5,19 +5,14 @@ using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 
-using SnowyImageCopy.Common;
-
-namespace SnowyImageCopy.ViewModels
+namespace SnowyImageCopy.Common
 {
-	public abstract class ViewModel : NotificationObject, IDisposable
+	public abstract class NotificationDisposableObject : NotificationObject, IDisposable
 	{
-		public ViewModel()
-		{ }
-
-		#region Dispose
-
 		protected CompositeDisposable Subscription => _subscription.Value;
 		private Lazy<CompositeDisposable> _subscription = new Lazy<CompositeDisposable>(() => new CompositeDisposable());
+
+		#region IDisposable member
 
 		private bool _disposed = false;
 
