@@ -351,6 +351,7 @@ namespace SnowyImageCopy.ViewModels
 		public MainWindowViewModel()
 		{
 			Op = new Operator(this);
+			Subscription.Add(Op);
 
 			// Add event listeners.
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
