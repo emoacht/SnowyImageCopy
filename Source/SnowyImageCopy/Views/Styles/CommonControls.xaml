@@ -90,7 +90,7 @@
 	</Style>
 
 	<!-- ToggleButton -->
-	<Style x:Key="SwitchButtonStyle" TargetType="{x:Type ToggleButton}">
+	<Style x:Key="DrawButtonStyle" TargetType="{x:Type ToggleButton}">
 		<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
 		<Setter Property="SnapsToDevicePixels" Value="True"/>
 		<Setter Property="BorderThickness" Value="0"/>

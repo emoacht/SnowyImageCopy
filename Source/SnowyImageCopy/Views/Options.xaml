@@ -72,7 +72,8 @@
 					Margin="8,2,8,0">
 
 			<!-- Path -->
-			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+			<GroupBox x:Name="PathGroupBox"
+					  Template="{StaticResource ItemGroupTemplate}"
 					  Header="{Binding Resources.Options_Path, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
 					<TextBlock Text="{Binding Resources.Options_RemoteAddress, Source={x:Static models:ResourceService.Current}}"/>
@@ -93,7 +94,6 @@
 						<Button	Margin="0,0,4,0"
 								Padding="8,2,8,2"
 								Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}"
-								IsEnabled="{Binding IsEnabled, ElementName=LocalFolderTextBox, Mode=OneWay}"
 								Style="{StaticResource ButtonBaseStyle}">
 							<i:Interaction.Triggers>
 								<i:EventTrigger EventName="Click">
@@ -145,7 +145,6 @@
 						  Margin="-4,0,0,2"
 						  Visibility="{Binding SettingsCurrent.TargetPeriod, Converter={StaticResource EnumToVisibilityConverterKey}, ConverterParameter=Select, Mode=OneWay}">
 						<Calendar
-							x:Name="DateCalendar"
 							HorizontalAlignment="Left" VerticalAlignment="Stretch"
 							SelectionMode="MultipleRange" IsTodayHighlighted="False"
 							DisplayDateEnd="{Binding Source={x:Static sys:DateTime.Today}, Mode=OneWay}">
@@ -171,7 +170,7 @@
 					<GroupBox Template="{StaticResource ItemDetailedCenterTemplate}"
 							  Header="{Binding Resources.Options_AutoCheckInterval, Source={x:Static models:ResourceService.Current}}">
 						<controls:NumericUpDown
-							Width="90" Height="24"							
+							Width="90" Height="24"
 							Minimum="1" Middle="10" Maximum="180" Frequency="10" LowerFrequency="1" HigherFrequency="10"
 							Value="{Binding SettingsCurrent.AutoCheckInterval}"/>
 					</GroupBox>
@@ -179,7 +178,7 @@
 					<GroupBox Template="{StaticResource ItemDetailedCenterTemplate}"
 							  Header="{Binding Resources.Options_TimeoutDuration, Source={x:Static models:ResourceService.Current}}">
 						<controls:NumericUpDown
-							Width="90" Height="24"							
+							Width="90" Height="24"
 							Minimum="10" Maximum="60" Frequency="10"
 							Value="{Binding SettingsCurrent.TimeoutDuration}"/>
 					</GroupBox>
@@ -187,71 +186,42 @@
 			</GroupBox>
 
 			<!-- File -->
-			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+			<GroupBox x:Name="FileGroupBox"
+					  Template="{StaticResource ItemGroupTemplate}"
 					  Header="{Binding Resources.Options_File, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_OrderFromNewer, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
-							Width="60" Height="24"
-							TextChecked="ON"
-							TextUnchecked="OFF"
-							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
-							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
-							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
-							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.OrdersFromNewer, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_ExtensionLowercase, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
-							Width="60" Height="24"
-							TextChecked="ON"
-							TextUnchecked="OFF"
-							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
-							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
-							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
-							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.MakesFileExtensionLowercase, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_SelectReadOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
-							Width="60" Height="24"
-							TextChecked="ON"
-							TextUnchecked="OFF"
-							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
-							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
-							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
-							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.SelectsReadOnlyFile, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_HandleJpegFileOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
-							Width="60" Height="24"
-							TextChecked="ON"
-							TextUnchecked="OFF"
-							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
-							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
-							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
-							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.HandlesJpegFileOnly, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_CreateDatedFolder, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
-							Width="60" Height="24"
-							TextChecked="ON"
-							TextUnchecked="OFF"
-							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
-							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
-							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
-							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.CreatesDatedFolder, Mode=TwoWay}"/>
 					</GroupBox>
 
@@ -259,13 +229,7 @@
 							  Header="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							x:Name="RecycleButton"
-							Width="60" Height="24"
-							TextChecked="ON"
-							TextUnchecked="OFF"
-							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
-							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
-							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
-							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.MovesFileToRecycle, Mode=TwoWay}"/>
 					</GroupBox>
 
@@ -274,13 +238,9 @@
 						<StackPanel>
 							<controls:SlidingToggleButton
 								x:Name="ChooseDeleteOnCopyButton"
-								Width="60" Height="24"
-								TextChecked="ON"
-								TextUnchecked="OFF"
+								Style="{StaticResource SwitchButtonStyle}"
 								ForegroundChecked="{StaticResource Sliding.CheckedSecond.Foreground}"
-								ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
 								BackgroundChecked="{StaticResource Sliding.CheckedSecond.Background}"
-								BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
 								IsChecked="{Binding IsChecked, ElementName= RecycleButton, Converter={StaticResource BooleanInverseConverterKey}, ConverterParameter=True}"/>
 							<controls:CheckTextBox
 								Margin="0,4,0,0" Padding="2,0"

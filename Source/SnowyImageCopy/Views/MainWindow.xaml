@@ -159,15 +159,11 @@
 						<Label
 							VerticalAlignment="Center"
 							Content="{Binding Resources.Options_DeleteOnCopy, Source={x:Static models:ResourceService.Current}}"/>
-						<controls:SlidingToggleButton
-							Width="60" Height="24"
+						<controls:SlidingToggleButton							
 							Margin="0,4"
-							TextChecked="ON"
-							TextUnchecked="OFF"
+							Style="{StaticResource SwitchButtonStyle}"
 							ForegroundChecked="{StaticResource Sliding.CheckedSecond.Foreground}"
-							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
 							BackgroundChecked="{StaticResource Sliding.CheckedSecond.Background}"
-							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
 							IsChecked="{Binding SettingsCurrent.DeleteOnCopy, Mode=TwoWay}"/>
 					</StackPanel>
 
@@ -177,14 +173,8 @@
 							VerticalAlignment="Center"
 							Content="{Binding Resources.Options_InstantCopy, Source={x:Static models:ResourceService.Current}}"/>
 						<controls:SlidingToggleButton
-							Width="60" Height="24"
 							Margin="0,4"
-							TextChecked="ON"
-							TextUnchecked="OFF"
-							ForegroundChecked="{StaticResource Sliding.Checked.Foreground}"
-							ForegroundUnchecked="{StaticResource Sliding.Unchecked.Foreground}"
-							BackgroundChecked="{StaticResource Sliding.Checked.Background}"
-							BackgroundUnchecked="{StaticResource Sliding.Unchecked.Background}"
+							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.InstantCopy, Mode=TwoWay}"/>
 					</StackPanel>
 				</StackPanel>
@@ -204,7 +194,7 @@
 				Height="24" HorizontalAlignment="Right" VerticalAlignment="Top"
 				Margin="0,8,0,0" Padding="8,0,8,0"
 				Content="{Binding Resources.Options, Source={x:Static models:ResourceService.Current}}"
-				Style="{StaticResource SwitchButtonStyle}"/>
+				Style="{StaticResource DrawButtonStyle}"/>
 		</Grid>
 
 		<!-- Options area -->
@@ -224,7 +214,7 @@
 				HorizontalContentAlignment="Left"
 				Content="{Binding Resources.Options, Source={x:Static models:ResourceService.Current}}"
 				IsChecked="{Binding IsChecked, ElementName=OptionsButtonLeft}"
-				Style="{StaticResource SwitchButtonStyle}"/>
+				Style="{StaticResource DrawButtonStyle}"/>
 
 			<ScrollViewer
 				Grid.Row="1"
@@ -252,7 +242,7 @@
 					HorizontalContentAlignment="Left"
 					Content="{Binding Resources.CurrentImage, Source={x:Static models:ResourceService.Current}}"
 					IsChecked="{Binding IsCurrentImageVisible, Mode=TwoWay}"
-					Style="{StaticResource SwitchButtonStyle}">
+					Style="{StaticResource DrawButtonStyle}">
 					<ToggleButton.Width>
 						<MultiBinding Converter="{StaticResource DoubleAndVisibilityToDoubleConverterKey}">
 							<Binding ElementName="CurrentImageGridSplitter" Path="ActualWidth"/>

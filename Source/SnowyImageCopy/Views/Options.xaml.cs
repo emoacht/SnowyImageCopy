@@ -38,7 +38,7 @@ namespace SnowyImageCopy.Views
 			// Binding in xaml will not work because MainWindowViewModel may be null when Options is instantiated.
 			var booleanInverseConverter = new BooleanInverseConverter();
 
-			RemoteAddressTextBox.SetBinding(
+			PathGroupBox.SetBinding(
 				UIElement.IsEnabledProperty,
 				new Binding(nameof(MainWindowViewModel.IsCheckOrCopyOngoing))
 				{
@@ -47,7 +47,7 @@ namespace SnowyImageCopy.Views
 					Converter = booleanInverseConverter
 				});
 
-			LocalFolderTextBox.SetBinding(
+			FileGroupBox.SetBinding(
 				UIElement.IsEnabledProperty,
 				new Binding(nameof(MainWindowViewModel.IsCheckOrCopyOngoing))
 				{
