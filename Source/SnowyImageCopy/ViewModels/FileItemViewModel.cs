@@ -14,7 +14,7 @@ using SnowyImageCopy.Views.Controls;
 
 namespace SnowyImageCopy.ViewModels
 {
-	public class FileItemViewModel : ViewModel, IComparable<FileItemViewModel>
+	public class FileItemViewModel : NotificationObject, IComparable<FileItemViewModel>
 	{
 		#region Basic
 

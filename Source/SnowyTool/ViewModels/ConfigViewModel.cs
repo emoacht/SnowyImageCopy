@@ -8,12 +8,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using SnowyTool.Common;
 using SnowyTool.Helper;
 using SnowyTool.Models;
 
 namespace SnowyTool.ViewModels
 {
-	public class ConfigViewModel : ViewModel
+	public class ConfigViewModel : NotificationObject
 	{
 		#region Type
 

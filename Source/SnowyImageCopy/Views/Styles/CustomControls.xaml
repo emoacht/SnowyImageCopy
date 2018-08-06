@@ -59,22 +59,34 @@
 								 IsReadOnly="True" IsUndoEnabled="False"/>
 
 						<!-- Foreground -->
-						<StackPanel Orientation="Horizontal">
-							<Button x:Name="PART_ForegroundButtonLeft"
+						<DockPanel LastChildFill="True">
+							<Button DockPanel.Dock="Left"
+									x:Name="PART_ForegroundButtonLeft"
 									Width="18"
 									Style="{StaticResource ButtonBaseStyle}"/>
-							<Grid Width="42">
-								<TextBlock x:Name="PART_ForegroundTextBlock"
-										   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</Grid>
-							<Button x:Name="PART_ForegroundButtonRight"
+							<Button DockPanel.Dock="Right"
+									x:Name="PART_ForegroundButtonRight"
 									Width="18"
 									Style="{StaticResource ButtonBaseStyle}"/>
-						</StackPanel>
+							<TextBlock x:Name="PART_ForegroundTextBlock"
+									   HorizontalAlignment="Center" VerticalAlignment="Center"
+									   IsHitTestVisible="False"/>
+						</DockPanel>
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
+	</Style>
+
+	<Style x:Key="SwitchButtonStyle" TargetType="{x:Type controls:SlidingToggleButton}" BasedOn="{StaticResource {x:Type controls:SlidingToggleButton}}">
+		<Setter Property="Width" Value="60"/>
+		<Setter Property="Height" Value="24"/>
+		<Setter Property="TextChecked" Value="ON"/>
+		<Setter Property="TextUnchecked" Value="OFF"/>
+		<Setter Property="ForegroundChecked" Value="{StaticResource Sliding.Checked.Foreground}"/>
+		<Setter Property="ForegroundUnchecked" Value="{StaticResource Sliding.Unchecked.Foreground}"/>
+		<Setter Property="BackgroundChecked" Value="{StaticResource Sliding.Checked.Background}"/>
+		<Setter Property="BackgroundUnchecked" Value="{StaticResource Sliding.Unchecked.Background}"/>
 	</Style>
 
 	<!-- BusyButton -->

@@ -89,18 +89,6 @@ namespace SnowyImageCopy.Helper
 		#endregion
 
 		/// <summary>
-		/// Moves a specified file to Recycle.
-		/// </summary>
-		/// <param name="filePath">File path</param>
-		public static void MoveToRecycle(string filePath)
-		{
-			if (string.IsNullOrWhiteSpace(filePath))
-				return;
-
-			MoveToRecycle(filePath);
-		}
-
-		/// <summary>
 		/// Moves specified files to Recycle.
 		/// </summary>
 		/// <param name="filePaths">File paths</param>

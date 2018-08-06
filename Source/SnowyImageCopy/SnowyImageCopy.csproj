@@ -137,6 +137,7 @@
     </Compile>
     <Compile Include="Common\DelegateCommand.cs" />
     <Compile Include="Common\NotificationObject.cs" />
+    <Compile Include="Common\NotificationDisposableObject.cs" />
     <Compile Include="Common\PropertyChangedEventListener.cs" />
     <Compile Include="Helper\BitmapExtension.cs" />
     <Compile Include="Helper\BitmapImageExtension.cs" />
@@ -193,7 +194,6 @@
     <Compile Include="ViewModels\FilePeriodViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
-    <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\Behaviors\CalendarSelectedDatesBehavior.cs" />
     <Compile Include="Views\Behaviors\FolderBrowserAction.cs" />
     <Compile Include="Views\Behaviors\FrameworkElementIntersectionBehavior.cs" />

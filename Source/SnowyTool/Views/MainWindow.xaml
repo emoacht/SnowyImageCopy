@@ -227,7 +227,7 @@
 				Padding="8,0,8,0"
 				HorizontalContentAlignment="Left"
 				Content="FlashAir Card Information"
-				Style="{StaticResource SwitchButtonStyle}"/>
+				Style="{StaticResource DrawButtonStyle}"/>
 
 			<Border
 				Grid.Row="1"

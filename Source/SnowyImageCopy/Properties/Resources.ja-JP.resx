@@ -246,6 +246,9 @@
   <data name="Options_OpenByExplorer" xml:space="preserve">
     <value>エクスプローラーで開く</value>
   </data>
+  <data name="Options_OrderFromNewer" xml:space="preserve">
+    <value>新しいイメージから並べる</value>
+  </data>
   <data name="Options_LocalFolderExplanation" xml:space="preserve">
     <value>イメージをコピーするフォルダーを指定してください。</value>
   </data>

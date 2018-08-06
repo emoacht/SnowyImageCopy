@@ -56,6 +56,19 @@ namespace SnowyImageCopy.Models
 			|| (string.Equals(FileName, "FA000001.JPG", StringComparison.OrdinalIgnoreCase) /* Control image file */
 				&& Directory.EndsWith("100__TSB", StringComparison.OrdinalIgnoreCase));
 
+		private enum Order : int
+		{
+			Ascending = 1,
+			Descending = -1
+		}
+
+		internal static bool OrderByAscendingDate
+		{
+			get => (_orderByAscendingDate == Order.Ascending);
+			set => _orderByAscendingDate = value ? Order.Ascending : Order.Descending;
+		}
+		private static Order _orderByAscendingDate = Order.Ascending; // Default
+
 		#endregion
 
 		#region Constructor
@@ -234,7 +247,7 @@ namespace SnowyImageCopy.Models
 
 			var dateComparison = this.Date.CompareTo(other.Date);
 			if (dateComparison != 0)
-				return dateComparison;
+				return dateComparison * (int)_orderByAscendingDate;
 
 			var filePathComparison = string.Compare(this.FilePath, other.FilePath, StringComparison.Ordinal);
 			if (filePathComparison != 0)

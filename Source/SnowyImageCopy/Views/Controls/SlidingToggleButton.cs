@@ -20,15 +20,6 @@ namespace SnowyImageCopy.Views.Controls
 		public SlidingToggleButton()
 		{ }
 
-		static SlidingToggleButton()
-		{
-			FrameworkElement.WidthProperty.OverrideMetadata(
-				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(
-					60D,
-					OnWidthChanged));
-		}
-
 		#region Template Part
 
 		private TextBox _backgroundTextBox;
@@ -214,22 +205,23 @@ namespace SnowyImageCopy.Views.Controls
 			}
 
 			_foregroundTextBlock = this.GetTemplateChild("PART_ForegroundTextBlock") as TextBlock;
-			if (_foregroundTextBlock != null)
-			{
-				_foregroundTextBlock.PreviewMouseUp += new MouseButtonEventHandler(OnClick);
-				_foregroundTextBlock.PreviewKeyUp += new KeyEventHandler(OnClick);
-			}
 
+			SetWidth();
 			SetAppearance();
 		}
 
 		private static void OnWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			var button = (SlidingToggleButton)d;
+			((SlidingToggleButton)d).SetWidth();
+		}
 
-			button._foregroundButtonLeft.Width = button.InnerButtonWidth;
-			button._foregroundTextBlock.Width = button.Width - button.InnerButtonWidth;
-			button._foregroundButtonRight.Width = button.InnerButtonWidth;
+		private void SetWidth()
+		{
+			if ((_foregroundButtonLeft == null) || (_foregroundButtonRight == null))
+				return;
+
+			_foregroundButtonLeft.Width = InnerButtonWidth;
+			_foregroundButtonRight.Width = InnerButtonWidth;
 		}
 
 		private static void OnAppearanceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

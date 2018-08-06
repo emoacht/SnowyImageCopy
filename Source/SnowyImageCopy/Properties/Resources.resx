@@ -250,6 +250,9 @@
   <data name="Options_OpenByExplorer" xml:space="preserve">
     <value>Open by Explorer</value>
   </data>
+  <data name="Options_OrderFromNewer" xml:space="preserve">
+    <value>Order from newer image</value>
+  </data>
   <data name="Options_LocalFolderExplanation" xml:space="preserve">
     <value>Specify a folder to copy images.</value>
   </data>

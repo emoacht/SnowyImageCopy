@@ -77,6 +77,8 @@ namespace SnowyImageCopy.Views
 				return;
 
 			WindowPlacement.Save(this);
+
+			_mainWindowViewModel?.Dispose();
 		}
 	}
 }

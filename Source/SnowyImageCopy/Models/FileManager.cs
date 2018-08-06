@@ -38,50 +38,24 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		#region Instance Method
+		#region Instance member
 
-		private readonly HttpClient _client;
-
-		internal FileManager()
+		private HttpClient Client
 		{
-			_client = new HttpClient { Timeout = Timeout.InfiniteTimeSpan };
+			get
+			{
+				if ((_client == null) || (_remoteRoot != Settings.Current.RemoteRoot))
+				{
+					_client?.Dispose();
+
+					_client = new HttpClient { Timeout = Timeout.InfiniteTimeSpan };
+					_remoteRoot = Settings.Current.RemoteRoot;
+				}
+				return _client;
+			}
 		}
-
-		internal Task<IEnumerable<IFileItem>> GetFileListRootAsync(CardInfo card, CancellationToken cancellationToken) =>
-			GetFileListRootAsync(_client, card, cancellationToken);
-
-		internal Task<IEnumerable<IFileItem>> GetFileListAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken) =>
-			GetFileListAsync(_client, remoteDirectoryPath, card, cancellationToken);
-
-		internal Task<int> GetFileNumAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken) =>
-			GetFileNumAsync(_client, remoteDirectoryPath, card, cancellationToken);
-
-		internal Task<BitmapSource> GetThumbnailAsync(string remoteFilePath, CardInfo card, CancellationToken cancellationToken) =>
-			GetThumbnailAsync(_client, remoteFilePath, card, cancellationToken);
-
-		internal Task<byte[]> GetSaveFileAsync(string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool canReadExif, IProgress<ProgressInfo> progress, CardInfo card, CancellationToken cancellationToken) =>
-			GetSaveFileAsync(_client, remoteFilePath, localFilePath, size, itemDate, canReadExif, progress, card, cancellationToken);
-
-		internal Task DeleteFileAsync(string remoteFilePath, CancellationToken cancellationToken) =>
-			DeleteFileAsync(_client, remoteFilePath, cancellationToken);
-
-		internal Task<string> GetFirmwareVersionAsync(CancellationToken cancellationToken) =>
-			GetFirmwareVersionAsync(_client, cancellationToken);
-
-		internal Task<string> GetCidAsync(CancellationToken cancellationToken) =>
-			GetCidAsync(_client, cancellationToken);
-
-		internal Task<string> GetSsidAsync(CancellationToken cancellationToken) =>
-			GetSsidAsync(_client, cancellationToken);
-
-		internal Task<bool> CheckUpdateStatusAsync() =>
-			CheckUpdateStatusAsync(_client);
-
-		internal Task<int> GetWriteTimeStampAsync(CancellationToken token) =>
-			GetWriteTimeStampAsync(_client, token);
-
-		internal Task<string> GetUploadAsync(CancellationToken cancellationToken) =>
-			GetUploadAsync(_client, cancellationToken);
+		private HttpClient _client;
+		private string _remoteRoot;
 
 		#region IDisposable member
 
@@ -100,7 +74,7 @@ namespace SnowyImageCopy.Models
 
 			if (disposing)
 			{
-				_client.Dispose();
+				_client?.Dispose();
 			}
 
 			_disposed = true;
@@ -108,9 +82,45 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
+		internal Task<IEnumerable<IFileItem>> GetFileListRootAsync(CardInfo card, CancellationToken cancellationToken) =>
+			GetFileListRootAsync(Client, card, cancellationToken);
+
+		internal Task<IEnumerable<IFileItem>> GetFileListAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken) =>
+			GetFileListAsync(Client, remoteDirectoryPath, card, cancellationToken);
+
+		internal Task<int> GetFileNumAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken) =>
+			GetFileNumAsync(Client, remoteDirectoryPath, card, cancellationToken);
+
+		internal Task<BitmapSource> GetThumbnailAsync(string remoteFilePath, CardInfo card, CancellationToken cancellationToken) =>
+			GetThumbnailAsync(Client, remoteFilePath, card, cancellationToken);
+
+		internal Task<byte[]> GetSaveFileAsync(string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool canReadExif, IProgress<ProgressInfo> progress, CardInfo card, CancellationToken cancellationToken) =>
+			GetSaveFileAsync(Client, remoteFilePath, localFilePath, size, itemDate, canReadExif, progress, card, cancellationToken);
+
+		internal Task DeleteFileAsync(string remoteFilePath, CancellationToken cancellationToken) =>
+			DeleteFileAsync(Client, remoteFilePath, cancellationToken);
+
+		internal Task<string> GetFirmwareVersionAsync(CancellationToken cancellationToken) =>
+			GetFirmwareVersionAsync(Client, cancellationToken);
+
+		internal Task<string> GetCidAsync(CancellationToken cancellationToken) =>
+			GetCidAsync(Client, cancellationToken);
+
+		internal Task<string> GetSsidAsync(CancellationToken cancellationToken) =>
+			GetSsidAsync(Client, cancellationToken);
+
+		internal Task<bool> CheckUpdateStatusAsync() =>
+			CheckUpdateStatusAsync(Client);
+
+		internal Task<int> GetWriteTimeStampAsync(CancellationToken token) =>
+			GetWriteTimeStampAsync(Client, token);
+
+		internal Task<string> GetUploadAsync(CancellationToken cancellationToken) =>
+			GetUploadAsync(Client, cancellationToken);
+
 		#endregion
 
-		#region Static Method (Internal)
+		#region Static member (Internal)
 
 		/// <summary>
 		/// Gets a list of all files recursively from root folder of FlashAir card.
@@ -718,18 +728,27 @@ namespace SnowyImageCopy.Models
 						// This is for response header only.
 						throw new TimeoutException("Reading response header timed out!");
 					}
-					catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
+					catch (ObjectDisposedException ode) when (cancellationToken.IsCancellationRequested)
 					{
 						// If cancellation has been requested, the reason of this exception must be cancellation.
 						// This is for response content only.
-						throw new OperationCanceledException();
+						throw new OperationCanceledException("Reading canceled!", ode);
 					}
-					catch (IOException ie) when (cancellationToken.IsCancellationRequested
-						&& (ie.InnerException is WebException we)
-						&& (we.Status == WebExceptionStatus.ConnectionClosed))
+					catch (IOException ie) when (cancellationToken.IsCancellationRequested)
 					{
 						// If cancellation has been requested while downloading, this exception may be thrown.
-						throw new OperationCanceledException();
+						throw new OperationCanceledException("Reading canceled!", ie);
+					}
+					catch (HttpRequestException hre) when (cancellationToken.IsCancellationRequested)
+					{
+						// If cancellation has been requested while downloading, this exception may be thrown.
+						throw new OperationCanceledException("Reading canceled!", hre);
+					}
+					catch (HttpRequestException hre) when (hre.InnerException is ObjectDisposedException)
+					{
+						// If lost connection to FlashAir card, this exception may be thrown.
+						// Error message: Error while copying content to a stream.
+						throw new RemoteConnectionLostException("Connection lost!");
 					}
 					catch (HttpRequestException hre) when (hre.InnerException is WebException we)
 					{
@@ -737,12 +756,6 @@ namespace SnowyImageCopy.Models
 						// The status may vary, such as WebExceptionStatus.NameResolutionFailure,
 						// WebExceptionStatus.ConnectFailure.
 						throw new RemoteConnectionUnableException(we.Status);
-					}
-					catch (HttpRequestException hre) when (hre.InnerException is ObjectDisposedException)
-					{
-						// If lost connection to FlashAir card, this exception may be thrown.
-						// Error message: Error while copying content to a stream.
-						throw new RemoteConnectionLostException("Connection lost!");
 					}
 				}
 				catch (RemoteConnectionUnableException)
@@ -790,7 +803,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>Outcome remote path</returns>
 		private static string ComposeRemotePath(FileManagerCommand command, string remotePath)
 		{
-			return Settings.Current.RemoteRoot + _commandMap[command] + remotePath.TrimStart('/');
+			return string.Concat(Settings.Current.RemoteRoot, _commandMap[command], remotePath.TrimStart('/'));
 		}
 
 		private static readonly bool _recordsDownloadString = CommandLine.RecordsDownloadLog

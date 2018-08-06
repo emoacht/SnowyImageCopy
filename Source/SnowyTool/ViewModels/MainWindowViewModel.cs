@@ -13,7 +13,7 @@ using SnowyTool.Properties;
 
 namespace SnowyTool.ViewModels
 {
-	public class MainWindowViewModel : ViewModel
+	public class MainWindowViewModel : NotificationObject
 	{
 		#region Interaction
 
