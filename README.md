@@ -17,6 +17,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ## History
 
+Ver 1.4.0 2018-8-7
+
+ - Enabled to order from newer images
+
 Ver 1.3.6 2018-8-1
 
  - Modified to allow UNC path
@@ -110,9 +114,15 @@ Ver 0.9.0 2014-04-10
 
  - MIT License
 
-## Other
+## Libraries
 
- - Libraries: [Reactive Extensions][2], [WPF Monitor Aware Window][3], [Desktop Toast][4]
+ - [Reactive Extensions][2]
+ - [WPF Monitor Aware Window][3]
+ - [Desktop Toast][4]
+
+## Developer
+
+ - emoacht (emotom[atmark]pobox.com)
 
 [1]: https://www.flashair-developers.com/en/
 [2]: https://github.com/Reactive-Extensions/Rx.NET
