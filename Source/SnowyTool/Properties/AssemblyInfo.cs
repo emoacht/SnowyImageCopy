@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Snowy Tool")]
-[assembly: AssemblyCopyright("Copyright © 2014-2018 EMO")]
+[assembly: AssemblyCopyright("Copyright © 2014-2018 emoacht")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -52,8 +52,8 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.3.6.15")]
-[assembly: AssemblyFileVersion("1.3.6.15")]
+[assembly: AssemblyVersion("1.4.0.16")]
+[assembly: AssemblyFileVersion("1.4.0.16")]
 
 // For unit test
 [assembly: InternalsVisibleTo("SnowyImageCopy.Test")]
