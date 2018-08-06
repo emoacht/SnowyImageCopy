@@ -728,18 +728,27 @@ namespace SnowyImageCopy.Models
 						// This is for response header only.
 						throw new TimeoutException("Reading response header timed out!");
 					}
-					catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
+					catch (ObjectDisposedException ode) when (cancellationToken.IsCancellationRequested)
 					{
 						// If cancellation has been requested, the reason of this exception must be cancellation.
 						// This is for response content only.
-						throw new OperationCanceledException();
+						throw new OperationCanceledException("Reading canceled!", ode);
 					}
-					catch (IOException ie) when (cancellationToken.IsCancellationRequested
-						&& (ie.InnerException is WebException we)
-						&& (we.Status == WebExceptionStatus.ConnectionClosed))
+					catch (IOException ie) when (cancellationToken.IsCancellationRequested)
 					{
 						// If cancellation has been requested while downloading, this exception may be thrown.
-						throw new OperationCanceledException();
+						throw new OperationCanceledException("Reading canceled!", ie);
+					}
+					catch (HttpRequestException hre) when (cancellationToken.IsCancellationRequested)
+					{
+						// If cancellation has been requested while downloading, this exception may be thrown.
+						throw new OperationCanceledException("Reading canceled!", hre);
+					}
+					catch (HttpRequestException hre) when (hre.InnerException is ObjectDisposedException)
+					{
+						// If lost connection to FlashAir card, this exception may be thrown.
+						// Error message: Error while copying content to a stream.
+						throw new RemoteConnectionLostException("Connection lost!");
 					}
 					catch (HttpRequestException hre) when (hre.InnerException is WebException we)
 					{
@@ -747,12 +756,6 @@ namespace SnowyImageCopy.Models
 						// The status may vary, such as WebExceptionStatus.NameResolutionFailure,
 						// WebExceptionStatus.ConnectFailure.
 						throw new RemoteConnectionUnableException(we.Status);
-					}
-					catch (HttpRequestException hre) when (hre.InnerException is ObjectDisposedException)
-					{
-						// If lost connection to FlashAir card, this exception may be thrown.
-						// Error message: Error while copying content to a stream.
-						throw new RemoteConnectionLostException("Connection lost!");
 					}
 				}
 				catch (RemoteConnectionUnableException)
