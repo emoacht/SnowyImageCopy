@@ -214,6 +214,12 @@ namespace SnowyImageCopy.ViewModels
 
 		public int CompareTo(FileItemViewModel other) => _fileItem.CompareTo(other?.FileItem);
 
+		public override bool Equals(object obj) => _fileItem.Equals((obj as FileItemViewModel)?.FileItem);
+
+		public bool Equals(FileItemViewModel other) => _fileItem.Equals(other?.FileItem);
+
+		public override int GetHashCode() => _fileItem.GetHashCode();
+
 		#endregion
 	}
 }

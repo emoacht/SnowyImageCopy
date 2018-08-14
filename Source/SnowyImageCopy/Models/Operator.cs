@@ -795,16 +795,7 @@ namespace SnowyImageCopy.Models
 					var isSample = FileListCore.Any(x => x.Size == 0);
 
 					// Check if FlashAir card is changed.
-					bool isChanged;
-					if (_card.IsChanged.HasValue)
-					{
-						isChanged = _card.IsChanged.Value;
-					}
-					else
-					{
-						var signaturesOld = new HashSet<string>(FileListCore.Select(x => x.Signature));
-						isChanged = !fileListNew.Select(x => x.Signature).Any(x => signaturesOld.Contains(x));
-					}
+					bool isChanged = _card.IsChanged ?? !(new HashSet<FileItemViewModel>(FileListCore).Overlaps(fileListNew));
 
 					if (isSample || isChanged)
 						FileListCore.Clear();
@@ -812,10 +803,7 @@ namespace SnowyImageCopy.Models
 					// Check old items.
 					foreach (var itemOld in FileListCore)
 					{
-						var itemSameIndex = fileListNew.IndexOf(x =>
-							x.FilePath.Equals(itemOld.FilePath, StringComparison.OrdinalIgnoreCase) &&
-							(x.Size == itemOld.Size));
-
+						var itemSameIndex = fileListNew.IndexOf(x => x.Equals(itemOld));
 						if (itemSameIndex >= 0)
 						{
 							itemOld.IsAliveRemote = true;

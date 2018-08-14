@@ -39,7 +39,7 @@ namespace SnowyImageCopy.Models
 
 		public bool IsImported { get; private set; }
 
-		public string FilePath => _filePath ?? (_filePath = $"{Directory}/{FileName}");
+		public string FilePath => _filePath ?? (_filePath = $"{Directory}/{FileName}").ToLower();
 		private string _filePath;
 
 		public string Signature => _signature ?? (_signature = $"{Date:yyyyMMddHHmmss}{FilePath}{Size}");
@@ -254,6 +254,29 @@ namespace SnowyImageCopy.Models
 				return filePathComparison;
 
 			return this.Size.CompareTo(other.Size);
+		}
+
+		public override bool Equals(object obj) => this.Equals(obj as IFileItem);
+
+		public bool Equals(IFileItem other)
+		{
+			if (other == null)
+				return false;
+
+			if (object.ReferenceEquals(this, other))
+				return true;
+
+			if ((this.Signature != null) && (this.Signature == other.Signature))
+				return true;
+
+			return (this.CompareTo(other) == 0);
+		}
+
+		public override int GetHashCode()
+		{
+			return (this.Signature != null)
+				? this.Signature.GetHashCode()
+				: new { Date, FilePath, Size }.GetHashCode();
 		}
 
 		#endregion

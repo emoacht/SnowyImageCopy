@@ -31,5 +31,7 @@ namespace SnowyImageCopy.Models
 		bool IsTiff { get; }
 		bool IsLoadable { get; }
 		bool IsFlashAirSystem { get; }
+
+		bool Equals(IFileItem other);
 	}
 }
