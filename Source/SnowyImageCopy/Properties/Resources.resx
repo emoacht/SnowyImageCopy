@@ -160,6 +160,9 @@
   <data name="FileStatus_NotCopied" xml:space="preserve">
     <value>Not Copied</value>
   </data>
+  <data name="FileStatus_OnceCopied" xml:space="preserve">
+    <value>Once Copied</value>
+  </data>
   <data name="FileStatus_Recycled" xml:space="preserve">
     <value>Recycled</value>
   </data>

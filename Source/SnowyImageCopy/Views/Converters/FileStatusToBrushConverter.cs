@@ -31,6 +31,7 @@ namespace SnowyImageCopy.Views.Converters
 						{FileStatus.ToBeCopied,(Color)Application.Current.Resources["FileItemStatus.ToBeCopiedColor"]},
 						{FileStatus.Copying, (Color)Application.Current.Resources["FileItemStatus.CopyingColor"]},
 						{FileStatus.Copied, (Color)Application.Current.Resources["FileItemStatus.CopiedColor"]},
+						{FileStatus.OnceCopied, (Color)Application.Current.Resources["FileItemStatus.OnceCopiedColor"]},
 						{FileStatus.Weird, (Color)Application.Current.Resources["FileItemStatus.WeirdColor"]},
 						{FileStatus.Recycled, (Color)Application.Current.Resources["FileItemStatus.RecycledColor"]},
 					};

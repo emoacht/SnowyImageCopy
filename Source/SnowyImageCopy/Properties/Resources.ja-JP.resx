@@ -156,6 +156,9 @@
   <data name="FileStatus_NotCopied" xml:space="preserve">
     <value>未コピー</value>
   </data>
+  <data name="FileStatus_OnceCopied" xml:space="preserve">
+    <value>前にコピー済</value>
+  </data>
   <data name="FileStatus_Recycled" xml:space="preserve">
     <value>ごみ箱行き</value>
   </data>

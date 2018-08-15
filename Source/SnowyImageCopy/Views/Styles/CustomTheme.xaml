@@ -77,6 +77,7 @@
 	<Color x:Key="FileItemStatus.ToBeCopiedColor">Orange</Color>
 	<Color x:Key="FileItemStatus.CopyingColor">Violet</Color>
 	<Color x:Key="FileItemStatus.CopiedColor">SkyBlue</Color>
+	<Color x:Key="FileItemStatus.OnceCopiedColor">Goldenrod</Color>
 	<Color x:Key="FileItemStatus.WeirdColor">Turquoise</Color>
 	<Color x:Key="FileItemStatus.RecycledColor">DarkGray</Color>
 

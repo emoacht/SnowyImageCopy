@@ -170,6 +170,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Once Copied.
+        /// </summary>
+        public static string FileStatus_OnceCopied {
+            get {
+                return ResourceManager.GetString("FileStatus_OnceCopied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recycled.
         /// </summary>
         public static string FileStatus_Recycled {

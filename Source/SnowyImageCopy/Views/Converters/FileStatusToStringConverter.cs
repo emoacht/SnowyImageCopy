@@ -33,6 +33,8 @@ namespace SnowyImageCopy.Views.Converters
 					return Resources.FileStatus_Copying;
 				case FileStatus.Copied:
 					return Resources.FileStatus_Copied;
+				case FileStatus.OnceCopied:
+					return Resources.FileStatus_OnceCopied;
 				case FileStatus.Weird:
 					return Resources.FileStatus_Weird;
 				case FileStatus.Recycled:
