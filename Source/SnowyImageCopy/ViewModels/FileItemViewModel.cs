@@ -36,7 +36,7 @@ namespace SnowyImageCopy.ViewModels
 		#region Supplementary
 
 		internal string FilePath => _fileItem.FilePath;
-		internal string Signature => _fileItem.Signature;
+		internal HashItem Signature => _fileItem.Signature;
 
 		internal string FileNameWithCaseExtension
 		{
@@ -145,6 +145,7 @@ namespace SnowyImageCopy.ViewModels
 		public bool IsAliveRemote { get; set; }
 		public bool IsAliveLocal { get; set; }
 		public bool IsAvailableLocal { get; set; }
+		public bool? IsOnceCopied { get; set; } = null;
 
 		public FileStatus Status
 		{

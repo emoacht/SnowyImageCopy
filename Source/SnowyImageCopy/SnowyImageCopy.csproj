@@ -163,11 +163,13 @@
     <Compile Include="Models\FileManagerCommand.cs" />
     <Compile Include="Models\FilePeriod.cs" />
     <Compile Include="Models\FileStatus.cs" />
+    <Compile Include="Models\HashItem.cs" />
     <Compile Include="Models\ImageManager.cs" />
     <Compile Include="Models\Operator.cs" />
     <Compile Include="Models\ProgressInfo.cs" />
     <Compile Include="Models\ResourceService.cs" />
     <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\Signatures.cs" />
     <Compile Include="Models\WindowPlacement.cs" />
     <Compile Include="Models\Exceptions\RemoteFileInvalidException.cs" />
     <Compile Include="Models\Exceptions\RemoteFileNotFoundException.cs" />

@@ -39,11 +39,8 @@ namespace SnowyImageCopy.Models
 
 		public bool IsImported { get; private set; }
 
-		public string FilePath => _filePath ?? (_filePath = $"{Directory}/{FileName}").ToLower();
-		private string _filePath;
-
-		public string Signature => _signature ?? (_signature = $"{Date:yyyyMMddHHmmss}{FilePath}{Size}");
-		private string _signature;
+		public string FilePath { get; private set; }
+		public HashItem Signature { get; private set; }
 
 		public bool IsImageFile { get; private set; }
 		public bool IsJpeg { get; private set; }
@@ -143,6 +140,8 @@ namespace SnowyImageCopy.Models
 				Path.GetInvalidFileNameChars().Any(x => FileName.Contains(x)))
 				return false;
 
+			FilePath = $"{Directory}/{FileName}".ToLower();
+
 			// Determine size, attribute and date.
 			int rawDate = 0;
 			int rawTime = 0;
@@ -179,6 +178,9 @@ namespace SnowyImageCopy.Models
 				var extension = Path.GetExtension(FileName);
 				SetFileExtension(extension);
 			}
+
+			if (IsImageFile)
+				Signature = GetSignature(Date, FilePath, Size);
 
 			return true;
 		}
@@ -234,6 +236,15 @@ namespace SnowyImageCopy.Models
 					IsLoadable = true;
 					break;
 			}
+		}
+
+		private static HashItem GetSignature(DateTime date, string filePath, int size)
+		{
+			var dateBytes = BitConverter.GetBytes(date.Ticks);
+			var filePathBytes = Encoding.UTF8.GetBytes(filePath.ToLower());
+			var sizeBytes = BitConverter.GetBytes(size);
+
+			return HashItem.Compute(sizeBytes.Concat(filePathBytes).Concat(dateBytes));
 		}
 
 		#endregion

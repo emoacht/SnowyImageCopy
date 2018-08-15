@@ -291,12 +291,12 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _makesFileExtensionLowercase = true; // Default
 
-		public bool SelectsReadOnlyFile
+		public bool CreatesDatedFolder
 		{
-			get => _selectsReadOnlyFile;
-			set => SetPropertyValue(ref _selectsReadOnlyFile, value);
+			get => _createsDatedFolder;
+			set => SetPropertyValue(ref _createsDatedFolder, value);
 		}
-		private bool _selectsReadOnlyFile;
+		private bool _createsDatedFolder = true; // Default;
 
 		public bool HandlesJpegFileOnly
 		{
@@ -305,12 +305,38 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _handlesJpegFileOnly;
 
-		public bool CreatesDatedFolder
+		public bool SelectsReadOnlyFile
 		{
-			get => _createsDatedFolder;
-			set => SetPropertyValue(ref _createsDatedFolder, value);
+			get => _selectsReadOnlyFile;
+			set => SetPropertyValue(ref _selectsReadOnlyFile, value);
 		}
-		private bool _createsDatedFolder = true; // Default;
+		private bool _selectsReadOnlyFile;
+
+		public bool SkipsOnceCopiedFile
+		{
+			get => _skipsOnceCopiedFile;
+			set
+			{
+				SetPropertyValue(ref _skipsOnceCopiedFile, value);
+
+				if (!value)
+					Signatures.Clear();
+			}
+		}
+		private bool _skipsOnceCopiedFile;
+
+		public int OnceCopiedCapacity
+		{
+			get => Signatures.MaxCount;
+			set
+			{
+				if (Signatures.MaxCount == value)
+					return;
+
+				Signatures.MaxCount = value;
+				RaisePropertyChanged();
+			}
+		}
 
 		public bool MovesFileToRecycle
 		{

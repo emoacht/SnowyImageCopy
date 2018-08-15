@@ -439,6 +439,7 @@ namespace SnowyImageCopy.ViewModels
 				switch (item.Status)
 				{
 					case FileStatus.NotCopied:
+					case FileStatus.OnceCopied:
 						// Make remote file as to be copied.
 						if (!item.IsAliveRemote)
 							break;
@@ -448,7 +449,11 @@ namespace SnowyImageCopy.ViewModels
 
 					case FileStatus.ToBeCopied:
 						// Make remote file as not to be copied.
-						item.Status = item.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
+						item.Status = item.IsAliveLocal
+							? FileStatus.Copied
+							: (item.IsOnceCopied == true)
+								? FileStatus.OnceCopied
+								: FileStatus.NotCopied;
 						break;
 
 					case FileStatus.Copied:
