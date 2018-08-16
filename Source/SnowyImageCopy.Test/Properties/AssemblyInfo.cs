@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SnowyImageCopy.Test")]
-[assembly: AssemblyCopyright("Copyright © 2015-2018 EMO")]
+[assembly: AssemblyCopyright("Copyright © 2015-2018 emoacht")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
