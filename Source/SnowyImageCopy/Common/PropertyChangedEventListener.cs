@@ -14,7 +14,7 @@ namespace SnowyImageCopy.Common
 
 		public PropertyChangedEventListener(Action<object, PropertyChangedEventArgs> propertyChangedAction)
 		{
-			this._propertyChangedAction = propertyChangedAction;
+			this._propertyChangedAction = propertyChangedAction ?? throw new ArgumentNullException(nameof(propertyChangedAction));
 		}
 
 		public bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)

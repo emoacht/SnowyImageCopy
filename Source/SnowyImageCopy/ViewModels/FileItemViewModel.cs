@@ -78,7 +78,9 @@ namespace SnowyImageCopy.ViewModels
 		/// <summary>
 		/// Whether can load image data from a local file
 		/// </summary>
-		/// <remarks>As for raw images, actual loadability depends on Microsoft Camera Codec Pack.</remarks>
+		/// <remarks>
+		/// As for raw images, whether an image is actually loadable depends on Microsoft Camera Codec Pack.
+		/// </remarks>
 		internal bool CanLoadDataLocal
 		{
 			get

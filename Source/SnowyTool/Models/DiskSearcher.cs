@@ -93,12 +93,10 @@ namespace SnowyTool.Models
 					using (var searcher = new ManagementObjectSearcher(
 						@"\\.\Root\Microsoft\Windows\Storage",
 						$"SELECT * FROM MSFT_PhysicalDisk WHERE DeviceId = {info.PhysicalDrive}")) // DeviceId represents index number of physical drive.
+					using (var disk = searcher.Get().Cast<ManagementObject>().FirstOrDefault())
 					{
-						var disk = searcher.Get().Cast<ManagementObject>().FirstOrDefault();
 						if (disk?["BusType"] is ushort busType)
-						{
 							info.BusType = busType;
-						}
 					}
 				}
 

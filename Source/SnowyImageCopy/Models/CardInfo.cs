@@ -20,10 +20,13 @@ namespace SnowyImageCopy.Models
 		/// False: If not changed.
 		/// Null:  If cannot detect change.
 		/// </returns>
-		/// <remarks>Checking not only CID but also firmware version and SSID is for the case that firmware version 
-		/// of a card is too old to support request for CID. However, if cards have the same firmware version and 
-		/// if the firmware version is too old and if cards have the same SSID, change of cards cannot be detected. 
-		/// Prior to draw value out of this property, getting the three parameters in sequence is required.</remarks>
+		/// <remarks>
+		/// Checking not only CID but also firmware version and SSID is for the case that firmware version
+		/// of a card is too old to support request for CID. However, if cards have the same firmware version
+		/// and if the firmware version is too old and if cards have the same SSID, change of cards cannot
+		/// be detected.
+		/// Prior to draw value out of this property, getting the three parameters in sequence is required.
+		/// </remarks>
 		public bool? IsChanged
 		{
 			get
@@ -51,11 +54,12 @@ namespace SnowyImageCopy.Models
 
 				_firmwareVersion = value;
 
-				var versionNumber = FindVersionNumber(value);
+				if (!TryFindVersion(value, out Version version))
+					return;
 
-				_isFirmwareVersion103OrNewer = (versionNumber >= new Version(1, 0, 3)); // If versionNumber == null, false.
-				_isFirmwareVersion202OrNewer = (versionNumber >= new Version(2, 0, 2)); // If versionNumber == null, false.
-				_isFirmwareVersion300OeNewer = (versionNumber >= new Version(3, 0, 0)); // If versionNumber == null, false.
+				_isFirmwareVersion103OrNewer = (version >= new Version(1, 0, 3));
+				_isFirmwareVersion202OrNewer = (version >= new Version(2, 0, 2));
+				_isFirmwareVersion300OeNewer = (version >= new Version(3, 0, 0));
 			}
 		}
 		private string _firmwareVersion;
@@ -141,8 +145,10 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Whether upload.cgi is disabled
 		/// </summary>
-		/// <remarks>False will not always mean upload.cgi is enabled. Because request for Upload parameters is 
-		/// supported only by newer firmware version, there is no direct way to confirm it.</remarks>
+		/// <remarks>
+		/// False will not always mean upload.cgi is enabled. Because request for Upload parameters is 
+		/// supported only by newer firmware version, there is no direct way to confirm it.
+		/// </remarks>
 		public bool IsUploadDisabled
 		{
 			get
@@ -162,16 +168,19 @@ namespace SnowyImageCopy.Models
 
 		private static readonly Regex _versionPattern = new Regex(@"[1-9]\.\d{2}\.\d{2}$", RegexOptions.Compiled);
 
-		private static Version FindVersionNumber(string source)
+		private static bool TryFindVersion(string source, out Version version)
 		{
+			version = null;
+
 			if (string.IsNullOrWhiteSpace(source))
-				return null;
+				return false;
 
 			var match = _versionPattern.Match(source);
 			if (!match.Success)
-				return null;
+				return false;
 
-			return new Version(match.Value);
+			version = new Version(match.Value);
+			return true;
 		}
 
 		#endregion

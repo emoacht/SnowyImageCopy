@@ -309,8 +309,10 @@ namespace SnowyImageCopy.Models
 		/// <param name="element">FrameworkElement</param>
 		/// <param name="outerSize">Target outer size</param>
 		/// <returns>BitmapImage of FrameworkElement</returns>
-		/// <remarks>A FrameworkElement instantiated by UI thread cannot be accessed by sub thread.
-		/// So, there is not much merit in making asynchronous version.</remarks>
+		/// <remarks>
+		/// A FrameworkElement instantiated by UI thread cannot be accessed by sub thread.
+		/// So, there is not much merit in making asynchronous version.
+		/// </remarks>
 		internal static BitmapImage ConvertFrameworkElementToBitmapImage(FrameworkElement element, Size outerSize)
 		{
 			if (double.IsNaN(element.Width) || (element.Width <= 0) ||
@@ -599,8 +601,10 @@ namespace SnowyImageCopy.Models
 		/// <param name="sourceProfile">Source color profile</param>
 		/// <param name="destinationProfile">Destination color profile</param>
 		/// <returns>Outcome BitmapSource</returns>
-		/// <remarks>Source color profile is color profile embedded in image file and destination color profile is
-		/// color profile used by the monitor to which the Window belongs.</remarks>
+		/// <remarks>
+		/// Source color profile is color profile embedded in image file and destination color profile is
+		/// color profile used by the monitor to which the Window belongs.
+		/// </remarks>
 		public static BitmapSource ConvertColorProfile(BitmapSource bitmapSource, ColorContext sourceProfile, ColorContext destinationProfile)
 		{
 			var bitmapConverted = new ColorConvertedBitmap();

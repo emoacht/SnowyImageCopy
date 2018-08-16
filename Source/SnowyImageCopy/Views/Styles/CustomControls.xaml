@@ -11,7 +11,7 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
-					<Grid Width="90">
+					<Grid Width="{TemplateBinding Width}">
 						<TextBox HorizontalAlignment="Stretch"
 								 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
 								 IsReadOnly="True" IsUndoEnabled="False"

@@ -130,9 +130,11 @@ namespace SnowyTool.Models
 		/// </summary>
 		/// <param name="source">Source sequence of bits</param>
 		/// <returns>32-bit integer</returns>
-		/// <remarks>The order of bits in source sequence must be the same as that of BitArray.
-		/// The least significant bit (bit at the far right) comes at the head and the most significant
-		/// bit (bit at the far left) at the tail. This is the way that BitArray handles bits.</remarks>
+		/// <remarks>
+		/// The order of bits in source sequence must be the same as that of BitArray.
+		/// The least significant bit (bit at the far right) comes at the head and the most significant bit
+		/// (bit at the far left) at the tail. This is the way that BitArray handles bits.
+		/// </remarks>
 		private static int ConvertFromBitsToInt(IEnumerable<bool> source)
 		{
 			var buff = new int[1];

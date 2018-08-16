@@ -79,14 +79,16 @@
 					<TextBlock Text="{Binding Resources.Options_RemoteAddress, Source={x:Static models:ResourceService.Current}}"/>
 					<TextBox x:Name="RemoteAddressTextBox"
 							 HorizontalAlignment="Stretch"
-							 Margin="0,4,0,6" Padding="2"
+							 Margin="0,4,0,6"
+							 Padding="2"
 							 VerticalContentAlignment="Center"
 							 Text="{Binding SettingsCurrent.RemoteAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
 
 					<TextBlock Text="{Binding Resources.Options_LocalFolder, Source={x:Static models:ResourceService.Current}}"/>
 					<TextBox x:Name="LocalFolderTextBox"
 							 HorizontalAlignment="Stretch"
-							 Margin="0,4,0,4" Padding="2"
+							 Margin="0,4,0,4"
+							 Padding="2"
 							 VerticalContentAlignment="Center"
 							 Foreground="{Binding SettingsCurrent.IsLocalFolderValid, Mode=OneWay, Converter={StaticResource BooleanToBrushConverterKey}, ConverterParameter={StaticResource BrushSet}}"
 							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>

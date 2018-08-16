@@ -23,7 +23,6 @@ namespace SnowyImageCopy.Views.Controls
 					(d, e) =>
 					{
 						var textBox = (CheckTextBox)d;
-
 						textBox.CompareText(textBox.CheckText, (string)e.NewValue);
 					}));
 
@@ -67,7 +66,6 @@ namespace SnowyImageCopy.Views.Controls
 					(d, e) =>
 					{
 						var textBox = (CheckTextBox)d;
-
 						textBox.CompareText((string)e.NewValue, textBox.Text);
 					}));
 

@@ -20,9 +20,11 @@ namespace SnowyImageCopy.Helper
 		/// </summary>
 		/// <param name="lpFileOp"></param>
 		/// <returns>Error code (0 if successful)</returns>
-		/// <remarks>MSDN says don't use GetLastError to examine the return values of this function.
+		/// <remarks>
+		/// MSDN says don't use GetLastError to examine the return values of this function.
 		/// Several of return values are based on pre-Win32 error codes, which in some cases overlap
-		/// common Win32 error codes without matching their meaning.</remarks>
+		/// common Win32 error codes without matching their meaning.
+		/// </remarks>
 		[DllImport("Shell32.dll", EntryPoint = "SHFileOperationW")]
 		private static extern int SHFileOperation(ref SHFILEOPSTRUCT lpFileOp);
 
