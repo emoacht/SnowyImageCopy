@@ -210,6 +210,7 @@
     <Compile Include="Views\Controls\BusyButton.cs" />
     <Compile Include="Views\Controls\CheckTextBox.cs" />
     <Compile Include="Views\Controls\CircularProgressBar.cs" />
+    <Compile Include="Views\Controls\NumericTextBox.cs" />
     <Compile Include="Views\Controls\NumericUpDown.cs" />
     <Compile Include="Views\Controls\SlidingToggleButton.cs" />
     <Compile Include="Views\Controls\HideableGridSplitter.cs" />

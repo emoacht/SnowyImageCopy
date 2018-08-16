@@ -253,9 +253,6 @@
   <data name="Options_OpenByExplorer" xml:space="preserve">
     <value>Open by Explorer</value>
   </data>
-  <data name="Options_OrderFromNewer" xml:space="preserve">
-    <value>Order from newer image</value>
-  </data>
   <data name="Options_LocalFolderExplanation" xml:space="preserve">
     <value>Specify a folder to copy images.</value>
   </data>
@@ -283,20 +280,26 @@
   <data name="Options_File" xml:space="preserve">
     <value>File</value>
   </data>
+  <data name="Options_OrderFromNewer" xml:space="preserve">
+    <value>Order from newer image</value>
+  </data>
   <data name="Options_ExtensionLowercase" xml:space="preserve">
     <value>Make file extension lowercase</value>
   </data>
-  <data name="Options_Recycle" xml:space="preserve">
-    <value>Move to Recycle Bin if image in FlashAir is deleted</value>
+  <data name="Options_CreateDatedFolder" xml:space="preserve">
+    <value>Create folder for each date</value>
+  </data>
+  <data name="Options_HandleJpegOnly" xml:space="preserve">
+    <value>Handle JPEG image only</value>
   </data>
   <data name="Options_SelectReadOnly" xml:space="preserve">
     <value>Select only Read-only image on check</value>
   </data>
-  <data name="Options_HandleJpegFileOnly" xml:space="preserve">
-    <value>Handle JPEG images only</value>
+  <data name="Options_OnceCopied" xml:space="preserve">
+    <value>Not select once copied image on check</value>
   </data>
-  <data name="Options_CreateDatedFolder" xml:space="preserve">
-    <value>Create folder for each date</value>
+  <data name="Options_Recycle" xml:space="preserve">
+    <value>Move to Recycle Bin if image in FlashAir is deleted</value>
   </data>
   <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
     <value>Enable to choose to delete image in FlashAir on copy</value>

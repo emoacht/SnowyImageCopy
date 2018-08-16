@@ -300,4 +300,14 @@
 		</Setter>
 	</Style>
 
+	<!-- NumericTextBox -->
+	<Style TargetType="{x:Type controls:NumericTextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+		<Setter Property="Text" Value="{Binding RelativeSource={RelativeSource Self}, Path=Value, Mode=OneWay}"/>
+		<Setter Property="IsReadOnly" Value="True"/>
+		<Setter Property="Focusable" Value="False"/>
+		<Setter Property="IsUndoEnabled" Value="False"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+
 </ResourceDictionary>
