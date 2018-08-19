@@ -11,11 +11,11 @@ namespace SnowyImageCopy.Models
 	internal class Signatures
 	{
 		/// <summary>
-		/// Count of signatures to be handled at the maximum
+		/// The maximum number of signatures to be handled
 		/// </summary>
 		/// <remarks>
-		/// More signatures than this count can be appended during the lifetime of this application,
-		/// while the excess ones (from older) will not be loaded next time.
+		/// The number of signatures can go beyond this number during a lifetime of this application,
+		/// while the excess ones (from older) will not be restored next time.
 		/// </remarks>
 		public static int MaxCount
 		{
@@ -25,7 +25,7 @@ namespace SnowyImageCopy.Models
 		private static int _maxCount = 10000;
 
 		/// <summary>
-		/// Count of signatures currently handled
+		/// The number of signatures currently handled
 		/// </summary>
 		public static int CurrentCount => _signatures?.Count ?? 0;
 
@@ -91,15 +91,15 @@ namespace SnowyImageCopy.Models
 
 		private const float ExcessFactor = 1.2F;
 
-		private static IEnumerable<HashItem> Load(int valueSize, int maxCount)
+		private static HashItem[] Load(int valueSize, int maxCount)
 		{
 			var fileInfo = new FileInfo(_signaturesFilePath);
 			if (!(fileInfo.Exists && (0 < fileInfo.Length) && (fileInfo.Length % valueSize == 0)))
-				return Enumerable.Empty<HashItem>();
+				return new HashItem[0];
 
 			try
 			{
-				return Read();
+				return Read().ToArray(); // To catch an exception, it must be consumed here.
 			}
 			catch (Exception ex)
 			{
@@ -109,16 +109,22 @@ namespace SnowyImageCopy.Models
 
 			IEnumerable<HashItem> Read()
 			{
-				var buff = new byte[valueSize];
-
 				using (var fs = new FileStream(_signaturesFilePath, FileMode.Open, FileAccess.Read))
 				{
 					var offset = fs.Length - valueSize * maxCount;
 					if (offset > 0)
 						fs.Seek(offset, SeekOrigin.Begin);
 
-					while (fs.Read(buff, 0, valueSize) == valueSize)
-						yield return HashItem.Restore(buff);
+					using (var ms = new MemoryStream((int)(fs.Length - fs.Position)))
+					{
+						fs.CopyTo(ms); // Read the file at once.
+						ms.Seek(0, SeekOrigin.Begin);
+
+						var buff = new byte[valueSize];
+
+						while (ms.Read(buff, 0, valueSize) == valueSize)
+							yield return HashItem.Restore(buff);
+					}
 				}
 			};
 		}
@@ -126,7 +132,7 @@ namespace SnowyImageCopy.Models
 		private static async Task SaveAsync(IList<HashItem> appendValues, ISet<HashItem> wholeValues, int valueSize, int maxCount)
 		{
 			var fileInfo = new FileInfo(_signaturesFilePath);
-			var isAppend = fileInfo.Exists && (0 < fileInfo.Length) && (fileInfo.Length % valueSize == 0)
+			var isAppend = fileInfo.Exists && (fileInfo.Length > 0) && (fileInfo.Length % valueSize == 0)
 				&& ((fileInfo.Length / valueSize + appendValues.Count) < (maxCount * ExcessFactor));
 
 			var fileMode = isAppend ? FileMode.Append : FileMode.Create;
