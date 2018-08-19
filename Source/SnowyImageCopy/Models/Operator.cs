@@ -1107,6 +1107,13 @@ namespace SnowyImageCopy.Models
 						item.CopiedTime = DateTime.Now;
 						item.IsAliveLocal = true;
 						item.IsAvailableLocal = true;
+
+						if (Settings.Current.SkipsOnceCopiedFile)
+						{
+							item.IsOnceCopied = true;
+							Signatures.Append(item.Signature);
+						}
+
 						item.Status = FileStatus.Copied;
 
 						_copyFileCount++;
@@ -1130,9 +1137,6 @@ namespace SnowyImageCopy.Models
 					{
 						await _manager.DeleteFileAsync(item.FilePath, _tokenSourceWorking.Token);
 					}
-
-					if (Settings.Current.SkipsOnceCopiedFile)
-						Signatures.Append(item.Signature);
 				}
 
 				OperationStatus = string.Format(Resources.OperationStatus_CopyCompleted, _copyFileCount, (int)(DateTime.Now - CopyStartTime).TotalSeconds);
