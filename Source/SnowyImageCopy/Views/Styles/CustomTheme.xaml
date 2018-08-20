@@ -77,8 +77,8 @@
 	<Color x:Key="FileItemStatus.ToBeCopiedColor">Orange</Color>
 	<Color x:Key="FileItemStatus.CopyingColor">Violet</Color>
 	<Color x:Key="FileItemStatus.CopiedColor">SkyBlue</Color>
-	<Color x:Key="FileItemStatus.OnceCopiedColor">Goldenrod</Color>
-	<Color x:Key="FileItemStatus.WeirdColor">Turquoise</Color>
+	<Color x:Key="FileItemStatus.OnceCopiedColor" A="255" R="102" G="200" B="200"/>
+	<Color x:Key="FileItemStatus.WeirdColor">LightPink</Color>
 	<Color x:Key="FileItemStatus.RecycledColor">DarkGray</Color>
 
 	<SolidColorBrush x:Key="FileItemStatus.Foreground" Color="{StaticResource FileItemStatus.ForegroundColor}"/>
