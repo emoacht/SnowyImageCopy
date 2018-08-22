@@ -22,7 +22,15 @@ namespace SnowyImageCopy.Models
 
 		static HashItem()
 		{
-			_algorithm = new MD5CryptoServiceProvider(); // MD5 is for less cost.
+			try
+			{
+				_algorithm = new MD5CryptoServiceProvider(); // MD5 is for less cost.
+			}
+			catch (InvalidOperationException)
+			{
+				_algorithm = new SHA1CryptoServiceProvider();
+			}
+
 			Size = _algorithm.HashSize / 8;
 		}
 
