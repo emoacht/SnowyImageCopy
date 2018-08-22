@@ -768,43 +768,38 @@ namespace SnowyImageCopy.Models
 			{
 				_tokenSourceWorking = new CancellationTokenSourcePlus();
 
-				// Check firmware version.
-				_card.FirmwareVersion = await _manager.GetFirmwareVersionAsync(_tokenSourceWorking.Token);
+				var prepareTask = Settings.Current.SkipsOnceCopiedFile
+					? Signatures.PrepareAsync()
+					: Task.FromResult(false); // Completed task
 
-				// Check CID.
-				if (_card.CanGetCid)
-					_card.Cid = await _manager.GetCidAsync(_tokenSourceWorking.Token);
-
-				// Check SSID and check if PC is connected to FlashAir card by a wireless connection.
-				_card.Ssid = await _manager.GetSsidAsync(_tokenSourceWorking.Token);
-				_card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(_card.Ssid);
-
-				// Get all items.
-				var fileListNew = (await _manager.GetFileListRootAsync(_card, _tokenSourceWorking.Token))
-					.Select(fileItem => new FileItemViewModel(fileItem))
-					.ToList();
-				fileListNew.Sort();
-
-				// Record time stamp of write event.
-				if (_card.CanGetWriteTimeStamp)
-					_card.WriteTimeStamp = await _manager.GetWriteTimeStampAsync(_tokenSourceWorking.Token);
-
-				await Task.Run(() =>
+				var checkTask = Task.Run(async () =>
 				{
+					// Check firmware version.
+					_card.FirmwareVersion = await _manager.GetFirmwareVersionAsync(_tokenSourceWorking.Token);
+
+					// Check CID.
+					if (_card.CanGetCid)
+						_card.Cid = await _manager.GetCidAsync(_tokenSourceWorking.Token);
+
+					// Check SSID and check if PC is connected to FlashAir card by a wireless connection.
+					_card.Ssid = await _manager.GetSsidAsync(_tokenSourceWorking.Token);
+					_card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(_card.Ssid);
+
+					// Get all items.
+					var fileListNew = (await _manager.GetFileListRootAsync(_card, _tokenSourceWorking.Token))
+						.Select(fileItem => new FileItemViewModel(fileItem))
+						.ToList();
+					fileListNew.Sort();
+
+					// Record time stamp of write event.
+					if (_card.CanGetWriteTimeStamp)
+						_card.WriteTimeStamp = await _manager.GetWriteTimeStampAsync(_tokenSourceWorking.Token);
+
 					// Check if any sample is in old items.
 					var isSample = FileListCore.Any(x => x.Size == 0);
 
 					// Check if FlashAir card is changed.
-					bool isChanged;
-					if (_card.IsChanged.HasValue)
-					{
-						isChanged = _card.IsChanged.Value;
-					}
-					else
-					{
-						var signaturesOld = new HashSet<string>(FileListCore.Select(x => x.Signature));
-						isChanged = !fileListNew.Select(x => x.Signature).Any(x => signaturesOld.Contains(x));
-					}
+					var isChanged = _card.IsChanged ?? !(new HashSet<FileItemViewModel>(FileListCore).Overlaps(fileListNew));
 
 					if (isSample || isChanged)
 						FileListCore.Clear();
@@ -812,10 +807,7 @@ namespace SnowyImageCopy.Models
 					// Check old items.
 					foreach (var itemOld in FileListCore)
 					{
-						var itemSameIndex = fileListNew.IndexOf(x =>
-							x.FilePath.Equals(itemOld.FilePath, StringComparison.OrdinalIgnoreCase) &&
-							(x.Size == itemOld.Size));
-
+						var itemSameIndex = fileListNew.IndexOf(x => x.Equals(itemOld));
 						if (itemSameIndex >= 0)
 						{
 							itemOld.IsAliveRemote = true;
@@ -843,14 +835,45 @@ namespace SnowyImageCopy.Models
 
 						FileListCore.Insert(itemNew); // Customized Insert method
 					}
+				}, _tokenSourceWorking.Token);
 
+				await Task.WhenAll(prepareTask, checkTask);
+
+				await Task.Run(() =>
+				{
 					// Check all local files.
 					foreach (var item in FileListCore)
 					{
 						var info = GetFileInfoLocal(item);
 						item.IsAliveLocal = IsAliveLocal(info, item.Size);
 						item.IsAvailableLocal = IsAvailableLocal(info);
-						item.Status = item.IsAliveLocal ? FileStatus.Copied : FileStatus.NotCopied;
+
+						if (Settings.Current.SkipsOnceCopiedFile)
+						{
+							if (item.IsOnceCopied == null)
+							{
+								if (item.IsAliveLocal)
+								{
+									item.IsOnceCopied = true;
+									Signatures.Append(item.Signature);
+								}
+								else
+								{
+									item.IsOnceCopied = Signatures.Contains(item.Signature);
+								}
+							}
+							// Maintain current value.
+						}
+						else
+						{
+							item.IsOnceCopied = null; // Reset value.
+						}
+
+						item.Status = item.IsAliveLocal
+							? FileStatus.Copied
+							: (item.IsOnceCopied == true)
+								? FileStatus.OnceCopied
+								: FileStatus.NotCopied;
 					}
 
 					// Manage deleted items.
@@ -876,7 +899,9 @@ namespace SnowyImageCopy.Models
 							catch (Exception ex)
 							{
 								Debug.WriteLine($"Failed to move a file to Recycle.\r\n{ex}");
-								item.Status = FileStatus.NotCopied;
+								item.Status = (item.IsOnceCopied == true)
+									? FileStatus.OnceCopied
+									: FileStatus.NotCopied;
 							}
 						}
 
@@ -923,8 +948,10 @@ namespace SnowyImageCopy.Models
 							{
 								if (ex is FileNotFoundException)
 								{
-									item.Status = FileStatus.NotCopied;
 									item.IsAliveLocal = false;
+									item.Status = (item.IsOnceCopied == true)
+										? FileStatus.OnceCopied
+										: FileStatus.NotCopied;
 								}
 								else if (ex is IOException)
 								{
@@ -971,6 +998,9 @@ namespace SnowyImageCopy.Models
 			{
 				FileListCoreViewIndex = -1; // No selection
 				_tokenSourceWorking?.Dispose();
+
+				if (Settings.Current.SkipsOnceCopiedFile)
+					await Signatures.FlushAsync();
 			}
 		}
 
@@ -1077,6 +1107,13 @@ namespace SnowyImageCopy.Models
 						item.CopiedTime = DateTime.Now;
 						item.IsAliveLocal = true;
 						item.IsAvailableLocal = true;
+
+						if (Settings.Current.SkipsOnceCopiedFile)
+						{
+							item.IsOnceCopied = true;
+							Signatures.Append(item.Signature);
+						}
+
 						item.Status = FileStatus.Copied;
 
 						_copyFileCount++;
@@ -1108,6 +1145,9 @@ namespace SnowyImageCopy.Models
 			{
 				FileListCoreViewIndex = -1; // No selection
 				_tokenSourceWorking?.Dispose();
+
+				if (Settings.Current.SkipsOnceCopiedFile)
+					await Signatures.FlushAsync();
 			}
 		}
 
@@ -1168,8 +1208,10 @@ namespace SnowyImageCopy.Models
 			}
 			catch (FileNotFoundException)
 			{
-				item.Status = FileStatus.NotCopied;
 				item.IsAliveLocal = false;
+				item.Status = (item.IsOnceCopied == true)
+					? FileStatus.OnceCopied
+					: FileStatus.NotCopied;
 			}
 			catch (IOException)
 			{

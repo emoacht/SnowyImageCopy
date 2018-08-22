@@ -156,6 +156,9 @@
   <data name="FileStatus_NotCopied" xml:space="preserve">
     <value>未コピー</value>
   </data>
+  <data name="FileStatus_OnceCopied" xml:space="preserve">
+    <value>前にコピー済</value>
+  </data>
   <data name="FileStatus_Recycled" xml:space="preserve">
     <value>ごみ箱行き</value>
   </data>
@@ -246,9 +249,6 @@
   <data name="Options_OpenByExplorer" xml:space="preserve">
     <value>エクスプローラーで開く</value>
   </data>
-  <data name="Options_OrderFromNewer" xml:space="preserve">
-    <value>新しいイメージから並べる</value>
-  </data>
   <data name="Options_LocalFolderExplanation" xml:space="preserve">
     <value>イメージをコピーするフォルダーを指定してください。</value>
   </data>
@@ -276,20 +276,26 @@
   <data name="Options_File" xml:space="preserve">
     <value>ファイル</value>
   </data>
+  <data name="Options_OrderFromNewer" xml:space="preserve">
+    <value>新しいイメージから並べる</value>
+  </data>
   <data name="Options_ExtensionLowercase" xml:space="preserve">
     <value>ファイル拡張子を小文字にする</value>
   </data>
-  <data name="Options_Recycle" xml:space="preserve">
-    <value>FlashAir内のイメージが削除されたらごみ箱に移動する</value>
+  <data name="Options_CreateDatedFolder" xml:space="preserve">
+    <value>日付ごとのフォルダーを作成する</value>
+  </data>  
+  <data name="Options_HandleJpegOnly" xml:space="preserve">
+    <value>JPEGイメージのみを扱う</value>
   </data>
   <data name="Options_SelectReadOnly" xml:space="preserve">
     <value>チェック後に読み取り専用のイメージだけを選択する</value>
   </data>
-  <data name="Options_HandleJpegFileOnly" xml:space="preserve">
-    <value>JPEGイメージのみを扱う</value>
+  <data name="Options_OnceCopied" xml:space="preserve">
+    <value>チェック後に前にコピー済のイメージを選択しない</value>
   </data>
-  <data name="Options_CreateDatedFolder" xml:space="preserve">
-    <value>日付ごとのフォルダーを作成する</value>
+  <data name="Options_Recycle" xml:space="preserve">
+    <value>FlashAir内のイメージが削除されたらごみ箱に移動する</value>
   </data>
   <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
     <value>コピー後にFlashAir内のイメージの削除を選べるようにする</value>

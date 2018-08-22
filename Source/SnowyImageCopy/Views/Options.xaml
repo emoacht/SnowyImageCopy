@@ -79,14 +79,16 @@
 					<TextBlock Text="{Binding Resources.Options_RemoteAddress, Source={x:Static models:ResourceService.Current}}"/>
 					<TextBox x:Name="RemoteAddressTextBox"
 							 HorizontalAlignment="Stretch"
-							 Margin="0,4,0,6" Padding="2"
+							 Margin="0,4,0,6"
+							 Padding="2"
 							 VerticalContentAlignment="Center"
 							 Text="{Binding SettingsCurrent.RemoteAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
 
 					<TextBlock Text="{Binding Resources.Options_LocalFolder, Source={x:Static models:ResourceService.Current}}"/>
 					<TextBox x:Name="LocalFolderTextBox"
 							 HorizontalAlignment="Stretch"
-							 Margin="0,4,0,4" Padding="2"
+							 Margin="0,4,0,4"
+							 Padding="2"
 							 VerticalContentAlignment="Center"
 							 Foreground="{Binding SettingsCurrent.IsLocalFolderValid, Mode=OneWay, Converter={StaticResource BooleanToBrushConverterKey}, ConverterParameter={StaticResource BrushSet}}"
 							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
@@ -205,6 +207,20 @@
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+							  Header="{Binding Resources.Options_CreateDatedFolder, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							Style="{StaticResource SwitchButtonStyle}"
+							IsChecked="{Binding SettingsCurrent.CreatesDatedFolder, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+							  Header="{Binding Resources.Options_HandleJpegOnly, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							Style="{StaticResource SwitchButtonStyle}"
+							IsChecked="{Binding SettingsCurrent.HandlesJpegFileOnly, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_SelectReadOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
@@ -212,17 +228,19 @@
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
-							  Header="{Binding Resources.Options_HandleJpegFileOnly, Source={x:Static models:ResourceService.Current}}">
-						<controls:SlidingToggleButton
-							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding SettingsCurrent.HandlesJpegFileOnly, Mode=TwoWay}"/>
-					</GroupBox>
-
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
-							  Header="{Binding Resources.Options_CreateDatedFolder, Source={x:Static models:ResourceService.Current}}">
-						<controls:SlidingToggleButton
-							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding SettingsCurrent.CreatesDatedFolder, Mode=TwoWay}"/>
+							  Header="{Binding Resources.Options_OnceCopied, Source={x:Static models:ResourceService.Current}}">
+						<StackPanel>
+							<controls:SlidingToggleButton
+								x:Name="SkipOnceCopiedButton"
+								Style="{StaticResource SwitchButtonStyle}"
+								IsChecked="{Binding SettingsCurrent.SkipsOnceCopiedFile, Mode=TwoWay}"/>
+							<controls:NumericTextBox
+								Height="20"
+								Margin="0,4,0,0"
+								Minimum="10000" Maximum="100000" Frequency="10000"
+								Visibility="{Binding IsChecked, ElementName=SkipOnceCopiedButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
+								Value="{Binding SettingsCurrent.OnceCopiedCapacity, Mode=TwoWay}"/>
+						</StackPanel>
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
@@ -243,6 +261,7 @@
 								BackgroundChecked="{StaticResource Sliding.CheckedSecond.Background}"
 								IsChecked="{Binding IsChecked, ElementName= RecycleButton, Converter={StaticResource BooleanInverseConverterKey}, ConverterParameter=True}"/>
 							<controls:CheckTextBox
+								Height="20"
 								Margin="0,4,0,0" Padding="2,0"
 								VerticalContentAlignment="Center"
 								IsUndoEnabled="False"

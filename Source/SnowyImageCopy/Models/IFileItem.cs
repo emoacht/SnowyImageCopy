@@ -25,11 +25,14 @@ namespace SnowyImageCopy.Models
 		bool IsImported { get; }
 
 		string FilePath { get; }
-		string Signature { get; }
+		HashItem Signature { get; }
+
 		bool IsImageFile { get; }
 		bool IsJpeg { get; }
 		bool IsTiff { get; }
 		bool IsLoadable { get; }
 		bool IsFlashAirSystem { get; }
+
+		bool Equals(IFileItem other);
 	}
 }

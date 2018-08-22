@@ -10,7 +10,7 @@ namespace SnowyImageCopy.Helper
 	/// <summary>
 	/// Manages date and time based on FAT file system.
 	/// </summary>
-	public class FatDateTime
+	public static class FatDateTime
 	{
 		/// <summary>
 		/// Converts int representing date and int representing time to <see cref="DateTime"/>.
@@ -128,15 +128,11 @@ namespace SnowyImageCopy.Helper
 		/// <param name="endTargetIndex">End index of target BitArray</param>
 		private static void CopyBits(BitArray source, ref BitArray target, int startTargetIndex, int endTargetIndex)
 		{
-			int sourceIndex = 0;
-
-			for (int i = startTargetIndex; i <= endTargetIndex; i++)
+			for (int i = 0, j = startTargetIndex;
+				(i < source.Length) && (j < target.Length) && (j <= endTargetIndex);
+				i++, j++)
 			{
-				if (sourceIndex > source.Length - 1)
-					break;
-
-				target[i] = source[sourceIndex];
-				sourceIndex++;
+				target[j] = source[i];
 			}
 		}
 

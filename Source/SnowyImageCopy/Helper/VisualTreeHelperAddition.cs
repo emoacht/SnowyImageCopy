@@ -76,8 +76,10 @@ namespace SnowyImageCopy.Helper
 		/// </summary>
 		/// <param name="reference">Child visual</param>
 		/// <returns>Ancestor visuals</returns>
-		/// <remarks><see cref="System.Windows.Interactivity.DependencyObjectHelper.GetSelfAndAncestors"/> method
-		/// will provide similar function if System.Windows.Interactivity is added to the project references.</remarks>
+		/// <remarks>
+		/// <see cref="System.Windows.Interactivity.DependencyObjectHelper.GetSelfAndAncestors"/> method
+		/// will provide similar function if System.Windows.Interactivity is added to the project references.
+		/// </remarks>
 		public static IEnumerable<DependencyObject> GetAncestors(DependencyObject reference)
 		{
 			var parent = reference;

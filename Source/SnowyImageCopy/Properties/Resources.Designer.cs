@@ -170,6 +170,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Once Copied.
+        /// </summary>
+        public static string FileStatus_OnceCopied {
+            get {
+                return ResourceManager.GetString("FileStatus_OnceCopied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recycled.
         /// </summary>
         public static string FileStatus_Recycled {
@@ -503,11 +512,11 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Handle JPEG images only.
+        ///   Looks up a localized string similar to Handle JPEG image only.
         /// </summary>
-        public static string Options_HandleJpegFileOnly {
+        public static string Options_HandleJpegOnly {
             get {
-                return ResourceManager.GetString("Options_HandleJpegFileOnly", resourceCulture);
+                return ResourceManager.GetString("Options_HandleJpegOnly", resourceCulture);
             }
         }
         
@@ -553,6 +562,15 @@ namespace SnowyImageCopy.Properties {
         public static string Options_LocalFolderExplanation {
             get {
                 return ResourceManager.GetString("Options_LocalFolderExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not select once copied image on check.
+        /// </summary>
+        public static string Options_OnceCopied {
+            get {
+                return ResourceManager.GetString("Options_OnceCopied", resourceCulture);
             }
         }
         

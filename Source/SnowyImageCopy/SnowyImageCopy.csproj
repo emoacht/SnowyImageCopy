@@ -114,6 +114,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Properties\Resources.ja-JP.Designer.cs">
+      <DependentUpon>Resources.ja-JP.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -163,11 +168,13 @@
     <Compile Include="Models\FileManagerCommand.cs" />
     <Compile Include="Models\FilePeriod.cs" />
     <Compile Include="Models\FileStatus.cs" />
+    <Compile Include="Models\HashItem.cs" />
     <Compile Include="Models\ImageManager.cs" />
     <Compile Include="Models\Operator.cs" />
     <Compile Include="Models\ProgressInfo.cs" />
     <Compile Include="Models\ResourceService.cs" />
     <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\Signatures.cs" />
     <Compile Include="Models\WindowPlacement.cs" />
     <Compile Include="Models\Exceptions\RemoteFileInvalidException.cs" />
     <Compile Include="Models\Exceptions\RemoteFileNotFoundException.cs" />
@@ -183,11 +190,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.ja-JP.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.ja-JP.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\FileItemViewModel.cs" />
     <Compile Include="ViewModels\ItemObservableCollection.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="Views\Controls\BusyButton.cs" />
     <Compile Include="Views\Controls\CheckTextBox.cs" />
     <Compile Include="Views\Controls\CircularProgressBar.cs" />
+    <Compile Include="Views\Controls\NumericTextBox.cs" />
     <Compile Include="Views\Controls\NumericUpDown.cs" />
     <Compile Include="Views\Controls\SlidingToggleButton.cs" />
     <Compile Include="Views\Controls\HideableGridSplitter.cs" />
@@ -290,14 +293,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.ja-JP.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ja-JP.Designer.cs</LastGenOutput>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.ja-JP.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.ja-JP.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

@@ -30,6 +30,11 @@ namespace SnowyImageCopy.Models
 		Copied,
 
 		/// <summary>
+		/// File has been already copied to local folder but no longer exist there.
+		/// </summary>
+		OnceCopied,
+
+		/// <summary>
 		/// File looks weird.
 		/// </summary>
 		/// <remarks>This type is given when downloaded data length doesn't match file size provided

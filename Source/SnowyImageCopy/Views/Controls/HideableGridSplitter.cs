@@ -40,8 +40,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void OnInitialized(object sender, EventArgs e)
 		{
-			var parent = base.Parent as Grid;
-			if (parent == null)
+			if (!(base.Parent is Grid parent))
 				return;
 
 			switch (GetResizeDirection())
@@ -72,8 +71,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void OnVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
-			var parent = base.Parent as Grid;
-			if (parent == null)
+			if (!(base.Parent is Grid parent))
 				return;
 
 			switch (GetResizeDirection())

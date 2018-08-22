@@ -36,7 +36,7 @@ namespace SnowyImageCopy.ViewModels
 		#region Supplementary
 
 		internal string FilePath => _fileItem.FilePath;
-		internal string Signature => _fileItem.Signature;
+		internal HashItem Signature => _fileItem.Signature;
 
 		internal string FileNameWithCaseExtension
 		{
@@ -78,7 +78,9 @@ namespace SnowyImageCopy.ViewModels
 		/// <summary>
 		/// Whether can load image data from a local file
 		/// </summary>
-		/// <remarks>As for raw images, actual loadability depends on Microsoft Camera Codec Pack.</remarks>
+		/// <remarks>
+		/// As for raw images, whether an image is actually loadable depends on Microsoft Camera Codec Pack.
+		/// </remarks>
 		internal bool CanLoadDataLocal
 		{
 			get
@@ -145,6 +147,7 @@ namespace SnowyImageCopy.ViewModels
 		public bool IsAliveRemote { get; set; }
 		public bool IsAliveLocal { get; set; }
 		public bool IsAvailableLocal { get; set; }
+		public bool? IsOnceCopied { get; set; } = null;
 
 		public FileStatus Status
 		{
@@ -213,6 +216,12 @@ namespace SnowyImageCopy.ViewModels
 		#region IComparable member
 
 		public int CompareTo(FileItemViewModel other) => _fileItem.CompareTo(other?.FileItem);
+
+		public override bool Equals(object obj) => _fileItem.Equals((obj as FileItemViewModel)?.FileItem);
+
+		public bool Equals(FileItemViewModel other) => _fileItem.Equals(other?.FileItem);
+
+		public override int GetHashCode() => _fileItem.GetHashCode();
 
 		#endregion
 	}

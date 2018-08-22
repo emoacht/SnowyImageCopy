@@ -120,7 +120,6 @@ namespace SnowyImageCopy.Views.Controls
 				value =>
 				{
 					var num = (double)value;
-
 					return (0D <= num) && (num <= 100D);
 				});
 
@@ -140,7 +139,6 @@ namespace SnowyImageCopy.Views.Controls
 				value =>
 				{
 					var num = (double)value;
-
 					return (0D <= num) && (num <= 360D);
 				});
 
