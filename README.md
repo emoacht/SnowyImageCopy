@@ -17,6 +17,10 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ## History
 
+Ver 1.5.0 2018-8-23
+
+ - Added function not to select once copied image
+
 Ver 1.4.0 2018-8-7
 
  - Enabled to order from newer images

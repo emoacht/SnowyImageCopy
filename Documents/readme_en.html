@@ -61,8 +61,8 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 
 <div id="title">
 <h1>Snowy</h1>
-<p id="version">Ver 1.4</p>
-<p id="date">2018/8/7</p>
+<p id="version">Ver 1.5</p>
+<p id="date">2018/8/23</p>
 </div><!-- end of title -->
 
 <div id="main">
@@ -91,6 +91,7 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 	<li>A RAW image can be copied as well. After copied to PC, if its image format is supported by Microsoft Camera Codec Pack, it will be shown in the thumbnail and in current image.</li>
 	<li>If you habitually delete images in FlashAir after copied to PC, it will be safer not to use "Move to Recycle Bin if image in FlashAir is deleted" function.</li>
 	<li>A color profile of monitor will be reflected to current image only.</li>
+	<li>When "Not select once copied image on check" is on, the maximum number of images to be recorded as copied will be shown in the textbox. You can change this number by clicking the texbox in the range of 10,000 to 100,000.</li>
 </ol>
 
 <a id="delete"></a><h2>Delete On Copy</h2>
@@ -100,7 +101,7 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 	<li>It is essential to test this function with your camera before actual use. Since this function uses <a href="https://flashair-developers.com/en/documents/api/uploadcgi/">upload.cgi</a> of FlashAir and it may cause inconsistency of data between FlashAir and camera, <span style="color:red">file system of FlashAir and stored images might be destroyed.</span> What will happen depends on each camera model.</li>
 	<li>If upload.cgi of FlashAir is disabled, this function will fail. To check or change this setting, insert FlashAir to PC and use included Snowy Tool. Or open CONFIG file in FlashAir and directly check <a href="https://flashair-developers.com/en/documents/api/config/#UPLOAD">UPLOAD</a> parameter.</li>
 	<li>In many cases, you need to reboot a camera to make it recognize the deletion by this function.</li>
-	<li>An image with Read-only attribute will not be deleted. </li>
+	<li>An image with Read-only attribute will not be deleted.</li>
 	<li>To use this function, turn on "Enable to choose to delete image in FlashAir on copy" button and type "DELETE" (all uppercase) in the text box. "Delete On Copy" button will appear. So change it to on.</li>
 </ul>
 
