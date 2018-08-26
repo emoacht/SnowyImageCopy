@@ -844,7 +844,7 @@ namespace SnowyImageCopy.Models
 					// Check all local files.
 					foreach (var item in FileListCore)
 					{
-						var info = GetFileInfoLocal(item);
+						TryGetFileInfoLocal(item, out FileInfo info);
 						item.IsAliveLocal = IsAliveLocal(info, item.Size);
 						item.IsAvailableLocal = IsAvailableLocal(info);
 
@@ -942,7 +942,6 @@ namespace SnowyImageCopy.Models
 									item.Thumbnail = await ImageManager.ReadThumbnailAsync(ComposeLocalPath(item));
 								else if (item.CanLoadDataLocal)
 									item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
-
 							}
 							catch (Exception ex)
 							{
@@ -1330,33 +1329,36 @@ namespace SnowyImageCopy.Models
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), item.FileNameWithCaseExtension);
 
 		/// <summary>
-		/// Gets FileInfo of a local file.
+		/// Tries to get FileInfo of a local file.
 		/// </summary>
 		/// <param name="item">Target item</param>
-		/// <returns>FileInfo</returns>
-		private static FileInfo GetFileInfoLocal(FileItemViewModel item)
+		/// <param name="info">FileInfo of a local file</param>
+		/// <returns>True if successfully got.</returns>
+		private static bool TryGetFileInfoLocal(FileItemViewModel item, out FileInfo info)
 		{
 			var localPath = ComposeLocalPath(item);
 
-			return File.Exists(localPath) // File.Exists method is more robust than FileInfo constructor.
+			info = File.Exists(localPath) // File.Exists method is more robust than FileInfo constructor.
 				? new FileInfo(localPath)
 				: null;
+
+			return (info != null);
 		}
 
 		/// <summary>
 		/// Checks if a local file exists
 		/// </summary>
 		/// <param name="item">Target item</param>
-		/// <returns>True if exists</returns>
+		/// <returns>True if exists.</returns>
 		private static bool IsAliveLocal(FileItemViewModel item) =>
-			IsAliveLocal(GetFileInfoLocal(item), item.Size);
+			TryGetFileInfoLocal(item, out FileInfo info) && IsAliveLocal(info, item.Size);
 
 		/// <summary>
 		/// Checks if a local file exists.
 		/// </summary>
 		/// <param name="info">FileInfo of a local file</param>
 		/// <param name="size">File size of a local file</param>
-		/// <returns>True if exists</returns>
+		/// <returns>True if exists.</returns>
 		private static bool IsAliveLocal(FileInfo info, int size) =>
 			(info != null) && (info.Length == size);
 
@@ -1364,7 +1366,7 @@ namespace SnowyImageCopy.Models
 		/// Checks if a local file is available (not offline) in relation to OneDrive.
 		/// </summary>
 		/// <param name="info">FileInfo of a local file</param>
-		/// <returns>True if available</returns>
+		/// <returns>True if available.</returns>
 		private static bool IsAvailableLocal(FileInfo info) =>
 			(info != null) && !info.Attributes.HasFlag(FileAttributes.Offline);
 
