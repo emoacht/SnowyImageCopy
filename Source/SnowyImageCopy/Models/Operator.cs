@@ -915,7 +915,7 @@ namespace SnowyImageCopy.Models
 
 				// Fill thumbnails.
 				var itemsDueLocal = new List<FileItemViewModel>(FileListCore.Count);
-				using (var itemsDueRemote = new BlockingCollection<FileItemViewModel>(FileListCore.Count))
+				using (var itemsDueRemote = new BlockingCollection<FileItemViewModel>())
 				{
 					foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))
 					{
