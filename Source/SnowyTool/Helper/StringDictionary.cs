@@ -28,8 +28,10 @@ namespace SnowyTool.Helper
 			return source.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
 				.Select(x => x.Split(new[] { separator }, 2))
 				.Where(x => x.Length == 2)
-				.Where(x => !string.IsNullOrWhiteSpace(x[0]))
-				.ToDictionary(x => x[0], x => x[1]);
+				.Select(x => new { Key = x[0].Trim(), Value = x[1].Trim() })
+				.Where(x => !string.IsNullOrEmpty(x.Key))
+				.GroupBy(x => x.Key)
+				.ToDictionary(x => x.Key, x => x.Last().Value);
 		}
 	}
 }
