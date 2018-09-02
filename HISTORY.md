@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 1.5.2 2018-9-2
+
+ - Refactor
+
 Ver 1.5.1 2018-8-26
 
  - Fixed a bug in check
