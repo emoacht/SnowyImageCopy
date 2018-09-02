@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -44,7 +43,7 @@ namespace SnowyImageCopy.Helper
 			WLAN_INTF_OPCODE OpCode,
 			IntPtr pReserved,
 			out uint pdwDataSize,
-			ref IntPtr ppData,
+			out IntPtr ppData,
 			IntPtr pWlanOpcodeValueType);
 
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -58,7 +57,6 @@ namespace SnowyImageCopy.Helper
 			public WLAN_INTERFACE_STATE isState;
 		}
 
-		[StructLayout(LayoutKind.Sequential)]
 		private struct WLAN_INTERFACE_INFO_LIST
 		{
 			public uint dwNumberOfItems;
@@ -67,15 +65,17 @@ namespace SnowyImageCopy.Helper
 
 			public WLAN_INTERFACE_INFO_LIST(IntPtr ppInterfaceList)
 			{
+				var uintSize = Marshal.SizeOf<uint>(); // 4
+
 				dwNumberOfItems = (uint)Marshal.ReadInt32(ppInterfaceList, 0);
-				dwIndex = (uint)Marshal.ReadInt32(ppInterfaceList, 4 /* Offset for dwNumberOfItems */);
+				dwIndex = (uint)Marshal.ReadInt32(ppInterfaceList, uintSize /* Offset for dwNumberOfItems */);
 				InterfaceInfo = new WLAN_INTERFACE_INFO[dwNumberOfItems];
 
 				for (int i = 0; i < dwNumberOfItems; i++)
 				{
 					var interfaceInfo = new IntPtr(ppInterfaceList.ToInt64()
-						+ 8 /* Offset for dwNumberOfItems and dwIndex */
-						+ (Marshal.SizeOf(typeof(WLAN_INTERFACE_INFO)) * i) /* Offset for preceding items */);
+						+ (uintSize * 2) /* Offset for dwNumberOfItems and dwIndex */
+						+ (Marshal.SizeOf<WLAN_INTERFACE_INFO>() * i) /* Offset for preceding items */);
 
 					InterfaceInfo[i] = Marshal.PtrToStructure<WLAN_INTERFACE_INFO>(interfaceInfo);
 				}
@@ -99,17 +99,16 @@ namespace SnowyImageCopy.Helper
 
 			public override string ToString()
 			{
-				if (ucSSID == null)
-					return null;
-
-				try
+				if (ucSSID != null)
 				{
-					return _encoding.Value.GetString(ToBytes());
+					try
+					{
+						return _encoding.Value.GetString(ToBytes());
+					}
+					catch (DecoderFallbackException)
+					{ }
 				}
-				catch (DecoderFallbackException)
-				{
-					return null;
-				}
+				return null;
 			}
 		}
 
@@ -293,23 +292,13 @@ namespace SnowyImageCopy.Helper
 		{
 			using (var client = new WlanClient())
 			{
-				var interfaceInfoList = GetInterfaceInfoList(client.Handle);
-
-				foreach (var interfaceInfo in interfaceInfoList)
+				foreach (var interfaceInfo in GetInterfaceInfoList(client.Handle))
 				{
 					var connection = GetConnectionAttributes(client.Handle, interfaceInfo.InterfaceGuid);
 					if (connection.isState != WLAN_INTERFACE_STATE.wlan_interface_state_connected)
 						continue;
 
 					var association = connection.wlanAssociationAttributes;
-					if (string.IsNullOrEmpty(association.dot11Ssid.ToString()))
-						continue;
-
-					Debug.WriteLine("Interface: {0}, SSID: {1}, BSSID: {2}, Signal: {3}",
-						interfaceInfo.strInterfaceDescription,
-						association.dot11Ssid,
-						association.dot11Bssid,
-						association.wlanSignalQuality);
 
 					yield return association.dot11Ssid.ToString();
 				}
@@ -320,7 +309,7 @@ namespace SnowyImageCopy.Helper
 
 		private class WlanClient : IDisposable
 		{
-			private IntPtr _clientHandle = IntPtr.Zero;
+			private readonly IntPtr _clientHandle = IntPtr.Zero;
 
 			public IntPtr Handle => _clientHandle;
 
@@ -397,7 +386,7 @@ namespace SnowyImageCopy.Helper
 					WLAN_INTF_OPCODE.wlan_intf_opcode_current_connection,
 					IntPtr.Zero,
 					out _,
-					ref queryData,
+					out queryData,
 					IntPtr.Zero);
 
 				return (result == ERROR_SUCCESS)

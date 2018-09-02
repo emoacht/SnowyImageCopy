@@ -86,7 +86,7 @@ namespace SnowyImageCopy.Models
 
 			var handle = new WindowInteropHelper(window).Handle;
 
-			placement.length = Marshal.SizeOf(typeof(WINDOWPLACEMENT));
+			placement.length = Marshal.SizeOf<WINDOWPLACEMENT>();
 			placement.flags = 0; // No flag set
 			placement.showCmd = isNormal ? SW.SW_SHOWNORMAL : SW.SW_SHOWMINNOACTIVE; // Make window state normal by default.
 

@@ -1329,7 +1329,7 @@ namespace SnowyImageCopy.Models
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), item.FileNameWithCaseExtension);
 
 		/// <summary>
-		/// Tries to get FileInfo of a local file.
+		/// Attempts to get FileInfo of a local file.
 		/// </summary>
 		/// <param name="item">Target item</param>
 		/// <param name="info">FileInfo of a local file</param>

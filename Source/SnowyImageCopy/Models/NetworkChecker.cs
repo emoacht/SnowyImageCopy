@@ -55,7 +55,7 @@ namespace SnowyImageCopy.Models
 			{
 				var ssids = NativeWifi.EnumerateConnectedNetworkSsids();
 
-				return ssids.Any(x => x.Equals(ssid, StringComparison.Ordinal));
+				return ssids.Any(x => string.Equals(x, ssid, StringComparison.Ordinal));
 			}
 			catch (Win32Exception)
 			{
