@@ -170,7 +170,7 @@ namespace SnowyImageCopy.Models
 				}
 			}
 
-			Date = FatDateTime.ConvertFromDateIntAndTimeIntToDateTime(rawDate, rawTime);
+			Date = FatDateTime.ConvertFromDateIntAndTimeIntToDateTime(rawDate, rawTime, DateTimeKind.Local);
 
 			// Determine file extension.
 			if (!IsDirectory && !IsVolume)

@@ -305,6 +305,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot access local file..
+        /// </summary>
+        public static string OperationStatus_LocalFileAccessUnable {
+            get {
+                return ResourceManager.GetString("OperationStatus_LocalFileAccessUnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Path of local folder is wrong..
         /// </summary>
         public static string OperationStatus_LocalFolderInvalid {

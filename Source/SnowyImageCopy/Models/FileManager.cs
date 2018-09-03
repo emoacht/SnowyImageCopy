@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
+using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models.Exceptions;
 
 namespace SnowyImageCopy.Models
@@ -332,37 +333,54 @@ namespace SnowyImageCopy.Models
 				throw new ArgumentNullException(nameof(localFilePath));
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.None, remoteFilePath);
+			byte[] bytes = null;
 
 			try
 			{
-				var bytes = await DownloadBytesAsync(client, remotePath, size, progress, card, cancellationToken).ConfigureAwait(false);
-
-				using (var fs = new FileStream(localFilePath, FileMode.Create, FileAccess.Write))
-				{
-					await fs.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
-				}
-
-				// Conform date of copied file in local folder to that of original file in FlashAir card.
-				var localFileInfo = new FileInfo(localFilePath);
-				localFileInfo.CreationTime = itemDate; // Creation time
-				localFileInfo.LastWriteTime = itemDate; // Last write time
-
-				// Overwrite creation time of copied file by date of image taken from Exif metadata.
-				if (canReadExif)
-				{
-					var exifDateTaken = await ImageManager.GetExifDateTakenAsync(bytes);
-					if (exifDateTaken != default(DateTime))
-					{
-						localFileInfo.CreationTime = exifDateTaken;
-					}
-				}
-
-				return bytes;
+				bytes = await DownloadBytesAsync(client, remotePath, size, progress, card, cancellationToken).ConfigureAwait(false);
 			}
 			catch
 			{
-				Debug.WriteLine("Failed to get and save a file.");
+				Debug.WriteLine("Failed to get a file.");
 				throw;
+			}
+
+			int retryCount = 0;
+
+			while (true)
+			{
+				try
+				{
+					using (var fs = new FileStream(localFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+					{
+						var creationTime = itemDate;
+						var lastWriteTime = itemDate;
+
+						// Overwrite creation time by date of image taken from Exif metadata.
+						if (canReadExif)
+						{
+							var exifDateTaken = await ImageManager.GetExifDateTakenAsync(bytes, DateTimeKind.Local);
+							if (exifDateTaken != default(DateTime))
+								creationTime = exifDateTaken;
+						}
+
+						FileTime.SetFileTime(fs.SafeFileHandle, creationTime: creationTime, lastWriteTime: lastWriteTime);
+
+						await fs.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
+					}
+					return bytes;
+				}
+				catch (IOException) when (++retryCount < MaxRetryCount)
+				{
+					// Wait interval before retry.
+					if (TimeSpan.Zero < _retryInterval)
+						await Task.Delay(_retryInterval, cancellationToken);
+				}
+				catch
+				{
+					Debug.WriteLine("Failed to save a file.");
+					throw;
+				}
 			}
 		}
 
@@ -578,8 +596,6 @@ namespace SnowyImageCopy.Models
 
 			while (true)
 			{
-				retryCount++;
-
 				try
 				{
 					try
@@ -758,20 +774,17 @@ namespace SnowyImageCopy.Models
 						throw new RemoteConnectionUnableException(we.Status);
 					}
 				}
-				catch (RemoteConnectionUnableException)
+				catch (RemoteConnectionUnableException) when (++retryCount < MaxRetryCount)
 				{
-					if (retryCount >= MaxRetryCount)
-						throw;
+					// Wait interval before retry.
+					if (TimeSpan.Zero < _retryInterval)
+						await Task.Delay(_retryInterval, cancellationToken);
 				}
 				catch (Exception ex)
 				{
 					Debug.WriteLine($"Failed to download byte array.\r\n{ex}");
 					throw;
 				}
-
-				// Wait interval before retry.
-				if (TimeSpan.Zero < _retryInterval)
-					await Task.Delay(_retryInterval, cancellationToken);
 			}
 		}
 

@@ -222,6 +222,9 @@
   <data name="OperationStatus_TimedOut" xml:space="preserve">
     <value>接続がタイムアウトしました。</value>
   </data>
+    <data name="OperationStatus_LocalFileAccessUnable" xml:space="preserve">
+    <value>ローカルファイルにアクセスできません。</value>
+  </data>
   <data name="OperationStatus_LocalFolderInvalid" xml:space="preserve">
     <value>ローカルフォルダーのパスが間違っています。</value>
   </data>
@@ -284,7 +287,7 @@
   </data>
   <data name="Options_CreateDatedFolder" xml:space="preserve">
     <value>日付ごとのフォルダーを作成する</value>
-  </data>  
+  </data>
   <data name="Options_HandleJpegOnly" xml:space="preserve">
     <value>JPEGイメージのみを扱う</value>
   </data>

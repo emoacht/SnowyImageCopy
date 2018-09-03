@@ -626,8 +626,9 @@ namespace SnowyImageCopy.Models
 		/// Gets date of image taken in Exif metadata from byte array.
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
+		/// <param name="kind">DateTimeKind</param>
 		/// <returns>Date of image taken</returns>
-		internal static async Task<DateTime> GetExifDateTakenAsync(byte[] bytes)
+		internal static async Task<DateTime> GetExifDateTakenAsync(byte[] bytes, DateTimeKind kind)
 		{
 			ThrowIfNullOrEmpty(bytes, nameof(bytes));
 
@@ -635,7 +636,7 @@ namespace SnowyImageCopy.Models
 			{
 				try
 				{
-					return await Task.Run(() => GetExifDateTaken(BitmapFrame.Create(ms)));
+					return await Task.Run(() => GetExifDateTaken(BitmapFrame.Create(ms), kind));
 				}
 				catch (Exception ex) when (IsImageNotSupported(ex))
 				{
@@ -684,14 +685,15 @@ namespace SnowyImageCopy.Models
 		/// Gets date of image taken in Exif metadata from BitmapFrame.
 		/// </summary>
 		/// <param name="bitmapFrame">BitmapFrame</param>
+		/// <param name="kind">DateTimeKind</param>
 		/// <returns>Date of image taken</returns>
-		private static DateTime GetExifDateTaken(BitmapFrame bitmapFrame)
+		private static DateTime GetExifDateTaken(BitmapFrame bitmapFrame, DateTimeKind kind)
 		{
 			//const string queryDateTaken = "System.Photo.DateTaken";
 
 			return (bitmapFrame.Metadata is BitmapMetadata metadata)
 				&& DateTime.TryParse(metadata.DateTaken, out DateTime dateTaken)
-				? dateTaken
+				? DateTime.SpecifyKind(dateTaken, kind)
 				: default(DateTime);
 		}
 
