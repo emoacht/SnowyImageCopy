@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 1.5.4 2018-9-4
+
+ - Modify file sharing when coping image
+
 Ver 1.5.2 2018-9-2
 
  - Refactor
