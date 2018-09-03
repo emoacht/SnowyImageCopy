@@ -551,6 +551,10 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_TimedOut;
 				}
+				else if (ex is IOException)
+				{
+					OperationStatus = Resources.OperationStatus_LocalFileAccessUnable;
+				}
 				else if (ex is UnauthorizedAccessException)
 				{
 					OperationStatus = Resources.OperationStatus_LocalFolderUnauthorized;
@@ -685,6 +689,10 @@ namespace SnowyImageCopy.Models
 				else if (ex is TimeoutException)
 				{
 					OperationStatus = Resources.OperationStatus_TimedOut;
+				}
+				else if (ex is IOException)
+				{
+					OperationStatus = Resources.OperationStatus_LocalFileAccessUnable;
 				}
 				else if (ex is UnauthorizedAccessException)
 				{

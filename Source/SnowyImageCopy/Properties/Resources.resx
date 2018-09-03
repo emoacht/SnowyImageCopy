@@ -226,6 +226,9 @@
   <data name="OperationStatus_TimedOut" xml:space="preserve">
     <value>Connection timed out.</value>
   </data>
+    <data name="OperationStatus_LocalFileAccessUnable" xml:space="preserve">
+    <value>Cannot access local file.</value>
+  </data>
   <data name="OperationStatus_LocalFolderInvalid" xml:space="preserve">
     <value>Path of local folder is wrong.</value>
   </data>
