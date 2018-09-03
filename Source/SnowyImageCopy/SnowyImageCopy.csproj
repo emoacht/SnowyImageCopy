@@ -151,6 +151,7 @@
     <Compile Include="Helper\EnumerableExtension.cs" />
     <Compile Include="Helper\FatDateTime.cs" />
     <Compile Include="Helper\FileAddition.cs" />
+    <Compile Include="Helper\FileTime.cs" />
     <Compile Include="Helper\NativeWifi.cs" />
     <Compile Include="Helper\OsVersion.cs" />
     <Compile Include="Helper\PathAddition.cs" />
