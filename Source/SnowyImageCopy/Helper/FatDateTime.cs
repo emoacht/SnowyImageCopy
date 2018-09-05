@@ -44,12 +44,12 @@ namespace SnowyImageCopy.Helper
 			var baDate = new BitArray(new[] { date });
 			var baTime = new BitArray(new[] { time });
 
-			var year = ConvertFromBitArrayToInt(baDate, 9, 15) + 1980;
-			var month = ConvertFromBitArrayToInt(baDate, 5, 8);
-			var day = ConvertFromBitArrayToInt(baDate, 0, 4);
-			var hour = ConvertFromBitArrayToInt(baTime, 11, 15);
-			var minute = ConvertFromBitArrayToInt(baTime, 5, 10);
-			var second = ConvertFromBitArrayToInt(baTime, 0, 4) * 2;
+			var year = ConvertFromBitArrayToInt(baDate, 9, count: 7) + 1980;
+			var month = ConvertFromBitArrayToInt(baDate, 5, count: 4);
+			var day = ConvertFromBitArrayToInt(baDate, 0, count: 5);
+			var hour = ConvertFromBitArrayToInt(baTime, 11, count: 5);
+			var minute = ConvertFromBitArrayToInt(baTime, 5, count: 6);
+			var second = ConvertFromBitArrayToInt(baTime, 0, count: 5) * 2;
 
 			try
 			{
@@ -76,9 +76,9 @@ namespace SnowyImageCopy.Helper
 			var baMonth = new BitArray(new[] { dateTime.Month });
 			var baDay = new BitArray(new[] { dateTime.Day });
 
-			CopyByTargetIndex(baYear, ref baDate, 9, 15);
-			CopyByTargetIndex(baMonth, ref baDate, 5, 8);
-			CopyByTargetIndex(baDay, ref baDate, 0, 4);
+			Copy(baYear, 0, baDate, 9, count: 7);
+			Copy(baMonth, 0, baDate, 5, count: 4);
+			Copy(baDay, 0, baDate, 0, count: 5);
 
 			return ConvertFromBitArrayToInt(baDate);
 		}
@@ -96,9 +96,9 @@ namespace SnowyImageCopy.Helper
 			var baMinute = new BitArray(new[] { dateTime.Minute });
 			var baSecond = new BitArray(new[] { dateTime.Second / 2 });
 
-			CopyByTargetIndex(baHour, ref baTime, 11, 15);
-			CopyByTargetIndex(baMinute, ref baTime, 5, 10);
-			CopyByTargetIndex(baSecond, ref baTime, 0, 4);
+			Copy(baHour, 0, baTime, 11, count: 5);
+			Copy(baMinute, 0, baTime, 5, count: 6);
+			Copy(baSecond, 0, baTime, 0, count: 5);
 
 			return ConvertFromBitArrayToInt(baTime);
 		}
@@ -109,14 +109,14 @@ namespace SnowyImageCopy.Helper
 		/// Converts BitArray to int by BitArray's index.
 		/// </summary>
 		/// <param name="source">Source BitArray</param>
-		/// <param name="startIndex">Start index of source BitArray</param>
-		/// <param name="endIndex">End index of source BitArray</param>
+		/// <param name="index">Start index of source BitArray</param>
+		/// <param name="count">Number of elements to convert</param>
 		/// <returns>Int</returns>
-		private static int ConvertFromBitArrayToInt(BitArray source, int startIndex, int endIndex)
+		private static int ConvertFromBitArrayToInt(BitArray source, int index, int count)
 		{
-			var target = new BitArray(endIndex - startIndex + 1);
-			CopyBySourceIndex(source, ref target, startIndex, endIndex);
-			return ConvertFromBitArrayToInt(target);
+			var destination = new BitArray(count);
+			Copy(source, index, destination, 0, count);
+			return ConvertFromBitArrayToInt(destination);
 		}
 
 		/// <summary>
@@ -132,36 +132,20 @@ namespace SnowyImageCopy.Helper
 		}
 
 		/// <summary>
-		/// Copies bits from BitArray to BitArray by source BitArray's index.
+		/// Copies a range of elements from BitArray to BitArray.
 		/// </summary>
 		/// <param name="source">Source BitArray</param>
-		/// <param name="target">Target BitArray</param>
-		/// <param name="startSourceIndex">Start index of source BitArray</param>
-		/// <param name="endSourceIndex">End index of source BitArray</param>
-		private static void CopyBySourceIndex(BitArray source, ref BitArray target, int startSourceIndex, int endSourceIndex)
+		/// <param name="sourceIndex">Start index of source BitArray</param>
+		/// <param name="destination">Destination BitArray</param>
+		/// <param name="destinationIndex">Start index of destination BitArray</param>
+		/// <param name="count">Number of elements to copy</param>
+		private static void Copy(BitArray source, int sourceIndex, BitArray destination, int destinationIndex, int count)
 		{
-			for (int i = startSourceIndex, j = 0;
-				(i < source.Length) && (i <= endSourceIndex) && (j < target.Length);
+			for (int i = sourceIndex, j = destinationIndex;
+				(i < source.Length) && (i < sourceIndex + count) && (j < destination.Length);
 				i++, j++)
 			{
-				target[j] = source[i];
-			}
-		}
-
-		/// <summary>
-		/// Copies bits from BitArray to BitArray by target BitArray's index.
-		/// </summary>
-		/// <param name="source">Source BitArray</param>
-		/// <param name="target">Target BitArray</param>
-		/// <param name="startTargetIndex">Start index of target BitArray</param>
-		/// <param name="endTargetIndex">End index of target BitArray</param>
-		private static void CopyByTargetIndex(BitArray source, ref BitArray target, int startTargetIndex, int endTargetIndex)
-		{
-			for (int i = 0, j = startTargetIndex;
-				(i < source.Length) && (j < target.Length) && (j <= endTargetIndex);
-				i++, j++)
-			{
-				target[j] = source[i];
+				destination[j] = source[i];
 			}
 		}
 
