@@ -968,6 +968,10 @@ namespace SnowyImageCopy.Models
 								{
 									item.CanLoadDataLocal = false;
 								}
+								else
+								{
+									//throw;
+								}
 
 								if (item.IsAliveRemote && item.CanGetThumbnailRemote)
 								{
@@ -1093,35 +1097,43 @@ namespace SnowyImageCopy.Models
 
 						var data = await _manager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, _card, _tokenSourceWorking.Token);
 
-						CurrentItem = item;
-						CurrentImageData = data;
-
-						if (!item.HasThumbnail)
+						if (data?.Any() == true)
 						{
-							try
+							CurrentItem = item;
+							CurrentImageData = data;
+
+							if (!item.HasThumbnail)
 							{
-								if (item.CanReadExif)
-									item.Thumbnail = await ImageManager.ReadThumbnailAsync(CurrentImageData);
-								else if (item.CanLoadDataLocal)
-									item.Thumbnail = await ImageManager.CreateThumbnailAsync(CurrentImageData);
+								try
+								{
+									if (item.CanReadExif)
+										item.Thumbnail = await ImageManager.ReadThumbnailAsync(data);
+									else if (item.CanLoadDataLocal)
+										item.Thumbnail = await ImageManager.CreateThumbnailAsync(data);
+								}
+								catch (ImageNotSupportedException)
+								{
+									item.CanLoadDataLocal = false;
+								}
 							}
-							catch (ImageNotSupportedException)
+
+							item.CopiedTime = DateTime.Now;
+							item.IsAliveLocal = true;
+							item.IsAvailableLocal = true;
+
+							if (Settings.Current.SkipsOnceCopiedFile)
 							{
-								item.CanLoadDataLocal = false;
+								item.IsOnceCopied = true;
+								Signatures.Append(item.Signature);
 							}
+
+							item.Status = FileStatus.Copied;
 						}
-
-						item.CopiedTime = DateTime.Now;
-						item.IsAliveLocal = true;
-						item.IsAvailableLocal = true;
-
-						if (Settings.Current.SkipsOnceCopiedFile)
+						else
 						{
-							item.IsOnceCopied = true;
-							Signatures.Append(item.Signature);
+							item.CanLoadDataLocal = false;
+							item.Status = FileStatus.Weird;
 						}
-
-						item.Status = FileStatus.Copied;
 
 						_copyFileCount++;
 					}
