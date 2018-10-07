@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 1.5.5 2018-10-6
+
+ - Improve handling of weird image
+
 Ver 1.5.4 2018-9-4
 
  - Modify file sharing when coping image
