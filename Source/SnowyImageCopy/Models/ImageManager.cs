@@ -35,13 +35,12 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="localPath">Local file path</param>
 		/// <returns>BitmapImage of thumbnail</returns>
+		/// <exception cref="FileNotFoundException">When file path is invalid or file is missing.</exception>
+		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
 		internal static async Task<BitmapImage> ReadThumbnailAsync(string localPath)
 		{
-			if (string.IsNullOrWhiteSpace(localPath))
-				throw new ArgumentNullException(nameof(localPath));
-
 			if (!File.Exists(localPath))
-				throw new FileNotFoundException("File seems missing.", localPath);
+				throw new FileNotFoundException("File path is invalid or file is missing.", localPath);
 
 			try
 			{
@@ -66,9 +65,11 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>BitmapImage of thumbnail</returns>
+		/// <exception cref="ArgumentNullException">When byte array is null or has no element.</exception>
+		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
 		internal static async Task<BitmapImage> ReadThumbnailAsync(byte[] bytes)
 		{
-			ThrowIfNullOrEmpty(bytes, nameof(bytes));
+			ThrowIfCollectionNullOrEmpty(bytes, nameof(bytes));
 
 			try
 			{
@@ -96,13 +97,12 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="localPath">Local file path</param>
 		/// <returns>BitmapImage of thumbnail</returns>
+		/// <exception cref="FileNotFoundException">When file path is invalid or file is missing.</exception>
+		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
 		internal static async Task<BitmapImage> CreateThumbnailAsync(string localPath)
 		{
-			if (string.IsNullOrWhiteSpace(localPath))
-				throw new ArgumentNullException(nameof(localPath));
-
 			if (!File.Exists(localPath))
-				throw new FileNotFoundException("File seems missing.", localPath);
+				throw new FileNotFoundException("File path is invalid or file is missing.", localPath);
 
 			try
 			{
@@ -131,9 +131,11 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>BitmapImage of thumbnail</returns>
+		/// <exception cref="ArgumentNullException">When byte array is null or has no element.</exception>
+		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
 		internal static async Task<BitmapImage> CreateThumbnailAsync(byte[] bytes)
 		{
-			ThrowIfNullOrEmpty(bytes, nameof(bytes));
+			ThrowIfCollectionNullOrEmpty(bytes, nameof(bytes));
 
 			try
 			{
@@ -311,7 +313,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>BitmapImage of FrameworkElement</returns>
 		/// <remarks>
 		/// A FrameworkElement instantiated by UI thread cannot be accessed by sub thread.
-		/// So, there is not much merit in making asynchronous version.
+		/// Therefore, there is not much merit in making asynchronous version.
 		/// </remarks>
 		internal static BitmapImage ConvertFrameworkElementToBitmapImage(FrameworkElement element, Size outerSize)
 		{
@@ -378,6 +380,8 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>BitmapSource</returns>
+		/// <exception cref="ArgumentNullException">When byte array is null or has no element.</exception>
+		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
 		internal static Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes)
 		{
 			return ConvertBytesToBitmapSourceAsync(bytes, 0D, 0D, false);
@@ -391,6 +395,8 @@ namespace SnowyImageCopy.Models
 		/// <param name="willReadExif">Whether Exif metadata will be read from byte array</param>
 		/// <param name="destinationProfile">Destination color profile for color management</param>
 		/// <returns>BitmapSource</returns>
+		/// <exception cref="ArgumentNullException">When byte array is null or has no element.</exception>
+		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
 		internal static Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes, double targetWidth, bool willReadExif, ColorContext destinationProfile = null)
 		{
 			return ConvertBytesToBitmapSourceAsync(bytes, targetWidth, 0D, willReadExif, destinationProfile);
@@ -405,9 +411,11 @@ namespace SnowyImageCopy.Models
 		/// <param name="willReadExif">Whether Exif metadata will be read from byte array</param>
 		/// <param name="destinationProfile">Destination color profile for color management</param>
 		/// <returns>BitmapSource</returns>
+		/// <exception cref="ArgumentNullException">When byte array is null or has no element.</exception>
+		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
 		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceAsync(byte[] bytes, double targetWidth, double targetHeight, bool willReadExif, ColorContext destinationProfile = null)
 		{
-			ThrowIfNullOrEmpty(bytes, nameof(bytes));
+			ThrowIfCollectionNullOrEmpty(bytes, nameof(bytes));
 
 			var targetSize = new Size(targetWidth, targetHeight);
 
@@ -445,9 +453,11 @@ namespace SnowyImageCopy.Models
 		/// <param name="willReadExif">Whether Exif metadata will be read from byte array</param>
 		/// <param name="destinationProfile">Destination color profile for color management</param>
 		/// <returns>BitmapSource</returns>
+		/// <exception cref="ArgumentNullException">When byte array is null or has no element.</exception>
+		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
 		internal static async Task<BitmapSource> ConvertBytesToBitmapSourceUniformAsync(byte[] bytes, Size outerSize, bool willReadExif, ColorContext destinationProfile = null)
 		{
-			ThrowIfNullOrEmpty(bytes, nameof(bytes));
+			ThrowIfCollectionNullOrEmpty(bytes, nameof(bytes));
 
 			try
 			{
@@ -628,9 +638,10 @@ namespace SnowyImageCopy.Models
 		/// <param name="bytes">Byte array</param>
 		/// <param name="kind">DateTimeKind</param>
 		/// <returns>Date of image taken</returns>
+		/// <exception cref="ArgumentNullException">When byte array is null or has no element.</exception>
 		internal static async Task<DateTime> GetExifDateTakenAsync(byte[] bytes, DateTimeKind kind)
 		{
-			ThrowIfNullOrEmpty(bytes, nameof(bytes));
+			ThrowIfCollectionNullOrEmpty(bytes, nameof(bytes));
 
 			using (var ms = new MemoryStream(bytes)) // This MemoryStream will not be changed.
 			{
@@ -655,9 +666,10 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>Orientation</returns>
+		/// <exception cref="ArgumentNullException">When byte array is null or has no element.</exception>
 		internal static async Task<int> GetExifOrientationAsync(byte[] bytes)
 		{
-			ThrowIfNullOrEmpty(bytes, nameof(bytes));
+			ThrowIfCollectionNullOrEmpty(bytes, nameof(bytes));
 
 			using (var ms = new MemoryStream(bytes)) // This MemoryStream will not be changed.
 			{
@@ -865,10 +877,16 @@ namespace SnowyImageCopy.Models
 
 		#region Helper
 
-		private static void ThrowIfNullOrEmpty<T>(ICollection<T> source, string name)
+		private static void ThrowIfCollectionNullOrEmpty<T>(ICollection<T> collection, string name)
 		{
-			if (!(source?.Count > 0))
+			if (!(collection?.Count > 0))
 				throw new ArgumentNullException(name);
+		}
+
+		private static void ThrowIfImageNotSupported(Exception ex)
+		{
+			if (IsImageNotSupported(ex))
+				throw new ImageNotSupportedException();
 		}
 
 		/// <summary>
@@ -880,8 +898,8 @@ namespace SnowyImageCopy.Models
 			if (ex is FileFormatException)
 				return true;
 
-			// Windows Imaging Component (WIC) defined error code
-			// This description is "No imaging component suitable to complete this operation was found."
+			// Windows Imaging Component (WIC) defined error code: 0x88982F50 = WINCODEC_ERR_COMPONENTNOTFOUND
+			// Error message: No imaging component suitable to complete this operation was found.
 			const uint WINCODEC_ERR_COMPONENTNOTFOUND = 0x88982F50;
 
 			if ((ex is NotSupportedException) &&
