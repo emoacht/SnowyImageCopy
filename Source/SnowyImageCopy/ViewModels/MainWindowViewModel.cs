@@ -146,7 +146,7 @@ namespace SnowyImageCopy.ViewModels
 		private DelegateCommand _saveDesktopCommand;
 
 		private async void SaveDesktopExecute() => await Op.SaveDesktopAsync();
-		private bool CanSaveDesktopExecute() => (CurrentImageData != null) && !Op.IsSavingDesktop;
+		private bool CanSaveDesktopExecute() => IsCurrentImageDataGiven && !Op.IsSavingDesktop;
 
 		#endregion
 
@@ -157,7 +157,7 @@ namespace SnowyImageCopy.ViewModels
 		private DelegateCommand _sendClipboardCommand;
 
 		private async void SendClipboardExecute() => await Op.SendClipboardAsync();
-		private bool CanSendClipboardExecute() => (CurrentImageData != null) && !Op.IsSendingClipboard;
+		private bool CanSendClipboardExecute() => IsCurrentImageDataGiven && !Op.IsSendingClipboard;
 
 		#endregion
 
@@ -167,49 +167,9 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Current image
 
-		public bool IsCurrentImageVisible
-		{
-			get => Settings.Current.IsCurrentImageVisible;
-			set
-			{
-				Settings.Current.IsCurrentImageVisible = value;
-				RaisePropertyChanged();
-
-				if (!Designer.IsInDesignMode)
-					SetCurrentImage();
-			}
-		}
-
-		public double CurrentImageWidth
-		{
-			get => Settings.Current.CurrentImageWidth;
-			set
-			{
-				Settings.Current.CurrentImageWidth = value;
-				RaisePropertyChanged();
-			}
-		}
-
-		public Size CurrentFrameSize
-		{
-			get => _currentFrameSize;
-			set
-			{
-				if (_currentFrameSize == value) // This check is necessary to prevent resizing loop.
-					return;
-
-				_currentFrameSize = value;
-				_currentFrameSizeChanged?.Invoke();
-			}
-		}
-		private Size _currentFrameSize = Size.Empty;
-
-		private event Action _currentFrameSizeChanged;
-
 		public FileItemViewModel CurrentItem { get; set; }
 
 		private readonly ReaderWriterLockSlim _dataLocker = new ReaderWriterLockSlim();
-		private bool _isCurrentImageDataGiven;
 
 		public byte[] CurrentImageData
 		{
@@ -239,15 +199,25 @@ namespace SnowyImageCopy.ViewModels
 					_dataLocker.ExitWriteLock();
 				}
 
-				if (!Designer.IsInDesignMode)
-					SetCurrentImage();
-
-				if (!_isCurrentImageDataGiven &&
-					(_isCurrentImageDataGiven = (value != null)))
-					RaiseCanExecuteChanged();
+				SetCurrentImage(value);
+				IsCurrentImageDataGiven = (value?.Length > 0);
 			}
 		}
 		private byte[] _currentImageData;
+
+		private bool IsCurrentImageDataGiven
+		{
+			get => _isCurrentImageDataGiven;
+			set
+			{
+				if (_isCurrentImageDataGiven == value)
+					return;
+
+				_isCurrentImageDataGiven = value;
+				RaiseCanExecuteChanged();
+			}
+		}
+		private bool _isCurrentImageDataGiven;
 
 		public BitmapSource CurrentImage
 		{
@@ -270,9 +240,11 @@ namespace SnowyImageCopy.ViewModels
 		/// <summary>
 		/// Sets current image.
 		/// </summary>
-		/// <remarks>In Design mode, this method causes NullReferenceException.</remarks>
-		private async void SetCurrentImage()
+		private async void SetCurrentImage(byte[] data)
 		{
+			if (Designer.IsInDesignMode) // To avoid NullReferenceException in Design mode.
+				return;
+
 			if (!IsCurrentImageVisible)
 			{
 				CurrentImage = null;
@@ -281,13 +253,13 @@ namespace SnowyImageCopy.ViewModels
 
 			BitmapSource image = null;
 
-			if ((CurrentImageData != null) && (CurrentItem != null))
+			if ((data?.Any() == true) && (CurrentItem != null))
 			{
 				try
 				{
 					image = !CurrentFrameSize.IsEmpty
-						? await ImageManager.ConvertBytesToBitmapSourceUniformAsync(CurrentImageData, CurrentFrameSize, CurrentItem.CanReadExif, DestinationColorProfile)
-						: await ImageManager.ConvertBytesToBitmapSourceAsync(CurrentImageData, CurrentImageWidth, CurrentItem.CanReadExif, DestinationColorProfile);
+						? await ImageManager.ConvertBytesToBitmapSourceUniformAsync(data, CurrentFrameSize, CurrentItem.CanReadExif, DestinationColorProfile)
+						: await ImageManager.ConvertBytesToBitmapSourceAsync(data, CurrentImageWidth, CurrentItem.CanReadExif, DestinationColorProfile);
 				}
 				catch (ImageNotSupportedException)
 				{
@@ -308,15 +280,47 @@ namespace SnowyImageCopy.ViewModels
 				: ImageManager.ConvertFrameworkElementToBitmapImage(new ThumbnailBox(), CurrentImageWidth);
 		}
 
+		public bool IsCurrentImageVisible
+		{
+			get => Settings.Current.IsCurrentImageVisible;
+			set
+			{
+				Settings.Current.IsCurrentImageVisible = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public double CurrentImageWidth
+		{
+			get => Settings.Current.CurrentImageWidth;
+			set
+			{
+				Settings.Current.CurrentImageWidth = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public Size CurrentFrameSize
+		{
+			get => _currentFrameSize;
+			set
+			{
+				if (_currentFrameSize == value) // This check is necessary to prevent resizing loop.
+					return;
+
+				_currentFrameSize = value;
+				RaisePropertyChanged();
+			}
+		}
+		private Size _currentFrameSize = Size.Empty;
+
 		public ColorContext DestinationColorProfile
 		{
 			get => _destinationColorProfile ?? new ColorContext(PixelFormats.Bgra32);
 			set
 			{
 				_destinationColorProfile = value;
-
-				if (value != null)
-					SetCurrentImage();
+				RaisePropertyChanged();
 			}
 		}
 		private ColorContext _destinationColorProfile;
@@ -354,7 +358,7 @@ namespace SnowyImageCopy.ViewModels
 			Subscription.Add(Op);
 
 			// Add event listeners.
-			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
+			if (!Designer.IsInDesignMode) // To avoid NullReferenceException in Design mode.
 			{
 				_fileListPropertyChangedListener = new PropertyChangedEventListener(FileListPropertyChanged);
 				PropertyChangedEventManager.AddListener(FileListCore, _fileListPropertyChangedListener, string.Empty);
@@ -367,14 +371,22 @@ namespace SnowyImageCopy.ViewModels
 			}
 
 			// Subscribe event handlers.
-			Subscription.Add(Observable.FromEvent
-			  (
-				  handler => _currentFrameSizeChanged += handler,
-				  handler => _currentFrameSizeChanged -= handler
-			  )
-			  .Throttle(TimeSpan.FromMilliseconds(50))
-			  .ObserveOn(SynchronizationContext.Current)
-			  .Subscribe(_ => SetCurrentImage()));
+			Subscription.Add(Observable.FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>
+				(
+					handler => (sender, e) => handler(e),
+					handler => this.PropertyChanged += handler,
+					handler => this.PropertyChanged -= handler
+				)
+				.Where(args =>
+				{
+					var name = args.PropertyName;
+					return (name == nameof(IsCurrentImageVisible))
+						|| (name == nameof(CurrentFrameSize))
+						|| (name == nameof(DestinationColorProfile));
+				})
+				.Throttle(TimeSpan.FromMilliseconds(50))
+				.ObserveOn(SynchronizationContext.Current)
+				.Subscribe(_ => SetCurrentImage(CurrentImageData)));
 
 			Subscription.Add(Observable.FromEvent
 				(
