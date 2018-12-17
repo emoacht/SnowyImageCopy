@@ -830,13 +830,14 @@ namespace SnowyImageCopy.Models
 					}
 
 					// Add new items (This operation may be heavy).
-					var isLeadOff = true;
+					var isLeadoff = true;
+
 					foreach (var itemNew in fileListNew)
 					{
-						if (isLeadOff)
+						if (isLeadoff)
 						{
+							isLeadoff = false;
 							InvokeSafely(() => FileListCoreViewIndex = FileListCoreView.IndexOf(itemNew));
-							isLeadOff = false;
 						}
 
 						itemNew.IsAliveRemote = true;

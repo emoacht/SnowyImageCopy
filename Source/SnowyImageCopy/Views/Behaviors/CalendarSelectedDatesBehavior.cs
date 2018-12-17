@@ -81,7 +81,6 @@ namespace SnowyImageCopy.Views.Behaviors
 				foreach (var date in e.AddedItems.OfType<DateTime>())
 					SelectedDates.Add(date);
 			}
-
 			if (e.RemovedItems?.Count > 0)
 			{
 				foreach (var date in e.RemovedItems.OfType<DateTime>())
