@@ -402,7 +402,7 @@
 					</ListView.ItemContainerStyle>
 
 					<i:Interaction.Behaviors>
-						<behaviors:ItemsControlChildBehavior/>
+						<behaviors:ListBoxVirtualizationBehavior/>
 						<behaviors:SelectorSelectedItemBehavior/>
 					</i:Interaction.Behaviors>
 				</ListView>

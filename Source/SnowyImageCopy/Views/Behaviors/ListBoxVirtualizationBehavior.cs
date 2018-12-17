@@ -16,10 +16,10 @@ using SnowyImageCopy.Helper;
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Checks child items inside the viewport of ScrollViewer in ItemsControl.
+	/// Checks child items inside the viewport of ScrollViewer in ListBox.
 	/// </summary>
-	[TypeConstraint(typeof(ItemsControl))]
-	public class ItemsControlChildBehavior : Behavior<ItemsControl>
+	[TypeConstraint(typeof(ListBox))]
+	public class ListBoxVirtualizationBehavior : Behavior<ListBox>
 	{
 		private ScrollViewer _viewer;
 		private CompositeDisposable _subscription;
