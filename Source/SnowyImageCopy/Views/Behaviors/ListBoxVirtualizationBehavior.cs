@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
+using static System.Math;
 
 using SnowyImageCopy.Helper;
 
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Checks child items inside the viewport of ScrollViewer in ListBox.
+	/// Checks which child items are inside the viewport of ScrollViewer in ListBox.
 	/// </summary>
 	[TypeConstraint(typeof(ListBox))]
 	public class ListBoxVirtualizationBehavior : Behavior<ListBox>
@@ -47,157 +48,275 @@ namespace SnowyImageCopy.Views.Behaviors
 			if (_viewer == null)
 				return;
 
-			CheckChild(); // Initial check
+			CheckItems(); // Initial check
 
 			_subscription.Add(Observable.FromEventPattern<ScrollChangedEventHandler, ScrollChangedEventArgs>(
 				handler => handler.Invoke,
 				handler => _viewer.ScrollChanged += handler,
 				handler => _viewer.ScrollChanged -= handler)
-				//.Do(_ => Debug.WriteLine("ScrollChanged!"))
-				.Subscribe(_ => CheckChild()));
+				.Subscribe(x => CheckItems(x.EventArgs)));
 
-			var source = this.AssociatedObject.Items as INotifyCollectionChanged; // ItemsSource
-			if (source == null)
+			if (!(this.AssociatedObject.Items is INotifyCollectionChanged source)) // ItemsSource
 				return;
 
-			var collectionChanged = Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+			_subscription.Add(Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
 				handler => handler.Invoke,
 				handler => source.CollectionChanged += handler,
-				handler => source.CollectionChanged -= handler);
-
-			_subscription.Add(collectionChanged
-				.Where(x => x.EventArgs.Action != NotifyCollectionChangedAction.Reset)
-				.Where(x => x.EventArgs.NewItems != null)
-				//.Do(x => Debug.WriteLine($"CollectionChanged ({x.EventArgs.Action})!"))
-				.Delay(TimeSpan.FromMilliseconds(10)) // Waiting time for child to perform Measure method
+				handler => source.CollectionChanged -= handler)
+				.Do(x => ReflectItemsFormer(x.EventArgs))
+				.Delay(TimeSpan.FromMilliseconds(10)) // Waiting time for child items to perform Measure method
 				.ObserveOn(SynchronizationContext.Current)
-				.Subscribe(x => CheckChild(x.EventArgs.NewItems.Cast<object>())));
-
-			_subscription.Add(collectionChanged
-				.Where(x => x.EventArgs.Action == NotifyCollectionChangedAction.Reset)
-				//.Do(x => Debug.WriteLine($"CollectionChanged ({x.EventArgs.Action})!"))
-				.Throttle(TimeSpan.FromMilliseconds(10))
-				.ObserveOn(SynchronizationContext.Current)
-				.Subscribe(_ => CheckChild()));
+				.Subscribe(x => ReflectItemsLatter(x.EventArgs)));
 		}
 
-		private const double _margin = 100D; // Vertical margin to set realization window for checking
-		private int _startIndex; // Start index for checking
+		/// <summary>
+		/// Vertical margin (top and bottom) added in the viewport
+		/// </summary>
+		protected double ViewportMargin { get; set; } = 100D;
 
-		private void CheckChild()
+		private int _firstOldIndex;
+		private int _lastOldIndex;
+
+		private int _firstOldDevience;
+		private int _lastOldDevience;
+
+		private readonly object _locker = new object();
+
+		private void CheckItems(ScrollChangedEventArgs args = null)
 		{
 			if (this.AssociatedObject.Items.Count == 0)
 				return;
 
-			var viewportRect = new Rect(0, -_margin, _viewer.RenderSize.Width, _viewer.RenderSize.Height + _margin);
-
-			int firstIndex = -1;
-			int lastIndex = -1;
-
-			int upwardIndex = _startIndex;
-			int downwardIndex = _startIndex + 1;
-
-			var isUpwardChecking = true;
-			var isDownwardChecking = true;
-
-			while (isUpwardChecking || isDownwardChecking)
+			lock (_locker)
 			{
-				// Check upward.
-				if (isUpwardChecking)
+				var viewportRect = new Rect(0, -ViewportMargin, _viewer.ViewportWidth, _viewer.ViewportHeight + ViewportMargin * 2);
+
+				int? firstNewIndex = null;
+				int? lastNewIndex = null;
+
+				int upwardIndex = Max(_firstOldIndex, 0);
+				int downwardIndex = Max(upwardIndex + 1, _lastOldIndex);
+
+				var oldIndices = IndicesCreate(_firstOldIndex - _firstOldDevience, _lastOldIndex + _lastOldDevience, this.AssociatedObject.Items.Count - 1);
+
+				var firstNewIndexMayExist = true;
+				var lastNewIndexMayExist = true;
+				var firstOldIndexMayExist = true;
+				var lastOldIndexMayExist = true;
+
+				var isLeadoff = true;
+
+				while (firstNewIndexMayExist || lastNewIndexMayExist)
 				{
-					if (0 <= upwardIndex)
+					// Check upward.
+					if (firstNewIndexMayExist)
 					{
-						var child = this.AssociatedObject.ItemContainerGenerator.ContainerFromIndex(upwardIndex) as ContentControl;
-						if (child != null)
+						if (0 <= upwardIndex)
 						{
-							if (IsIntersected(viewportRect, child))
+							if (this.AssociatedObject.ItemContainerGenerator.ContainerFromIndex(upwardIndex) is ContentControl item)
 							{
-								firstIndex = upwardIndex;
+								var isIntersected = IsIntersected(viewportRect, item);
+								if (isIntersected)
+								{
+									firstNewIndex = upwardIndex;
 
-								if (lastIndex == -1) // If not found yet
-									lastIndex = upwardIndex;
+									if (!isLeadoff && !lastNewIndex.HasValue) // If not found yet									
+										lastNewIndex = upwardIndex;
+								}
+								else
+								{
+									if (firstNewIndex.HasValue) // If found already
+										firstNewIndexMayExist = false;
+								}
+
+								SetViewable(isIntersected, item, upwardIndex);
 							}
-							else
-							{
-								if (firstIndex != -1) // If found already
-									isUpwardChecking = false;
-							}
-						}
 
-						upwardIndex--;
-					}
-					else
-					{
-						isUpwardChecking = false;
-					}
-				}
+							if (firstOldIndexMayExist)
+								firstOldIndexMayExist = IndicesRemove(oldIndices, upwardIndex);
 
-				// Check downward.
-				if (isDownwardChecking)
-				{
-					if (downwardIndex < this.AssociatedObject.Items.Count)
-					{
-						var child = this.AssociatedObject.ItemContainerGenerator.ContainerFromIndex(downwardIndex) as ContentControl;
-						if (child == null)
-							continue;
-
-						if (IsIntersected(viewportRect, child))
-						{
-							if (firstIndex == -1) // If not found yet
-								firstIndex = downwardIndex;
-
-							lastIndex = downwardIndex;
+							upwardIndex--;
 						}
 						else
 						{
-							if (lastIndex != -1) // If found already
-								isDownwardChecking = false;
+							firstNewIndexMayExist = false;
 						}
-
-						downwardIndex++;
 					}
-					else
+
+					// Check downward.
+					if (lastNewIndexMayExist)
 					{
-						isDownwardChecking = false;
+						if (downwardIndex < this.AssociatedObject.Items.Count)
+						{
+							if (this.AssociatedObject.ItemContainerGenerator.ContainerFromIndex(downwardIndex) is ContentControl item)
+							{
+								var isIntersected = IsIntersected(viewportRect, item);
+								if (isIntersected)
+								{
+									if (!isLeadoff && !firstNewIndex.HasValue) // If not found yet									
+										firstNewIndex = downwardIndex;
+
+									lastNewIndex = downwardIndex;
+								}
+								else
+								{
+									if (lastNewIndex.HasValue) // If found already
+										lastNewIndexMayExist = false;
+								}
+
+								SetViewable(isIntersected, item, downwardIndex);
+							}
+
+							if (lastOldIndexMayExist)
+								lastOldIndexMayExist = IndicesRemove(oldIndices, downwardIndex);
+
+							downwardIndex++;
+						}
+						else
+						{
+							lastNewIndexMayExist = false;
+						}
+					}
+
+					if (isLeadoff)
+					{
+						isLeadoff = false;
+
+						if (firstNewIndex.HasValue && lastNewIndex.HasValue)
+						{
+							// Continue both upward and downward. Ignore the indices between.
+							for (int i = firstNewIndex.Value + 1; i <= lastNewIndex.Value - 1; i++)
+								IndicesRemove(oldIndices, i);
+						}
+						else
+						{
+							var restartDownward = true;
+
+							if (firstNewIndex.HasValue)
+							{
+								// Continue upward. Restart downward.
+								lastNewIndex = firstNewIndex.Value; // upwardIndex + 1
+							}
+							else if (lastNewIndex.HasValue)
+							{
+								// Restart upward. Continue downward.
+								firstNewIndex = lastNewIndex.Value; // downwardIndex - 1
+								restartDownward = false;
+							}
+							else
+							{
+								// Restart downward or upward depending on scroll direction.
+								restartDownward = (args == null) || (args.VerticalChange + args.HorizontalChange < 0);
+							}
+
+							if (restartDownward)
+							{
+								downwardIndex = upwardIndex + 2;
+								lastNewIndexMayExist = true;
+								lastOldIndexMayExist = true;
+							}
+							else
+							{
+								upwardIndex = downwardIndex - 2;
+								firstNewIndexMayExist = true;
+								firstOldIndexMayExist = true;
+							}
+						}
 					}
 				}
+
+				foreach (int oldIndex in oldIndices)
+				{
+					// ItemContainerGenerator.ContainerFromIndex method will not throw an exception
+					// even if the index is out of range.
+					if (this.AssociatedObject.ItemContainerGenerator.ContainerFromIndex(oldIndex) is ContentControl item)
+					{
+						SetViewable(false, item, oldIndex);
+					}
+				}
+
+				_firstOldIndex = firstNewIndex ?? 0; // Fallback
+				_lastOldIndex = lastNewIndex ?? Max(_firstOldIndex, this.AssociatedObject.Items.Count - 1); // Fallback
+
+				_firstOldDevience = 0;
+				_lastOldDevience = 0;
 			}
 
-			if (firstIndex == -1)
-				firstIndex = 0; // Fallback
-			if (lastIndex == -1)
-				lastIndex = this.AssociatedObject.Items.Count - 1; // Fallback
-
-			_startIndex = firstIndex;
-
-			for (int i = 0; i < this.AssociatedObject.Items.Count; i++)
+			List<int> IndicesCreate(int firstIndex, int lastIndex, int maxIndex)
 			{
-				var child = this.AssociatedObject.ItemContainerGenerator.ContainerFromIndex(i) as ContentControl;
-				if (child == null)
-					continue;
+				firstIndex = Max(firstIndex, 0);
+				lastIndex = Min(lastIndex, maxIndex);
+				var list = new List<int>();
 
-				var isIntersected = (firstIndex <= i) && (i <= lastIndex);
+				for (int i = firstIndex; i <= lastIndex; i++)
+					list.Add(i);
 
-				StoreIntersected(isIntersected, child);
+				return list;
+			}
+
+			bool IndicesRemove(List<int> indices, int item)
+			{
+				var index = indices.BinarySearch(item);
+				if (index < 0)
+					return false;
+
+				indices.RemoveAt(index);
+				return true;
 			}
 		}
 
-		private void CheckChild(IEnumerable<object> sourceItems)
+		private void ReflectItemsFormer(NotifyCollectionChangedEventArgs args)
 		{
-			if (sourceItems == null)
-				return;
-
-			var viewportRect = new Rect(0, -_margin, _viewer.RenderSize.Width, _viewer.RenderSize.Height + _margin);
-
-			foreach (var sourceItem in sourceItems)
+			lock (_locker)
 			{
-				var child = this.AssociatedObject.ItemContainerGenerator.ContainerFromItem(sourceItem) as ContentControl;
-				if (child == null)
-					continue;
+				switch (args.Action)
+				{
+					case NotifyCollectionChangedAction.Add:
+					case NotifyCollectionChangedAction.Move:
+					case NotifyCollectionChangedAction.Remove:
+						if (args.OldItems?.Count > 0)
+						{
+							_firstOldDevience += args.OldItems.Count;
+						}
+						if (args.NewItems?.Count > 0)
+						{
+							_lastOldDevience += args.NewItems.Count;
+						}
+						break;
+					case NotifyCollectionChangedAction.Reset:
+						_firstOldIndex = 0;
+						_lastOldIndex = 0;
+						break;
+				}
+			}
+		}
 
-				var isIntersected = IsIntersected(viewportRect, child);
+		private void ReflectItemsLatter(NotifyCollectionChangedEventArgs args)
+		{
+			lock (_locker)
+			{
+				switch (args.Action)
+				{
+					case NotifyCollectionChangedAction.Add:
+					case NotifyCollectionChangedAction.Move:
+					case NotifyCollectionChangedAction.Replace:
+						if (args.NewItems?.Count > 0)
+						{
+							var viewportRect = new Rect(0, -ViewportMargin, _viewer.ViewportWidth, _viewer.ViewportHeight + ViewportMargin * 2);
 
-				StoreIntersected(isIntersected, child);
+							//_viewer.UpdateLayout();
+
+							foreach (var newItem in args.NewItems)
+							{
+								if (this.AssociatedObject.ItemContainerGenerator.ContainerFromItem(newItem) is ContentControl item)
+								{
+									var isIntersected = IsIntersected(viewportRect, item);
+									SetViewable(isIntersected, item);
+								}
+							}
+						}
+						break;
+				}
 			}
 		}
 
@@ -205,34 +324,49 @@ namespace SnowyImageCopy.Views.Behaviors
 		/// Checks if a specified child item is intersected with the viewport.
 		/// </summary>
 		/// <param name="viewportRect">Viewport Rect</param>
-		/// <param name="child">Child item</param>
+		/// <param name="item">Child item</param>
 		/// <returns>True if intersected</returns>
-		private bool IsIntersected(Rect viewportRect, Control child)
+		private bool IsIntersected(Rect viewportRect, Control item)
 		{
-			// If called after CollectionChanged event, child may have not performed Measure method yet
-			// and so RenderSize may be 0 and 0. A waiting time after the event will mostly prevent it
-			// but still it may happen. In such case, call UpdateLayout method to force child perform
-			// Measure method.
-			if (child.RenderSize.Width == 0) // Checking width only is enough.
-				child.UpdateLayout();
+			// If called after CollectionChanged event, child item may not have performed Measure
+			// method yet and so RenderSize may be 0 and 0. A waiting time after the event will
+			// mostly prevent it but still it may happen. In such case, call UpdateLayout method
+			// to force child item perform Measure method. System.Windows.Size.IsEmpty property is
+			// not useful for this purpose because it checks if its width is below 0.
+			if (item.RenderSize.Width == 0)
+				item.UpdateLayout();
 
-			var childRect = child.TransformToAncestor(this.AssociatedObject)
-				.TransformBounds(new Rect(new Point(0, 0), child.RenderSize));
+			var itemRect = item.TransformToAncestor(this.AssociatedObject)
+				.TransformBounds(new Rect(default(Point), item.RenderSize));
 
-			return viewportRect.IntersectsWith(childRect);
+			return viewportRect.IntersectsWith(itemRect);
 		}
 
 		/// <summary>
-		/// Stores information on intersection to a specified child item's Tag property.
+		/// Sets information on whether a specified child item is viewable.
 		/// </summary>
-		/// <param name="isIntersected">Information on intersection</param>
-		/// <param name="child">Child item</param>
-		private void StoreIntersected(bool isIntersected, Control child)
+		/// <param name="isViewable">Information on whether the child item is viewable</param>
+		/// <param name="item">Child item</param>
+		/// <param name="index">Child item's (Source item's) index (optional)</param>
+		/// <remarks>
+		/// If child item's index is -1, the index is not given. If the index is necessary,
+		/// call ItemContainerGenerator.IndexFromContainer method with the given child item.
+		/// </remarks>
+		protected virtual void SetViewable(bool isViewable, Control item, int index = -1)
 		{
-			var isTrue = (child.Tag is bool stored) && stored;
+			StoreViewable(isViewable, item);
+		}
 
-			if ((isIntersected && !isTrue) || (!isIntersected && isTrue))
-				child.Tag = isIntersected;
+		/// <summary>
+		/// Stores information on whether a specified child item is viewable in its Tag property.
+		/// </summary>
+		/// <param name="isViewable">Information on whether the child item is viewable</param>
+		/// <param name="item">Child item</param>
+		private static void StoreViewable(bool isViewable, Control item)
+		{
+			var isTrue = (item.Tag is bool stored) && stored;
+			if (isTrue ^ isViewable)
+				item.Tag = isViewable;
 		}
 	}
 }
