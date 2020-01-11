@@ -57,8 +57,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Microsoft.Expression.Interactions" />
-    <Reference Include="System.Windows.Interactivity" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
