@@ -15,16 +15,7 @@ namespace SnowyImageCopy.Helper
 		/// Whether OS is Windows 8 or newer
 		/// </summary>
 		/// <remarks>Windows 8 = version 6.2</remarks>
-		public static bool IsEightOrNewer
-		{
-			get
-			{
-				if (!_isEightOrNewer.HasValue)
-					_isEightOrNewer = (new Version(6, 2) <= Environment.OSVersion.Version);
-
-				return _isEightOrNewer.Value;
-			}
-		}
+		public static bool IsEightOrNewer => _isEightOrNewer ??= (new Version(6, 2) <= Environment.OSVersion.Version);
 		private static bool? _isEightOrNewer;
 	}
 }

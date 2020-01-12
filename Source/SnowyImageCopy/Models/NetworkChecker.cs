@@ -30,7 +30,7 @@ namespace SnowyImageCopy.Models
 			if (!NetworkInterface.GetIsNetworkAvailable())
 				return false;
 
-			if ((card == null) || string.IsNullOrWhiteSpace(card.Ssid) || !card.IsWirelessConnected)
+			if ((card is null) || string.IsNullOrWhiteSpace(card.Ssid) || !card.IsWirelessConnected)
 				return true;
 
 			return IsWirelessNetworkConnected(card.Ssid);

@@ -45,7 +45,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			this.AssociatedObject.Loaded -= OnLoaded;
 
 			_viewer = VisualTreeHelperAddition.GetDescendants<ScrollViewer>(this.AssociatedObject).FirstOrDefault();
-			if (_viewer == null)
+			if (_viewer is null)
 				return;
 
 			CheckItems(); // Initial check
@@ -206,7 +206,7 @@ namespace SnowyImageCopy.Views.Behaviors
 							else
 							{
 								// Restart downward or upward depending on scroll direction.
-								restartDownward = (args == null) || (args.VerticalChange + args.HorizontalChange < 0);
+								restartDownward = (args is null) || (args.VerticalChange + args.HorizontalChange < 0);
 							}
 
 							if (restartDownward)
@@ -242,7 +242,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				_lastOldDevience = 0;
 			}
 
-			List<int> IndicesCreate(int firstIndex, int lastIndex, int maxIndex)
+			static List<int> IndicesCreate(int firstIndex, int lastIndex, int maxIndex)
 			{
 				firstIndex = Max(firstIndex, 0);
 				lastIndex = Min(lastIndex, maxIndex);
@@ -254,7 +254,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				return list;
 			}
 
-			bool IndicesRemove(List<int> indices, int item)
+			static bool IndicesRemove(List<int> indices, int item)
 			{
 				var index = indices.BinarySearch(item);
 				if (index < 0)
@@ -337,7 +337,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				item.UpdateLayout();
 
 			var itemRect = item.TransformToAncestor(this.AssociatedObject)
-				.TransformBounds(new Rect(default(Point), item.RenderSize));
+				.TransformBounds(new Rect(default, item.RenderSize));
 
 			return viewportRect.IntersectsWith(itemRect);
 		}

@@ -25,15 +25,13 @@ namespace SnowyTool.Views.Converters
 		/// <returns>Boolean</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var source = FindBoolean(value);
-			if (!source.HasValue)
+			if (!TryParse(value, out bool sourceValue))
 				return false;
 
-			var condition = FindBoolean(parameter);
-			if (!condition.HasValue)
+			if (!TryParse(parameter, out bool conditionValue))
 				return DependencyProperty.UnsetValue;
 
-			return (condition.Value == source.Value);
+			return (sourceValue == conditionValue);
 		}
 
 		/// <summary>
@@ -49,22 +47,21 @@ namespace SnowyTool.Views.Converters
 			if (!(value is bool sourceValue) || !sourceValue)
 				return DependencyProperty.UnsetValue;
 
-			var condition = FindBoolean(parameter);
-			if (!condition.HasValue)
+			if (!TryParse(parameter, out bool conditionValue))
 				return DependencyProperty.UnsetValue;
 
-			return condition;
+			return conditionValue;
 		}
 
-		private static bool? FindBoolean(object source)
+		private static bool TryParse(object source, out bool value)
 		{
-			if (source is bool buff)
-				return buff;
-
-			if (bool.TryParse(source as string, out buff))
-				return buff;
-
-			return null;
+			if ((source is bool buff) || bool.TryParse(source as string, out buff))
+			{
+				value = buff;
+				return true;
+			}
+			value = default;
+			return false;
 		}
 	}
 }

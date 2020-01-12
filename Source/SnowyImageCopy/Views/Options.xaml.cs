@@ -32,7 +32,7 @@ namespace SnowyImageCopy.Views
 			this.Loaded -= OnLoaded;
 
 			var mainWindowViewModel = Window.GetWindow(this)?.DataContext as MainWindowViewModel;
-			if (mainWindowViewModel == null)
+			if (mainWindowViewModel is null)
 				return;
 
 			// Binding in xaml will not work because MainWindowViewModel may be null when Options is instantiated.

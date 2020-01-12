@@ -45,7 +45,7 @@ namespace SnowyImageCopy.Models
 		{
 			get
 			{
-				if ((_client == null) || (_remoteRoot != Settings.Current.RemoteRoot))
+				if ((_client is null) || (_remoteRoot != Settings.Current.RemoteRoot))
 				{
 					_client?.Dispose();
 
@@ -333,7 +333,7 @@ namespace SnowyImageCopy.Models
 				throw new ArgumentNullException(nameof(localFilePath));
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.None, remoteFilePath);
-			byte[] bytes = null;
+			byte[] bytes;
 
 			try
 			{
@@ -360,7 +360,7 @@ namespace SnowyImageCopy.Models
 						if (canReadExif)
 						{
 							var exifDateTaken = await ImageManager.GetExifDateTakenAsync(bytes, DateTimeKind.Local);
-							if (exifDateTaken != default(DateTime))
+							if (exifDateTaken != default)
 								creationTime = exifDateTaken;
 						}
 
@@ -657,7 +657,7 @@ namespace SnowyImageCopy.Models
 								{
 									var monitorTask = tcs.Task;
 
-									if ((size == 0) || (progress == null))
+									if ((size == 0) || (progress is null))
 									{
 										// Route without progress reporting
 										var readTask = Task.Run(async () => await response.Content.ReadAsByteArrayAsync());

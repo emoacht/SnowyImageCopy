@@ -51,7 +51,7 @@ namespace SnowyImageCopy.Helper
 				if (IsWhiteSpaceOrQuotationChar(source[i]))
 					continue;
 
-				int length = 0;
+				int length;
 				if (IsDriveRoot(i))
 				{
 					length = 3;
@@ -99,7 +99,7 @@ namespace SnowyImageCopy.Helper
 		/// <returns>Directory paths</returns>
 		public static IEnumerable<string> EnumerateDirectoryPaths(string source)
 		{
-			if (source == null)
+			if (source is null)
 				yield break;
 
 			var buff = source.Trim().Trim('\'', '"', Path.DirectorySeparatorChar);

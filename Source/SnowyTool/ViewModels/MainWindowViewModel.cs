@@ -143,7 +143,7 @@ namespace SnowyTool.ViewModels
 		{
 			get
 			{
-				if (CurrentConfig == null)
+				if (CurrentConfig is null)
 					return null;
 
 				return (CurrentConfig.UPLOAD == 1);
@@ -171,7 +171,7 @@ namespace SnowyTool.ViewModels
 		#region Search Command
 
 		public DelegateCommand SearchCommand =>
-			_searchCommand ?? (_searchCommand = new DelegateCommand(SearchExecute, CanSearchExecute));
+			_searchCommand ??= new DelegateCommand(SearchExecute, CanSearchExecute);
 		private DelegateCommand _searchCommand;
 
 		private async void SearchExecute() => await SearchConfigAsync();
@@ -182,7 +182,7 @@ namespace SnowyTool.ViewModels
 		#region Apply Command
 
 		public DelegateCommand ApplyCommand =>
-			_applyCommand ?? (_applyCommand = new DelegateCommand(ApplyExecute, CanApplyExecute));
+			_applyCommand ??= new DelegateCommand(ApplyExecute, CanApplyExecute);
 		private DelegateCommand _applyCommand;
 
 		private async void ApplyExecute() => await ApplyConfigAsync();

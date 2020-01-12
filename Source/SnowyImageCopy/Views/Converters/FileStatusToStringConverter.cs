@@ -23,25 +23,17 @@ namespace SnowyImageCopy.Views.Converters
 			if (!(value is FileStatus status))
 				return DependencyProperty.UnsetValue;
 
-			switch (status)
+			return status switch
 			{
-				case FileStatus.NotCopied:
-					return Resources.FileStatus_NotCopied;
-				case FileStatus.ToBeCopied:
-					return Resources.FileStatus_ToBeCopied;
-				case FileStatus.Copying:
-					return Resources.FileStatus_Copying;
-				case FileStatus.Copied:
-					return Resources.FileStatus_Copied;
-				case FileStatus.OnceCopied:
-					return Resources.FileStatus_OnceCopied;
-				case FileStatus.Weird:
-					return Resources.FileStatus_Weird;
-				case FileStatus.Recycled:
-					return Resources.FileStatus_Recycled;
-				default: // FileStatus.Unknown
-					return Resources.FileStatus_Unknown;
-			}
+				FileStatus.NotCopied => Resources.FileStatus_NotCopied,
+				FileStatus.ToBeCopied => Resources.FileStatus_ToBeCopied,
+				FileStatus.Copying => Resources.FileStatus_Copying,
+				FileStatus.Copied => Resources.FileStatus_Copied,
+				FileStatus.OnceCopied => Resources.FileStatus_OnceCopied,
+				FileStatus.Weird => Resources.FileStatus_Weird,
+				FileStatus.Recycled => Resources.FileStatus_Recycled,
+				_ => Resources.FileStatus_Unknown,
+			};
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

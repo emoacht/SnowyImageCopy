@@ -10,7 +10,7 @@ namespace SnowyImageCopy.Common
 	public abstract class NotificationDisposableObject : NotificationObject, IDisposable
 	{
 		protected CompositeDisposable Subscription => _subscription.Value;
-		private Lazy<CompositeDisposable> _subscription = new Lazy<CompositeDisposable>(() => new CompositeDisposable());
+		private readonly Lazy<CompositeDisposable> _subscription = new Lazy<CompositeDisposable>(() => new CompositeDisposable());
 
 		#region IDisposable member
 

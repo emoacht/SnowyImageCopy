@@ -20,7 +20,7 @@ namespace SnowyImageCopy.Helper
 		/// <returns>Descendant visuals</returns>
 		public static IEnumerable<DependencyObject> GetDescendants(DependencyObject reference)
 		{
-			if (reference == null)
+			if (reference is null)
 				yield break;
 
 			var queue = new Queue<DependencyObject>();
@@ -49,7 +49,7 @@ namespace SnowyImageCopy.Helper
 		/// <returns>Descendant visuals</returns>
 		public static IEnumerable<T> GetDescendants<T>(DependencyObject reference) where T : DependencyObject
 		{
-			if (reference == null)
+			if (reference is null)
 				yield break;
 
 			var queue = new Queue<DependencyObject>();
@@ -87,8 +87,7 @@ namespace SnowyImageCopy.Helper
 			while (true)
 			{
 				parent = VisualTreeHelper.GetParent(parent);
-
-				if (parent == null)
+				if (parent is null)
 					yield break;
 
 				yield return parent;
@@ -108,8 +107,7 @@ namespace SnowyImageCopy.Helper
 			while (true)
 			{
 				parent = VisualTreeHelper.GetParent(parent);
-
-				if (parent == null)
+				if (parent is null)
 					yield break;
 
 				if (parent is T)

@@ -23,10 +23,7 @@ namespace SnowyTool.ViewModels
 		{
 			public bool IsMonitored { get; private set; }
 
-			public PersistentMemberAttribute(bool isMonitored = false)
-			{
-				this.IsMonitored = isMonitored;
-			}
+			public PersistentMemberAttribute(bool isMonitored = false) => this.IsMonitored = isMonitored;
 		}
 
 		#endregion
@@ -167,13 +164,13 @@ namespace SnowyTool.ViewModels
 			get => _APPAUTOTIME;
 			set
 			{
-				if ((value != 0) && ((value < 60000) || (4294967294 < value)))
+				if ((value != 0) && ((value < 60_000) || (4_294_967_294 < value)))
 					return;
 
 				_APPAUTOTIME = value;
 			}
 		}
-		private uint _APPAUTOTIME = 300000; // Default
+		private uint _APPAUTOTIME = 300_000; // Default
 
 		/// <summary>
 		/// DNS operation mode
@@ -313,8 +310,7 @@ namespace SnowyTool.ViewModels
 		/// <remarks>This is to hold unusable parameters (LOCK, APPINFO) and unknown ones.</remarks>
 		private readonly Dictionary<string, string> _remaining = new Dictionary<string, string>();
 
-		public bool IsChanged =>
-			!_isImporting && !GetMonitoredValues().SequenceEqual(_monitoredValues);
+		public bool IsChanged => !_isImporting && !GetMonitoredValues().SequenceEqual(_monitoredValues);
 
 		private static readonly Regex _versionPattern = new Regex(@"[1-9]\.\d{2}\.\d{2}$", RegexOptions.Compiled); // Pattern for firmware version (number part)
 
@@ -438,7 +434,7 @@ namespace SnowyTool.ViewModels
 				foreach (var c in contents)
 				{
 					var p = _persistentProperties.FirstOrDefault(x => c.Key == x.Name);
-					if (p == null)
+					if (p is null)
 					{
 						if (!_remaining.Keys.Contains(c.Key))
 							_remaining.Add(c.Key, c.Value);
@@ -460,7 +456,8 @@ namespace SnowyTool.ViewModels
 
 				_monitoredValues = GetMonitoredValues().ToArray();
 
-				RemoveTemporaryMembers(_remaining); // Remove temporary members added by bug.
+				// Remove temporary members added by a bug in older version.
+				RemoveTemporaryMembers(_remaining);
 			}
 			finally
 			{
@@ -490,7 +487,7 @@ namespace SnowyTool.ViewModels
 			foreach (var p in _persistentProperties)
 			{
 				var value = p.GetValue(this);
-				if (value == null)
+				if (value is null)
 					continue;
 
 				outcome.Add($"{p.Name}{Separator}{value}");
@@ -520,11 +517,6 @@ namespace SnowyTool.ViewModels
 
 		private static void RemoveTemporaryMembers(Dictionary<string, string> source)
 		{
-			var sourceNames = source.Select(x => x.Key).ToArray();
-
-			if (!_temporaryMemberNames.All(x => sourceNames.Contains(x)))
-				return;
-
 			foreach (var name in _temporaryMemberNames)
 				source.Remove(name);
 		}
@@ -555,11 +547,8 @@ namespace SnowyTool.ViewModels
 			}
 			else
 			{
-				if (a == null)
-					a = string.Empty;
-
-				if (b == null)
-					b = string.Empty;
+				a ??= string.Empty;
+				b ??= string.Empty;
 			}
 		}
 

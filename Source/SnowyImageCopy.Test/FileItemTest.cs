@@ -159,7 +159,7 @@ namespace SnowyImageCopy.Test
 				directory: "",
 				fileName: "DCIM",
 				size: 0,
-				date: default(DateTime));
+				date: default);
 		}
 
 		/// <summary>
@@ -176,7 +176,7 @@ namespace SnowyImageCopy.Test
 				directory: "/DCIM/150___03",
 				fileName: "IMG_3862.CR2",
 				size: 0,
-				date: default(DateTime),
+				date: default,
 				isImported: false);
 		}
 

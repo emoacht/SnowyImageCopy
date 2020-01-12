@@ -202,7 +202,7 @@ namespace SnowyImageCopy.Models
 			var bitmapFrame = BitmapFrame.Create(stream, BitmapCreateOptions.DelayCreation, BitmapCacheOption.OnDemand);
 			var bitmapSource = bitmapFrame.Thumbnail;
 
-			if (bitmapSource == null)
+			if (bitmapSource is null)
 				return null;
 
 			using (var ms = new MemoryStream())
@@ -651,7 +651,7 @@ namespace SnowyImageCopy.Models
 				}
 				catch (Exception ex) when (IsImageNotSupported(ex))
 				{
-					return default(DateTime);
+					return default;
 				}
 				catch (Exception ex)
 				{
@@ -706,7 +706,7 @@ namespace SnowyImageCopy.Models
 			return (bitmapFrame.Metadata is BitmapMetadata metadata)
 				&& DateTime.TryParse(metadata.DateTaken, out DateTime dateTaken)
 				? DateTime.SpecifyKind(dateTaken, kind)
-				: default(DateTime);
+				: default;
 		}
 
 		/// <summary>

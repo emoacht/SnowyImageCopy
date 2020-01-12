@@ -63,7 +63,7 @@ namespace SnowyTool.Views.Controls
 			if (FadeOutTime <= 0D)
 				return;
 
-			if (_fadingTimer == null)
+			if (_fadingTimer is null)
 			{
 				_fadingTimer = new DispatcherTimer();
 				_fadingTimer.Tick += OnFadingTimerTick;

@@ -185,7 +185,7 @@ namespace SnowyImageCopy.Models
 
 		public ObservableCollection<DateTime> TargetDates
 		{
-			get => _targetDates ?? (_targetDates = new ObservableCollection<DateTime>());
+			get => _targetDates ??= new ObservableCollection<DateTime>();
 			set
 			{
 				if ((_targetDates != null) && (_targetDates == value))

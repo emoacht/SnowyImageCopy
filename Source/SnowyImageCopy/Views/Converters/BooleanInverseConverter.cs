@@ -28,8 +28,7 @@ namespace SnowyImageCopy.Views.Converters
 			if (!(value is bool sourceValue))
 				return DependencyProperty.UnsetValue;
 
-			var condition = FindBoolean(parameter);
-			if (condition.HasValue && (condition.Value != sourceValue))
+			if (TryParse(parameter, out bool conditionValue) && (sourceValue != conditionValue))
 				return Binding.DoNothing; // DependencyProperty.UnsetValue will not work well.
 
 			return !sourceValue;
@@ -40,15 +39,15 @@ namespace SnowyImageCopy.Views.Converters
 			return Convert(value, targetType, parameter, culture);
 		}
 
-		private static bool? FindBoolean(object source)
+		private static bool TryParse(object source, out bool value)
 		{
-			if (source is bool buff)
-				return buff;
-
-			if (bool.TryParse(source as string, out buff))
-				return buff;
-
-			return null;
+			if ((source is bool buff) || bool.TryParse(source as string, out buff))
+			{
+				value = buff;
+				return true;
+			}
+			value = default;
+			return false;
 		}
 	}
 }
