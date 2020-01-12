@@ -217,7 +217,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void SetWidth()
 		{
-			if ((_foregroundButtonLeft == null) || (_foregroundButtonRight == null))
+			if ((_foregroundButtonLeft is null) || (_foregroundButtonRight is null))
 				return;
 
 			_foregroundButtonLeft.Width = InnerButtonWidth;
@@ -237,7 +237,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void SetAppearance()
 		{
-			if ((_backgroundTextBox == null) || (_foregroundButtonLeft == null) || (_foregroundButtonRight == null) || (_foregroundTextBlock == null))
+			if ((_backgroundTextBox is null) || (_foregroundButtonLeft is null) || (_foregroundButtonRight is null) || (_foregroundTextBlock is null))
 				return;
 
 			if (IsChecked)

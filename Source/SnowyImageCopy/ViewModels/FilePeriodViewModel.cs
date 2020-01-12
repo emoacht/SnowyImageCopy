@@ -54,20 +54,12 @@ namespace SnowyImageCopy.ViewModels
 
 		private void SetDescription(FilePeriod period)
 		{
-			Description = GetDescription();
-
-			string GetDescription()
+			Description = period switch
 			{
-				switch (period)
-				{
-					case FilePeriod.Today:
-						return Resources.Options_DateToday;
-					case FilePeriod.Select:
-						return Resources.Options_DateSelect;
-					default:
-						return Resources.Options_DateAll;
-				}
-			}
+				FilePeriod.Today => Resources.Options_DateToday,
+				FilePeriod.Select => Resources.Options_DateSelect,
+				_ => Resources.Options_DateAll,
+			};
 		}
 	}
 }

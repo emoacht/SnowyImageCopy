@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Helper
 		/// <returns>Outcome System.Windows.Media.Imaging.BitmapImage</returns>
 		public static BitmapImage ToBitmapImage(this System.Drawing.Bitmap source)
 		{
-			if (source == null)
+			if (source is null)
 				throw new ArgumentNullException(nameof(source));
 
 			using (var ms = new MemoryStream())
@@ -57,7 +57,7 @@ namespace SnowyImageCopy.Helper
 		/// <returns>Outcome System.Windows.Media.Imaging.BitmapSource</returns>
 		public static BitmapSource ToBitmapSource(this System.Drawing.Bitmap source)
 		{
-			if (source == null)
+			if (source is null)
 				throw new ArgumentNullException(nameof(source));
 
 			var handleBitmap = IntPtr.Zero;

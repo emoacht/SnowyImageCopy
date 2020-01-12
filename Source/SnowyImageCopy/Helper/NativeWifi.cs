@@ -391,7 +391,7 @@ namespace SnowyImageCopy.Helper
 
 				return (result == ERROR_SUCCESS)
 					? Marshal.PtrToStructure<WLAN_CONNECTION_ATTRIBUTES>(queryData)
-					: default(WLAN_CONNECTION_ATTRIBUTES);
+					: default;
 			}
 			finally
 			{

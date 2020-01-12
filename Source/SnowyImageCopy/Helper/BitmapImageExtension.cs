@@ -21,7 +21,7 @@ namespace SnowyImageCopy.Helper
 		/// <returns>Outcome System.Drawing.Bitmap</returns>
 		public static System.Drawing.Bitmap ToBitmap<TEncoder>(this BitmapImage source) where TEncoder : BitmapEncoder, new()
 		{
-			if (source == null)
+			if (source is null)
 				throw new ArgumentNullException(nameof(source));
 
 			using (var ms = new MemoryStream())
@@ -43,7 +43,7 @@ namespace SnowyImageCopy.Helper
 		/// <param name="filePath">File path</param>
 		public static void Save<TEncoder>(this BitmapImage source, string filePath) where TEncoder : BitmapEncoder, new()
 		{
-			if (source == null)
+			if (source is null)
 				throw new ArgumentNullException(nameof(source));
 
 			if (string.IsNullOrEmpty(filePath))
@@ -65,7 +65,7 @@ namespace SnowyImageCopy.Helper
 		/// <returns>Codec info</returns>
 		public static BitmapCodecInfo GetCodecInfo<TEncoder>(this BitmapImage source) where TEncoder : BitmapEncoder, new()
 		{
-			if (source == null)
+			if (source is null)
 				throw new ArgumentNullException(nameof(source));
 
 			using (var ms = new MemoryStream())

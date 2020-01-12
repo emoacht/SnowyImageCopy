@@ -279,16 +279,13 @@ namespace SnowyImageCopy.Models
 			else
 			{
 				var sizeCopiedLatest = (long)(info?.CurrentValue).GetValueOrDefault();
-
 				ProgressCopiedAll = (double)(_sizeCopiedAll + sizeCopiedLatest) * 100D / (double)_sizeOverall;
-
-				//Debug.WriteLine($"ProgressCopiedAll: {ProgressCopiedAll}");
 			}
 		}
 
 		private void UpdateProgressCurrent(ProgressInfo info)
 		{
-			if (info == null)
+			if (info is null)
 			{
 				ProgressCopiedCurrent = 0D;
 				RemainingTime = TimeSpan.Zero;
@@ -310,8 +307,6 @@ namespace SnowyImageCopy.Models
 				ProgressCopiedCurrent = (double)(_sizeCopiedCurrent + sizeCopiedLatest) * 100D / (double)sizeCopiedToBeCopiedCurrent;
 				RemainingTime = TimeSpan.FromSeconds((double)(_sizeToBeCopiedCurrent - sizeCopiedLatest) * elapsedTimeLatest.TotalSeconds / (double)sizeCopiedLatest);
 				ProgressState = TaskbarItemProgressState.Normal;
-
-				//Debug.WriteLine($"ProgressCopiedCurrent: {ProgressCopiedCurrent} RemainingTime: {RemainingTime}");
 			}
 		}
 
@@ -352,7 +347,7 @@ namespace SnowyImageCopy.Models
 		{
 			if (IsAutoRunning)
 			{
-				if (_autoTimer == null)
+				if (_autoTimer is null)
 				{
 					_autoTimer = new DispatcherTimer();
 					_autoTimer.Tick += OnAutoTimerTick;
@@ -365,7 +360,7 @@ namespace SnowyImageCopy.Models
 			}
 			else
 			{
-				if (_autoTimer == null)
+				if (_autoTimer is null)
 					return;
 
 				_autoTimer.Stop();
@@ -859,7 +854,7 @@ namespace SnowyImageCopy.Models
 
 						if (Settings.Current.SkipsOnceCopiedFile)
 						{
-							if (item.IsOnceCopied == null)
+							if (item.IsOnceCopied is null)
 							{
 								if (item.IsAliveLocal)
 								{
@@ -1079,7 +1074,7 @@ namespace SnowyImageCopy.Models
 				while (true)
 				{
 					var item = FileListCore.FirstOrDefault(x => x.IsTarget && (x.Status == FileStatus.ToBeCopied));
-					if (item == null)
+					if (item is null)
 						break; // Copy completed.
 
 					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
@@ -1253,7 +1248,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		internal async Task SaveDesktopAsync()
 		{
-			if ((CurrentImageData == null) || (CurrentItem == null))
+			if ((CurrentImageData is null) || (CurrentItem is null))
 				return;
 
 			try
@@ -1282,7 +1277,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		internal async Task SendClipboardAsync()
 		{
-			if (CurrentImageData == null)
+			if (CurrentImageData is null)
 				return;
 
 			try
@@ -1333,7 +1328,7 @@ namespace SnowyImageCopy.Models
 		private static string ComposeLocalPath(FileItemViewModel item)
 		{
 			var folderName = Settings.Current.CreatesDatedFolder
-				? (item.Date != default(DateTime))
+				? (item.Date != default)
 					? item.Date.ToString("yyyyMMdd")
 					: UnknownFolderName
 				: string.Empty;

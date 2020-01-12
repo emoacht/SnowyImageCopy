@@ -20,17 +20,10 @@ namespace SnowyImageCopy.ViewModels
 
 		public IReadOnlyCollection<FilePeriodViewModel> FilePeriodList
 		{
-			get
-			{
-				if (_filePeriodList == null)
-				{
-					_filePeriodList = Enum.GetValues(typeof(FilePeriod))
-						.Cast<FilePeriod>()
-						.Select(x => new FilePeriodViewModel { Period = x })
-						.ToArray();
-				}
-				return _filePeriodList;
-			}
+			get => _filePeriodList ??= Enum.GetValues(typeof(FilePeriod))
+				.Cast<FilePeriod>()
+				.Select(x => new FilePeriodViewModel { Period = x })
+				.ToArray();
 		}
 		private FilePeriodViewModel[] _filePeriodList;
 
@@ -55,15 +48,13 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				if (_cultureMap == null)
-				{
-					_cultureMap = new[] { new KeyValuePair<string, string>(string.Empty, CultureNameAuto) }
-						.Concat(ResourceService.Current.SupportedCultures
-							.Select(x => new KeyValuePair<string, string>(x.Name, x.EnglishName)) // Or NativeName
-							.OrderBy(x => x.Value))
-						.ToDictionary(x => x.Key, x => x.Value);
-				}
-				return _cultureMap.Select(x => x.Value).ToArray();
+				_cultureMap ??= new[] { new KeyValuePair<string, string>(string.Empty, CultureNameAuto) }
+					.Concat(ResourceService.Current.SupportedCultures
+						.Select(x => new KeyValuePair<string, string>(x.Name, x.EnglishName)) // Or NativeName
+						.OrderBy(x => x.Value))
+					.ToDictionary(x => x.Key, x => x.Value);
+
+				return _cultureMap.Values.ToArray();
 			}
 		}
 
@@ -71,12 +62,12 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				var index = _cultureMap.Select(x => x.Key).ToList().FindIndex(x => x == Settings.Current.CultureName);
+				var index = _cultureMap.Keys.ToList().FindIndex(x => x == Settings.Current.CultureName);
 				return Math.Max(0, index);
 			}
 			set
 			{
-				var cultureName = _cultureMap.Select(x => x.Key).ToList()[value];
+				var cultureName = _cultureMap.Keys.ToList()[value];
 
 				// If cultureName is empty, Culture of this application's Resources will be automatically selected.
 				ResourceService.Current.ChangeCulture(cultureName);

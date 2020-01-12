@@ -24,7 +24,7 @@ namespace SnowyTool.Common
 
 		protected void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
 		{
-			if (propertyExpression == null)
+			if (propertyExpression is null)
 				throw new ArgumentNullException(nameof(propertyExpression));
 
 			if (!(propertyExpression.Body is MemberExpression memberExpression))

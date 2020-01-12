@@ -97,7 +97,7 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		private void CheckIntersection()
 		{
-			if ((this.AssociatedObject == null) || (TargetFrameworkElement == null))
+			if ((this.AssociatedObject is null) || (TargetFrameworkElement is null))
 				return;
 
 			IsIntersected = IsFrameworkElementIntersected(this.AssociatedObject, new[] { TargetFrameworkElement });
@@ -111,7 +111,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			// Compute factor from default DPI to Window DPI.
 			var factor = new { X = (double)WindowDpi.X / Dpi.Default.X, Y = (double)WindowDpi.Y / Dpi.Default.Y };
 
-			var baseElementLocation = baseElement.PointToScreen(default(Point));
+			var baseElementLocation = baseElement.PointToScreen(default);
 
 			var expandedRect = new Rect(
 				baseElementLocation.X - ExpandedMargin.Left * factor.X,
@@ -122,7 +122,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			var rects = new[] { expandedRect }
 				.Concat(targetElements
 					.Where(x => x.IsVisible) // If not visible, PointToScreen method will fail.
-					.Select(x => new Rect(x.PointToScreen(default(Point)), new Size(x.ActualWidth * factor.X, x.ActualHeight * factor.Y))))
+					.Select(x => new Rect(x.PointToScreen(default), new Size(x.ActualWidth * factor.X, x.ActualHeight * factor.Y))))
 				.ToArray();
 
 			return IsRectIntersected(rects);
@@ -132,7 +132,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			var rects = elements
 				.Where(x => x.IsVisible) // If not visible, PointToScreen method will fail.
-				.Select(x => new Rect(x.PointToScreen(default(Point)), new Size(x.ActualWidth, x.ActualHeight)))
+				.Select(x => new Rect(x.PointToScreen(default), new Size(x.ActualWidth, x.ActualHeight)))
 				.ToArray();
 
 			return IsRectIntersected(rects);

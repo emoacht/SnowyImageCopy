@@ -17,22 +17,22 @@ namespace SnowyImageCopy.Views
 
 		#region Assembly attributes
 
-		public static string Title => _title ?? (_title = GetAttribute<AssemblyTitleAttribute>(_assembly).Title);
+		public static string Title => _title ??= GetAttribute<AssemblyTitleAttribute>(_assembly).Title;
 		private static string _title;
 
-		public static string Description => _description ?? (_description = GetAttribute<AssemblyDescriptionAttribute>(_assembly).Description);
+		public static string Description => _description ??= GetAttribute<AssemblyDescriptionAttribute>(_assembly).Description;
 		private static string _description;
 
-		public static string Company => _company ?? (_company = GetAttribute<AssemblyCompanyAttribute>(_assembly).Company);
+		public static string Company => _company ??= GetAttribute<AssemblyCompanyAttribute>(_assembly).Company;
 		private static string _company;
 
-		public static string Product => _product ?? (_product = GetAttribute<AssemblyProductAttribute>(_assembly).Product);
+		public static string Product => _product ??= GetAttribute<AssemblyProductAttribute>(_assembly).Product;
 		private static string _product;
 
-		public static string Copyright => _copyright ?? (_copyright = GetAttribute<AssemblyCopyrightAttribute>(_assembly).Copyright);
+		public static string Copyright => _copyright ??= GetAttribute<AssemblyCopyrightAttribute>(_assembly).Copyright;
 		private static string _copyright;
 
-		public static string Trademark => _trademark ?? (_trademark = GetAttribute<AssemblyTrademarkAttribute>(_assembly).Trademark);
+		public static string Trademark => _trademark ??= GetAttribute<AssemblyTrademarkAttribute>(_assembly).Trademark;
 		private static string _trademark;
 
 		private static TAttribute GetAttribute<TAttribute>(Assembly assembly) where TAttribute : Attribute =>

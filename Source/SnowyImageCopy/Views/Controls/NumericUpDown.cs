@@ -187,7 +187,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void OnButtonClick(object sender, RoutedEventArgs e)
 		{
-			if ((UpButton == null) || (DownButton == null))
+			if ((UpButton is null) || (DownButton is null))
 				return;
 
 			var direction = e.Source.Equals(DownButton) ? Direction.Down : Direction.Up;
@@ -245,7 +245,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void ChangeCanChangeValue()
 		{
-			if ((UpButton == null) || (DownButton == null))
+			if ((UpButton is null) || (DownButton is null))
 				return;
 
 			UpButton.IsEnabled = (Value < Maximum);

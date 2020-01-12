@@ -68,7 +68,7 @@ namespace SnowyImageCopy.Models
 
 		public int CompareTo(HashItem other)
 		{
-			if (other == null)
+			if (other is null)
 				return 1;
 
 			if (object.ReferenceEquals(this, other))
@@ -88,7 +88,7 @@ namespace SnowyImageCopy.Models
 
 		public bool Equals(HashItem other)
 		{
-			if (other == null)
+			if (other is null)
 				return false;
 
 			if (object.ReferenceEquals(this, other))

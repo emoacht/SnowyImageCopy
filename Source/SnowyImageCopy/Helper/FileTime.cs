@@ -54,7 +54,7 @@ namespace SnowyImageCopy.Helper
 		/// <remarks>DateTimeKind of time must be properly set. Otherwise, it will be regarded as UTC time.</remarks>
 		public static bool SetFileTime(SafeFileHandle handle, DateTime creationTime, DateTime lastWriteTime)
 		{
-			return SetFileTime(handle, creationTime, default(DateTime), lastWriteTime);
+			return SetFileTime(handle, creationTime, default, lastWriteTime);
 		}
 
 		/// <summary>
@@ -74,8 +74,8 @@ namespace SnowyImageCopy.Helper
 
 			return SetFileTime(handle, ref creationFileTime, ref lastAccessFileTime, ref lastWriteFileTime);
 
-			FILETIME GetFileTime(DateTime dateTime) =>
-				dateTime.Equals(default(DateTime)) ? default(FILETIME) : new FILETIME(dateTime);
+			static FILETIME GetFileTime(DateTime dateTime) =>
+				dateTime.Equals(default) ? default : new FILETIME(dateTime);
 		}
 	}
 }

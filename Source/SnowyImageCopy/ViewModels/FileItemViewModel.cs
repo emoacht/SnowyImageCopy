@@ -181,12 +181,10 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private IFileItem _fileItem;
 
-		internal FileItemViewModel()
-			: this(string.Empty, string.Empty)
+		internal FileItemViewModel() : this(string.Empty, string.Empty)
 		{ }
 
-		internal FileItemViewModel(string fileEntry, string directoryPath)
-			: this(new FileItem(fileEntry, directoryPath))
+		internal FileItemViewModel(string fileEntry, string directoryPath) : this(new FileItem(fileEntry, directoryPath))
 		{ }
 
 		internal FileItemViewModel(IFileItem fileItem)

@@ -110,7 +110,7 @@ namespace SnowyImageCopy.Models
 			var fileInfo = new FileInfo(_placementFilePath);
 			if (!fileInfo.Exists || (fileInfo.Length == 0))
 			{
-				placement = default(T);
+				placement = default;
 				return false;
 			}
 
@@ -127,7 +127,7 @@ namespace SnowyImageCopy.Models
 			catch (Exception ex)
 			{
 				Debug.WriteLine($"Failed to load window placement.\r\n{ex}");
-				placement = default(T);
+				placement = default;
 				return false;
 			}
 		}

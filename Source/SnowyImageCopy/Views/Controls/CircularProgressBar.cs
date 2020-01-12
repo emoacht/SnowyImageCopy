@@ -175,7 +175,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void RenderArc()
 		{
-			if ((_circlePathBox == null) || (_circlePathFigure == null) || (_circleArcSegment == null))
+			if ((_circlePathBox is null) || (_circlePathFigure is null) || (_circleArcSegment is null))
 				return;
 
 			var radius = this.Width / 2D; // Outer radius

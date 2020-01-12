@@ -40,7 +40,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Whether to make window state minimized at startup of this application
 		/// </summary>
-		public static bool MakesWindowStateMinimized => CheckArgs(MakesWindowStateMinimizedOptions);		
+		public static bool MakesWindowStateMinimized => CheckArgs(MakesWindowStateMinimizedOptions);
 		private static string[] MakesWindowStateMinimizedOptions => new[] { "/minimized", "-minimized", "/m", "-m" };
 
 		/// <summary>
@@ -73,13 +73,11 @@ namespace SnowyImageCopy.Models
 
 		private static bool CheckArgs(params string[] options)
 		{
-			if (_args == null)
-			{
-				_args = Environment.GetCommandLineArgs()
-					.Skip(1) // The first arg is always executable file path.
-					.Select(x => x.ToLower())
-					.ToArray();
-			}
+			_args ??= Environment.GetCommandLineArgs()
+				.Skip(1) // The first arg is always executable file path.
+				.Select(x => x.ToLower())
+				.ToArray();
+
 			return (options != null) && _args.Intersect(options).Any();
 		}
 
