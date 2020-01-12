@@ -295,14 +295,12 @@ namespace SnowyImageCopy.Models
 			{
 				// If the format of image file is not JPEG or if there is no Exif standardized thumbnail stored,
 				// StatusCode will be HttpStatusCode.NotFound.
-				Debug.WriteLine("Image file is not JPEG format or does not contain standardized thumbnail.");
-				throw new RemoteFileThumbnailFailedException(remotePath);
+				throw new RemoteFileThumbnailFailedException("Image file is not JPEG format or does not contain standardized thumbnail.", remotePath);
 			}
 			catch (RemoteConnectionUnableException rcue) when (rcue.Code == HttpStatusCode.InternalServerError)
 			{
 				// If image file is non-standard JPEG format, StatusCode may be HttpStatusCode.InternalServerError.
-				Debug.WriteLine("Image file is non-standard JPEG format.");
-				throw new RemoteFileThumbnailFailedException(remotePath);
+				throw new RemoteFileThumbnailFailedException("Image file is non-standard JPEG format.", remotePath);
 			}
 			catch
 			{
@@ -404,12 +402,12 @@ namespace SnowyImageCopy.Models
 				// "SUCCESS": If succeeded.
 				// "ERROR":   If failed.
 				if (!result.Equals("SUCCESS", StringComparison.Ordinal))
-					throw new RemoteFileDeletionFailedException($"Result: {result}", remotePath);
+					throw new RemoteFileDeletionFailedException(result, remotePath);
 			}
 			catch (RemoteFileNotFoundException)
 			{
 				// If upload.cgi is disabled, StatusCode will be HttpStatusCode.NotFound.
-				throw new RemoteFileDeletionFailedException(remotePath);
+				throw new RemoteFileDeletionFailedException(null, remotePath);
 			}
 			catch
 			{

@@ -15,7 +15,6 @@ namespace SnowyImageCopy.Models.Exceptions
 	{
 		public CardUploadDisabledException() { }
 		public CardUploadDisabledException(string message) : base(message) { }
-		public CardUploadDisabledException(string message, Exception inner) : base(message, inner) { }
 		protected CardUploadDisabledException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }
