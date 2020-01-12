@@ -454,26 +454,23 @@ namespace SnowyImageCopy.Models
 					return false;
 				}
 			}
+			catch (RemoteConnectionUnableException)
+			{
+				OperationStatus = Resources.OperationStatus_ConnectionUnable;
+			}
+			catch (RemoteConnectionLostException)
+			{
+				OperationStatus = Resources.OperationStatus_ConnectionLost;
+			}
+			catch (TimeoutException)
+			{
+				OperationStatus = Resources.OperationStatus_TimedOut;
+			}
 			catch (Exception ex)
 			{
-				if (ex is RemoteConnectionUnableException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionUnable;
-				}
-				else if (ex is RemoteConnectionLostException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionLost;
-				}
-				else if (ex is TimeoutException)
-				{
-					OperationStatus = Resources.OperationStatus_TimedOut;
-				}
-				else
-				{
-					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine($"Failed to check if content is updated.\r\n{ex}");
-					throw new UnexpectedException("Failed to check if content is updated.", ex);
-				}
+				OperationStatus = Resources.OperationStatus_Error;
+				Debug.WriteLine($"Failed to check if content is updated.\r\n{ex}");
+				throw new UnexpectedException("Failed to check if content is updated.", ex);
 			}
 
 			return null;
@@ -493,91 +490,91 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				IsChecking = true;
-				IsCopying = true;
-				UpdateProgress();
+				try
+				{
+					IsChecking = IsCopying = true;
+					UpdateProgress();
 
-				await CheckFileBaseAsync();
+					await CheckFileBaseAsync();
 
-				UpdateProgress();
+					UpdateProgress();
 
-				LastCheckCopyTime = CheckFileToBeCopied(true)
-					? DateTime.MinValue
-					: DateTime.Now;
+					LastCheckCopyTime = CheckFileToBeCopied(true)
+						? DateTime.MinValue
+						: DateTime.Now;
 
-				await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
+					await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
 
-				LastCheckCopyTime = DateTime.Now;
+					LastCheckCopyTime = DateTime.Now;
 
-				await Task.Delay(_copyWaitingDuration);
-				UpdateProgress();
-				IsChecking = false;
-				IsCopying = false;
+					await Task.Delay(_copyWaitingDuration);
+					UpdateProgress();
+					IsChecking = IsCopying = false;
 
-				await ShowToastAsync();
+					await ShowToastAsync();
 
-				return true;
+					return true;
+				}
+				catch (OperationCanceledException)
+				{
+					SystemSounds.Asterisk.Play();
+					OperationStatus = Resources.OperationStatus_Stopped;
+				}
+				catch
+				{
+					UpdateProgress(new ProgressInfo(isError: true));
+
+					if (!IsAutoRunning)
+						SystemSounds.Hand.Play();
+
+					throw;
+				}
+				finally
+				{
+					IsChecking = IsCopying = false;
+				}
 			}
-			catch (OperationCanceledException)
+			catch (RemoteConnectionUnableException)
 			{
-				SystemSounds.Asterisk.Play();
-				OperationStatus = Resources.OperationStatus_Stopped;
+				OperationStatus = Resources.OperationStatus_ConnectionUnable;
+			}
+			catch (RemoteConnectionLostException)
+			{
+				OperationStatus = Resources.OperationStatus_ConnectionLost;
+			}
+			catch (RemoteFileNotFoundException)
+			{
+				OperationStatus = Resources.OperationStatus_NotFolderFound;
+			}
+			catch (TimeoutException)
+			{
+				OperationStatus = Resources.OperationStatus_TimedOut;
+			}
+			catch (IOException)
+			{
+				OperationStatus = Resources.OperationStatus_LocalFileAccessUnable;
+			}
+			catch (UnauthorizedAccessException)
+			{
+				OperationStatus = Resources.OperationStatus_LocalFolderUnauthorized;
+			}
+			catch (CardChangedException)
+			{
+				OperationStatus = Resources.OperationStatus_NotSameFlashAir;
+			}
+			catch (CardUploadDisabledException)
+			{
+				OperationStatus = Resources.OperationStatus_DeleteDisabled;
+			}
+			catch (RemoteFileDeletionFailedException)
+			{
+				OperationStatus = Resources.OperationStatus_DeleteFailed;
 			}
 			catch (Exception ex)
 			{
-				UpdateProgress(new ProgressInfo(isError: true));
-
-				if (!IsAutoRunning)
-					SystemSounds.Hand.Play();
-
-				if (ex is RemoteConnectionUnableException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionUnable;
-				}
-				else if (ex is RemoteConnectionLostException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionLost;
-				}
-				else if (ex is RemoteFileNotFoundException)
-				{
-					OperationStatus = Resources.OperationStatus_NotFolderFound;
-				}
-				else if (ex is TimeoutException)
-				{
-					OperationStatus = Resources.OperationStatus_TimedOut;
-				}
-				else if (ex is IOException)
-				{
-					OperationStatus = Resources.OperationStatus_LocalFileAccessUnable;
-				}
-				else if (ex is UnauthorizedAccessException)
-				{
-					OperationStatus = Resources.OperationStatus_LocalFolderUnauthorized;
-				}
-				else if (ex is CardChangedException)
-				{
-					OperationStatus = Resources.OperationStatus_NotSameFlashAir;
-				}
-				else if (ex is CardUploadDisabledException)
-				{
-					OperationStatus = Resources.OperationStatus_DeleteDisabled;
-				}
-				else if (ex is RemoteFileDeletionFailedException)
-				{
-					OperationStatus = Resources.OperationStatus_DeleteFailed;
-				}
-				else
-				{
-					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine($"Failed to check & copy files.\r\n{ex}");
-					throw new UnexpectedException("Failed to check & copy files.", ex);
-				}
-			}
-			finally
-			{
-				// In case any exception is thrown.
-				IsChecking = false;
-				IsCopying = false;
+				OperationStatus = Resources.OperationStatus_Error;
+				Debug.WriteLine($"Failed to check & copy files.\r\n{ex}");
+				throw new UnexpectedException("Failed to check & copy files.", ex);
 			}
 
 			return false;
@@ -593,53 +590,56 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				IsChecking = true;
-				UpdateProgress();
+				try
+				{
+					IsChecking = true;
+					UpdateProgress();
 
-				await CheckFileBaseAsync();
+					await CheckFileBaseAsync();
 
-				UpdateProgress();
+					UpdateProgress();
 
-				LastCheckCopyTime = CheckFileToBeCopied(false)
-					? DateTime.MinValue
-					: DateTime.Now;
+					LastCheckCopyTime = CheckFileToBeCopied(false)
+						? DateTime.MinValue
+						: DateTime.Now;
+				}
+				catch (OperationCanceledException)
+				{
+					SystemSounds.Asterisk.Play();
+					OperationStatus = Resources.OperationStatus_Stopped;
+				}
+				catch
+				{
+					UpdateProgress(new ProgressInfo(isError: true));
+					SystemSounds.Hand.Play();
+					throw;
+				}
+				finally
+				{
+					IsChecking = false;
+				}
 			}
-			catch (OperationCanceledException)
+			catch (RemoteConnectionUnableException)
 			{
-				SystemSounds.Asterisk.Play();
-				OperationStatus = Resources.OperationStatus_Stopped;
+				OperationStatus = Resources.OperationStatus_ConnectionUnable;
+			}
+			catch (RemoteConnectionLostException)
+			{
+				OperationStatus = Resources.OperationStatus_ConnectionLost;
+			}
+			catch (RemoteFileNotFoundException)
+			{
+				OperationStatus = Resources.OperationStatus_NotFolderFound;
+			}
+			catch (TimeoutException)
+			{
+				OperationStatus = Resources.OperationStatus_TimedOut;
 			}
 			catch (Exception ex)
 			{
-				UpdateProgress(new ProgressInfo(isError: true));
-				SystemSounds.Hand.Play();
-
-				if (ex is RemoteConnectionUnableException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionUnable;
-				}
-				else if (ex is RemoteConnectionLostException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionLost;
-				}
-				else if (ex is RemoteFileNotFoundException)
-				{
-					OperationStatus = Resources.OperationStatus_NotFolderFound;
-				}
-				else if (ex is TimeoutException)
-				{
-					OperationStatus = Resources.OperationStatus_TimedOut;
-				}
-				else
-				{
-					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine($"Failed to check files.\r\n{ex}");
-					throw new UnexpectedException("Failed to check files.", ex);
-				}
-			}
-			finally
-			{
-				IsChecking = false;
+				OperationStatus = Resources.OperationStatus_Error;
+				Debug.WriteLine($"Failed to check files.\r\n{ex}");
+				throw new UnexpectedException("Failed to check files.", ex);
 			}
 		}
 
@@ -653,69 +653,71 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				IsCopying = true;
+				try
+				{
+					IsCopying = true;
 
-				await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
+					await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
 
-				await Task.Delay(_copyWaitingDuration);
-				UpdateProgress();
-				IsCopying = false;
+					await Task.Delay(_copyWaitingDuration);
+					UpdateProgress();
+					IsCopying = false;
 
-				await ShowToastAsync();
+					await ShowToastAsync();
+				}
+				catch (OperationCanceledException)
+				{
+					SystemSounds.Asterisk.Play();
+					OperationStatus = Resources.OperationStatus_Stopped;
+				}
+				catch
+				{
+					UpdateProgress(new ProgressInfo(isError: true));
+					SystemSounds.Hand.Play();
+					throw;
+				}
+				finally
+				{
+					IsCopying = false;
+				}
 			}
-			catch (OperationCanceledException)
+			catch (RemoteConnectionUnableException)
 			{
-				SystemSounds.Asterisk.Play();
-				OperationStatus = Resources.OperationStatus_Stopped;
+				OperationStatus = Resources.OperationStatus_ConnectionUnable;
+			}
+			catch (RemoteConnectionLostException)
+			{
+				OperationStatus = Resources.OperationStatus_ConnectionLost;
+			}
+			catch (TimeoutException)
+			{
+				OperationStatus = Resources.OperationStatus_TimedOut;
+			}
+			catch (IOException)
+			{
+				OperationStatus = Resources.OperationStatus_LocalFileAccessUnable;
+			}
+			catch (UnauthorizedAccessException)
+			{
+				OperationStatus = Resources.OperationStatus_LocalFolderUnauthorized;
+			}
+			catch (CardChangedException)
+			{
+				OperationStatus = Resources.OperationStatus_NotSameFlashAir;
+			}
+			catch (CardUploadDisabledException)
+			{
+				OperationStatus = Resources.OperationStatus_DeleteDisabled;
+			}
+			catch (RemoteFileDeletionFailedException)
+			{
+				OperationStatus = Resources.OperationStatus_DeleteFailed;
 			}
 			catch (Exception ex)
 			{
-				UpdateProgress(new ProgressInfo(isError: true));
-				SystemSounds.Hand.Play();
-
-				if (ex is RemoteConnectionUnableException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionUnable;
-				}
-				else if (ex is RemoteConnectionLostException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionLost;
-				}
-				else if (ex is TimeoutException)
-				{
-					OperationStatus = Resources.OperationStatus_TimedOut;
-				}
-				else if (ex is IOException)
-				{
-					OperationStatus = Resources.OperationStatus_LocalFileAccessUnable;
-				}
-				else if (ex is UnauthorizedAccessException)
-				{
-					OperationStatus = Resources.OperationStatus_LocalFolderUnauthorized;
-				}
-				else if (ex is CardChangedException)
-				{
-					OperationStatus = Resources.OperationStatus_NotSameFlashAir;
-				}
-				else if (ex is CardUploadDisabledException)
-				{
-					OperationStatus = Resources.OperationStatus_DeleteDisabled;
-				}
-				else if (ex is RemoteFileDeletionFailedException)
-				{
-					OperationStatus = Resources.OperationStatus_DeleteFailed;
-				}
-				else
-				{
-					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine($"Failed to copy files.\r\n{ex}");
-					throw new UnexpectedException("Failed to copy files.", ex);
-				}
-			}
-			finally
-			{
-				// In case any exception is thrown.
-				IsCopying = false;
+				OperationStatus = Resources.OperationStatus_Error;
+				Debug.WriteLine($"Failed to copy files.\r\n{ex}");
+				throw new UnexpectedException("Failed to copy files.", ex);
 			}
 		}
 

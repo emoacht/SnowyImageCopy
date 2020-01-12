@@ -15,7 +15,6 @@ namespace SnowyImageCopy.Models.Exceptions
 	{
 		public CardChangedException() { }
 		public CardChangedException(string message) : base(message) { }
-		public CardChangedException(string message, Exception inner) : base(message, inner) { }
 		protected CardChangedException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }

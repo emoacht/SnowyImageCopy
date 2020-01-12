@@ -15,7 +15,6 @@ namespace SnowyImageCopy.Models.Exceptions
 	{
 		public ImageNotSupportedException() { }
 		public ImageNotSupportedException(string message) : base(message) { }
-		public ImageNotSupportedException(string message, Exception inner) : base(message, inner) { }
 		protected ImageNotSupportedException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }
