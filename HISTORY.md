@@ -1,5 +1,10 @@
 ﻿## History
 
+Ver 1.6.0 2020-1-13
+
+ - Update projects
+ - Refactor
+
 Ver 1.5.5 2018-10-6
 
  - Improve handling of weird image
