@@ -25,10 +25,11 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ## Other
 
- - Libraries: [Reactive Extensions][2], [WPF Monitor Aware Window][3], [Desktop Toast][4]
+ - Libraries: [Reactive Extensions][2], [XamlBehaviors for WPF][3] [WPF Monitor Aware Window][4], [Desktop Toast][5]
  - Developer: emoacht (emotom[atmark]pobox.com)
 
 [1]: https://www.flashair-developers.com/en/
-[2]: https://github.com/Reactive-Extensions/Rx.NET
-[3]: https://github.com/emoacht/WpfMonitorAware
-[4]: https://github.com/emoacht/DesktopToast
+[2]: https://github.com/dotnet/reactive
+[3]: https://github.com/microsoft/XamlBehaviorsWpf
+[4]: https://github.com/emoacht/WpfMonitorAware
+[5]: https://github.com/emoacht/DesktopToast
