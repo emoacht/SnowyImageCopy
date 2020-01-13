@@ -51,7 +51,7 @@ namespace SnowyImageCopy.Views
 			WindowPlacement.Load(this, !CommandLine.MakesWindowStateMinimized);
 
 			_mainWindowViewModel = this.DataContext as MainWindowViewModel;
-			if (_mainWindowViewModel == null)
+			if (_mainWindowViewModel is null)
 				return;
 
 			if (CommandLine.StartsAutoCheck &&

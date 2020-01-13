@@ -8,8 +8,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Interactivity;
 using System.Windows.Navigation;
+using Microsoft.Xaml.Behaviors;
 
 namespace SnowyImageCopy.Views.Behaviors
 {
@@ -65,7 +65,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			base.OnDetaching();
 
-			if (this.AssociatedObject == null)
+			if (this.AssociatedObject is null)
 				return;
 
 			this.AssociatedObject.IsVisibleChanged -= OnIsVisibleChanged;

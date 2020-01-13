@@ -45,7 +45,7 @@ namespace SnowyImageCopy.Models
 		{
 			get
 			{
-				if ((_client == null) || (_remoteRoot != Settings.Current.RemoteRoot))
+				if ((_client is null) || (_remoteRoot != Settings.Current.RemoteRoot))
 				{
 					_client?.Dispose();
 
@@ -154,7 +154,7 @@ namespace SnowyImageCopy.Models
 		/// <remarks>This method is part of parent method.</remarks>
 		private static async Task<List<IFileItem>> GetFileListAllAsync(HttpClient client, string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
 		{
-			var itemList = await GetFileListEachAsync(client, remoteDirectoryPath, card, cancellationToken);
+			var itemList = await GetFileListEachAsync(client, remoteDirectoryPath, card, cancellationToken).ConfigureAwait(false);
 
 			for (int i = itemList.Count - 1; 0 <= i; i--)
 			{
@@ -178,7 +178,7 @@ namespace SnowyImageCopy.Models
 
 				var path = item.FilePath;
 				itemList.RemoveAt(i);
-				itemList.AddRange(await GetFileListAllAsync(client, path, card, cancellationToken));
+				itemList.AddRange(await GetFileListAllAsync(client, path, card, cancellationToken).ConfigureAwait(false));
 			}
 			return itemList;
 		}
@@ -196,7 +196,7 @@ namespace SnowyImageCopy.Models
 		{
 			var remotePath = ComposeRemotePath(FileManagerCommand.GetFileList, remoteDirectoryPath);
 
-			var fileEntries = await DownloadStringAsync(client, remotePath, card, cancellationToken);
+			var fileEntries = await DownloadStringAsync(client, remotePath, card, cancellationToken).ConfigureAwait(false);
 
 			return fileEntries.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
 				.Select<string, IFileItem>(fileEntry => new FileItem(fileEntry, remoteDirectoryPath))
@@ -295,14 +295,12 @@ namespace SnowyImageCopy.Models
 			{
 				// If the format of image file is not JPEG or if there is no Exif standardized thumbnail stored,
 				// StatusCode will be HttpStatusCode.NotFound.
-				Debug.WriteLine("Image file is not JPEG format or does not contain standardized thumbnail.");
-				throw new RemoteFileThumbnailFailedException(remotePath);
+				throw new RemoteFileThumbnailFailedException("Image file is not JPEG format or does not contain standardized thumbnail.", remotePath);
 			}
 			catch (RemoteConnectionUnableException rcue) when (rcue.Code == HttpStatusCode.InternalServerError)
 			{
 				// If image file is non-standard JPEG format, StatusCode may be HttpStatusCode.InternalServerError.
-				Debug.WriteLine("Image file is non-standard JPEG format.");
-				throw new RemoteFileThumbnailFailedException(remotePath);
+				throw new RemoteFileThumbnailFailedException("Image file is non-standard JPEG format.", remotePath);
 			}
 			catch
 			{
@@ -333,7 +331,7 @@ namespace SnowyImageCopy.Models
 				throw new ArgumentNullException(nameof(localFilePath));
 
 			var remotePath = ComposeRemotePath(FileManagerCommand.None, remoteFilePath);
-			byte[] bytes = null;
+			byte[] bytes;
 
 			try
 			{
@@ -359,8 +357,8 @@ namespace SnowyImageCopy.Models
 						// Overwrite creation time by date of image taken from Exif metadata.
 						if (canReadExif)
 						{
-							var exifDateTaken = await ImageManager.GetExifDateTakenAsync(bytes, DateTimeKind.Local);
-							if (exifDateTaken != default(DateTime))
+							var exifDateTaken = await ImageManager.GetExifDateTakenAsync(bytes, DateTimeKind.Local).ConfigureAwait(false);
+							if (exifDateTaken != default)
 								creationTime = exifDateTaken;
 						}
 
@@ -404,12 +402,12 @@ namespace SnowyImageCopy.Models
 				// "SUCCESS": If succeeded.
 				// "ERROR":   If failed.
 				if (!result.Equals("SUCCESS", StringComparison.Ordinal))
-					throw new RemoteFileDeletionFailedException($"Result: {result}", remotePath);
+					throw new RemoteFileDeletionFailedException(result, remotePath);
 			}
 			catch (RemoteFileNotFoundException)
 			{
 				// If upload.cgi is disabled, StatusCode will be HttpStatusCode.NotFound.
-				throw new RemoteFileDeletionFailedException(remotePath);
+				throw new RemoteFileDeletionFailedException(null, remotePath);
 			}
 			catch
 			{
@@ -570,23 +568,23 @@ namespace SnowyImageCopy.Models
 
 		private static async Task<string> DownloadStringAsync(HttpClient client, string path, CardInfo card, CancellationToken cancellationToken)
 		{
-			var bytes = await DownloadBytesAsync(client, path, 0, null, card, cancellationToken);
+			var bytes = await DownloadBytesAsync(client, path, 0, null, card, cancellationToken).ConfigureAwait(false);
 
 			if (_recordsDownloadString)
-				await RecordDownloadStringAsync(path, bytes);
+				await RecordDownloadStringAsync(path, bytes).ConfigureAwait(false);
 
 			// Response from FlashAir card seems to be encoded by ASCII.
 			return Encoding.ASCII.GetString(bytes);
 		}
 
-		private static async Task<byte[]> DownloadBytesAsync(HttpClient client, string path, CardInfo card, CancellationToken cancellationToken)
+		private static Task<byte[]> DownloadBytesAsync(HttpClient client, string path, CardInfo card, CancellationToken cancellationToken)
 		{
-			return await DownloadBytesAsync(client, path, 0, null, card, cancellationToken);
+			return DownloadBytesAsync(client, path, 0, null, card, cancellationToken);
 		}
 
-		private static async Task<byte[]> DownloadBytesAsync(HttpClient client, string path, int size, CardInfo card, CancellationToken cancellationToken)
+		private static Task<byte[]> DownloadBytesAsync(HttpClient client, string path, int size, CardInfo card, CancellationToken cancellationToken)
 		{
-			return await DownloadBytesAsync(client, path, size, null, card, cancellationToken);
+			return DownloadBytesAsync(client, path, size, null, card, cancellationToken);
 		}
 
 		private static async Task<byte[]> DownloadBytesAsync(HttpClient client, string path, int size, IProgress<ProgressInfo> progress, CardInfo card, CancellationToken cancellationToken)
@@ -600,7 +598,7 @@ namespace SnowyImageCopy.Models
 				{
 					try
 					{
-						using (var response = await client.GetAsync(path, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+						using (var response = await client.GetAsync(path, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
 						{
 							// If HttpResponseMessage.EnsureSuccessStatusCode is set, an exception by this setting
 							// will be thrown in the scope of HttpClient and so cannot be caught in this method.
@@ -657,7 +655,7 @@ namespace SnowyImageCopy.Models
 								{
 									var monitorTask = tcs.Task;
 
-									if ((size == 0) || (progress == null))
+									if ((size == 0) || (progress is null))
 									{
 										// Route without progress reporting
 										var readTask = Task.Run(async () => await response.Content.ReadAsByteArrayAsync());
@@ -693,7 +691,7 @@ namespace SnowyImageCopy.Models
 										double stepCurrent = 1D;
 										var startTime = DateTime.Now;
 
-										using (var stream = await response.Content.ReadAsStreamAsync())
+										using (var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
 										{
 											while (readLengthTotal != size)
 											{

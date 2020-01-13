@@ -20,24 +20,17 @@ namespace SnowyImageCopy.Views.Converters
 	{
 		public static IReadOnlyDictionary<FileStatus, Color> StatusColorMap
 		{
-			get
+			get => _statusColorMap ??= new Dictionary<FileStatus, Color>
 			{
-				if (_statusColorMap == null)
-				{
-					_statusColorMap = new Dictionary<FileStatus, Color>
-					{
-						{FileStatus.Unknown, (Color)Application.Current.Resources["FileItemStatus.UnknownColor"]},
-						{FileStatus.NotCopied, (Color)Application.Current.Resources["FileItemStatus.NotCopiedColor"]},
-						{FileStatus.ToBeCopied,(Color)Application.Current.Resources["FileItemStatus.ToBeCopiedColor"]},
-						{FileStatus.Copying, (Color)Application.Current.Resources["FileItemStatus.CopyingColor"]},
-						{FileStatus.Copied, (Color)Application.Current.Resources["FileItemStatus.CopiedColor"]},
-						{FileStatus.OnceCopied, (Color)Application.Current.Resources["FileItemStatus.OnceCopiedColor"]},
-						{FileStatus.Weird, (Color)Application.Current.Resources["FileItemStatus.WeirdColor"]},
-						{FileStatus.Recycled, (Color)Application.Current.Resources["FileItemStatus.RecycledColor"]},
-					};
-				}
-				return _statusColorMap;
-			}
+				{FileStatus.Unknown, (Color)Application.Current.Resources["FileItemStatus.UnknownColor"]},
+				{FileStatus.NotCopied, (Color)Application.Current.Resources["FileItemStatus.NotCopiedColor"]},
+				{FileStatus.ToBeCopied,(Color)Application.Current.Resources["FileItemStatus.ToBeCopiedColor"]},
+				{FileStatus.Copying, (Color)Application.Current.Resources["FileItemStatus.CopyingColor"]},
+				{FileStatus.Copied, (Color)Application.Current.Resources["FileItemStatus.CopiedColor"]},
+				{FileStatus.OnceCopied, (Color)Application.Current.Resources["FileItemStatus.OnceCopiedColor"]},
+				{FileStatus.Weird, (Color)Application.Current.Resources["FileItemStatus.WeirdColor"]},
+				{FileStatus.Recycled, (Color)Application.Current.Resources["FileItemStatus.RecycledColor"]}
+			};
 		}
 		private static Dictionary<FileStatus, Color> _statusColorMap;
 

@@ -43,14 +43,8 @@ namespace SnowyImageCopy.ViewModels
 
 		public ItemObservableCollection<FileItemViewModel> FileListCore { get; } = new ItemObservableCollection<FileItemViewModel>();
 
-		public ListCollectionView FileListCoreView
-		{
-			get
-			{
-				return _fileListCoreView ?? (_fileListCoreView =
-					new ListCollectionView(FileListCore) { Filter = item => ((FileItemViewModel)item).IsTarget });
-			}
-		}
+		public ListCollectionView FileListCoreView =>
+			_fileListCoreView ??= new ListCollectionView(FileListCore) { Filter = item => ((FileItemViewModel)item).IsTarget };
 		private ListCollectionView _fileListCoreView;
 
 		public int FileListCoreViewIndex
@@ -87,7 +81,7 @@ namespace SnowyImageCopy.ViewModels
 		#region Check & Copy Command
 
 		public DelegateCommand CheckAndCopyCommand =>
-			_checkAndCopyCommand ?? (_checkAndCopyCommand = new DelegateCommand(CheckAndCopyExecute, CanCheckAndCopyExecute));
+			_checkAndCopyCommand ??= new DelegateCommand(CheckAndCopyExecute, CanCheckAndCopyExecute);
 		private DelegateCommand _checkAndCopyCommand;
 
 		private async void CheckAndCopyExecute() => await Op.CheckCopyFileAsync();
@@ -98,7 +92,7 @@ namespace SnowyImageCopy.ViewModels
 		#region Check & Copy Auto Command
 
 		public DelegateCommand CheckAndCopyAutoCommand =>
-			_checkAndCopyAutoCommand ?? (_checkAndCopyAutoCommand = new DelegateCommand(CheckAndCopyAutoExecute, CanCheckAndCopyAutoExecute));
+			_checkAndCopyAutoCommand ??= new DelegateCommand(CheckAndCopyAutoExecute, CanCheckAndCopyAutoExecute);
 		private DelegateCommand _checkAndCopyAutoCommand;
 
 		private void CheckAndCopyAutoExecute() => Op.StartAutoTimer();
@@ -109,7 +103,7 @@ namespace SnowyImageCopy.ViewModels
 		#region Check Command
 
 		public DelegateCommand CheckCommand =>
-			_checkFileCommand ?? (_checkFileCommand = new DelegateCommand(CheckExecute, CanCheckExecute));
+			_checkFileCommand ??= new DelegateCommand(CheckExecute, CanCheckExecute);
 		private DelegateCommand _checkFileCommand;
 
 		private async void CheckExecute() => await Op.CheckFileAsync();
@@ -120,7 +114,7 @@ namespace SnowyImageCopy.ViewModels
 		#region Copy Command
 
 		public DelegateCommand CopyCommand =>
-			_copyCommand ?? (_copyCommand = new DelegateCommand(CopyExecute, CanCopyExecute));
+			_copyCommand ??= new DelegateCommand(CopyExecute, CanCopyExecute);
 		private DelegateCommand _copyCommand;
 
 		private async void CopyExecute() => await Op.CopyFileAsync();
@@ -131,7 +125,7 @@ namespace SnowyImageCopy.ViewModels
 		#region Stop Command
 
 		public DelegateCommand StopCommand =>
-			_stopCommand ?? (_stopCommand = new DelegateCommand(StopExecute, CanStopExecute));
+			_stopCommand ??= new DelegateCommand(StopExecute, CanStopExecute);
 		private DelegateCommand _stopCommand;
 
 		private void StopExecute() => Op.Stop();
@@ -142,7 +136,7 @@ namespace SnowyImageCopy.ViewModels
 		#region Save Desktop Command
 
 		public DelegateCommand SaveDesktopCommand =>
-			_saveDesktopCommand ?? (_saveDesktopCommand = new DelegateCommand(SaveDesktopExecute, CanSaveDesktopExecute));
+			_saveDesktopCommand ??= new DelegateCommand(SaveDesktopExecute, CanSaveDesktopExecute);
 		private DelegateCommand _saveDesktopCommand;
 
 		private async void SaveDesktopExecute() => await Op.SaveDesktopAsync();
@@ -153,7 +147,7 @@ namespace SnowyImageCopy.ViewModels
 		#region Send Clipboard Command
 
 		public DelegateCommand SendClipboardCommand =>
-			_sendClipboardCommand ?? (_sendClipboardCommand = new DelegateCommand(SendClipboardExecute, CanSendClipboardExecute));
+			_sendClipboardCommand ??= new DelegateCommand(SendClipboardExecute, CanSendClipboardExecute);
 		private DelegateCommand _sendClipboardCommand;
 
 		private async void SendClipboardExecute() => await Op.SendClipboardAsync();
@@ -221,7 +215,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public BitmapSource CurrentImage
 		{
-			get => _currentImage ?? (_currentImage = GetDefaultCurrentImage());
+			get => _currentImage ??= GetDefaultCurrentImage();
 			set
 			{
 				_currentImage = value;
@@ -267,10 +261,7 @@ namespace SnowyImageCopy.ViewModels
 				}
 			}
 
-			if (image == null)
-				image = GetDefaultCurrentImage();
-
-			CurrentImage = image;
+			CurrentImage = image ?? GetDefaultCurrentImage();
 		}
 
 		private BitmapImage GetDefaultCurrentImage()

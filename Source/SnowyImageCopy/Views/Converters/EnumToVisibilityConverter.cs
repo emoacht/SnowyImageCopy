@@ -28,11 +28,10 @@ namespace SnowyImageCopy.Views.Converters
 			if (!(value is Enum sourceValue) || !(parameter is string conditionString))
 				return DependencyProperty.UnsetValue;
 
-			var condition = GetEnumValue(value.GetType(), conditionString);
-			if (condition == null)
+			if (!TryParse(value.GetType(), conditionString, out Enum conditionValue))
 				return DependencyProperty.UnsetValue;
 
-			return ((Enum)value).Equals(condition)
+			return sourceValue.Equals(conditionValue) // == operator works well for concrete enum but not for System.Enum.
 				? Visibility.Visible
 				: Visibility.Collapsed;
 		}
@@ -42,11 +41,16 @@ namespace SnowyImageCopy.Views.Converters
 			throw new NotImplementedException();
 		}
 
-		private static Enum GetEnumValue(Type enumType, string source)
+		private static bool TryParse(Type enumType, string source, out Enum value)
 		{
-			return Enum.GetValues(enumType)
-				.Cast<Enum>()
-				.FirstOrDefault(x => x.ToString().Equals(source, StringComparison.OrdinalIgnoreCase));
+			// Compare enum values with source string ignoring the case.
+			// Enum.IsDefined and Enum.Parse methods are case-sensitive and so not usable for this purpose.
+			value = enumType.IsEnum
+				? Enum.GetValues(enumType).Cast<Enum>()
+					.FirstOrDefault(x => x.ToString().Equals(source.Trim(), StringComparison.OrdinalIgnoreCase))
+				: null;
+
+			return (value != null);
 		}
 	}
 }

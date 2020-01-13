@@ -279,16 +279,13 @@ namespace SnowyImageCopy.Models
 			else
 			{
 				var sizeCopiedLatest = (long)(info?.CurrentValue).GetValueOrDefault();
-
 				ProgressCopiedAll = (double)(_sizeCopiedAll + sizeCopiedLatest) * 100D / (double)_sizeOverall;
-
-				//Debug.WriteLine($"ProgressCopiedAll: {ProgressCopiedAll}");
 			}
 		}
 
 		private void UpdateProgressCurrent(ProgressInfo info)
 		{
-			if (info == null)
+			if (info is null)
 			{
 				ProgressCopiedCurrent = 0D;
 				RemainingTime = TimeSpan.Zero;
@@ -310,8 +307,6 @@ namespace SnowyImageCopy.Models
 				ProgressCopiedCurrent = (double)(_sizeCopiedCurrent + sizeCopiedLatest) * 100D / (double)sizeCopiedToBeCopiedCurrent;
 				RemainingTime = TimeSpan.FromSeconds((double)(_sizeToBeCopiedCurrent - sizeCopiedLatest) * elapsedTimeLatest.TotalSeconds / (double)sizeCopiedLatest);
 				ProgressState = TaskbarItemProgressState.Normal;
-
-				//Debug.WriteLine($"ProgressCopiedCurrent: {ProgressCopiedCurrent} RemainingTime: {RemainingTime}");
 			}
 		}
 
@@ -352,7 +347,7 @@ namespace SnowyImageCopy.Models
 		{
 			if (IsAutoRunning)
 			{
-				if (_autoTimer == null)
+				if (_autoTimer is null)
 				{
 					_autoTimer = new DispatcherTimer();
 					_autoTimer.Tick += OnAutoTimerTick;
@@ -365,7 +360,7 @@ namespace SnowyImageCopy.Models
 			}
 			else
 			{
-				if (_autoTimer == null)
+				if (_autoTimer is null)
 					return;
 
 				_autoTimer.Stop();
@@ -459,26 +454,23 @@ namespace SnowyImageCopy.Models
 					return false;
 				}
 			}
+			catch (RemoteConnectionUnableException)
+			{
+				OperationStatus = Resources.OperationStatus_ConnectionUnable;
+			}
+			catch (RemoteConnectionLostException)
+			{
+				OperationStatus = Resources.OperationStatus_ConnectionLost;
+			}
+			catch (TimeoutException)
+			{
+				OperationStatus = Resources.OperationStatus_TimedOut;
+			}
 			catch (Exception ex)
 			{
-				if (ex is RemoteConnectionUnableException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionUnable;
-				}
-				else if (ex is RemoteConnectionLostException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionLost;
-				}
-				else if (ex is TimeoutException)
-				{
-					OperationStatus = Resources.OperationStatus_TimedOut;
-				}
-				else
-				{
-					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine($"Failed to check if content is updated.\r\n{ex}");
-					throw new UnexpectedException("Failed to check if content is updated.", ex);
-				}
+				OperationStatus = Resources.OperationStatus_Error;
+				Debug.WriteLine($"Failed to check if content is updated.\r\n{ex}");
+				throw new UnexpectedException("Failed to check if content is updated.", ex);
 			}
 
 			return null;
@@ -498,91 +490,91 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				IsChecking = true;
-				IsCopying = true;
-				UpdateProgress();
+				try
+				{
+					IsChecking = IsCopying = true;
+					UpdateProgress();
 
-				await CheckFileBaseAsync();
+					await CheckFileBaseAsync();
 
-				UpdateProgress();
+					UpdateProgress();
 
-				LastCheckCopyTime = CheckFileToBeCopied(true)
-					? DateTime.MinValue
-					: DateTime.Now;
+					LastCheckCopyTime = CheckFileToBeCopied(true)
+						? DateTime.MinValue
+						: DateTime.Now;
 
-				await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
+					await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
 
-				LastCheckCopyTime = DateTime.Now;
+					LastCheckCopyTime = DateTime.Now;
 
-				await Task.Delay(_copyWaitingDuration);
-				UpdateProgress();
-				IsChecking = false;
-				IsCopying = false;
+					await Task.Delay(_copyWaitingDuration);
+					UpdateProgress();
+					IsChecking = IsCopying = false;
 
-				await ShowToastAsync();
+					await ShowToastAsync();
 
-				return true;
+					return true;
+				}
+				catch (OperationCanceledException)
+				{
+					SystemSounds.Asterisk.Play();
+					OperationStatus = Resources.OperationStatus_Stopped;
+				}
+				catch
+				{
+					UpdateProgress(new ProgressInfo(isError: true));
+
+					if (!IsAutoRunning)
+						SystemSounds.Hand.Play();
+
+					throw;
+				}
+				finally
+				{
+					IsChecking = IsCopying = false;
+				}
 			}
-			catch (OperationCanceledException)
+			catch (RemoteConnectionUnableException)
 			{
-				SystemSounds.Asterisk.Play();
-				OperationStatus = Resources.OperationStatus_Stopped;
+				OperationStatus = Resources.OperationStatus_ConnectionUnable;
+			}
+			catch (RemoteConnectionLostException)
+			{
+				OperationStatus = Resources.OperationStatus_ConnectionLost;
+			}
+			catch (RemoteFileNotFoundException)
+			{
+				OperationStatus = Resources.OperationStatus_NotFolderFound;
+			}
+			catch (TimeoutException)
+			{
+				OperationStatus = Resources.OperationStatus_TimedOut;
+			}
+			catch (IOException)
+			{
+				OperationStatus = Resources.OperationStatus_LocalFileAccessUnable;
+			}
+			catch (UnauthorizedAccessException)
+			{
+				OperationStatus = Resources.OperationStatus_LocalFolderUnauthorized;
+			}
+			catch (CardChangedException)
+			{
+				OperationStatus = Resources.OperationStatus_NotSameFlashAir;
+			}
+			catch (CardUploadDisabledException)
+			{
+				OperationStatus = Resources.OperationStatus_DeleteDisabled;
+			}
+			catch (RemoteFileDeletionFailedException)
+			{
+				OperationStatus = Resources.OperationStatus_DeleteFailed;
 			}
 			catch (Exception ex)
 			{
-				UpdateProgress(new ProgressInfo(isError: true));
-
-				if (!IsAutoRunning)
-					SystemSounds.Hand.Play();
-
-				if (ex is RemoteConnectionUnableException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionUnable;
-				}
-				else if (ex is RemoteConnectionLostException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionLost;
-				}
-				else if (ex is RemoteFileNotFoundException)
-				{
-					OperationStatus = Resources.OperationStatus_NotFolderFound;
-				}
-				else if (ex is TimeoutException)
-				{
-					OperationStatus = Resources.OperationStatus_TimedOut;
-				}
-				else if (ex is IOException)
-				{
-					OperationStatus = Resources.OperationStatus_LocalFileAccessUnable;
-				}
-				else if (ex is UnauthorizedAccessException)
-				{
-					OperationStatus = Resources.OperationStatus_LocalFolderUnauthorized;
-				}
-				else if (ex is CardChangedException)
-				{
-					OperationStatus = Resources.OperationStatus_NotSameFlashAir;
-				}
-				else if (ex is CardUploadDisabledException)
-				{
-					OperationStatus = Resources.OperationStatus_DeleteDisabled;
-				}
-				else if (ex is RemoteFileDeletionFailedException)
-				{
-					OperationStatus = Resources.OperationStatus_DeleteFailed;
-				}
-				else
-				{
-					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine($"Failed to check & copy files.\r\n{ex}");
-					throw new UnexpectedException("Failed to check & copy files.", ex);
-				}
-			}
-			finally
-			{
-				// In case any exception is thrown.
-				IsChecking = false;
-				IsCopying = false;
+				OperationStatus = Resources.OperationStatus_Error;
+				Debug.WriteLine($"Failed to check & copy files.\r\n{ex}");
+				throw new UnexpectedException("Failed to check & copy files.", ex);
 			}
 
 			return false;
@@ -598,53 +590,56 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				IsChecking = true;
-				UpdateProgress();
+				try
+				{
+					IsChecking = true;
+					UpdateProgress();
 
-				await CheckFileBaseAsync();
+					await CheckFileBaseAsync();
 
-				UpdateProgress();
+					UpdateProgress();
 
-				LastCheckCopyTime = CheckFileToBeCopied(false)
-					? DateTime.MinValue
-					: DateTime.Now;
+					LastCheckCopyTime = CheckFileToBeCopied(false)
+						? DateTime.MinValue
+						: DateTime.Now;
+				}
+				catch (OperationCanceledException)
+				{
+					SystemSounds.Asterisk.Play();
+					OperationStatus = Resources.OperationStatus_Stopped;
+				}
+				catch
+				{
+					UpdateProgress(new ProgressInfo(isError: true));
+					SystemSounds.Hand.Play();
+					throw;
+				}
+				finally
+				{
+					IsChecking = false;
+				}
 			}
-			catch (OperationCanceledException)
+			catch (RemoteConnectionUnableException)
 			{
-				SystemSounds.Asterisk.Play();
-				OperationStatus = Resources.OperationStatus_Stopped;
+				OperationStatus = Resources.OperationStatus_ConnectionUnable;
+			}
+			catch (RemoteConnectionLostException)
+			{
+				OperationStatus = Resources.OperationStatus_ConnectionLost;
+			}
+			catch (RemoteFileNotFoundException)
+			{
+				OperationStatus = Resources.OperationStatus_NotFolderFound;
+			}
+			catch (TimeoutException)
+			{
+				OperationStatus = Resources.OperationStatus_TimedOut;
 			}
 			catch (Exception ex)
 			{
-				UpdateProgress(new ProgressInfo(isError: true));
-				SystemSounds.Hand.Play();
-
-				if (ex is RemoteConnectionUnableException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionUnable;
-				}
-				else if (ex is RemoteConnectionLostException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionLost;
-				}
-				else if (ex is RemoteFileNotFoundException)
-				{
-					OperationStatus = Resources.OperationStatus_NotFolderFound;
-				}
-				else if (ex is TimeoutException)
-				{
-					OperationStatus = Resources.OperationStatus_TimedOut;
-				}
-				else
-				{
-					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine($"Failed to check files.\r\n{ex}");
-					throw new UnexpectedException("Failed to check files.", ex);
-				}
-			}
-			finally
-			{
-				IsChecking = false;
+				OperationStatus = Resources.OperationStatus_Error;
+				Debug.WriteLine($"Failed to check files.\r\n{ex}");
+				throw new UnexpectedException("Failed to check files.", ex);
 			}
 		}
 
@@ -658,69 +653,71 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				IsCopying = true;
+				try
+				{
+					IsCopying = true;
 
-				await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
+					await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
 
-				await Task.Delay(_copyWaitingDuration);
-				UpdateProgress();
-				IsCopying = false;
+					await Task.Delay(_copyWaitingDuration);
+					UpdateProgress();
+					IsCopying = false;
 
-				await ShowToastAsync();
+					await ShowToastAsync();
+				}
+				catch (OperationCanceledException)
+				{
+					SystemSounds.Asterisk.Play();
+					OperationStatus = Resources.OperationStatus_Stopped;
+				}
+				catch
+				{
+					UpdateProgress(new ProgressInfo(isError: true));
+					SystemSounds.Hand.Play();
+					throw;
+				}
+				finally
+				{
+					IsCopying = false;
+				}
 			}
-			catch (OperationCanceledException)
+			catch (RemoteConnectionUnableException)
 			{
-				SystemSounds.Asterisk.Play();
-				OperationStatus = Resources.OperationStatus_Stopped;
+				OperationStatus = Resources.OperationStatus_ConnectionUnable;
+			}
+			catch (RemoteConnectionLostException)
+			{
+				OperationStatus = Resources.OperationStatus_ConnectionLost;
+			}
+			catch (TimeoutException)
+			{
+				OperationStatus = Resources.OperationStatus_TimedOut;
+			}
+			catch (IOException)
+			{
+				OperationStatus = Resources.OperationStatus_LocalFileAccessUnable;
+			}
+			catch (UnauthorizedAccessException)
+			{
+				OperationStatus = Resources.OperationStatus_LocalFolderUnauthorized;
+			}
+			catch (CardChangedException)
+			{
+				OperationStatus = Resources.OperationStatus_NotSameFlashAir;
+			}
+			catch (CardUploadDisabledException)
+			{
+				OperationStatus = Resources.OperationStatus_DeleteDisabled;
+			}
+			catch (RemoteFileDeletionFailedException)
+			{
+				OperationStatus = Resources.OperationStatus_DeleteFailed;
 			}
 			catch (Exception ex)
 			{
-				UpdateProgress(new ProgressInfo(isError: true));
-				SystemSounds.Hand.Play();
-
-				if (ex is RemoteConnectionUnableException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionUnable;
-				}
-				else if (ex is RemoteConnectionLostException)
-				{
-					OperationStatus = Resources.OperationStatus_ConnectionLost;
-				}
-				else if (ex is TimeoutException)
-				{
-					OperationStatus = Resources.OperationStatus_TimedOut;
-				}
-				else if (ex is IOException)
-				{
-					OperationStatus = Resources.OperationStatus_LocalFileAccessUnable;
-				}
-				else if (ex is UnauthorizedAccessException)
-				{
-					OperationStatus = Resources.OperationStatus_LocalFolderUnauthorized;
-				}
-				else if (ex is CardChangedException)
-				{
-					OperationStatus = Resources.OperationStatus_NotSameFlashAir;
-				}
-				else if (ex is CardUploadDisabledException)
-				{
-					OperationStatus = Resources.OperationStatus_DeleteDisabled;
-				}
-				else if (ex is RemoteFileDeletionFailedException)
-				{
-					OperationStatus = Resources.OperationStatus_DeleteFailed;
-				}
-				else
-				{
-					OperationStatus = Resources.OperationStatus_Error;
-					Debug.WriteLine($"Failed to copy files.\r\n{ex}");
-					throw new UnexpectedException("Failed to copy files.", ex);
-				}
-			}
-			finally
-			{
-				// In case any exception is thrown.
-				IsCopying = false;
+				OperationStatus = Resources.OperationStatus_Error;
+				Debug.WriteLine($"Failed to copy files.\r\n{ex}");
+				throw new UnexpectedException("Failed to copy files.", ex);
 			}
 		}
 
@@ -830,13 +827,14 @@ namespace SnowyImageCopy.Models
 					}
 
 					// Add new items (This operation may be heavy).
-					var isLeadOff = true;
+					var isLeadoff = true;
+
 					foreach (var itemNew in fileListNew)
 					{
-						if (isLeadOff)
+						if (isLeadoff)
 						{
+							isLeadoff = false;
 							InvokeSafely(() => FileListCoreViewIndex = FileListCoreView.IndexOf(itemNew));
-							isLeadOff = false;
 						}
 
 						itemNew.IsAliveRemote = true;
@@ -858,7 +856,7 @@ namespace SnowyImageCopy.Models
 
 						if (Settings.Current.SkipsOnceCopiedFile)
 						{
-							if (item.IsOnceCopied == null)
+							if (item.IsOnceCopied is null)
 							{
 								if (item.IsAliveLocal)
 								{
@@ -1078,7 +1076,7 @@ namespace SnowyImageCopy.Models
 				while (true)
 				{
 					var item = FileListCore.FirstOrDefault(x => x.IsTarget && (x.Status == FileStatus.ToBeCopied));
-					if (item == null)
+					if (item is null)
 						break; // Copy completed.
 
 					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
@@ -1252,7 +1250,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		internal async Task SaveDesktopAsync()
 		{
-			if ((CurrentImageData == null) || (CurrentItem == null))
+			if ((CurrentImageData is null) || (CurrentItem is null))
 				return;
 
 			try
@@ -1281,7 +1279,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		internal async Task SendClipboardAsync()
 		{
-			if (CurrentImageData == null)
+			if (CurrentImageData is null)
 				return;
 
 			try
@@ -1332,7 +1330,7 @@ namespace SnowyImageCopy.Models
 		private static string ComposeLocalPath(FileItemViewModel item)
 		{
 			var folderName = Settings.Current.CreatesDatedFolder
-				? (item.Date != default(DateTime))
+				? (item.Date != default)
 					? item.Date.ToString("yyyyMMdd")
 					: UnknownFolderName
 				: string.Empty;

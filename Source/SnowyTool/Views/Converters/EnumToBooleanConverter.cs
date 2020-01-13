@@ -28,11 +28,10 @@ namespace SnowyTool.Views.Converters
 			if (!(value is Enum sourceValue) || !(parameter is string conditionString))
 				return DependencyProperty.UnsetValue;
 
-			var condition = GetEnumValue(value.GetType(), conditionString);
-			if (condition == null)
+			if (!TryParse(value.GetType(), conditionString, out Enum conditionValue))
 				return DependencyProperty.UnsetValue;
 
-			return sourceValue.Equals(condition);
+			return sourceValue.Equals(conditionValue); // == operator works well for concrete enum but not for System.Enum.
 		}
 
 		/// <summary>
@@ -45,21 +44,25 @@ namespace SnowyTool.Views.Converters
 		/// <returns>Condition Enum value if Boolean is true</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool sourceValue) || !sourceValue || !targetType.IsEnum || !(parameter is string conditionString))
+			if (!(value is bool sourceValue) || !sourceValue || !(parameter is string conditionString))
 				return DependencyProperty.UnsetValue;
 
-			var condition = GetEnumValue(targetType, conditionString);
-			if (condition == null)
+			if (!TryParse(targetType, conditionString, out Enum conditionValue))
 				return DependencyProperty.UnsetValue;
 
-			return condition;
+			return conditionValue;
 		}
 
-		private static Enum GetEnumValue(Type enumType, string source)
+		private static bool TryParse(Type enumType, string source, out Enum value)
 		{
-			return Enum.GetValues(enumType)
-				.Cast<Enum>()
-				.FirstOrDefault(x => x.ToString().Equals(source, StringComparison.OrdinalIgnoreCase));
+			// Compare enum values with source string ignoring the case.
+			// Enum.IsDefined and Enum.Parse methods are case-sensitive and so not usable for this purpose.
+			value = enumType.IsEnum
+				? Enum.GetValues(enumType).Cast<Enum>()
+					.FirstOrDefault(x => x.ToString().Equals(source.Trim(), StringComparison.OrdinalIgnoreCase))
+				: null;
+
+			return (value != null);
 		}
 	}
 }

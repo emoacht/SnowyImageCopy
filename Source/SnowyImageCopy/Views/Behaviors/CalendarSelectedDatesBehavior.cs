@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interactivity;
+using Microsoft.Xaml.Behaviors;
 
 namespace SnowyImageCopy.Views.Behaviors
 {
@@ -47,7 +47,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			base.OnDetaching();
 
-			if (this.AssociatedObject == null)
+			if (this.AssociatedObject is null)
 				return;
 
 			this.AssociatedObject.Loaded -= OnLoaded;
@@ -81,7 +81,6 @@ namespace SnowyImageCopy.Views.Behaviors
 				foreach (var date in e.AddedItems.OfType<DateTime>())
 					SelectedDates.Add(date);
 			}
-
 			if (e.RemovedItems?.Count > 0)
 			{
 				foreach (var date in e.RemovedItems.OfType<DateTime>())

@@ -39,7 +39,7 @@ namespace SnowyImageCopy.Helper
 		public static DateTime ConvertFromDateIntAndTimeIntToDateTime(int date, int time, DateTimeKind kind)
 		{
 			if ((date <= 0) || (time < 0))
-				return default(DateTime);
+				return default;
 
 			var baDate = new BitArray(new[] { date });
 			var baTime = new BitArray(new[] { time });
@@ -59,7 +59,7 @@ namespace SnowyImageCopy.Helper
 			{
 				// If time stamp of source folder or file is weird, date or time parameters may become invalid
 				// and so this exception will be thrown.
-				return default(DateTime);
+				return default;
 			}
 		}
 

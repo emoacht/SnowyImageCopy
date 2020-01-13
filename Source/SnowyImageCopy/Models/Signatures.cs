@@ -33,10 +33,7 @@ namespace SnowyImageCopy.Models
 
 		public static async Task PrepareAsync()
 		{
-			if (_signatures != null)
-				return;
-
-			_signatures = await Task.Run(() => new HashSet<HashItem>(Load(valueSize: HashItem.Size, maxCount: MaxCount)));
+			_signatures ??= await Task.Run(() => new HashSet<HashItem>(Load(valueSize: HashItem.Size, maxCount: MaxCount)));
 		}
 
 		public static bool Contains(HashItem value)
@@ -51,16 +48,14 @@ namespace SnowyImageCopy.Models
 			if (!(_signatures?.Add(value) == true))
 				return false;
 
-			if (_appendValues == null)
-				_appendValues = new List<HashItem>();
-
+			_appendValues ??= new List<HashItem>();
 			_appendValues.Add(value);
 			return true;
 		}
 
 		public static void Append(IEnumerable<HashItem> values)
 		{
-			if (values == null)
+			if (values is null)
 				return;
 
 			foreach (var value in values)

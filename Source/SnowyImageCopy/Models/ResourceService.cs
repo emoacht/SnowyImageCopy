@@ -42,27 +42,20 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public IReadOnlyCollection<CultureInfo> SupportedCultures
 		{
-			get
-			{
-				if (_supportedCultures == null)
+			get => _supportedCultures ??= _supportedCultureNames
+				.Select(x =>
 				{
-					_supportedCultures = _supportedCultureNames
-						.Select(x =>
-						{
-							try
-							{
-								return CultureInfo.GetCultureInfo(x);
-							}
-							catch (CultureNotFoundException)
-							{
-								return null;
-							}
-						})
-						.Where(x => x != null)
-						.ToArray();
-				}
-				return _supportedCultures;
-			}
+					try
+					{
+						return CultureInfo.GetCultureInfo(x);
+					}
+					catch (CultureNotFoundException)
+					{
+						return null;
+					}
+				})
+				.Where(x => x != null)
+				.ToArray();
 		}
 		private CultureInfo[] _supportedCultures;
 

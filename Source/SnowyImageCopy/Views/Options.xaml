@@ -3,8 +3,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+			 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			 xmlns:ma="clr-namespace:MonitorAware.Views;assembly=MonitorAware"
 			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
@@ -295,7 +294,7 @@
 							 TextDecorations="Underline" Cursor="Hand">
 							<i:Interaction.Triggers>
 								<i:EventTrigger EventName="MouseDown">
-									<ei:LaunchUriOrFileAction Path="{Binding Resources.ProjectSite, Source={x:Static models:ResourceService.Current}}"/>
+									<i:LaunchUriOrFileAction Path="{Binding Resources.ProjectSite, Source={x:Static models:ResourceService.Current}}"/>
 								</i:EventTrigger>
 							</i:Interaction.Triggers>
 						</Run><Run Text=")"/>

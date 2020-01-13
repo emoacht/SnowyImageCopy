@@ -253,7 +253,7 @@ namespace SnowyImageCopy.Models
 
 		public int CompareTo(IFileItem other)
 		{
-			if (other == null)
+			if (other is null)
 				return 1;
 
 			var dateComparison = this.Date.CompareTo(other.Date);
@@ -271,7 +271,7 @@ namespace SnowyImageCopy.Models
 
 		public bool Equals(IFileItem other)
 		{
-			if (other == null)
+			if (other is null)
 				return false;
 
 			if (object.ReferenceEquals(this, other))

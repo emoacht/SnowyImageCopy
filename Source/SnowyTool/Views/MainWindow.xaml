@@ -1,8 +1,6 @@
 ﻿<Window x:Class="SnowyTool.Views.MainWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-		xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 		xmlns:ma="clr-namespace:MonitorAware.Views;assembly=MonitorAware"
 		xmlns:views="clr-namespace:SnowyTool.Views"
 		xmlns:viewModels="clr-namespace:SnowyTool.ViewModels"
@@ -16,9 +14,9 @@
 		<viewModels:MainWindowViewModel/>
 	</Window.DataContext>
 
-	<i:Interaction.Behaviors>
-		<ma:MonitorAwareBehavior x:Name="MonitorBehavior"/>
-	</i:Interaction.Behaviors>
+	<ma:MonitorAwareProperty.AttachedProperty>
+		<ma:MonitorAwareProperty/>
+	</ma:MonitorAwareProperty.AttachedProperty>
 
 	<Grid x:Name="LayoutRoot"
 		  Background="{StaticResource Window.Background}">

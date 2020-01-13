@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interactivity;
+using Microsoft.Xaml.Behaviors;
 
 using Expression = System.Linq.Expressions.Expression;
 
@@ -70,11 +70,11 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		private void AddHandler()
 		{
-			if ((SenderObject == null) || string.IsNullOrEmpty(EventName))
+			if ((SenderObject is null) || string.IsNullOrEmpty(EventName))
 				return;
 
 			_eventInfo = SenderObject.GetType().GetEvent(EventName);
-			if (_eventInfo == null)
+			if (_eventInfo is null)
 				return;
 
 			_handler = CreateDelegate(_eventInfo, Activate);
@@ -83,7 +83,7 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		private void RemoveHandler()
 		{
-			if ((SenderObject == null) || (_eventInfo == null))
+			if ((SenderObject is null) || (_eventInfo is null))
 				return;
 
 			_eventInfo.RemoveEventHandler(SenderObject, _handler);

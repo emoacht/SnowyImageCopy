@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Interactivity;
+using Microsoft.Xaml.Behaviors;
 
 namespace SnowyImageCopy.Views.Behaviors
 {
@@ -109,7 +109,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			base.OnDetaching();
 
-			if (this.AssociatedObject == null)
+			if (this.AssociatedObject is null)
 				return;
 
 			this.AssociatedObject.SizeChanged -= OnSizeChanged;
