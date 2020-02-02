@@ -11,9 +11,9 @@ using System.Windows.Media.Imaging;
 
 namespace SnowyTool.Views
 {
-	public partial class MainWindow : Window
+	public partial class CardWindow : Window
 	{
-		public MainWindow()
+		public CardWindow()
 		{
 			this.InitializeComponent();
 		}

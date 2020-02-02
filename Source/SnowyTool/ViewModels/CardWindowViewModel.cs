@@ -13,7 +13,7 @@ using SnowyTool.Properties;
 
 namespace SnowyTool.ViewModels
 {
-	public class MainWindowViewModel : NotificationObject
+	public class CardWindowViewModel : NotificationObject
 	{
 		#region Interaction
 
@@ -55,7 +55,7 @@ namespace SnowyTool.ViewModels
 			new ModeSet(6, LanModeOption.InternetPassThru, LanStartupModeOption.Automatic),
 		};
 
-		public ConfigViewModel CurrentConfig
+		public CardConfigViewModel CurrentConfig
 		{
 			get => _currentConfig;
 			set
@@ -87,7 +87,7 @@ namespace SnowyTool.ViewModels
 				RaisePropertyChanged(nameof(IsUploadEnabled));
 			}
 		}
-		private ConfigViewModel _currentConfig;
+		private CardConfigViewModel _currentConfig;
 
 		public LanModeOption CurrentLanMode
 		{
@@ -160,7 +160,7 @@ namespace SnowyTool.ViewModels
 
 		private void OnCurrentConfigPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == nameof(ConfigViewModel.IsChanged))
+			if (e.PropertyName == nameof(CardConfigViewModel.IsChanged))
 				DelegateCommand.RaiseCanExecuteChanged();
 		}
 
@@ -194,7 +194,7 @@ namespace SnowyTool.ViewModels
 
 		#region Constructor
 
-		public MainWindowViewModel()
+		public CardWindowViewModel()
 		{
 			InitializeTask = InitializeAsync();
 		}
@@ -220,7 +220,7 @@ namespace SnowyTool.ViewModels
 
 				foreach (var disk in disks.Where(x => x.CanBeSD).OrderBy(x => x.PhysicalDrive))
 				{
-					var configNew = new ConfigViewModel();
+					var configNew = new CardConfigViewModel();
 
 					if (!await configNew.ReadAsync(disk))
 						continue;
@@ -246,7 +246,7 @@ namespace SnowyTool.ViewModels
 			{
 				_isApplying = true;
 
-				var configNew = new ConfigViewModel();
+				var configNew = new CardConfigViewModel();
 
 				if (!await configNew.ReadAsync(CurrentConfig.AssociatedDisk) ||
 					(configNew.CID != CurrentConfig.CID))

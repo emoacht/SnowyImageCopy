@@ -38,36 +38,54 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="MonitorAware">
       <HintPath>..\SnowyImageCopy\Libraries\MonitorAware.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\CidInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\DelegateCommand.cs" />
+    <Compile Include="Common\NotificationObject.cs" />
+    <Compile Include="Models\CidInfo.cs" />
+    <Compile Include="Models\DiskInfo.cs" />
+    <Compile Include="Models\DiskSearcher.cs" />
+    <Compile Include="Models\LanModeOption.cs" />
+    <Compile Include="Models\LanStartupModeOption.cs" />
+    <Compile Include="Helper\OsVersion.cs" />
+    <Compile Include="Helper\StringDictionary.cs" />
+    <Compile Include="ViewModels\CardConfigViewModel.cs" />
+    <Compile Include="ViewModels\CardWindowViewModel.cs" />
+    <Compile Include="Views\Controls\FadingTextBox.cs" />
+    <Compile Include="Views\Converters\BooleanInverseToBrushConverter.cs" />
+    <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="Views\Converters\NullableBooleanToBooleanConverter.cs" />
+    <Compile Include="Views\Converters\SextupleDigitConverter.cs" />
     <Compile Include="Views\ProductInfo.cs" />
+    <Compile Include="Views\CardWindow.xaml.cs">
+      <DependentUpon>CardWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Page Include="..\SnowyImageCopy\Views\Styles\CommonControls.xaml">
       <Link>Views\Styles\CommonControls.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
@@ -83,41 +101,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow.xaml">
+    <Page Include="Views\CardWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Common\DelegateCommand.cs" />
-    <Compile Include="Common\NotificationObject.cs" />
-    <Compile Include="Helper\OsVersion.cs" />
-    <Compile Include="Helper\StringDictionary.cs" />
-    <Compile Include="Models\DiskSearcher.cs" />
-    <Compile Include="Models\DiskInfo.cs" />
-    <Compile Include="Models\LanModeOption.cs" />
-    <Compile Include="Models\LanStartupModeOption.cs" />
-    <Compile Include="ViewModels\ConfigViewModel.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="Views\Controls\FadingTextBox.cs" />
-    <Compile Include="Views\Converters\BooleanInverseToBrushConverter.cs" />
-    <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
-    <Compile Include="Views\Converters\NullableBooleanToBooleanConverter.cs" />
-    <Compile Include="Views\Converters\SextupleDigitConverter.cs" />
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <AppDesigner Include="Properties\" />
-    <None Include="app.config" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <None Include="Properties\app.manifest" />
+    <None Include="app.config" />
     <None Include="Application.ico">
       <Visible>false</Visible>
     </None>

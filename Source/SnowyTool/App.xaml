@@ -1,24 +1,24 @@
 ﻿<Application x:Class="SnowyTool.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:converters="clr-namespace:SnowyTool.Views.Converters"
-             StartupUri="Views/MainWindow.xaml">
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:converters="clr-namespace:SnowyTool.Views.Converters"
+			 StartupUri="Views/CardWindow.xaml">
 
-    <Application.Resources>
-        <ResourceDictionary>
-            <!-- Converters -->
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
-            <converters:BooleanInverseToBrushConverter x:Key="BooleanInverseToBrushConverterKey"/>            
-            <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverterKey"/>
-            <converters:SextupleDigitConverter x:Key="SextupleDigitConverterKey"/>
-            <converters:NullableBooleanToBooleanConverter x:Key="NullableBooleanToBooleanConverterKey"/>
+	<Application.Resources>
+		<ResourceDictionary>
+			<!-- Converters -->
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
+			<converters:BooleanInverseToBrushConverter x:Key="BooleanInverseToBrushConverterKey"/>
+			<converters:EnumToBooleanConverter x:Key="EnumToBooleanConverterKey"/>
+			<converters:SextupleDigitConverter x:Key="SextupleDigitConverterKey"/>
+			<converters:NullableBooleanToBooleanConverter x:Key="NullableBooleanToBooleanConverterKey"/>
 
-            <!-- Styles, templates -->
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Views/Styles/DefaultTheme.xaml"/>
-                <ResourceDictionary Source="/Views/Styles/CustomTheme.xaml"/>
-                <ResourceDictionary Source="/Views/Styles/CommonControls.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
+			<!-- Styles, templates -->
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Views/Styles/DefaultTheme.xaml"/>
+				<ResourceDictionary Source="/Views/Styles/CustomTheme.xaml"/>
+				<ResourceDictionary Source="/Views/Styles/CommonControls.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
 </Application>

@@ -14,7 +14,7 @@ using SnowyTool.Models;
 
 namespace SnowyTool.ViewModels
 {
-	public class ConfigViewModel : NotificationObject
+	public class CardConfigViewModel : NotificationObject
 	{
 		#region Type
 
@@ -403,7 +403,7 @@ namespace SnowyTool.ViewModels
 
 		#region Import/Export
 
-		private static readonly PropertyInfo[] _persistentProperties = typeof(ConfigViewModel)
+		private static readonly PropertyInfo[] _persistentProperties = typeof(CardConfigViewModel)
 			.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
 			.Where(x => x.IsDefined(typeof(PersistentMemberAttribute)))
 			.ToArray();
