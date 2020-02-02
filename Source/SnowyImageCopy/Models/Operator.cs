@@ -944,37 +944,40 @@ namespace SnowyImageCopy.Models
 
 							try
 							{
-								if (item.CanReadExif)
-									item.Thumbnail = await ImageManager.ReadThumbnailAsync(ComposeLocalPath(item));
-								else if (item.CanLoadDataLocal)
-									item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
+								try
+								{
+									if (item.CanReadExif)
+										item.Thumbnail = await ImageManager.ReadThumbnailAsync(ComposeLocalPath(item));
+									else if (item.CanLoadDataLocal)
+										item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
+								}
+								catch
+								{
+									if (item.IsAliveRemote && item.CanGetThumbnailRemote)
+									{
+										itemsDueRemote.Add(item);
+									}
+									throw;
+								}
 							}
-							catch (Exception ex)
+							catch (FileNotFoundException)
 							{
-								if (ex is FileNotFoundException)
-								{
-									item.IsAliveLocal = false;
-									item.Status = (item.IsOnceCopied == true)
-										? FileStatus.OnceCopied
-										: FileStatus.NotCopied;
-								}
-								else if (ex is IOException)
-								{
-									item.IsAvailableLocal = false;
-								}
-								else if (ex is ImageNotSupportedException)
-								{
-									item.CanLoadDataLocal = false;
-								}
-								else
-								{
-									//throw;
-								}
-
-								if (item.IsAliveRemote && item.CanGetThumbnailRemote)
-								{
-									itemsDueRemote.Add(item);
-								}
+								item.IsAliveLocal = false;
+								item.Status = (item.IsOnceCopied == true)
+									? FileStatus.OnceCopied
+									: FileStatus.NotCopied;
+							}
+							catch (IOException)
+							{
+								item.IsAvailableLocal = false;
+							}
+							catch (ImageNotSupportedException)
+							{
+								item.CanLoadDataLocal = false;
+							}
+							catch
+							{
+								//throw;
 							}
 						}
 						itemsDueRemote.CompleteAdding();

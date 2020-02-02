@@ -53,6 +53,10 @@ namespace SnowyImageCopy.Models
 			|| (string.Equals(FileName, "FA000001.JPG", StringComparison.OrdinalIgnoreCase) /* Control image file */
 				&& Directory.EndsWith("100__TSB", StringComparison.OrdinalIgnoreCase));
 
+		#endregion
+
+		#region Order
+
 		private enum Order : int
 		{
 			Ascending = 1,
