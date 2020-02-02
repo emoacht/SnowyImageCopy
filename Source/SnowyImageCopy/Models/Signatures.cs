@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SnowyImageCopy.Models.ImageFile;
+
 namespace SnowyImageCopy.Models
 {
 	internal class Signatures
@@ -152,7 +154,7 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-		private static void Delete() => File.Delete(_signaturesFilePath);
+		private static void Delete() => System.IO.File.Delete(_signaturesFilePath);
 
 		#endregion
 	}

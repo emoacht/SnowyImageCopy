@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 using SnowyImageCopy.Helper;
 
-namespace SnowyImageCopy.Models
+namespace SnowyImageCopy.Models.ImageFile
 {
 	/// <summary>
 	/// File item in FlashAir card

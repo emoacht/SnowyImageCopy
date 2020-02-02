@@ -18,6 +18,7 @@ using DesktopToast;
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models.Exceptions;
+using SnowyImageCopy.Models.ImageFile;
 using SnowyImageCopy.Properties;
 using SnowyImageCopy.ViewModels;
 

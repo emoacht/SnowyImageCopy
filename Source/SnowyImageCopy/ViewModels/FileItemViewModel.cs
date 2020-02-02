@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models;
+using SnowyImageCopy.Models.ImageFile;
 using SnowyImageCopy.Views.Controls;
 
 namespace SnowyImageCopy.ViewModels

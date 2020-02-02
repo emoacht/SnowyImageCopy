@@ -16,6 +16,7 @@ using System.Xml.Serialization;
 
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
+using SnowyImageCopy.Models.ImageFile;
 
 namespace SnowyImageCopy.Models
 {

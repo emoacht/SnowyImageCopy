@@ -1,5 +1,5 @@
 ﻿
-namespace SnowyImageCopy.Models
+namespace SnowyImageCopy.Models.ImageFile
 {
 	/// <summary>
 	/// File extension for image files

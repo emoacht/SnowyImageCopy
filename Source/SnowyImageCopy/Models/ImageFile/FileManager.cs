@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models.Exceptions;
 
-namespace SnowyImageCopy.Models
+namespace SnowyImageCopy.Models.ImageFile
 {
 	/// <summary>
 	/// Manages FlashAir card.
