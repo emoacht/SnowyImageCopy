@@ -151,7 +151,7 @@
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="Views\Behaviors\CalendarSelectedDatesBehavior.cs" />
     <Compile Include="Views\Behaviors\ExplorerAction.cs" />
-    <Compile Include="Views\Behaviors\FolderBrowserAction.cs" />
+    <Compile Include="Views\Behaviors\FolderDialogAction.cs" />
     <Compile Include="Views\Behaviors\FrameworkElementIntersectionBehavior.cs" />
     <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
     <Compile Include="Views\Behaviors\GridSizeBehavior.cs" />

@@ -98,7 +98,7 @@
 								Style="{StaticResource ButtonBaseStyle}">
 							<i:Interaction.Triggers>
 								<i:EventTrigger EventName="Click">
-									<behaviors:FolderBrowserAction
+									<behaviors:FolderDialogAction
 										Explanation="{Binding Resources.Options_LocalFolderExplanation, Source={x:Static models:ResourceService.Current}}"
 										FolderPath="{Binding Text, ElementName=LocalFolderTextBox}"/>
 								</i:EventTrigger>
