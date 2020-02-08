@@ -143,6 +143,7 @@
     <Compile Include="Models\ResourceService.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Signatures.cs" />
+    <Compile Include="Models\SoundManager.cs" />
     <Compile Include="Models\WindowPlacement.cs" />
     <Compile Include="ViewModels\FileItemViewModel.cs" />
     <Compile Include="ViewModels\FilePeriodViewModel.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Views\Converters\FileStatusToBrushConverter.cs" />
     <Compile Include="Views\Converters\FileStatusToStringConverter.cs" />
     <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
+    <Compile Include="Views\Converters\PathFileNameConverter.cs" />
     <Compile Include="Views\Converters\TimeSpanToStringConverter.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

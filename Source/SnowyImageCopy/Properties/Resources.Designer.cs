@@ -19,7 +19,7 @@ namespace SnowyImageCopy.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -634,6 +634,78 @@ namespace SnowyImageCopy.Properties {
         public static string Options_SelectReadOnly {
             get {
                 return ResourceManager.GetString("Options_SelectReadOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sound.
+        /// </summary>
+        public static string Options_Sound {
+            get {
+                return ResourceManager.GetString("Options_Sound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All images copied.
+        /// </summary>
+        public static string Options_SoundAllCopied {
+            get {
+                return ResourceManager.GetString("Options_SoundAllCopied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy started.
+        /// </summary>
+        public static string Options_SoundCopyStarted {
+            get {
+                return ResourceManager.GetString("Options_SoundCopyStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify a WAVE file for notification..
+        /// </summary>
+        public static string Options_SoundExplanation {
+            get {
+                return ResourceManager.GetString("Options_SoundExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WAVE files (*.wav)|*.wav|All files (*.*)|*.*.
+        /// </summary>
+        public static string Options_SoundFilter {
+            get {
+                return ResourceManager.GetString("Options_SoundFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An image copied.
+        /// </summary>
+        public static string Options_SoundOneCopied {
+            get {
+                return ResourceManager.GetString("Options_SoundOneCopied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play notification sound.
+        /// </summary>
+        public static string Options_SoundPlay {
+            get {
+                return ResourceManager.GetString("Options_SoundPlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test.
+        /// </summary>
+        public static string Options_Test {
+            get {
+                return ResourceManager.GetString("Options_Test", resourceCulture);
             }
         }
         

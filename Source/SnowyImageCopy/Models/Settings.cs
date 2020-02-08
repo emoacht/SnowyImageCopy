@@ -361,6 +361,59 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
+		#region Sound
+
+		public bool PlaysSound
+		{
+			get => SoundManager.PlaysSound;
+			set
+			{
+				if (SoundManager.PlaysSound == value)
+					return;
+
+				SoundManager.PlaysSound = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public string CopyStarted
+		{
+			get => SoundManager.CopyStarted.Path;
+			set
+			{
+				SoundManager.CopyStarted.Path = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public void TestCopyStarted() => SoundManager.CopyStarted.Play();
+
+		public string OneCopied
+		{
+			get => SoundManager.OneCopied.Path;
+			set
+			{
+				SoundManager.OneCopied.Path = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public void TestOneCopied() => SoundManager.OneCopied.Play();
+
+		public string AllCopied
+		{
+			get => SoundManager.AllCopied.Path;
+			set
+			{
+				SoundManager.AllCopied.Path = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public void TestAllCopied() => SoundManager.AllCopied.Play();
+
+		#endregion
+
 		#region Culture
 
 		public string CultureName

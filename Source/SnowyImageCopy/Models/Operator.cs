@@ -366,7 +366,7 @@ namespace SnowyImageCopy.Models
 
 				_autoTimer.Stop();
 				_autoTimer = null;
-				SystemSounds.Asterisk.Play();
+				SoundManager.PlayInterrupted();
 				OperationStatus = Resources.OperationStatus_Stopped;
 			}
 		}
@@ -518,7 +518,7 @@ namespace SnowyImageCopy.Models
 				}
 				catch (OperationCanceledException)
 				{
-					SystemSounds.Asterisk.Play();
+					SoundManager.PlayInterrupted();
 					OperationStatus = Resources.OperationStatus_Stopped;
 				}
 				catch
@@ -526,7 +526,7 @@ namespace SnowyImageCopy.Models
 					UpdateProgress(new ProgressInfo(isError: true));
 
 					if (!IsAutoRunning)
-						SystemSounds.Hand.Play();
+						SoundManager.PlayError();
 
 					throw;
 				}
@@ -606,13 +606,13 @@ namespace SnowyImageCopy.Models
 				}
 				catch (OperationCanceledException)
 				{
-					SystemSounds.Asterisk.Play();
+					SoundManager.PlayInterrupted();
 					OperationStatus = Resources.OperationStatus_Stopped;
 				}
 				catch
 				{
 					UpdateProgress(new ProgressInfo(isError: true));
-					SystemSounds.Hand.Play();
+					SoundManager.PlayError();
 					throw;
 				}
 				finally
@@ -668,13 +668,13 @@ namespace SnowyImageCopy.Models
 				}
 				catch (OperationCanceledException)
 				{
-					SystemSounds.Asterisk.Play();
+					SoundManager.PlayInterrupted();
 					OperationStatus = Resources.OperationStatus_Stopped;
 				}
 				catch
 				{
 					UpdateProgress(new ProgressInfo(isError: true));
-					SystemSounds.Hand.Play();
+					SoundManager.PlayError();
 					throw;
 				}
 				finally
@@ -1080,8 +1080,20 @@ namespace SnowyImageCopy.Models
 				while (true)
 				{
 					var item = FileListCore.FirstOrDefault(x => x.IsTarget && (x.Status == FileStatus.ToBeCopied));
-					if (item is null)
+					if (item != null)
+					{
+						if (0 == _copyFileCount)
+							SoundManager.PlayCopyStarted();
+						else
+							SoundManager.PlayOneCopied();
+					}
+					else
+					{
+						if (0 < _copyFileCount)
+							SoundManager.PlayAllCopied();
+
 						break; // Copy completed.
+					}
 
 					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
 

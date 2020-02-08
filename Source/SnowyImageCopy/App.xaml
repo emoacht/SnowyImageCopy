@@ -17,10 +17,11 @@
 			<converters:FileStatusToBrushConverter x:Key="FileStatusToBrushConverterKey"/>
 			<converters:FileStatusToStringConverter x:Key="FileStatusToStringConverterKey"/>
 
-			<converters:DoubleCentesimalConverter x:Key="DoubleCentesimalConverterKey"/>
-			<converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey"/>
 			<converters:DoubleAndVisibilityToDoubleConverter x:Key="DoubleAndVisibilityToDoubleConverterKey"/>
+			<converters:DoubleCentesimalConverter x:Key="DoubleCentesimalConverterKey"/>
 			<converters:ObjectArrayConverter x:Key="ObjectArrayConverterKey"/>
+			<converters:PathFileNameConverter x:Key="PathFileNameConverterKey"/>
+			<converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey"/>
 
 			<!-- Styles, Templates -->
 			<ResourceDictionary.MergedDictionaries>
