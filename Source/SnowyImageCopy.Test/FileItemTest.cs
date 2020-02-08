@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using SnowyImageCopy.Helper;
-using SnowyImageCopy.Models;
+using SnowyImageCopy.Models.ImageFile;
 
 namespace SnowyImageCopy.Test
 {
