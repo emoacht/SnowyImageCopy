@@ -25,7 +25,7 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
 ## Other
 
- - Libraries: [Reactive Extensions][2], [XamlBehaviors for WPF][3] [WPF Monitor Aware Window][4], [Desktop Toast][5]
+ - Libraries: [Reactive Extensions][2], [XamlBehaviors for WPF][3], [WPF Monitor Aware Window][4], [Desktop Toast][5]
  - Developer: emoacht (emotom[atmark]pobox.com)
 
 [1]: https://www.flashair-developers.com/en/

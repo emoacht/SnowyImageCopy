@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 1.7.0 2020-2-8
+
+ - Add notification sound function
+
 Ver 1.6.0 2020-1-13
 
  - Update projects
