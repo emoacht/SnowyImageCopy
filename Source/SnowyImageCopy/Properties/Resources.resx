@@ -226,7 +226,7 @@
   <data name="OperationStatus_TimedOut" xml:space="preserve">
     <value>Connection timed out.</value>
   </data>
-    <data name="OperationStatus_LocalFileAccessUnable" xml:space="preserve">
+  <data name="OperationStatus_LocalFileAccessUnable" xml:space="preserve">
     <value>Cannot access local file.</value>
   </data>
   <data name="OperationStatus_LocalFolderInvalid" xml:space="preserve">
@@ -306,6 +306,30 @@
   </data>
   <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
     <value>Enable to choose to delete image in FlashAir on copy</value>
+  </data>
+  <data name="Options_Sound" xml:space="preserve">
+    <value>Sound</value>
+  </data>
+  <data name="Options_SoundAllCopied" xml:space="preserve">
+    <value>All images copied</value>
+  </data>
+  <data name="Options_SoundExplanation" xml:space="preserve">
+    <value>Specify a WAVE file for notification.</value>
+  </data>
+  <data name="Options_SoundCopyStarted" xml:space="preserve">
+    <value>Copy started</value>
+  </data>
+  <data name="Options_SoundOneCopied" xml:space="preserve">
+    <value>An image copied</value>
+  </data>
+  <data name="Options_SoundFilter" xml:space="preserve">
+    <value>WAVE files (*.wav)|*.wav|All files (*.*)|*.*</value>
+  </data>
+  <data name="Options_SoundPlay" xml:space="preserve">
+    <value>Play notification sound</value>
+  </data>
+  <data name="Options_Test" xml:space="preserve">
+    <value>Test</value>
   </data>
   <data name="Options_Language" xml:space="preserve">
     <value>Language</value>

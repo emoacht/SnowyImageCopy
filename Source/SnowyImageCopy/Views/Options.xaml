@@ -60,6 +60,10 @@
 			</DockPanel>
 		</ControlTemplate>
 
+		<Style x:Key="ActionButtonBaseStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonBaseStyle}">
+			<Setter Property="Padding" Value="8,2"/>
+		</Style>
+
 		<x:Array x:Key="BrushSet" Type="{x:Type Brush}">
 			<SolidColorBrush Color="Black"/>
 			<SolidColorBrush Color="Red"/>
@@ -93,20 +97,18 @@
 							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 						<Button	Margin="0,0,4,0"
-								Padding="8,2,8,2"
-								Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}"
-								Style="{StaticResource ButtonBaseStyle}">
+								Style="{StaticResource ActionButtonBaseStyle}"
+								Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}">
 							<i:Interaction.Triggers>
 								<i:EventTrigger EventName="Click">
-									<behaviors:FolderBrowserAction
+									<behaviors:FolderDialogAction
 										Explanation="{Binding Resources.Options_LocalFolderExplanation, Source={x:Static models:ResourceService.Current}}"
 										FolderPath="{Binding Text, ElementName=LocalFolderTextBox}"/>
 								</i:EventTrigger>
 							</i:Interaction.Triggers>
 						</Button>
-						<Button	Padding="8,2,8,2"
-								Content="{Binding Resources.Options_OpenByExplorer, Source={x:Static models:ResourceService.Current}}"
-								Style="{StaticResource ButtonBaseStyle}">
+						<Button Style="{StaticResource ActionButtonBaseStyle}"
+								Content="{Binding Resources.Options_OpenByExplorer, Source={x:Static models:ResourceService.Current}}">
 							<i:Interaction.Triggers>
 								<i:EventTrigger EventName="Click">
 									<behaviors:ExplorerAction
@@ -269,6 +271,117 @@
 								IsChecked="{Binding SettingsCurrent.EnablesChooseDeleteOnCopy, Mode=TwoWay}"/>
 						</StackPanel>
 					</GroupBox>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- Sound -->
+			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+					  Header="{Binding Resources.Options_Sound, Source={x:Static models:ResourceService.Current}}">
+				<StackPanel Margin="4">
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+							  Header="{Binding Resources.Options_SoundPlay, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							Style="{StaticResource SwitchButtonStyle}"
+							IsChecked="{Binding SettingsCurrent.PlaysSound, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<StackPanel Visibility="{Binding SettingsCurrent.PlaysSound, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+						<TextBlock Text="{Binding Resources.Options_SoundCopyStarted, Source={x:Static models:ResourceService.Current}}"/>
+						<DockPanel Margin="0,4,0,6">
+							<Button DockPanel.Dock="Right"
+									Margin="4,0,0,0"
+									Style="{StaticResource ActionButtonBaseStyle}"
+									Content="{Binding Resources.Options_Test, Source={x:Static models:ResourceService.Current}}">
+								<i:Interaction.Triggers>
+									<i:EventTrigger EventName="Click">
+										<i:CallMethodAction TargetObject="{Binding SettingsCurrent}" MethodName="TestCopyStarted"/>
+									</i:EventTrigger>
+								</i:Interaction.Triggers>
+							</Button>
+							<Button DockPanel.Dock="Right"
+									Margin="4,0,0,0"
+									Style="{StaticResource ActionButtonBaseStyle}"
+									Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}">
+								<i:Interaction.Triggers>
+									<i:EventTrigger EventName="Click">
+										<behaviors:FileDialogAction
+											Explanation="{Binding Resources.Options_SoundExplanation, Source={x:Static models:ResourceService.Current}}"
+											Filter="{Binding Resources.Options_SoundFilter, Source={x:Static models:ResourceService.Current}}"
+											FilePath="{Binding SettingsCurrent.CopyStarted}"/>
+									</i:EventTrigger>
+								</i:Interaction.Triggers>
+							</Button>
+							<TextBox DockPanel.Dock="Left"
+									 Padding="2"
+									 VerticalContentAlignment="Center"
+									 IsReadOnly="True"
+									 Text="{Binding SettingsCurrent.CopyStarted, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
+						</DockPanel>
+
+						<TextBlock Text="{Binding Resources.Options_SoundOneCopied, Source={x:Static models:ResourceService.Current}}"/>
+						<DockPanel Margin="0,4,0,6">
+							<Button DockPanel.Dock="Right"
+									Margin="4,0,0,0"
+									Style="{StaticResource ActionButtonBaseStyle}"
+									Content="{Binding Resources.Options_Test, Source={x:Static models:ResourceService.Current}}">
+								<i:Interaction.Triggers>
+									<i:EventTrigger EventName="Click">
+										<i:CallMethodAction TargetObject="{Binding SettingsCurrent}" MethodName="TestOneCopied"/>
+									</i:EventTrigger>
+								</i:Interaction.Triggers>
+							</Button>
+							<Button DockPanel.Dock="Right"
+									Margin="4,0,0,0"
+									Style="{StaticResource ActionButtonBaseStyle}"
+									Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}">
+								<i:Interaction.Triggers>
+									<i:EventTrigger EventName="Click">
+										<behaviors:FileDialogAction
+											Explanation="{Binding Resources.Options_SoundExplanation, Source={x:Static models:ResourceService.Current}}"
+											Filter="{Binding Resources.Options_SoundFilter, Source={x:Static models:ResourceService.Current}}"
+											FilePath="{Binding SettingsCurrent.OneCopied}"/>
+									</i:EventTrigger>
+								</i:Interaction.Triggers>
+							</Button>
+							<TextBox DockPanel.Dock="Left"
+									 Padding="2"
+									 VerticalContentAlignment="Center"
+									 IsReadOnly="True"
+									 Text="{Binding SettingsCurrent.OneCopied, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
+						</DockPanel>
+
+						<TextBlock Text="{Binding Resources.Options_SoundAllCopied, Source={x:Static models:ResourceService.Current}}"/>
+						<DockPanel Margin="0,4,0,4">
+							<Button DockPanel.Dock="Right"
+									Margin="4,0,0,0"
+									Style="{StaticResource ActionButtonBaseStyle}"
+									Content="{Binding Resources.Options_Test, Source={x:Static models:ResourceService.Current}}">
+								<i:Interaction.Triggers>
+									<i:EventTrigger EventName="Click">
+										<i:CallMethodAction TargetObject="{Binding SettingsCurrent}" MethodName="TestAllCopied"/>
+									</i:EventTrigger>
+								</i:Interaction.Triggers>
+							</Button>
+							<Button DockPanel.Dock="Right"
+									Margin="4,0,0,0"
+									Style="{StaticResource ActionButtonBaseStyle}"
+									Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}">
+								<i:Interaction.Triggers>
+									<i:EventTrigger EventName="Click">
+										<behaviors:FileDialogAction
+											Explanation="{Binding Resources.Options_SoundExplanation, Source={x:Static models:ResourceService.Current}}"
+											Filter="{Binding Resources.Options_SoundFilter, Source={x:Static models:ResourceService.Current}}"
+											FilePath="{Binding SettingsCurrent.AllCopied}"/>
+									</i:EventTrigger>
+								</i:Interaction.Triggers>
+							</Button>
+							<TextBox DockPanel.Dock="Left"
+									 Padding="2"
+									 VerticalContentAlignment="Center"
+									 IsReadOnly="True"
+									 Text="{Binding SettingsCurrent.AllCopied, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
+						</DockPanel>
+					</StackPanel>
 				</StackPanel>
 			</GroupBox>
 

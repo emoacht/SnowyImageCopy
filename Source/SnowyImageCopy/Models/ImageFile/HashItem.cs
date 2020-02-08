@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SnowyImageCopy.Models
+namespace SnowyImageCopy.Models.ImageFile
 {
 	/// <summary>
 	/// Container for hash

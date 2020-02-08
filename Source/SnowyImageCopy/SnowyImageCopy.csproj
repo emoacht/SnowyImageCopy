@@ -43,6 +43,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\DesktopToast.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.3\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
@@ -50,9 +51,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\MonitorAware.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
@@ -80,44 +84,18 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Properties\Resources.ja-JP.Designer.cs">
-      <DependentUpon>Resources.ja-JP.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Options.xaml.cs">
-      <DependentUpon>Options.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ProductInfo.cs" />
-    <Page Include="Views\Controls\ThumbnailBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -139,26 +117,6 @@
     <Compile Include="Helper\PathAddition.cs" />
     <Compile Include="Helper\Recycle.cs" />
     <Compile Include="Helper\VisualTreeHelperAddition.cs" />
-    <Compile Include="Models\CardInfo.cs" />
-    <Compile Include="Models\CommandLine.cs" />
-    <Compile Include="Models\FileItem.cs" />
-    <Compile Include="Models\IFileItem.cs" />
-    <Compile Include="Models\FolderService.cs" />
-    <Compile Include="Models\LogService.cs" />
-    <Compile Include="Models\NetworkChecker.cs" />
-    <Compile Include="Models\FileExtension.cs" />
-    <Compile Include="Models\FileManager.cs" />
-    <Compile Include="Models\FileManagerCommand.cs" />
-    <Compile Include="Models\FilePeriod.cs" />
-    <Compile Include="Models\FileStatus.cs" />
-    <Compile Include="Models\HashItem.cs" />
-    <Compile Include="Models\ImageManager.cs" />
-    <Compile Include="Models\Operator.cs" />
-    <Compile Include="Models\ProgressInfo.cs" />
-    <Compile Include="Models\ResourceService.cs" />
-    <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\Signatures.cs" />
-    <Compile Include="Models\WindowPlacement.cs" />
     <Compile Include="Models\Exceptions\CardChangedException.cs" />
     <Compile Include="Models\Exceptions\CardUploadDisabledException.cs" />
     <Compile Include="Models\Exceptions\ImageNotSupportedException.cs" />
@@ -166,34 +124,51 @@
     <Compile Include="Models\Exceptions\RemoteConnectionUnableException.cs" />
     <Compile Include="Models\Exceptions\RemoteFileException.cs" />
     <Compile Include="Models\Exceptions\UnexpectedException.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+    <Compile Include="Models\ImageFile\FileExtension.cs" />
+    <Compile Include="Models\ImageFile\FileItem.cs" />
+    <Compile Include="Models\ImageFile\FileManager.cs" />
+    <Compile Include="Models\ImageFile\FileManagerCommand.cs" />
+    <Compile Include="Models\ImageFile\HashItem.cs" />
+    <Compile Include="Models\ImageFile\IFileItem.cs" />
+    <Compile Include="Models\CardInfo.cs" />
+    <Compile Include="Models\CommandLine.cs" />
+    <Compile Include="Models\FilePeriod.cs" />
+    <Compile Include="Models\FileStatus.cs" />
+    <Compile Include="Models\FolderService.cs" />
+    <Compile Include="Models\ImageManager.cs" />
+    <Compile Include="Models\LogService.cs" />
+    <Compile Include="Models\NetworkChecker.cs" />
+    <Compile Include="Models\Operator.cs" />
+    <Compile Include="Models\ProgressInfo.cs" />
+    <Compile Include="Models\ResourceService.cs" />
+    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\Signatures.cs" />
+    <Compile Include="Models\SoundManager.cs" />
+    <Compile Include="Models\WindowPlacement.cs" />
     <Compile Include="ViewModels\FileItemViewModel.cs" />
-    <Compile Include="ViewModels\ItemObservableCollection.cs" />
     <Compile Include="ViewModels\FilePeriodViewModel.cs" />
+    <Compile Include="ViewModels\ItemObservableCollection.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="Views\Behaviors\CalendarSelectedDatesBehavior.cs" />
-    <Compile Include="Views\Behaviors\FolderBrowserAction.cs" />
-    <Compile Include="Views\Behaviors\FrameworkElementIntersectionBehavior.cs" />
-    <Compile Include="Views\Behaviors\GridSizeBehavior.cs" />
-    <Compile Include="Views\Behaviors\SelectorSelectedItemBehavior.cs" />
-    <Compile Include="Views\Behaviors\WebBrowserBehavior.cs" />
     <Compile Include="Views\Behaviors\ExplorerAction.cs" />
+    <Compile Include="Views\Behaviors\FileDialogAction.cs" />
+    <Compile Include="Views\Behaviors\FolderDialogAction.cs" />
+    <Compile Include="Views\Behaviors\FrameworkElementIntersectionBehavior.cs" />
     <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
+    <Compile Include="Views\Behaviors\GridSizeBehavior.cs" />
     <Compile Include="Views\Behaviors\ListBoxVirtualizationBehavior.cs" />
+    <Compile Include="Views\Behaviors\SelectorSelectedItemBehavior.cs" />
     <Compile Include="Views\Behaviors\SystemSoundPlayAction.cs" />
+    <Compile Include="Views\Behaviors\WebBrowserBehavior.cs" />
     <Compile Include="Views\Behaviors\WindowActivateBehavior.cs" />
     <Compile Include="Views\Controls\BusyButton.cs" />
     <Compile Include="Views\Controls\CheckTextBox.cs" />
     <Compile Include="Views\Controls\CircularProgressBar.cs" />
+    <Compile Include="Views\Controls\HideableGridSplitter.cs" />
     <Compile Include="Views\Controls\NumericTextBox.cs" />
     <Compile Include="Views\Controls\NumericUpDown.cs" />
     <Compile Include="Views\Controls\SlidingToggleButton.cs" />
-    <Compile Include="Views\Controls\HideableGridSplitter.cs" />
     <Compile Include="Views\Controls\ThumbnailBox.xaml.cs">
       <DependentUpon>ThumbnailBox.xaml</DependentUpon>
     </Compile>
@@ -207,15 +182,16 @@
     <Compile Include="Views\Converters\FileStatusToBrushConverter.cs" />
     <Compile Include="Views\Converters\FileStatusToStringConverter.cs" />
     <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
+    <Compile Include="Views\Converters\PathFileNameConverter.cs" />
     <Compile Include="Views\Converters\TimeSpanToStringConverter.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\Options.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Compile Include="Views\Options.xaml.cs">
+      <DependentUpon>Options.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProductInfo.cs" />
     <Page Include="Views\Styles\CommonControls.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -224,11 +200,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Styles\CustomTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Styles\DefaultTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Styles\CustomTheme.xaml">
+    <Page Include="Views\Controls\ThumbnailBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Options.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -237,28 +225,42 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <AppDesigner Include="Properties\" />
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.ja-JP.Designer.cs">
+      <DependentUpon>Resources.ja-JP.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <None Include="Properties\app.manifest">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Application.ico">
-      <Visible>false</Visible>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Application.ico">
+      <Visible>false</Visible>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5 %28x86 および x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -273,16 +275,16 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ja-JP.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.ja-JP.Designer.cs</LastGenOutput>
       <DependentUpon>Resources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -313,6 +315,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SnowyTool\SnowyTool.csproj">
+      <Project>{bb8a7f03-e29d-4023-bd7b-fe2988ff4d77}</Project>
+      <Name>SnowyTool</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
 </Project>

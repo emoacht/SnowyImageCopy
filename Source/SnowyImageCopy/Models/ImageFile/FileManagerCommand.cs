@@ -1,5 +1,5 @@
 ﻿
-namespace SnowyImageCopy.Models
+namespace SnowyImageCopy.Models.ImageFile
 {
 	/// <summary>
 	/// CGI command types to manage FlashAir card

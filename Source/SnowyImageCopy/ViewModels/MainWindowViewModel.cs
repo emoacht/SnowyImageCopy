@@ -427,7 +427,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#region FileItem
 
-		private PropertyChangedEventListener _fileListPropertyChangedListener;
+		private readonly PropertyChangedEventListener _fileListPropertyChangedListener;
 
 		private async void FileListPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -437,49 +437,51 @@ namespace SnowyImageCopy.ViewModels
 			var item = ((ItemObservableCollection<FileItemViewModel>)sender).ItemPropertyChangedSender;
 			var propertyName = ((ItemObservableCollection<FileItemViewModel>)sender).ItemPropertyChangedEventArgs.PropertyName;
 
-			if (propertyName == nameof(FileItemViewModel.IsSelected))
+			switch (propertyName)
 			{
-				switch (item.Status)
-				{
-					case FileStatus.NotCopied:
-					case FileStatus.OnceCopied:
-						// Make remote file as to be copied.
-						if (!item.IsAliveRemote)
+				case nameof(FileItemViewModel.IsSelected):
+					switch (item.Status)
+					{
+						case FileStatus.NotCopied:
+						case FileStatus.OnceCopied:
+							// Make remote file as to be copied.
+							if (!item.IsAliveRemote)
+								break;
+
+							item.Status = FileStatus.ToBeCopied;
 							break;
 
-						item.Status = FileStatus.ToBeCopied;
-						break;
-
-					case FileStatus.ToBeCopied:
-						// Make remote file as not to be copied.
-						item.Status = item.IsAliveLocal
-							? FileStatus.Copied
-							: (item.IsOnceCopied == true)
-								? FileStatus.OnceCopied
-								: FileStatus.NotCopied;
-						break;
-
-					case FileStatus.Copied:
-						// Load image data from local file.
-						if (!IsCurrentImageVisible || Op.IsCopying)
+						case FileStatus.ToBeCopied:
+							// Make remote file as not to be copied.
+							item.Status = item.IsAliveLocal
+								? FileStatus.Copied
+								: (item.IsOnceCopied == true)
+									? FileStatus.OnceCopied
+									: FileStatus.NotCopied;
 							break;
 
-						await Op.LoadSetAsync(item);
-						break;
-				}
-			}
-			else if (propertyName == nameof(FileItemViewModel.Status))
-			{
-				switch (item.Status)
-				{
-					case FileStatus.ToBeCopied:
-						// Trigger instant copy.
-						if (!Settings.Current.InstantCopy || Op.IsChecking || Op.IsCopying)
-							break;
+						case FileStatus.Copied:
+							// Load image data from local file.
+							if (!IsCurrentImageVisible || Op.IsCopying)
+								break;
 
-						await Op.CopyFileAsync();
-						break;
-				}
+							await Op.LoadSetAsync(item);
+							break;
+					}
+					break;
+
+				case nameof(FileItemViewModel.Status):
+					switch (item.Status)
+					{
+						case FileStatus.ToBeCopied:
+							// Trigger instant copy.
+							if (!Settings.Current.InstantCopy || Op.IsChecking || Op.IsCopying)
+								break;
+
+							await Op.CopyFileAsync();
+							break;
+					}
+					break;
 			}
 		}
 
@@ -487,28 +489,28 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Settings
 
-		private PropertyChangedEventListener _settingsPropertyChangedListener;
+		private readonly PropertyChangedEventListener _settingsPropertyChangedListener;
 
 		private event Action _autoCheckIntervalChanged;
 		private event Action _targetConditionChanged;
 
 		private void ReactSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			var propertyName = e.PropertyName;
+			switch (e.PropertyName)
+			{
+				case nameof(Settings.AutoCheckInterval):
+					_autoCheckIntervalChanged?.Invoke();
+					break;
 
-			if (propertyName == nameof(Settings.AutoCheckInterval))
-			{
-				_autoCheckIntervalChanged?.Invoke();
-			}
-			else if ((propertyName == nameof(Settings.TargetPeriod))
-				|| (propertyName == nameof(Settings.TargetDates))
-				|| (propertyName == nameof(Settings.HandlesJpegFileOnly)))
-			{
-				_targetConditionChanged?.Invoke();
-			}
-			else if (propertyName == nameof(Settings.OrdersFromNewer))
-			{
-				FileListCore.Clear();
+				case nameof(Settings.TargetPeriod):
+				case nameof(Settings.TargetDates):
+				case nameof(Settings.HandlesJpegFileOnly):
+					_targetConditionChanged?.Invoke();
+					break;
+
+				case nameof(Settings.OrdersFromNewer):
+					FileListCore.Clear();
+					break;
 			}
 		}
 
@@ -516,30 +518,31 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Operator
 
-		private PropertyChangedEventListener _operatorPropertyChangedListener;
+		private readonly PropertyChangedEventListener _operatorPropertyChangedListener;
 
 		private void ReactOperatorPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			var propertyName = e.PropertyName;
+			switch (e.PropertyName)
+			{
+				case nameof(Operator.IsChecking):
+					ManageOperationState();
+					ManageBrowserOpen(Op.IsChecking);
+					break;
 
-			if (propertyName == nameof(Operator.IsChecking))
-			{
-				ManageOperationState();
-				ManageBrowserOpen(Op.IsChecking);
-			}
-			else if (propertyName == nameof(Operator.IsCopying))
-			{
-				ManageOperationState();
-				ManageBrowserOpen(Op.IsCopying);
-			}
-			else if (propertyName == nameof(Operator.IsAutoRunning))
-			{
-				ManageOperationState();
-				ManageBrowserOpen(Op.IsAutoRunning);
-			}
-			else if ((propertyName == nameof(Operator.IsSavingDesktop)) || (propertyName == nameof(Operator.IsSendingClipboard)))
-			{
-				ManageOperationState();
+				case nameof(Operator.IsCopying):
+					ManageOperationState();
+					ManageBrowserOpen(Op.IsCopying);
+					break;
+
+				case nameof(Operator.IsAutoRunning):
+					ManageOperationState();
+					ManageBrowserOpen(Op.IsAutoRunning);
+					break;
+
+				case nameof(Operator.IsSavingDesktop):
+				case nameof(Operator.IsSendingClipboard):
+					ManageOperationState();
+					break;
 			}
 		}
 

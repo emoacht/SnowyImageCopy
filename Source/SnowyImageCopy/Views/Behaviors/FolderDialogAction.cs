@@ -12,7 +12,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// <summary>
 	/// Opens folder browser dialog.
 	/// </summary>
-	public class FolderBrowserAction : TriggerAction<DependencyObject>
+	public class FolderDialogAction : TriggerAction<DependencyObject>
 	{
 		#region Property
 
@@ -28,8 +28,8 @@ namespace SnowyImageCopy.Views.Behaviors
 			DependencyProperty.Register(
 				"Explanation",
 				typeof(string),
-				typeof(FolderBrowserAction),
-				new FrameworkPropertyMetadata(string.Empty));
+				typeof(FolderDialogAction),
+				new FrameworkPropertyMetadata(default));
 
 		/// <summary>
 		/// Folder path specified in the dialog.
@@ -40,37 +40,41 @@ namespace SnowyImageCopy.Views.Behaviors
 			set { SetValue(FolderPathProperty, value); }
 		}
 		public static readonly DependencyProperty FolderPathProperty =
-			DependencyProperty.Register(
-				"FolderPath",
-				typeof(string),
-				typeof(FolderBrowserAction),
-				new FrameworkPropertyMetadata(
-					string.Empty,
-					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+		   DependencyProperty.Register(
+			   "FolderPath",
+			   typeof(string),
+			   typeof(FolderDialogAction),
+			   new FrameworkPropertyMetadata(
+				   default,
+				   FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
 		#endregion
 
 		protected override void Invoke(object parameter)
 		{
-			var initialPath = FolderPath;
-
-			if (!string.IsNullOrEmpty(initialPath) && !Directory.Exists(initialPath))
+			static string GetInitialPath(string source)
 			{
-				var parent = Path.GetDirectoryName(initialPath);
+				if (string.IsNullOrWhiteSpace(source))
+					return null;
+
+				if (Directory.Exists(source))
+					return source;
+
+				var parent = Path.GetDirectoryName(source);
 				if (!string.IsNullOrEmpty(parent))
-					initialPath = parent;
+					return parent;
+
+				return null;
 			}
 
-			using (var fbd = new System.Windows.Forms.FolderBrowserDialog
+			using var fbd = new System.Windows.Forms.FolderBrowserDialog
 			{
 				Description = Explanation,
-				SelectedPath = initialPath,
-			})
+				SelectedPath = GetInitialPath(FolderPath)
+			};
+			if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
-				if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-				{
-					FolderPath = fbd.SelectedPath;
-				}
+				FolderPath = fbd.SelectedPath;
 			}
 		}
 	}

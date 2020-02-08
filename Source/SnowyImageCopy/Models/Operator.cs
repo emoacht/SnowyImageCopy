@@ -18,6 +18,7 @@ using DesktopToast;
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models.Exceptions;
+using SnowyImageCopy.Models.ImageFile;
 using SnowyImageCopy.Properties;
 using SnowyImageCopy.ViewModels;
 
@@ -365,7 +366,7 @@ namespace SnowyImageCopy.Models
 
 				_autoTimer.Stop();
 				_autoTimer = null;
-				SystemSounds.Asterisk.Play();
+				SoundManager.PlayInterrupted();
 				OperationStatus = Resources.OperationStatus_Stopped;
 			}
 		}
@@ -517,7 +518,7 @@ namespace SnowyImageCopy.Models
 				}
 				catch (OperationCanceledException)
 				{
-					SystemSounds.Asterisk.Play();
+					SoundManager.PlayInterrupted();
 					OperationStatus = Resources.OperationStatus_Stopped;
 				}
 				catch
@@ -525,7 +526,7 @@ namespace SnowyImageCopy.Models
 					UpdateProgress(new ProgressInfo(isError: true));
 
 					if (!IsAutoRunning)
-						SystemSounds.Hand.Play();
+						SoundManager.PlayError();
 
 					throw;
 				}
@@ -605,13 +606,13 @@ namespace SnowyImageCopy.Models
 				}
 				catch (OperationCanceledException)
 				{
-					SystemSounds.Asterisk.Play();
+					SoundManager.PlayInterrupted();
 					OperationStatus = Resources.OperationStatus_Stopped;
 				}
 				catch
 				{
 					UpdateProgress(new ProgressInfo(isError: true));
-					SystemSounds.Hand.Play();
+					SoundManager.PlayError();
 					throw;
 				}
 				finally
@@ -667,13 +668,13 @@ namespace SnowyImageCopy.Models
 				}
 				catch (OperationCanceledException)
 				{
-					SystemSounds.Asterisk.Play();
+					SoundManager.PlayInterrupted();
 					OperationStatus = Resources.OperationStatus_Stopped;
 				}
 				catch
 				{
 					UpdateProgress(new ProgressInfo(isError: true));
-					SystemSounds.Hand.Play();
+					SoundManager.PlayError();
 					throw;
 				}
 				finally
@@ -944,37 +945,40 @@ namespace SnowyImageCopy.Models
 
 							try
 							{
-								if (item.CanReadExif)
-									item.Thumbnail = await ImageManager.ReadThumbnailAsync(ComposeLocalPath(item));
-								else if (item.CanLoadDataLocal)
-									item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
+								try
+								{
+									if (item.CanReadExif)
+										item.Thumbnail = await ImageManager.ReadThumbnailAsync(ComposeLocalPath(item));
+									else if (item.CanLoadDataLocal)
+										item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
+								}
+								catch
+								{
+									if (item.IsAliveRemote && item.CanGetThumbnailRemote)
+									{
+										itemsDueRemote.Add(item);
+									}
+									throw;
+								}
 							}
-							catch (Exception ex)
+							catch (FileNotFoundException)
 							{
-								if (ex is FileNotFoundException)
-								{
-									item.IsAliveLocal = false;
-									item.Status = (item.IsOnceCopied == true)
-										? FileStatus.OnceCopied
-										: FileStatus.NotCopied;
-								}
-								else if (ex is IOException)
-								{
-									item.IsAvailableLocal = false;
-								}
-								else if (ex is ImageNotSupportedException)
-								{
-									item.CanLoadDataLocal = false;
-								}
-								else
-								{
-									//throw;
-								}
-
-								if (item.IsAliveRemote && item.CanGetThumbnailRemote)
-								{
-									itemsDueRemote.Add(item);
-								}
+								item.IsAliveLocal = false;
+								item.Status = (item.IsOnceCopied == true)
+									? FileStatus.OnceCopied
+									: FileStatus.NotCopied;
+							}
+							catch (IOException)
+							{
+								item.IsAvailableLocal = false;
+							}
+							catch (ImageNotSupportedException)
+							{
+								item.CanLoadDataLocal = false;
+							}
+							catch
+							{
+								//throw;
 							}
 						}
 						itemsDueRemote.CompleteAdding();
@@ -1076,8 +1080,20 @@ namespace SnowyImageCopy.Models
 				while (true)
 				{
 					var item = FileListCore.FirstOrDefault(x => x.IsTarget && (x.Status == FileStatus.ToBeCopied));
-					if (item is null)
+					if (item != null)
+					{
+						if (0 == _copyFileCount)
+							SoundManager.PlayCopyStarted();
+						else
+							SoundManager.PlayOneCopied();
+					}
+					else
+					{
+						if (0 < _copyFileCount)
+							SoundManager.PlayAllCopied();
+
 						break; // Copy completed.
+					}
 
 					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
 

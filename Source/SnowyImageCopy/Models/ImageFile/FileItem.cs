@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 using SnowyImageCopy.Helper;
 
-namespace SnowyImageCopy.Models
+namespace SnowyImageCopy.Models.ImageFile
 {
 	/// <summary>
 	/// File item in FlashAir card
@@ -52,6 +52,10 @@ namespace SnowyImageCopy.Models
 			|| string.Equals(FileName, "SD_WLAN", StringComparison.OrdinalIgnoreCase)
 			|| (string.Equals(FileName, "FA000001.JPG", StringComparison.OrdinalIgnoreCase) /* Control image file */
 				&& Directory.EndsWith("100__TSB", StringComparison.OrdinalIgnoreCase));
+
+		#endregion
+
+		#region Order
 
 		private enum Order : int
 		{
