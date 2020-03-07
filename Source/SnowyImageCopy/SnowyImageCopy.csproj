@@ -116,6 +116,7 @@
     <Compile Include="Helper\OsVersion.cs" />
     <Compile Include="Helper\PathAddition.cs" />
     <Compile Include="Helper\Recycle.cs" />
+    <Compile Include="Helper\VersionAddition.cs" />
     <Compile Include="Helper\VisualTreeHelperAddition.cs" />
     <Compile Include="Models\Exceptions\CardChangedException.cs" />
     <Compile Include="Models\Exceptions\CardUploadDisabledException.cs" />
