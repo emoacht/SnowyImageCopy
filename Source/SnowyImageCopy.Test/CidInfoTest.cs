@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using SnowyTool.Models;
@@ -51,6 +55,19 @@ namespace SnowyImageCopy.Test
 		public void TestImportCid4()
 		{
 			var cid = new CidInfo();
+			cid.Import("02544d535733324755e2cf8e7b011c01"); // FlashAir W-04 32GB
+			Assert.AreEqual(2, cid.ManufacturerID);
+			Assert.AreEqual("TM", cid.OemApplicationID);
+			Assert.AreEqual("SW32G", cid.ProductName);
+			Assert.AreEqual("5.5", cid.ProductRevision);
+			Assert.AreEqual(3805253243U, cid.ProductSerialNumber);
+			Assert.AreEqual(new DateTime(2017, 12, 1), cid.ManufacturingDate);
+		}
+
+		[TestMethod]
+		public void TestImportCid5()
+		{
+			var cid = new CidInfo();
 			cid.Import("0353445355303847801BB8C2F600C82F");
 			Assert.AreEqual(3, cid.ManufacturerID);
 			Assert.AreEqual("SD", cid.OemApplicationID);
@@ -61,7 +78,7 @@ namespace SnowyImageCopy.Test
 		}
 
 		[TestMethod]
-		public void TestImportCid5()
+		public void TestImportCid6()
 		{
 			var cid = new CidInfo();
 			cid.Import("02544d5341303247049c62cae60099dd");

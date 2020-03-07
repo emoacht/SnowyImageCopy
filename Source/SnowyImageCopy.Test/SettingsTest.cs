@@ -1,6 +1,8 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using SnowyImageCopy.Models;
@@ -26,6 +28,7 @@ namespace SnowyImageCopy.Test
 		[TestMethod]
 		public void TestTryParseRemoteAddressInvalid()
 		{
+			TestTryParseRemoteAddressBase(null); // Null
 			TestTryParseRemoteAddressBase(@"http:///"); // Wrong path
 			TestTryParseRemoteAddressBase(@"http://flashair"); // No slash at the end
 			TestTryParseRemoteAddressBase(@"http://flashair_0123456/"); // Too long host name
@@ -49,6 +52,55 @@ namespace SnowyImageCopy.Test
 			var args = new object[] { source, null, null };
 
 			Assert.IsFalse((bool)settingsObject.Invoke("TryParseRemoteAddress", args));
+		}
+
+		#endregion
+
+		#endregion
+
+		#region IsDatedFolderValid
+
+		[TestMethod]
+		public void TestIsDatedFolderValidTrue()
+		{
+			TestTrue("yyyyMMdd");
+			TestTrue("yyyy-MM-dd");
+			TestTrue("yyyy_MM_dd");
+			TestTrue("ddMMyyyy");
+			TestTrue("dd-MM-yyyy");
+			TestTrue("dd_MM_yyyy");
+			TestTrue("yMd");
+			TestTrue("dMy");
+
+			void TestTrue(string source) => TestIsDatedFolderValidBase(source, true);
+		}
+
+		[TestMethod]
+		public void TestIsDatedFolderValidFalse()
+		{
+			TestFalse(null);
+			TestFalse(string.Empty);
+			TestFalse(" ");
+			TestFalse("yyyymmdd");
+			TestFalse("yyyyMMDD");
+			TestFalse("YYYYMMdd");
+			TestFalse("yyyy/MM/dd");
+			TestFalse(@"yyyy\MM\dd");
+			TestFalse("yyyy.MM.dd");
+			TestFalse("yyyy MM dd");
+			TestFalse("ddmmyyyy");
+			TestFalse("yyyyMM");
+			TestFalse("MMdd");
+
+			void TestFalse(string source) => TestIsDatedFolderValidBase(source, false);
+		}
+
+		#region Base
+
+		private void TestIsDatedFolderValidBase(string source, bool isValid)
+		{
+			var privateType = new PrivateType(typeof(Settings));
+			Assert.AreEqual((bool)privateType.InvokeStatic("IsDatedFolderValid", source), isValid);
 		}
 
 		#endregion
