@@ -292,6 +292,9 @@
   <data name="Options_CreateDatedFolder" xml:space="preserve">
     <value>Create folder for each date</value>
   </data>
+  <data name="Options_CustomizeDatedFolder" xml:space="preserve">
+    <value>Customize folder name for each date</value>
+  </data>
   <data name="Options_HandleJpegOnly" xml:space="preserve">
     <value>Handle JPEG image only</value>
   </data>

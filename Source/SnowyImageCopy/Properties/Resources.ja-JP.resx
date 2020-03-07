@@ -288,6 +288,9 @@
   <data name="Options_CreateDatedFolder" xml:space="preserve">
     <value>日付ごとのフォルダーを作成する</value>
   </data>
+  <data name="Options_CustomizeDatedFolder" xml:space="preserve">
+    <value>日付ごとのフォルダー名をカスタマイズする</value>
+  </data>
   <data name="Options_HandleJpegOnly" xml:space="preserve">
     <value>JPEGイメージのみを扱う</value>
   </data>

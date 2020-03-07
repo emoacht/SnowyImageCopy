@@ -292,12 +292,75 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _makesFileExtensionLowercase = true; // Default
 
+		#region Dated folder
+
 		public bool CreatesDatedFolder
 		{
 			get => _createsDatedFolder;
 			set => SetPropertyValue(ref _createsDatedFolder, value);
 		}
 		private bool _createsDatedFolder = true; // Default;
+
+		[XmlIgnore]
+		public bool CustomizesDatedFolder
+		{
+			get => _customizesDatedFolder || (CustomDatedFolder != null);
+			set
+			{
+				if (_customizesDatedFolder == value)
+					return;
+
+				_customizesDatedFolder = value;
+				if (!value)
+					CustomDatedFolder = null;
+			}
+		}
+		private bool _customizesDatedFolder;
+
+		[XmlIgnore]
+		public string DatedFolder
+		{
+			get => CustomDatedFolder ?? DefaultDatedFolder;
+			set
+			{
+				var buffer = value?.Trim();
+				if (string.IsNullOrEmpty(buffer) ||
+					string.Equals(buffer, DefaultDatedFolder, StringComparison.OrdinalIgnoreCase))
+				{
+					CustomDatedFolder = null;
+				}
+				else if (IsDatedFolderValid(buffer))
+				{
+					CustomDatedFolder = buffer;
+				}
+			}
+		}
+
+		public string CustomDatedFolder
+		{
+			get => _customDatedFolder;
+			set
+			{
+				SetPropertyValue(ref _customDatedFolder, value);
+				RaisePropertyChanged(nameof(DatedFolder));
+			}
+		}
+		private string _customDatedFolder;
+
+		private const string DefaultDatedFolder = "yyyyMMdd";
+
+		private static bool IsDatedFolderValid(string format)
+		{
+			// year:  y{1,4}
+			// month: M{1,4}
+			// day:   d{1,2}
+			// delimiter: [-_]?
+			const string datePattern = "^(?:y{1,4}[-_]?M{1,4}[-_]?d{1,2}|d{1,2}[-_]?M{1,4}[-_]?y{1,4})$";
+
+			return new Regex(datePattern).IsMatch(format ?? string.Empty);
+		}
+
+		#endregion
 
 		public bool HandlesJpegFileOnly
 		{

@@ -215,6 +215,23 @@
 					</GroupBox>
 
 					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+							  Header="{Binding Resources.Options_CustomizeDatedFolder, Source={x:Static models:ResourceService.Current}}">
+						<StackPanel>
+							<controls:SlidingToggleButton
+								x:Name="CustomizeDatedFolderButton"
+								Style="{StaticResource SwitchButtonStyle}"
+								HorizontalAlignment="Right"
+								IsChecked="{Binding SettingsCurrent.CustomizesDatedFolder, Mode=TwoWay}"/>
+							<TextBox
+								Height="20"
+								Margin="0,4,0,0" Padding="2,0"
+								VerticalContentAlignment="Center"
+								Visibility="{Binding IsChecked, ElementName=CustomizeDatedFolderButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
+								Text="{Binding SettingsCurrent.DatedFolder, Mode=TwoWay}"/>
+						</StackPanel>
+					</GroupBox>
+
+					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
 							  Header="{Binding Resources.Options_HandleJpegOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"

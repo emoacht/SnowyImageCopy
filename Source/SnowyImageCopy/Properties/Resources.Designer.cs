@@ -458,6 +458,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customize folder name for each date.
+        /// </summary>
+        public static string Options_CustomizeDatedFolder {
+            get {
+                return ResourceManager.GetString("Options_CustomizeDatedFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date.
         /// </summary>
         public static string Options_Date {

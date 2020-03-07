@@ -1347,7 +1347,7 @@ namespace SnowyImageCopy.Models
 		{
 			var folderName = Settings.Current.CreatesDatedFolder
 				? (item.Date != default)
-					? item.Date.ToString("yyyyMMdd")
+					? item.Date.ToString(Settings.Current.DatedFolder)
 					: UnknownFolderName
 				: string.Empty;
 
