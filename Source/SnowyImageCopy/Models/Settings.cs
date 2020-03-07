@@ -111,17 +111,17 @@ namespace SnowyImageCopy.Models
 		public string RemoteDescendant => _remoteDescendant ?? string.Empty;
 		private string _remoteDescendant;
 
-		private static readonly Regex _rootPattern = new Regex(@"^https?://((?!/)\S){1,15}/", RegexOptions.Compiled);
-
 		private bool TryParseRemoteAddress(string source, out string root, out string descendant)
 		{
+			const string rootPattern = @"^https?://((?!/)\S){1,15}/";
+
 			root = null;
 			descendant = null;
 
-			if (Path.GetInvalidPathChars().Any(x => source.Contains(x)))
+			if (string.IsNullOrEmpty(source) || Path.GetInvalidPathChars().Any(x => source.Contains(x)))
 				return false;
 
-			var match = _rootPattern.Match(source);
+			var match = new Regex(rootPattern).Match(source);
 			if (!match.Success)
 				return false;
 
