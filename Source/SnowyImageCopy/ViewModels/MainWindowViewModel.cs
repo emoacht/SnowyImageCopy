@@ -33,8 +33,6 @@ namespace SnowyImageCopy.ViewModels
 
 		public Settings SettingsCurrent => Settings.Current;
 
-		public event EventHandler ActivateRequested;
-
 		#endregion
 
 		#region Operation
@@ -351,14 +349,8 @@ namespace SnowyImageCopy.ViewModels
 			// Add event listeners.
 			if (!Designer.IsInDesignMode) // To avoid NullReferenceException in Design mode.
 			{
-				_fileListPropertyChangedListener = new PropertyChangedEventListener(FileListPropertyChanged);
+				_fileListPropertyChangedListener = new PropertyChangedEventListener(OnFileListPropertyChanged);
 				PropertyChangedEventManager.AddListener(FileListCore, _fileListPropertyChangedListener, string.Empty);
-
-				_settingsPropertyChangedListener = new PropertyChangedEventListener(ReactSettingsPropertyChanged);
-				PropertyChangedEventManager.AddListener(Settings.Current, _settingsPropertyChangedListener, string.Empty);
-
-				_operatorPropertyChangedListener = new PropertyChangedEventListener(ReactOperatorPropertyChanged);
-				PropertyChangedEventManager.AddListener(Op, _operatorPropertyChangedListener, string.Empty);
 			}
 
 			// Subscribe event handlers.
@@ -368,31 +360,57 @@ namespace SnowyImageCopy.ViewModels
 					handler => this.PropertyChanged += handler,
 					handler => this.PropertyChanged -= handler
 				)
-				.Where(args =>
+				.Where(e =>
 				{
-					var name = args.PropertyName;
-					return (name == nameof(IsCurrentImageVisible))
-						|| (name == nameof(CurrentFrameSize))
-						|| (name == nameof(DestinationColorProfile));
+					switch (e.PropertyName)
+					{
+						case nameof(IsCurrentImageVisible):
+						case nameof(CurrentFrameSize):
+						case nameof(DestinationColorProfile):
+							return true;
+						default:
+							return false;
+					}
 				})
 				.Throttle(TimeSpan.FromMilliseconds(50))
 				.ObserveOn(SynchronizationContext.Current)
 				.Subscribe(_ => SetCurrentImage(CurrentImageData)));
 
-			Subscription.Add(Observable.FromEvent
+			var settingsPropertyChanged = Observable.FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>
 				(
-					handler => _autoCheckIntervalChanged += handler,
-					handler => _autoCheckIntervalChanged -= handler
-				)
+					handler => (sender, e) => handler(e),
+					handler => Settings.Current.PropertyChanged += handler,
+					handler => Settings.Current.PropertyChanged -= handler
+				);
+
+			Subscription.Add(settingsPropertyChanged
+				.Where(e =>
+				{
+					switch (e.PropertyName)
+					{
+						case nameof(Settings.AutoCheckInterval):
+							return true;
+						default:
+							return false;
+					}
+				})
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
 				.Subscribe(_ => Op.ResetAutoTimer()));
 
-			Subscription.Add(Observable.FromEvent
-				(
-					handler => _targetConditionChanged += handler,
-					handler => _targetConditionChanged -= handler
-				)
+			Subscription.Add(settingsPropertyChanged
+				.Where(e =>
+				{
+					switch (e.PropertyName)
+					{
+						case nameof(Settings.TargetPeriod):
+						case nameof(Settings.TargetDates):
+						case nameof(Settings.HandlesJpegFileOnly):
+							return true;
+						default:
+							return false;
+					}
+				})
 				.Throttle(TimeSpan.FromMilliseconds(200))
 				.ObserveOn(SynchronizationContext.Current)
 				.Subscribe(_ =>
@@ -401,13 +419,48 @@ namespace SnowyImageCopy.ViewModels
 					Op.UpdateProgress();
 				}));
 
-			Subscription.Add(Observable.FromEventPattern
-				(
-					handler => Op.ActivateRequested += handler,
-					handler => Op.ActivateRequested -= handler
-				)
+			Subscription.Add(settingsPropertyChanged
+				.Where(e =>
+				{
+					switch (e.PropertyName)
+					{
+						case nameof(Settings.OrdersFromNewer):
+							return true;
+						default:
+							return false;
+					}
+				})
 				.ObserveOn(SynchronizationContext.Current)
-				.Subscribe(_ => ActivateRequested?.Invoke(this, EventArgs.Empty)));
+				.Subscribe(_ => FileListCore.Clear()));
+
+			Op.PropertyChanged += (_, e) =>
+			{
+				switch (e.PropertyName)
+				{
+					case nameof(Operator.IsChecking):
+					case nameof(Operator.IsCopying):
+					case nameof(Operator.IsAutoRunning):
+					case nameof(Operator.IsSavingDesktop):
+					case nameof(Operator.IsSendingClipboard):
+						ManageOperationState();
+
+						switch (e.PropertyName)
+						{
+							case nameof(Operator.IsChecking):
+								ManageBrowserOpen(Op.IsChecking);
+								break;
+
+							case nameof(Operator.IsCopying):
+								ManageBrowserOpen(Op.IsCopying);
+								break;
+
+							case nameof(Operator.IsAutoRunning):
+								ManageBrowserOpen(Op.IsAutoRunning);
+								break;
+						}
+						break;
+				}
+			};
 
 			SetSample(1);
 		}
@@ -425,11 +478,9 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Event listener
 
-		#region FileItem
-
 		private readonly PropertyChangedEventListener _fileListPropertyChangedListener;
 
-		private async void FileListPropertyChanged(object sender, PropertyChangedEventArgs e)
+		private async void OnFileListPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName != nameof(ItemObservableCollection<FileItemViewModel>.ItemPropertyChangedSender))
 				return;
@@ -484,69 +535,6 @@ namespace SnowyImageCopy.ViewModels
 					break;
 			}
 		}
-
-		#endregion
-
-		#region Settings
-
-		private readonly PropertyChangedEventListener _settingsPropertyChangedListener;
-
-		private event Action _autoCheckIntervalChanged;
-		private event Action _targetConditionChanged;
-
-		private void ReactSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			switch (e.PropertyName)
-			{
-				case nameof(Settings.AutoCheckInterval):
-					_autoCheckIntervalChanged?.Invoke();
-					break;
-
-				case nameof(Settings.TargetPeriod):
-				case nameof(Settings.TargetDates):
-				case nameof(Settings.HandlesJpegFileOnly):
-					_targetConditionChanged?.Invoke();
-					break;
-
-				case nameof(Settings.OrdersFromNewer):
-					FileListCore.Clear();
-					break;
-			}
-		}
-
-		#endregion
-
-		#region Operator
-
-		private readonly PropertyChangedEventListener _operatorPropertyChangedListener;
-
-		private void ReactOperatorPropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			switch (e.PropertyName)
-			{
-				case nameof(Operator.IsChecking):
-					ManageOperationState();
-					ManageBrowserOpen(Op.IsChecking);
-					break;
-
-				case nameof(Operator.IsCopying):
-					ManageOperationState();
-					ManageBrowserOpen(Op.IsCopying);
-					break;
-
-				case nameof(Operator.IsAutoRunning):
-					ManageOperationState();
-					ManageBrowserOpen(Op.IsAutoRunning);
-					break;
-
-				case nameof(Operator.IsSavingDesktop):
-				case nameof(Operator.IsSendingClipboard):
-					ManageOperationState();
-					break;
-			}
-		}
-
-		#endregion
 
 		#endregion
 	}
