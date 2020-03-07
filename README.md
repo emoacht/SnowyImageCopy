@@ -13,7 +13,8 @@ Tested on Windows 10 64bit with SD-WB008G, SD-WC016G (W-02), SD-WE016G (W-03) an
 
 This app is a WPF app developed in C# with Visual Studio Community 2017.
 
-As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
+As for FlashAir's API used in this app, refer to [FlashAir Developers](https://www.flashair-developers.com/)
+ ([copy](https://flashair-developers.github.io/website/)).
 
 ## History
 
@@ -23,13 +24,14 @@ As for FlashAir's API used in this app, refer to [FlashAir Developers][1].
 
  - MIT License
 
-## Other
+## Libraries
 
- - Libraries: [Reactive Extensions][2], [XamlBehaviors for WPF][3], [WPF Monitor Aware Window][4], [Desktop Toast][5]
- - Developer: emoacht (emotom[atmark]pobox.com)
+ - [Reactive Extensions](https://github.com/dotnet/reactive)
+ - [XamlBehaviors for WPF](https://github.com/microsoft/XamlBehaviorsWpf)
+ - [WPF Monitor Aware Window](https://github.com/emoacht/WpfMonitorAware)
+ - [Desktop Toast](https://github.com/emoacht/DesktopToast)
 
-[1]: https://www.flashair-developers.com/en/
-[2]: https://github.com/dotnet/reactive
-[3]: https://github.com/microsoft/XamlBehaviorsWpf
-[4]: https://github.com/emoacht/WpfMonitorAware
-[5]: https://github.com/emoacht/DesktopToast
+## Developer
+
+ - emoacht (emotom[atmark]pobox.com)
+

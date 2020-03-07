@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 1.8.0 2020-3-8
+
+ - Enable to customize folder name for each date
+
 Ver 1.7.0 2020-2-8
 
  - Add notification sound function
