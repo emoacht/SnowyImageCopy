@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using SnowyImageCopy.Helper;
+
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
@@ -54,7 +56,7 @@ namespace SnowyImageCopy.Models
 
 				_firmwareVersion = value;
 
-				if (!TryFindVersion(value, out Version version))
+				if (!VersionAddition.TryFind(value, out Version version))
 					return;
 
 				_isFirmwareVersion103OrNewer = (version >= new Version(1, 0, 3));
@@ -160,27 +162,6 @@ namespace SnowyImageCopy.Models
 				// Other: Uploading is disabled.
 				return (Upload != "1");
 			}
-		}
-
-		#endregion
-
-		#region Helper
-
-		private static readonly Regex _versionPattern = new Regex(@"[1-9]\.\d{2}\.\d{2}$", RegexOptions.Compiled);
-
-		private static bool TryFindVersion(string source, out Version version)
-		{
-			version = null;
-
-			if (string.IsNullOrWhiteSpace(source))
-				return false;
-
-			var match = _versionPattern.Match(source);
-			if (!match.Success)
-				return false;
-
-			version = new Version(match.Value);
-			return true;
 		}
 
 		#endregion
