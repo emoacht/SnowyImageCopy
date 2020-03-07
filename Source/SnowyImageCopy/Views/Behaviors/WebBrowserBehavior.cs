@@ -108,8 +108,6 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		#region Helper
 
-		private static readonly Regex _fragmentPattern = new Regex(@"(?<path>.+\.(?:htm|html))#.*");
-
 		/// <summary>
 		/// Removes fragment at the end of htm/html file path.
 		/// </summary>
@@ -118,10 +116,12 @@ namespace SnowyImageCopy.Views.Behaviors
 		/// <remarks>Uri.GetLeftPart(UriPartial.Path) method does not work for file path.</remarks>
 		private static string RemoveFragment(string filePath)
 		{
+			const string fragmentPattern = @"(?<path>.+\.(?:htm|html))#.*";
+
 			if (string.IsNullOrWhiteSpace(filePath))
 				return filePath;
 
-			var match = _fragmentPattern.Match(filePath);
+			var match = new Regex(fragmentPattern).Match(filePath);
 			if (!match.Success)
 				return filePath;
 
