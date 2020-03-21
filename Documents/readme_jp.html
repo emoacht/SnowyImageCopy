@@ -7,51 +7,42 @@
 <style type="text/css">
 <!--
 /* body */
-body {font-family: Segoe UI, Meiryo; line-height: 1.4em; background: rgb(234,234,234); padding: 0; margin: 0;}
+body {margin: 0; padding: 0; font-family: Segoe UI, Meiryo; line-height: 1.4em; background: white;}
 
-h1,h2,h3,p {font-weight: normal; padding: 0; margin: 0;}
+div#wrapper {margin: 0 auto; min-width: 640px; max-width: 920px;}
+div#wrapper {max-width: none\9;} /* for WebBrowser */
+
+h1,h2,h3,p {margin: 0; padding: 0; font-weight: normal;}
 
 p,li {font-size: 0.92em;}
 
-div#wrapper {margin: 0 auto; min-width: 640px; max-width: 720px; box-shadow: 0 0 8px rgb(144,144,144);}
-
 /* title */
-div#title {background: white; height: 70px; position: relative;}
+div#title {height: 4.4em; position: relative;}
 
-h1 {font-size: 46px; line-height: 46px; margin-top: -24px; position: absolute; top: 50%; left: 20px; color: #00a1e0;}
-p#language {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10px;}
-p#version {font-size: 16px; line-height: 16px; position: absolute; bottom: 24px; right: 10px;}
-p#date {font-size: 16px; line-height: 16px; position: absolute; bottom: 6px; right: 10px;}
+h1 {position: absolute; top: 50%; left: 0.44em; margin-top: -1.44em; font-size: 2.86em; line-height: 2.86em; color: #00a1e0;}
 
 /* main */
-div#main {background: white; padding: 8px 20px 10px 30px; margin: 0; clear: both;}
+div#main {margin: 0; padding: 0.4em 1.2em 0.8em 1.9em; clear: both;}
 
-h2 {font-size: 1.4em; line-height: 1.4em; margin: 20px 0 6px -12px; padding: 0 0 0 12px; border-style: solid; border-width: 0 0 1px 0; border-color: #a2d9ef; color: navy;}
-h3 {font-size: 1.2em; font-weight: normal; margin: 14px 0 0 -10px; color: #222222;}
-p {margin:10px 0 0 0;}
-
-p.note,
-div.note {font-size: 1em; line-height: 1.3em; margin: 0.4em 0 0 2em;}
-span.note-head {font-weight: bold; color: rgb(70,70,70);}
+h2 {margin: 0.8em 0 0.4em -0.6em; padding: 0 0 0 0.6em; border-color: #a2d9ef; border-width: 0 0 thin 0; border-style: solid; font-size: 1.4em; line-height: 1.4em; color: navy;}
+h2#top {margin: 0.5em 0 0.4em -0.6em;}
+h3 {margin-top: 0.7em; font-size: 1.2em; font-weight: normal; color: navy;}
+p {margin-top: 0.7em;}
 
 ul,ol {margin: 0.6em 0 0 1.6em; padding: 0;}
 li {margin: 0 0 0.4em 0}
 
 em {font-style: normal; font-weight: bold;}
 
-table {font-size: 0.92em; line-height: 1.25em; margin: 10px 8px;}
-table,th,td {border-collapse: collapse; border: 1px darkgray solid;}
-th,td {padding: 6px;}
+table {font-size: 0.92em; line-height: 1.25em; margin: 0.6em 0.5em;}
+table,th,td {border-collapse: collapse; border: thin darkgray solid;}
+th,td {padding: 0.5em;}
 td.head {white-space: nowrap; color: navy; background: rgb(208,236,247);}
 
 a:link,
 a:visited {color: black; background: rgb(248,248,248);}
 a:hover,
 a:active {color: black; background: rgb(194,224,255);}
-
-/* footnote */
-div#footnote {background: rgb(248,248,248); height: 28px; padding: 6px 10px; margin: 0; border-top: rgb(120,120,120) solid 1px; position: relative;}
-p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10px;}
 -->
 </style>
 </head>
@@ -61,8 +52,6 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 
 <div id="title">
 <h1>Snowy</h1>
-<p id="version">Ver 1.8</p>
-<p id="date">2020/3/8</p>
 </div><!-- end of title -->
 
 <div id="main">
@@ -72,10 +61,10 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 <h2>動作条件</h2>
 
 <ul>
-	<li>Windows 7以降</li>
-	<li>.NET Framework 4.5.2</li>
+  <li>Windows 7以降</li>
+  <li>.NET Framework 4.5.2</li>
 </ul>
-<p>Windows 10 64bit上でSD-WB008G、SD-WC016G (W-02)、SD-WE016G (W-03)とSD-UWA032G (W-04)を相手に動作確認しています。</p>
+<p>Windows 10上でSD-WB008G、SD-WC016G (W-02)、SD-WE016G (W-03)とSD-UWA032G (W-04)を相手に動作確認しています。</p>
 
 <h2>インストール</h2>
 
@@ -86,23 +75,25 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 <h2>特記事項</h2>
 
 <ol>
-	<li>このアプリを使う前に、FlashAirと無線接続がされている必要があります。さらに、<u>他のネットワーク接続（無線、有線を問わず）は一時的に切る必要があります。</u>これはFlashAirが初期設定（アクセスポイントモード）では実質的に唯一のアクセスポイントとなる必要があるからです。他のネットワーク接続と同時に使うには、FlashAirを<a href="https://www.flashair-developers.com/ja/documents/tutorials/advanced/1/">ステーションモード</a>か、<a href="https://www.flashair-developers.com/ja/documents/tutorials/advanced/3/">インターネット同時接続モード</a>に切り替える必要があります。</li>
-	<li>まだPCにコピーされていない画像のサムネイルはJPEG形式の画像のみ表示されます。</li>
-	<li>RAW画像もコピーできます。PCにコピー後、画像形式がMicrosoftカメラコーデックパックでサポートされていれば、サムネイルと現在のイメージに表示されます。</li>
-	<li>PCにコピー後は習慣的にFlashAir内のイメージを削除するようにしている場合、"FlashAir内のイメージが削除されたらごみ箱に移動する"機能は使わない方が無難です。</li>
-	<li>モニターのカラープロファイルは現在のイメージにのみ反映されます。</li>
-	<li>"チェック後に前にコピー済みのイメージを選択しない"がオンのときは、コピー済みとして記録されるイメージの最大数がテキストボックスに表示されます。この数字はテキストボックスをクリックすることで10,000から100,000の範囲内で変更できます。</li>
+  <li>このアプリを使う前に、FlashAirと無線接続がされている必要があります。さらに、<u>他のネットワーク接続（無線、有線を問わず）は一時的に切る必要があります</u>。これは初期設定の<u>AP（アクセスポイント）モード</u>ではFlashAirが実質的に唯一のアクセスポイントとなる必要があるからです。他のネットワーク接続と同時に使うには、FlashAirを<u>STA（ステーション）モード</u>か<u>インターネット同時接続モード</u>に切り替える必要があります。</li>
+  <li>まだPCにコピーされていない画像のサムネイルはJPEG画像のみ表示されます。</li>
+  <li>RAW画像もコピーできます。PCにコピー後、画像形式がMicrosoftカメラコーデックパックでサポートされていれば、サムネイルと現在のイメージに表示されます。</li>
+  <li>モニターのカラープロファイルは現在のイメージにのみ反映されます。</li>
+  <li>"タイムアウト時間"とは、コピーやチェック中にこのアプリからFlashAirに送られる多数のリクエストのうちの各リクエストに対する待ち時間の長さです。もしタイムアウトが頻繁に発生するようであれば、これを長くしてみてください。</li>
+  <li>"日付ごとのフォルダー名をカスタマイズする"がオンのときは、日付フォーマット用の文字列がテキストボックスに表示されます。年月日の間に"-"か"_"を挿入する（例えば、yyyy-MM-dd）などの変更が可能です。</li>
+  <li>"チェック後に前にコピー済みのイメージを選択しない"がオンのときは、コピー済みとして記録されるイメージの最大数がテキストボックスに表示されます。この数字はテキストボックスをクリックすることで10,000から100,000の範囲で変更できます。</li>
+  <li>PCにコピー後、FlashAir内のイメージは削除することにしている場合は、"FlashAir内のイメージが削除されたらごみ箱に移動する"機能は使わない方が無難です。</li>
 </ol>
 
 <a id="delete"></a><h2>コピー後に削除</h2>
 
 <ul>
-	<li>"コピー後に削除"機能はFlashAir内のイメージを、そのデータがPCにコピーされた後に削除するよう試みます。</li>
-	<li>実際に使う前にこの機能をカメラと共にテストすることが必須です。この機能はFlashAirの<a href="https://flashair-developers.com/ja/documents/api/uploadcgi/">upload.cgi</a>を使用しますが、これはFlashAirとカメラの間でデータの不整合を起こし得るため、<span style="color:red">FlashAirのファイルシステムと保存されたイメージが破壊されるかもしれません。</span>何が起きるかは個々のカメラ機種によります。</li>
-	<li>FlashAirのupload.cgiが無効になっている場合、この機能は失敗します。この設定を確認または変更するには、FlashAirをPCに挿入して同梱のSnowy Toolを使ってください。またはFlashAir内のCONFIGファイルを開いて、<a href="https://flashair-developers.com/ja/documents/api/config/#UPLOAD">UPLOAD</a>パラメーターを直接確認してください。</li>
-	<li>多くの場合、この機能による削除を認識させるにはカメラを再起動させる必要があります。</li>
-	<li>読み取り専用の属性が付いたイメージは削除されません。</li>
-	<li>この機能を使うには、"コピー後にFlashAir内のイメージの削除を選べるようにする"ボタンをオンにし、テキストボックスに"DELETE"（全て大文字）と入力してください。"コピー後に削除"ボタンが現れるので、これをオンにしてください。</li>
+  <li>"コピー後に削除"機能はFlashAir内のイメージを、PCにコピーされた後に削除するよう試みます。</li>
+  <li>実際に使う前にこの機能をカメラと共にテストすることが必須です。この機能はFlashAirのupload.cgiを使用しますが、これはFlashAirとカメラの間でデータの不整合を起こし得るため、<span style="color:red">FlashAirのファイルシステムと保存されたイメージが破壊されるかもしれません。</span>何が起きるかは個々のカメラ機種によります。</li>
+  <li>FlashAirのupload.cgiが無効になっている場合、この機能は失敗します。この設定を確認または変更するには、FlashAirをPCに挿入してカード機能を使ってください。またはFlashAir内のCONFIGファイルを開いて、UPLOADパラメーターを直接確認してください。</li>
+  <li>多くの場合、この機能による削除を認識させるにはカメラを再起動させる必要があります。</li>
+  <li>読み取り専用の属性が付いたイメージは削除されません。</li>
+  <li>この機能を使うには、"コピー後にFlashAir内のイメージの削除を選べるようにする"ボタンをオンにし、テキストボックスに"DELETE"（全て大文字）と入力してください。"コピー後に削除"ボタンが現れるので、これをオンにしてください。</li>
 </ul>
 
 <h2>コマンドライン</h2>
@@ -110,18 +101,18 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 <p>コマンドラインからの起動時に以下のオプションが使用できます。</p>
 
 <table><tbody>
-	<tr>
-		<td class="head">/autocheck</td>
-		<td>起動時に自動チェックを開始します。</td>
-	</tr>
-	<tr>
-		<td class="head">/minimized</td>
-		<td>起動時にウィンドウを最小化します。</td>
-	</tr>
-	<tr>
-		<td class="head">/recordlog</td>
-		<td>FlashAirからのダウンロードのログを記録します。ログファイルは設定ファイルと同じフォルダーに保存されます。</td>
-	</tr>
+  <tr>
+    <td class="head">/autocheck</td>
+    <td>起動時に自動チェックを開始します。</td>
+  </tr>
+  <tr>
+    <td class="head">/minimized</td>
+    <td>起動時にウィンドウを最小化します。</td>
+  </tr>
+  <tr>
+    <td class="head">/recordlog</td>
+    <td>FlashAirからのダウンロードのログを記録します。ログファイルは設定ファイルと同じフォルダーに保存されます。</td>
+  </tr>
 </tbody></table>
 
 <h2>羽根について</h2>
@@ -131,15 +122,22 @@ p#sig {font-size: 16px; line-height: 16px; position: absolute; top: 0; right: 10
 <h2>ライセンス</h2>
 
 <ul>
-	<li>MIT License</li>
+  <li>MIT License</li>
 </ul>
 
-<h2>その他</h2>
+<h2>ライブラリ</h2>
 
 <ul>
-	<li>ライブラリ: <a href="https://github.com/dotnet/reactive">Reactive Extensions</a>, <a href="https://github.com/microsoft/XamlBehaviorsWpf">XamlBehaviors for WPF</a>, <a href="https://github.com/emoacht/WpfMonitorAware">WPF Monitor Aware Window</a>, <a href="https://github.com/emoacht/DesktopToast">Desktop Toast</a></li>
-	<li>レポジトリ: <a href="http://github.com/emoacht/SnowyImageCopy">emoacht/SnowyImageCopy</a></li>
-	<li>開発者: emoacht (emotom[atmark]pobox.com)</li>
+  <li><a href="https://github.com/dotnet/reactive">Reactive Extensions</a></li>
+  <li><a href="https://github.com/microsoft/XamlBehaviorsWpf">XAML Behaviors for WPF</a></li>
+  <li><a href="https://github.com/emoacht/WpfMonitorAware">WPF Monitor Aware Window</a></li>
+  <li><a href="https://github.com/emoacht/DesktopToast">Desktop Toast</a></li>
+</ul>
+
+<h2>開発者</h2>
+
+<ul>
+  <li>emoacht (emotom[atmark]pobox.com)</li>
 </ul>
 
 </div><!-- end of main -->
