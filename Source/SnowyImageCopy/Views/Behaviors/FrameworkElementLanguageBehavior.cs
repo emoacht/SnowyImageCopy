@@ -37,6 +37,9 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		private void SetLanguage(string ietfLanguageTag)
 		{
+			if (this.AssociatedObject is null) // Associated FrameworkElement can be null in design mode.
+				return;
+
 			if (string.IsNullOrEmpty(ietfLanguageTag))
 				ietfLanguageTag = CultureInfo.CurrentUICulture.ToString();
 
