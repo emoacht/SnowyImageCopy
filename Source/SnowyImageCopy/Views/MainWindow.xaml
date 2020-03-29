@@ -23,7 +23,7 @@
 	</Window.TaskbarItemInfo>
 
 	<i:Interaction.Behaviors>
-		<behaviors:WindowActivateBehavior SenderObject="{Binding Op}" EventName="ActivateRequested"/>
+		<behaviors:WindowActivationBehavior SenderObject="{Binding Op}" EventName="ActivateRequested"/>
 	</i:Interaction.Behaviors>
 
 	<Grid x:Name="LayoutRoot"

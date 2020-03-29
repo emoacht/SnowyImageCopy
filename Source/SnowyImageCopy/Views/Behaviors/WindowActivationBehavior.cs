@@ -15,7 +15,7 @@ namespace SnowyImageCopy.Views.Behaviors
 	/// Activates attached Window.
 	/// </summary>
 	[TypeConstraint(typeof(Window))]
-	public class WindowActivateBehavior : Behavior<Window>
+	public class WindowActivationBehavior : Behavior<Window>
 	{
 		#region Property
 
@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			DependencyProperty.Register(
 				"SenderObject",
 				typeof(object),
-				typeof(WindowActivateBehavior),
+				typeof(WindowActivationBehavior),
 				new FrameworkPropertyMetadata(null));
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			DependencyProperty.Register(
 				"EventName",
 				typeof(string),
-				typeof(WindowActivateBehavior),
+				typeof(WindowActivationBehavior),
 				new FrameworkPropertyMetadata(null));
 
 		#endregion
