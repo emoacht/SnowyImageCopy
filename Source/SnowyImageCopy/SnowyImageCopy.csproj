@@ -155,7 +155,6 @@
     <Compile Include="Views\Behaviors\GridSizeBehavior.cs" />
     <Compile Include="Views\Behaviors\ListBoxVirtualizationBehavior.cs" />
     <Compile Include="Views\Behaviors\SelectorSelectedItemBehavior.cs" />
-    <Compile Include="Views\Behaviors\SystemSoundPlayAction.cs" />
     <Compile Include="Views\Behaviors\WebBrowserBehavior.cs" />
     <Compile Include="Views\Behaviors\WindowActivateBehavior.cs" />
     <Compile Include="Views\Controls\BusyButton.cs" />
