@@ -171,27 +171,27 @@ namespace SnowyImageCopy.Models
 		public bool CanGetUpload => _isFirmwareVersion202OrNewer;
 
 		/// <summary>
-		/// Upload parameters
+		/// Upload parameter
 		/// </summary>
-		public string Upload { get; set; }
+		public int Upload { get; set; }
 
 		/// <summary>
 		/// Whether upload.cgi is disabled
 		/// </summary>
 		/// <remarks>
-		/// False will not always mean upload.cgi is enabled. Because request for Upload parameters is 
-		/// supported only by newer firmware version, there is no direct way to confirm it.
+		/// False will not always mean upload.cgi is enabled. Because request for Upload parameter is 
+		/// supported only by newer firmware version, there is no straightforward way to confirm it.
 		/// </remarks>
 		public bool IsUploadDisabled
 		{
 			get
 			{
-				if (!CanGetUpload || string.IsNullOrWhiteSpace(Upload))
+				if (!CanGetUpload)
 					return false;
 
 				// 1:     Uploading is enabled.
 				// Other: Uploading is disabled.
-				return (Upload != "1");
+				return (Upload != 1);
 			}
 		}
 

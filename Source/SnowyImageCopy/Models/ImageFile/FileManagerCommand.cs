@@ -54,7 +54,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		GetWriteTimeStamp,
 
 		/// <summary>
-		/// Gets Upload parameters of FlashAir card.
+		/// Gets Upload parameter of FlashAir card.
 		/// </summary>
 		GetUpload,
 

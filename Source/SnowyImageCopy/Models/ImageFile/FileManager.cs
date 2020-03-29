@@ -119,7 +119,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		internal Task<int> GetWriteTimeStampAsync(CancellationToken token) =>
 			GetWriteTimeStampAsync(Client, token);
 
-		internal Task<string> GetUploadAsync(CancellationToken cancellationToken) =>
+		internal Task<int> GetUploadAsync(CancellationToken cancellationToken) =>
 			GetUploadAsync(Client, cancellationToken);
 
 		#endregion
@@ -572,27 +572,29 @@ namespace SnowyImageCopy.Models.ImageFile
 		}
 
 		/// <summary>
-		/// Gets Upload parameters of FlashAir card.
+		/// Gets Upload parameter of FlashAir card.
 		/// </summary>
 		/// <param name="client">HttpClient</param>
 		/// <param name="cancellationToken">CancellationToken</param>
-		/// <returns>If succeeded, Upload parameters (string). If failed, empty string.</returns>
-		internal static async Task<string> GetUploadAsync(HttpClient client, CancellationToken cancellationToken)
+		/// <returns>If succeeded, Upload parameter. If failed, -1.</returns>
+		internal static async Task<int> GetUploadAsync(HttpClient client, CancellationToken cancellationToken)
 		{
 			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpload, string.Empty);
 
 			try
 			{
-				return await DownloadStringAsync(client, remotePath, null, cancellationToken).ConfigureAwait(false);
+				var upload = await DownloadStringAsync(client, remotePath, null, cancellationToken).ConfigureAwait(false);
+
+				return int.TryParse(upload, out var num) ? num : -1;
 			}
 			catch (RemoteConnectionUnableException)
 			{
-				// If request for Upload parameters is not supported, StatusCode will be HttpStatusCode.BadRequest.
-				return string.Empty;
+				// If request for Upload parameter is not supported, StatusCode will be HttpStatusCode.BadRequest.
+				return -1;
 			}
 			catch
 			{
-				Debug.WriteLine("Failed to get Upload parameters.");
+				Debug.WriteLine("Failed to get Upload parameter.");
 				throw;
 			}
 		}
