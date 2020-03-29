@@ -23,7 +23,53 @@ namespace SnowyImageCopy.ViewModels
 		internal void Initialize(MainWindowViewModel mainWindowViewModel)
 		{
 			this._mainWindowViewModel ??= mainWindowViewModel ?? throw new ArgumentNullException(nameof(mainWindowViewModel));
+
+			// Subscribe event handlers.
+			Subscription.Add(Observable.FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>
+				(
+					handler => (sender, e) => handler(e),
+					handler => mainWindowViewModel.Op.Card.PropertyChanged += handler,
+					handler => mainWindowViewModel.Op.Card.PropertyChanged -= handler
+				)
+				.Throttle(TimeSpan.FromMilliseconds(100))
+				.ObserveOn(SynchronizationContext.Current)
+				.Subscribe(e =>
+				{
+					switch (e.PropertyName)
+					{
+						case nameof(CardState.FirmwareVersion):
+						case nameof(CardState.Ssid):
+						case nameof(CardState.Cid):
+							Remote = new CardStateViewModel(this._mainWindowViewModel.Op.Card);
+							break;
+					}
+				}));
 		}
+
+		#region Remote
+
+		public CardStateViewModel Remote
+		{
+			get => _remote;
+			private set
+			{
+				if (_remote != null)
+					Subscription.Remove(_remote);
+
+				_remote = value;
+
+				if (_remote != null)
+					Subscription.Add(_remote);
+
+				RaisePropertyChanged();
+				RaisePropertyChanged(nameof(RemoteIsAvailable));
+			}
+		}
+		private CardStateViewModel _remote;
+
+		public bool RemoteIsAvailable => (Remote != null);
+
+		#endregion
 
 		#region Local
 

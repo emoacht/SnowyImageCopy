@@ -149,6 +149,7 @@
     <Compile Include="Models\SoundManager.cs" />
     <Compile Include="Models\WindowPlacement.cs" />
     <Compile Include="ViewModels\CardConfigViewModel.cs" />
+    <Compile Include="ViewModels\CardStateViewModel.cs" />
     <Compile Include="ViewModels\CardViewModel.cs" />
     <Compile Include="ViewModels\FileItemViewModel.cs" />
     <Compile Include="ViewModels\FilePeriodViewModel.cs" />
