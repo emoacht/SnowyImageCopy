@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 using SnowyImageCopy.Helper;
+using SnowyImageCopy.Models.Card;
 using SnowyImageCopy.Models.Exceptions;
 
 namespace SnowyImageCopy.Models.ImageFile
@@ -83,19 +84,19 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		#endregion
 
-		internal Task<IEnumerable<IFileItem>> GetFileListRootAsync(CardInfo card, CancellationToken cancellationToken) =>
+		internal Task<IEnumerable<IFileItem>> GetFileListRootAsync(ICardState card, CancellationToken cancellationToken) =>
 			GetFileListRootAsync(Client, card, cancellationToken);
 
-		internal Task<IEnumerable<IFileItem>> GetFileListAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken) =>
+		internal Task<IEnumerable<IFileItem>> GetFileListAsync(string remoteDirectoryPath, ICardState card, CancellationToken cancellationToken) =>
 			GetFileListAsync(Client, remoteDirectoryPath, card, cancellationToken);
 
-		internal Task<int> GetFileNumAsync(string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken) =>
+		internal Task<int> GetFileNumAsync(string remoteDirectoryPath, ICardState card, CancellationToken cancellationToken) =>
 			GetFileNumAsync(Client, remoteDirectoryPath, card, cancellationToken);
 
-		internal Task<BitmapSource> GetThumbnailAsync(string remoteFilePath, CardInfo card, CancellationToken cancellationToken) =>
+		internal Task<BitmapSource> GetThumbnailAsync(string remoteFilePath, ICardState card, CancellationToken cancellationToken) =>
 			GetThumbnailAsync(Client, remoteFilePath, card, cancellationToken);
 
-		internal Task<byte[]> GetSaveFileAsync(string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool canReadExif, IProgress<ProgressInfo> progress, CardInfo card, CancellationToken cancellationToken) =>
+		internal Task<byte[]> GetSaveFileAsync(string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool canReadExif, IProgress<ProgressInfo> progress, ICardState card, CancellationToken cancellationToken) =>
 			GetSaveFileAsync(Client, remoteFilePath, localFilePath, size, itemDate, canReadExif, progress, card, cancellationToken);
 
 		internal Task DeleteFileAsync(string remoteFilePath, CancellationToken cancellationToken) =>
@@ -130,10 +131,10 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// Gets a list of all files recursively from root folder of FlashAir card.
 		/// </summary>
 		/// <param name="client">HttpClient</param>
-		/// <param name="card">FlashAir card information</param>
+		/// <param name="card">State of FlashAir card</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>File list</returns>
-		internal static async Task<IEnumerable<IFileItem>> GetFileListRootAsync(HttpClient client, CardInfo card, CancellationToken cancellationToken)
+		internal static async Task<IEnumerable<IFileItem>> GetFileListRootAsync(HttpClient client, ICardState card, CancellationToken cancellationToken)
 		{
 			try
 			{
@@ -151,11 +152,11 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// </summary>
 		/// <param name="client">HttpClient</param>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
-		/// <param name="card">FlashAir card information</param>
+		/// <param name="card">State of FlashAir card</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>File list</returns>
 		/// <remarks>This method is part of parent method.</remarks>
-		private static async Task<List<IFileItem>> GetFileListAllAsync(HttpClient client, string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
+		private static async Task<List<IFileItem>> GetFileListAllAsync(HttpClient client, string remoteDirectoryPath, ICardState card, CancellationToken cancellationToken)
 		{
 			var itemList = await GetFileListEachAsync(client, remoteDirectoryPath, card, cancellationToken).ConfigureAwait(false);
 
@@ -191,11 +192,11 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// </summary>
 		/// <param name="client">HttpClient</param>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
-		/// <param name="card">FlashAir card information</param>
+		/// <param name="card">State of FlashAir card</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>File list</returns>
 		/// <remarks>This method is part of parent method.</remarks>
-		private static async Task<List<IFileItem>> GetFileListEachAsync(HttpClient client, string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
+		private static async Task<List<IFileItem>> GetFileListEachAsync(HttpClient client, string remoteDirectoryPath, ICardState card, CancellationToken cancellationToken)
 		{
 			var remotePath = ComposeRemotePath(FileManagerCommand.GetFileList, remoteDirectoryPath);
 
@@ -212,11 +213,11 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// </summary>
 		/// <param name="client">HttpClient</param>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
-		/// <param name="card">FlashAir card information</param>
+		/// <param name="card">State of FlashAir card</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>File list</returns>
 		/// <remarks>This method is not actually used.</remarks>
-		internal static async Task<IEnumerable<IFileItem>> GetFileListAsync(HttpClient client, string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
+		internal static async Task<IEnumerable<IFileItem>> GetFileListAsync(HttpClient client, string remoteDirectoryPath, ICardState card, CancellationToken cancellationToken)
 		{
 			if (string.IsNullOrWhiteSpace(remoteDirectoryPath))
 				throw new ArgumentNullException(nameof(remoteDirectoryPath));
@@ -244,11 +245,11 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// </summary>
 		/// <param name="client">HttpClient</param>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
-		/// <param name="card">FlashAir card information</param>
+		/// <param name="card">State of FlashAir card</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>The number of files</returns>
 		/// <remarks>This method is not actually used.</remarks>
-		internal static async Task<int> GetFileNumAsync(HttpClient client, string remoteDirectoryPath, CardInfo card, CancellationToken cancellationToken)
+		internal static async Task<int> GetFileNumAsync(HttpClient client, string remoteDirectoryPath, ICardState card, CancellationToken cancellationToken)
 		{
 			if (string.IsNullOrWhiteSpace(remoteDirectoryPath))
 				throw new ArgumentNullException(nameof(remoteDirectoryPath));
@@ -273,10 +274,10 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// </summary>
 		/// <param name="client">HttpClient</param>
 		/// <param name="remoteFilePath">Remote file path</param>
-		/// <param name="card">FlashAir card information</param>
+		/// <param name="card">State of FlashAir card</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>Thumbnail of image file</returns>
-		internal static async Task<BitmapSource> GetThumbnailAsync(HttpClient client, string remoteFilePath, CardInfo card, CancellationToken cancellationToken)
+		internal static async Task<BitmapSource> GetThumbnailAsync(HttpClient client, string remoteFilePath, ICardState card, CancellationToken cancellationToken)
 		{
 			if (string.IsNullOrWhiteSpace(remoteFilePath))
 				throw new ArgumentNullException(nameof(remoteFilePath));
@@ -322,10 +323,10 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// <param name="itemDate">Date provided by FlashAir card</param>
 		/// <param name="canReadExif">Whether can read Exif metadata from the file</param>
 		/// <param name="progress">Progress</param>
-		/// <param name="card">FlashAir card information</param>
+		/// <param name="card">State of FlashAir card</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>Byte array of file</returns>
-		internal static async Task<byte[]> GetSaveFileAsync(HttpClient client, string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool canReadExif, IProgress<ProgressInfo> progress, CardInfo card, CancellationToken cancellationToken)
+		internal static async Task<byte[]> GetSaveFileAsync(HttpClient client, string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool canReadExif, IProgress<ProgressInfo> progress, ICardState card, CancellationToken cancellationToken)
 		{
 			if (string.IsNullOrWhiteSpace(remoteFilePath))
 				throw new ArgumentNullException(nameof(remoteFilePath));
@@ -603,7 +604,7 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		#region Static Method (Private)
 
-		private static async Task<string> DownloadStringAsync(HttpClient client, string path, CardInfo card, CancellationToken cancellationToken)
+		private static async Task<string> DownloadStringAsync(HttpClient client, string path, ICardState card, CancellationToken cancellationToken)
 		{
 			var bytes = await DownloadBytesAsync(client, path, 0, null, card, cancellationToken).ConfigureAwait(false);
 
@@ -614,17 +615,17 @@ namespace SnowyImageCopy.Models.ImageFile
 			return Encoding.ASCII.GetString(bytes);
 		}
 
-		private static Task<byte[]> DownloadBytesAsync(HttpClient client, string path, CardInfo card, CancellationToken cancellationToken)
+		private static Task<byte[]> DownloadBytesAsync(HttpClient client, string path, ICardState card, CancellationToken cancellationToken)
 		{
 			return DownloadBytesAsync(client, path, 0, null, card, cancellationToken);
 		}
 
-		private static Task<byte[]> DownloadBytesAsync(HttpClient client, string path, int size, CardInfo card, CancellationToken cancellationToken)
+		private static Task<byte[]> DownloadBytesAsync(HttpClient client, string path, int size, ICardState card, CancellationToken cancellationToken)
 		{
 			return DownloadBytesAsync(client, path, size, null, card, cancellationToken);
 		}
 
-		private static async Task<byte[]> DownloadBytesAsync(HttpClient client, string path, int size, IProgress<ProgressInfo> progress, CardInfo card, CancellationToken cancellationToken)
+		private static async Task<byte[]> DownloadBytesAsync(HttpClient client, string path, int size, IProgress<ProgressInfo> progress, ICardState card, CancellationToken cancellationToken)
 		{
 			var timeoutDuration = TimeSpan.FromSeconds(Settings.Current.TimeoutDuration);
 			int retryCount = 0;

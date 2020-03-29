@@ -113,6 +113,8 @@
     <Compile Include="Helper\Recycle.cs" />
     <Compile Include="Helper\VersionAddition.cs" />
     <Compile Include="Helper\VisualTreeHelperAddition.cs" />
+    <Compile Include="Models\Card\CardState.cs" />
+    <Compile Include="Models\Card\ICardState.cs" />
     <Compile Include="Models\Exceptions\CardChangedException.cs" />
     <Compile Include="Models\Exceptions\CardUploadDisabledException.cs" />
     <Compile Include="Models\Exceptions\ImageNotSupportedException.cs" />
@@ -126,7 +128,6 @@
     <Compile Include="Models\ImageFile\FileManagerCommand.cs" />
     <Compile Include="Models\ImageFile\HashItem.cs" />
     <Compile Include="Models\ImageFile\IFileItem.cs" />
-    <Compile Include="Models\CardInfo.cs" />
     <Compile Include="Models\CommandLine.cs" />
     <Compile Include="Models\FilePeriod.cs" />
     <Compile Include="Models\FileStatus.cs" />

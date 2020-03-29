@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
 
-namespace SnowyImageCopy.Models
+namespace SnowyImageCopy.Models.Card
 {
 	/// <summary>
-	/// FlashAir card information
+	/// State of FlashAir card
 	/// </summary>
-	internal class CardInfo
+	internal class CardState : NotificationObject, ICardState
 	{
 		/// <summary>
 		/// Whether FlashAir card is changed
@@ -54,6 +55,7 @@ namespace SnowyImageCopy.Models
 					return;
 
 				_firmwareVersion = value;
+				RaisePropertyChanged();
 
 				if (!VersionAddition.TryFind(value, out Version version))
 					return;
@@ -72,7 +74,7 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		#region CID/SSID
+		#region CID & SSID
 
 		public bool CanGetCid => _isFirmwareVersion103OrNewer;
 
@@ -89,6 +91,7 @@ namespace SnowyImageCopy.Models
 					return;
 
 				_cid = value;
+				RaisePropertyChanged();
 			}
 		}
 		private string _cid;
@@ -107,6 +110,7 @@ namespace SnowyImageCopy.Models
 					return;
 
 				_ssid = value;
+				RaisePropertyChanged();
 			}
 		}
 		private string _ssid;
@@ -146,6 +150,7 @@ namespace SnowyImageCopy.Models
 				}
 
 				_capacity = value;
+				RaisePropertyChanged();
 			}
 		}
 		private Tuple<ulong, ulong> _capacity;
@@ -162,7 +167,12 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Time stamp of write event
 		/// </summary>
-		public int WriteTimeStamp { get; set; }
+		public int WriteTimeStamp
+		{
+			get => _writeTimeStamp;
+			set => SetPropertyValue(ref _writeTimeStamp, value);
+		}
+		private int _writeTimeStamp = -1;
 
 		#endregion
 
@@ -173,7 +183,12 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Upload parameter
 		/// </summary>
-		public int Upload { get; set; }
+		public int Upload
+		{
+			get => _upload;
+			set => SetPropertyValue(ref _upload, value);
+		}
+		private int _upload = -1;
 
 		/// <summary>
 		/// Whether upload.cgi is disabled

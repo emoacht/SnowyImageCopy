@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using SnowyImageCopy.Helper;
+using SnowyImageCopy.Models.Card;
 
 namespace SnowyImageCopy.Models
 {
@@ -23,9 +24,9 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Determines whether PC is connected to a network and if applicable, a specified wireless LAN.
 		/// </summary>
-		/// <param name="card">FlashAir card information</param>
+		/// <param name="card">State of FlashAir card</param>
 		/// <returns>True if connected</returns>
-		internal static bool IsNetworkConnected(CardInfo card)
+		internal static bool IsNetworkConnected(ICardState card)
 		{
 			if (!NetworkInterface.GetIsNetworkAvailable())
 				return false;

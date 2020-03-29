@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Media;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -17,6 +16,7 @@ using System.Windows.Threading;
 using DesktopToast;
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
+using SnowyImageCopy.Models.Card;
 using SnowyImageCopy.Models.Exceptions;
 using SnowyImageCopy.Models.ImageFile;
 using SnowyImageCopy.Properties;
@@ -415,7 +415,7 @@ namespace SnowyImageCopy.Models
 
 		#region Check & Copy
 
-		private readonly CardInfo _card = new CardInfo();
+		internal CardState Card { get; } = new CardState();
 
 		private CancellationTokenSourcePlus _tokenSourceWorking;
 
@@ -438,12 +438,12 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				if (NetworkChecker.IsNetworkConnected(_card))
+				if (NetworkChecker.IsNetworkConnected(Card))
 				{
 					OperationStatus = Resources.OperationStatus_Checking;
 
-					var isUpdated = _card.CanGetWriteTimeStamp
-						? (await _manager.GetWriteTimeStampAsync(CancellationToken.None) != _card.WriteTimeStamp)
+					var isUpdated = Card.CanGetWriteTimeStamp
+						? (await _manager.GetWriteTimeStampAsync(CancellationToken.None) != Card.WriteTimeStamp)
 						: await _manager.CheckUpdateStatusAsync();
 
 					OperationStatus = Resources.OperationStatus_Completed;
@@ -781,35 +781,35 @@ namespace SnowyImageCopy.Models
 				var checkTask = Task.Run(async () =>
 				{
 					// Check firmware version.
-					_card.FirmwareVersion = await _manager.GetFirmwareVersionAsync(_tokenSourceWorking.Token);
+					Card.FirmwareVersion = await _manager.GetFirmwareVersionAsync(_tokenSourceWorking.Token);
 
 					// Check CID.
-					if (_card.CanGetCid)
-						_card.Cid = await _manager.GetCidAsync(_tokenSourceWorking.Token);
+					if (Card.CanGetCid)
+						Card.Cid = await _manager.GetCidAsync(_tokenSourceWorking.Token);
 
 					// Check SSID and check if PC is connected to FlashAir card by a wireless connection.
-					_card.Ssid = await _manager.GetSsidAsync(_tokenSourceWorking.Token);
-					_card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(_card.Ssid);
+					Card.Ssid = await _manager.GetSsidAsync(_tokenSourceWorking.Token);
+					Card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(Card.Ssid);
 
 					// Check capacities.
-					if (_card.CanGetCapacity)
-						_card.Capacity = await _manager.GetCapacityAsync(_tokenSourceWorking.Token);
+					if (Card.CanGetCapacity)
+						Card.Capacity = await _manager.GetCapacityAsync(_tokenSourceWorking.Token);
 
 					// Get all items.
-					var fileListNew = (await _manager.GetFileListRootAsync(_card, _tokenSourceWorking.Token))
+					var fileListNew = (await _manager.GetFileListRootAsync(Card, _tokenSourceWorking.Token))
 						.Select(fileItem => new FileItemViewModel(fileItem))
 						.ToList();
 					fileListNew.Sort();
 
 					// Record time stamp of write event.
-					if (_card.CanGetWriteTimeStamp)
-						_card.WriteTimeStamp = await _manager.GetWriteTimeStampAsync(_tokenSourceWorking.Token);
+					if (Card.CanGetWriteTimeStamp)
+						Card.WriteTimeStamp = await _manager.GetWriteTimeStampAsync(_tokenSourceWorking.Token);
 
 					// Check if any sample is in old items.
 					var isSample = FileListCore.Any(x => x.Size == 0);
 
 					// Check if FlashAir card is changed.
-					var isChanged = _card.IsChanged ?? !(new HashSet<FileItemViewModel>(FileListCore).Overlaps(fileListNew));
+					var isChanged = Card.IsChanged ?? !(new HashSet<FileItemViewModel>(FileListCore).Overlaps(fileListNew));
 
 					if (isSample || isChanged)
 						FileListCore.Clear();
@@ -997,7 +997,7 @@ namespace SnowyImageCopy.Models
 
 							try
 							{
-								item.Thumbnail = await _manager.GetThumbnailAsync(item.FilePath, _card, _tokenSourceWorking.Token);
+								item.Thumbnail = await _manager.GetThumbnailAsync(item.FilePath, Card, _tokenSourceWorking.Token);
 							}
 							catch (RemoteFileThumbnailFailedException)
 							{
@@ -1067,17 +1067,17 @@ namespace SnowyImageCopy.Models
 				_tokenSourceWorking = new CancellationTokenSourcePlus();
 
 				// Check CID.
-				if (_card.CanGetCid)
+				if (Card.CanGetCid)
 				{
-					if (await _manager.GetCidAsync(_tokenSourceWorking.Token) != _card.Cid)
+					if (await _manager.GetCidAsync(_tokenSourceWorking.Token) != Card.Cid)
 						throw new CardChangedException();
 				}
 
 				// Check if upload.cgi is disabled.
-				if (Settings.Current.DeleteOnCopy && _card.CanGetUpload)
+				if (Settings.Current.DeleteOnCopy && Card.CanGetUpload)
 				{
-					_card.Upload = await _manager.GetUploadAsync(_tokenSourceWorking.Token);
-					if (_card.IsUploadDisabled)
+					Card.Upload = await _manager.GetUploadAsync(_tokenSourceWorking.Token);
+					if (Card.IsUploadDisabled)
 						throw new CardUploadDisabledException();
 				}
 
@@ -1113,7 +1113,7 @@ namespace SnowyImageCopy.Models
 						if (!string.IsNullOrEmpty(localDirectory) && !Directory.Exists(localDirectory))
 							Directory.CreateDirectory(localDirectory);
 
-						var data = await _manager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, _card, _tokenSourceWorking.Token);
+						var data = await _manager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, Card, _tokenSourceWorking.Token);
 
 						if (data?.Any() == true)
 						{
