@@ -338,6 +338,14 @@ namespace SnowyImageCopy.ViewModels
 
 				_lanMode = value;
 				RaisePropertyChanged();
+				RaisePropertyChanged(nameof(IsBuiltinUsable));
+				RaisePropertyChanged(nameof(BuiltinSsid));
+				RaisePropertyChanged(nameof(BuiltinNetworkKey));
+				RaisePropertyChanged(nameof(IsRouterUsable));
+				RaisePropertyChanged(nameof(RouterSsid));
+				RaisePropertyChanged(nameof(RouterNetworkKey));
+				RaisePropertyChanged(nameof(IsAutomaticTimeoutReady));
+				RaisePropertyChanged(nameof(IsAutomaticTimeoutEnabled));
 
 				var modeSet = _modeSetMap.SingleOrDefault(x => (x.LanMode == value) && (x.LanStartupMode == this.LanStartupMode));
 				if (modeSet != null)
@@ -356,6 +364,8 @@ namespace SnowyImageCopy.ViewModels
 
 				_lanStartupMode = value;
 				RaisePropertyChanged();
+				RaisePropertyChanged(nameof(IsAutomaticTimeoutReady));
+				RaisePropertyChanged(nameof(IsAutomaticTimeoutEnabled));
 
 				var modeSet = _modeSetMap.SingleOrDefault(x => (x.LanStartupMode == value) && (x.LanMode == this.LanMode));
 				if (modeSet != null)
@@ -389,6 +399,153 @@ namespace SnowyImageCopy.ViewModels
 
 		public bool IsInternetPassThruReady =>
 			VersionAddition.TryFind(VERSION, out Version version) && (version >= new Version(2, 0, 2)); // Equal to or newer than 2.00.02
+
+		#region SSID & Network security key
+
+		public bool IsBuiltinUsable => (LanMode == LanModeOption.AccessPoint) || (LanMode == LanModeOption.InternetPassThru);
+
+		public string BuiltinSsid
+		{
+			get
+			{
+				switch (LanMode)
+				{
+					case LanModeOption.AccessPoint:
+					case LanModeOption.InternetPassThru:
+						return APPSSID;
+					default:
+						return null;
+				}
+			}
+			set
+			{
+				switch (LanMode)
+				{
+					case LanModeOption.AccessPoint:
+					case LanModeOption.InternetPassThru:
+						APPSSID = value;
+						break;
+				}
+			}
+		}
+
+		public string BuiltinNetworkKey
+		{
+			get
+			{
+				switch (LanMode)
+				{
+					case LanModeOption.AccessPoint:
+					case LanModeOption.InternetPassThru:
+						return APPNETWORKKEY;
+					default:
+						return null;
+				}
+			}
+			set
+			{
+				switch (LanMode)
+				{
+					case LanModeOption.AccessPoint:
+					case LanModeOption.InternetPassThru:
+						APPNETWORKKEY = value;
+						break;
+				}
+			}
+		}
+
+		public bool IsRouterUsable => (LanMode == LanModeOption.Station) || (LanMode == LanModeOption.InternetPassThru);
+
+		public string RouterSsid
+		{
+			get
+			{
+				switch (LanMode)
+				{
+					case LanModeOption.Station:
+						return APPSSID;
+					case LanModeOption.InternetPassThru:
+						return BRGSSID;
+					default:
+						return null;
+				}
+			}
+			set
+			{
+				switch (LanMode)
+				{
+					case LanModeOption.Station:
+						APPSSID = value;
+						break;
+					case LanModeOption.InternetPassThru:
+						BRGSSID = value;
+						break;
+				}
+			}
+		}
+
+		public string RouterNetworkKey
+		{
+			get
+			{
+				switch (LanMode)
+				{
+					case LanModeOption.Station:
+						return APPNETWORKKEY;
+					case LanModeOption.InternetPassThru:
+						return BRGNETWORKKEY;
+					default:
+						return null;
+				}
+			}
+			set
+			{
+				switch (LanMode)
+				{
+					case LanModeOption.Station:
+						APPNETWORKKEY = value;
+						break;
+					case LanModeOption.InternetPassThru:
+						BRGNETWORKKEY = value;
+						break;
+				}
+			}
+		}
+
+		#endregion
+
+		#region Automatic timeout
+
+		public bool IsAutomaticTimeoutReady => (LanMode == LanModeOption.AccessPoint) && (LanStartupMode == LanStartupModeOption.Automatic);
+
+		public bool IsAutomaticTimeoutEnabled
+		{
+			get => IsAutomaticTimeoutReady && (0 < APPAUTOTIME);
+			set
+			{
+				if ((0 < APPAUTOTIME) == value)
+					return;
+
+				// If true, set 5 (default) so as to make it other than 0 (disabled). If false, set 0. 
+				AutomaticTimeout = value ? 5 : 0;
+				RaisePropertyChanged();
+			}
+		}
+
+		/// <summary>
+		/// Automatic timeout period (min)
+		/// </summary>
+		public int AutomaticTimeout
+		{
+			get => (int)Math.Ceiling(APPAUTOTIME / 60_000D);
+			set
+			{
+				APPAUTOTIME = (uint)(value * 60_000);
+				RaisePropertyChanged();
+			}
+		}
+
+		#endregion
 
 		public bool IsUploadEnabled
 		{
