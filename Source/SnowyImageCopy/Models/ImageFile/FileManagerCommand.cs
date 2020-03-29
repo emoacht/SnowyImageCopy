@@ -39,6 +39,11 @@ namespace SnowyImageCopy.Models.ImageFile
 		GetSsid,
 
 		/// <summary>
+		/// Gets free/total capacities of FlashAir card.
+		/// </summary>
+		GetCapacity,
+
+		/// <summary>
 		/// Gets update status of FlashAir card.
 		/// </summary>
 		GetUpdateStatus,

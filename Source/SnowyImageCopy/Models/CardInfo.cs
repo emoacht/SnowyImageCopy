@@ -123,6 +123,38 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
+		#region Capacity
+
+		public bool CanGetCapacity => _isFirmwareVersion103OrNewer;
+
+		/// <summary>
+		/// Free/Total capacities of FlashAir card
+		/// </summary>
+		public Tuple<ulong, ulong> Capacity
+		{
+			get => _capacity;
+			set
+			{
+				if (value is null)
+				{
+					if (_capacity is null)
+						return;
+				}
+				else if (value.Equals(_capacity))
+				{
+					return;
+				}
+
+				_capacity = value;
+			}
+		}
+		private Tuple<ulong, ulong> _capacity;
+
+		public ulong FreeCapacity => _capacity?.Item1 ?? 0UL;
+		public ulong TotalCapacity => _capacity?.Item2 ?? 0UL;
+
+		#endregion
+
 		#region Time stamp of write event
 
 		public bool CanGetWriteTimeStamp => _isFirmwareVersion202OrNewer;

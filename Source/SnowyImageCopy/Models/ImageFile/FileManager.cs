@@ -110,6 +110,9 @@ namespace SnowyImageCopy.Models.ImageFile
 		internal Task<string> GetSsidAsync(CancellationToken cancellationToken) =>
 			GetSsidAsync(Client, cancellationToken);
 
+		internal Task<Tuple<ulong, ulong>> GetCapacityAsync(CancellationToken cancellationToken) =>
+			GetCapacityAsync(Client, cancellationToken);
+
 		internal Task<bool> CheckUpdateStatusAsync() =>
 			CheckUpdateStatusAsync(Client);
 
@@ -484,6 +487,38 @@ namespace SnowyImageCopy.Models.ImageFile
 		}
 
 		/// <summary>
+		/// Gets free/total capacities of FlashAir card.
+		/// </summary>
+		/// <param name="client">HttpClient</param>
+		/// <param name="cancellationToken">CancellationToken</param>
+		/// <returns>
+		/// <para>Tuple.Item1: Free capacity (bytes)</para>
+		/// <para>Tuple.Item2: Total capacity (bytes)</para>
+		/// </returns>
+		internal static async Task<Tuple<ulong, ulong>> GetCapacityAsync(HttpClient client, CancellationToken cancellationToken)
+		{
+			var remotePath = ComposeRemotePath(FileManagerCommand.GetCapacity, string.Empty);
+
+			try
+			{
+				var result = await DownloadStringAsync(client, remotePath, null, cancellationToken).ConfigureAwait(false);
+
+				// [number of free sectors]/[number of total sectors],[sector size (bytes)]
+				var num = result.Split(new[] { '/', ',' }, 3).Select(x => ulong.Parse(x)).ToArray();
+				var freeSectors = num[0];
+				var totalSectors = num[1];
+				var sectorSize = num[2]; // 512
+
+				return Tuple.Create(freeSectors * sectorSize, totalSectors * sectorSize);
+			}
+			catch
+			{
+				Debug.WriteLine("Failed to get capacities.");
+				throw;
+			}
+		}
+
+		/// <summary>
 		/// Checks update status of FlashAir card.
 		/// </summary>
 		/// <param name="client">HttpClient</param>
@@ -800,6 +835,7 @@ namespace SnowyImageCopy.Models.ImageFile
 				{FileManagerCommand.GetFirmwareVersion, @"command.cgi?op=108"},
 				{FileManagerCommand.GetCid, @"command.cgi?op=120"},
 				{FileManagerCommand.GetSsid, @"command.cgi?op=104"},
+				{FileManagerCommand.GetCapacity, @"command.cgi?op=140"},
 				{FileManagerCommand.GetUpdateStatus, @"command.cgi?op=102"},
 				{FileManagerCommand.GetWriteTimeStamp, @"command.cgi?op=121"},
 				{FileManagerCommand.GetUpload, @"command.cgi?op=118"},

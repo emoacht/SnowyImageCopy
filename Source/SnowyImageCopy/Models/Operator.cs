@@ -791,6 +791,10 @@ namespace SnowyImageCopy.Models
 					_card.Ssid = await _manager.GetSsidAsync(_tokenSourceWorking.Token);
 					_card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(_card.Ssid);
 
+					// Check capacities.
+					if (_card.CanGetCapacity)
+						_card.Capacity = await _manager.GetCapacityAsync(_tokenSourceWorking.Token);
+
 					// Get all items.
 					var fileListNew = (await _manager.GetFileListRootAsync(_card, _tokenSourceWorking.Token))
 						.Select(fileItem => new FileItemViewModel(fileItem))
