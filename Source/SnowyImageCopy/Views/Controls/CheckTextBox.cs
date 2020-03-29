@@ -19,7 +19,7 @@ namespace SnowyImageCopy.Views.Controls
 			TextBox.TextProperty.OverrideMetadata(
 				typeof(CheckTextBox),
 				new FrameworkPropertyMetadata(
-					string.Empty,
+					default(string),
 					(d, e) =>
 					{
 						var textBox = (CheckTextBox)d;
@@ -49,7 +49,7 @@ namespace SnowyImageCopy.Views.Controls
 				"MessageText",
 				typeof(string),
 				typeof(CheckTextBox),
-				new FrameworkPropertyMetadata(string.Empty));
+				new PropertyMetadata(default(string)));
 
 		public string CheckText
 		{
@@ -61,8 +61,8 @@ namespace SnowyImageCopy.Views.Controls
 				"CheckText",
 				typeof(string),
 				typeof(CheckTextBox),
-				new FrameworkPropertyMetadata(
-					string.Empty,
+				new PropertyMetadata(
+					default(string),
 					(d, e) =>
 					{
 						var textBox = (CheckTextBox)d;

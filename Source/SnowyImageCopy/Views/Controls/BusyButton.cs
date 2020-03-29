@@ -27,7 +27,7 @@ namespace SnowyImageCopy.Views.Controls
 				"IsBusy",
 				typeof(bool),
 				typeof(BusyButton),
-				new FrameworkPropertyMetadata(false));
+				new PropertyMetadata(false));
 
 		#endregion
 

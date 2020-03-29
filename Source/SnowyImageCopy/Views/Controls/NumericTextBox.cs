@@ -47,7 +47,7 @@ namespace SnowyImageCopy.Views.Controls
 		public static readonly DependencyProperty MinimumProperty =
 			RangeBase.MinimumProperty.AddOwner(
 				typeof(NumericTextBox),
-				new FrameworkPropertyMetadata(0D));
+				new PropertyMetadata(0D));
 
 		public double Maximum
 		{
@@ -57,7 +57,7 @@ namespace SnowyImageCopy.Views.Controls
 		public static readonly DependencyProperty MaximumProperty =
 			RangeBase.MaximumProperty.AddOwner(
 				typeof(NumericTextBox),
-				new FrameworkPropertyMetadata(10D));
+				new PropertyMetadata(10D));
 
 		public double Frequency
 		{
@@ -69,7 +69,7 @@ namespace SnowyImageCopy.Views.Controls
 				"Frequency",
 				typeof(double),
 				typeof(NumericTextBox),
-				new FrameworkPropertyMetadata(1D));
+				new PropertyMetadata(1D));
 
 		#endregion
 

@@ -30,7 +30,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"FolderPath",
 				typeof(string),
 				typeof(ExplorerAction),
-				new FrameworkPropertyMetadata(string.Empty));
+				new PropertyMetadata(default(string)));
 
 		#endregion
 

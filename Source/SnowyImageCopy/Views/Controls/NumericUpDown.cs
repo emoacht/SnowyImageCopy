@@ -79,7 +79,7 @@ namespace SnowyImageCopy.Views.Controls
 		public static readonly DependencyProperty MinimumProperty =
 			RangeBase.MinimumProperty.AddOwner(
 				typeof(NumericUpDown),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					0D,
 					OnPropertyChanged));
 
@@ -91,7 +91,7 @@ namespace SnowyImageCopy.Views.Controls
 		public static readonly DependencyProperty MaximumProperty =
 			RangeBase.MaximumProperty.AddOwner(
 				typeof(NumericUpDown),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					10D,
 					OnPropertyChanged));
 
@@ -105,7 +105,7 @@ namespace SnowyImageCopy.Views.Controls
 				"Frequency",
 				typeof(double),
 				typeof(NumericUpDown),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					1D,
 					null,
 					(d, baseValue) => (0 < (double)baseValue) ? (double)baseValue : DependencyProperty.UnsetValue));
@@ -124,7 +124,7 @@ namespace SnowyImageCopy.Views.Controls
 				"Middle",
 				typeof(double),
 				typeof(NumericUpDown),
-				new FrameworkPropertyMetadata(0D));
+				new PropertyMetadata(0D));
 
 		/// <summary>
 		/// Frequency when value is higher than Middle.
@@ -140,7 +140,7 @@ namespace SnowyImageCopy.Views.Controls
 				"HigherFrequency",
 				typeof(double),
 				typeof(NumericUpDown),
-				new FrameworkPropertyMetadata(0D));
+				new PropertyMetadata(0D));
 
 		/// <summary>
 		/// Frequency when value is lower than Middle.
@@ -156,7 +156,7 @@ namespace SnowyImageCopy.Views.Controls
 				"LowerFrequency",
 				typeof(double),
 				typeof(NumericUpDown),
-				new FrameworkPropertyMetadata(0D));
+				new PropertyMetadata(0D));
 
 		private bool IsMiddleEnabled => 
 			(Minimum < Middle) && (Middle < Maximum) &&

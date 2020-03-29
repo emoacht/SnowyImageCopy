@@ -34,7 +34,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"TargetFile",
 				typeof(string),
 				typeof(WebBrowserBehavior),
-				new FrameworkPropertyMetadata(string.Empty));
+				new PropertyMetadata(default(string)));
 
 		/// <summary>
 		/// Alternate text when target file does not exist
@@ -49,7 +49,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"AlternateText",
 				typeof(string),
 				typeof(WebBrowserBehavior),
-				new FrameworkPropertyMetadata(string.Empty));
+				new PropertyMetadata(default(string)));
 
 		#endregion
 

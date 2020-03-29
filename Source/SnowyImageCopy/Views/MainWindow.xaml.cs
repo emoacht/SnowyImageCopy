@@ -36,7 +36,7 @@ namespace SnowyImageCopy.Views
 				"IsWindowPlacementReliable",
 				typeof(bool),
 				typeof(MainWindow),
-				new FrameworkPropertyMetadata(false));
+				new PropertyMetadata(false));
 
 		#endregion
 

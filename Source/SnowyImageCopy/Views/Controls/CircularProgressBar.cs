@@ -58,7 +58,7 @@ namespace SnowyImageCopy.Views.Controls
 				"StrokeThickness",
 				typeof(double),
 				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					10D,
 					OnPropertyChanged));
 
@@ -72,7 +72,7 @@ namespace SnowyImageCopy.Views.Controls
 				"ArcSegmentColor",
 				typeof(Brush),
 				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					SystemColors.HighlightBrush,
 					OnPropertyChanged));
 
@@ -86,7 +86,7 @@ namespace SnowyImageCopy.Views.Controls
 				"RingSegmentColor",
 				typeof(Brush),
 				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					default(Brush),
 					OnPropertyChanged));
 
@@ -100,7 +100,7 @@ namespace SnowyImageCopy.Views.Controls
 				"RingSegmentOpacity",
 				typeof(double),
 				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					0D,
 					OnPropertyChanged));
 
@@ -114,7 +114,7 @@ namespace SnowyImageCopy.Views.Controls
 				"Percentage",
 				typeof(double),
 				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					60D, // Sample percentage
 					OnPercentageChanged),
 				value =>
@@ -133,7 +133,7 @@ namespace SnowyImageCopy.Views.Controls
 				"Angle",
 				typeof(double),
 				typeof(CircularProgressBar),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					216D, // Sample angle
 					OnPropertyChanged),
 				value =>

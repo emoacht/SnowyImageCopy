@@ -29,8 +29,8 @@ namespace SnowyImageCopy.Views.Behaviors
 				"IetfLanguageTag",
 				typeof(string),
 				typeof(FrameworkElementLanguageBehavior),
-				new FrameworkPropertyMetadata(
-					string.Empty,
+				new PropertyMetadata(
+					default(string),
 					(d, e) => ((FrameworkElementLanguageBehavior)d).SetLanguage((string)e.NewValue)));
 
 		#endregion

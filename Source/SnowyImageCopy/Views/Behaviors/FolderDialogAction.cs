@@ -29,7 +29,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"Explanation",
 				typeof(string),
 				typeof(FolderDialogAction),
-				new FrameworkPropertyMetadata(default(string)));
+				new PropertyMetadata(default(string)));
 
 		/// <summary>
 		/// Folder path specified in the dialog.

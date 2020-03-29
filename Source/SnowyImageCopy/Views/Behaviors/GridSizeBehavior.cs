@@ -30,7 +30,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"GridSize",
 				typeof(Size),
 				typeof(GridSizeBehavior),
-				new FrameworkPropertyMetadata(Size.Empty));
+				new PropertyMetadata(Size.Empty));
 
 		/// <summary>
 		/// Maximum width of this Grid
@@ -45,7 +45,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"MaxWidth",
 				typeof(double),
 				typeof(GridSizeBehavior),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					double.NaN,
 					(d, e) => ((GridSizeBehavior)d).AdjustSize()));
 
@@ -62,7 +62,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"FrameSize",
 				typeof(Size),
 				typeof(GridSizeBehavior),
-				new FrameworkPropertyMetadata(Size.Empty));
+				new PropertyMetadata(Size.Empty));
 
 		/// <summary>
 		/// Padding of this Grid for calculation
@@ -78,7 +78,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"Padding",
 				typeof(Thickness),
 				typeof(GridSizeBehavior),
-				new FrameworkPropertyMetadata(new Thickness(0D)));
+				new PropertyMetadata(default(Thickness)));
 
 		/// <summary>
 		/// Whether change of Grid size is reliable for relaying
@@ -94,7 +94,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"IsReliable",
 				typeof(bool),
 				typeof(GridSizeBehavior),
-				new FrameworkPropertyMetadata(false));
+				new PropertyMetadata(false));
 
 		#endregion
 

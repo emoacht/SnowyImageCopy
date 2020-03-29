@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"TargetFrameworkElement",
 				typeof(FrameworkElement),
 				typeof(FrameworkElementIntersectionBehavior),
-				new FrameworkPropertyMetadata(default(FrameworkElement)));
+				new PropertyMetadata(default(FrameworkElement)));
 
 		/// <summary>
 		/// Object to trigger checking
@@ -47,7 +47,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"TriggerObject",
 				typeof(object),
 				typeof(FrameworkElementIntersectionBehavior),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					null,
 					(d, e) => ((FrameworkElementIntersectionBehavior)d).CheckIntersection()));
 
@@ -64,7 +64,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"ExpandedMargin",
 				typeof(Thickness),
 				typeof(FrameworkElementIntersectionBehavior),
-				new FrameworkPropertyMetadata(default(Thickness)));
+				new PropertyMetadata(default(Thickness)));
 
 		/// <summary>
 		/// Whether this FrameworkElement is intersected with target FrameworkElement
@@ -79,7 +79,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"IsIntersected",
 				typeof(bool),
 				typeof(FrameworkElementIntersectionBehavior),
-				new FrameworkPropertyMetadata(false));
+				new PropertyMetadata(false));
 
 		public Dpi WindowDpi
 		{
@@ -91,7 +91,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"WindowDpi",
 				typeof(Dpi),
 				typeof(FrameworkElementIntersectionBehavior),
-				new FrameworkPropertyMetadata(Dpi.Default));
+				new PropertyMetadata(Dpi.Default));
 
 		#endregion
 

@@ -32,7 +32,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"SenderObject",
 				typeof(object),
 				typeof(WindowActivationBehavior),
-				new FrameworkPropertyMetadata(default(object)));
+				new PropertyMetadata(default(object)));
 
 		/// <summary>
 		/// Name of an event to be listened
@@ -47,7 +47,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"EventName",
 				typeof(string),
 				typeof(WindowActivationBehavior),
-				new FrameworkPropertyMetadata(default(string)));
+				new PropertyMetadata(default(string)));
 
 		#endregion
 

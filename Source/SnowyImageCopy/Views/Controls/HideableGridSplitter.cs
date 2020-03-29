@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Views.Controls
 				"MinLength",
 				typeof(double),
 				typeof(HideableGridSplitter),
-				new FrameworkPropertyMetadata(0D));
+				new PropertyMetadata(0D));
 
 		#endregion
 

@@ -41,7 +41,7 @@ namespace SnowyImageCopy.Views.Controls
 				"InnerButtonWidth",
 				typeof(double),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					18D,
 					OnWidthChanged));
 
@@ -75,7 +75,7 @@ namespace SnowyImageCopy.Views.Controls
 				"IsCheckedCopy",
 				typeof(bool),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(false));
+				new PropertyMetadata(false));
 
 		/// <summary>
 		/// Button text when checked
@@ -90,7 +90,7 @@ namespace SnowyImageCopy.Views.Controls
 				"TextChecked",
 				typeof(string),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					"On",
 					OnAppearanceChanged));
 
@@ -107,7 +107,7 @@ namespace SnowyImageCopy.Views.Controls
 				"TextUnchecked",
 				typeof(string),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					"Off",
 					OnAppearanceChanged));
 
@@ -124,7 +124,7 @@ namespace SnowyImageCopy.Views.Controls
 				"ForegroundChecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					Brushes.Black,
 					OnAppearanceChanged));
 
@@ -141,7 +141,7 @@ namespace SnowyImageCopy.Views.Controls
 				"ForegroundUnchecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					Brushes.Black,
 					OnAppearanceChanged));
 
@@ -158,7 +158,7 @@ namespace SnowyImageCopy.Views.Controls
 				"BackgroundChecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					Brushes.SkyBlue,
 					OnAppearanceChanged));
 
@@ -175,7 +175,7 @@ namespace SnowyImageCopy.Views.Controls
 				"BackgroundUnchecked",
 				typeof(Brush),
 				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					Brushes.Gray,
 					OnAppearanceChanged));
 
