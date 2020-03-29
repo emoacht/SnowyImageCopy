@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"TargetFrameworkElement",
 				typeof(FrameworkElement),
 				typeof(FrameworkElementIntersectionBehavior),
-				new FrameworkPropertyMetadata(null));
+				new FrameworkPropertyMetadata(default(FrameworkElement)));
 
 		/// <summary>
 		/// Object to trigger checking
@@ -64,7 +64,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				"ExpandedMargin",
 				typeof(Thickness),
 				typeof(FrameworkElementIntersectionBehavior),
-				new FrameworkPropertyMetadata(new Thickness(0D)));
+				new FrameworkPropertyMetadata(default(Thickness)));
 
 		/// <summary>
 		/// Whether this FrameworkElement is intersected with target FrameworkElement

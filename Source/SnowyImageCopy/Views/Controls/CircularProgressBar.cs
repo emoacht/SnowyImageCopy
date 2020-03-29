@@ -87,7 +87,7 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(Brush),
 				typeof(CircularProgressBar),
 				new FrameworkPropertyMetadata(
-					null,
+					default(Brush),
 					OnPropertyChanged));
 
 		public double RingSegmentOpacity
