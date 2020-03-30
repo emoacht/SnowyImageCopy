@@ -94,7 +94,7 @@
 	<SolidColorBrush x:Key="BorderLine.Strong" Color="LightGray"/>
 	<SolidColorBrush x:Key="BorderLine.Weak" Color="#FFeeeeee"/>
 
-	<SolidColorBrush x:Key="OptionHeader.Foreground" Color="Navy"/>
-	<SolidColorBrush x:Key="OptionHeader.Border" Color="{StaticResource SnowBlue.LightColor}"/>
+	<SolidColorBrush x:Key="ItemHeader.Border" Color="{StaticResource SnowBlue.LightColor}"/>
+	<SolidColorBrush x:Key="ItemHeader.Foreground" Color="Navy"/>
 
 </ResourceDictionary>

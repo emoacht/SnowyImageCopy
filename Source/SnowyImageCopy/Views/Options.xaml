@@ -7,59 +7,12 @@
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			 xmlns:ma="clr-namespace:MonitorAware.Views;assembly=MonitorAware"
 			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
-			 xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
 			 xmlns:models="clr-namespace:SnowyImageCopy.Models"
 			 xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
 			 xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
 			 mc:Ignorable="d"
-			 d:DesignHeight="800" d:DesignWidth="250">
+			 d:DesignHeight="1200" d:DesignWidth="250">
 	<UserControl.Resources>
-		<ControlTemplate x:Key="ItemGroupTemplate" TargetType="{x:Type GroupBox}">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
-
-				<Border BorderThickness="0,0,0,1"
-						BorderBrush="{StaticResource OptionHeader.Border}"
-						SnapsToDevicePixels="True">
-					<TextBlock Margin="6,2,0,2"
-							   FontSize="15"
-							   Foreground="{StaticResource OptionHeader.Foreground}"
-							   Text="{Binding Header, RelativeSource={RelativeSource AncestorType=GroupBox}}"/>
-				</Border>
-				<Grid Grid.Row="1">
-					<ContentPresenter/>
-				</Grid>
-			</Grid>
-		</ControlTemplate>
-
-		<ControlTemplate x:Key="ItemDetailedCenterTemplate" TargetType="{x:Type GroupBox}">
-			<DockPanel Margin="0,4">
-				<Grid DockPanel.Dock="Right"
-					  Margin="4,0,0,0">
-					<ContentPresenter VerticalAlignment="Center"/>
-				</Grid>
-				<TextBlock DockPanel.Dock="Left"
-						   VerticalAlignment="Center"
-						   TextWrapping="Wrap"
-						   Text="{Binding Header, RelativeSource={RelativeSource AncestorType=GroupBox}}"/>
-			</DockPanel>
-		</ControlTemplate>
-
-		<ControlTemplate x:Key="ItemDetailedTopTemplate" TargetType="{x:Type GroupBox}">
-			<DockPanel Margin="0,4">
-				<Grid DockPanel.Dock="Right"
-					  Margin="4,0,0,0">
-					<ContentPresenter VerticalAlignment="Top"/>
-				</Grid>
-				<TextBlock DockPanel.Dock="Left"
-						   TextWrapping="Wrap"
-						   Text="{Binding Header, RelativeSource={RelativeSource AncestorType=GroupBox}}"/>
-			</DockPanel>
-		</ControlTemplate>
-
 		<Style x:Key="ActionButtonBaseStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonBaseStyle}">
 			<Setter Property="Padding" Value="8,2"/>
 		</Style>
@@ -76,26 +29,23 @@
 
 			<!-- Path -->
 			<GroupBox x:Name="PathGroupBox"
-					  Template="{StaticResource ItemGroupTemplate}"
+					  Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_Path, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
 					<TextBlock Text="{Binding Resources.Options_RemoteAddress, Source={x:Static models:ResourceService.Current}}"/>
 					<TextBox x:Name="RemoteAddressTextBox"
-							 HorizontalAlignment="Stretch"
 							 Margin="0,4,0,6"
-							 Padding="2"
-							 VerticalContentAlignment="Center"
+							 Padding="2" VerticalContentAlignment="Center"
 							 Text="{Binding SettingsCurrent.RemoteAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
 
 					<TextBlock Text="{Binding Resources.Options_LocalFolder, Source={x:Static models:ResourceService.Current}}"/>
 					<TextBox x:Name="LocalFolderTextBox"
-							 HorizontalAlignment="Stretch"
-							 Margin="0,4,0,4"
-							 Padding="2"
-							 VerticalContentAlignment="Center"
+							 Margin="0,4"
+							 Padding="2" VerticalContentAlignment="Center"
 							 Foreground="{Binding SettingsCurrent.IsLocalFolderValid, Mode=OneWay, Converter={StaticResource BooleanToBrushConverterKey}, ConverterParameter={StaticResource BrushSet}}"
 							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+					<StackPanel HorizontalAlignment="Right"
+								Orientation="Horizontal">
 						<Button	Margin="0,0,4,0"
 								Style="{StaticResource ActionButtonBaseStyle}"
 								Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}">
@@ -121,7 +71,7 @@
 			</GroupBox>
 
 			<!-- Date -->
-			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+			<GroupBox Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_Date, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
 					<ListBox HorizontalAlignment="Left"
@@ -135,7 +85,7 @@
 									<Setter.Value>
 										<ControlTemplate>
 											<RadioButton
-												Margin="0,4,0,4"
+												Margin="0,4"
 												Content="{Binding Description, Mode=OneWay}"
 												IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
 										</ControlTemplate>
@@ -144,9 +94,8 @@
 							</Style>
 						</ListBox.Resources>
 					</ListBox>
-					<Grid Height="216"
-						  Margin="-4,0,0,2"
-						  Visibility="{Binding SettingsCurrent.TargetPeriod, Converter={StaticResource EnumToVisibilityConverterKey}, ConverterParameter=Select, Mode=OneWay}">
+					<Grid Height="216" Margin="-4,0,0,2"
+						  Visibility="{Binding SettingsCurrent.TargetPeriod, Mode=OneWay, Converter={StaticResource EnumToVisibilityConverterKey}, ConverterParameter=Select}">
 						<Calendar
 							HorizontalAlignment="Left" VerticalAlignment="Stretch"
 							SelectionMode="MultipleRange" IsTodayHighlighted="False"
@@ -167,10 +116,10 @@
 			</GroupBox>
 
 			<!-- Connection -->
-			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+			<GroupBox Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_Connection, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
-					<GroupBox Template="{StaticResource ItemDetailedCenterTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberCenterStyle}"
 							  Header="{Binding Resources.Options_AutoCheckInterval, Source={x:Static models:ResourceService.Current}}">
 						<controls:NumericUpDown
 							Width="90" Height="24"
@@ -178,7 +127,7 @@
 							Value="{Binding SettingsCurrent.AutoCheckInterval}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedCenterTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberCenterStyle}"
 							  Header="{Binding Resources.Options_TimeoutDuration, Source={x:Static models:ResourceService.Current}}">
 						<controls:NumericUpDown
 							Width="90" Height="24"
@@ -190,31 +139,31 @@
 
 			<!-- File -->
 			<GroupBox x:Name="FileGroupBox"
-					  Template="{StaticResource ItemGroupTemplate}"
+					  Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_File, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_OrderFromNewer, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.OrdersFromNewer, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_ExtensionLowercase, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.MakesFileExtensionLowercase, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_CreateDatedFolder, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.CreatesDatedFolder, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_CustomizeDatedFolder, Source={x:Static models:ResourceService.Current}}">
 						<StackPanel>
 							<controls:SlidingToggleButton
@@ -223,29 +172,28 @@
 								HorizontalAlignment="Right"
 								IsChecked="{Binding SettingsCurrent.CustomizesDatedFolder, Mode=TwoWay}"/>
 							<TextBox
-								Height="20"
-								Margin="0,4,0,0" Padding="2,0"
-								VerticalContentAlignment="Center"
+								Height="20" Margin="0,4,0,0"
+								Padding="2,0" VerticalContentAlignment="Center"
 								Visibility="{Binding IsChecked, ElementName=CustomizeDatedFolderButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
 								Text="{Binding SettingsCurrent.DatedFolder, Mode=TwoWay}"/>
 						</StackPanel>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_HandleJpegOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.HandlesJpegFileOnly, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_SelectReadOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding SettingsCurrent.SelectsReadOnlyFile, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_OnceCopied, Source={x:Static models:ResourceService.Current}}">
 						<StackPanel>
 							<controls:SlidingToggleButton
@@ -253,15 +201,14 @@
 								Style="{StaticResource SwitchButtonStyle}"
 								IsChecked="{Binding SettingsCurrent.SkipsOnceCopiedFile, Mode=TwoWay}"/>
 							<controls:NumericTextBox
-								Height="20"
-								Margin="0,4,0,0"
+								Height="20" Margin="0,4,0,0"
 								Minimum="10000" Maximum="100000" Frequency="10000"
 								Visibility="{Binding IsChecked, ElementName=SkipOnceCopiedButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
 								Value="{Binding SettingsCurrent.OnceCopiedCapacity, Mode=TwoWay}"/>
 						</StackPanel>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							x:Name="RecycleButton"
@@ -269,7 +216,7 @@
 							IsChecked="{Binding SettingsCurrent.MovesFileToRecycle, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_ChooseDeleteOnCopy, Source={x:Static models:ResourceService.Current}}">
 						<StackPanel>
 							<controls:SlidingToggleButton
@@ -279,9 +226,8 @@
 								BackgroundChecked="{StaticResource Sliding.CheckedSecond.Background}"
 								IsChecked="{Binding IsChecked, ElementName= RecycleButton, Converter={StaticResource BooleanInverseConverterKey}, ConverterParameter=True}"/>
 							<controls:CheckTextBox
-								Height="20"
-								Margin="0,4,0,0" Padding="2,0"
-								VerticalContentAlignment="Center"
+								Height="20" Margin="0,4,0,0"
+								Padding="2,0" VerticalContentAlignment="Center"
 								IsUndoEnabled="False"
 								CheckText="DELETE"
 								Visibility="{Binding IsChecked, ElementName=ChooseDeleteOnCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
@@ -292,10 +238,10 @@
 			</GroupBox>
 
 			<!-- Sound -->
-			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+			<GroupBox Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_Sound, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
-					<GroupBox Template="{StaticResource ItemDetailedTopTemplate}"
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_SoundPlay, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
@@ -329,8 +275,7 @@
 								</i:Interaction.Triggers>
 							</Button>
 							<TextBox DockPanel.Dock="Left"
-									 Padding="2"
-									 VerticalContentAlignment="Center"
+									 Padding="2" VerticalContentAlignment="Center"
 									 IsReadOnly="True"
 									 Text="{Binding SettingsCurrent.CopyStarted, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
 						</DockPanel>
@@ -361,14 +306,13 @@
 								</i:Interaction.Triggers>
 							</Button>
 							<TextBox DockPanel.Dock="Left"
-									 Padding="2"
-									 VerticalContentAlignment="Center"
+									 Padding="2" VerticalContentAlignment="Center"
 									 IsReadOnly="True"
 									 Text="{Binding SettingsCurrent.OneCopied, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
 						</DockPanel>
 
 						<TextBlock Text="{Binding Resources.Options_SoundAllCopied, Source={x:Static models:ResourceService.Current}}"/>
-						<DockPanel Margin="0,4,0,4">
+						<DockPanel Margin="0,4">
 							<Button DockPanel.Dock="Right"
 									Margin="4,0,0,0"
 									Style="{StaticResource ActionButtonBaseStyle}"
@@ -393,8 +337,7 @@
 								</i:Interaction.Triggers>
 							</Button>
 							<TextBox DockPanel.Dock="Left"
-									 Padding="2"
-									 VerticalContentAlignment="Center"
+									 Padding="2" VerticalContentAlignment="Center"
 									 IsReadOnly="True"
 									 Text="{Binding SettingsCurrent.AllCopied, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
 						</DockPanel>
@@ -403,18 +346,18 @@
 			</GroupBox>
 
 			<!-- Language -->
-			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+			<GroupBox Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_Language, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
 					<ComboBox x:Name="LanguageComboBox"
-							  Margin="0,4,0,4"
+							  Margin="0,4"
 							  ItemsSource="{Binding Cultures}"
 							  SelectedIndex="{Binding CultureSeletedIndex}"/>
 				</StackPanel>
 			</GroupBox>
 
 			<!-- Info -->
-			<GroupBox Template="{StaticResource ItemGroupTemplate}"
+			<GroupBox Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_Info, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
 					<TextBlock Margin="0,0,0,4">

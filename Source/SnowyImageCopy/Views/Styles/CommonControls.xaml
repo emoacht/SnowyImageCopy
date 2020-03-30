@@ -139,4 +139,56 @@
 		</Style.Triggers>
 	</Style>
 
+	<!-- Item GroupBox -->
+	<Style x:Key="ItemGroupStyle" TargetType="{x:Type GroupBox}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type GroupBox}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+						</Grid.RowDefinitions>
+
+						<Border BorderThickness="0,0,0,1"
+								BorderBrush="{StaticResource ItemHeader.Border}"
+								SnapsToDevicePixels="True">
+							<TextBlock Margin="6,2,0,2"
+									   FontSize="15"
+									   Foreground="{StaticResource ItemHeader.Foreground}"
+									   Text="{Binding Header, RelativeSource={RelativeSource AncestorType=GroupBox}}"/>
+						</Border>
+						<Grid Grid.Row="1">
+							<ContentPresenter/>
+						</Grid>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="ItemMemberCenterStyle" TargetType="{x:Type GroupBox}">
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type GroupBox}">
+					<DockPanel Margin="0,4">
+						<Grid DockPanel.Dock="Right"
+							  Margin="4,0,0,0">
+							<ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Grid>
+						<TextBlock DockPanel.Dock="Left"
+								   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+								   TextWrapping="Wrap"
+								   Text="{Binding Header, RelativeSource={RelativeSource AncestorType=GroupBox}}"/>
+					</DockPanel>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="ItemMemberTopStyle" TargetType="{x:Type GroupBox}" BasedOn="{StaticResource ItemMemberCenterStyle}">
+		<Setter Property="VerticalContentAlignment" Value="Top"/>
+	</Style>
+
 </ResourceDictionary>
