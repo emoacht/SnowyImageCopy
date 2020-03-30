@@ -109,9 +109,6 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			base.OnDetaching();
 
-			if (this.AssociatedObject is null)
-				return;
-
 			this.AssociatedObject.SizeChanged -= OnSizeChanged;
 		}
 

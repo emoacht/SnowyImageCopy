@@ -43,7 +43,7 @@ namespace SnowyImageCopy.Helper
 				&& (source[i] == Path.DirectorySeparatorChar) // \
 				&& (source[i + 1] == Path.DirectorySeparatorChar); // \
 
-			var buff = new StringBuilder(endIndex + 1);
+			var buffer = new StringBuilder(endIndex + 1);
 
 			int startIndex = 0;
 			for (int i = 0; i <= endIndex; i++)
@@ -65,7 +65,7 @@ namespace SnowyImageCopy.Helper
 					return false;
 				}
 
-				buff.Append(source, i, length);
+				buffer.Append(source, i, length);
 				startIndex = i + length;
 				break;
 			}
@@ -73,16 +73,16 @@ namespace SnowyImageCopy.Helper
 			for (int i = startIndex; i <= endIndex; i++)
 			{
 				if ((source[i] == Path.DirectorySeparatorChar) &&
-					(buff[buff.Length - 1] == Path.DirectorySeparatorChar))
+					(buffer[buffer.Length - 1] == Path.DirectorySeparatorChar))
 					continue;
 
 				if (Path.GetInvalidPathChars().Contains(source[i])) // Invalid path char includes double quotation mark.
 					return false;
 
-				buff.Append(source[i]);
+				buffer.Append(source[i]);
 			}
 
-			normalized = buff.ToString();
+			normalized = buffer.ToString();
 			return true;
 		}
 
@@ -102,18 +102,18 @@ namespace SnowyImageCopy.Helper
 			if (source is null)
 				yield break;
 
-			var buff = source.Trim().Trim('\'', '"', Path.DirectorySeparatorChar);
-			if (buff.Length == 0)
+			var buffer = source.Trim().Trim('\'', '"', Path.DirectorySeparatorChar);
+			if (buffer.Length == 0)
 				yield break;
 
-			yield return buff;
+			yield return buffer;
 
 			int index = 1;
 			while (index > 0)
 			{
-				index = buff.LastIndexOf(Path.DirectorySeparatorChar);
+				index = buffer.LastIndexOf(Path.DirectorySeparatorChar);
 				if (index > 0)
-					yield return buff = buff.Substring(0, index);
+					yield return buffer = buffer.Substring(0, index);
 			}
 		}
 	}

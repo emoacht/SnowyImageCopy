@@ -246,12 +246,8 @@ namespace SnowyImageCopy.Views.Behaviors
 			{
 				firstIndex = Max(firstIndex, 0);
 				lastIndex = Min(lastIndex, maxIndex);
-				var list = new List<int>();
 
-				for (int i = firstIndex; i <= lastIndex; i++)
-					list.Add(i);
-
-				return list;
+				return Enumerable.Range(firstIndex, lastIndex - firstIndex + 1).ToList();
 			}
 
 			static bool IndicesRemove(List<int> indices, int item)

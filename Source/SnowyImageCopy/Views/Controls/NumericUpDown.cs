@@ -158,7 +158,7 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(NumericUpDown),
 				new PropertyMetadata(0D));
 
-		private bool IsMiddleEnabled => 
+		private bool IsMiddleEnabled =>
 			(Minimum < Middle) && (Middle < Maximum) &&
 			(0 < LowerFrequency) && (0 < HigherFrequency);
 

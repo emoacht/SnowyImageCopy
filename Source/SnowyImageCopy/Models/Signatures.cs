@@ -117,10 +117,10 @@ namespace SnowyImageCopy.Models
 						fs.CopyTo(ms); // Read the file at once.
 						ms.Seek(0, SeekOrigin.Begin);
 
-						var buff = new byte[valueSize];
+						var buffer = new byte[valueSize];
 
-						while (ms.Read(buff, 0, valueSize) == valueSize)
-							yield return HashItem.Restore(buff);
+						while (ms.Read(buffer, 0, valueSize) == valueSize)
+							yield return HashItem.Restore(buffer);
 					}
 				}
 			};
@@ -154,7 +154,7 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-		private static void Delete() => System.IO.File.Delete(_signaturesFilePath);
+		private static void Delete() => File.Delete(_signaturesFilePath);
 
 		#endregion
 	}

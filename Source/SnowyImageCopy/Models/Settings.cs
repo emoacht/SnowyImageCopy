@@ -146,15 +146,15 @@ namespace SnowyImageCopy.Models
 			}
 			set
 			{
-				string buff;
+				string buffer;
 				if (string.IsNullOrEmpty(value))
 				{
-					buff = value;
+					buffer = value;
 				}
-				else if (!PathAddition.TryNormalizePath(value, out buff))
+				else if (!PathAddition.TryNormalizePath(value, out buffer))
 					return;
 
-				SetPropertyValue(ref _localFolder, buff);
+				SetPropertyValue(ref _localFolder, buffer);
 				CheckLocalFolderValid();
 			}
 		}

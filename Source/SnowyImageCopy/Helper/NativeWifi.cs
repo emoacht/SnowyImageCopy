@@ -290,18 +290,17 @@ namespace SnowyImageCopy.Helper
 		/// <returns>SSIDs</returns>
 		public static IEnumerable<string> EnumerateConnectedNetworkSsids()
 		{
-			using (var client = new WlanClient())
+			using var client = new WlanClient();
+
+			foreach (var interfaceInfo in GetInterfaceInfoList(client.Handle))
 			{
-				foreach (var interfaceInfo in GetInterfaceInfoList(client.Handle))
-				{
-					var connection = GetConnectionAttributes(client.Handle, interfaceInfo.InterfaceGuid);
-					if (connection.isState != WLAN_INTERFACE_STATE.wlan_interface_state_connected)
-						continue;
+				var connection = GetConnectionAttributes(client.Handle, interfaceInfo.InterfaceGuid);
+				if (connection.isState != WLAN_INTERFACE_STATE.wlan_interface_state_connected)
+					continue;
 
-					var association = connection.wlanAssociationAttributes;
+				var association = connection.wlanAssociationAttributes;
 
-					yield return association.dot11Ssid.ToString();
-				}
+				yield return association.dot11Ssid.ToString();
 			}
 		}
 

@@ -12,11 +12,6 @@ namespace SnowyImageCopy.Views.Controls
 {
 	public class NumericTextBox : TextBox
 	{
-		public NumericTextBox()
-		{
-			PreviewMouseUp += OnPreviewMouseUp;
-		}
-
 		#region Property
 
 		public double Value
@@ -73,16 +68,13 @@ namespace SnowyImageCopy.Views.Controls
 
 		#endregion
 
-		private void OnPreviewMouseUp(object sender, MouseButtonEventArgs e)
+		protected override void OnPreviewMouseUp(MouseButtonEventArgs e)
 		{
-			((NumericTextBox)sender).ChangeValue();
-		}
+			base.OnPreviewMouseUp(e);
 
-		private void ChangeValue()
-		{
-			var buff = (Math.Floor(Value / Frequency) + 1) * Frequency;
+			var buffer = (Math.Floor(Value / Frequency) + 1) * Frequency;
 
-			Value = ((Minimum <= buff) && (buff <= Maximum)) ? buff : Minimum;
+			Value = ((Minimum <= buffer) && (buffer <= Maximum)) ? buffer : Minimum;
 		}
 	}
 }

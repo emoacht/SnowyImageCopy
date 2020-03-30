@@ -13,22 +13,17 @@ namespace SnowyImageCopy.Models
 	/// </summary>
 	internal static class FolderService
 	{
-		public static string AppDataFolderPath
-		{
-			get
-			{
-				if (_appDataFolderPath is null)
-				{
-					var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-					if (string.IsNullOrEmpty(appDataPath)) // This should not happen.
-						throw new DirectoryNotFoundException();
-
-					_appDataFolderPath = Path.Combine(appDataPath, Assembly.GetExecutingAssembly().GetName().Name);
-				}
-				return _appDataFolderPath;
-			}
-		}
+		public static string AppDataFolderPath => _appDataFolderPath ??= GetAppDataFolderPath();
 		private static string _appDataFolderPath;
+
+		private static string GetAppDataFolderPath()
+		{
+			var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+			if (string.IsNullOrEmpty(appDataPath)) // This should not happen.
+				throw new DirectoryNotFoundException();
+
+			return Path.Combine(appDataPath, Assembly.GetExecutingAssembly().GetName().Name);
+		}
 
 		public static void AssureAppDataFolder()
 		{

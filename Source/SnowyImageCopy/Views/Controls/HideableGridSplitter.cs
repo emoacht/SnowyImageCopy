@@ -10,12 +10,6 @@ namespace SnowyImageCopy.Views.Controls
 {
 	public class HideableGridSplitter : GridSplitter
 	{
-		public HideableGridSplitter()
-		{
-			this.Initialized += OnInitialized;
-			this.IsVisibleChanged += OnVisibleChanged;
-		}
-
 		#region Property
 
 		/// <summary>
@@ -38,111 +32,125 @@ namespace SnowyImageCopy.Views.Controls
 		private GridLength _rightColumnWidth; // Width of Column at the right of this splitter
 		private GridLength _bottomRowHeight; // Height of Row at the bottom of this splitter
 
-		private void OnInitialized(object sender, EventArgs e)
+		protected override void OnInitialized(EventArgs e)
 		{
+			base.OnInitialized(e);
+
+			this.IsVisibleChanged += OnIsVisibleChanged;
+
 			if (!(base.Parent is Grid parent))
 				return;
 
-			switch (GetResizeDirection())
+			switch (GetResizeDirection(this))
 			{
 				case GridResizeDirection.Columns:
-					var columnIndex = Grid.GetColumn(this);
-					if (columnIndex + 1 >= parent.ColumnDefinitions.Count)
-						return;
-
-					var rightColumn = parent.ColumnDefinitions[columnIndex + 1]; // Column at the right of this splitter
-
-					// Record current column width.
-					_rightColumnWidth = rightColumn.Width;
-					break;
-
-				case GridResizeDirection.Rows:
-					var rowIndex = Grid.GetRow(this);
-					if (rowIndex + 1 >= parent.RowDefinitions.Count)
-						return;
-
-					var bottomRow = parent.RowDefinitions[rowIndex + 1]; // Row at the bottom of this splitter
-
-					// Record current row height.
-					_bottomRowHeight = bottomRow.Height;
-					break;
-			}
-		}
-
-		private void OnVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-		{
-			if (!(base.Parent is Grid parent))
-				return;
-
-			switch (GetResizeDirection())
-			{
-				case GridResizeDirection.Columns:
-					int columnIndex = Grid.GetColumn(this);
-					if (columnIndex + 1 >= parent.ColumnDefinitions.Count)
-						return;
-
-					var rightColumn = parent.ColumnDefinitions[columnIndex + 1]; // Column at right side of this splitter
-
-					if (this.Visibility == Visibility.Visible)
-					{
-						// Restore previous column width.
-						rightColumn.Width = _rightColumnWidth;
-						rightColumn.MinWidth = MinLength;
-					}
-					else
+					if (TryGetRightColumn(this, parent, out ColumnDefinition rightColumn))
 					{
 						// Record current column width.
 						_rightColumnWidth = rightColumn.Width;
-
-						// Hide the column.
-						rightColumn.Width = new GridLength(0);
-						rightColumn.MinWidth = 0D;
 					}
 					break;
-
 				case GridResizeDirection.Rows:
-					int rowIndex = Grid.GetRow(this);
-					if (rowIndex + 1 >= parent.RowDefinitions.Count)
-						return;
-
-					var bottomRow = parent.RowDefinitions[rowIndex + 1]; // Row at the bottom of this splitter
-
-					if (this.Visibility == Visibility.Visible)
+					if (TryGetBottomRow(this, parent, out RowDefinition bottomRow))
 					{
-						// Restore previous row height.
-						bottomRow.Height = _bottomRowHeight;
-						bottomRow.MinHeight = MinLength;
-					}
-					else
-					{
-						// Record height of the row.
+						// Record current row height.
 						_bottomRowHeight = bottomRow.Height;
-
-						// Hide the column.
-						bottomRow.Height = new GridLength(0);
-						bottomRow.MinHeight = 0D;
 					}
 					break;
 			}
 		}
 
-		private GridResizeDirection GetResizeDirection()
+		private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
-			switch (this.ResizeDirection)
+			if (!(base.Parent is Grid parent))
+				return;
+
+			switch (GetResizeDirection(this))
+			{
+				case GridResizeDirection.Columns:
+					if (TryGetRightColumn(this, parent, out ColumnDefinition rightColumn))
+					{
+						if (this.Visibility == Visibility.Visible)
+						{
+							// Restore previous column width.
+							rightColumn.Width = _rightColumnWidth;
+							rightColumn.MinWidth = MinLength;
+						}
+						else
+						{
+							// Record current column width.
+							_rightColumnWidth = rightColumn.Width;
+
+							// Hide the column.
+							rightColumn.Width = new GridLength(0);
+							rightColumn.MinWidth = 0D;
+						}
+					}
+					break;
+				case GridResizeDirection.Rows:
+					if (TryGetBottomRow(this, parent, out RowDefinition bottomRow))
+					{
+						if (this.Visibility == Visibility.Visible)
+						{
+							// Restore previous row height.
+							bottomRow.Height = _bottomRowHeight;
+							bottomRow.MinHeight = MinLength;
+						}
+						else
+						{
+							// Record height of the row.
+							_bottomRowHeight = bottomRow.Height;
+
+							// Hide the column.
+							bottomRow.Height = new GridLength(0);
+							bottomRow.MinHeight = 0D;
+						}
+					}
+					break;
+			}
+		}
+
+		private static bool TryGetRightColumn(UIElement child, Grid parent, out ColumnDefinition rightColumn)
+		{
+			int columnIndex = Grid.GetColumn(child);
+			if (columnIndex + 1 < parent.ColumnDefinitions.Count)
+			{
+				rightColumn = parent.ColumnDefinitions[columnIndex + 1]; // Column at the right of child element
+				return true;
+			}
+			rightColumn = default;
+			return false;
+		}
+
+		private static bool TryGetBottomRow(UIElement child, Grid parent, out RowDefinition bottomRow)
+		{
+			int rowIndex = Grid.GetRow(child);
+			if (rowIndex + 1 < parent.RowDefinitions.Count)
+			{
+				bottomRow = parent.RowDefinitions[rowIndex + 1]; // Row at the bottom of child element
+				return true;
+			}
+			bottomRow = default;
+			return false;
+		}
+
+		private static GridResizeDirection GetResizeDirection(GridSplitter splitter)
+		{
+			switch (splitter.ResizeDirection)
 			{
 				// This logic is based on http://msdn.microsoft.com/library/system.windows.controls.gridsplitter.aspx
 				case GridResizeDirection.Auto:
-					if (this.HorizontalAlignment != HorizontalAlignment.Stretch)
+					if (splitter.HorizontalAlignment != HorizontalAlignment.Stretch)
 						return GridResizeDirection.Columns;
-					if (this.VerticalAlignment != VerticalAlignment.Stretch)
+					if (splitter.VerticalAlignment != VerticalAlignment.Stretch)
 						return GridResizeDirection.Rows;
-					if (this.ActualWidth <= this.ActualHeight)
+					if (splitter.ActualWidth <= splitter.ActualHeight)
 						return GridResizeDirection.Columns;
 					else
 						return GridResizeDirection.Rows;
 
 				default:
-					return this.ResizeDirection;
+					return splitter.ResizeDirection;
 			}
 		}
 	}

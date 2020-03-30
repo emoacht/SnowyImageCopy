@@ -48,9 +48,9 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		public static HashItem Compute(IEnumerable<byte> source)
 		{
-			var buff = source as byte[] ?? source?.ToArray() ?? throw new ArgumentNullException(nameof(source));
+			var buffer = source as byte[] ?? source?.ToArray() ?? throw new ArgumentNullException(nameof(source));
 
-			return new HashItem(_algorithm.ComputeHash(buff));
+			return new HashItem(_algorithm.ComputeHash(buffer));
 		}
 
 		public static HashItem Restore(byte[] source)

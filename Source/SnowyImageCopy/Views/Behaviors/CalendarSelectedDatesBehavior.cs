@@ -47,15 +47,13 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			base.OnDetaching();
 
-			if (this.AssociatedObject is null)
-				return;
-
-			this.AssociatedObject.Loaded -= OnLoaded;
 			this.AssociatedObject.SelectedDatesChanged -= OnSelectedDatesChanged;
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
 		{
+			this.AssociatedObject.Loaded -= OnLoaded;
+
 			if (!SelectedDates.Any())
 				return;
 
