@@ -890,7 +890,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Checks if an exception is thrown because image format is not supported by PC.
+		/// Determines whether an exception is thrown because image format is not supported by PC.
 		/// </summary>
 		/// <param name="ex">Exception</param>
 		private static bool IsImageNotSupported(Exception ex)

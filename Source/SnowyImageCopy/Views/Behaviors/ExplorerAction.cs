@@ -18,7 +18,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		#region Property
 
 		/// <summary>
-		/// Folder path to be opened.
+		/// Folder path to be opened
 		/// </summary>
 		public string FolderPath
 		{

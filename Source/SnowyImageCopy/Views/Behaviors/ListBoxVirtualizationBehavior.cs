@@ -317,7 +317,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		}
 
 		/// <summary>
-		/// Checks if a specified child item is intersected with the viewport.
+		/// Determines whether a specified child item is intersected with the viewport.
 		/// </summary>
 		/// <param name="viewportRect">Viewport Rect</param>
 		/// <param name="item">Child item</param>

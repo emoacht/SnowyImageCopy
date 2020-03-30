@@ -34,7 +34,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				new PropertyMetadata(default(string)));
 
 		/// <summary>
-		/// Folder path specified in the dialog.
+		/// Folder path specified in the dialog
 		/// </summary>
 		public string FolderPath
 		{

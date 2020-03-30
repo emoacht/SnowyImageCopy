@@ -1380,7 +1380,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Checks if a local file exists
+		/// Determines whether a local file exists.
 		/// </summary>
 		/// <param name="item">Target item</param>
 		/// <returns>True if exists.</returns>
@@ -1388,7 +1388,7 @@ namespace SnowyImageCopy.Models
 			TryGetFileInfoLocal(item, out FileInfo info) && IsAliveLocal(info, item.Size);
 
 		/// <summary>
-		/// Checks if a local file exists.
+		/// Determines whether a local file exists.
 		/// </summary>
 		/// <param name="info">FileInfo of a local file</param>
 		/// <param name="size">File size of a local file</param>
@@ -1397,7 +1397,7 @@ namespace SnowyImageCopy.Models
 			(info != null) && (info.Length == size);
 
 		/// <summary>
-		/// Checks if a local file is available (not offline) in relation to OneDrive.
+		/// Determines whether a local file is available (not offline) in relation to OneDrive.
 		/// </summary>
 		/// <param name="info">FileInfo of a local file</param>
 		/// <returns>True if available.</returns>

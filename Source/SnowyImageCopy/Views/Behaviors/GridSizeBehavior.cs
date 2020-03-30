@@ -18,7 +18,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		#region Property
 
 		/// <summary>
-		/// Size of this Grid
+		/// Size of associated Grid
 		/// </summary>
 		public Size GridSize
 		{
@@ -33,7 +33,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				new PropertyMetadata(Size.Empty));
 
 		/// <summary>
-		/// Maximum width of this Grid
+		/// Maximum width of associated Grid
 		/// </summary>
 		public double MaxWidth
 		{
@@ -50,7 +50,7 @@ namespace SnowyImageCopy.Views.Behaviors
 					(d, e) => ((GridSizeBehavior)d).AdjustSize()));
 
 		/// <summary>
-		/// Inner frame size of this Grid calculated by padding
+		/// Inner frame size of associated Grid calculated by padding
 		/// </summary>
 		public Size FrameSize
 		{
@@ -65,7 +65,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				new PropertyMetadata(Size.Empty));
 
 		/// <summary>
-		/// Padding of this Grid for calculation
+		/// Padding of associated Grid for calculation
 		/// </summary>
 		/// <remarks>This must match with Margin of inner element.</remarks>
 		public Thickness Padding

@@ -16,12 +16,12 @@ namespace SnowyImageCopy.Models
 	internal static class NetworkChecker
 	{
 		/// <summary>
-		/// Checks if PC is connected to a network.
+		/// Determines whether PC is connected to a network.
 		/// </summary>
 		internal static bool IsNetworkConnected() => NetworkInterface.GetIsNetworkAvailable();
 
 		/// <summary>
-		/// Checks if PC is connected to a network and if applicable, a specified wireless LAN.
+		/// Determines whether PC is connected to a network and if applicable, a specified wireless LAN.
 		/// </summary>
 		/// <param name="card">FlashAir card information</param>
 		/// <returns>True if connected</returns>
@@ -37,7 +37,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Checks if PC is connected to a specified wireless LAN.
+		/// Determines whether PC is connected to a specified wireless LAN.
 		/// </summary>
 		/// <param name="ssid">SSID of wireless LAN</param>
 		/// <returns>True if connected</returns>

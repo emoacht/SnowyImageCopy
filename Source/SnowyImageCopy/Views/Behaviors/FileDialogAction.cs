@@ -33,7 +33,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				new PropertyMetadata(default(string)));
 
 		/// <summary>
-		/// Filter for file extension in the dialog.
+		/// Filter for file extension in the dialog
 		/// </summary>
 		public string Filter
 		{
@@ -48,7 +48,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				new PropertyMetadata(default(string)));
 
 		/// <summary>
-		/// File path specified in the dialog.
+		/// File path specified in the dialog
 		/// </summary>
 		public string FilePath
 		{
