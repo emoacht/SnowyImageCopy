@@ -114,6 +114,26 @@
 		</Style.Triggers>
 	</Style>
 
+	<Style x:Key="QuickButtonStyle" TargetType="{x:Type ToggleButton}">
+		<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
+		<Setter Property="SnapsToDevicePixels" Value="True"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Background" Value="{StaticResource SnowGray.Normal.Background}"/>
+		<Setter Property="Foreground" Value="{StaticResource SnowGray.Normal.Foreground}"/>
+		<Setter Property="Padding" Value="4"/>
+		<Setter Property="Template" Value="{StaticResource ButtonTemplate}"/>
+
+		<Style.Triggers>
+			<Trigger Property="IsChecked" Value="True">
+				<Setter Property="Background" Value="{StaticResource SnowBlue.Normal.Background}"/>
+				<Setter Property="Foreground" Value="{StaticResource SnowBlue.Normal.Foreground}"/>
+			</Trigger>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter Property="Background" Value="{StaticResource SnowBlue.MouseOver.Background}"/>
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+
 	<!-- Action Button -->
 	<Style x:Key="ActionButtonStyle" TargetType="{x:Type Button}">
 		<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>

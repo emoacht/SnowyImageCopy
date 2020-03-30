@@ -229,12 +229,12 @@ namespace SnowyImageCopy.Models
 
 		#region Dashboard
 
-		public bool InstantCopy
+		public bool CopyOnSelect
 		{
-			get => _instantCopy;
-			set => SetPropertyValue(ref _instantCopy, value);
+			get => _copyOnSelect;
+			set => SetPropertyValue(ref _copyOnSelect, value);
 		}
-		private bool _instantCopy = true; // Default
+		private bool _copyOnSelect = true; // Default
 
 		#endregion
 

@@ -149,18 +149,14 @@
 							 FontSize="13" IsReadOnly="True" IsUndoEnabled="False"
 							 Text="{Binding OperationStatus, Mode=OneWay}"/>
 
-					<StackPanel Margin="0,4,0,0"
+					<StackPanel Margin="0,8,0,0"
 								Orientation="Horizontal">
-						<!-- Instant Copy -->
-						<StackPanel Orientation="Horizontal">
-							<TextBlock
-								VerticalAlignment="Center"
-								Text="{Binding Resources.Options_InstantCopy, Source={x:Static models:ResourceService.Current}}"/>
-							<controls:SlidingToggleButton
-								Margin="5,4"
-								Style="{StaticResource SwitchButtonStyle}"
-								IsChecked="{Binding SettingsCurrent.InstantCopy, Mode=TwoWay}"/>
-						</StackPanel>
+						<!-- Copy on select -->
+						<ToggleButton
+							Width="90"
+							Style="{StaticResource QuickButtonStyle}"
+							Content="{Binding Resources.Options_CopyOnSelect, Source={x:Static models:ResourceService.Current}}"
+							IsChecked="{Binding SettingsCurrent.CopyOnSelect, Mode=TwoWay}"/>
 					</StackPanel>
 				</StackPanel>
 			</Grid>

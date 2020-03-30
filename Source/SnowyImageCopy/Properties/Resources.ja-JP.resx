@@ -222,9 +222,6 @@
   <data name="Command_Stop" xml:space="preserve">
     <value>停止</value>
   </data>
-  <data name="Options_InstantCopy" xml:space="preserve">
-    <value>すぐコピー</value>
-  </data>
   <data name="Command_Save" xml:space="preserve">
     <value>デスクトップへ</value>
   </data>
@@ -344,6 +341,9 @@
   </data>
   <data name="Options" xml:space="preserve">
     <value>オプション</value>
+  </data>
+  <data name="Options_CopyOnSelect" xml:space="preserve">
+    <value>選択でコピー</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>パス</value>

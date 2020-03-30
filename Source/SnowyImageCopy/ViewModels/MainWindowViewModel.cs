@@ -525,8 +525,8 @@ namespace SnowyImageCopy.ViewModels
 					switch (item.Status)
 					{
 						case FileStatus.ToBeCopied:
-							// Trigger instant copy.
-							if (!Settings.Current.InstantCopy || Op.IsChecking || Op.IsCopying)
+							// Trigger copy on select.
+							if (!Settings.Current.CopyOnSelect || Op.IsChecking || Op.IsCopying)
 								break;
 
 							await Op.CopyFileAsync();

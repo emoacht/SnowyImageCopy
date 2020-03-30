@@ -226,9 +226,6 @@
   <data name="Command_Stop" xml:space="preserve">
     <value>Stop</value>
   </data>
-  <data name="Options_InstantCopy" xml:space="preserve">
-    <value>Instant Copy</value>
-  </data>
   <data name="Command_Save" xml:space="preserve">
     <value>To Desktop</value>
   </data>
@@ -348,6 +345,9 @@
   </data>
   <data name="Options" xml:space="preserve">
     <value>Options</value>
+  </data>
+  <data name="Options_CopyOnSelect" xml:space="preserve">
+    <value>Copy on select</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Path</value>
