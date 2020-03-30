@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using SnowyTool.Models;
+using SnowyImageCopy.Models.Card;
 
 namespace SnowyImageCopy.Test
 {

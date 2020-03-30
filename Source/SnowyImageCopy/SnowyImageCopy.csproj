@@ -321,11 +321,5 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SnowyTool\SnowyTool.csproj">
-      <Project>{bb8a7f03-e29d-4023-bd7b-fe2988ff4d77}</Project>
-      <Name>SnowyTool</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,7 +8,6 @@ using System.Windows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using SnowyImageCopy.Views.Converters;
-using SnowyTool.Views.Converters;
 
 namespace SnowyImageCopy.Test
 {

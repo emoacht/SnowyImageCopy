@@ -64,10 +64,6 @@
       <Project>{55df0585-a26e-489e-bd94-4e6a50a83e23}</Project>
       <Name>SnowyImageCopy</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SnowyTool\SnowyTool.csproj">
-      <Project>{bb8a7f03-e29d-4023-bd7b-fe2988ff4d77}</Project>
-      <Name>SnowyTool</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
