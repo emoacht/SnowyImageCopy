@@ -17,9 +17,6 @@ namespace SnowyImageCopy.Views.Controls
 	[TemplatePart(Name = "PART_ForegroundTextBlock", Type = typeof(TextBlock))]
 	public class SlidingToggleButton : Control
 	{
-		public SlidingToggleButton()
-		{ }
-
 		#region Template Part
 
 		private TextBox _backgroundTextBox;
@@ -44,38 +41,6 @@ namespace SnowyImageCopy.Views.Controls
 				new PropertyMetadata(
 					18D,
 					OnWidthChanged));
-
-		public bool IsChecked
-		{
-			get { return (bool)GetValue(IsCheckedProperty); }
-			set { SetValue(IsCheckedProperty, value); }
-		}
-		public static readonly DependencyProperty IsCheckedProperty =
-			ToggleButton.IsCheckedProperty.AddOwner(
-				typeof(SlidingToggleButton),
-				new FrameworkPropertyMetadata(
-					false,
-					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-					(d, e) =>
-					{
-						((SlidingToggleButton)d).IsCheckedCopy = (bool)e.NewValue;
-						OnAppearanceChanged(d, e);
-					}));
-
-		/// <summary>
-		/// Copy of IsChecked property for binding to another source
-		/// </summary>
-		public bool IsCheckedCopy
-		{
-			get { return (bool)GetValue(IsCheckedCopyProperty); }
-			set { SetValue(IsCheckedCopyProperty, value); }
-		}
-		public static readonly DependencyProperty IsCheckedCopyProperty =
-			DependencyProperty.Register(
-				"IsCheckedCopy",
-				typeof(bool),
-				typeof(SlidingToggleButton),
-				new PropertyMetadata(false));
 
 		/// <summary>
 		/// Button text when checked
@@ -179,6 +144,33 @@ namespace SnowyImageCopy.Views.Controls
 					Brushes.Gray,
 					OnAppearanceChanged));
 
+		public bool IsChecked
+		{
+			get { return (bool)GetValue(IsCheckedProperty); }
+			set { SetValue(IsCheckedProperty, value); }
+		}
+		public static readonly DependencyProperty IsCheckedProperty =
+			ToggleButton.IsCheckedProperty.AddOwner(
+				typeof(SlidingToggleButton),
+				new FrameworkPropertyMetadata(
+					false,
+					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+					(d, e) =>
+					{
+						if ((bool)e.NewValue)
+							((SlidingToggleButton)d).Checked?.Invoke(d, new RoutedEventArgs(CheckedEvent));
+						else
+							((SlidingToggleButton)d).Unchecked?.Invoke(d, new RoutedEventArgs(UncheckedEvent));
+
+						OnAppearanceChanged(d, e);
+					}));
+
+		public event RoutedEventHandler Checked;
+		public event RoutedEventHandler Unchecked;
+
+		public static readonly RoutedEvent CheckedEvent = EventManager.RegisterRoutedEvent("Checked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(SlidingToggleButton));
+		public static readonly RoutedEvent UncheckedEvent = EventManager.RegisterRoutedEvent("Unchecked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(SlidingToggleButton));
+
 		#endregion
 
 		public override void OnApplyTemplate()
@@ -194,15 +186,11 @@ namespace SnowyImageCopy.Views.Controls
 
 			_foregroundButtonLeft = this.GetTemplateChild("PART_ForegroundButtonLeft") as Button;
 			if (_foregroundButtonLeft != null)
-			{
 				_foregroundButtonLeft.Click += new RoutedEventHandler(OnClick);
-			}
 
 			_foregroundButtonRight = this.GetTemplateChild("PART_ForegroundButtonRight") as Button;
 			if (_foregroundButtonRight != null)
-			{
 				_foregroundButtonRight.Click += new RoutedEventHandler(OnClick);
-			}
 
 			_foregroundTextBlock = this.GetTemplateChild("PART_ForegroundTextBlock") as TextBlock;
 
