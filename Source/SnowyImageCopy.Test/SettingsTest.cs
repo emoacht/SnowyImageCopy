@@ -69,8 +69,17 @@ namespace SnowyImageCopy.Test
 			TestTrue("ddMMyyyy");
 			TestTrue("dd-MM-yyyy");
 			TestTrue("dd_MM_yyyy");
-			TestTrue("yMd");
-			TestTrue("dMy");
+			TestTrue("yyMd");
+			TestTrue("ddMy");
+			TestTrue("yyyyMM");
+			TestTrue("yyy-MM");
+			TestTrue("yy_MM");
+			TestTrue("yM");
+			TestTrue("MMyyyy");
+			TestTrue("MMMMyyy");
+			TestTrue("MM-yy");
+			TestTrue("M_y");
+			TestTrue("My");
 
 			void TestTrue(string source) => TestIsDatedFolderValidBase(source, true);
 		}
@@ -89,8 +98,8 @@ namespace SnowyImageCopy.Test
 			TestFalse("yyyy.MM.dd");
 			TestFalse("yyyy MM dd");
 			TestFalse("ddmmyyyy");
-			TestFalse("yyyyMM");
 			TestFalse("MMdd");
+			TestFalse("ddMM");
 
 			void TestFalse(string source) => TestIsDatedFolderValidBase(source, false);
 		}
