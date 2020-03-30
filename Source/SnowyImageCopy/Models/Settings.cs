@@ -355,7 +355,7 @@ namespace SnowyImageCopy.Models
 			// month: M{1,4}
 			// day:   d{1,2}
 			// delimiter: [-_]?
-			const string datePattern = "^(?:y{1,4}[-_]?M{1,4}[-_]?d{1,2}|d{1,2}[-_]?M{1,4}[-_]?y{1,4})$";
+			const string datePattern = "^(?:y{1,4}[-_]?M{1,4}(?:|[-_]?d{1,2})|(?:|d{1,2}[-_]?)M{1,4}[-_]?y{1,4})$";
 
 			return new Regex(datePattern).IsMatch(format ?? string.Empty);
 		}
