@@ -312,6 +312,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ContentWithTargetPath Include="..\..\Documents\readme_en.html">
+      <Link>Resources\readme_en.html</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>readme_en.html</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="..\..\Documents\readme_jp.html">
+      <Link>Resources\readme_jp.html</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>readme_jp.html</TargetPath>
+    </ContentWithTargetPath>
+    <EmbeddedResource Include="..\..\Documents\license.html">
+      <Link>Resources\license.html</Link>
+    </EmbeddedResource>
     <Content Include="Libraries\DesktopToast.dll" />
     <Resource Include="Libraries\DesktopToast.xml">
       <SubType>Designer</SubType>
