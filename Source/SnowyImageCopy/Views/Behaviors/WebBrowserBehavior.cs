@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -10,6 +12,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Xaml.Behaviors;
+
+using MonitorAware.Models;
 
 namespace SnowyImageCopy.Views.Behaviors
 {
@@ -22,34 +26,60 @@ namespace SnowyImageCopy.Views.Behaviors
 		#region Property
 
 		/// <summary>
-		/// Target file
+		/// Source file path
 		/// </summary>
-		public string TargetFile
+		public string SourcePath
 		{
-			get { return (string)GetValue(TargetFileProperty); }
-			set { SetValue(TargetFileProperty, value); }
+			get { return (string)GetValue(SourcePathProperty); }
+			set { SetValue(SourcePathProperty, value); }
 		}
-		public static readonly DependencyProperty TargetFileProperty =
+		public static readonly DependencyProperty SourcePathProperty =
 			DependencyProperty.Register(
-				"TargetFile",
+				"SourcePath",
 				typeof(string),
 				typeof(WebBrowserBehavior),
 				new PropertyMetadata(default(string)));
 
 		/// <summary>
-		/// Alternate text when target file does not exist
+		/// Source text
 		/// </summary>
-		public string AlternateText
+		public string SourceText
 		{
-			get { return (string)GetValue(AlternateTextProperty); }
-			set { SetValue(AlternateTextProperty, value); }
+			get { return (string)GetValue(SourceTextProperty); }
+			set { SetValue(SourceTextProperty, value); }
 		}
-		public static readonly DependencyProperty AlternateTextProperty =
+		public static readonly DependencyProperty SourceTextProperty =
 			DependencyProperty.Register(
-				"AlternateText",
+				"SourceText",
 				typeof(string),
 				typeof(WebBrowserBehavior),
 				new PropertyMetadata(default(string)));
+
+		public Dpi WindowDpi
+		{
+			get { return (Dpi)GetValue(WindowDpiProperty); }
+			set { SetValue(WindowDpiProperty, value); }
+		}
+		public static readonly DependencyProperty WindowDpiProperty =
+			DependencyProperty.Register(
+				"WindowDpi",
+				typeof(Dpi),
+				typeof(WebBrowserBehavior),
+				new PropertyMetadata(Dpi.Default));
+
+		public Dpi SystemDpi
+		{
+			get { return (Dpi)GetValue(SystemDpiProperty); }
+			set { SetValue(SystemDpiProperty, value); }
+		}
+		public static readonly DependencyProperty SystemDpiProperty =
+			DependencyProperty.Register(
+				"SystemDpi",
+				typeof(Dpi),
+				typeof(WebBrowserBehavior),
+				new PropertyMetadata(Dpi.Default));
+
+		public int ZoomPercentage { get; private set; } = 100;
 
 		#endregion
 
@@ -65,45 +95,89 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			base.OnDetaching();
 
-			if (this.AssociatedObject is null)
-				return;
-
 			this.AssociatedObject.IsVisibleChanged -= OnIsVisibleChanged;
 			this.AssociatedObject.Navigating -= OnNavigating;
 		}
 
-		private bool _isApplying;
+		private bool _isLoading;
 
-		private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		private async void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
-			_isApplying = true;
-
 			if (!(bool)e.NewValue)
-			{
-				this.AssociatedObject.Navigate("about:blank"); // Or (Uri)null
 				return;
+
+			var percentage = (int)Math.Round(WindowDpi.X * 100D / SystemDpi.X, MidpointRounding.AwayFromZero);
+			if (ZoomPercentage != percentage)
+			{
+				// Load dummy text (neither null nor empty) and set zoom before loading actual file or text.
+				// This is because setting zoom will cause unintended scrolling.
+				var tcs = new TaskCompletionSource<bool>();
+
+				void OnLoadCompleted(object sender, NavigationEventArgs e)
+				{
+					this.AssociatedObject.LoadCompleted -= OnLoadCompleted;
+					tcs.SetResult(true);
+				}
+
+				_isLoading = true;
+				this.AssociatedObject.LoadCompleted += OnLoadCompleted;
+				this.AssociatedObject.NavigateToString("LOADING" /* dummy text */);
+				await tcs.Task;
+
+				if (TrySetZoom(percentage))
+					ZoomPercentage = percentage;
 			}
 
-			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, TargetFile);
-			if (File.Exists(RemoveFragment(path)))
-				this.AssociatedObject.Navigate(path);
-			else
-				this.AssociatedObject.NavigateToString(AlternateText);
+			if (!string.IsNullOrEmpty(SourcePath) && File.Exists(RemoveFragment(SourcePath)))
+			{
+				_isLoading = true;
+				this.AssociatedObject.Navigate(SourcePath);
+			}
+			else if (!string.IsNullOrEmpty(SourceText))
+			{
+				_isLoading = true;
+				this.AssociatedObject.NavigateToString(SourceText);
+			}
 
-			// OnNavigating event may be fired after exiting this method.
+			// Navigating event will be fired after exiting this method.
 		}
 
 		private void OnNavigating(object sender, NavigatingCancelEventArgs e)
 		{
-			if (_isApplying)
+			if (_isLoading)
 			{
-				_isApplying = false;
+				_isLoading = false;
 				return;
 			}
 
 			// Cancel navigating and open external browser instead.
 			e.Cancel = true;
 			Process.Start(e.Uri.OriginalString);
+		}
+
+		private dynamic _browser;
+
+		private bool TrySetZoom(int percentage)
+		{
+			// Parameters derived from DocObj.h
+			const int OLECMDID_OPTICAL_ZOOM = 63;
+			const int OLECMDEXECOPT_DONTPROMPTUSER = 2;
+
+			_browser ??= typeof(WebBrowser).GetProperty("AxIWebBrowser2", BindingFlags.Instance | BindingFlags.NonPublic)
+				?.GetValue(this.AssociatedObject);
+			if (_browser is null)
+				return false;
+
+			try
+			{
+				_browser.ExecWB(OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT_DONTPROMPTUSER, percentage, IntPtr.Zero);
+				return true;
+			}
+			catch (COMException ce)
+			{
+				Debug.WriteLine($"Failed to set zoom of WebBrowser.\r\n{ce}");
+				return false;
+			}
 		}
 
 		#region Helper

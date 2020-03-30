@@ -33,6 +33,8 @@ namespace SnowyImageCopy.ViewModels
 
 		public Settings SettingsCurrent => Settings.Current;
 
+		public DocumentViewModel Document { get; } = new DocumentViewModel();
+
 		#endregion
 
 		#region Operation
@@ -316,29 +318,6 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-		#region Browser
-
-		public bool IsBrowserOpen
-		{
-			get => _isBrowserOpen;
-			set
-			{
-				SetPropertyValue(ref _isBrowserOpen, value);
-
-				if (value)
-					Op.Stop();
-			}
-		}
-		private bool _isBrowserOpen;
-
-		private void ManageBrowserOpen(bool isOngoing)
-		{
-			if (isOngoing)
-				IsBrowserOpen = false;
-		}
-
-		#endregion
-
 		#region Constructor
 
 		public MainWindowViewModel()
@@ -446,18 +425,22 @@ namespace SnowyImageCopy.ViewModels
 
 						switch (e.PropertyName)
 						{
-							case nameof(Operator.IsChecking):
-								ManageBrowserOpen(Op.IsChecking);
-								break;
-
-							case nameof(Operator.IsCopying):
-								ManageBrowserOpen(Op.IsCopying);
-								break;
-
-							case nameof(Operator.IsAutoRunning):
-								ManageBrowserOpen(Op.IsAutoRunning);
+							case nameof(Operator.IsChecking) when Op.IsChecking:
+							case nameof(Operator.IsCopying) when Op.IsCopying:
+							case nameof(Operator.IsAutoRunning) when Op.IsAutoRunning:
+								Document.Close();
 								break;
 						}
+						break;
+				}
+			};
+
+			Document.PropertyChanged += (_, e) =>
+			{
+				switch (e.PropertyName)
+				{
+					case nameof(DocumentViewModel.IsOpen) when Document.IsOpen:
+						Op.Stop();
 						break;
 				}
 			};

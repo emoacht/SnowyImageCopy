@@ -259,6 +259,12 @@
   <data name="FileStatus_Weird" xml:space="preserve">
     <value>Weird</value>
   </data>
+  <data name="License" xml:space="preserve">
+    <value>License</value>
+  </data>
+  <data name="LicenseFile" xml:space="preserve">
+    <value>license.html</value>
+  </data>
   <data name="OperationStatus_Card_Applied" xml:space="preserve">
     <value>Applied new settings.</value>
   </data>
@@ -454,14 +460,23 @@
   <data name="Options_Info" xml:space="preserve">
     <value>Info</value>
   </data>
-  <data name="ProjectSite" xml:space="preserve">
-    <value>http://emoacht.github.io/SnowyImageCopy/index.html</value>
+  <data name="Readme" xml:space="preserve">
+    <value>Readme</value>
   </data>
   <data name="ReadmeFile" xml:space="preserve">
+    <value>readme_en.html</value>
+  </data>
+  <data name="ReadmeFileDelete" xml:space="preserve">
     <value>readme_en.html#delete</value>
   </data>
   <data name="RecordException" xml:space="preserve">
     <value>This app will terminate, because unexpected problem happened. Leave exception log on Desktop?</value>
+  </data>
+  <data name="Site" xml:space="preserve">
+    <value>Site</value>
+  </data>
+  <data name="SiteUrl" xml:space="preserve">
+    <value>https://emoacht.github.io/SnowyImageCopy/index.html</value>
   </data>
   <data name="ToastBodyExtra_CopyCompleted" xml:space="preserve">
     <value>({0} images, {1} seconds)</value>

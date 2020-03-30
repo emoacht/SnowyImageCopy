@@ -485,6 +485,24 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to License.
+        /// </summary>
+        public static string License {
+            get {
+                return ResourceManager.GetString("License", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to license.html.
+        /// </summary>
+        public static string LicenseFile {
+            get {
+                return ResourceManager.GetString("LicenseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Applied new settings..
         /// </summary>
         public static string OperationStatus_Card_Applied {
@@ -1070,20 +1088,29 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://emoacht.github.io/SnowyImageCopy/index.html.
+        ///   Looks up a localized string similar to Readme.
         /// </summary>
-        public static string ProjectSite {
+        public static string Readme {
             get {
-                return ResourceManager.GetString("ProjectSite", resourceCulture);
+                return ResourceManager.GetString("Readme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to readme_en.html.
+        /// </summary>
+        public static string ReadmeFile {
+            get {
+                return ResourceManager.GetString("ReadmeFile", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to readme_en.html#delete.
         /// </summary>
-        public static string ReadmeFile {
+        public static string ReadmeFileDelete {
             get {
-                return ResourceManager.GetString("ReadmeFile", resourceCulture);
+                return ResourceManager.GetString("ReadmeFileDelete", resourceCulture);
             }
         }
         
@@ -1093,6 +1120,24 @@ namespace SnowyImageCopy.Properties {
         public static string RecordException {
             get {
                 return ResourceManager.GetString("RecordException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Site.
+        /// </summary>
+        public static string Site {
+            get {
+                return ResourceManager.GetString("Site", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://emoacht.github.io/SnowyImageCopy/index.html.
+        /// </summary>
+        public static string SiteUrl {
+            get {
+                return ResourceManager.GetString("SiteUrl", resourceCulture);
             }
         }
         

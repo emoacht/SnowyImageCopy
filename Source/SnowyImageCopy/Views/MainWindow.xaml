@@ -421,17 +421,19 @@
 						</i:Interaction.Behaviors>
 					</ListView>
 
-					<!-- Browser for readme -->
+					<!-- Browser -->
 					<Border
 						Grid.Column="0"
 						BorderThickness="0,1,0,0"
 						BorderBrush="{StaticResource BorderLine.Weak}"
-						Visibility="{Binding IsBrowserOpen, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+						Visibility="{Binding Document.IsOpen, Converter={StaticResource BooleanToVisibilityConverterKey}}">
 						<WebBrowser Visibility="{Binding Visibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}">
 							<i:Interaction.Behaviors>
 								<behaviors:WebBrowserBehavior
-									TargetFile="{Binding Resources.ReadmeFile, Source={x:Static models:ResourceService.Current}}"
-									AlternateText="Read readme."/>
+									SourcePath="{Binding Document.SourcePath, Mode=OneWay}"
+									SourceText="{Binding Document.SourceText, Mode=OneWay}"
+									WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MainWindowRoot, Mode=OneWay}"
+									SystemDpi="{Binding WindowHandler.SystemDpi, ElementName=MainWindowRoot, Mode=OneWay}"/>
 							</i:Interaction.Behaviors>
 						</WebBrowser>
 					</Border>

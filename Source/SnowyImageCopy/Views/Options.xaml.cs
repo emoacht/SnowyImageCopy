@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 using SnowyImageCopy.ViewModels;
-using SnowyImageCopy.Views.Controls;
 using SnowyImageCopy.Views.Converters;
 
 namespace SnowyImageCopy.Views
@@ -54,14 +53,6 @@ namespace SnowyImageCopy.Views
 					Source = mainWindowViewModel,
 					Mode = BindingMode.OneWay,
 					Converter = booleanInverseConverter
-				});
-
-			ChooseDeleteOnCopyButton.SetBinding(
-				SlidingToggleButton.IsCheckedCopyProperty,
-				new Binding(nameof(MainWindowViewModel.IsBrowserOpen))
-				{
-					Source = mainWindowViewModel,
-					Mode = BindingMode.OneWayToSource,
 				});
 
 			LanguageComboBox.SetBinding(

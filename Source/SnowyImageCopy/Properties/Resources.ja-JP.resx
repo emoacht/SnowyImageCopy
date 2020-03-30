@@ -450,14 +450,17 @@
   <data name="Options_Info" xml:space="preserve">
     <value>情報</value>
   </data>
-  <data name="ProjectSite" xml:space="preserve">
-    <value>http://emoacht.github.io/SnowyImageCopy/index_jp.html</value>
-  </data>
   <data name="ReadmeFile" xml:space="preserve">
+    <value>readme_jp.html</value>
+  </data>
+  <data name="ReadmeFileDelete" xml:space="preserve">
     <value>readme_jp.html#delete</value>
   </data>
   <data name="RecordException" xml:space="preserve">
     <value>予想外の問題が起きたため、このアプリを終了します。例外のログをデスクトップに残しますか?</value>
+  </data>
+  <data name="SiteUrl" xml:space="preserve">
+    <value>https://emoacht.github.io/SnowyImageCopy/index_jp.html</value>
   </data>
   <data name="ToastBodyExtra_CopyCompleted" xml:space="preserve">
     <value>({0} イメージ, {1} 秒)</value>
