@@ -93,18 +93,18 @@
 	<Style x:Key="DrawButtonStyle" TargetType="{x:Type ToggleButton}">
 		<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
 		<Setter Property="SnapsToDevicePixels" Value="True"/>
-		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="BorderBrush" Value="{StaticResource Window.Background}"/>
+		<Setter Property="BorderThickness" Value="2,0,0,0"/>
 		<Setter Property="Background" Value="{StaticResource SnowBlue.Normal.Background}"/>
 		<Setter Property="Foreground" Value="{StaticResource SnowBlue.Normal.Foreground}"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
 		<Setter Property="Template" Value="{StaticResource ButtonTemplate}"/>
 
 		<Style.Triggers>
 			<Trigger Property="IsMouseOver" Value="True">
-				<Setter Property="BorderBrush" Value="{StaticResource SnowBlue.MouseOver.Border}"/>
 				<Setter Property="Background" Value="{StaticResource SnowBlue.MouseOver.Background}"/>
 			</Trigger>
 			<Trigger Property="IsPressed" Value="True">
-				<Setter Property="BorderBrush" Value="{StaticResource SnowBlue.MouseOver.Border}"/>
 				<Setter Property="Background" Value="{StaticResource SnowBlue.MouseOver.Background}"/>
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
@@ -137,6 +137,67 @@
 				<Setter Property="Foreground" Value="{StaticResource SnowBlue.Disabled.Foreground}"/>
 			</Trigger>
 		</Style.Triggers>
+	</Style>
+
+	<!-- Normal GroupBox -->
+	<Style TargetType="{x:Type GroupBox}">
+		<Setter Property="BorderBrush" Value="{StaticResource BorderLine.Strong}"/>
+		<Setter Property="SnapsToDevicePixels" Value="True"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type GroupBox}">
+					<ControlTemplate.Resources>
+						<BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
+					</ControlTemplate.Resources>
+
+					<Grid SnapsToDevicePixels="true">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="6"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="6"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+							<RowDefinition Height="6"/>
+						</Grid.RowDefinitions>
+
+						<Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="3"
+								BorderBrush="White"
+								BorderThickness="1"
+								CornerRadius="4">
+							<Border.OpacityMask>
+								<MultiBinding ConverterParameter="7"
+											  Converter="{StaticResource BorderGapMaskConverter}">
+									<Binding ElementName="Header" Path="ActualWidth"/>
+									<Binding RelativeSource="{RelativeSource Self}" Path="ActualWidth"/>
+									<Binding RelativeSource="{RelativeSource Self}" Path="ActualHeight"/>
+								</MultiBinding>
+							</Border.OpacityMask>
+
+							<Border BorderBrush="{TemplateBinding BorderBrush}"
+									BorderThickness="1"
+									CornerRadius="3">
+								<Border BorderBrush="White"
+										BorderThickness="1"
+										CornerRadius="2"/>
+							</Border>
+						</Border>
+						<Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+								x:Name="Header"
+								HorizontalAlignment="Left"
+								Padding="3,1,3,0">
+							<ContentPresenter ContentSource="Header"
+											  RecognizesAccessKey="True"
+											  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+						</Border>
+						<ContentPresenter Grid.Column="1" Grid.Row="2"
+										  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
 	</Style>
 
 	<!-- Item GroupBox -->

@@ -179,20 +179,26 @@
       <DependentUpon>ThumbnailBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Converters\BooleanInverseConverter.cs" />
+    <Compile Include="Views\Converters\BooleanInverseToBrushConverter.cs" />
     <Compile Include="Views\Converters\BooleanInverseToThicknessConverter.cs" />
     <Compile Include="Views\Converters\BooleanInverseToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\BooleanToBrushConverter.cs" />
     <Compile Include="Views\Converters\DoubleAndVisibilityToDoubleConverter.cs" />
-    <Compile Include="Views\Converters\DoubleCentesimalConverter.cs" />
+    <Compile Include="Views\Converters\DoubleDigitsConverter.cs" />
+    <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
     <Compile Include="Views\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\FileStatusToBrushConverter.cs" />
     <Compile Include="Views\Converters\FileStatusToStringConverter.cs" />
     <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
     <Compile Include="Views\Converters\PathFileNameConverter.cs" />
+    <Compile Include="Views\Converters\TripleDigitsConverter.cs" />
     <Compile Include="Views\Converters\TimeSpanToStringConverter.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Card.xaml.cs">
+      <DependentUpon>Card.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
@@ -221,6 +227,10 @@
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Card.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Options.xaml">
       <SubType>Designer</SubType>

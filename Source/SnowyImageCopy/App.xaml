@@ -7,18 +7,21 @@
 		<ResourceDictionary>
 			<!-- Converters -->
 			<converters:BooleanInverseConverter x:Key="BooleanInverseConverterKey"/>
+			<converters:BooleanInverseToBrushConverter x:Key="BooleanInverseToBrushConverterKey"/>
 			<converters:BooleanInverseToThicknessConverter x:Key="BooleanInverseToThicknessConverterKey"/>
 			<converters:BooleanInverseToVisibilityConverter x:Key="BooleanInverseToVisibilityConverterKey"/>
 			<converters:BooleanToBrushConverter x:Key="BooleanToBrushConverterKey"/>
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
 
 			<converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverterKey"/>
+			<converters:EnumToBooleanConverter x:Key="EnumToBooleanConverterKey"/>
 
 			<converters:FileStatusToBrushConverter x:Key="FileStatusToBrushConverterKey"/>
 			<converters:FileStatusToStringConverter x:Key="FileStatusToStringConverterKey"/>
 
 			<converters:DoubleAndVisibilityToDoubleConverter x:Key="DoubleAndVisibilityToDoubleConverterKey"/>
-			<converters:DoubleCentesimalConverter x:Key="DoubleCentesimalConverterKey"/>
+			<converters:DoubleDigitsConverter x:Key="DoubleDigitsConverterKey"/>
+			<converters:TripleDigitsConverter x:Key="TripleDigitsConverterKey"/>
 			<converters:ObjectArrayConverter x:Key="ObjectArrayConverterKey"/>
 			<converters:PathFileNameConverter x:Key="PathFileNameConverterKey"/>
 			<converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey"/>

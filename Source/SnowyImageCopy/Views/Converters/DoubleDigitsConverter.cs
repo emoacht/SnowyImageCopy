@@ -10,10 +10,10 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Converts double representing percentage to centesimal double.
+	/// Converts double representing percentage to double divided by 100.
 	/// </summary>
 	[ValueConversion(typeof(double), typeof(double))]
-	public class DoubleCentesimalConverter : IValueConverter
+	public class DoubleDigitsConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{

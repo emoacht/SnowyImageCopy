@@ -10,29 +10,28 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Inverses Boolean and then converts it to Visibility.
+	/// Converts ulong to double divided by the power of 1024.
 	/// </summary>
-	[ValueConversion(typeof(bool), typeof(Visibility))]
-	public class BooleanInverseToVisibilityConverter : IValueConverter
+	[ValueConversion(typeof(ulong), typeof(double))]
+	public class TripleDigitsConverter : IValueConverter
 	{
+		private const double TripleDigitsFactor = 1024;
+
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool sourceValue))
+			if (!(value is ulong sourceValue))
 				return DependencyProperty.UnsetValue;
 
-			var visibility = Visibility.Collapsed;
-			if (Enum.TryParse(parameter as string, out Visibility buffer))
-				visibility = buffer;
+			var factor = TripleDigitsFactor;
+			if (double.TryParse(parameter as string, out double buffer))
+				factor = Math.Pow(TripleDigitsFactor, buffer);
 
-			return !sourceValue ? Visibility.Visible : visibility;
+			return sourceValue / factor;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Visibility sourceValue))
-				return DependencyProperty.UnsetValue;
-
-			return (sourceValue != Visibility.Visible);
+			throw new NotImplementedException();
 		}
 	}
 }

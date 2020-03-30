@@ -8,8 +8,10 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using SnowyImageCopy.Common;
+using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models;
 using SnowyImageCopy.Models.Card;
+using SnowyImageCopy.Properties;
 
 namespace SnowyImageCopy.ViewModels
 {
@@ -135,9 +137,13 @@ namespace SnowyImageCopy.ViewModels
 
 		private async Task SearchConfigAsync()
 		{
+			if (Designer.IsInDesignMode) // To avoid NullReferenceException in Design mode.
+				return;
+
 			try
 			{
 				_isSearching = true;
+				_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Card_Searching;
 
 				var disks = await Task.Run(() => DiskSearcher.Search());
 
@@ -149,14 +155,17 @@ namespace SnowyImageCopy.ViewModels
 						continue;
 
 					Local = configNew;
+					_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Card_OneFound;
 					return;
 				}
 
 				Local = null;
+				_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Card_NoFound;
 			}
 			catch
 			{
 				SoundManager.PlayError();
+				_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Failed;
 			}
 			finally
 			{
@@ -170,6 +179,7 @@ namespace SnowyImageCopy.ViewModels
 			try
 			{
 				_isApplying = true;
+				_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Card_Applying;
 
 				var configNew = new CardConfigViewModel();
 
@@ -177,14 +187,18 @@ namespace SnowyImageCopy.ViewModels
 					(configNew.CID != Local.CID))
 				{
 					SoundManager.PlayError();
+					_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Card_Replaced;
 					return;
 				}
 
 				await Local.WriteAsync();
+
+				_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Card_Applied;
 			}
 			catch
 			{
 				SoundManager.PlayError();
+				_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Failed;
 			}
 			finally
 			{

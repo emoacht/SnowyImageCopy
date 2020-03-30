@@ -121,6 +121,96 @@
   <data name="Feather" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Feather.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Card" xml:space="preserve">
+    <value>Card</value>
+  </data>
+  <data name="Card_AddressName" xml:space="preserve">
+    <value>Address name</value>
+  </data>
+  <data name="Card_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Card_AutomaticTimeout" xml:space="preserve">
+    <value>Automatic timeout (only for Automatic startup and AP mode)</value>
+  </data>
+  <data name="Card_Capacity" xml:space="preserve">
+    <value>Capacity</value>
+  </data>
+  <data name="Card_Drive" xml:space="preserve">
+    <value>Drive</value>
+  </data>
+  <data name="Card_Firmware" xml:space="preserve">
+    <value>Firmware</value>
+  </data>
+  <data name="Card_FreeSpace" xml:space="preserve">
+    <value>free space</value>
+  </data>
+  <data name="Card_LanMode" xml:space="preserve">
+    <value>Wireless LAN mode</value>
+  </data>
+  <data name="Card_LanModeAP" xml:space="preserve">
+    <value>AP (Access Point) mode</value>
+  </data>
+  <data name="Card_LanModeIPT" xml:space="preserve">
+    <value>Internet pass-thru mode</value>
+  </data>
+  <data name="Card_LanModeSTA" xml:space="preserve">
+    <value>STA (Station) mode</value>
+  </data>
+  <data name="Card_LanStartup" xml:space="preserve">
+    <value>Wireless LAN startup</value>
+  </data>
+  <data name="Card_LanStartupAutomatic" xml:space="preserve">
+    <value>Automatic startup</value>
+  </data>
+  <data name="Card_LanStartupManual" xml:space="preserve">
+    <value>Manual startup</value>
+  </data>
+  <data name="Card_LocalCard" xml:space="preserve">
+    <value>FlashAir card (local)</value>
+  </data>
+  <data name="Card_Manufactured" xml:space="preserve">
+    <value>Manufactured</value>
+  </data>
+  <data name="Card_ModelName" xml:space="preserve">
+    <value>Model name</value>
+  </data>
+  <data name="Card_RemoteCard" xml:space="preserve">
+    <value>FlashAir card (remote)</value>
+  </data>
+  <data name="Card_Revision" xml:space="preserve">
+    <value>Revision</value>
+  </data>
+  <data name="Card_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Card_SecurityKey" xml:space="preserve">
+    <value>Network security key</value>
+  </data>
+  <data name="Card_SerialNumber" xml:space="preserve">
+    <value>Serial number</value>
+  </data>
+  <data name="Card_Ssid" xml:space="preserve">
+    <value>SSID</value>
+  </data>
+  <data name="Card_ToBuiltinAP" xml:space="preserve">
+    <value>Access point built into FlashAir (for AP mode, Internet pass-thru mode)</value>
+  </data>
+  <data name="Card_ToRouterAP" xml:space="preserve">
+    <value>Access point to which FlashAir is to connect (for STA mode, Internet pass-thru mode)</value>
+  </data>
+  <data name="Card_Unconnected" xml:space="preserve">
+    <value>Unconnected</value>
+  </data>
+  <data name="Card_Unretrieved" xml:space="preserve">
+    <value>Unretrieved</value>
+  </data>
+  <data name="Card_Upload" xml:space="preserve">
+    <value>upload.cgi</value>
+  </data>
+  <data name="Card_UsedCapacity" xml:space="preserve">
+    <value>Used capacity</value>
+  </data>
   <data name="Command_Check" xml:space="preserve">
     <value>Check</value>
   </data>
@@ -175,6 +265,24 @@
   <data name="FileStatus_Weird" xml:space="preserve">
     <value>Weird</value>
   </data>
+  <data name="OperationStatus_Card_Applied" xml:space="preserve">
+    <value>Applied new settings.</value>
+  </data>
+  <data name="OperationStatus_Card_Applying" xml:space="preserve">
+    <value>Applying new settings.</value>
+  </data>
+  <data name="OperationStatus_Card_NoFound" xml:space="preserve">
+    <value>No FlashAir found.</value>
+  </data>
+  <data name="OperationStatus_Card_OneFound" xml:space="preserve">
+    <value>A FlashAir found.</value>
+  </data>
+  <data name="OperationStatus_Card_Replaced" xml:space="preserve">
+    <value>FlashAir is replaced.</value>
+  </data>
+  <data name="OperationStatus_Card_Searching" xml:space="preserve">
+    <value>Searching FlashAir.</value>
+  </data>
   <data name="OperationStatus_CheckCompleted" xml:space="preserve">
     <value>Check completed.</value>
   </data>
@@ -204,6 +312,9 @@
   </data>
   <data name="OperationStatus_Error" xml:space="preserve">
     <value>An error happened.</value>
+  </data>
+  <data name="OperationStatus_Failed" xml:space="preserve">
+    <value>Failed.</value>
   </data>
   <data name="OperationStatus_NoDateCalender" xml:space="preserve">
     <value>No date is selected in calendar.</value>

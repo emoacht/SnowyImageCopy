@@ -61,6 +61,276 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Card.
+        /// </summary>
+        public static string Card {
+            get {
+                return ResourceManager.GetString("Card", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Address name.
+        /// </summary>
+        public static string Card_AddressName {
+            get {
+                return ResourceManager.GetString("Card_AddressName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        public static string Card_Apply {
+            get {
+                return ResourceManager.GetString("Card_Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatic timeout (only for Automatic startup and AP mode).
+        /// </summary>
+        public static string Card_AutomaticTimeout {
+            get {
+                return ResourceManager.GetString("Card_AutomaticTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capacity.
+        /// </summary>
+        public static string Card_Capacity {
+            get {
+                return ResourceManager.GetString("Card_Capacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drive.
+        /// </summary>
+        public static string Card_Drive {
+            get {
+                return ResourceManager.GetString("Card_Drive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Firmware.
+        /// </summary>
+        public static string Card_Firmware {
+            get {
+                return ResourceManager.GetString("Card_Firmware", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to free space.
+        /// </summary>
+        public static string Card_FreeSpace {
+            get {
+                return ResourceManager.GetString("Card_FreeSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wireless LAN mode.
+        /// </summary>
+        public static string Card_LanMode {
+            get {
+                return ResourceManager.GetString("Card_LanMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AP (Access Point) mode.
+        /// </summary>
+        public static string Card_LanModeAP {
+            get {
+                return ResourceManager.GetString("Card_LanModeAP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internet pass-thru mode.
+        /// </summary>
+        public static string Card_LanModeIPT {
+            get {
+                return ResourceManager.GetString("Card_LanModeIPT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to STA (Station) mode.
+        /// </summary>
+        public static string Card_LanModeSTA {
+            get {
+                return ResourceManager.GetString("Card_LanModeSTA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wireless LAN startup.
+        /// </summary>
+        public static string Card_LanStartup {
+            get {
+                return ResourceManager.GetString("Card_LanStartup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatic startup.
+        /// </summary>
+        public static string Card_LanStartupAutomatic {
+            get {
+                return ResourceManager.GetString("Card_LanStartupAutomatic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual startup.
+        /// </summary>
+        public static string Card_LanStartupManual {
+            get {
+                return ResourceManager.GetString("Card_LanStartupManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FlashAir card (local).
+        /// </summary>
+        public static string Card_LocalCard {
+            get {
+                return ResourceManager.GetString("Card_LocalCard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manufactured.
+        /// </summary>
+        public static string Card_Manufactured {
+            get {
+                return ResourceManager.GetString("Card_Manufactured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model name.
+        /// </summary>
+        public static string Card_ModelName {
+            get {
+                return ResourceManager.GetString("Card_ModelName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FlashAir card (remote).
+        /// </summary>
+        public static string Card_RemoteCard {
+            get {
+                return ResourceManager.GetString("Card_RemoteCard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revision.
+        /// </summary>
+        public static string Card_Revision {
+            get {
+                return ResourceManager.GetString("Card_Revision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Card_Search {
+            get {
+                return ResourceManager.GetString("Card_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Network security key.
+        /// </summary>
+        public static string Card_SecurityKey {
+            get {
+                return ResourceManager.GetString("Card_SecurityKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serial number.
+        /// </summary>
+        public static string Card_SerialNumber {
+            get {
+                return ResourceManager.GetString("Card_SerialNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SSID.
+        /// </summary>
+        public static string Card_Ssid {
+            get {
+                return ResourceManager.GetString("Card_Ssid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Access point built into FlashAir (for AP mode, Internet pass-thru mode).
+        /// </summary>
+        public static string Card_ToBuiltinAP {
+            get {
+                return ResourceManager.GetString("Card_ToBuiltinAP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Access point to which FlashAir is to connect (for STA mode, Internet pass-thru mode).
+        /// </summary>
+        public static string Card_ToRouterAP {
+            get {
+                return ResourceManager.GetString("Card_ToRouterAP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unconnected.
+        /// </summary>
+        public static string Card_Unconnected {
+            get {
+                return ResourceManager.GetString("Card_Unconnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unretrieved.
+        /// </summary>
+        public static string Card_Unretrieved {
+            get {
+                return ResourceManager.GetString("Card_Unretrieved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to upload.cgi.
+        /// </summary>
+        public static string Card_Upload {
+            get {
+                return ResourceManager.GetString("Card_Upload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used capacity.
+        /// </summary>
+        public static string Card_UsedCapacity {
+            get {
+                return ResourceManager.GetString("Card_UsedCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check.
         /// </summary>
         public static string Command_Check {
@@ -215,6 +485,60 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applied new settings..
+        /// </summary>
+        public static string OperationStatus_Card_Applied {
+            get {
+                return ResourceManager.GetString("OperationStatus_Card_Applied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Applying new settings..
+        /// </summary>
+        public static string OperationStatus_Card_Applying {
+            get {
+                return ResourceManager.GetString("OperationStatus_Card_Applying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No FlashAir found..
+        /// </summary>
+        public static string OperationStatus_Card_NoFound {
+            get {
+                return ResourceManager.GetString("OperationStatus_Card_NoFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A FlashAir found..
+        /// </summary>
+        public static string OperationStatus_Card_OneFound {
+            get {
+                return ResourceManager.GetString("OperationStatus_Card_OneFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FlashAir is replaced..
+        /// </summary>
+        public static string OperationStatus_Card_Replaced {
+            get {
+                return ResourceManager.GetString("OperationStatus_Card_Replaced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searching FlashAir..
+        /// </summary>
+        public static string OperationStatus_Card_Searching {
+            get {
+                return ResourceManager.GetString("OperationStatus_Card_Searching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check completed..
         /// </summary>
         public static string OperationStatus_CheckCompleted {
@@ -301,6 +625,15 @@ namespace SnowyImageCopy.Properties {
         public static string OperationStatus_Error {
             get {
                 return ResourceManager.GetString("OperationStatus_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed..
+        /// </summary>
+        public static string OperationStatus_Failed {
+            get {
+                return ResourceManager.GetString("OperationStatus_Failed", resourceCulture);
             }
         }
         

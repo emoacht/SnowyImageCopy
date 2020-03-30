@@ -117,6 +117,96 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Card" xml:space="preserve">
+    <value>カード</value>
+  </data>
+  <data name="Card_AddressName" xml:space="preserve">
+    <value>アドレス名</value>
+  </data>
+  <data name="Card_Apply" xml:space="preserve">
+    <value>適用</value>
+  </data>
+  <data name="Card_AutomaticTimeout" xml:space="preserve">
+    <value>自動タイムアウト (自動起動かつAPモード用のみ)</value>
+  </data>
+  <data name="Card_Capacity" xml:space="preserve">
+    <value>容量</value>
+  </data>
+  <data name="Card_Drive" xml:space="preserve">
+    <value>ドライブ</value>
+  </data>
+  <data name="Card_Firmware" xml:space="preserve">
+    <value>ファームウェア</value>
+  </data>
+  <data name="Card_FreeSpace" xml:space="preserve">
+    <value>空き領域</value>
+  </data>
+  <data name="Card_LanMode" xml:space="preserve">
+    <value>無線LANモード</value>
+  </data>
+  <data name="Card_LanModeAP" xml:space="preserve">
+    <value>AP (アクセスポイント) モード</value>
+  </data>
+  <data name="Card_LanModeIPT" xml:space="preserve">
+    <value>インターネット同時接続モード</value>
+  </data>
+  <data name="Card_LanModeSTA" xml:space="preserve">
+    <value>STA (ステーション) モード</value>
+  </data>
+  <data name="Card_LanStartup" xml:space="preserve">
+    <value>無線LAN起動</value>
+  </data>
+  <data name="Card_LanStartupAutomatic" xml:space="preserve">
+    <value>自動起動</value>
+  </data>
+  <data name="Card_LanStartupManual" xml:space="preserve">
+    <value>手動起動</value>
+  </data>
+  <data name="Card_LocalCard" xml:space="preserve">
+    <value>FlashAirカード (ローカル)</value>
+  </data>
+  <data name="Card_Manufactured" xml:space="preserve">
+    <value>製造</value>
+  </data>
+  <data name="Card_ModelName" xml:space="preserve">
+    <value>モデル名</value>
+  </data>
+  <data name="Card_RemoteCard" xml:space="preserve">
+    <value>FlashAirカード (リモート)</value>
+  </data>
+  <data name="Card_Revision" xml:space="preserve">
+    <value>リビジョン</value>
+  </data>
+  <data name="Card_Search" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="Card_SecurityKey" xml:space="preserve">
+    <value>ネットワークセキュリティキー</value>
+  </data>
+  <data name="Card_SerialNumber" xml:space="preserve">
+    <value>シリアルナンバー</value>
+  </data>
+  <data name="Card_Ssid" xml:space="preserve">
+    <value>SSID</value>
+  </data>
+  <data name="Card_ToBuiltinAP" xml:space="preserve">
+    <value>FlashAirに内蔵のアクセスポイント (APモード、インターネット同時接続モード用)</value>
+  </data>
+  <data name="Card_ToRouterAP" xml:space="preserve">
+    <value>FlashAirが接続するアクセスポイント (STAモード、インターネット同時接続モード用)</value>
+  </data>
+  <data name="Card_Unconnected" xml:space="preserve">
+    <value>未接続</value>
+  </data>
+  <data name="Card_Unretrieved" xml:space="preserve">
+    <value>未取得</value>
+  </data>
+  <data name="Card_Upload" xml:space="preserve">
+    <value>upload.cgi</value>
+  </data>
+  <data name="Card_UsedCapacity" xml:space="preserve">
+    <value>使用容量</value>
+  </data>
   <data name="Command_Check" xml:space="preserve">
     <value>チェック</value>
   </data>
@@ -171,6 +261,24 @@
   <data name="FileStatus_Weird" xml:space="preserve">
     <value>おかしい</value>
   </data>
+  <data name="OperationStatus_Card_Applied" xml:space="preserve">
+    <value>新しい設定を適用しました。</value>
+  </data>
+  <data name="OperationStatus_Card_Applying" xml:space="preserve">
+    <value>新しい設定を適用しています。</value>
+  </data>
+  <data name="OperationStatus_Card_NoFound" xml:space="preserve">
+    <value>FlashAirは見つかりませんでした。</value>
+  </data>
+  <data name="OperationStatus_Card_OneFound" xml:space="preserve">
+    <value>FlashAirが見つかりました。</value>
+  </data>
+  <data name="OperationStatus_Card_Replaced" xml:space="preserve">
+    <value>FlashAirが差し替えられました。</value>
+  </data>
+  <data name="OperationStatus_Card_Searching" xml:space="preserve">
+    <value>FlashAirを検索しています。</value>
+  </data>
   <data name="OperationStatus_CheckCompleted" xml:space="preserve">
     <value>チェックを完了しました。</value>
   </data>
@@ -200,6 +308,9 @@
   </data>
   <data name="OperationStatus_Error" xml:space="preserve">
     <value>エラーが発生しました。</value>
+  </data>
+  <data name="OperationStatus_Failed" xml:space="preserve">
+    <value>失敗しました。</value>
   </data>
   <data name="OperationStatus_NoDateCalender" xml:space="preserve">
     <value>カレンダーに選択された日付がありません。</value>

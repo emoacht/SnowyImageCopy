@@ -23,10 +23,10 @@
 		</x:Array>
 	</UserControl.Resources>
 
-	<Grid x:Name="LayoutRoot">
-		<StackPanel Width="234"
+	<Grid x:Name="PaneRoot"
+		  Background="{StaticResource Window.Background}">
+		<StackPanel Width="233"
 					Margin="8,2,8,0">
-
 			<!-- Path -->
 			<GroupBox x:Name="PathGroupBox"
 					  Style="{StaticResource ItemGroupStyle}"

@@ -19,40 +19,27 @@ namespace SnowyImageCopy.Views.Behaviors
 		#region Property
 
 		/// <summary>
+		/// Associated FrameworkElement
+		/// </summary>
+		private FrameworkElement AssociatedElement => this.AssociatedObject;
+
+		/// <summary>
 		/// Target FrameworkElement for checking
 		/// </summary>
-		public FrameworkElement TargetFrameworkElement
+		public FrameworkElement TargetElement
 		{
-			get { return (FrameworkElement)GetValue(TargetFrameworkElementProperty); }
-			set { SetValue(TargetFrameworkElementProperty, value); }
+			get { return (FrameworkElement)GetValue(TargetElementProperty); }
+			set { SetValue(TargetElementProperty, value); }
 		}
-		public static readonly DependencyProperty TargetFrameworkElementProperty =
+		public static readonly DependencyProperty TargetElementProperty =
 			DependencyProperty.Register(
-				"TargetFrameworkElement",
+				"TargetElement",
 				typeof(FrameworkElement),
 				typeof(FrameworkElementIntersectionBehavior),
 				new PropertyMetadata(default(FrameworkElement)));
 
 		/// <summary>
-		/// Object to trigger checking
-		/// </summary>
-		/// <remarks>Any kind of object will be accepted.</remarks>
-		public object TriggerObject
-		{
-			get { return (object)GetValue(TriggerObjectProperty); }
-			set { SetValue(TriggerObjectProperty, value); }
-		}
-		public static readonly DependencyProperty TriggerObjectProperty =
-			DependencyProperty.Register(
-				"TriggerObject",
-				typeof(object),
-				typeof(FrameworkElementIntersectionBehavior),
-				new PropertyMetadata(
-					null,
-					(d, e) => ((FrameworkElementIntersectionBehavior)d).CheckIntersection()));
-
-		/// <summary>
-		/// Expanded margin of this FrameworkElement for checking
+		/// Expanded margin of associated FrameworkElement for checking
 		/// </summary>
 		public Thickness ExpandedMargin
 		{
@@ -66,8 +53,20 @@ namespace SnowyImageCopy.Views.Behaviors
 				typeof(FrameworkElementIntersectionBehavior),
 				new PropertyMetadata(default(Thickness)));
 
+		public Dpi WindowDpi
+		{
+			get { return (Dpi)GetValue(WindowDpiProperty); }
+			set { SetValue(WindowDpiProperty, value); }
+		}
+		public static readonly DependencyProperty WindowDpiProperty =
+			DependencyProperty.Register(
+				"WindowDpi",
+				typeof(Dpi),
+				typeof(FrameworkElementIntersectionBehavior),
+				new PropertyMetadata(Dpi.Default));
+
 		/// <summary>
-		/// Whether this FrameworkElement is intersected with target FrameworkElement
+		/// Whether associated FrameworkElement is intersected with target FrameworkElement
 		/// </summary>
 		public bool IsIntersected
 		{
@@ -81,61 +80,72 @@ namespace SnowyImageCopy.Views.Behaviors
 				typeof(FrameworkElementIntersectionBehavior),
 				new PropertyMetadata(false));
 
-		public Dpi WindowDpi
+		/// <summary>
+		/// Object to trigger checking
+		/// </summary>
+		/// <remarks>Any kinds of object will be accepted.</remarks>
+		public object TriggerObject
 		{
-			get { return (Dpi)GetValue(WindowDpiProperty); }
-			set { SetValue(WindowDpiProperty, value); }
+			get { return (object)GetValue(TriggerObjectProperty); }
+			set { SetValue(TriggerObjectProperty, value); }
 		}
-		public static readonly DependencyProperty WindowDpiProperty =
+		public static readonly DependencyProperty TriggerObjectProperty =
 			DependencyProperty.Register(
-				"WindowDpi",
-				typeof(Dpi),
+				"TriggerObject",
+				typeof(object),
 				typeof(FrameworkElementIntersectionBehavior),
-				new PropertyMetadata(Dpi.Default));
+				new PropertyMetadata(
+					null,
+					(d, e) => ((FrameworkElementIntersectionBehavior)d).CheckElements()));
 
 		#endregion
 
-		private void CheckIntersection()
+		private void CheckElements(bool retry = true)
 		{
-			if ((this.AssociatedObject is null) || (TargetFrameworkElement is null))
+			if ((AssociatedElement is null) ||
+				(AssociatedElement.Visibility == Visibility.Collapsed) ||
+				(TargetElement is null) ||
+				(TargetElement.Visibility == Visibility.Collapsed))
 				return;
 
-			IsIntersected = IsFrameworkElementIntersected(this.AssociatedObject, new[] { TargetFrameworkElement });
+			var isIntersected = IsElementIntersected();
+			if (this.IsIntersected != isIntersected)
+			{
+				this.IsIntersected = isIntersected;
+				return;
+			}
+
+			if (retry)
+				AssociatedElement.LayoutUpdated += OnLayoutUpdated;
 		}
 
-		private bool IsFrameworkElementIntersected(FrameworkElement baseElement, IEnumerable<FrameworkElement> targetElements)
+		private void OnLayoutUpdated(object sender, EventArgs e)
 		{
-			if (!baseElement.IsVisible) // If not visible, PointToScreen method will fail.
-				return false;
+			AssociatedElement.LayoutUpdated -= OnLayoutUpdated;
 
+			CheckElements(false);
+		}
+
+		private bool IsElementIntersected()
+		{
 			// Compute factor from default DPI to Window DPI.
 			var factor = new { X = (double)WindowDpi.X / Dpi.Default.X, Y = (double)WindowDpi.Y / Dpi.Default.Y };
 
-			var baseElementLocation = baseElement.PointToScreen(default);
-
+			var associatedLocation = AssociatedElement.PointToScreen(default);
 			var expandedRect = new Rect(
-				baseElementLocation.X - ExpandedMargin.Left * factor.X,
-				baseElementLocation.Y - ExpandedMargin.Top * factor.Y,
-				(baseElement.ActualWidth + ExpandedMargin.Left + ExpandedMargin.Right) * factor.X,
-				(baseElement.ActualHeight + ExpandedMargin.Top + ExpandedMargin.Bottom) * factor.Y);
+				associatedLocation.X - ExpandedMargin.Left * factor.X,
+				associatedLocation.Y - ExpandedMargin.Top * factor.Y,
+				(AssociatedElement.ActualWidth + ExpandedMargin.Left + ExpandedMargin.Right) * factor.X,
+				(AssociatedElement.ActualHeight + ExpandedMargin.Top + ExpandedMargin.Bottom) * factor.Y);
 
-			var rects = new[] { expandedRect }
-				.Concat(targetElements
-					.Where(x => x.IsVisible) // If not visible, PointToScreen method will fail.
-					.Select(x => new Rect(x.PointToScreen(default), new Size(x.ActualWidth * factor.X, x.ActualHeight * factor.Y))))
-				.ToArray();
+			var targetLocation = TargetElement.PointToScreen(default);
+			var targetRect = new Rect(
+				targetLocation.X,
+				targetLocation.Y,
+				TargetElement.ActualWidth * factor.X,
+				TargetElement.ActualHeight * factor.Y);
 
-			return IsRectIntersected(rects);
-		}
-
-		private bool IsFrameworkElementIntersected(IEnumerable<FrameworkElement> elements)
-		{
-			var rects = elements
-				.Where(x => x.IsVisible) // If not visible, PointToScreen method will fail.
-				.Select(x => new Rect(x.PointToScreen(default), new Size(x.ActualWidth, x.ActualHeight)))
-				.ToArray();
-
-			return IsRectIntersected(rects);
+			return IsRectIntersected(new[] { expandedRect, targetRect });
 		}
 
 		private static bool IsRectIntersected(Rect[] rects)
