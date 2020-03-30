@@ -764,7 +764,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable to choose to delete image in FlashAir on copy.
+        ///   Looks up a localized string similar to Choose to delete image in FlashAir on copy.
         /// </summary>
         public static string Options_ChooseDeleteOnCopy {
             get {
@@ -836,7 +836,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete On Copy.
+        ///   Looks up a localized string similar to Delete image in FlashAir on copy.
         /// </summary>
         public static string Options_DeleteOnCopy {
             get {

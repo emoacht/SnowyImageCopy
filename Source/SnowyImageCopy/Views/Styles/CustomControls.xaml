@@ -89,6 +89,11 @@
 		<Setter Property="BackgroundUnchecked" Value="{StaticResource Sliding.Unchecked.Background}"/>
 	</Style>
 
+	<Style x:Key="SwitchCautionButtonStyle" TargetType="{x:Type controls:SlidingToggleButton}" BasedOn="{StaticResource SwitchButtonStyle}">
+		<Setter Property="ForegroundChecked" Value="{StaticResource Sliding.CheckedCaution.Foreground}"/>
+		<Setter Property="BackgroundChecked" Value="{StaticResource Sliding.CheckedCaution.Background}"/>
+	</Style>
+
 	<!-- BusyButton -->
 	<Style TargetType="{x:Type controls:BusyButton}">
 		<Style.Resources>

@@ -222,9 +222,6 @@
   <data name="Command_Stop" xml:space="preserve">
     <value>停止</value>
   </data>
-  <data name="Options_DeleteOnCopy" xml:space="preserve">
-    <value>コピー後に削除</value>
-  </data>
   <data name="Options_InstantCopy" xml:space="preserve">
     <value>すぐコピー</value>
   </data>
@@ -415,7 +412,10 @@
     <value>FlashAir内のイメージが削除されたらごみ箱に移動する</value>
   </data>
   <data name="Options_ChooseDeleteOnCopy" xml:space="preserve">
-    <value>コピー後にFlashAir内のイメージの削除を選べるようにする</value>
+    <value>コピー後にFlashAir内のイメージを削除するかを選ぶ</value>
+  </data>
+  <data name="Options_DeleteOnCopy" xml:space="preserve">
+    <value>コピー後にFlashAir内のイメージを削除する</value>
   </data>
   <data name="Options_Sound" xml:space="preserve">
     <value>音</value>

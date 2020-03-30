@@ -151,20 +151,6 @@
 
 					<StackPanel Margin="0,4,0,0"
 								Orientation="Horizontal">
-						<!-- Delete On Copy -->
-						<StackPanel Orientation="Horizontal"
-									Visibility="{Binding SettingsCurrent.EnablesChooseDeleteOnCopy, Converter={StaticResource BooleanToVisibilityConverterKey}}">
-							<TextBlock
-								VerticalAlignment="Center"
-								Text="{Binding Resources.Options_DeleteOnCopy, Source={x:Static models:ResourceService.Current}}"/>
-							<controls:SlidingToggleButton
-								Margin="5,4"
-								Style="{StaticResource SwitchButtonStyle}"
-								ForegroundChecked="{StaticResource Sliding.CheckedSecond.Foreground}"
-								BackgroundChecked="{StaticResource Sliding.CheckedSecond.Background}"
-								IsChecked="{Binding SettingsCurrent.DeleteOnCopy, Mode=TwoWay}"/>
-						</StackPanel>
-
 						<!-- Instant Copy -->
 						<StackPanel Orientation="Horizontal">
 							<TextBlock

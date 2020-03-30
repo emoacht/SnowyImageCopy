@@ -236,19 +236,6 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _instantCopy = true; // Default
 
-		public bool DeleteOnCopy
-		{
-			get
-			{
-				if (!EnablesChooseDeleteOnCopy)
-					_deleteOnCopy = false;
-
-				return _deleteOnCopy;
-			}
-			set => SetPropertyValue(ref _deleteOnCopy, value);
-		}
-		private bool _deleteOnCopy;
-
 		#endregion
 
 		#region Connection
@@ -409,18 +396,12 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _movesFileToRecycle;
 
-		public bool EnablesChooseDeleteOnCopy
+		public bool DeletesOnCopy
 		{
-			get => _enablesChooseDeleteOnCopy;
-			set
-			{
-				SetPropertyValue(ref _enablesChooseDeleteOnCopy, value);
-
-				if (!value)
-					DeleteOnCopy = false;
-			}
+			get => _deletesOnCopy;
+			set => SetPropertyValue(ref _deletesOnCopy, value);
 		}
-		private bool _enablesChooseDeleteOnCopy;
+		private bool _deletesOnCopy;
 
 		#endregion
 
