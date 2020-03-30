@@ -746,6 +746,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto at start.
+        /// </summary>
+        public static string Options_AutoAtStart {
+            get {
+                return ResourceManager.GetString("Options_AutoAtStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto Check Interval.
         /// </summary>
         public static string Options_AutoCheckInterval {

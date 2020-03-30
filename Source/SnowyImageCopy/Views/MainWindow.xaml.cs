@@ -54,10 +54,6 @@ namespace SnowyImageCopy.Views
 			if (_mainWindowViewModel is null)
 				return;
 
-			if (CommandLine.StartsAutoCheck &&
-				_mainWindowViewModel.CheckAndCopyAutoCommand.CanExecute())
-				_mainWindowViewModel.CheckAndCopyAutoCommand.Execute();
-
 			SetDestinationColorProfile(this.WindowHandler.ColorProfilePath);
 			this.WindowHandler.ColorProfileChanged += (_, e) => SetDestinationColorProfile(e.NewPath);
 		}

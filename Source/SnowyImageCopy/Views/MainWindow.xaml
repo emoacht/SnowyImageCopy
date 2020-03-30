@@ -157,6 +157,13 @@
 							Style="{StaticResource QuickButtonStyle}"
 							Content="{Binding Resources.Options_CopyOnSelect, Source={x:Static models:ResourceService.Current}}"
 							IsChecked="{Binding SettingsCurrent.CopyOnSelect, Mode=TwoWay}"/>
+
+						<!-- Auto at start -->
+						<ToggleButton
+							Width="90" Margin="2,0,0,0"
+							Style="{StaticResource QuickButtonStyle}"
+							Content="{Binding Resources.Options_AutoAtStart, Source={x:Static models:ResourceService.Current}}"
+							IsChecked="{Binding SettingsCurrent.AutoAtStart, Mode=TwoWay}"/>
 					</StackPanel>
 				</StackPanel>
 			</Grid>

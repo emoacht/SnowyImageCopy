@@ -463,6 +463,10 @@ namespace SnowyImageCopy.ViewModels
 			};
 
 			SetSample(1);
+
+			if ((Settings.Current.AutoAtStart || CommandLine.StartsAutoCheck) &&
+				CheckAndCopyAutoCommand.CanExecute())
+				CheckAndCopyAutoCommand.Execute();
 		}
 
 		private void SetSample(int number = 1)

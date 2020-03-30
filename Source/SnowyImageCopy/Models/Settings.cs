@@ -236,6 +236,13 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _copyOnSelect = true; // Default
 
+		public bool AutoAtStart
+		{
+			get => _autoAtStart;
+			set => SetPropertyValue(ref _autoAtStart, value);
+		}
+		private bool _autoAtStart;
+
 		#endregion
 
 		#region Connection

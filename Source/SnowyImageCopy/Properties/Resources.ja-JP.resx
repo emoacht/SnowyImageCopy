@@ -345,6 +345,9 @@
   <data name="Options_CopyOnSelect" xml:space="preserve">
     <value>選択でコピー</value>
   </data>
+  <data name="Options_AutoAtStart" xml:space="preserve">
+    <value>始めから自動</value>
+  </data>
   <data name="Options_Path" xml:space="preserve">
     <value>パス</value>
   </data>

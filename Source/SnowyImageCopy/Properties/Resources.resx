@@ -349,6 +349,9 @@
   <data name="Options_CopyOnSelect" xml:space="preserve">
     <value>Copy on select</value>
   </data>
+  <data name="Options_AutoAtStart" xml:space="preserve">
+    <value>Auto at start</value>
+  </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Path</value>
   </data>
