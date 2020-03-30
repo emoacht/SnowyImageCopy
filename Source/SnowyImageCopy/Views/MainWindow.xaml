@@ -24,6 +24,8 @@
 
 	<i:Interaction.Behaviors>
 		<behaviors:WindowActivationBehavior SenderObject="{Binding Op}" EventName="ActivateRequested"/>
+		<behaviors:WindowSizeBehavior WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MainWindowRoot, Mode=OneWay}"
+									  SystemDpi="{Binding WindowHandler.SystemDpi, ElementName=MainWindowRoot, Mode=OneWay}"/>
 	</i:Interaction.Behaviors>
 
 	<Grid x:Name="LayoutRoot"

@@ -157,6 +157,7 @@
     <Compile Include="Views\Behaviors\SelectorSelectedItemBehavior.cs" />
     <Compile Include="Views\Behaviors\WebBrowserBehavior.cs" />
     <Compile Include="Views\Behaviors\WindowActivationBehavior.cs" />
+    <Compile Include="Views\Behaviors\WindowSizeBehavior.cs" />
     <Compile Include="Views\Controls\BusyButton.cs" />
     <Compile Include="Views\Controls\CheckTextBox.cs" />
     <Compile Include="Views\Controls\CircularProgressBar.cs" />
