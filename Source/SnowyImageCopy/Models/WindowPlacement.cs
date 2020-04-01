@@ -11,6 +11,8 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Xml;
 
+using MonitorAware.Models;
+
 namespace SnowyImageCopy.Models
 {
 	/// <summary>
@@ -48,6 +50,12 @@ namespace SnowyImageCopy.Models
 		{
 			public int x;
 			public int y;
+
+			public POINT(int x, int y)
+			{
+				this.x = x;
+				this.y = y;
+			}
 		}
 
 		[Serializable]
@@ -58,6 +66,17 @@ namespace SnowyImageCopy.Models
 			public int top;
 			public int right;
 			public int bottom;
+
+			public RECT(int left, int top, int right, int bottom)
+			{
+				this.left = left;
+				this.top = top;
+				this.right = right;
+				this.bottom = bottom;
+			}
+
+			public int Width => right - left;
+			public int Height => bottom - top;
 		}
 
 		private enum SW
@@ -77,11 +96,37 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
+		#region Type
+
+		[DataContract]
+		private class Container
+		{
+			[DataMember]
+			public WINDOWPLACEMENT Placement { get; private set; }
+
+			[DataMember]
+			public Point Scale { get; private set; }
+
+			public Container(WINDOWPLACEMENT placement, Point scale)
+			{
+				this.Placement = placement;
+				this.Scale = scale;
+			}
+		}
+
+		#endregion
+
 		#region Load/Save
 
 		public static void Load(Window window, bool isNormal = true)
 		{
-			if (!TryLoad(out WINDOWPLACEMENT placement))
+			if (!TryLoad(out Container container))
+				return;
+
+			var placement = container.Placement;
+
+			var scale = GetScale(placement.rcNormalPosition);
+			if (scale != container.Scale)
 				return;
 
 			var handle = new WindowInteropHelper(window).Handle;
@@ -99,7 +144,14 @@ namespace SnowyImageCopy.Models
 
 			GetWindowPlacement(handle, out WINDOWPLACEMENT placement);
 
-			Save(placement);
+			var scale = GetScale(window);
+			if ((scale.X != 1) || (scale.Y != 1))
+			{
+				placement.rcNormalPosition.right = placement.rcNormalPosition.left + (int)(placement.rcNormalPosition.Width / scale.X);
+				placement.rcNormalPosition.bottom = placement.rcNormalPosition.top + (int)(placement.rcNormalPosition.Height / scale.Y);
+			}
+
+			Save(new Container(placement, scale));
 		}
 
 		private const string PlacementFileName = "placement.xml";
@@ -150,6 +202,34 @@ namespace SnowyImageCopy.Models
 			{
 				Debug.WriteLine($"Failed to save window placement.\r\n{ex}");
 			}
+		}
+
+		#endregion
+
+		#region Scale
+
+		private static Point GetScale(Window window)
+		{
+			var windowDpi = DpiChecker.GetDpiFromVisual(window);
+
+			return GetScaleBase(windowDpi);
+		}
+
+		private static Point GetScale(RECT rect)
+		{
+			var monitorDpi = DpiChecker.GetDpiFromRect(new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top));
+
+			return GetScaleBase(monitorDpi);
+		}
+
+		private static Point GetScaleBase(Dpi monitorDpi)
+		{
+			var systemDpi = DpiChecker.GetSystemDpi();
+
+			// Use Point structure as container of a combination of doubles.
+			return new Point(
+				(double)monitorDpi.X / systemDpi.X,
+				(double)monitorDpi.X / systemDpi.Y);
 		}
 
 		#endregion
