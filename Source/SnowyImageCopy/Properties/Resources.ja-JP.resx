@@ -246,14 +246,14 @@
   <data name="Options_LocalFolder" xml:space="preserve">
     <value>ローカルフォルダー (コピー先)</value>
   </data>
+  <data name="Options_LocalFolderTitle" xml:space="preserve">
+    <value>ローカルフォルダーを選択</value>
+  </data>
   <data name="Options_Browse" xml:space="preserve">
     <value>参照</value>
   </data>
   <data name="Options_OpenByExplorer" xml:space="preserve">
     <value>エクスプローラーで開く</value>
-  </data>
-  <data name="Options_LocalFolderExplanation" xml:space="preserve">
-    <value>イメージをコピーするフォルダーを指定してください。</value>
   </data>
   <data name="Options_Date" xml:space="preserve">
     <value>日付</value>

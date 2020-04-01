@@ -250,14 +250,14 @@
   <data name="Options_LocalFolder" xml:space="preserve">
     <value>Local Folder (Copy Destination)</value>
   </data>
+  <data name="Options_LocalFolderTitle" xml:space="preserve">
+    <value>Select local folder</value>
+  </data>
   <data name="Options_Browse" xml:space="preserve">
     <value>Browse</value>
   </data>
   <data name="Options_OpenByExplorer" xml:space="preserve">
     <value>Open by Explorer</value>
-  </data>
-  <data name="Options_LocalFolderExplanation" xml:space="preserve">
-    <value>Specify a folder to copy images.</value>
   </data>
   <data name="Options_Date" xml:space="preserve">
     <value>Date</value>

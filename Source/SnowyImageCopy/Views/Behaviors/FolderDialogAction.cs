@@ -7,26 +7,28 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Xaml.Behaviors;
 
+using SnowyImageCopy.Helper;
+
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
-	/// Opens folder browser dialog.
+	/// Opens folder dialog.
 	/// </summary>
 	public class FolderDialogAction : TriggerAction<DependencyObject>
 	{
 		#region Property
 
 		/// <summary>
-		/// Explanation shown in the dialog.
+		/// Title shown in the dialog
 		/// </summary>
-		public string Explanation
+		public string Title
 		{
-			get { return (string)GetValue(ExplanationProperty); }
-			set { SetValue(ExplanationProperty, value); }
+			get { return (string)GetValue(TitleProperty); }
+			set { SetValue(TitleProperty, value); }
 		}
-		public static readonly DependencyProperty ExplanationProperty =
+		public static readonly DependencyProperty TitleProperty =
 			DependencyProperty.Register(
-				"Explanation",
+				"Title",
 				typeof(string),
 				typeof(FolderDialogAction),
 				new PropertyMetadata(default(string)));
@@ -67,14 +69,14 @@ namespace SnowyImageCopy.Views.Behaviors
 				return null;
 			}
 
-			using var fbd = new System.Windows.Forms.FolderBrowserDialog
+			var ofd = new OpenFolderDialog
 			{
-				Description = Explanation,
-				SelectedPath = GetInitialPath(FolderPath)
+				Title = this.Title,
+				InitialPath = GetInitialPath(FolderPath),
 			};
-			if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			if (ofd.ShowDialog(Window.GetWindow(this.AssociatedObject)))
 			{
-				FolderPath = fbd.SelectedPath;
+				FolderPath = ofd.SelectedPath;
 			}
 		}
 	}

@@ -102,7 +102,7 @@
 							<i:Interaction.Triggers>
 								<i:EventTrigger EventName="Click">
 									<behaviors:FolderDialogAction
-										Explanation="{Binding Resources.Options_LocalFolderExplanation, Source={x:Static models:ResourceService.Current}}"
+										Title="{Binding Resources.Options_LocalFolderTitle, Source={x:Static models:ResourceService.Current}}"
 										FolderPath="{Binding Text, ElementName=LocalFolderTextBox}"/>
 								</i:EventTrigger>
 							</i:Interaction.Triggers>

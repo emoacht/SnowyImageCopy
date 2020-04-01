@@ -78,7 +78,6 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -108,6 +107,7 @@
     <Compile Include="Helper\FileAddition.cs" />
     <Compile Include="Helper\FileTime.cs" />
     <Compile Include="Helper\NativeWifi.cs" />
+    <Compile Include="Helper\OpenFolderDialog.cs" />
     <Compile Include="Helper\OsVersion.cs" />
     <Compile Include="Helper\PathAddition.cs" />
     <Compile Include="Helper\Recycle.cs" />

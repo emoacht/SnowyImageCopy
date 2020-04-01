@@ -575,11 +575,11 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify a folder to copy images..
+        ///   Looks up a localized string similar to Select local folder.
         /// </summary>
-        public static string Options_LocalFolderExplanation {
+        public static string Options_LocalFolderTitle {
             get {
-                return ResourceManager.GetString("Options_LocalFolderExplanation", resourceCulture);
+                return ResourceManager.GetString("Options_LocalFolderTitle", resourceCulture);
             }
         }
         
