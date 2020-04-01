@@ -674,15 +674,6 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify a WAVE file for notification..
-        /// </summary>
-        public static string Options_SoundExplanation {
-            get {
-                return ResourceManager.GetString("Options_SoundExplanation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to WAVE files (*.wav)|*.wav|All files (*.*)|*.*.
         /// </summary>
         public static string Options_SoundFilter {
@@ -706,6 +697,15 @@ namespace SnowyImageCopy.Properties {
         public static string Options_SoundPlay {
             get {
                 return ResourceManager.GetString("Options_SoundPlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open WAVE file.
+        /// </summary>
+        public static string Options_SoundTitle {
+            get {
+                return ResourceManager.GetString("Options_SoundTitle", resourceCulture);
             }
         }
         

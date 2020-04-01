@@ -18,16 +18,16 @@ namespace SnowyImageCopy.Views.Behaviors
 		#region Property
 
 		/// <summary>
-		/// Explanation shown in the dialog.
+		/// Title shown in the dialog
 		/// </summary>
-		public string Explanation
+		public string Title
 		{
-			get { return (string)GetValue(ExplanationProperty); }
-			set { SetValue(ExplanationProperty, value); }
+			get { return (string)GetValue(TitleProperty); }
+			set { SetValue(TitleProperty, value); }
 		}
-		public static readonly DependencyProperty ExplanationProperty =
+		public static readonly DependencyProperty TitleProperty =
 			DependencyProperty.Register(
-				"Explanation",
+				"Title",
 				typeof(string),
 				typeof(FileDialogAction),
 				new PropertyMetadata(default(string)));
@@ -82,9 +82,9 @@ namespace SnowyImageCopy.Views.Behaviors
 
 			var ofd = new OpenFileDialog
 			{
-				Title = Explanation,
-				InitialDirectory = GetInitialPath(FilePath),
-				Filter = this.Filter
+				Title = this.Title,
+				Filter = this.Filter,
+				InitialDirectory = GetInitialPath(FilePath)
 			};
 			if (ofd.ShowDialog(Window.GetWindow(this.AssociatedObject)) == true)
 			{

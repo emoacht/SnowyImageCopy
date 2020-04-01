@@ -315,9 +315,6 @@
   <data name="Options_SoundCopyStarted" xml:space="preserve">
     <value>コピーを開始</value>
   </data>
-  <data name="Options_SoundExplanation" xml:space="preserve">
-    <value>通知のためのWAVEファイルを指定してください。</value>
-  </data>
   <data name="Options_SoundFilter" xml:space="preserve">
     <value>WAVEファイル (*.wav)|*.wav|すべてのファイル (*.*)|*.*</value>
   </data>
@@ -326,6 +323,9 @@
   </data>
   <data name="Options_SoundPlay" xml:space="preserve">
     <value>通知音を鳴らす</value>
+  </data>
+  <data name="Options_SoundTitle" xml:space="preserve">
+    <value>WAVEファイルを開く</value>
   </data>
   <data name="Options_Test" xml:space="preserve">
     <value>テスト</value>

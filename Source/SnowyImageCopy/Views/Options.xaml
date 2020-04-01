@@ -312,7 +312,7 @@
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
 										<behaviors:FileDialogAction
-											Explanation="{Binding Resources.Options_SoundExplanation, Source={x:Static models:ResourceService.Current}}"
+											Title="{Binding Resources.Options_SoundTitle, Source={x:Static models:ResourceService.Current}}"
 											Filter="{Binding Resources.Options_SoundFilter, Source={x:Static models:ResourceService.Current}}"
 											FilePath="{Binding SettingsCurrent.CopyStarted}"/>
 									</i:EventTrigger>
@@ -344,7 +344,7 @@
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
 										<behaviors:FileDialogAction
-											Explanation="{Binding Resources.Options_SoundExplanation, Source={x:Static models:ResourceService.Current}}"
+											Title="{Binding Resources.Options_SoundTitle, Source={x:Static models:ResourceService.Current}}"
 											Filter="{Binding Resources.Options_SoundFilter, Source={x:Static models:ResourceService.Current}}"
 											FilePath="{Binding SettingsCurrent.OneCopied}"/>
 									</i:EventTrigger>
@@ -376,7 +376,7 @@
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
 										<behaviors:FileDialogAction
-											Explanation="{Binding Resources.Options_SoundExplanation, Source={x:Static models:ResourceService.Current}}"
+											Title="{Binding Resources.Options_SoundTitle, Source={x:Static models:ResourceService.Current}}"
 											Filter="{Binding Resources.Options_SoundFilter, Source={x:Static models:ResourceService.Current}}"
 											FilePath="{Binding SettingsCurrent.AllCopied}"/>
 									</i:EventTrigger>
