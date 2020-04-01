@@ -85,15 +85,31 @@ a:active {color: black; background: rgb(194,224,255);}
   <li>If you usually delete images in FlashAir after copied to PC, it is recommended not to use "Move to Recycle Bin if image in FlashAir is deleted" function.</li>
 </ol>
 
-<a id="delete"></a><h2>Delete On Copy</h2>
+<a id="delete"></a><h2>Delete image in FlashAir</h2>
 
 <ul>
-  <li>"Delete On Copy" function tries to delete an image in FlashAir after it is copied to PC.</li>
+  <li>This function tries to delete an image in FlashAir after it is copied to PC.</li>
   <li>It is essential to test this function with your camera before actual use. Since this function uses upload.cgi of FlashAir and it may cause inconsistency of data between FlashAir and camera, <span style="color:red">file system of FlashAir and stored images might be destroyed.</span> What will happen depends on each camera model.</li>
-  <li>If upload.cgi of FlashAir is disabled, this function will fail. To check or change this setting, insert FlashAir to PC and use Card function. Or open CONFIG file in FlashAir and directly check UPLOAD parameter.</li>
-  <li>In many cases, you need to reboot a camera to make it recognize the deletion by this function.</li>
+  <li>If upload.cgi of FlashAir is disabled, this function will fail. To check or change this setting, insert FlashAir to PC and use Card function. Or open CONFIG file in FlashAir and directly check UPLOAD parameter (1 means enabled).</li>
+  <li>In most cases, you need to reboot a camera to make it recognize the deletion by this function.</li>
   <li>An image with Read-only attribute will not be deleted.</li>
-  <li>To use this function, turn on "Enable to choose to delete image in FlashAir on copy" button and type "DELETE" (all uppercase) in the text box. "Delete On Copy" button will appear. So change it to on.</li>
+  <li>To use this function, turn on "Choose to delete image in FlashAir on copy" button and type "DELETE" (all uppercase) into the text box which appears next to "Delete image in FlashAir on copy". Then this function will be turned on.</li>
+</ul>
+
+<h2>Card</h2>
+
+<h3>FlashAir card (remote)</h3>
+
+<ul>
+  <li>The information on FlashAir which is connected by a wireless connection will be shown. This includes SSID and current free space.</li>
+</ul>
+
+<h3>FlashAir card (local)</h3>
+
+<ul>
+  <li>The information on FlashAir which is inserted to PC will be shown. In addition, you can change commonly used settings of CONFIG file such as wireless modes.</li>
+  <li>To reflect changed settings, you need to reboot FlashAir. Once rebooted, the network security key will be saved in the protected area and the value in CONFIG file will be replaced with symbols and so you will no longer able to see it. If you lose the key, you will need to set again.</li>
+  <li><u>Internet pass-thru mode</u> is a function which enables the connection from PC to the Internet via FlashAir by connecting PC to the access point built into FlashAir and simultaneously connecting FlashAir to another access point provided that such another access point is connected to the Internet. Therefore, settings for both access points are required.</li>
 </ul>
 
 <h2>Command Line</h2>
