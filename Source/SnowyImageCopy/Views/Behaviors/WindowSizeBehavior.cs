@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+
 using Microsoft.Xaml.Behaviors;
 
 using MonitorAware.Models;
@@ -18,31 +19,31 @@ namespace SnowyImageCopy.Views.Behaviors
 	{
 		#region Property
 
-		public Dpi WindowDpi
+		public DpiScale WindowDpi
 		{
-			get { return (Dpi)GetValue(WindowDpiProperty); }
+			get { return (DpiScale)GetValue(WindowDpiProperty); }
 			set { SetValue(WindowDpiProperty, value); }
 		}
 		public static readonly DependencyProperty WindowDpiProperty =
 			DependencyProperty.Register(
 				"WindowDpi",
-				typeof(Dpi),
+				typeof(DpiScale),
 				typeof(WindowSizeBehavior),
 				new PropertyMetadata(
-					Dpi.Default,
-					(d, e) => ((WindowSizeBehavior)d).AdjustMinSize((Dpi)e.NewValue)));
+					DpiHelper.Identity,
+					(d, e) => ((WindowSizeBehavior)d).AdjustMinSize((DpiScale)e.NewValue)));
 
-		public Dpi SystemDpi
+		public DpiScale SystemDpi
 		{
-			get { return (Dpi)GetValue(SystemDpiProperty); }
+			get { return (DpiScale)GetValue(SystemDpiProperty); }
 			set { SetValue(SystemDpiProperty, value); }
 		}
 		public static readonly DependencyProperty SystemDpiProperty =
 			DependencyProperty.Register(
 				"SystemDpi",
-				typeof(Dpi),
+				typeof(DpiScale),
 				typeof(WindowSizeBehavior),
-				new PropertyMetadata(Dpi.Default));
+				new PropertyMetadata(DpiHelper.Identity));
 
 		#endregion
 
@@ -66,15 +67,15 @@ namespace SnowyImageCopy.Views.Behaviors
 			AdjustMinSize(WindowDpi);
 		}
 
-		private void AdjustMinSize(Dpi windowDpi)
+		private void AdjustMinSize(DpiScale windowDpi)
 		{
 			if (this.AssociatedObject is null)
 				return;
 
 			// This calculation is incorrect because it doesn't take into account DWM window bounds.
 			// However, it would be enough for settings MinWidth and MinHeight.
-			this.AssociatedObject.MinWidth = _defaultMinWidth * windowDpi.X / SystemDpi.X;
-			this.AssociatedObject.MinHeight = _defaultMinHeight * windowDpi.Y / SystemDpi.Y;
+			this.AssociatedObject.MinWidth = _defaultMinWidth * windowDpi.DpiScaleX / SystemDpi.DpiScaleX;
+			this.AssociatedObject.MinHeight = _defaultMinHeight * windowDpi.DpiScaleY / SystemDpi.DpiScaleY;
 		}
 	}
 }

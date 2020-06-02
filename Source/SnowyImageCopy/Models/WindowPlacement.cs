@@ -210,26 +210,26 @@ namespace SnowyImageCopy.Models
 
 		private static Point GetScale(Window window)
 		{
-			var windowDpi = DpiChecker.GetDpiFromVisual(window);
+			var windowDpi = DpiHelper.GetDpiFromVisual(window);
 
 			return GetScaleBase(windowDpi);
 		}
 
 		private static Point GetScale(RECT rect)
 		{
-			var monitorDpi = DpiChecker.GetDpiFromRect(new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top));
+			var monitorDpi = DpiHelper.GetDpiFromRect(new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top));
 
 			return GetScaleBase(monitorDpi);
 		}
 
-		private static Point GetScaleBase(Dpi monitorDpi)
+		private static Point GetScaleBase(DpiScale monitorDpi)
 		{
-			var systemDpi = DpiChecker.GetSystemDpi();
+			var systemDpi = DpiHelper.SystemDpi;
 
 			// Use Point structure as container of a combination of doubles.
 			return new Point(
-				(double)monitorDpi.X / systemDpi.X,
-				(double)monitorDpi.X / systemDpi.Y);
+				monitorDpi.DpiScaleX / systemDpi.DpiScaleX,
+				monitorDpi.DpiScaleY / systemDpi.DpiScaleY);
 		}
 
 		#endregion

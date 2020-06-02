@@ -1,18 +1,19 @@
-﻿<ma:MonitorAwareWindow x:Class="SnowyImageCopy.Views.MainWindow"
-					   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-					   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-					   xmlns:ma="clr-namespace:MonitorAware.Views;assembly=MonitorAware"
-					   xmlns:views="clr-namespace:SnowyImageCopy.Views"
-					   xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
-					   xmlns:models="clr-namespace:SnowyImageCopy.Models"
-					   xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
-					   xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
-					   x:Name="MainWindowRoot"
-					   Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
-					   FontFamily="Segoe UI"
-					   Width="720" Height="480" MinWidth="640" MinHeight="280"
-					   Icon="/SnowyImageCopy;component/Resources/Feather.ico">
+﻿<se:SlateWindow x:Class="SnowyImageCopy.Views.MainWindow"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+				xmlns:ma="clr-namespace:MonitorAware;assembly=MonitorAware"
+				xmlns:se="clr-namespace:SlateElement;assembly=SlateElement"
+				xmlns:views="clr-namespace:SnowyImageCopy.Views"
+				xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
+				xmlns:models="clr-namespace:SnowyImageCopy.Models"
+				xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
+				xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
+				x:Name="MainWindowRoot"
+				Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
+				FontFamily="Segoe UI"
+				Width="720" Height="480" MinWidth="640" MinHeight="280"
+				Icon="/SnowyImageCopy;component/Resources/Feather.ico">
 	<Window.DataContext>
 		<viewModels:MainWindowViewModel/>
 	</Window.DataContext>
@@ -22,10 +23,14 @@
 						 ProgressValue="{Binding Op.ProgressCopiedCurrent, Converter={StaticResource DoubleDigitsConverterKey}}"/>
 	</Window.TaskbarItemInfo>
 
+	<ma:MonitorAwareProperty.Instance>
+		<ma:MonitorAwareProperty x:Name="MonitorProperty"/>
+	</ma:MonitorAwareProperty.Instance>	
+
 	<i:Interaction.Behaviors>
 		<behaviors:WindowActivationBehavior SenderObject="{Binding Op}" EventName="ActivateRequested"/>
-		<behaviors:WindowSizeBehavior WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MainWindowRoot, Mode=OneWay}"
-									  SystemDpi="{Binding WindowHandler.SystemDpi, ElementName=MainWindowRoot, Mode=OneWay}"/>
+		<behaviors:WindowSizeBehavior WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}"
+									  SystemDpi="{Binding WindowHandler.SystemDpi, ElementName=MonitorProperty, Mode=OneWay}"/>
 	</i:Interaction.Behaviors>
 
 	<Grid x:Name="GroundRoot"
@@ -183,7 +188,7 @@
 							x:Name="CardButtonIntersectionBehavior"
 							TargetElement ="{Binding ElementName=CommandsAndProgress}"
 							ExpandedMargin="12,0,0,0"
-							WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MainWindowRoot, Mode=OneWay}">
+							WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}">
 							<behaviors:FrameworkElementIntersectionBehavior.TriggerObject>
 								<MultiBinding Converter="{StaticResource ObjectArrayConverterKey}">
 									<Binding ElementName="ImageListView" Path="ActualWidth"/>
@@ -287,7 +292,7 @@
 								x:Name="CurrentImageTabIntersectionBehavior"
 								TargetElement ="{Binding ElementName=CommandsAndProgress}"
 								ExpandedMargin="-2,24,0,0"
-								WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MainWindowRoot, Mode=OneWay}">
+								WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}">
 								<behaviors:FrameworkElementIntersectionBehavior.TriggerObject>
 									<MultiBinding Converter="{StaticResource ObjectArrayConverterKey}">
 										<Binding ElementName="LayoutRoot" Path="ActualWidth" Mode="OneTime"/>
@@ -432,8 +437,8 @@
 								<behaviors:WebBrowserBehavior
 									SourcePath="{Binding Document.SourcePath, Mode=OneWay}"
 									SourceText="{Binding Document.SourceText, Mode=OneWay}"
-									WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MainWindowRoot, Mode=OneWay}"
-									SystemDpi="{Binding WindowHandler.SystemDpi, ElementName=MainWindowRoot, Mode=OneWay}"/>
+									WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}"
+									SystemDpi="{Binding WindowHandler.SystemDpi, ElementName=MonitorProperty, Mode=OneWay}"/>
 							</i:Interaction.Behaviors>
 						</WebBrowser>
 					</Border>
@@ -489,4 +494,4 @@
 			</Grid>
 		</Grid>
 	</Grid>
-</ma:MonitorAwareWindow>
+</se:SlateWindow>

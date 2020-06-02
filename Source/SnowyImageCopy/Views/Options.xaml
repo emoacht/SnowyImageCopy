@@ -5,7 +5,7 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
-			 xmlns:ma="clr-namespace:MonitorAware.Views;assembly=MonitorAware"
+			 xmlns:ma="clr-namespace:MonitorAware;assembly=MonitorAware"
 			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
 			 xmlns:models="clr-namespace:SnowyImageCopy.Models"
 			 xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
@@ -415,8 +415,8 @@
 						</Run>
 					</TextBlock>
 					<TextBlock Margin="0,2">
-						<Run Text="{Binding WindowHandler.SystemDpi.X, RelativeSource={RelativeSource AncestorType=ma:MonitorAwareWindow}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
-						<Run Text="{Binding WindowHandler.MonitorDpi.X, RelativeSource={RelativeSource AncestorType=ma:MonitorAwareWindow}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
+						<Run Text="{Binding (ma:MonitorAwareProperty.Instance).WindowHandler.SystemDpi.PixelsPerInchX, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
+						<Run Text="{Binding (ma:MonitorAwareProperty.Instance).WindowHandler.MonitorDpi.PixelsPerInchX, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
 					</TextBlock>
 				</StackPanel>
 			</GroupBox>

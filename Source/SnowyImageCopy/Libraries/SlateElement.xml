@@ -1,0 +1,526 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SlateElement</name>
+    </assembly>
+    <members>
+        <member name="T:SlateElement.Helper.BrushExtension">
+            <summary>
+            Extension method for <see cref="T:System.Windows.Media.Brush"/>
+            </summary>
+        </member>
+        <member name="M:SlateElement.Helper.BrushExtension.IsTransparent(System.Windows.Media.Brush)">
+            <summary>
+            Determines whether a Brush is Transparent.
+            </summary>
+            <param name="source">Source Brush</param>
+            <returns>True if Transparent</returns>
+        </member>
+        <member name="T:SlateElement.Helper.ColorExtension">
+            <summary>
+            Extension methods for <see cref="T:System.Windows.Media.Color"/>
+            </summary>
+        </member>
+        <member name="M:SlateElement.Helper.ColorExtension.ToOpaque(System.Windows.Media.Color)">
+            <summary>
+            Converts a Color to an opaque Color using white background.
+            </summary>
+            <param name="source">Source Color</param>
+            <returns>Opaque Color</returns>
+        </member>
+        <member name="M:SlateElement.Helper.ColorExtension.ToBlended(System.Windows.Media.Color,System.Windows.Media.Color,System.Double)">
+            <summary>
+            Converts two Colors to a blended Color ignoring alpha channel.
+            </summary>
+            <param name="source">Source Color</param>
+            <param name="target">Target Color</param>
+            <param name="targetPerc">Percentage of target Color</param>
+            <returns>Blended Color</returns>
+            <remarks>Alpha channels of both Colors will be ignored.</remarks>
+        </member>
+        <member name="M:SlateElement.Helper.ColorExtension.BlendColor(System.Windows.Media.Color,System.Windows.Media.Color,System.Double)">
+            <summary>
+            Blends two Colors.
+            </summary>
+            <param name="color1">1st Color</param>
+            <param name="color2">2nd Color</param>
+            <param name="color2Perc">Percentage of 2nd Color</param>
+            <returns>Blended Color</returns>
+            <remarks>Alpha channels of both Colors will be ignored.</remarks>
+        </member>
+        <member name="T:SlateElement.Helper.ResourceExtension">
+            <summary>
+            Extension methods for <see cref="T:System.Windows.FrameworkElement"/> to manage resources
+            </summary>
+        </member>
+        <member name="M:SlateElement.Helper.ResourceExtension.ApplyResource(System.Windows.Application,System.String,System.String)">
+            <summary>
+            Adds/Removes resources to/from <see cref="T:System.Windows.Application"/> resources.
+            </summary>
+            <param name="app">Target Application</param>
+            <param name="newUriString">URI string of new resources to be added</param>
+            <param name="oldUriString">URI string of old resources to be removed (case-sensitive)</param>
+        </member>
+        <member name="M:SlateElement.Helper.ResourceExtension.ApplyResource(System.Windows.Controls.ContentControl,System.String,System.String)">
+            <summary>
+            Adds/Removes resources to/from <see cref="T:System.Windows.Controls.ContentControl"/> resources.
+            </summary>
+            <param name="control">Target ContentControl</param>
+            <param name="newUriString">Uri string of new resources to be added</param>
+            <param name="oldUriString">Uri string of old resources to be removed (case-sensitive)</param>
+        </member>
+        <member name="T:SlateElement.Helper.WindowChromeColor">
+            <summary>
+            Window chrome color information
+            </summary>
+        </member>
+        <member name="M:SlateElement.Helper.WindowChromeColor.TryGetChromeColor(System.Windows.Media.Color@)">
+            <summary>
+            Attemps to get OS's window chrome Color.
+            </summary>
+            <param name="chromeColor">Window chrome Color</param>
+            <returns>True if successfully gets. False otherwise.</returns>		
+        </member>
+        <member name="M:SlateElement.Helper.WindowChromeColor.GetChromeColor">
+            <summary>
+            Gets OS's window chrome Color.
+            </summary>
+            <returns>If successfully gets, window chrome Color. If not, null.</returns>
+            <remarks>This method is intended to get window chrome Color of Windows 8 or newer.</remarks>
+        </member>
+        <member name="F:SlateElement.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONULL">
+            <summary>
+            If no display monitor intersects, returns null.
+            </summary>
+        </member>
+        <member name="F:SlateElement.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTOPRIMARY">
+            <summary>
+            If no display monitor intersects, returns a handle to the primary display monitor.
+            </summary>
+        </member>
+        <member name="F:SlateElement.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONEAREST">
+            <summary>
+            If no display monitor intersects, returns a handle to the display monitor that is nearest to the rectangle.
+            </summary>
+        </member>
+        <member name="T:SlateElement.Models.DpiHelper">
+            <summary>
+            Utility methods for <see cref="T:System.Windows.DpiScale"/>
+            </summary>
+        </member>
+        <member name="M:SlateElement.Models.DpiHelper.GetSystemDpi(System.Windows.Media.Visual)">
+            <summary>
+            Gets system DPI.
+            </summary>
+            <param name="visual">Source Visual</param>
+            <returns>DPI scale information</returns>
+        </member>
+        <member name="T:SlateElement.Models.WindowHelper">
+            <summary>
+            Utility methods for <see cref="T:System.Windows.Window"/>
+            </summary>
+        </member>
+        <member name="M:SlateElement.Models.WindowHelper.TryGetMousePoint(System.Windows.Point@)">
+            <summary>
+            Attemps to get the mouse cursor point in screen.
+            </summary>
+            <param name="point">Mouse cursor point</param>
+            <returns>True if successfully gets. False otherwise.</returns>
+        </member>
+        <member name="M:SlateElement.Models.WindowHelper.TryGetWindowRect(System.IntPtr,System.Windows.Rect@)">
+            <summary>
+            Attemps to get a specified Window's current rectangle.
+            </summary>
+            <param name="windowHandle">Window's handle</param>
+            <param name="rect">Window's rectangle</param>
+            <returns>True if successfully gets. False otherwise.</returns>
+        </member>
+        <member name="M:SlateElement.Models.WindowHelper.TryGetWindowNormalRect(System.IntPtr,System.Windows.Rect@)">
+            <summary>
+            Attemps to get a specified Window's normal (restore) rectangle.
+            </summary>
+            <param name="windowHandle">Window's handle</param>
+            <param name="rect">Window's rectangle</param>
+            <returns>True if successfully gets. False otherwise.</returns>
+        </member>
+        <member name="M:SlateElement.Models.WindowHelper.SetWindowNormalRect(System.IntPtr,System.Windows.Rect)">
+            <summary>
+            Sets a specified Window's normal rectangle changing the window to normal state.
+            </summary>
+            <param name="windowHandle">Window's handle</param>
+            <param name="rect">Window's rectangle</param>
+            <returns>True if successfully sets. False otherwise.</returns>
+        </member>
+        <member name="M:SlateElement.Models.WindowHelper.TryGetMonitorRect(System.IntPtr,System.Windows.Rect@,System.Windows.Rect@,System.Boolean@)">
+            <summary>
+            Attemps to get the monitor's rectangles to which a specified Window belongs.
+            </summary>
+            <param name="windowHandle">Window's handle</param>
+            <param name="monitorRect">Monitor's (full) rectangle</param>
+            <param name="workRect">Work area's rectangle inside monitor's rectangle</param>
+            <param name="isPrimary">Whether the monitor is the primary monitor</param>
+            <returns>True if successfully gets. False otherwise.</returns>
+        </member>
+        <member name="M:SlateElement.Models.WindowHelper.TryGetMonitorRect(System.Windows.Point,System.Windows.Rect@,System.Windows.Rect@,System.Boolean@)">
+            <summary>
+            Attemps to get the monitor's rectangles to which a specified point belongs.
+            </summary>
+            <param name="point">Point</param>
+            <param name="monitorRect">Monitor's (full) rectangle</param>
+            <param name="workRect">Work area's rectangle inside monitor's rectangle</param>
+            <param name="isPrimary">Whether the monitor is the primary monitor</param>
+            <returns>True if successfully gets. False otherwise.</returns>
+        </member>
+        <member name="T:SlateElement.SlateCaptionButtonType">
+            <summary>
+            Caption Button types
+            </summary>
+        </member>
+        <member name="F:SlateElement.SlateCaptionButtonType.None">
+            <summary>
+            None
+            </summary>
+        </member>
+        <member name="F:SlateElement.SlateCaptionButtonType.Minimize">
+            <summary>
+            Minimize Button
+            </summary>
+        </member>
+        <member name="F:SlateElement.SlateCaptionButtonType.Maximize">
+            <summary>
+            Maximize Button
+            </summary>
+        </member>
+        <member name="F:SlateElement.SlateCaptionButtonType.Restore">
+            <summary>
+            Restore Button
+            </summary>
+        </member>
+        <member name="F:SlateElement.SlateCaptionButtonType.Close">
+            <summary>
+            Close Button
+            </summary>
+        </member>
+        <member name="T:SlateElement.SlateCaptionIcon">
+            <summary>
+            Control for caption icon image
+            </summary>
+            <remarks>This Control is for maintaining caption icon shape regardless of DPI.</remarks>
+        </member>
+        <member name="M:SlateElement.SlateCaptionIcon.OnInitialized(System.EventArgs)">
+            <summary>
+            OnInitialized
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateCaptionIcon.OnDpiChanged(System.Windows.DpiScale,System.Windows.DpiScale)">
+            <summary>
+            OnDpiChanged
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateCaptionIcon.OnRender(System.Windows.Media.DrawingContext)">
+            <summary>
+            OnRender
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateCaptionIcon.Draw(System.Windows.Media.DrawingContext,System.Double,System.Windows.Media.Brush)">
+            <summary>
+            Draws icon.
+            </summary>
+            <param name="drawingContext">DrawingContext of Control</param>
+            <param name="factor">Factor from identity DPI</param>
+            <param name="foreground">Icon foreground Brush</param>
+        </member>
+        <member name="T:SlateElement.SlateMaximizeCaptionIcon">
+            <summary>
+            Control for maximize caption icon image
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateMaximizeCaptionIcon.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateMaximizeCaptionIcon.Draw(System.Windows.Media.DrawingContext,System.Double,System.Windows.Media.Brush)">
+            <summary>
+            Draws maximize icon.
+            </summary>
+            <param name="drawingContext">DrawingContext of Control</param>
+            <param name="factor">Factor from identity DPI</param>
+            <param name="foreground">Icon foreground Brush</param>
+            <remarks>This drawing assumes that its size is 10x10.</remarks>
+        </member>
+        <member name="T:SlateElement.SlateMinimizeCaptionIcon">
+            <summary>
+            Control for minimize caption icon image
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateMinimizeCaptionIcon.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateMinimizeCaptionIcon.Draw(System.Windows.Media.DrawingContext,System.Double,System.Windows.Media.Brush)">
+            <summary>
+            Draws minimize icon.
+            </summary>
+            <param name="drawingContext">DrawingContext of Control</param>
+            <param name="factor">Factor from identity DPI</param>
+            <param name="foreground">Icon foreground Brush</param>
+            <remarks>This drawing assumes that its size is 10x10.</remarks>
+        </member>
+        <member name="T:SlateElement.SlateRestoreCaptionIcon">
+            <summary>
+            Control for restore caption icon image
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateRestoreCaptionIcon.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateRestoreCaptionIcon.Draw(System.Windows.Media.DrawingContext,System.Double,System.Windows.Media.Brush)">
+            <summary>
+            Draws restore icon.
+            </summary>
+            <param name="drawingContext">DrawingContext of Control</param>
+            <param name="factor">Factor from identity DPI</param>
+            <param name="foreground">Icon foreground Brush</param>
+            <remarks>This drawing assumes that its size is 10x10.</remarks>
+        </member>
+        <member name="T:SlateElement.SlateWindow">
+            <summary>
+            Customizable chrome Window
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="F:SlateElement.SlateWindow.PrototypeResourceUriString">
+            <summary>
+            URI string of prototype resources for SlateWindow's Style
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="resourceUriString">URI string of resources for SlateWindow's Style</param>
+        </member>
+        <member name="M:SlateElement.SlateWindow.OnApplyTemplate">
+            <summary>
+            OnApplyTemplate
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.OnSourceInitialized(System.EventArgs)">
+            <summary>
+            OnSourceInitialized
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.OnClosed(System.EventArgs)">
+            <summary>
+            OnClosed
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.WndProc(System.IntPtr,System.Int32,System.IntPtr,System.IntPtr,System.Boolean@)">
+            <summary>
+            Handles window messages.
+            </summary>
+            <param name="hwnd">The window handle</param>
+            <param name="msg">The message ID</param>
+            <param name="wParam">The message's wParam value</param>
+            <param name="lParam">The message's lParam value</param>
+            <param name="handled">Whether the message was handled</param>
+            <returns>Return value depending on the particular message</returns>
+            <remarks>This is an implementation of System.Windows.Interop.HwndSourceHook.</remarks>
+        </member>
+        <member name="M:SlateElement.SlateWindow.OnDpiChanged(System.Windows.DpiScale,System.Windows.DpiScale)">
+            <summary>
+            OnDpiChanged
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.OnStateChanged(System.EventArgs)">
+            <summary>
+            OnStateChanged
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.IsMaximized">
+            <summary>
+            Whether this Window is maximized
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.ChromeBorder">
+            <summary>
+            Window chrome outer border
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.ChromeGrid">
+            <summary>
+            Window chrome grid
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.TitleBarGrid">
+            <summary>
+            Title bar grid
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.TitleBarContentGrid">
+            <summary>
+            Title bar content grid
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.GetCaptionButton(System.Windows.Controls.Button)">
+            <summary>
+            Getter for CaptionButton
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.SetCaptionButton(System.Windows.Controls.Button,SlateElement.SlateCaptionButtonType)">
+            <summary>
+            Setter for CaptionButton
+            </summary>
+        </member>
+        <member name="F:SlateElement.SlateWindow.CaptionButtonProperty">
+            <summary>
+            Attached property for CaptionButton
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.CanMaximize">
+            <summary>
+            Whether a window can be maximized
+            </summary>
+            <remarks>
+            This property is useful to prevent a window from being maximized even if ResizeMode property
+            is CanResize or CanResizeWithGrip.
+            If ResizeMode property is such values and this property is false, maximize/restore buttons
+            will not be visible (Not OS's default). If ResizeMode property is CanMinimize, maximize button
+            will be visible but never be enabled (OS's default).
+            </remarks>
+        </member>
+        <member name="F:SlateElement.SlateWindow.CanMaximizeProperty">
+            <summary>
+            Dependency property for <see cref="P:SlateElement.SlateWindow.CanMaximize"/>
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.DefaultChromeBackground">
+            <summary>
+            OS's default chrome background Brush when a Window is activated (public readonly)
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.GetDefaultChromeBrush">
+            <summary>
+            Gets OS's default chrome Brush.
+            </summary>
+            <returns>If successfully gets, default chrome Brush. If not, null.</returns>
+        </member>
+        <member name="F:SlateElement.SlateWindow.DefaultChromeBackgroundPropertyKey">
+            <summary>
+            Dependency property for <see cref="P:SlateElement.SlateWindow.DefaultChromeBackground"/>
+            </summary>
+        </member>
+        <member name="F:SlateElement.SlateWindow.DefaultChromeBackgroundProperty">
+            <summary>
+            Dependency property for <see cref="P:SlateElement.SlateWindow.DefaultChromeBackground"/>
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.ChromeBackground">
+            <summary>
+            Chrome background Brush when a Window is activated
+            </summary>
+        </member>
+        <member name="F:SlateElement.SlateWindow.ChromeBackgroundProperty">
+            <summary>
+            Dependency property for <see cref="P:SlateElement.SlateWindow.ChromeBackground"/>
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.ChromeForeground">
+            <summary>
+            Chrome foreground Brush when a Window is activated
+            </summary>
+            <remarks>Default value (Black) is OS's default.</remarks>
+        </member>
+        <member name="F:SlateElement.SlateWindow.ChromeForegroundProperty">
+            <summary>
+            Dependency property for <see cref="P:SlateElement.SlateWindow.ChromeForeground"/>
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.ChromeBorderThickness">
+            <summary>
+            Chrome border thickness
+            </summary>
+            <remarks>Default value (1) is OS's default.</remarks>
+        </member>
+        <member name="F:SlateElement.SlateWindow.ChromeBorderThicknessProperty">
+            <summary>
+            Dependency property for <see cref="P:SlateElement.SlateWindow.ChromeBorderThickness"/>
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.ChromeBorderBrush">
+            <summary>
+            Chrome border Brush
+            </summary>
+            <remarks>Default value (#3C000000) is OS's default.</remarks>
+        </member>
+        <member name="F:SlateElement.SlateWindow._chromeBorderBrush">
+            <summary>
+            Default value of <see cref="P:SlateElement.SlateWindow.ChromeBorderBrush"/>
+            </summary>
+            <remarks>This value seems to have to be defined before dependency property.</remarks>
+        </member>
+        <member name="F:SlateElement.SlateWindow.ChromeBorderBrushProperty">
+            <summary>
+            Dependency property for <see cref="P:SlateElement.SlateWindow.ChromeBorderBrush"/>
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.TitleBarIcon">
+            <summary>
+            Title bar icon
+            </summary>
+        </member>
+        <member name="F:SlateElement.SlateWindow.TitleBarIconProperty">
+            <summary>
+            Dependency property for <see cref="P:SlateElement.SlateWindow.TitleBarIcon"/>
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.TitleBarContent">
+            <summary>
+            Title bar content
+            </summary>
+        </member>
+        <member name="F:SlateElement.SlateWindow.TitleBarContentProperty">
+            <summary>
+            Dependency property for <see cref="P:SlateElement.SlateWindow.TitleBarContent"/>
+            </summary>
+        </member>
+        <member name="P:SlateElement.SlateWindow.WindowDpi">
+            <summary>
+            This window's DPI
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.ManageChromeBorder(System.Windows.DpiScale)">
+            <summary>
+            Manages chrome outer border.
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.ManageTitleBarBackground">
+            <summary>
+            Manages title bar background.
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.ManageTitleBarContent">
+            <summary>
+            Manages title bar content.
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.OnMouseMove(System.Windows.Input.MouseEventArgs)">
+            <summary>
+            OnMouseMove
+            </summary>
+        </member>
+        <member name="M:SlateElement.SlateWindow.OnMouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            OnMouseLeftButtonUp
+            </summary>
+        </member>
+    </members>
+</doc>

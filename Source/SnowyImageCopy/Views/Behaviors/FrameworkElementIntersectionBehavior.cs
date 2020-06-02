@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+
 using Microsoft.Xaml.Behaviors;
 
 using MonitorAware.Models;
@@ -53,17 +54,17 @@ namespace SnowyImageCopy.Views.Behaviors
 				typeof(FrameworkElementIntersectionBehavior),
 				new PropertyMetadata(default(Thickness)));
 
-		public Dpi WindowDpi
+		public DpiScale WindowDpi
 		{
-			get { return (Dpi)GetValue(WindowDpiProperty); }
+			get { return (DpiScale)GetValue(WindowDpiProperty); }
 			set { SetValue(WindowDpiProperty, value); }
 		}
 		public static readonly DependencyProperty WindowDpiProperty =
 			DependencyProperty.Register(
 				"WindowDpi",
-				typeof(Dpi),
+				typeof(DpiScale),
 				typeof(FrameworkElementIntersectionBehavior),
-				new PropertyMetadata(Dpi.Default));
+				new PropertyMetadata(DpiHelper.Identity));
 
 		/// <summary>
 		/// Whether associated FrameworkElement is intersected with target FrameworkElement
@@ -129,7 +130,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		private bool IsElementIntersected()
 		{
 			// Compute factor from default DPI to Window DPI.
-			var factor = new { X = (double)WindowDpi.X / Dpi.Default.X, Y = (double)WindowDpi.Y / Dpi.Default.Y };
+			var factor = new { X = WindowDpi.DpiScaleX, Y = WindowDpi.DpiScaleY };
 
 			var associatedLocation = AssociatedElement.PointToScreen(default);
 			var expandedRect = new Rect(

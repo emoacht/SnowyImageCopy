@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+
 using Microsoft.Xaml.Behaviors;
 
 using MonitorAware.Models;
@@ -55,29 +56,29 @@ namespace SnowyImageCopy.Views.Behaviors
 				typeof(WebBrowserBehavior),
 				new PropertyMetadata(default(string)));
 
-		public Dpi WindowDpi
+		public DpiScale WindowDpi
 		{
-			get { return (Dpi)GetValue(WindowDpiProperty); }
+			get { return (DpiScale)GetValue(WindowDpiProperty); }
 			set { SetValue(WindowDpiProperty, value); }
 		}
 		public static readonly DependencyProperty WindowDpiProperty =
 			DependencyProperty.Register(
 				"WindowDpi",
-				typeof(Dpi),
+				typeof(DpiScale),
 				typeof(WebBrowserBehavior),
-				new PropertyMetadata(Dpi.Default));
+				new PropertyMetadata(DpiHelper.Identity));
 
-		public Dpi SystemDpi
+		public DpiScale SystemDpi
 		{
-			get { return (Dpi)GetValue(SystemDpiProperty); }
+			get { return (DpiScale)GetValue(SystemDpiProperty); }
 			set { SetValue(SystemDpiProperty, value); }
 		}
 		public static readonly DependencyProperty SystemDpiProperty =
 			DependencyProperty.Register(
 				"SystemDpi",
-				typeof(Dpi),
+				typeof(DpiScale),
 				typeof(WebBrowserBehavior),
-				new PropertyMetadata(Dpi.Default));
+				new PropertyMetadata(DpiHelper.Identity));
 
 		public int ZoomPercentage { get; private set; } = 100;
 
@@ -106,7 +107,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			if (!(bool)e.NewValue)
 				return;
 
-			var percentage = (int)Math.Round(WindowDpi.X * 100D / SystemDpi.X, MidpointRounding.AwayFromZero);
+			var percentage = (int)Math.Round(WindowDpi.DpiScaleX * 100D / SystemDpi.DpiScaleX, MidpointRounding.AwayFromZero);
 			if (ZoomPercentage != percentage)
 			{
 				// Load dummy text (neither null nor empty) and set zoom before loading actual file or text.
