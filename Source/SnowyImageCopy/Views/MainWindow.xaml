@@ -12,7 +12,7 @@
 				x:Name="MainWindowRoot"
 				Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
 				FontFamily="Segoe UI"
-				Width="720" Height="480" MinWidth="640" MinHeight="280"
+				Width="720" Height="480" MinWidth="626" MinHeight="280"
 				Icon="/SnowyImageCopy;component/Resources/Feather.ico">
 	<Window.DataContext>
 		<viewModels:MainWindowViewModel/>
@@ -25,12 +25,11 @@
 
 	<ma:MonitorAwareProperty.Instance>
 		<ma:MonitorAwareProperty x:Name="MonitorProperty"/>
-	</ma:MonitorAwareProperty.Instance>	
+	</ma:MonitorAwareProperty.Instance>
 
 	<i:Interaction.Behaviors>
 		<behaviors:WindowActivationBehavior SenderObject="{Binding Op}" EventName="ActivateRequested"/>
-		<behaviors:WindowSizeBehavior WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}"
-									  SystemDpi="{Binding WindowHandler.SystemDpi, ElementName=MonitorProperty, Mode=OneWay}"/>
+		<behaviors:WindowSizeBehavior ScaleFactor="{Binding WindowHandler.ScaleFactor, ElementName=MonitorProperty, Mode=OneWay}"/>
 	</i:Interaction.Behaviors>
 
 	<Grid x:Name="GroundRoot"

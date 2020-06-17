@@ -7,8 +7,6 @@ using System.Windows;
 
 using Microsoft.Xaml.Behaviors;
 
-using MonitorAware.Models;
-
 namespace SnowyImageCopy.Views.Behaviors
 {
 	/// <summary>
@@ -19,31 +17,19 @@ namespace SnowyImageCopy.Views.Behaviors
 	{
 		#region Property
 
-		public DpiScale WindowDpi
+		public Point ScaleFactor
 		{
-			get { return (DpiScale)GetValue(WindowDpiProperty); }
-			set { SetValue(WindowDpiProperty, value); }
+			get { return (Point)GetValue(ScaleFactorProperty); }
+			set { SetValue(ScaleFactorProperty, value); }
 		}
-		public static readonly DependencyProperty WindowDpiProperty =
+		public static readonly DependencyProperty ScaleFactorProperty =
 			DependencyProperty.Register(
-				"WindowDpi",
-				typeof(DpiScale),
+				"ScaleFactor",
+				typeof(Point),
 				typeof(WindowSizeBehavior),
 				new PropertyMetadata(
-					DpiHelper.Identity,
-					(d, e) => ((WindowSizeBehavior)d).AdjustMinSize((DpiScale)e.NewValue)));
-
-		public DpiScale SystemDpi
-		{
-			get { return (DpiScale)GetValue(SystemDpiProperty); }
-			set { SetValue(SystemDpiProperty, value); }
-		}
-		public static readonly DependencyProperty SystemDpiProperty =
-			DependencyProperty.Register(
-				"SystemDpi",
-				typeof(DpiScale),
-				typeof(WindowSizeBehavior),
-				new PropertyMetadata(DpiHelper.Identity));
+					new Point(1D, 1D),
+					(d, e) => ((WindowSizeBehavior)d).AdjustMinSize((Point)e.NewValue)));
 
 		#endregion
 
@@ -56,26 +42,15 @@ namespace SnowyImageCopy.Views.Behaviors
 
 			_defaultMinWidth = this.AssociatedObject.MinWidth;
 			_defaultMinHeight = this.AssociatedObject.MinHeight;
-
-			this.AssociatedObject.Activated += OnActivated;
 		}
 
-		private void OnActivated(object sender, EventArgs e)
-		{
-			this.AssociatedObject.Activated -= OnActivated;
-
-			AdjustMinSize(WindowDpi);
-		}
-
-		private void AdjustMinSize(DpiScale windowDpi)
+		private void AdjustMinSize(Point scaleFactor)
 		{
 			if (this.AssociatedObject is null)
 				return;
 
-			// This calculation is incorrect because it doesn't take into account DWM window bounds.
-			// However, it would be enough for settings MinWidth and MinHeight.
-			this.AssociatedObject.MinWidth = _defaultMinWidth * windowDpi.DpiScaleX / SystemDpi.DpiScaleX;
-			this.AssociatedObject.MinHeight = _defaultMinHeight * windowDpi.DpiScaleY / SystemDpi.DpiScaleY;
+			this.AssociatedObject.MinWidth = _defaultMinWidth * scaleFactor.X;
+			this.AssociatedObject.MinHeight = _defaultMinHeight * scaleFactor.Y;
 		}
 	}
 }
