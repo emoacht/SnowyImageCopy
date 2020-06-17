@@ -68,19 +68,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				typeof(WebBrowserBehavior),
 				new PropertyMetadata(DpiHelper.Identity));
 
-		public DpiScale SystemDpi
-		{
-			get { return (DpiScale)GetValue(SystemDpiProperty); }
-			set { SetValue(SystemDpiProperty, value); }
-		}
-		public static readonly DependencyProperty SystemDpiProperty =
-			DependencyProperty.Register(
-				"SystemDpi",
-				typeof(DpiScale),
-				typeof(WebBrowserBehavior),
-				new PropertyMetadata(DpiHelper.Identity));
-
-		public int ZoomPercentage { get; private set; } = 100;
+		public int ZoomPercentage { get; private set; } = 0;
 
 		#endregion
 
@@ -107,7 +95,9 @@ namespace SnowyImageCopy.Views.Behaviors
 			if (!(bool)e.NewValue)
 				return;
 
-			var percentage = (int)Math.Round(WindowDpi.DpiScaleX * 100D / SystemDpi.DpiScaleX, MidpointRounding.AwayFromZero);
+			// WebBrowser's default zoom seems to depend on System DPI and so must be set correctly
+			// when it is shown first time.
+			var percentage = (int)(WindowDpi.DpiScaleX * 100);
 			if (ZoomPercentage != percentage)
 			{
 				// Load dummy text (neither null nor empty) and set zoom before loading actual file or text.
@@ -141,6 +131,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			}
 
 			// Navigating event will be fired after exiting this method.
+
 		}
 
 		private void OnNavigating(object sender, NavigatingCancelEventArgs e)

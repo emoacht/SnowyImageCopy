@@ -436,8 +436,7 @@
 								<behaviors:WebBrowserBehavior
 									SourcePath="{Binding Document.SourcePath, Mode=OneWay}"
 									SourceText="{Binding Document.SourceText, Mode=OneWay}"
-									WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}"
-									SystemDpi="{Binding WindowHandler.SystemDpi, ElementName=MonitorProperty, Mode=OneWay}"/>
+									WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}"/>
 							</i:Interaction.Behaviors>
 						</WebBrowser>
 					</Border>
