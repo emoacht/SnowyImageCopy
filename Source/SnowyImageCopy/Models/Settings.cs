@@ -111,6 +111,8 @@ namespace SnowyImageCopy.Models
 		public string RemoteDescendant => _remoteDescendant ?? string.Empty;
 		private string _remoteDescendant;
 
+		internal (string remoteRoot, string remoteDescendant) RemoteRootDescendant => (RemoteRoot, RemoteDescendant);
+
 		private bool TryParseRemoteAddress(string source, out string root, out string descendant)
 		{
 			const string rootPattern = @"^https?://((?!/)\S){1,15}/";

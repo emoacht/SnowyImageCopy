@@ -14,6 +14,7 @@ using System.Windows.Shell;
 using System.Windows.Threading;
 
 using DesktopToast;
+
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models.Card;
@@ -442,6 +443,8 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_Checking;
 
+					_manager.Ensure(Settings.Current.RemoteRootDescendant, Settings.Current.TimeoutDuration);
+
 					var isUpdated = Card.CanGetWriteTimeStamp
 						? (await _manager.GetWriteTimeStampAsync(CancellationToken.None) != Card.WriteTimeStamp)
 						: await _manager.CheckUpdateStatusAsync();
@@ -770,6 +773,8 @@ namespace SnowyImageCopy.Models
 		{
 			OperationStatus = Resources.OperationStatus_Checking;
 
+			_manager.Ensure(Settings.Current.RemoteRootDescendant, Settings.Current.TimeoutDuration);
+
 			try
 			{
 				_tokenSourceWorking = new CancellationTokenSourcePlus();
@@ -1062,6 +1067,8 @@ namespace SnowyImageCopy.Models
 
 			OperationStatus = Resources.OperationStatus_Copying;
 
+			_manager.Ensure(Settings.Current.RemoteRootDescendant, Settings.Current.TimeoutDuration);
+
 			try
 			{
 				_tokenSourceWorking = new CancellationTokenSourcePlus();
@@ -1338,7 +1345,7 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		#region Helper
+		#region Local path
 
 		private const string UnknownFolderName = "Unknown"; // Folder name for an item whose date or time is invalid
 
@@ -1365,6 +1372,10 @@ namespace SnowyImageCopy.Models
 		/// <returns>Local file path</returns>
 		private static string ComposeDesktopPath(FileItemViewModel item) =>
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), item.FileNameWithCaseExtension);
+
+		#endregion
+
+		#region Local file
 
 		/// <summary>
 		/// Attempts to get FileInfo of a local file.
