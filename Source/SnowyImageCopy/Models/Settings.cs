@@ -99,7 +99,7 @@ namespace SnowyImageCopy.Models
 
 				_remoteAddress = root + descendant;
 				_remoteRoot = root;
-				_remoteDescendant = "/" + descendant.TrimEnd('/');
+				_remoteDescendant = string.IsNullOrEmpty(descendant) ? null : "/" + descendant.TrimEnd('/');
 				RaisePropertyChanged();
 			}
 		}
