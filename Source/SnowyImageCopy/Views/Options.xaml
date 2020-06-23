@@ -37,14 +37,14 @@
 					<TextBox x:Name="RemoteAddressTextBox"
 							 Margin="0,4,0,6"
 							 Padding="2" VerticalContentAlignment="Center"
-							 Text="{Binding SettingsCurrent.RemoteAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
+							 Text="{Binding Settings.RemoteAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
 
 					<TextBlock Text="{Binding Resources.Options_LocalFolder, Source={x:Static models:ResourceService.Current}}"/>
 					<TextBox x:Name="LocalFolderTextBox"
 							 Margin="0,4"
 							 Padding="2" VerticalContentAlignment="Center"
-							 Foreground="{Binding SettingsCurrent.IsLocalFolderValid, Mode=OneWay, Converter={StaticResource BooleanToBrushConverterKey}, ConverterParameter={StaticResource BrushSet}}"
-							 Text="{Binding SettingsCurrent.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
+							 Foreground="{Binding Settings.IsLocalFolderValid, Mode=OneWay, Converter={StaticResource BooleanToBrushConverterKey}, ConverterParameter={StaticResource BrushSet}}"
+							 Text="{Binding Settings.LocalFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=600}"/>
 					<StackPanel HorizontalAlignment="Right"
 								Orientation="Horizontal">
 						<Button	Margin="0,0,4,0"
@@ -96,7 +96,7 @@
 						</ListBox.Resources>
 					</ListBox>
 					<Grid Height="216" Margin="-4,0,0,2"
-						  Visibility="{Binding SettingsCurrent.TargetPeriod, Mode=OneWay, Converter={StaticResource EnumToVisibilityConverterKey}, ConverterParameter=Select}">
+						  Visibility="{Binding Settings.TargetPeriod, Mode=OneWay, Converter={StaticResource EnumToVisibilityConverterKey}, ConverterParameter=Select}">
 						<Calendar
 							HorizontalAlignment="Left" VerticalAlignment="Stretch"
 							SelectionMode="MultipleRange" IsTodayHighlighted="False"
@@ -108,8 +108,8 @@
 							</Calendar.RenderTransform>
 
 							<i:Interaction.Behaviors>
-								<behaviors:CalendarSelectedDatesBehavior SelectedDates="{Binding SettingsCurrent.TargetDates}"/>
-								<behaviors:FrameworkElementLanguageBehavior IetfLanguageTag="{Binding SettingsCurrent.CultureName}"/>
+								<behaviors:CalendarSelectedDatesBehavior SelectedDates="{Binding Settings.TargetDates}"/>
+								<behaviors:FrameworkElementLanguageBehavior IetfLanguageTag="{Binding Settings.CultureName}"/>
 							</i:Interaction.Behaviors>
 						</Calendar>
 					</Grid>
@@ -125,7 +125,7 @@
 						<controls:NumericUpDown
 							Width="90" Height="24"
 							Minimum="1" Middle="10" Maximum="180" Frequency="10" LowerFrequency="1" HigherFrequency="10"
-							Value="{Binding SettingsCurrent.AutoCheckInterval}"/>
+							Value="{Binding Settings.AutoCheckInterval}"/>
 					</GroupBox>
 
 					<GroupBox Style="{StaticResource ItemMemberCenterStyle}"
@@ -133,7 +133,7 @@
 						<controls:NumericUpDown
 							Width="90" Height="24"
 							Minimum="10" Maximum="60" Frequency="10"
-							Value="{Binding SettingsCurrent.TimeoutDuration}"/>
+							Value="{Binding Settings.TimeoutDuration}"/>
 					</GroupBox>
 				</StackPanel>
 			</GroupBox>
@@ -147,21 +147,21 @@
 							  Header="{Binding Resources.Options_OrderFromNewer, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding SettingsCurrent.OrdersFromNewer, Mode=TwoWay}"/>
+							IsChecked="{Binding Settings.OrdersFromNewer, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_ExtensionLowercase, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding SettingsCurrent.MakesFileExtensionLowercase, Mode=TwoWay}"/>
+							IsChecked="{Binding Settings.MakesFileExtensionLowercase, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_CreateDatedFolder, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding SettingsCurrent.CreatesDatedFolder, Mode=TwoWay}"/>
+							IsChecked="{Binding Settings.CreatesDatedFolder, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
@@ -171,12 +171,12 @@
 								x:Name="CustomizeDatedFolderButton"
 								Style="{StaticResource SwitchButtonStyle}"
 								HorizontalAlignment="Right"
-								IsChecked="{Binding SettingsCurrent.CustomizesDatedFolder, Mode=TwoWay}"/>
+								IsChecked="{Binding Settings.CustomizesDatedFolder, Mode=TwoWay}"/>
 							<TextBox
 								Height="20" Margin="0,4,0,0"
 								Padding="2,0" VerticalContentAlignment="Center"
 								Visibility="{Binding IsChecked, ElementName=CustomizeDatedFolderButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
-								Text="{Binding SettingsCurrent.DatedFolder, Mode=TwoWay}"/>
+								Text="{Binding Settings.DatedFolder, Mode=TwoWay}"/>
 						</StackPanel>
 					</GroupBox>
 
@@ -184,14 +184,14 @@
 							  Header="{Binding Resources.Options_HandleJpegOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding SettingsCurrent.HandlesJpegFileOnly, Mode=TwoWay}"/>
+							IsChecked="{Binding Settings.HandlesJpegFileOnly, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_SelectReadOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding SettingsCurrent.SelectsReadOnlyFile, Mode=TwoWay}"/>
+							IsChecked="{Binding Settings.SelectsReadOnlyFile, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
@@ -200,12 +200,12 @@
 							<controls:SlidingToggleButton
 								x:Name="SkipOnceCopiedButton"
 								Style="{StaticResource SwitchButtonStyle}"
-								IsChecked="{Binding SettingsCurrent.SkipsOnceCopiedFile, Mode=TwoWay}"/>
+								IsChecked="{Binding Settings.SkipsOnceCopiedFile, Mode=TwoWay}"/>
 							<controls:NumericTextBox
 								Height="20" Margin="0,4,0,0"
 								Minimum="10000" Maximum="100000" Frequency="10000"
 								Visibility="{Binding IsChecked, ElementName=SkipOnceCopiedButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
-								Value="{Binding SettingsCurrent.OnceCopiedCapacity, Mode=TwoWay}"/>
+								Value="{Binding Settings.OnceCopiedCapacity, Mode=TwoWay}"/>
 						</StackPanel>
 					</GroupBox>
 
@@ -214,7 +214,7 @@
 						<controls:SlidingToggleButton
 							x:Name="RecycleButton"
 							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding SettingsCurrent.MovesFileToRecycle, Mode=TwoWay}"/>
+							IsChecked="{Binding Settings.MovesFileToRecycle, Mode=TwoWay}"/>
 					</GroupBox>
 
 					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
@@ -252,7 +252,7 @@
 								IsUndoEnabled="False"
 								CheckText="DELETE"
 								Visibility="{Binding IsChecked, ElementName=ChooseDeleteOnCopyButton, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
-								IsChecked="{Binding SettingsCurrent.DeletesOnCopy, Mode=TwoWay}"/>
+								IsChecked="{Binding Settings.DeletesOnCopy, Mode=TwoWay}"/>
 						</StackPanel>
 					</GroupBox>
 				</StackPanel>
@@ -266,10 +266,10 @@
 							  Header="{Binding Resources.Options_SoundPlay, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding SettingsCurrent.PlaysSound, Mode=TwoWay}"/>
+							IsChecked="{Binding Settings.PlaysSound, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<StackPanel Visibility="{Binding SettingsCurrent.PlaysSound, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+					<StackPanel Visibility="{Binding Settings.PlaysSound, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}">
 						<TextBlock Text="{Binding Resources.Options_SoundCopyStarted, Source={x:Static models:ResourceService.Current}}"/>
 						<DockPanel Margin="0,4,0,6">
 							<Button DockPanel.Dock="Right"
@@ -281,7 +281,7 @@
 										<behaviors:FileDialogAction
 											Title="{Binding Resources.Options_SoundTitle, Source={x:Static models:ResourceService.Current}}"
 											Filter="{Binding Resources.Options_SoundFilter, Source={x:Static models:ResourceService.Current}}"
-											FilePath="{Binding SettingsCurrent.CopyStarted}"/>
+											FilePath="{Binding Settings.CopyStarted}"/>
 									</i:EventTrigger>
 								</i:Interaction.Triggers>
 							</Button>
@@ -291,14 +291,14 @@
 									Content="{Binding Resources.Options_Test, Source={x:Static models:ResourceService.Current}}">
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
-										<i:CallMethodAction TargetObject="{Binding SettingsCurrent}" MethodName="TestCopyStarted"/>
+										<i:CallMethodAction TargetObject="{Binding Settings}" MethodName="TestCopyStarted"/>
 									</i:EventTrigger>
 								</i:Interaction.Triggers>
 							</Button>
 							<TextBox DockPanel.Dock="Left"
 									 Padding="2" VerticalContentAlignment="Center"
 									 IsReadOnly="True"
-									 Text="{Binding SettingsCurrent.CopyStarted, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
+									 Text="{Binding Settings.CopyStarted, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
 						</DockPanel>
 
 						<TextBlock Text="{Binding Resources.Options_SoundOneCopied, Source={x:Static models:ResourceService.Current}}"/>
@@ -312,7 +312,7 @@
 										<behaviors:FileDialogAction
 											Title="{Binding Resources.Options_SoundTitle, Source={x:Static models:ResourceService.Current}}"
 											Filter="{Binding Resources.Options_SoundFilter, Source={x:Static models:ResourceService.Current}}"
-											FilePath="{Binding SettingsCurrent.OneCopied}"/>
+											FilePath="{Binding Settings.OneCopied}"/>
 									</i:EventTrigger>
 								</i:Interaction.Triggers>
 							</Button>
@@ -322,14 +322,14 @@
 									Content="{Binding Resources.Options_Test, Source={x:Static models:ResourceService.Current}}">
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
-										<i:CallMethodAction TargetObject="{Binding SettingsCurrent}" MethodName="TestOneCopied"/>
+										<i:CallMethodAction TargetObject="{Binding Settings}" MethodName="TestOneCopied"/>
 									</i:EventTrigger>
 								</i:Interaction.Triggers>
 							</Button>
 							<TextBox DockPanel.Dock="Left"
 									 Padding="2" VerticalContentAlignment="Center"
 									 IsReadOnly="True"
-									 Text="{Binding SettingsCurrent.OneCopied, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
+									 Text="{Binding Settings.OneCopied, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
 						</DockPanel>
 
 						<TextBlock Text="{Binding Resources.Options_SoundAllCopied, Source={x:Static models:ResourceService.Current}}"/>
@@ -343,7 +343,7 @@
 										<behaviors:FileDialogAction
 											Title="{Binding Resources.Options_SoundTitle, Source={x:Static models:ResourceService.Current}}"
 											Filter="{Binding Resources.Options_SoundFilter, Source={x:Static models:ResourceService.Current}}"
-											FilePath="{Binding SettingsCurrent.AllCopied}"/>
+											FilePath="{Binding Settings.AllCopied}"/>
 									</i:EventTrigger>
 								</i:Interaction.Triggers>
 							</Button>
@@ -353,14 +353,14 @@
 									Content="{Binding Resources.Options_Test, Source={x:Static models:ResourceService.Current}}">
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
-										<i:CallMethodAction TargetObject="{Binding SettingsCurrent}" MethodName="TestAllCopied"/>
+										<i:CallMethodAction TargetObject="{Binding Settings}" MethodName="TestAllCopied"/>
 									</i:EventTrigger>
 								</i:Interaction.Triggers>
 							</Button>
 							<TextBox DockPanel.Dock="Left"
 									 Padding="2" VerticalContentAlignment="Center"
 									 IsReadOnly="True"
-									 Text="{Binding SettingsCurrent.AllCopied, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
+									 Text="{Binding Settings.AllCopied, Mode=OneWay, Converter={StaticResource PathFileNameConverterKey}}"/>
 						</DockPanel>
 					</StackPanel>
 				</StackPanel>

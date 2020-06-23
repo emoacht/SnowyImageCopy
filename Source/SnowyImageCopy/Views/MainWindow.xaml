@@ -5,7 +5,6 @@
 				xmlns:ma="clr-namespace:MonitorAware;assembly=MonitorAware"
 				xmlns:se="clr-namespace:SlateElement;assembly=SlateElement"
 				xmlns:views="clr-namespace:SnowyImageCopy.Views"
-				xmlns:viewModels="clr-namespace:SnowyImageCopy.ViewModels"
 				xmlns:models="clr-namespace:SnowyImageCopy.Models"
 				xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
 				xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
@@ -14,10 +13,6 @@
 				FontFamily="Segoe UI"
 				Width="720" Height="480" MinWidth="626" MinHeight="280"
 				Icon="/SnowyImageCopy;component/Resources/Feather.ico">
-	<Window.DataContext>
-		<viewModels:MainWindowViewModel/>
-	</Window.DataContext>
-
 	<Window.TaskbarItemInfo>
 		<TaskbarItemInfo ProgressState="{Binding Op.ProgressState}"
 						 ProgressValue="{Binding Op.ProgressCopiedCurrent, Converter={StaticResource DoubleDigitsConverterKey}}"/>
@@ -160,14 +155,14 @@
 							Width="90"
 							Style="{StaticResource QuickButtonStyle}"
 							Content="{Binding Resources.Options_CopyOnSelect, Source={x:Static models:ResourceService.Current}}"
-							IsChecked="{Binding SettingsCurrent.CopyOnSelect, Mode=TwoWay}"/>
+							IsChecked="{Binding Settings.CopyOnSelect, Mode=TwoWay}"/>
 
 						<!-- Auto at start -->
 						<ToggleButton
 							Width="90" Margin="2,0,0,0"
 							Style="{StaticResource QuickButtonStyle}"
 							Content="{Binding Resources.Options_AutoAtStart, Source={x:Static models:ResourceService.Current}}"
-							IsChecked="{Binding SettingsCurrent.AutoAtStart, Mode=TwoWay}"/>
+							IsChecked="{Binding Settings.AutoAtStart, Mode=TwoWay}"/>
 					</StackPanel>
 				</StackPanel>
 			</Grid>
@@ -220,9 +215,10 @@
 					Grid.Row="1"
 					VerticalScrollBarVisibility="Auto"
 					Visibility="{Binding Visibility, ElementName=OptionsButtonOpen}">
-					<Border BorderThickness="1,0,0,0"
+					<Border x:Name="OptionsBorder"
+							BorderThickness="1,0,0,0"
 							BorderBrush="{StaticResource BorderLine.Weak}">
-						<views:Options/>
+						<!-- Placeholder for Options -->
 					</Border>
 				</ScrollViewer>
 

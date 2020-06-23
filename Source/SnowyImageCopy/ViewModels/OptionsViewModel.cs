@@ -11,10 +11,12 @@ namespace SnowyImageCopy.ViewModels
 {
 	public class OptionsViewModel : NotificationObject
 	{
-		public OptionsViewModel()
-		{ }
+		public Settings Settings { get; }
 
-		public Settings SettingsCurrent => Settings.Current;
+		public OptionsViewModel(Settings settings)
+		{
+			this.Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+		}
 
 		#region Date
 
@@ -29,10 +31,10 @@ namespace SnowyImageCopy.ViewModels
 
 		public FilePeriodViewModel FilePeriodSelected
 		{
-			get => FilePeriodList.Single(x => x.Period == Settings.Current.TargetPeriod);
+			get => FilePeriodList.Single(x => x.Period == Settings.TargetPeriod);
 			set
 			{
-				Settings.Current.TargetPeriod = value.Period;
+				Settings.TargetPeriod = value.Period;
 				RaisePropertyChanged();
 			}
 		}
@@ -62,7 +64,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				var index = _cultureMap.Keys.ToList().FindIndex(x => x == Settings.Current.CultureName);
+				var index = _cultureMap.Keys.ToList().FindIndex(x => x == Settings.CultureName);
 				return Math.Max(0, index);
 			}
 			set
@@ -72,7 +74,7 @@ namespace SnowyImageCopy.ViewModels
 				// If cultureName is empty, Culture of this application's Resources will be automatically selected.
 				ResourceService.Current.ChangeCulture(cultureName);
 
-				Settings.Current.CultureName = cultureName;
+				Settings.CultureName = cultureName;
 				RaisePropertyChanged();
 			}
 		}

@@ -22,6 +22,8 @@ namespace SnowyImageCopy
 				AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 		}
 
+		private Settings _settings;
+
 		protected override void OnStartup(StartupEventArgs e)
 		{
 			base.OnStartup(e);
@@ -42,10 +44,12 @@ namespace SnowyImageCopy
 				return;
 			}
 
-			Settings.Current.Start();
-			ResourceService.Current.ChangeCulture(Settings.Current.CultureName);
+			_settings = new Settings();
+			_settings.Start();
 
-			this.MainWindow = new MainWindow();
+			ResourceService.Current.ChangeCulture(_settings.CultureName);
+
+			this.MainWindow = new MainWindow(_settings);
 			this.MainWindow.Show();
 		}
 

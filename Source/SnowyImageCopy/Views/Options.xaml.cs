@@ -18,30 +18,24 @@ namespace SnowyImageCopy.Views
 {
 	public partial class Options : UserControl
 	{
-		public Options()
+		private readonly MainWindowViewModel _mainWindowViewModel;
+
+		public Options(MainWindow mainWindow)
 		{
 			InitializeComponent();
 
-			this.DataContext = new OptionsViewModel();
-			this.Loaded += OnLoaded;
-		}
+			_mainWindowViewModel = mainWindow?.DataContext as MainWindowViewModel ?? throw new InvalidOperationException();
+			this.DataContext = new OptionsViewModel(_mainWindowViewModel.Settings);
 
-		private void OnLoaded(object sender, RoutedEventArgs e)
-		{
-			this.Loaded -= OnLoaded;
-
-			var mainWindowViewModel = Window.GetWindow(this)?.DataContext as MainWindowViewModel;
-			if (mainWindowViewModel is null)
-				return;
-
-			// Binding in xaml will not work because MainWindowViewModel may be null when Options is instantiated.
+			// If Options is defined in MainWindow's xaml, it will be instantiated before MainWindowViewModel
+			// and so binding to MainWindowViewModel will not work.
 			var booleanInverseConverter = new BooleanInverseConverter();
 
 			PathGroupBox.SetBinding(
 				UIElement.IsEnabledProperty,
 				new Binding(nameof(MainWindowViewModel.IsCheckOrCopyOngoing))
 				{
-					Source = mainWindowViewModel,
+					Source = _mainWindowViewModel,
 					Mode = BindingMode.OneWay,
 					Converter = booleanInverseConverter
 				});
@@ -50,7 +44,7 @@ namespace SnowyImageCopy.Views
 				UIElement.IsEnabledProperty,
 				new Binding(nameof(MainWindowViewModel.IsCheckOrCopyOngoing))
 				{
-					Source = mainWindowViewModel,
+					Source = _mainWindowViewModel,
 					Mode = BindingMode.OneWay,
 					Converter = booleanInverseConverter
 				});
@@ -59,7 +53,7 @@ namespace SnowyImageCopy.Views
 				UIElement.IsEnabledProperty,
 				new Binding(nameof(MainWindowViewModel.IsCheckOrCopyOngoing))
 				{
-					Source = mainWindowViewModel,
+					Source = _mainWindowViewModel,
 					Mode = BindingMode.OneWay,
 					Converter = booleanInverseConverter
 				});

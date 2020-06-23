@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,9 +24,20 @@ namespace SnowyImageCopy.Views
 {
 	public partial class MainWindow : SlateWindow
 	{
-		public MainWindow() : base(SlateWindow.PrototypeResourceUriString)
+		private readonly MainWindowViewModel _mainWindowViewModel;
+
+		public MainWindow(Settings settings) : base(SlateWindow.PrototypeResourceUriString)
 		{
 			InitializeComponent();
+
+			this.DataContext = _mainWindowViewModel = new MainWindowViewModel(settings);
+		}
+
+		public override void OnApplyTemplate()
+		{
+			base.OnApplyTemplate();
+
+			this.OptionsBorder.Child = new Options(this);
 		}
 
 		#region Property
@@ -43,8 +56,6 @@ namespace SnowyImageCopy.Views
 
 		#endregion
 
-		private MainWindowViewModel _mainWindowViewModel;
-
 		protected override void OnSourceInitialized(EventArgs e)
 		{
 			base.OnSourceInitialized(e);
@@ -52,10 +63,6 @@ namespace SnowyImageCopy.Views
 			IsWindowPlacementReliable = true; // This must be set before loading WindowPlacement.
 
 			WindowPlacement.Load(this, !CommandLine.MakesWindowStateMinimized);
-
-			_mainWindowViewModel = this.DataContext as MainWindowViewModel;
-			if (_mainWindowViewModel is null)
-				return;
 
 			var monitorProperty = MonitorAwareProperty.GetInstance(this);
 			if (monitorProperty != null)
@@ -81,7 +88,7 @@ namespace SnowyImageCopy.Views
 
 			WindowPlacement.Save(this);
 
-			_mainWindowViewModel?.Dispose();
+			_mainWindowViewModel.Dispose();
 		}
 	}
 }

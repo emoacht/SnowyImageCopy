@@ -31,11 +31,13 @@ namespace SnowyImageCopy.Models
 	public class Operator : NotificationDisposableObject
 	{
 		private readonly MainWindowViewModel _mainWindowViewModel;
+		private readonly Settings _settings;
 		private readonly FileManager _manager;
 
 		public Operator(MainWindowViewModel mainWindowViewModel)
 		{
-			this._mainWindowViewModel = mainWindowViewModel;
+			this._mainWindowViewModel = mainWindowViewModel ?? throw new ArgumentNullException(nameof(mainWindowViewModel));
+			this._settings = mainWindowViewModel.Settings;
 
 			this._manager = new FileManager();
 			Subscription.Add(_manager);
@@ -356,7 +358,7 @@ namespace SnowyImageCopy.Models
 				}
 
 				_autoTimer.Stop();
-				_autoTimer.Interval = TimeSpan.FromSeconds(Settings.Current.AutoCheckInterval);
+				_autoTimer.Interval = TimeSpan.FromSeconds(_settings.AutoCheckInterval);
 				_autoTimer.Start();
 				OperationStatus = Resources.OperationStatus_WaitingAutoCheck;
 			}
@@ -443,7 +445,7 @@ namespace SnowyImageCopy.Models
 				{
 					OperationStatus = Resources.OperationStatus_Checking;
 
-					_manager.Ensure(Settings.Current.RemoteRootDescendant, Settings.Current.TimeoutDuration);
+					_manager.Ensure(_settings.RemoteRootDescendant, _settings.TimeoutDuration);
 
 					var isUpdated = Card.CanGetWriteTimeStamp
 						? (await _manager.GetWriteTimeStampAsync(CancellationToken.None) != Card.WriteTimeStamp)
@@ -744,8 +746,8 @@ namespace SnowyImageCopy.Models
 		/// <returns>True if ready</returns>
 		private async Task<bool> CheckReadyAsync()
 		{
-			if ((Settings.Current.TargetPeriod == FilePeriod.Select) &&
-				!Settings.Current.TargetDates.Any())
+			if ((_settings.TargetPeriod == FilePeriod.Select) &&
+				!_settings.TargetDates.Any())
 			{
 				OperationStatus = Resources.OperationStatus_NoDateCalender;
 				return false;
@@ -757,7 +759,7 @@ namespace SnowyImageCopy.Models
 				return false;
 			}
 
-			if (!(await Task.Run(() => Settings.Current.CheckLocalFolderValid())))
+			if (!(await Task.Run(() => _settings.CheckLocalFolderValid())))
 			{
 				OperationStatus = Resources.OperationStatus_LocalFolderInvalid;
 				return false;
@@ -773,13 +775,13 @@ namespace SnowyImageCopy.Models
 		{
 			OperationStatus = Resources.OperationStatus_Checking;
 
-			_manager.Ensure(Settings.Current.RemoteRootDescendant, Settings.Current.TimeoutDuration);
+			_manager.Ensure(_settings.RemoteRootDescendant, _settings.TimeoutDuration);
 
 			try
 			{
 				_tokenSourceWorking = new CancellationTokenSourcePlus();
 
-				var prepareTask = Settings.Current.SkipsOnceCopiedFile
+				var prepareTask = _settings.SkipsOnceCopiedFile
 					? Signatures.PrepareAsync()
 					: Task.FromResult(false); // Completed task
 
@@ -802,7 +804,7 @@ namespace SnowyImageCopy.Models
 
 					// Get all items.
 					var fileListNew = (await _manager.GetFileListRootAsync(Card, _tokenSourceWorking.Token))
-						.Select(fileItem => new FileItemViewModel(fileItem))
+						.Select(fileItem => new FileItemViewModel(_settings, fileItem))
 						.ToList();
 					fileListNew.Sort();
 
@@ -864,7 +866,7 @@ namespace SnowyImageCopy.Models
 						item.IsAliveLocal = IsAliveLocal(info, item.Size);
 						item.IsAvailableLocal = IsAvailableLocal(info);
 
-						if (Settings.Current.SkipsOnceCopiedFile)
+						if (_settings.SkipsOnceCopiedFile)
 						{
 							if (item.IsOnceCopied is null)
 							{
@@ -903,7 +905,7 @@ namespace SnowyImageCopy.Models
 					{
 						var item = itemDeletedPair.Item;
 
-						if (Settings.Current.MovesFileToRecycle &&
+						if (_settings.MovesFileToRecycle &&
 							item.IsDescendant &&
 							(item.Status == FileStatus.Copied))
 						{
@@ -1021,7 +1023,7 @@ namespace SnowyImageCopy.Models
 				FileListCoreViewIndex = -1; // No selection
 				_tokenSourceWorking?.Dispose();
 
-				if (Settings.Current.SkipsOnceCopiedFile)
+				if (_settings.SkipsOnceCopiedFile)
 					await Signatures.FlushAsync();
 			}
 		}
@@ -1038,7 +1040,7 @@ namespace SnowyImageCopy.Models
 			foreach (var item in FileListCore)
 			{
 				if (item.IsTarget && item.IsAliveRemote && (item.Status == FileStatus.NotCopied) &&
-					(!Settings.Current.SelectsReadOnlyFile || item.IsReadOnly))
+					(!_settings.SelectsReadOnlyFile || item.IsReadOnly))
 				{
 					countToBeCopied++;
 
@@ -1067,7 +1069,7 @@ namespace SnowyImageCopy.Models
 
 			OperationStatus = Resources.OperationStatus_Copying;
 
-			_manager.Ensure(Settings.Current.RemoteRootDescendant, Settings.Current.TimeoutDuration);
+			_manager.Ensure(_settings.RemoteRootDescendant, _settings.TimeoutDuration);
 
 			try
 			{
@@ -1081,7 +1083,7 @@ namespace SnowyImageCopy.Models
 				}
 
 				// Check if upload.cgi is disabled.
-				if (Settings.Current.DeletesOnCopy && Card.CanGetUpload)
+				if (_settings.DeletesOnCopy && Card.CanGetUpload)
 				{
 					Card.Upload = await _manager.GetUploadAsync(_tokenSourceWorking.Token);
 					if (Card.IsUploadDisabled)
@@ -1146,7 +1148,7 @@ namespace SnowyImageCopy.Models
 							item.IsAliveLocal = true;
 							item.IsAvailableLocal = true;
 
-							if (Settings.Current.SkipsOnceCopiedFile)
+							if (_settings.SkipsOnceCopiedFile)
 							{
 								item.IsOnceCopied = true;
 								Signatures.Append(item.Signature);
@@ -1176,7 +1178,7 @@ namespace SnowyImageCopy.Models
 						throw;
 					}
 
-					if (Settings.Current.DeletesOnCopy &&
+					if (_settings.DeletesOnCopy &&
 						!item.IsReadOnly && IsAliveLocal(item))
 					{
 						await _manager.DeleteFileAsync(item.FilePath, _tokenSourceWorking.Token);
@@ -1190,7 +1192,7 @@ namespace SnowyImageCopy.Models
 				FileListCoreViewIndex = -1; // No selection
 				_tokenSourceWorking?.Dispose();
 
-				if (Settings.Current.SkipsOnceCopiedFile)
+				if (_settings.SkipsOnceCopiedFile)
 					await Signatures.FlushAsync();
 			}
 		}
@@ -1354,15 +1356,15 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="item">Target item</param>
 		/// <returns>Local file path</returns>
-		private static string ComposeLocalPath(FileItemViewModel item)
+		private string ComposeLocalPath(FileItemViewModel item)
 		{
-			var folderName = Settings.Current.CreatesDatedFolder
+			var folderName = _settings.CreatesDatedFolder
 				? (item.Date != default)
-					? item.Date.ToString(Settings.Current.DatedFolder)
+					? item.Date.ToString(_settings.DatedFolder)
 					: UnknownFolderName
 				: string.Empty;
 
-			return Path.Combine(Settings.Current.LocalFolder, folderName, item.FileNameWithCaseExtension);
+			return Path.Combine(_settings.LocalFolder, folderName, item.FileNameWithCaseExtension);
 		}
 
 		/// <summary>
@@ -1383,7 +1385,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="item">Target item</param>
 		/// <param name="info">FileInfo of a local file</param>
 		/// <returns>True if successfully got.</returns>
-		private static bool TryGetFileInfoLocal(FileItemViewModel item, out FileInfo info)
+		private bool TryGetFileInfoLocal(FileItemViewModel item, out FileInfo info)
 		{
 			var localPath = ComposeLocalPath(item);
 
@@ -1399,7 +1401,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="item">Target item</param>
 		/// <returns>True if exists.</returns>
-		private static bool IsAliveLocal(FileItemViewModel item) =>
+		private bool IsAliveLocal(FileItemViewModel item) =>
 			TryGetFileInfoLocal(item, out FileInfo info) && IsAliveLocal(info, item.Size);
 
 		/// <summary>

@@ -77,11 +77,6 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		public static Settings Current { get; } = new Settings();
-
-		private Settings()
-		{ }
-
 		#region Settings
 
 		#region Path
@@ -486,14 +481,14 @@ namespace SnowyImageCopy.Models
 
 		public void Start()
 		{
-			Load(Current);
+			Load(this);
 
 			_subscription = Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
 				handler => handler.Invoke,
 				handler => PropertyChanged += handler,
 				handler => PropertyChanged -= handler)
 				.Throttle(TimeSpan.FromSeconds(1))
-				.Subscribe(_ => Save(Current));
+				.Subscribe(_ => Save(this));
 		}
 
 		public void Stop()

@@ -31,8 +31,6 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private string _operationStatus;
 
-		public Settings SettingsCurrent => Settings.Current;
-
 		public DocumentViewModel Document { get; } = new DocumentViewModel();
 
 		#endregion
@@ -273,20 +271,20 @@ namespace SnowyImageCopy.ViewModels
 
 		public bool IsCurrentImageVisible
 		{
-			get => Settings.Current.IsCurrentImageVisible;
+			get => Settings.IsCurrentImageVisible;
 			set
 			{
-				Settings.Current.IsCurrentImageVisible = value;
+				Settings.IsCurrentImageVisible = value;
 				RaisePropertyChanged();
 			}
 		}
 
 		public double CurrentImageWidth
 		{
-			get => Settings.Current.CurrentImageWidth;
+			get => Settings.CurrentImageWidth;
 			set
 			{
-				Settings.Current.CurrentImageWidth = value;
+				Settings.CurrentImageWidth = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -320,8 +318,12 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Constructor
 
-		public MainWindowViewModel()
+		public Settings Settings { get; }
+
+		public MainWindowViewModel(Settings settings)
 		{
+			this.Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+
 			Op = new Operator(this);
 			Subscription.Add(Op);
 
@@ -358,8 +360,8 @@ namespace SnowyImageCopy.ViewModels
 			var settingsPropertyChanged = Observable.FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>
 				(
 					handler => (sender, e) => handler(e),
-					handler => Settings.Current.PropertyChanged += handler,
-					handler => Settings.Current.PropertyChanged -= handler
+					handler => Settings.PropertyChanged += handler,
+					handler => Settings.PropertyChanged -= handler
 				);
 
 			Subscription.Add(settingsPropertyChanged
@@ -447,7 +449,7 @@ namespace SnowyImageCopy.ViewModels
 
 			SetSample(1);
 
-			if ((Settings.Current.AutoAtStart || CommandLine.StartsAutoCheck) &&
+			if ((Settings.AutoAtStart || CommandLine.StartsAutoCheck) &&
 				CheckAndCopyAutoCommand.CanExecute())
 				CheckAndCopyAutoCommand.Execute();
 		}
@@ -456,7 +458,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			Enumerable.Range(0, number)
 				.Select(x => (1 < number) ? x.ToString(CultureInfo.InvariantCulture) : string.Empty)
-				.Select(x => new FileItemViewModel($"/DCIM,SAMPLE{x}.JPG,0,0,0,0", "/DCIM"))
+				.Select(x => new FileItemViewModel(Settings, $"/DCIM,SAMPLE{x}.JPG,0,0,0,0", "/DCIM"))
 				.ToList()
 				.ForEach(x => FileListCore.Insert(x));
 		}
@@ -513,7 +515,7 @@ namespace SnowyImageCopy.ViewModels
 					{
 						case FileStatus.ToBeCopied:
 							// Trigger copy on select.
-							if (!Settings.Current.CopyOnSelect || Op.IsChecking || Op.IsCopying)
+							if (!Settings.CopyOnSelect || Op.IsChecking || Op.IsCopying)
 								break;
 
 							await Op.CopyFileAsync();

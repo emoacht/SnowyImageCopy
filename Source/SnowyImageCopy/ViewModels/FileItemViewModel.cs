@@ -43,7 +43,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				if (!Settings.Current.MakesFileExtensionLowercase)
+				if (!_settings.MakesFileExtensionLowercase)
 					return this.FileName;
 
 				var extension = Path.GetExtension(this.FileName);
@@ -125,16 +125,16 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				if (Settings.Current.HandlesJpegFileOnly && !_fileItem.IsJpeg)
+				if (_settings.HandlesJpegFileOnly && !_fileItem.IsJpeg)
 					return false;
 
-				switch (Settings.Current.TargetPeriod)
+				switch (_settings.TargetPeriod)
 				{
 					case FilePeriod.Today:
 						return (this.Date.Date == DateTime.Today);
 
 					case FilePeriod.Select:
-						return Settings.Current.TargetDates.Contains(this.Date.Date);
+						return _settings.TargetDates.Contains(this.Date.Date);
 
 					default: // FilePeriod.All
 						return true;
@@ -143,7 +143,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		public bool IsDescendant =>
-			this.Directory.StartsWith(Settings.Current.RemoteDescendant, StringComparison.OrdinalIgnoreCase);
+			this.Directory.StartsWith(_settings.RemoteDescendant, StringComparison.OrdinalIgnoreCase);
 
 		public bool IsAliveRemote { get; set; }
 		public bool IsAliveLocal { get; set; }
@@ -175,6 +175,8 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Constructor
 
+		private readonly Settings _settings;
+
 		internal IFileItem FileItem
 		{
 			get => _fileItem;
@@ -182,14 +184,12 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private IFileItem _fileItem;
 
-		internal FileItemViewModel() : this(string.Empty, string.Empty)
+		internal FileItemViewModel(Settings settings, string fileEntry, string directoryPath) : this(settings, new FileItem(fileEntry, directoryPath))
 		{ }
 
-		internal FileItemViewModel(string fileEntry, string directoryPath) : this(new FileItem(fileEntry, directoryPath))
-		{ }
-
-		internal FileItemViewModel(IFileItem fileItem)
+		internal FileItemViewModel(Settings settings, IFileItem fileItem)
 		{
+			this._settings = settings ?? throw new ArgumentNullException(nameof(settings));
 			this._fileItem = fileItem ?? throw new ArgumentNullException(nameof(fileItem));
 
 			if (!Designer.IsInDesignMode) // AddListener source may be null in Design mode.
