@@ -20,7 +20,7 @@ using SnowyImageCopy.Views.Controls;
 
 namespace SnowyImageCopy.ViewModels
 {
-	public class MainWindowViewModel : NotificationDisposableObject
+	public class MainWindowViewModel : NotificationSubscriptionObject
 	{
 		#region Interaction
 

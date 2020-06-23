@@ -12,7 +12,7 @@ using SnowyImageCopy.Models.Card;
 
 namespace SnowyImageCopy.ViewModels
 {
-	public class CardStateViewModel : NotificationDisposableObject
+	public class CardStateViewModel : NotificationSubscriptionObject
 	{
 		private readonly CardState _card;
 

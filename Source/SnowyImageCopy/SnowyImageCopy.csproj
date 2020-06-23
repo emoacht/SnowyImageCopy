@@ -101,7 +101,7 @@
     </Compile>
     <Compile Include="Common\DelegateCommand.cs" />
     <Compile Include="Common\NotificationObject.cs" />
-    <Compile Include="Common\NotificationDisposableObject.cs" />
+    <Compile Include="Common\NotificationSubscriptionObject.cs" />
     <Compile Include="Common\PropertyChangedEventListener.cs" />
     <Compile Include="Helper\BitmapExtension.cs" />
     <Compile Include="Helper\BitmapImageExtension.cs" />

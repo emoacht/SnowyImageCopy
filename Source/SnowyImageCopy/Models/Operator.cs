@@ -28,7 +28,7 @@ namespace SnowyImageCopy.Models
 	/// <summary>
 	/// Operates.
 	/// </summary>
-	public class Operator : NotificationDisposableObject
+	public class Operator : NotificationSubscriptionObject
 	{
 		private readonly MainWindowViewModel _mainWindowViewModel;
 		private readonly Settings _settings;

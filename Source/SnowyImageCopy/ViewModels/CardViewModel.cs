@@ -15,7 +15,7 @@ using SnowyImageCopy.Properties;
 
 namespace SnowyImageCopy.ViewModels
 {
-	public class CardViewModel : NotificationDisposableObject
+	public class CardViewModel : NotificationSubscriptionObject
 	{
 		public CardViewModel()
 		{ }
