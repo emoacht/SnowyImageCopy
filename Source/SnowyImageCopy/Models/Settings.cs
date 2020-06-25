@@ -475,7 +475,17 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		#region Start/Stop
+		[XmlIgnore]
+		public int Index { get; private set; } = 0;
+		internal string IndexString => (0 < Index) ? Index.ToString() : string.Empty;
+
+		public Settings()
+		{ }
+
+		public Settings(int index)
+		{
+			this.Index = index;
+		}
 
 		private IDisposable _subscription;
 
@@ -496,18 +506,23 @@ namespace SnowyImageCopy.Models
 			_subscription?.Dispose();
 		}
 
-		private const string SettingsFileName = "settings.xml";
-		private static readonly string _settingsFilePath = Path.Combine(FolderService.AppDataFolderPath, SettingsFileName);
+		#region Load/Save
 
-		private static void Load<T>(T instance) where T : class
+		private static string GetSettingsFileName(in string value) => $"settings{value}.xml";
+		private static string GetSettingsFilePath(in string value) => FolderService.GetAppDataFilePath(GetSettingsFileName(value));
+
+		private static void Load(Settings instance) => Load(GetSettingsFilePath(instance.IndexString), instance);
+		private static void Save(Settings instance) => Save(GetSettingsFilePath(instance.IndexString), instance);
+
+		private static void Load<T>(in string filePath, T instance)
 		{
-			var fileInfo = new FileInfo(_settingsFilePath);
+			var fileInfo = new FileInfo(filePath);
 			if (!fileInfo.Exists || (fileInfo.Length == 0))
 				return;
 
 			try
 			{
-				using (var fs = new FileStream(_settingsFilePath, FileMode.Open, FileAccess.Read))
+				using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
 				{
 					var serializer = new XmlSerializer(typeof(T));
 					var loaded = (T)serializer.Deserialize(fs);
@@ -522,7 +537,7 @@ namespace SnowyImageCopy.Models
 			{
 				try
 				{
-					File.Delete(_settingsFilePath);
+					File.Delete(filePath);
 				}
 				catch
 				{ }
@@ -531,13 +546,13 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-		private static void Save<T>(T instance) where T : class
+		private static void Save<T>(in string filePath, T instance)
 		{
 			try
 			{
 				FolderService.AssureAppDataFolder();
 
-				using (var fs = new FileStream(_settingsFilePath, FileMode.Create, FileAccess.Write))
+				using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
 				{
 					var serializer = new XmlSerializer(typeof(T));
 					serializer.Serialize(fs, instance);

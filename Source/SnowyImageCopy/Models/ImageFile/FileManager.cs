@@ -40,10 +40,12 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		#endregion
 
+		private readonly string _indexString;
 		private readonly HttpClient _client;
 
-		internal FileManager()
+		internal FileManager(in string indexString)
 		{
+			this._indexString = indexString;
 			_client = new HttpClient { Timeout = Timeout.InfiniteTimeSpan };
 		}
 
@@ -557,7 +559,7 @@ namespace SnowyImageCopy.Models.ImageFile
 			var bytes = await DownloadBytesAsync(path, 0, null, card, cancellationToken).ConfigureAwait(false);
 
 			if (_recordsDownloadString)
-				await RecordDownloadStringAsync(path, bytes).ConfigureAwait(false);
+				await RecordDownloadStringAsync(_indexString, path, bytes).ConfigureAwait(false);
 
 			// Response from FlashAir card seems to be encoded by ASCII.
 			return Encoding.ASCII.GetString(bytes);
@@ -810,21 +812,21 @@ namespace SnowyImageCopy.Models.ImageFile
 		private static readonly bool _recordsDownloadString = CommandLine.RecordsDownloadLog
 			|| Debugger.IsAttached; // When this application runs in a debugger, download log will be always recorded.
 
-		private const string DownloadFileName = "download.log";
+		private static string GetDownloadFileName(in string value) => $"download{value}.log";
 
 		/// <summary>
 		/// Records result of DownloadStringAsync method.
 		/// </summary>
 		/// <param name="requestPath">Request path</param>
 		/// <param name="responseBytes">Response byte array</param>
-		private static async Task RecordDownloadStringAsync(string requestPath, byte[] responseBytes)
+		private static async Task RecordDownloadStringAsync(string indexString, string requestPath, byte[] responseBytes)
 		{
 			var buffer = new StringBuilder()
 				.AppendLine($"request => {requestPath}")
 				.AppendLine("response -> ")
 				.AppendLine(Encoding.ASCII.GetString(responseBytes));
 
-			await LogService.RecordAsync(DownloadFileName, buffer.ToString());
+			await LogService.RecordAsync(GetDownloadFileName(indexString), buffer.ToString());
 		}
 
 		#endregion

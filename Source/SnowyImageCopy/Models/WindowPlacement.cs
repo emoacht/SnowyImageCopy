@@ -122,9 +122,12 @@ namespace SnowyImageCopy.Models
 
 		#region Load/Save
 
-		public static void Load(Window window, bool isNormal = true)
+		private static string GetPlacementFileName(in string value) => $"placement{value}.xml";
+		private static string GetPlacementFilePath(in string value) => FolderService.GetAppDataFilePath(GetPlacementFileName(value));
+
+		public static void Load(in string indexString, Window window, bool isNormal = true)
 		{
-			if (!TryLoad(out Container container))
+			if (!TryLoad(GetPlacementFilePath(indexString), out Container container))
 				return;
 
 			var placement = container.Placement;
@@ -142,7 +145,7 @@ namespace SnowyImageCopy.Models
 			SetWindowPlacement(handle, ref placement);
 		}
 
-		public static void Save(Window window)
+		public static void Save(in string indexString, Window window)
 		{
 			var handle = new WindowInteropHelper(window).Handle;
 
@@ -155,50 +158,47 @@ namespace SnowyImageCopy.Models
 				placement.rcNormalPosition.bottom = placement.rcNormalPosition.top + (int)(placement.rcNormalPosition.Height / dpi.DpiScaleY);
 			}
 
-			Save(new Container(placement, dpi));
+			Save(GetPlacementFilePath(indexString), new Container(placement, dpi));
 		}
 
-		private const string PlacementFileName = "placement.xml";
-		private static readonly string _placementFilePath = Path.Combine(FolderService.AppDataFolderPath, PlacementFileName);
-
-		private static bool TryLoad<T>(out T placement)
+		private static bool TryLoad<T>(in string filePath, out T instance)
 		{
-			var fileInfo = new FileInfo(_placementFilePath);
+			var fileInfo = new FileInfo(filePath);
 			if (!fileInfo.Exists || (fileInfo.Length == 0))
 			{
-				placement = default;
+				instance = default;
 				return false;
 			}
 
 			try
 			{
-				using (var sr = new StreamReader(_placementFilePath, Encoding.UTF8))
+				using (var sr = new StreamReader(filePath, Encoding.UTF8))
 				using (var xr = XmlReader.Create(sr))
 				{
 					var serializer = new DataContractSerializer(typeof(T));
-					placement = (T)serializer.ReadObject(xr);
+					instance = (T)serializer.ReadObject(xr);
 					return true;
 				}
 			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine($"Failed to load window placement.\r\n{ex}");
-				placement = default;
+				instance = default;
 				return false;
 			}
 		}
 
-		private static void Save<T>(T placement)
+		private static void Save<T>(in string filePath, T instance)
 		{
 			try
 			{
 				FolderService.AssureAppDataFolder();
 
-				using (var sw = new StreamWriter(_placementFilePath, false, Encoding.UTF8)) // BOM will be emitted.
+				using (var sw = new StreamWriter(filePath, false, Encoding.UTF8)) // BOM will be emitted.
 				using (var xw = XmlWriter.Create(sw, new XmlWriterSettings { Indent = true }))
 				{
 					var serializer = new DataContractSerializer(typeof(T));
-					serializer.WriteObject(xw, placement);
+					serializer.WriteObject(xw, instance);
 					xw.Flush();
 				}
 			}

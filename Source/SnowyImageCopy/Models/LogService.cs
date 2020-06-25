@@ -24,7 +24,7 @@ namespace SnowyImageCopy.Models
 
 				FolderService.AssureAppDataFolder();
 
-				var filePath = Path.Combine(FolderService.AppDataFolderPath, fileName);
+				var filePath = FolderService.GetAppDataFilePath(fileName);
 
 				if (File.Exists(filePath) && (File.GetLastWriteTime(filePath) < DateTime.Now.AddHours(-1)))
 					File.Delete(filePath);
@@ -59,7 +59,7 @@ namespace SnowyImageCopy.Models
 			{
 				FolderService.AssureAppDataFolder();
 
-				var appDataFilePath = Path.Combine(FolderService.AppDataFolderPath, fileName);
+				var appDataFilePath = FolderService.GetAppDataFilePath(fileName);
 
 				UpdateText(appDataFilePath, content);
 			}

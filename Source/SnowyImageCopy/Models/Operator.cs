@@ -39,7 +39,7 @@ namespace SnowyImageCopy.Models
 			this._mainWindowViewModel = mainWindowViewModel ?? throw new ArgumentNullException(nameof(mainWindowViewModel));
 			this._settings = mainWindowViewModel.Settings;
 
-			this._manager = new FileManager();
+			this._manager = new FileManager(this._settings.IndexString);
 			Subscription.Add(_manager);
 
 			if (!Designer.IsInDesignMode) // ListCollectionView may be null in Design mode.
@@ -782,7 +782,7 @@ namespace SnowyImageCopy.Models
 				_tokenSourceWorking = new CancellationTokenSourcePlus();
 
 				var prepareTask = _settings.SkipsOnceCopiedFile
-					? Signatures.PrepareAsync()
+					? Signatures.PrepareAsync(_settings.IndexString)
 					: Task.FromResult(false); // Completed task
 
 				var checkTask = Task.Run(async () =>
@@ -1024,7 +1024,7 @@ namespace SnowyImageCopy.Models
 				_tokenSourceWorking?.Dispose();
 
 				if (_settings.SkipsOnceCopiedFile)
-					await Signatures.FlushAsync();
+					await Signatures.FlushAsync(_settings.IndexString);
 			}
 		}
 
@@ -1193,7 +1193,7 @@ namespace SnowyImageCopy.Models
 				_tokenSourceWorking?.Dispose();
 
 				if (_settings.SkipsOnceCopiedFile)
-					await Signatures.FlushAsync();
+					await Signatures.FlushAsync(_settings.IndexString);
 			}
 		}
 

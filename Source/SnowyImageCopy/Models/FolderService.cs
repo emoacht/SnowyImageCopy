@@ -13,6 +13,9 @@ namespace SnowyImageCopy.Models
 	/// </summary>
 	internal static class FolderService
 	{
+		public static string GetAppDataFilePath(in string fileName) =>
+			Path.Combine(AppDataFolderPath, fileName);
+
 		public static string AppDataFolderPath => _appDataFolderPath ??= GetAppDataFolderPath();
 		private static string _appDataFolderPath;
 

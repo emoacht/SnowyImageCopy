@@ -33,9 +33,10 @@ namespace SnowyImageCopy.Models
 
 		private static HashSet<HashItem> _signatures;
 
-		public static async Task PrepareAsync()
+		public static async Task PrepareAsync(string indexString)
 		{
-			_signatures ??= await Task.Run(() => new HashSet<HashItem>(Load(valueSize: HashItem.Size, maxCount: MaxCount)));
+			_signatures ??= await Task.Run(() => new HashSet<HashItem>(
+				Load(indexString, valueSize: HashItem.Size, maxCount: MaxCount)));
 		}
 
 		public static bool Contains(HashItem value)
@@ -64,12 +65,12 @@ namespace SnowyImageCopy.Models
 				Append(value);
 		}
 
-		public static async Task FlushAsync()
+		public static async Task FlushAsync(string indexString)
 		{
 			if ((_appendValues?.Count ?? 0) == 0)
 				return;
 
-			await SaveAsync(_appendValues, _signatures, valueSize: HashItem.Size, maxCount: MaxCount);
+			await SaveAsync(indexString, _appendValues, _signatures, valueSize: HashItem.Size, maxCount: MaxCount);
 
 			_appendValues.Clear();
 		}
@@ -83,14 +84,15 @@ namespace SnowyImageCopy.Models
 
 		#region Load/Save
 
-		private const string SignaturesFileName = "signatures.bin";
-		private static readonly string _signaturesFilePath = Path.Combine(FolderService.AppDataFolderPath, SignaturesFileName);
+		private static string GetSignaturesFileName(in string value) => $"signatures{value}.bin";
+		private static string GetSignaturesFilePath(in string value) => FolderService.GetAppDataFilePath(GetSignaturesFileName(value));
 
 		private const float ExcessFactor = 1.2F;
 
-		private static HashItem[] Load(int valueSize, int maxCount)
+		private static HashItem[] Load(string indexString, int valueSize, int maxCount)
 		{
-			var fileInfo = new FileInfo(_signaturesFilePath);
+			var filePath = GetSignaturesFilePath(indexString);
+			var fileInfo = new FileInfo(filePath);
 			if (!(fileInfo.Exists && (0 < fileInfo.Length) && (fileInfo.Length % valueSize == 0)))
 				return new HashItem[0];
 
@@ -106,7 +108,7 @@ namespace SnowyImageCopy.Models
 
 			IEnumerable<HashItem> Read()
 			{
-				using (var fs = new FileStream(_signaturesFilePath, FileMode.Open, FileAccess.Read))
+				using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
 				{
 					var offset = fs.Length - valueSize * maxCount;
 					if (offset > 0)
@@ -126,9 +128,10 @@ namespace SnowyImageCopy.Models
 			};
 		}
 
-		private static async Task SaveAsync(IList<HashItem> appendValues, ISet<HashItem> wholeValues, int valueSize, int maxCount)
+		private static async Task SaveAsync(string indexString, IList<HashItem> appendValues, ISet<HashItem> wholeValues, int valueSize, int maxCount)
 		{
-			var fileInfo = new FileInfo(_signaturesFilePath);
+			var filePath = GetSignaturesFilePath(indexString);
+			var fileInfo = new FileInfo(filePath);
 			var isAppend = fileInfo.Exists && (fileInfo.Length > 0) && (fileInfo.Length % valueSize == 0)
 				&& ((fileInfo.Length / valueSize + appendValues.Count) < (maxCount * ExcessFactor));
 
@@ -139,7 +142,7 @@ namespace SnowyImageCopy.Models
 			{
 				FolderService.AssureAppDataFolder();
 
-				using (var fs = new FileStream(_signaturesFilePath, fileMode, FileAccess.Write))
+				using (var fs = new FileStream(filePath, fileMode, FileAccess.Write))
 				{
 					foreach (var value in values)
 						await fs.WriteAsync(value.ToByteArray(), 0, valueSize);
@@ -153,8 +156,6 @@ namespace SnowyImageCopy.Models
 				throw;
 			}
 		}
-
-		private static void Delete() => File.Delete(_signaturesFilePath);
 
 		#endregion
 	}
