@@ -33,5 +33,15 @@ namespace SnowyImageCopy.Models
 			if (!Directory.Exists(AppDataFolderPath))
 				Directory.CreateDirectory(AppDataFolderPath);
 		}
+
+		public static void Delete(in string filePath)
+		{
+			try
+			{
+				File.Delete(filePath);
+			}
+			catch
+			{ }
+		}
 	}
 }

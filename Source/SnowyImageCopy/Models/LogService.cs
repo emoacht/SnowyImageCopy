@@ -27,7 +27,7 @@ namespace SnowyImageCopy.Models
 				var filePath = FolderService.GetAppDataFilePath(fileName);
 
 				if (File.Exists(filePath) && (File.GetLastWriteTime(filePath) < DateTime.Now.AddHours(-1)))
-					File.Delete(filePath);
+					FolderService.Delete(filePath);
 
 				using (var sw = new StreamWriter(filePath, true, Encoding.UTF8)) // BOM will be emitted.
 					await sw.WriteAsync(content);

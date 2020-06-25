@@ -519,7 +519,7 @@ namespace SnowyImageCopy.Models
 			_subscription?.Dispose();
 		}
 
-		#region Load/Save
+		#region Load/Save/Delete
 
 		private static string GetSettingsFileName(in string value) => $"settings{value}.xml";
 		private static string GetSettingsFilePath(in string value) => FolderService.GetAppDataFilePath(GetSettingsFileName(value));
@@ -589,12 +589,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				try
-				{
-					File.Delete(filePath);
-				}
-				catch
-				{ }
+				FolderService.Delete(filePath);
 
 				Debug.WriteLine($"Failed to load settings.\r\n{ex}");
 				instance = default;
@@ -619,6 +614,8 @@ namespace SnowyImageCopy.Models
 				Debug.WriteLine($"Failed to save settings.\r\n{ex}");
 			}
 		}
+
+		internal static void Delete(Settings settings) => FolderService.Delete(GetSettingsFilePath(settings.IndexString));
 
 		#endregion
 	}

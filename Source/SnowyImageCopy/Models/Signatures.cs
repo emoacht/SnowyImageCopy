@@ -79,10 +79,9 @@ namespace SnowyImageCopy.Models
 		{
 			_signatures?.Clear();
 			_signatures = null;
-			//Delete();
 		}
 
-		#region Load/Save
+		#region Load/Save/Delete
 
 		private static string GetSignaturesFileName(in string value) => $"signatures{value}.bin";
 		private static string GetSignaturesFilePath(in string value) => FolderService.GetAppDataFilePath(GetSignaturesFileName(value));
@@ -156,6 +155,8 @@ namespace SnowyImageCopy.Models
 				throw;
 			}
 		}
+
+		internal static void Delete(string indexString) => FolderService.Delete(GetSignaturesFilePath(indexString));
 
 		#endregion
 	}

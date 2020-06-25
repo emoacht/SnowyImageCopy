@@ -120,12 +120,12 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		#region Load/Save
+		#region Load/Save/Delete
 
 		private static string GetPlacementFileName(in string value) => $"placement{value}.xml";
 		private static string GetPlacementFilePath(in string value) => FolderService.GetAppDataFilePath(GetPlacementFileName(value));
 
-		public static void Load(in string indexString, Window window, bool isNormal = true)
+		internal static void Load(in string indexString, Window window, bool isNormal = true)
 		{
 			if (!TryLoad(GetPlacementFilePath(indexString), out Container container))
 				return;
@@ -145,7 +145,7 @@ namespace SnowyImageCopy.Models
 			SetWindowPlacement(handle, ref placement);
 		}
 
-		public static void Save(in string indexString, Window window)
+		internal static void Save(in string indexString, Window window)
 		{
 			var handle = new WindowInteropHelper(window).Handle;
 
@@ -207,6 +207,8 @@ namespace SnowyImageCopy.Models
 				Debug.WriteLine($"Failed to save window placement.\r\n{ex}");
 			}
 		}
+
+		internal static void Delete(in string indexString) => FolderService.Delete(GetPlacementFilePath(indexString));
 
 		#endregion
 	}
