@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -479,6 +480,14 @@ namespace SnowyImageCopy.Models
 		public int Index { get; private set; } = 0;
 		internal string IndexString => (0 < Index) ? Index.ToString() : string.Empty;
 
+		[XmlIgnore]
+		public DateTime LastWriteTime
+		{
+			get => _lastWriteTime;
+			private set => SetPropertyValue(ref _lastWriteTime, value);
+		}
+		private DateTime _lastWriteTime;
+
 		public Settings()
 		{ }
 
@@ -498,7 +507,11 @@ namespace SnowyImageCopy.Models
 				handler => PropertyChanged += handler,
 				handler => PropertyChanged -= handler)
 				.Throttle(TimeSpan.FromSeconds(1))
-				.Subscribe(_ => Save(this));
+				.Subscribe(_ =>
+				{
+					Save(this);
+					LastWriteTime = DateTime.Now;
+				});
 		}
 
 		public void Stop()
@@ -511,8 +524,41 @@ namespace SnowyImageCopy.Models
 		private static string GetSettingsFileName(in string value) => $"settings{value}.xml";
 		private static string GetSettingsFilePath(in string value) => FolderService.GetAppDataFilePath(GetSettingsFileName(value));
 
-		private static void Load(Settings instance) => Load(GetSettingsFilePath(instance.IndexString), instance);
-		private static void Save(Settings instance) => Save(GetSettingsFilePath(instance.IndexString), instance);
+		public static IEnumerable<Settings> Load()
+		{
+			var folderPath = FolderService.AppDataFolderPath;
+			if (!Directory.Exists(folderPath))
+				yield break;
+
+			var serializer = new XmlSerializer(typeof(Settings));
+
+			foreach (var filePath in Directory.EnumerateFiles(folderPath, GetSettingsFileName("?")))
+			{
+				if (!TryLoad(filePath, serializer, out Settings instance))
+					continue;
+
+				if (int.TryParse(Path.GetFileNameWithoutExtension(filePath).LastOrDefault().ToString(), out int index))
+					instance.Index = index;
+
+				instance.LastWriteTime = GetLastWriteTime(filePath);
+
+				yield return instance;
+			}
+
+			static DateTime GetLastWriteTime(string filePath)
+			{
+				try
+				{
+					return File.GetLastWriteTime(filePath);
+				}
+				catch
+				{
+					return default;
+				}
+			}
+		}
+
+		public static void Save(Settings instance) => Save(GetSettingsFilePath(instance.IndexString), instance);
 
 		private static void Load<T>(in string filePath, T instance)
 		{
@@ -520,17 +566,25 @@ namespace SnowyImageCopy.Models
 			if (!fileInfo.Exists || (fileInfo.Length == 0))
 				return;
 
+			var serializer = new XmlSerializer(typeof(T));
+
+			if (!TryLoad(filePath, serializer, out T buffer))
+				return;
+
+			typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+				.Where(x => x.CanWrite)
+				.ToList()
+				.ForEach(x => x.SetValue(instance, x.GetValue(buffer)));
+		}
+
+		private static bool TryLoad<T>(in string filePath, XmlSerializer serializer, out T instance)
+		{
 			try
 			{
 				using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
 				{
-					var serializer = new XmlSerializer(typeof(T));
-					var loaded = (T)serializer.Deserialize(fs);
-
-					typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-						.Where(x => x.CanWrite)
-						.ToList()
-						.ForEach(x => x.SetValue(instance, x.GetValue(loaded)));
+					instance = (T)serializer.Deserialize(fs);
+					return true;
 				}
 			}
 			catch (Exception ex)
@@ -542,7 +596,9 @@ namespace SnowyImageCopy.Models
 				catch
 				{ }
 
-				throw new Exception("Failed to load settings.", ex);
+				Debug.WriteLine($"Failed to load settings.\r\n{ex}");
+				instance = default;
+				return false;
 			}
 		}
 
@@ -560,7 +616,7 @@ namespace SnowyImageCopy.Models
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("Failed to save settings.", ex);
+				Debug.WriteLine($"Failed to save settings.\r\n{ex}");
 			}
 		}
 
