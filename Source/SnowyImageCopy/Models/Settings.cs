@@ -500,8 +500,6 @@ namespace SnowyImageCopy.Models
 
 		public void Start()
 		{
-			Load(this);
-
 			_subscription = Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
 				handler => handler.Invoke,
 				handler => PropertyChanged += handler,
@@ -517,6 +515,7 @@ namespace SnowyImageCopy.Models
 		public void Stop()
 		{
 			_subscription?.Dispose();
+			_subscription = null;
 		}
 
 		#region Load/Save/Delete
