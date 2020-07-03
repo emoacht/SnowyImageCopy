@@ -373,7 +373,7 @@
 					<ComboBox x:Name="LanguageComboBox"
 							  Margin="0,4"
 							  ItemsSource="{Binding Cultures}"
-							  SelectedIndex="{Binding CultureSeletedIndex}"/>
+							  SelectedIndex="{Binding Culture.SeletedIndex}"/>
 				</StackPanel>
 			</GroupBox>
 

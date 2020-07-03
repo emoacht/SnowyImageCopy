@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,40 +44,49 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Language
 
-		private Dictionary<string, string> _cultureMap;
 		private const string CultureNameAuto = "(auto)";
 
-		public string[] Cultures
+		private static IReadOnlyDictionary<string, string> CultureMap
 		{
-			get
-			{
-				_cultureMap ??= new[] { new KeyValuePair<string, string>(string.Empty, CultureNameAuto) }
-					.Concat(ResourceService.Current.SupportedCultures
-						.Select(x => new KeyValuePair<string, string>(x.Name, x.EnglishName)) // Or NativeName
-						.OrderBy(x => x.Value))
-					.ToDictionary(x => x.Key, x => x.Value);
+			get => _culureMap ??= ResourceService.Current.SupportedCultures
+				.Select(x => (cultureName: x.Name, friendlyName: x.EnglishName /* Or NativeName */))
+				.OrderBy(x => x.friendlyName)
+				.Prepend((cultureName: string.Empty, friendlyName: CultureNameAuto))
+				.ToDictionary(x => x.cultureName, x => x.friendlyName);
+		}
+		private static Dictionary<string, string> _culureMap;
 
-				return _cultureMap.Values.ToArray();
-			}
+		public static string[] Cultures => CultureMap.Values.ToArray();
+
+		public static CultureViewModel Culture { get; } = GetCultureViewModel();
+
+		// This method and delegate are to access private constructor without exposing static instance. 
+		private static CultureViewModel GetCultureViewModel()
+		{
+			RuntimeHelpers.RunClassConstructor(typeof(CultureViewModel).TypeHandle);
+			return CreateCultureViewModel.Invoke();
 		}
 
-		public int CultureSeletedIndex
+		private static Func<CultureViewModel> CreateCultureViewModel;
+
+		public class CultureViewModel : NotificationObject
 		{
-			get
-			{
-				var index = _cultureMap.Keys.ToList().FindIndex(x => x == Settings.CultureName);
-				return Math.Max(0, index);
-			}
-			set
-			{
-				var cultureName = _cultureMap.Keys.ToList()[value];
+			static CultureViewModel() => CreateCultureViewModel = () => new CultureViewModel();
 
-				// If cultureName is empty, Culture of this application's Resources will be automatically selected.
-				ResourceService.Current.ChangeCulture(cultureName);
+			private CultureViewModel()
+			{ }
 
-				Settings.CultureName = cultureName;
-				RaisePropertyChanged();
+			public int SeletedIndex
+			{
+				get => _selectedIndex ??= Math.Max(0, CultureMap.Keys.ToList().FindIndex(x => x == Settings.CommonCultureName));
+				set
+				{
+					_selectedIndex = value;
+					Settings.CommonCultureName = CultureMap.Keys.ToList()[value];
+					RaisePropertyChanged();
+				}
 			}
+			private int? _selectedIndex;
 		}
 
 		#endregion
