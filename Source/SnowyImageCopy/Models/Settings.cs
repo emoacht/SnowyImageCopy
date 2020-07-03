@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -465,6 +466,22 @@ namespace SnowyImageCopy.Models
 
 		#region Culture
 
+		// A name of static event for data binding must meet the following rule:
+		// https://docs.microsoft.com/en-us/dotnet/framework/wpf/getting-started/whats-new?#binding-to-static-properties
+		public static event EventHandler CommonCultureNameChanged;
+
+		public static string CommonCultureName
+		{
+			get => ResourceService.Current.CultureName;
+			set
+			{
+				// If culture name is empty, Culture of this application's Resources will be automatically selected.
+				ResourceService.Current.ChangeCulture(value);
+
+				CommonCultureNameChanged?.Invoke(null, EventArgs.Empty);
+			}
+		}
+
 		public string CultureName
 		{
 			get => _cultureName;
@@ -496,20 +513,30 @@ namespace SnowyImageCopy.Models
 			this.Index = index;
 		}
 
-		private IDisposable _subscription;
+		private CompositeDisposable _subscription;
 
 		public void Start()
 		{
-			_subscription = Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
-				handler => handler.Invoke,
-				handler => PropertyChanged += handler,
-				handler => PropertyChanged -= handler)
-				.Throttle(TimeSpan.FromSeconds(1))
-				.Subscribe(_ =>
-				{
-					Save(this);
-					LastWriteTime = DateTime.Now;
-				});
+			_subscription = new CompositeDisposable
+			{
+				Observable.FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>
+					(
+						handler => (sender, e) => handler(e),
+						handler => PropertyChanged += handler,
+						handler => PropertyChanged -= handler
+					)
+					.Throttle(TimeSpan.FromSeconds(1))
+					.Subscribe(_ =>
+					{
+						Save(this);
+						LastWriteTime = DateTime.Now;
+					}),
+
+				Observable.FromEventPattern(typeof(Settings), nameof(CommonCultureNameChanged))
+					.Subscribe(x => CultureName = CommonCultureName)
+			};
+
+			CultureName = CommonCultureName;
 		}
 
 		public void Stop()

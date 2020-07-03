@@ -60,6 +60,11 @@ namespace SnowyImageCopy.Models
 		private CultureInfo[] _supportedCultures;
 
 		/// <summary>
+		/// Culture name currently used by this application's Resources
+		/// </summary>
+		public string CultureName => Resources.Culture?.Name;
+
+		/// <summary>
 		/// Changes Culture of this application's Resources by Culture name
 		/// </summary>
 		/// <param name="cultureName">Culture name</param>
