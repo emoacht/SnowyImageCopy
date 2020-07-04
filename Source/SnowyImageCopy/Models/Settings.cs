@@ -91,16 +91,18 @@ namespace SnowyImageCopy.Models
 				if (_remoteAddress == value)
 					return;
 
-				if (!TryParseRemoteAddress(value, out var root, out var descendant))
+				if (!TryParseRemoteAddress(value, out var root, out var descendant, out var name))
 					return;
 
 				_remoteAddress = root + descendant;
 				_remoteRoot = root;
 				_remoteDescendant = string.IsNullOrEmpty(descendant) ? null : "/" + descendant.TrimEnd('/');
+				_remoteName = name;
 				RaisePropertyChanged();
+				RaisePropertyChanged(nameof(RemoteName));
 			}
 		}
-		private string _remoteAddress = @"http://flashair/"; // Default FlashAir Url
+		private string _remoteAddress = @"http://flashair/"; // Default FlashAir address
 
 		public string RemoteRoot => _remoteRoot ?? _remoteAddress;
 		private string _remoteRoot;
@@ -110,15 +112,19 @@ namespace SnowyImageCopy.Models
 
 		internal (string remoteRoot, string remoteDescendant) RemoteRootDescendant => (RemoteRoot, RemoteDescendant);
 
-		private bool TryParseRemoteAddress(string source, out string root, out string descendant)
+		public string RemoteName => _remoteName ?? "flashair"; // Default FlashAir name
+		private string _remoteName;
+
+		private bool TryParseRemoteAddress(string source, out string root, out string descendant, out string name)
 		{
 			root = null;
 			descendant = null;
+			name = null;
 
 			if (string.IsNullOrEmpty(source) || Path.GetInvalidPathChars().Any(x => source.Contains(x)))
 				return false;
 
-			var match = new Regex(@"^https?://((?!/)\S){1,15}/").Match(source);
+			var match = new Regex(@"^https?://(?<name>((?!/)\S){1,15})/").Match(source);
 			if (!match.Success)
 				return false;
 
@@ -127,6 +133,8 @@ namespace SnowyImageCopy.Models
 			descendant = source.Substring(match.Length).TrimStart('/');
 			descendant = Regex.Replace(descendant, @"\s+", string.Empty);
 			descendant = Regex.Replace(descendant, "/{2,}", "/");
+
+			name = match.Groups["name"].Value; // Port number may be included.
 			return true;
 		}
 
