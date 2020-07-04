@@ -182,12 +182,10 @@ namespace SnowyImageCopy.Views.Behaviors
 		/// <remarks>Uri.GetLeftPart(UriPartial.Path) method does not work for file path.</remarks>
 		private static string RemoveFragment(string filePath)
 		{
-			const string fragmentPattern = @"(?<path>.+\.(?:htm|html))#.*";
-
 			if (string.IsNullOrWhiteSpace(filePath))
 				return filePath;
 
-			var match = new Regex(fragmentPattern).Match(filePath);
+			var match = new Regex(@"(?<path>.+\.(?:htm|html))#.*").Match(filePath);
 			if (!match.Success)
 				return filePath;
 

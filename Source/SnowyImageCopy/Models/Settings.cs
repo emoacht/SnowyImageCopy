@@ -112,15 +112,13 @@ namespace SnowyImageCopy.Models
 
 		private bool TryParseRemoteAddress(string source, out string root, out string descendant)
 		{
-			const string rootPattern = @"^https?://((?!/)\S){1,15}/";
-
 			root = null;
 			descendant = null;
 
 			if (string.IsNullOrEmpty(source) || Path.GetInvalidPathChars().Any(x => source.Contains(x)))
 				return false;
 
-			var match = new Regex(rootPattern).Match(source);
+			var match = new Regex(@"^https?://((?!/)\S){1,15}/").Match(source);
 			if (!match.Success)
 				return false;
 
@@ -348,9 +346,8 @@ namespace SnowyImageCopy.Models
 			// month: M{1,4}
 			// day:   d{1,2}
 			// delimiter: [-_]?
-			const string datePattern = "^(?:y{1,4}[-_]?M{1,4}(?:|[-_]?d{1,2})|(?:|d{1,2}[-_]?)M{1,4}[-_]?y{1,4})$";
-
-			return new Regex(datePattern).IsMatch(format ?? string.Empty);
+			return new Regex("^(?:y{1,4}[-_]?M{1,4}(?:|[-_]?d{1,2})|(?:|d{1,2}[-_]?)M{1,4}[-_]?y{1,4})$")
+				.IsMatch(format ?? string.Empty);
 		}
 
 		#endregion
