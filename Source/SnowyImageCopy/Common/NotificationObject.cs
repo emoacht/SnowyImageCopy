@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,27 +12,30 @@ namespace SnowyImageCopy.Common
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected void SetPropertyValue<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+		protected bool SetPropertyValue<T>(ref T storage, in T value, [CallerMemberName] string propertyName = null)
 		{
 			if (EqualityComparer<T>.Default.Equals(storage, value))
-				return;
+				return false;
 
 			storage = value;
 			RaisePropertyChanged(propertyName);
-		}
-
-		protected void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
-		{
-			if (propertyExpression is null)
-				throw new ArgumentNullException(nameof(propertyExpression));
-
-			if (!(propertyExpression.Body is MemberExpression memberExpression))
-				throw new ArgumentException("The expression is not a member access expression.", nameof(propertyExpression));
-
-			RaisePropertyChanged(memberExpression.Member.Name);
+			return true;
 		}
 
 		protected void RaisePropertyChanged([CallerMemberName] string propertyName = null) =>
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+		protected static bool SetPropertyValue<T>(ref T storage, in T value, EventHandler<PropertyChangedEventArgs> handler, [CallerMemberName] string propertyName = null)
+		{
+			if (EqualityComparer<T>.Default.Equals(storage, value))
+				return false;
+
+			storage = value;
+			RaisePropertyChanged(handler, propertyName);
+			return true;
+		}
+
+		protected static void RaisePropertyChanged(EventHandler<PropertyChangedEventArgs> handler, [CallerMemberName] string propertyName = null) =>
+			handler?.Invoke(null, new PropertyChangedEventArgs(propertyName));
 	}
 }
