@@ -42,7 +42,7 @@ namespace SnowyImageCopy.ViewModels
 						case nameof(CardState.FirmwareVersion):
 						case nameof(CardState.Ssid):
 						case nameof(CardState.Cid):
-							Remote = new CardStateViewModel(this._mainWindowViewModel.Op.Card);
+							RemoteCard = new CardStateViewModel(this._mainWindowViewModel.Op.Card);
 							break;
 					}
 				}));
@@ -50,53 +50,53 @@ namespace SnowyImageCopy.ViewModels
 
 		#region Remote
 
-		public CardStateViewModel Remote
+		public CardStateViewModel RemoteCard
 		{
-			get => _remote;
+			get => _remoteCard;
 			private set
 			{
-				if (_remote != null)
-					Subscription.Remove(_remote);
+				if (_remoteCard != null)
+					Subscription.Remove(_remoteCard);
 
-				_remote = value;
+				_remoteCard = value;
 
-				if (_remote != null)
-					Subscription.Add(_remote);
+				if (_remoteCard != null)
+					Subscription.Add(_remoteCard);
 
 				RaisePropertyChanged();
-				RaisePropertyChanged(nameof(RemoteIsAvailable));
+				RaisePropertyChanged(nameof(RemoteCardIsAvailable));
 			}
 		}
-		private CardStateViewModel _remote;
+		private CardStateViewModel _remoteCard;
 
-		public bool RemoteIsAvailable => (Remote != null);
+		public bool RemoteCardIsAvailable => (RemoteCard != null);
 
 		#endregion
 
 		#region Local
 
-		public CardConfigViewModel Local
+		public CardConfigViewModel LocalCard
 		{
-			get => _local;
+			get => _localCard;
 			private set
 			{
-				if (_local != null)
-					_local.PropertyChanged -= OnLocalPropertyChanged;
+				if (_localCard != null)
+					_localCard.PropertyChanged -= OnLocalCardPropertyChanged;
 
-				_local = value;
+				_localCard = value;
 
-				if (_local != null)
-					_local.PropertyChanged += OnLocalPropertyChanged;
+				if (_localCard != null)
+					_localCard.PropertyChanged += OnLocalCardPropertyChanged;
 
 				RaisePropertyChanged();
-				RaisePropertyChanged(nameof(LocalIsAvailable));
+				RaisePropertyChanged(nameof(LocalCardIsAvailable));
 			}
 		}
-		private CardConfigViewModel _local;
+		private CardConfigViewModel _localCard;
 
-		public bool LocalIsAvailable => (Local != null);
+		public bool LocalCardIsAvailable => (LocalCard != null);
 
-		private void OnLocalPropertyChanged(object sender, PropertyChangedEventArgs e)
+		private void OnLocalCardPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(CardConfigViewModel.IsChanged))
 				DelegateCommand.RaiseCanExecuteChanged();
@@ -124,7 +124,7 @@ namespace SnowyImageCopy.ViewModels
 		private DelegateCommand _applyCommand;
 
 		private async void ApplyExecute() => await ApplyConfigAsync();
-		private bool CanApplyExecute() => !_isApplying && (Local != null) && Local.IsChanged;
+		private bool CanApplyExecute() => !_isApplying && (LocalCard != null) && LocalCard.IsChanged;
 
 		#endregion
 
@@ -149,17 +149,17 @@ namespace SnowyImageCopy.ViewModels
 
 				foreach (var disk in disks.Where(x => x.CanBeSD).OrderBy(x => x.PhysicalDrive))
 				{
-					var configNew = new CardConfigViewModel();
+					var card = new CardConfigViewModel();
 
-					if (!await configNew.ReadAsync(disk))
+					if (!await card.ReadAsync(disk))
 						continue;
 
-					Local = configNew;
+					LocalCard = card;
 					_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Card_OneFound;
 					return;
 				}
 
-				Local = null;
+				LocalCard = null;
 				_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Card_NoFound;
 			}
 			catch
@@ -181,17 +181,17 @@ namespace SnowyImageCopy.ViewModels
 				_isApplying = true;
 				_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Card_Applying;
 
-				var configNew = new CardConfigViewModel();
+				var card = new CardConfigViewModel();
 
-				if (!await configNew.ReadAsync(Local.AssociatedDisk) ||
-					(configNew.CID != Local.CID))
+				if (!await card.ReadAsync(LocalCard.AssociatedDisk) ||
+					(card.CID != LocalCard.CID))
 				{
 					SoundManager.PlayError();
 					_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Card_Replaced;
 					return;
 				}
 
-				await Local.WriteAsync();
+				await LocalCard.WriteAsync();
 
 				_mainWindowViewModel.OperationStatus = Resources.OperationStatus_Card_Applied;
 			}
