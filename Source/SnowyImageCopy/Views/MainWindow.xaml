@@ -442,12 +442,13 @@
 					</Border>
 
 					<!-- Splitter -->
+					<!-- Setting ShowsPreview true will cause NullReferenceException. -->
 					<controls:HideableGridSplitter
 						Grid.Column="1"
 						x:Name="CurrentImageGridSplitter"
 						Width="8" HorizontalAlignment="Center" VerticalAlignment="Stretch"
 						Background="{StaticResource Window.Background}"
-						ShowsPreview="True" ResizeDirection="Columns"
+						ShowsPreview="False" ResizeDirection="Columns"
 						MinLength="168"
 						BorderBrush="{StaticResource BorderLine.Weak}"
 						BorderThickness="1,0,0,0"
