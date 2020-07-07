@@ -19,7 +19,7 @@
 			<Setter Property="Margin" Value="0,4,8,4"/>
 		</Style>
 
-		<!--ProgressBar -->
+		<!-- ProgressBar -->
 		<SolidColorBrush x:Key="Volume.Progress" Color="#FF26a0da"/>
 		<SolidColorBrush x:Key="Volume.Background" Color="#FFe6e6e6"/>
 		<SolidColorBrush x:Key="Volume.Border" Color="#FFbcbcbc"/>
@@ -195,9 +195,10 @@
 				<StackPanel>
 					<StackPanel Margin="4,8,4,0">
 						<!-- Search -->
-						<Button Height="24"
+						<Button x:Name="SearchButton"
+								Height="24"
 								Style="{StaticResource ButtonBaseStyle}"
-								Padding="6,0" VerticalContentAlignment="Center"
+								VerticalContentAlignment="Center"
 								Content="{Binding Resources.Card_Search, Source={x:Static models:ResourceService.Current}}"
 								Command="{Binding SearchCommand}"/>
 
@@ -207,11 +208,13 @@
 							<TextBlock
 								VerticalAlignment="Center"
 								Text="{Binding Resources.Card_Drive, Source={x:Static models:ResourceService.Current}}"/>
-							<TextBox
-								Width="40" Height="24" Margin="6,0"
-								Padding="2,0" VerticalContentAlignment="Center"
-								FontSize="14" IsReadOnly="True"
-								Text="{Binding LocalCard.DriveLetter, Mode=OneWay}"/>
+							<ComboBox
+								Width="50" Height="24" Margin="6,0"
+								VerticalContentAlignment="Center"
+								IsEnabled="{Binding ElementName=SearchButton, Path=IsEnabled, Mode=OneWay}"
+								ItemsSource="{Binding LocalCards}"
+								DisplayMemberPath="DriveLetter"
+								SelectedItem="{Binding LocalCard, Mode=TwoWay}"/>
 						</StackPanel>
 					</StackPanel>
 
@@ -435,7 +438,7 @@
 						<!-- Apply -->
 						<Button Height="24" Margin="0,10,0,8"
 								Style="{StaticResource ButtonBaseStyle}"
-								Padding="6,0" VerticalContentAlignment="Center"
+								VerticalContentAlignment="Center"
 								Content="{Binding Resources.Card_Apply, Source={x:Static models:ResourceService.Current}}"
 								Command="{Binding ApplyCommand}"/>
 					</StackPanel>

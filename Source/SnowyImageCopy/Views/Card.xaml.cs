@@ -34,10 +34,7 @@ namespace SnowyImageCopy.Views
 			this.Loaded -= OnLoaded;
 
 			var mainWindow = Window.GetWindow(this);
-			if (mainWindow is null)
-				return;
-
-			var mainWindowViewModel = mainWindow.DataContext as MainWindowViewModel;
+			var mainWindowViewModel = mainWindow?.DataContext as MainWindowViewModel;
 			if (mainWindowViewModel is null)
 				return;
 
@@ -46,11 +43,11 @@ namespace SnowyImageCopy.Views
 			mainWindow.Closing += OnClosing;
 		}
 
-		private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		private async void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
 			this.IsVisibleChanged -= OnIsVisibleChanged;
 
-			_cardViewModel.SearchCommand.Execute();
+			await _cardViewModel.SearchFirstAsync();
 		}
 
 		private void OnClosing(object sender, CancelEventArgs e)
