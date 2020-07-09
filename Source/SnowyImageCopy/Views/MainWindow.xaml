@@ -8,33 +8,59 @@
 				xmlns:models="clr-namespace:SnowyImageCopy.Models"
 				xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
 				xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
-				x:Name="MainWindowRoot"
+				x:Name="WindowRoot"
+				Icon="/SnowyImageCopy;component/Resources/Feather.ico"
 				Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
 				FontFamily="Segoe UI"
 				Width="720" Height="480" MinWidth="626" MinHeight="280"
-				Icon="/SnowyImageCopy;component/Resources/Feather.ico">
+				ChromeBackground="{StaticResource Window.Background}">
 	<Window.TaskbarItemInfo>
 		<TaskbarItemInfo ProgressState="{Binding Op.ProgressState}"
 						 ProgressValue="{Binding Op.ProgressCopiedCurrent, Converter={StaticResource DoubleDigitsConverterKey}}"/>
 	</Window.TaskbarItemInfo>
-
-	<ma:MonitorAwareProperty.Instance>
-		<ma:MonitorAwareProperty x:Name="MonitorProperty"/>
-	</ma:MonitorAwareProperty.Instance>
 
 	<i:Interaction.Behaviors>
 		<behaviors:WindowActivationBehavior SenderObject="{Binding Op}" EventName="ActivateRequested"/>
 		<behaviors:WindowSizeBehavior ScaleFactor="{Binding WindowHandler.ScaleFactor, ElementName=MonitorProperty, Mode=OneWay}"/>
 	</i:Interaction.Behaviors>
 
+	<ma:MonitorAwareProperty.Instance>
+		<ma:MonitorAwareProperty x:Name="MonitorProperty"/>
+	</ma:MonitorAwareProperty.Instance>
+
+	<se:SlateWindow.TitleBarContent>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+
+			<!-- Title -->
+			<TextBlock Grid.Column="0"
+					   Margin="8,0,0,0"
+					   VerticalAlignment="Center"
+					   Foreground="{Binding ChromeForeground, ElementName=WindowRoot, Mode=OneWay}"
+					   Text="{Binding Source={x:Static views:ProductInfo.Title}, Mode=OneWay}"/>
+
+			<!-- Status -->
+			<TextBox Grid.Column="1"
+					 MaxWidth="300" Height="24" Margin="4,4,4,0"
+					 Padding="2,0" VerticalContentAlignment="Center"
+					 FontSize="13" IsReadOnly="True" IsUndoEnabled="False"
+					 Text="{Binding OperationStatus, Mode=OneWay}"/>
+		</Grid>
+	</se:SlateWindow.TitleBarContent>
+
 	<Grid x:Name="GroundRoot"
+		  Margin="0,6,0,0"
 		  Background="{StaticResource Window.Background}">
 		<!-- Options switch (Closed) -->
 		<ToggleButton
 			Panel.ZIndex="1"
 			x:Name="OptionsButtonClosed"
-			Height="24" Margin="-2,8,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+			Height="24" Margin="-2,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
 			Style="{StaticResource DrawButtonStyle}"
+			BorderThickness="2,0,0,0"
 			Padding="8,0"
 			Content="{Binding Resources.Options, Source={x:Static models:ResourceService.Current}}"
 			Visibility="{Binding IsChecked, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanInverseToVisibilityConverterKey}}"/>
@@ -51,7 +77,7 @@
 
 			<!-- Dashboard area -->
 			<Grid Grid.ColumnSpan="2"
-				  Margin="0,8">
+				  Margin="0,0,0,8">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="14"/>
@@ -141,37 +167,32 @@
 					</Grid>
 				</Grid>
 
-				<StackPanel Grid.Column="2" Grid.Row="0">
-					<!-- Status -->
-					<TextBox Width="256" Height="24"
-							 Padding="2,0" VerticalContentAlignment="Center"
-							 FontSize="13" IsReadOnly="True" IsUndoEnabled="False"
-							 Text="{Binding OperationStatus, Mode=OneWay}"/>
-
-					<StackPanel Margin="0,8,0,0"
+				<Grid Grid.Column="2" Grid.Row="0"
+					  Width="256">
+					<StackPanel HorizontalAlignment="Left" VerticalAlignment="Top"
 								Orientation="Horizontal">
-						<!-- Copy on select -->
-						<ToggleButton
-							Width="90"
-							Style="{StaticResource QuickButtonStyle}"
-							Content="{Binding Resources.Options_CopyOnSelect, Source={x:Static models:ResourceService.Current}}"
-							IsChecked="{Binding Settings.CopyOnSelect, Mode=TwoWay}"/>
-
 						<!-- Auto at start -->
 						<ToggleButton
-							Width="90" Margin="2,0,0,0"
+							Width="90" 
 							Style="{StaticResource QuickButtonStyle}"
 							Content="{Binding Resources.Options_AutoAtStart, Source={x:Static models:ResourceService.Current}}"
 							IsChecked="{Binding Settings.AutoAtStart, Mode=TwoWay}"/>
+
+						<!-- Copy on select -->
+						<ToggleButton
+							Width="90" Margin="2,0,0,0"
+							Style="{StaticResource QuickButtonStyle}"
+							Content="{Binding Resources.Options_CopyOnSelect, Source={x:Static models:ResourceService.Current}}"
+							IsChecked="{Binding Settings.CopyOnSelect, Mode=TwoWay}"/>
 					</StackPanel>
-				</StackPanel>
+				</Grid>
 			</Grid>
 
 			<!-- Card switch (Closed) -->
 			<Grid Visibility="{Binding IsIntersected, ElementName=CardButtonIntersectionBehavior, Mode=OneWay, Converter={StaticResource BooleanInverseToVisibilityConverterKey}, ConverterParameter=Hidden}">
 				<ToggleButton
 					x:Name="CardButtonClosed"
-					Height="24" Margin="-2,40,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+					Height="24" Margin="0,32,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
 					Style="{StaticResource DrawButtonStyle}"
 					Padding="8,0"
 					Content="{Binding Resources.Card, Source={x:Static models:ResourceService.Current}}"
@@ -181,7 +202,7 @@
 						<behaviors:FrameworkElementIntersectionBehavior
 							x:Name="CardButtonIntersectionBehavior"
 							TargetElement ="{Binding ElementName=CommandsAndProgress}"
-							ExpandedMargin="12,0,0,0"
+							ExpandedMargin="13,0,0,0"
 							WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}">
 							<behaviors:FrameworkElementIntersectionBehavior.TriggerObject>
 								<MultiBinding Converter="{StaticResource ObjectArrayConverterKey}">
@@ -205,8 +226,9 @@
 				<!-- Options switch (Open) -->
 				<ToggleButton
 					x:Name="OptionsButtonOpen"
-					Height="24" Margin="-2,8,0,0"
+					Height="24" Margin="-2,0,0,0"
 					Style="{StaticResource DrawButtonStyle}"
+					BorderThickness="2,0,0,0"
 					Padding="8,0"
 					Content="{Binding Resources.Options, Source={x:Static models:ResourceService.Current}}"
 					Visibility="{Binding IsChecked, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverterKey}}"
@@ -225,7 +247,7 @@
 				<!-- Card switch (Open) -->
 				<ToggleButton
 					x:Name="CardButtonOpen"
-					Height="24"	Margin="-2,40,0,0"
+					Height="24"	Margin="0,32,0,0"
 					Style="{StaticResource DrawButtonStyle}"
 					Padding="8,0"
 					Content="{Binding Resources.Card, Source={x:Static models:ResourceService.Current}}"
@@ -438,7 +460,6 @@
 					</Border>
 
 					<!-- Splitter -->
-					<!-- Setting ShowsPreview true will cause NullReferenceException. -->
 					<controls:HideableGridSplitter
 						Grid.Column="1"
 						x:Name="CurrentImageGridSplitter"
@@ -479,7 +500,7 @@
 
 						<i:Interaction.Behaviors>
 							<behaviors:GridSizeBehavior
-								IsReliable="{Binding IsWindowPlacementReliable, ElementName=MainWindowRoot}"
+								IsReliable="{Binding IsWindowPlacementReliable, ElementName=WindowRoot}"
 								MaxWidth="{Binding ActualWidth, ElementName=LayoutRoot, Mode=OneWay}"
 								Padding="{Binding Margin, ElementName=CurrentImageImage}"
 								FrameSize="{Binding CurrentFrameSize, Mode=OneWayToSource}"/>

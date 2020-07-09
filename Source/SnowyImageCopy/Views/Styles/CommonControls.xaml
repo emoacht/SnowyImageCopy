@@ -94,7 +94,7 @@
 		<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
 		<Setter Property="SnapsToDevicePixels" Value="True"/>
 		<Setter Property="BorderBrush" Value="{StaticResource Window.Background}"/>
-		<Setter Property="BorderThickness" Value="2,0,0,0"/>
+		<Setter Property="BorderThickness" Value="0"/> <!-- To be customized in each case -->
 		<Setter Property="Background" Value="{StaticResource SnowBlue.Normal.Background}"/>
 		<Setter Property="Foreground" Value="{StaticResource SnowBlue.Normal.Foreground}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Left"/>
