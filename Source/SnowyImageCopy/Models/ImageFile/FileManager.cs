@@ -809,7 +809,7 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		#region Log
 
-		private static readonly bool _recordsDownloadString = CommandLine.RecordsDownloadLog
+		private static readonly bool _recordsDownloadString = Workspace.RecordsDownloadLog
 			|| Debugger.IsAttached; // When this application runs in a debugger, download log will be always recorded.
 
 		private static string GetDownloadFileName(in string value) => $"download{value}.log";

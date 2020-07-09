@@ -138,7 +138,6 @@
     <Compile Include="Models\ImageFile\FileManagerCommand.cs" />
     <Compile Include="Models\ImageFile\HashItem.cs" />
     <Compile Include="Models\ImageFile\IFileItem.cs" />
-    <Compile Include="Models\CommandLine.cs" />
     <Compile Include="Models\FilePeriod.cs" />
     <Compile Include="Models\FileStatus.cs" />
     <Compile Include="Models\FolderService.cs" />
@@ -152,6 +151,7 @@
     <Compile Include="Models\Signatures.cs" />
     <Compile Include="Models\SoundManager.cs" />
     <Compile Include="Models\WindowPlacement.cs" />
+    <Compile Include="Models\Workspace.cs" />
     <Compile Include="ViewModels\CardConfigViewModel.cs" />
     <Compile Include="ViewModels\CardStateViewModel.cs" />
     <Compile Include="ViewModels\CardViewModel.cs" />
@@ -230,8 +230,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Card.xaml">
       <SubType>Designer</SubType>
