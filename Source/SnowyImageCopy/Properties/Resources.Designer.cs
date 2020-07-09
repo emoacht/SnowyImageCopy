@@ -503,7 +503,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Applied new settings..
+        ///   Looks up a localized string similar to Applied new settings to FlashAir in local..
         /// </summary>
         public static string OperationStatus_Card_Applied {
             get {
@@ -512,7 +512,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Applying new settings..
+        ///   Looks up a localized string similar to Applying new settings to FlashAir in local..
         /// </summary>
         public static string OperationStatus_Card_Applying {
             get {
@@ -521,7 +521,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No FlashAir found..
+        ///   Looks up a localized string similar to No FlashAir in local is found..
         /// </summary>
         public static string OperationStatus_Card_NoFound {
             get {
@@ -530,7 +530,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A FlashAir found..
+        ///   Looks up a localized string similar to A FlashAir in local is found..
         /// </summary>
         public static string OperationStatus_Card_OneFound {
             get {
@@ -539,7 +539,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FlashAir is replaced..
+        ///   Looks up a localized string similar to A FlashAir in local is replaced..
         /// </summary>
         public static string OperationStatus_Card_Replaced {
             get {
@@ -548,7 +548,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Searching FlashAir..
+        ///   Looks up a localized string similar to Searching FlashAir in local..
         /// </summary>
         public static string OperationStatus_Card_Searching {
             get {

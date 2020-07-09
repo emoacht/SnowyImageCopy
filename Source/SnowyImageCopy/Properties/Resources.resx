@@ -266,22 +266,22 @@
     <value>license.html</value>
   </data>
   <data name="OperationStatus_Card_Applied" xml:space="preserve">
-    <value>Applied new settings.</value>
+    <value>Applied new settings to FlashAir in local.</value>
   </data>
   <data name="OperationStatus_Card_Applying" xml:space="preserve">
-    <value>Applying new settings.</value>
+    <value>Applying new settings to FlashAir in local.</value>
   </data>
   <data name="OperationStatus_Card_NoFound" xml:space="preserve">
-    <value>No FlashAir found.</value>
+    <value>No FlashAir in local is found.</value>
   </data>
   <data name="OperationStatus_Card_OneFound" xml:space="preserve">
-    <value>A FlashAir found.</value>
+    <value>A FlashAir in local is found.</value>
   </data>
   <data name="OperationStatus_Card_Replaced" xml:space="preserve">
-    <value>FlashAir is replaced.</value>
+    <value>A FlashAir in local is replaced.</value>
   </data>
   <data name="OperationStatus_Card_Searching" xml:space="preserve">
-    <value>Searching FlashAir.</value>
+    <value>Searching FlashAir in local.</value>
   </data>
   <data name="OperationStatus_CheckCompleted" xml:space="preserve">
     <value>Check completed.</value>

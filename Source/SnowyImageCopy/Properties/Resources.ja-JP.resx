@@ -256,22 +256,22 @@
     <value>おかしい</value>
   </data>
   <data name="OperationStatus_Card_Applied" xml:space="preserve">
-    <value>新しい設定を適用しました。</value>
+    <value>ローカルのFlashAirに新しい設定を適用しました。</value>
   </data>
   <data name="OperationStatus_Card_Applying" xml:space="preserve">
-    <value>新しい設定を適用しています。</value>
+    <value>ローカルのFlashAirに新しい設定を適用しています。</value>
   </data>
   <data name="OperationStatus_Card_NoFound" xml:space="preserve">
-    <value>FlashAirは見つかりませんでした。</value>
+    <value>ローカルのFlashAirは見つかりませんでした。</value>
   </data>
   <data name="OperationStatus_Card_OneFound" xml:space="preserve">
-    <value>FlashAirが見つかりました。</value>
+    <value>ローカルのFlashAirが見つかりました。</value>
   </data>
   <data name="OperationStatus_Card_Replaced" xml:space="preserve">
-    <value>FlashAirが差し替えられました。</value>
+    <value>ローカルのFlashAirが差し替えられました。</value>
   </data>
   <data name="OperationStatus_Card_Searching" xml:space="preserve">
-    <value>FlashAirを検索しています。</value>
+    <value>ローカルのFlashAirを検索しています。</value>
   </data>
   <data name="OperationStatus_CheckCompleted" xml:space="preserve">
     <value>チェックを完了しました。</value>
