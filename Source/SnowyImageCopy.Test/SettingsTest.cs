@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using SnowyImageCopy.Models;
@@ -17,12 +18,12 @@ namespace SnowyImageCopy.Test
 		[TestMethod]
 		public void TestTryParseRemoteAddressValid()
 		{
-			TestTryParseRemoteAddressBase(@"http://flashair/", @"http://flashair/", string.Empty);
-			TestTryParseRemoteAddressBase(@"http://flashair_012345/", @"http://flashair_012345/", string.Empty);
-			TestTryParseRemoteAddressBase(@"http://flashair/dcim", @"http://flashair/", @"dcim");
-			TestTryParseRemoteAddressBase(@"https://flashair//dcim/", @"https://flashair/", @"dcim/");
-			TestTryParseRemoteAddressBase(@"http://flashair/dcim//161___01", @"http://flashair/", @"dcim/161___01");
-			TestTryParseRemoteAddressBase(@"http://flashair:8080/dcim//161___01", @"http://flashair:8080/", @"dcim/161___01");
+			TestTryParseRemoteAddressBase(@"http://flashair/", @"http://flashair/", string.Empty, "flashair");
+			TestTryParseRemoteAddressBase(@"http://flashair_012345/", @"http://flashair_012345/", string.Empty, "flashair_012345");
+			TestTryParseRemoteAddressBase(@"http://0flash/dcim", @"http://0flash/", "dcim", "0flash");
+			TestTryParseRemoteAddressBase(@"https://f//dcim/", @"https://f/", @"dcim/", "f");
+			TestTryParseRemoteAddressBase(@"http://flash_air/dcim//161___01", @"http://flash_air/", @"dcim/161___01", "flash_air");
+			TestTryParseRemoteAddressBase(@"http://flashair:8080/dcim//161___01", @"http://flashair:8080/", @"dcim/161___01", "flashair:8080");
 		}
 
 		[TestMethod]
@@ -36,20 +37,21 @@ namespace SnowyImageCopy.Test
 
 		#region Base
 
-		private void TestTryParseRemoteAddressBase(string source, string root, string descendant)
+		private void TestTryParseRemoteAddressBase(string source, string root, string descendant, string name)
 		{
 			var settingsObject = new PrivateObject(Activator.CreateInstance(typeof(Settings), true));
-			var args = new object[] { source, null, null };
+			var args = new object[] { source, null, null, null };
 
 			Assert.IsTrue((bool)settingsObject.Invoke("TryParseRemoteAddress", args));
 			Assert.IsTrue(((string)args[1]).Equals(root, StringComparison.Ordinal));
 			Assert.IsTrue(((string)args[2]).Equals(descendant, StringComparison.Ordinal));
+			Assert.IsTrue(((string)args[3]).Equals(name, StringComparison.Ordinal));
 		}
 
 		private void TestTryParseRemoteAddressBase(string source)
 		{
 			var settingsObject = new PrivateObject(Activator.CreateInstance(typeof(Settings), true));
-			var args = new object[] { source, null, null };
+			var args = new object[] { source, null, null, null };
 
 			Assert.IsFalse((bool)settingsObject.Invoke("TryParseRemoteAddress", args));
 		}
