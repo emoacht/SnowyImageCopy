@@ -14,7 +14,7 @@
 			 mc:Ignorable="d"
 			 d:DesignHeight="1200" d:DesignWidth="250">
 	<UserControl.Resources>
-		<Style x:Key="ActionButtonBaseStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonBaseStyle}">
+		<Style x:Key="PlainButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonBaseStyle}">
 			<Setter Property="Padding" Value="8,2"/>
 		</Style>
 
@@ -48,7 +48,7 @@
 					<StackPanel HorizontalAlignment="Right"
 								Orientation="Horizontal">
 						<Button	Margin="0,0,4,0"
-								Style="{StaticResource ActionButtonBaseStyle}"
+								Style="{StaticResource PlainButtonStyle}"
 								Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}">
 							<i:Interaction.Triggers>
 								<i:EventTrigger EventName="Click">
@@ -58,7 +58,7 @@
 								</i:EventTrigger>
 							</i:Interaction.Triggers>
 						</Button>
-						<Button Style="{StaticResource ActionButtonBaseStyle}"
+						<Button Style="{StaticResource PlainButtonStyle}"
 								Content="{Binding Resources.Options_OpenByExplorer, Source={x:Static models:ResourceService.Current}}">
 							<i:Interaction.Triggers>
 								<i:EventTrigger EventName="Click">
@@ -274,7 +274,7 @@
 						<DockPanel Margin="0,4,0,6">
 							<Button DockPanel.Dock="Right"
 									Margin="4,0,0,0"
-									Style="{StaticResource ActionButtonBaseStyle}"
+									Style="{StaticResource PlainButtonStyle}"
 									Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}">
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
@@ -287,7 +287,7 @@
 							</Button>
 							<Button DockPanel.Dock="Right"
 									Margin="4,0,0,0"
-									Style="{StaticResource ActionButtonBaseStyle}"
+									Style="{StaticResource PlainButtonStyle}"
 									Content="{Binding Resources.Options_Test, Source={x:Static models:ResourceService.Current}}">
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
@@ -305,7 +305,7 @@
 						<DockPanel Margin="0,4,0,6">
 							<Button DockPanel.Dock="Right"
 									Margin="4,0,0,0"
-									Style="{StaticResource ActionButtonBaseStyle}"
+									Style="{StaticResource PlainButtonStyle}"
 									Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}">
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
@@ -318,7 +318,7 @@
 							</Button>
 							<Button DockPanel.Dock="Right"
 									Margin="4,0,0,0"
-									Style="{StaticResource ActionButtonBaseStyle}"
+									Style="{StaticResource PlainButtonStyle}"
 									Content="{Binding Resources.Options_Test, Source={x:Static models:ResourceService.Current}}">
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
@@ -336,7 +336,7 @@
 						<DockPanel Margin="0,4">
 							<Button DockPanel.Dock="Right"
 									Margin="4,0,0,0"
-									Style="{StaticResource ActionButtonBaseStyle}"
+									Style="{StaticResource PlainButtonStyle}"
 									Content="{Binding Resources.Options_Browse, Source={x:Static models:ResourceService.Current}}">
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
@@ -349,7 +349,7 @@
 							</Button>
 							<Button DockPanel.Dock="Right"
 									Margin="4,0,0,0"
-									Style="{StaticResource ActionButtonBaseStyle}"
+									Style="{StaticResource PlainButtonStyle}"
 									Content="{Binding Resources.Options_Test, Source={x:Static models:ResourceService.Current}}">
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">

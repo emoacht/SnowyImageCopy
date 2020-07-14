@@ -486,12 +486,12 @@
 							<StackPanel Margin="0,0,0,4" VerticalAlignment="Bottom"
 										Orientation="Horizontal">
 								<Button Height="22" Margin="0,0,2,0"
-										Style="{StaticResource ActionButtonStyle}"
+										Style="{StaticResource SendButtonStyle}"
 										Padding="7,0"
 										Content="{Binding Resources.Command_Save, Source={x:Static models:ResourceService.Current}}"
-										Command="{Binding SaveDesktopCommand}"/>
+										Command="{Binding SendDesktopCommand}"/>
 								<Button Height="22"
-										Style="{StaticResource ActionButtonStyle}"
+										Style="{StaticResource SendButtonStyle}"
 										Padding="7,0"
 										Content="{Binding Resources.Command_Send, Source={x:Static models:ResourceService.Current}}"
 										Command="{Binding SendClipboardCommand}"/>
