@@ -131,14 +131,14 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-		#region Save Desktop Command
+		#region Send Desktop Command
 
-		public DelegateCommand SaveDesktopCommand =>
-			_saveDesktopCommand ??= new DelegateCommand(SaveDesktopExecute, CanSaveDesktopExecute);
-		private DelegateCommand _saveDesktopCommand;
+		public DelegateCommand SendDesktopCommand =>
+			_sendDesktopCommand ??= new DelegateCommand(SendDesktopExecute, CanSendDesktopExecute);
+		private DelegateCommand _sendDesktopCommand;
 
-		private async void SaveDesktopExecute() => await Op.SaveDesktopAsync();
-		private bool CanSaveDesktopExecute() => IsCurrentImageDataGiven && !Op.IsSavingDesktop;
+		private async void SendDesktopExecute() => await Op.SaveDesktopAsync();
+		private bool CanSendDesktopExecute() => IsCurrentImageDataGiven && !Op.IsSavingDesktop;
 
 		#endregion
 
