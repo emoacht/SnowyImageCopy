@@ -111,56 +111,76 @@ namespace SnowyImageCopy.Views.Controls
 					(d, baseValue) => (0 < (double)baseValue) ? (double)baseValue : DependencyProperty.UnsetValue));
 
 		/// <summary>
-		/// Middle level between Minimum and Maximum
+		/// Medium level
 		/// </summary>
-		/// <remarks>To enable Middle, HigherFrequency and LowerFrequency must be set.</remarks>
-		public double Middle
+		/// <remarks>To enable Medium, MediumFrequency must be set.</remarks>
+		public double Medium
 		{
-			get { return (double)GetValue(MiddleProperty); }
-			set { SetValue(MiddleProperty, value); }
+			get { return (double)GetValue(MediumProperty); }
+			set { SetValue(MediumProperty, value); }
 		}
-		public static readonly DependencyProperty MiddleProperty =
+		public static readonly DependencyProperty MediumProperty =
 			DependencyProperty.Register(
-				"Middle",
+				"Medium",
+				typeof(double),
+				typeof(NumericUpDown),
+				new PropertyMetadata(0D));
+
+		private bool IsMediumEnabled =>
+			(Minimum < Medium) && (Medium < Maximum) &&
+			(0 < MediumFrequency);
+
+		/// <summary>
+		/// Small level
+		/// </summary>
+		/// <remarks>To enable Small, Medium must be enabled and SmallFrequency must be set.</remarks>
+		public double Small
+		{
+			get { return (double)GetValue(SmallProperty); }
+			set { SetValue(SmallProperty, value); }
+		}
+		public static readonly DependencyProperty SmallProperty =
+			DependencyProperty.Register(
+				"Small",
+				typeof(double),
+				typeof(NumericUpDown),
+				new PropertyMetadata(1D));
+
+		private bool IsSmallEnabled => IsMediumEnabled &&
+			(Minimum < Small) && (Small < Medium) &&
+			(0 < SmallFrequency);
+
+		/// <summary>
+		/// Frequency when value is equal to or lower than Medium
+		/// </summary>
+		/// <remarks>Default (0) means invalid.</remarks>
+		public double MediumFrequency
+		{
+			get { return (double)GetValue(MediumFrequencyProperty); }
+			set { SetValue(MediumFrequencyProperty, value); }
+		}
+		public static readonly DependencyProperty MediumFrequencyProperty =
+			DependencyProperty.Register(
+				"MediumFrequency",
 				typeof(double),
 				typeof(NumericUpDown),
 				new PropertyMetadata(0D));
 
 		/// <summary>
-		/// Frequency when value is higher than Middle.
+		/// Frequency when value is equal to or lower than Small
 		/// </summary>
 		/// <remarks>Default (0) means invalid.</remarks>
-		public double HigherFrequency
+		public double SmallFrequency
 		{
-			get { return (double)GetValue(HigherFrequencyProperty); }
-			set { SetValue(HigherFrequencyProperty, value); }
+			get { return (double)GetValue(SmallFrequencyProperty); }
+			set { SetValue(SmallFrequencyProperty, value); }
 		}
-		public static readonly DependencyProperty HigherFrequencyProperty =
+		public static readonly DependencyProperty SmallFrequencyProperty =
 			DependencyProperty.Register(
-				"HigherFrequency",
+				"SmallFrequency",
 				typeof(double),
 				typeof(NumericUpDown),
 				new PropertyMetadata(0D));
-
-		/// <summary>
-		/// Frequency when value is lower than Middle.
-		/// </summary>
-		/// <remarks>Default (0) means invalid.</remarks>
-		public double LowerFrequency
-		{
-			get { return (double)GetValue(LowerFrequencyProperty); }
-			set { SetValue(LowerFrequencyProperty, value); }
-		}
-		public static readonly DependencyProperty LowerFrequencyProperty =
-			DependencyProperty.Register(
-				"LowerFrequency",
-				typeof(double),
-				typeof(NumericUpDown),
-				new PropertyMetadata(0D));
-
-		private bool IsMiddleEnabled =>
-			(Minimum < Middle) && (Middle < Maximum) &&
-			(0 < LowerFrequency) && (0 < HigherFrequency);
 
 		#endregion
 
@@ -196,49 +216,40 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void SetAppearance(Direction direction)
 		{
-			switch (direction)
+			double Change(double current)
 			{
-				case Direction.Down:
-					if (!IsMiddleEnabled)
-					{
-						var num = Value - Frequency;
-						Value = (num > Minimum) ? num : Minimum;
-					}
-					else
-					{
-						if (Value > Middle)
+				switch (direction)
+				{
+					case Direction.Down:
+						if (IsSmallEnabled && (current <= Small))
 						{
-							var num = Value - HigherFrequency;
-							Value = (num > Middle) ? num : Middle; // Stop at Middle.
+							return Math.Max(current - SmallFrequency, Minimum);
 						}
-						else
+						if (IsMediumEnabled && (current <= Medium))
 						{
-							var num = Value - LowerFrequency;
-							Value = (num > Minimum) ? num : Minimum;
+							return Math.Max(current - MediumFrequency, (IsSmallEnabled ? Small /* Stop at Small. */ : Minimum));
 						}
-					}
-					break;
-				case Direction.Up:
-					if (!IsMiddleEnabled)
-					{
-						var num = Value + Frequency;
-						Value = (num < Maximum) ? num : Maximum;
-					}
-					else
-					{
-						if (Value < Middle)
 						{
-							var num = Value + LowerFrequency;
-							Value = (num < Middle) ? num : Middle; // Stop at Middle.
+							return Math.Max(current - Frequency, (IsMediumEnabled ? Medium /* Stop at Medium. */ : Minimum));
 						}
-						else
+					case Direction.Up:
+						if (IsSmallEnabled && (current < Small))
 						{
-							var num = Value + HigherFrequency;
-							Value = (num < Maximum) ? num : Maximum;
+							return Math.Min(current + SmallFrequency, Small /* Stop at Small. */);
 						}
-					}
-					break;
+						if (IsMediumEnabled && (current < Medium))
+						{
+							return Math.Min(current + MediumFrequency, Medium /* Stop at Medium. */);
+						}
+						{
+							return Math.Min(current + Frequency, Maximum);
+						}
+					default:
+						throw new InvalidOperationException();
+				}
 			}
+
+			Value = Change(Value);
 
 			ChangeCanChangeValue();
 		}
