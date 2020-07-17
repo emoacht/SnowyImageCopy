@@ -124,7 +124,7 @@
 							  Header="{Binding Resources.Options_AutoCheckInterval, Source={x:Static models:ResourceService.Current}}">
 						<controls:NumericUpDown
 							Width="90" Height="24"
-							Minimum="1" Middle="10" Maximum="180" Frequency="10" LowerFrequency="1" HigherFrequency="10"
+							Minimum="0.2" Small="1" Medium="10" Maximum="180" SmallFrequency="0.2" MediumFrequency="1" Frequency="10"
 							Value="{Binding Settings.AutoCheckInterval}"/>
 					</GroupBox>
 

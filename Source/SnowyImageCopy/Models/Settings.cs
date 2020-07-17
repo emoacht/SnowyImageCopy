@@ -253,12 +253,12 @@ namespace SnowyImageCopy.Models
 		#region Connection
 
 		// XmlSerializer cannot work with TimeSpan.
-		public int AutoCheckInterval
+		public double AutoCheckInterval
 		{
 			get => _autoCheckInterval;
 			set => SetPropertyValue(ref _autoCheckInterval, value);
 		}
-		private int _autoCheckInterval = 30; // Default
+		private double _autoCheckInterval = 30D; // Default
 
 		public int TimeoutDuration
 		{
