@@ -40,12 +40,10 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		#endregion
 
-		private readonly string _indexString;
 		private readonly HttpClient _client;
 
-		internal FileManager(in string indexString)
+		internal FileManager()
 		{
-			this._indexString = indexString;
 			_client = new HttpClient { Timeout = Timeout.InfiniteTimeSpan };
 		}
 
@@ -554,15 +552,17 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		#region Method (Private)
 
+		internal event EventHandler<(string request, string response)> Downloaded;
+
 		private async Task<string> DownloadStringAsync(string path, ICardState card, CancellationToken cancellationToken)
 		{
 			var bytes = await DownloadBytesAsync(path, 0, null, card, cancellationToken).ConfigureAwait(false);
 
-			if (_recordsDownloadString)
-				await RecordDownloadStringAsync(_indexString, path, bytes).ConfigureAwait(false);
-
 			// Response from FlashAir card seems to be encoded by ASCII.
-			return Encoding.ASCII.GetString(bytes);
+			string buffer = null;
+			Downloaded?.Invoke(this, (path, buffer = Encoding.ASCII.GetString(bytes)));
+
+			return buffer ?? Encoding.ASCII.GetString(bytes);
 		}
 
 		private Task<byte[]> DownloadBytesAsync(string path, ICardState card, CancellationToken cancellationToken)
@@ -803,30 +803,6 @@ namespace SnowyImageCopy.Models.ImageFile
 		private string ComposeRemotePath(FileManagerCommand command, string remotePath)
 		{
 			return string.Concat(_remoteRoot, _commandMap[command], remotePath.TrimStart('/'));
-		}
-
-		#endregion
-
-		#region Log
-
-		private static readonly bool _recordsDownloadString = Workspace.RecordsDownloadLog
-			|| Debugger.IsAttached; // When this application runs in a debugger, download log will be always recorded.
-
-		private static string GetDownloadFileName(in string value) => $"download{value}.log";
-
-		/// <summary>
-		/// Records result of DownloadStringAsync method.
-		/// </summary>
-		/// <param name="requestPath">Request path</param>
-		/// <param name="responseBytes">Response byte array</param>
-		private static async Task RecordDownloadStringAsync(string indexString, string requestPath, byte[] responseBytes)
-		{
-			var buffer = new StringBuilder()
-				.AppendLine($"request => {requestPath}")
-				.AppendLine("response -> ")
-				.AppendLine(Encoding.ASCII.GetString(responseBytes));
-
-			await LogService.RecordAsync(GetDownloadFileName(indexString), buffer.ToString());
 		}
 
 		#endregion

@@ -39,8 +39,9 @@ namespace SnowyImageCopy.Models
 			this._mainWindowViewModel = mainWindowViewModel ?? throw new ArgumentNullException(nameof(mainWindowViewModel));
 			this._settings = mainWindowViewModel.Settings;
 
-			this._manager = new FileManager(this._settings.IndexString);
+			_manager = new FileManager();
 			Subscription.Add(_manager);
+			RegisterDownloaded(_manager);
 
 			if (!Designer.IsInDesignMode) // ListCollectionView may be null in Design mode.
 			{
@@ -1420,6 +1421,36 @@ namespace SnowyImageCopy.Models
 		/// <returns>True if available.</returns>
 		private static bool IsAvailableLocal(FileInfo info) =>
 			(info != null) && !info.Attributes.HasFlag(FileAttributes.Offline);
+
+		#endregion
+
+		#region Log
+
+		private void RegisterDownloaded(FileManager manager)
+		{
+			if (Debugger.IsAttached || Workspace.RecordsDownloadLog) // When this application runs in a debugger, download log will be always recorded.
+				manager.Downloaded += OnDownloaded;
+		}
+
+		private async void OnDownloaded(object sender, (string request, string response) e) =>
+			await RecordDownloadAsync(_settings.IndexString, e.request, e.response);
+
+		private static string GetDownloadFileName(in string value) => $"download{value}.log";
+
+		/// <summary>
+		/// Records download log.
+		/// </summary>
+		/// <param name="request">Request path</param>
+		/// <param name="response">Response in string</param>
+		private static Task RecordDownloadAsync(string indexString, string request, string response)
+		{
+			var buffer = new StringBuilder()
+				.AppendLine($"request => {request}")
+				.AppendLine("response -> ")
+				.AppendLine(response);
+
+			return LogService.RecordAsync(GetDownloadFileName(indexString), buffer.ToString());
+		}
 
 		#endregion
 	}
