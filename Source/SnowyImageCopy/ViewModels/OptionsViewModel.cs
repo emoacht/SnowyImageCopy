@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Models;
+using SnowyImageCopy.Views;
 
 namespace SnowyImageCopy.ViewModels
 {
@@ -88,6 +89,24 @@ namespace SnowyImageCopy.ViewModels
 			}
 			private int? _selectedIndex;
 		}
+
+		#endregion
+
+		#region Info
+
+		public string Title
+		{
+			get => _title ?? ProductInfo.Title;
+			set => SetPropertyValue(ref _title, value);
+		}
+		public string _title;
+
+		public Version Version
+		{
+			get => _version ?? ProductInfo.Version;
+			set => SetPropertyValue(ref _version, value);
+		}
+		public Version _version;
 
 		#endregion
 	}

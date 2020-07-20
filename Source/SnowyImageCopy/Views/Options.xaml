@@ -6,11 +6,11 @@
 			 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			 xmlns:ma="clr-namespace:MonitorAware;assembly=MonitorAware"
-			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
 			 xmlns:models="clr-namespace:SnowyImageCopy.Models"
+			 xmlns:properties="clr-namespace:SnowyImageCopy.Properties"
+			 xmlns:views="clr-namespace:SnowyImageCopy.Views"
 			 xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
 			 xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
-			 xmlns:properties="clr-namespace:SnowyImageCopy.Properties"
 			 mc:Ignorable="d"
 			 d:DesignHeight="1200" d:DesignWidth="250">
 	<UserControl.Resources>
@@ -378,12 +378,14 @@
 			</GroupBox>
 
 			<!-- Info -->
-			<GroupBox Style="{StaticResource ItemGroupStyle}"
+			<GroupBox x:Name="InfoGroupBox"
+					  x:FieldModifier="public"
+					  Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_Info, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
-					<TextBlock Text="{x:Static views:ProductInfo.Title}"/>
+					<TextBlock Text="{Binding Title, Mode=OneWay}"/>
 					<TextBlock Margin="0,2,0,0">
-						<Run Text="{Binding Source={x:Static views:ProductInfo.Version}, Mode=OneTime}"/>
+						<Run Text="{Binding Version, Mode=OneWay}"/>
 						<Run Text="|"/>
 						<Run TextDecorations="Underline" Cursor="Hand"
 							 Text="{x:Static properties:Resources.Site}">
@@ -415,8 +417,7 @@
 						</Run>
 					</TextBlock>
 					<TextBlock Margin="0,2">
-						<Run Text="{Binding (ma:MonitorAwareProperty.Instance).WindowHandler.SystemDpi.PixelsPerInchX, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay, StringFormat=System DPI: {0}}"/>
-						<Run Text="{Binding (ma:MonitorAwareProperty.Instance).WindowHandler.MonitorDpi.PixelsPerInchX, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
+						<Run Text="{Binding Path=(ma:MonitorAwareProperty.Instance).WindowHandler.MonitorDpi.PixelsPerInchX, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
 					</TextBlock>
 				</StackPanel>
 			</GroupBox>

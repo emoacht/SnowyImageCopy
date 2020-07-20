@@ -4,8 +4,8 @@
 				xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 				xmlns:ma="clr-namespace:MonitorAware;assembly=MonitorAware"
 				xmlns:se="clr-namespace:SlateElement;assembly=SlateElement"
-				xmlns:views="clr-namespace:SnowyImageCopy.Views"
 				xmlns:models="clr-namespace:SnowyImageCopy.Models"
+				xmlns:views="clr-namespace:SnowyImageCopy.Views"
 				xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
 				xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
 				x:Name="WindowRoot"
@@ -238,6 +238,7 @@
 					VerticalScrollBarVisibility="Auto"
 					Visibility="{Binding Visibility, ElementName=OptionsButtonOpen}">
 					<Border x:Name="OptionsBorder"
+							x:FieldModifier="public"
 							BorderThickness="1,0,0,0"
 							BorderBrush="{StaticResource BorderLine.Weak}">
 						<!-- Placeholder for Options -->
