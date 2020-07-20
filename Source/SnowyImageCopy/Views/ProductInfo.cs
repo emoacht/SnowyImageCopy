@@ -12,7 +12,7 @@ namespace SnowyImageCopy.Views
 	/// </summary>
 	public static class ProductInfo
 	{
-		private static readonly Assembly _assembly = Assembly.GetExecutingAssembly();
+		private static readonly Assembly _assembly = Assembly.GetEntryAssembly();
 		public static Version Version { get; } = _assembly.GetName().Version;
 
 		#region Assembly attributes

@@ -1212,7 +1212,7 @@ namespace SnowyImageCopy.Models
 				ToastBody = Resources.ToastBody_CopyCompleted,
 				ToastBodyExtra = string.Format(Resources.ToastBodyExtra_CopyCompleted, _copyFileCount, (int)(DateTime.Now - CopyStartTime).TotalSeconds),
 				ShortcutFileName = Properties.Settings.Default.ShortcutFileName,
-				ShortcutTargetFilePath = Assembly.GetExecutingAssembly().Location,
+				ShortcutTargetFilePath = Assembly.GetEntryAssembly().Location,
 				AppId = Properties.Settings.Default.AppId
 			};
 
