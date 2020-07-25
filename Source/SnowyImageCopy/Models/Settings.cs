@@ -510,6 +510,8 @@ namespace SnowyImageCopy.Models
 		}
 		private DateTime _lastWriteTime;
 
+		public string Reserve { get; set; }
+
 		public Settings()
 		{ }
 
