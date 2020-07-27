@@ -38,7 +38,7 @@ namespace SnowyImageCopy.Models
 		{
 			if (ShowsUsage)
 			{
-				ShowUsage();
+				WriteConsole(GetUsage());
 				return false;
 			}
 
@@ -132,6 +132,20 @@ namespace SnowyImageCopy.Models
 		#region Command-line
 
 		/// <summary>
+		/// Writes a specified value to console.
+		/// </summary>
+		/// <param name="value"></param>
+		public static void WriteConsole(string value)
+		{
+			if (AttachConsole(ATTACH_PARENT_PROCESS))
+			{
+				Console.WriteLine(value);
+
+				FreeConsole();
+			}
+		}
+
+		/// <summary>
 		/// Whether to show command line usage
 		/// </summary>
 		public static bool ShowsUsage => CheckArgs("/?", "-?");
@@ -153,16 +167,6 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		public static bool RecordsDownloadLog => CheckArgs(RecordsDownloadLogOptions);
 		private static string[] RecordsDownloadLogOptions => Propagate("recordlog");
-
-		public void ShowUsage()
-		{
-			if (!AttachConsole(ATTACH_PARENT_PROCESS))
-				return;
-
-			Console.WriteLine(GetUsage());
-
-			FreeConsole();
-		}
 
 		protected virtual string GetUsage()
 		{
