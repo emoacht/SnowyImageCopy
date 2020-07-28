@@ -153,14 +153,14 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Whether to start auto check at startup of this application
 		/// </summary>
-		public static bool StartsAutoCheck => CheckArgs(StartsAutoCheckOptions);
-		private static string[] StartsAutoCheckOptions => Propagate("autocheck");
+		public static bool StartsAutoCheckAtStart => CheckArgs(StartsAutoCheckAtStartOptions);
+		private static string[] StartsAutoCheckAtStartOptions => Propagate("autocheck");
 
 		/// <summary>
-		/// Whether to make window state minimized at startup of this application
+		/// Whether to minimize window at startup of this application
 		/// </summary>
-		public static bool MakesWindowStateMinimized => CheckArgs(MakesWindowStateMinimizedOptions);
-		private static string[] MakesWindowStateMinimizedOptions => Propagate("minimized");
+		public static bool MinimizesWindowAtStart => CheckArgs(MinimizesWindowAtStartOptions);
+		private static string[] MinimizesWindowAtStartOptions => Propagate("minimize");
 
 		/// <summary>
 		/// Whether to record download log
@@ -174,10 +174,10 @@ namespace SnowyImageCopy.Models
 				"\n" +
 				"Usage: SnowyImageCopy [{0}] [{1}] [{2}]\n" +
 				"{0}: Start auto check at startup\n" +
-				"{1}: Make window state minimized at startup\n" +
+				"{1}: Minimize window at startup\n" +
 				"{2}: Record download log",
-				StartsAutoCheckOptions[0],
-				MakesWindowStateMinimizedOptions[0],
+				StartsAutoCheckAtStartOptions[0],
+				MinimizesWindowAtStartOptions[0],
 				RecordsDownloadLogOptions[0]);
 		}
 
