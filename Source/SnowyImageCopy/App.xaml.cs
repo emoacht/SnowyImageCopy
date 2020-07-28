@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -35,6 +36,12 @@ namespace SnowyImageCopy
 				return;
 			}
 
+			if (!TryCreateSemaphore(SnowyImageCopy.Properties.Settings.Default.AppId))
+			{
+				this.Shutdown(0);
+				return;
+			}
+
 			Settings.Current.Start();
 			ResourceService.Current.ChangeCulture(Settings.Current.CultureName);
 
@@ -45,9 +52,27 @@ namespace SnowyImageCopy
 		protected override void OnExit(ExitEventArgs e)
 		{
 			Settings.Current.Stop();
+			CloseSemaphore();
 
 			base.OnExit(e);
 		}
+
+		#region Semaphore
+
+		private Semaphore _semaphore;
+
+		private bool TryCreateSemaphore(string name)
+		{
+			if (string.IsNullOrEmpty(name))
+				throw new ArgumentNullException(nameof(name));
+
+			_semaphore = new Semaphore(1, 1, name, out bool createdNew);
+			return createdNew;
+		}
+
+		private void CloseSemaphore() => _semaphore?.Dispose();
+
+		#endregion
 
 		#region Exception
 
