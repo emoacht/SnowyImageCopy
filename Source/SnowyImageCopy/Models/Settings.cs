@@ -508,7 +508,7 @@ namespace SnowyImageCopy.Models
 
 		public void Stop()
 		{
-			_subscription.Dispose();
+			_subscription?.Dispose();
 		}
 
 		private const string SettingsFileName = "settings.xml";
