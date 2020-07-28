@@ -176,7 +176,7 @@
 							Width="90" 
 							Style="{StaticResource QuickButtonStyle}"
 							Content="{Binding Resources.Options_AutoAtStart, Source={x:Static models:ResourceService.Current}}"
-							IsChecked="{Binding Settings.AutoAtStart, Mode=TwoWay}"/>
+							IsChecked="{Binding Settings.AutoCheckAtStart, Mode=TwoWay}"/>
 
 						<!-- Copy on select -->
 						<ToggleButton

@@ -241,12 +241,12 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _copyOnSelect = true; // Default
 
-		public bool AutoAtStart
+		public bool AutoCheckAtStart
 		{
-			get => _autoAtStart;
-			set => SetPropertyValue(ref _autoAtStart, value);
+			get => _autoCheckAtStart;
+			set => SetPropertyValue(ref _autoCheckAtStart, value);
 		}
-		private bool _autoAtStart;
+		private bool _autoCheckAtStart;
 
 		#endregion
 

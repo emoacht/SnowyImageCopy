@@ -449,7 +449,7 @@ namespace SnowyImageCopy.ViewModels
 
 			SetSample(1);
 
-			if ((Settings.AutoAtStart || Workspace.StartsAutoCheck) &&
+			if ((Settings.AutoCheckAtStart || Workspace.StartsAutoCheck) &&
 				CheckAndCopyAutoCommand.CanExecute())
 				CheckAndCopyAutoCommand.Execute();
 		}
