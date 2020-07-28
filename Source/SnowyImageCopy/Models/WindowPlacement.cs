@@ -125,7 +125,7 @@ namespace SnowyImageCopy.Models
 		private static string GetPlacementFileName(in string value) => $"placement{value}.xml";
 		private static string GetPlacementFilePath(in string value) => FolderService.GetAppDataFilePath(GetPlacementFileName(value));
 
-		internal static void Load(in string indexString, Window window, bool isNormal = true)
+		internal static void Load(in string indexString, Window window)
 		{
 			if (!TryLoad(GetPlacementFilePath(indexString), out Container container))
 				return;
@@ -140,7 +140,9 @@ namespace SnowyImageCopy.Models
 
 			placement.length = Marshal.SizeOf<WINDOWPLACEMENT>();
 			placement.flags = 0; // No flag set
-			placement.showCmd = isNormal ? SW.SW_SHOWNORMAL : SW.SW_SHOWMINNOACTIVE; // Make window state normal by default.
+			placement.showCmd = (window.WindowState == WindowState.Minimized)
+				? SW.SW_SHOWMINNOACTIVE // If WindowState property is WindowState.Minimized, make window state minimized.
+				: SW.SW_SHOWNORMAL;
 
 			SetWindowPlacement(handle, ref placement);
 		}

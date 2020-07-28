@@ -181,6 +181,8 @@ namespace SnowyImageCopy.Models
 				RecordsDownloadLogOptions[0]);
 		}
 
+		public static WindowState WindowStateAtStart => MinimizesWindowAtStart ? WindowState.Minimized : WindowState.Normal;
+
 		private static string[] _args;
 
 		protected static bool CheckArgs(params string[] options)

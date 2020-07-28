@@ -37,7 +37,7 @@ namespace SnowyImageCopy
 			_settings = Settings.Load().DefaultIfEmpty(new Settings()).First();
 			Settings.CommonCultureName = _settings.CultureName;
 			_settings.Start();
-			this.MainWindow = new MainWindow(_settings);
+			this.MainWindow = new MainWindow(_settings) { WindowState = Workspace.WindowStateAtStart };
 			this.MainWindow.Show();
 		}
 
