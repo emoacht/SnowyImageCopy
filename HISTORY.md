@@ -1,5 +1,18 @@
 ﻿## History
 
+Ver 2.0.0 2020-7-31
+
+ - Add `Card (Remote)` function to provide information on remotely connected FlashAir card
+ - Add `Card (Local)` function to manage settings of local FlashAir card
+ - Add `Auto at start` function to start auto check at app's start
+ - Enable to set Auto Check Interval shorter than one second
+ - Improve Per-Monitor DPI awareness
+
+Ver 1.9.0 2020-7-30
+
+ - Modify some behaviors
+
+
 Ver 1.8.0 2020-3-8
 
  - Enable to customize folder name for each date
