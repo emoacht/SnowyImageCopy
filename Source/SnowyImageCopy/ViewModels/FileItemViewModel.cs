@@ -39,18 +39,36 @@ namespace SnowyImageCopy.ViewModels
 		internal string FilePath => _fileItem.FilePath;
 		internal HashItem Signature => _fileItem.Signature;
 
+		internal ushort FileIndex { get; set; } = 0;
+
+		private string _fileNameWithoutExtension;
+		private string _fileExtension;
+
 		internal string FileNameWithCaseExtension
 		{
 			get
 			{
-				if (!_settings.MakesFileExtensionLowercase)
+				if (!_settings.MakesFileExtensionLowercase &&
+					!_settings.LeavesExistingFile)
 					return this.FileName;
 
-				var extension = Path.GetExtension(this.FileName);
-				if (string.IsNullOrEmpty(extension))
-					return this.FileName;
+				_fileNameWithoutExtension ??= Path.GetFileNameWithoutExtension(this.FileName);
+				_fileExtension ??= Path.GetExtension(this.FileName);
 
-				return Path.GetFileNameWithoutExtension(this.FileName) + extension.ToLower();
+				var buffer = new StringBuilder(_fileNameWithoutExtension);
+
+				if (_settings.LeavesExistingFile && (0 < FileIndex))
+					buffer.AppendFormat(" ({0})", FileIndex);
+
+				if (!string.IsNullOrEmpty(_fileExtension))
+				{
+					if (_settings.MakesFileExtensionLowercase)
+						buffer.Append(_fileExtension.ToLower());
+					else
+						buffer.Append(_fileExtension);
+				}
+
+				return buffer.ToString();
 			}
 		}
 
@@ -58,42 +76,6 @@ namespace SnowyImageCopy.ViewModels
 		/// Whether can read Exif metadata
 		/// </summary>
 		internal bool CanReadExif => _fileItem.IsJpeg || _fileItem.IsTiff;
-
-		/// <summary>
-		/// Whether can get a thumbnail of a remote file
-		/// </summary>
-		/// <remarks>FlashAir card can provide a thumbnail only from JPEG format file.</remarks>
-		internal bool CanGetThumbnailRemote
-		{
-			get
-			{
-				if (_canGetThumbnailRemote.HasValue)
-					return _canGetThumbnailRemote.Value;
-
-				return _fileItem.IsJpeg;
-			}
-			set => _canGetThumbnailRemote = value;
-		}
-		private bool? _canGetThumbnailRemote;
-
-		/// <summary>
-		/// Whether can load image data from a local file
-		/// </summary>
-		/// <remarks>
-		/// As for raw images, whether an image is actually loadable depends on Microsoft Camera Codec Pack.
-		/// </remarks>
-		internal bool CanLoadDataLocal
-		{
-			get
-			{
-				if (_canLoadDataLocal.HasValue)
-					return _canLoadDataLocal.Value;
-
-				return _fileItem.IsLoadable;
-			}
-			set => _canLoadDataLocal = value;
-		}
-		private bool? _canLoadDataLocal;
 
 		public override string ToString() => this.FileName; // For the case when being called for binding
 
@@ -128,17 +110,13 @@ namespace SnowyImageCopy.ViewModels
 				if (_settings.HandlesJpegFileOnly && !_fileItem.IsJpeg)
 					return false;
 
-				switch (_settings.TargetPeriod)
+				return _settings.TargetPeriod switch
 				{
-					case FilePeriod.Today:
-						return (this.Date.Date == DateTime.Today);
-
-					case FilePeriod.Select:
-						return _settings.TargetDates.Contains(this.Date.Date);
-
-					default: // FilePeriod.All
-						return true;
-				}
+					FilePeriod.All => true,
+					FilePeriod.Today => (this.Date.Date == DateTime.Today),
+					FilePeriod.Select => _settings.TargetDates.Contains(this.Date.Date),
+					_ => throw new InvalidOperationException(),
+				};
 			}
 		}
 
@@ -150,12 +128,52 @@ namespace SnowyImageCopy.ViewModels
 		public bool IsAvailableLocal { get; set; }
 		public bool? IsOnceCopied { get; set; } = null;
 
+		internal FileStatus ResolveStatus()
+		{
+			FileStatus Resolve()
+			{
+				if (IsAliveLocal)
+					return FileStatus.Copied;
+
+				if (IsOnceCopied == true)
+					return FileStatus.OnceCopied;
+
+				return FileStatus.NotCopied;
+			}
+
+			return Status = Resolve();
+		}
+
 		public FileStatus Status
 		{
 			get => _status;
 			set => SetPropertyValue(ref _status, value);
 		}
 		private FileStatus _status = FileStatus.Unknown;
+
+		/// <summary>
+		/// Whether can get a thumbnail of a remote file
+		/// </summary>
+		/// <remarks>FlashAir card can provide a thumbnail only from JPEG format file.</remarks>
+		internal bool CanGetThumbnailRemote
+		{
+			get => !(_canGetThumbnailRemote == false) && _fileItem.IsJpeg && IsAliveRemote;
+			set => _canGetThumbnailRemote = value;
+		}
+		private bool? _canGetThumbnailRemote;
+
+		/// <summary>
+		/// Whether can load image data from a local file
+		/// </summary>
+		/// <remarks>
+		/// As for raw images, whether an image is actually loadable depends on Microsoft Camera Codec Pack.
+		/// </remarks>
+		internal bool CanLoadDataLocal
+		{
+			get => !(_canLoadDataLocal == false) && _fileItem.IsLoadable && IsAliveLocal && IsAvailableLocal;
+			set => _canLoadDataLocal = value;
+		}
+		private bool? _canLoadDataLocal;
 
 		public bool IsSelected
 		{

@@ -400,6 +400,13 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
+		public bool LeavesExistingFile
+		{
+			get => _leavesExistingFile;
+			set => SetPropertyValue(ref _leavesExistingFile, value);
+		}
+		private bool _leavesExistingFile;
+
 		public bool MovesFileToRecycle
 		{
 			get => _movesFileToRecycle;

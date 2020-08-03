@@ -330,7 +330,7 @@ namespace SnowyImageCopy.Models
 
 			_isFileListCoreViewThumbnailFilled = FileListCore
 				.Where(x => x.IsTarget && (x.Size != 0))
-				.Where(x => (x.IsAliveRemote && x.CanGetThumbnailRemote) || (x.IsAliveLocal && x.IsAvailableLocal && x.CanLoadDataLocal))
+				.Where(x => x.CanGetThumbnailRemote || x.CanLoadDataLocal)
 				.All(x => x.HasThumbnail);
 		}
 
@@ -863,9 +863,9 @@ namespace SnowyImageCopy.Models
 					// Check all local files.
 					foreach (var item in FileListCore)
 					{
-						TryGetFileInfoLocal(item, out FileInfo info);
-						item.IsAliveLocal = IsAliveLocal(info, item.Size);
-						item.IsAvailableLocal = IsAvailableLocal(info);
+						CheckFileLocal(item, out bool isAlive, out bool isAvailable);
+						item.IsAliveLocal = isAlive;
+						item.IsAvailableLocal = isAvailable;
 
 						if (_settings.SkipsOnceCopiedFile)
 						{
@@ -888,11 +888,7 @@ namespace SnowyImageCopy.Models
 							item.IsOnceCopied = null; // Reset value.
 						}
 
-						item.Status = item.IsAliveLocal
-							? FileStatus.Copied
-							: (item.IsOnceCopied == true)
-								? FileStatus.OnceCopied
-								: FileStatus.NotCopied;
+						item.ResolveStatus();
 					}
 
 					// Manage deleted items.
@@ -918,9 +914,8 @@ namespace SnowyImageCopy.Models
 							catch (Exception ex)
 							{
 								Debug.WriteLine($"Failed to move a file to Recycle.\r\n{ex}");
-								item.Status = (item.IsOnceCopied == true)
-									? FileStatus.OnceCopied
-									: FileStatus.NotCopied;
+								item.IsAliveLocal = false;
+								item.ResolveStatus();
 							}
 						}
 
@@ -938,11 +933,11 @@ namespace SnowyImageCopy.Models
 				{
 					foreach (var item in FileListCore.Where(x => x.IsTarget && !x.HasThumbnail))
 					{
-						if (item.IsAliveLocal && item.IsAvailableLocal && item.CanLoadDataLocal)
+						if (item.CanLoadDataLocal)
 						{
 							itemsDueLocal.Add(item);
 						}
-						else if (item.IsAliveRemote && item.CanGetThumbnailRemote)
+						else if (item.CanGetThumbnailRemote)
 						{
 							itemsDueRemote.Add(item);
 						}
@@ -966,7 +961,7 @@ namespace SnowyImageCopy.Models
 								}
 								catch
 								{
-									if (item.IsAliveRemote && item.CanGetThumbnailRemote)
+									if (item.CanGetThumbnailRemote)
 									{
 										itemsDueRemote.Add(item);
 									}
@@ -976,9 +971,7 @@ namespace SnowyImageCopy.Models
 							catch (FileNotFoundException)
 							{
 								item.IsAliveLocal = false;
-								item.Status = (item.IsOnceCopied == true)
-									? FileStatus.OnceCopied
-									: FileStatus.NotCopied;
+								item.ResolveStatus();
 							}
 							catch (IOException)
 							{
@@ -1123,7 +1116,7 @@ namespace SnowyImageCopy.Models
 						if (!string.IsNullOrEmpty(localDirectory) && !Directory.Exists(localDirectory))
 							Directory.CreateDirectory(localDirectory);
 
-						var data = await _manager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, item.CanReadExif, progress, Card, _tokenSourceWorking.Token);
+						var data = await _manager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, !_settings.LeavesExistingFile, item.CanReadExif, progress, Card, _tokenSourceWorking.Token);
 
 						if (data?.Any() == true)
 						{
@@ -1243,7 +1236,7 @@ namespace SnowyImageCopy.Models
 				_tokenSourceLoading = new CancellationTokenSourcePlus();
 
 				byte[] data = null;
-				if (item.IsAvailableLocal && item.CanLoadDataLocal)
+				if (item.CanLoadDataLocal)
 					data = await FileAddition.ReadAllBytesAsync(ComposeLocalPath(item), _tokenSourceLoading.Token);
 
 				CurrentItem = item;
@@ -1256,9 +1249,7 @@ namespace SnowyImageCopy.Models
 			catch (FileNotFoundException)
 			{
 				item.IsAliveLocal = false;
-				item.Status = (item.IsOnceCopied == true)
-					? FileStatus.OnceCopied
-					: FileStatus.NotCopied;
+				item.ResolveStatus();
 			}
 			catch (IOException)
 			{
@@ -1381,20 +1372,51 @@ namespace SnowyImageCopy.Models
 		#region Local file
 
 		/// <summary>
-		/// Attempts to get FileInfo of a local file.
+		/// Checks whether a local file exists changing file index if necessary.
 		/// </summary>
 		/// <param name="item">Target item</param>
-		/// <param name="info">FileInfo of a local file</param>
-		/// <returns>True if successfully got.</returns>
-		private bool TryGetFileInfoLocal(FileItemViewModel item, out FileInfo info)
+		/// <param name="isAlive">Whether a local file exists.</param>
+		/// <param name="isAvailable">Whether a local file is available (not offline) in relation to OneDrive.</param>
+		private void CheckFileLocal(FileItemViewModel item, out bool isAlive, out bool isAvailable)
 		{
-			var localPath = ComposeLocalPath(item);
+			var isInitial = true;
 
-			info = File.Exists(localPath) // File.Exists method is more robust than FileInfo constructor.
-				? new FileInfo(localPath)
-				: null;
+			while (true)
+			{
+				var localPath = ComposeLocalPath(item);
 
-			return (info != null);
+				if (File.Exists(localPath)) // File.Exists method is more robust than FileInfo constructor.
+				{
+					var info = new FileInfo(localPath);
+					if (info.Length == item.Size)
+					{
+						isAlive = true;
+						isAvailable = !info.Attributes.HasFlag(FileAttributes.Offline);
+						return;
+					}
+				}
+				else if (item.FileIndex == 0 || !isInitial)
+					break;
+
+				if (!_settings.LeavesExistingFile)
+					break;
+
+				if (isInitial)
+				{
+					isInitial = false;
+					item.FileIndex = (ushort)(item.FileIndex == 0 ? 1 : 0);
+				}
+				else
+				{
+					if (item.FileIndex == ushort.MaxValue)
+						break;
+
+					item.FileIndex++;
+				}
+			}
+
+			isAlive = false;
+			isAvailable = false;
 		}
 
 		/// <summary>
@@ -1402,25 +1424,11 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		/// <param name="item">Target item</param>
 		/// <returns>True if exists.</returns>
-		private bool IsAliveLocal(FileItemViewModel item) =>
-			TryGetFileInfoLocal(item, out FileInfo info) && IsAliveLocal(info, item.Size);
-
-		/// <summary>
-		/// Determines whether a local file exists.
-		/// </summary>
-		/// <param name="info">FileInfo of a local file</param>
-		/// <param name="size">File size of a local file</param>
-		/// <returns>True if exists.</returns>
-		private static bool IsAliveLocal(FileInfo info, int size) =>
-			(info != null) && (info.Length == size);
-
-		/// <summary>
-		/// Determines whether a local file is available (not offline) in relation to OneDrive.
-		/// </summary>
-		/// <param name="info">FileInfo of a local file</param>
-		/// <returns>True if available.</returns>
-		private static bool IsAvailableLocal(FileInfo info) =>
-			(info != null) && !info.Attributes.HasFlag(FileAttributes.Offline);
+		private bool IsAliveLocal(FileItemViewModel item)
+		{
+			CheckFileLocal(item, out bool isAlive, out _);
+			return isAlive;
+		}
 
 		#endregion
 
