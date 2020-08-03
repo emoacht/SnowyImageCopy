@@ -926,6 +926,15 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not overwrite existing image.
+        /// </summary>
+        public static string Options_LeaveExisting {
+            get {
+                return ResourceManager.GetString("Options_LeaveExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Local Folder (Copy Destination).
         /// </summary>
         public static string Options_LocalFolder {
