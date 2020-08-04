@@ -421,6 +421,9 @@
   <data name="Options_OnceCopied" xml:space="preserve">
     <value>Not select once copied image on check</value>
   </data>
+  <data name="Options_LeaveExisting" xml:space="preserve">
+    <value>Not overwrite existing image</value>
+  </data>
   <data name="Options_Recycle" xml:space="preserve">
     <value>Move to Recycle Bin if image in FlashAir is deleted</value>
   </data>

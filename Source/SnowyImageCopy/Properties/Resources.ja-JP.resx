@@ -411,6 +411,9 @@
   <data name="Options_OnceCopied" xml:space="preserve">
     <value>チェック後に前にコピー済のイメージを選択しない</value>
   </data>
+  <data name="Options_LeaveExisting" xml:space="preserve">
+    <value>既存のイメージを上書きしない</value>
+  </data>
   <data name="Options_Recycle" xml:space="preserve">
     <value>FlashAir内のイメージが削除されたらごみ箱に移動する</value>
   </data>

@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 2.1.0 2020-8-4
+
+ - Add setting not to overwrite existing image
+
 Ver 2.0.0 2020-7-31
 
  - Add `Card (Remote)` function to provide information on remotely connected FlashAir card

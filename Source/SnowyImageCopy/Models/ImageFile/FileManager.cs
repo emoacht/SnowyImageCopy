@@ -274,15 +274,16 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// Gets file data of a specified remote file in FlashAir card and save it in local folder.
 		/// </summary>
 		/// <param name="remoteFilePath">Remote file path</param>
-		/// <param name="localFilePath">Local file path</param>
+		/// <param name="localFilePath">Local file path</param> 
 		/// <param name="size">File size provided by FlashAir card</param>
 		/// <param name="itemDate">Date provided by FlashAir card</param>
-		/// <param name="canReadExif">Whether can read Exif metadata from the file</param>
+		/// <param name="overwrite">Whether to overwrite existing file</param>
+		/// <param name="readExif">Whether to read Exif metadata from file</param>
 		/// <param name="progress">Progress</param>
 		/// <param name="card">State of FlashAir card</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		/// <returns>Byte array of file</returns>
-		internal async Task<byte[]> GetSaveFileAsync(string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool canReadExif, IProgress<ProgressInfo> progress, ICardState card, CancellationToken cancellationToken)
+		internal async Task<byte[]> GetSaveFileAsync(string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool overwrite, bool readExif, IProgress<ProgressInfo> progress, ICardState card, CancellationToken cancellationToken)
 		{
 			if (string.IsNullOrWhiteSpace(remoteFilePath))
 				throw new ArgumentNullException(nameof(remoteFilePath));
@@ -303,19 +304,20 @@ namespace SnowyImageCopy.Models.ImageFile
 				throw;
 			}
 
+			var mode = overwrite ? FileMode.Create : FileMode.CreateNew; // FileMode.CreateNew will cause IOException if a same name file exists.
 			int retryCount = 0;
 
 			while (true)
 			{
 				try
 				{
-					using (var fs = new FileStream(localFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+					using (var fs = new FileStream(localFilePath, mode, FileAccess.Write, FileShare.ReadWrite))
 					{
 						var creationTime = itemDate;
 						var lastWriteTime = itemDate;
 
 						// Overwrite creation time by date of image taken from Exif metadata.
-						if (canReadExif)
+						if (readExif)
 						{
 							var exifDateTaken = await ImageManager.GetExifDateTakenAsync(bytes, DateTimeKind.Local).ConfigureAwait(false);
 							if (exifDateTaken != default)
@@ -328,7 +330,7 @@ namespace SnowyImageCopy.Models.ImageFile
 					}
 					return bytes;
 				}
-				catch (IOException) when (++retryCount < MaxRetryCount)
+				catch (IOException) when (overwrite && (++retryCount < MaxRetryCount))
 				{
 					// Wait interval before retry.
 					if (TimeSpan.Zero < _retryInterval)

@@ -312,6 +312,10 @@ namespace SnowyImageCopy.Views.Behaviors
 							}
 						}
 						break;
+					case NotifyCollectionChangedAction.Reset:
+						// This indicates that ListCollectionView.Refresh method is called.
+						CheckItems();
+						break;
 				}
 			}
 		}
