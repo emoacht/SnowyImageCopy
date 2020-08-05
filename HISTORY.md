@@ -1,6 +1,6 @@
 ﻿## History
 
-Ver 2.1.0 2020-8-4
+Ver 2.1.1 2020-8-6
 
  - Add setting not to overwrite existing image
 
