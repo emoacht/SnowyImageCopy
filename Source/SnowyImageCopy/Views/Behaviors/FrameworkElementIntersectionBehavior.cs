@@ -103,19 +103,15 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		private void CheckElements(bool retry = true)
 		{
-			// Check if AssociatedElement and TargetElement are assigned and Visibility properties
-			// are set to Visibility.Visible (It does not necessarily mean they are visible).
-			if ((AssociatedElement is null) ||
-				(AssociatedElement.Visibility == Visibility.Collapsed) ||
-				(TargetElement is null) ||
-				(TargetElement.Visibility == Visibility.Collapsed))
+			// Check if AssociatedElement and TargetElement are assigned.
+			if ((AssociatedElement is null) || (TargetElement is null))
 				return;
 
-			// Check if AssociatedElement and TargetElement have been already visible.
+			// Check if AssociatedElement and TargetElement have been already presented.
 			// If not, an InvalidOperationException ("This Visual is not connected to a PresentationSource")
 			// will be thrown when calling PointToScreen method.
-			if (AssociatedElement.IsVisible &&
-				TargetElement.IsVisible)
+			if ((PresentationSource.FromVisual(AssociatedElement) != null) &&
+				(PresentationSource.FromVisual(TargetElement) != null))
 			{
 				var isIntersected = IsElementIntersected();
 				if (this.IsIntersected != isIntersected)
