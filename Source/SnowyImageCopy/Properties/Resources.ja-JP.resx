@@ -465,13 +465,13 @@
   <data name="SiteUrl" xml:space="preserve">
     <value>https://emoacht.github.io/SnowyImageCopy/index_jp.html</value>
   </data>
-  <data name="ToastBodyExtra_CopyCompleted" xml:space="preserve">
+  <data name="ToastBodyFormat_CopyCompleted" xml:space="preserve">
     <value>({0} イメージ, {1} 秒)</value>
   </data>
   <data name="ToastBody_CopyCompleted" xml:space="preserve">
     <value>FlashAirからのコピーが完了しました。</value>
   </data>
-  <data name="ToastHeadline_CopyCompleted" xml:space="preserve">
+  <data name="ToastTitle_CopyCompleted" xml:space="preserve">
     <value>コピー完了</value>
   </data>
 </root>

@@ -481,13 +481,13 @@
   <data name="SiteUrl" xml:space="preserve">
     <value>https://emoacht.github.io/SnowyImageCopy/index.html</value>
   </data>
-  <data name="ToastBodyExtra_CopyCompleted" xml:space="preserve">
+  <data name="ToastBodyFormat_CopyCompleted" xml:space="preserve">
     <value>({0} images, {1} seconds)</value>
   </data>
   <data name="ToastBody_CopyCompleted" xml:space="preserve">
     <value>Copy from FlashAir completed.</value>
   </data>
-  <data name="ToastHeadline_CopyCompleted" xml:space="preserve">
+  <data name="ToastTitle_CopyCompleted" xml:space="preserve">
     <value>Copy Completed</value>
   </data>
 </root>

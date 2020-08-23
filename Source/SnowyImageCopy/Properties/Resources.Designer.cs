@@ -1162,18 +1162,18 @@ namespace SnowyImageCopy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to ({0} images, {1} seconds).
         /// </summary>
-        public static string ToastBodyExtra_CopyCompleted {
+        public static string ToastBodyFormat_CopyCompleted {
             get {
-                return ResourceManager.GetString("ToastBodyExtra_CopyCompleted", resourceCulture);
+                return ResourceManager.GetString("ToastBodyFormat_CopyCompleted", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Copy Completed.
         /// </summary>
-        public static string ToastHeadline_CopyCompleted {
+        public static string ToastTitle_CopyCompleted {
             get {
-                return ResourceManager.GetString("ToastHeadline_CopyCompleted", resourceCulture);
+                return ResourceManager.GetString("ToastTitle_CopyCompleted", resourceCulture);
             }
         }
     }
