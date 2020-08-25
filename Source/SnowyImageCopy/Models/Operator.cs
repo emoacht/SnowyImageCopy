@@ -1207,9 +1207,9 @@ namespace SnowyImageCopy.Models
 					Resources.ToastBody_CopyCompleted,
 					string.Format(Resources.ToastBodyFormat_CopyCompleted, _copyFileCount, (int)(DateTime.Now - CopyStartTime).TotalSeconds)
 				},
-				ShortcutFileName = Properties.Settings.Default.ShortcutFileName,
+				ShortcutFileName = Workspace.ShortcutFileName,
 				ShortcutTargetFilePath = Assembly.GetEntryAssembly().Location,
-				AppId = Properties.Settings.Default.AppId
+				AppId = Workspace.AppId
 			};
 
 			var result = await ToastManager.ShowAsync(request);

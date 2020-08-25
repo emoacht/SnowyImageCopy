@@ -129,6 +129,20 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
+		#region Toast
+
+		/// <summary>
+		/// Shortcut file name
+		/// </summary>
+		public static string ShortcutFileName { get; set; } = Properties.Settings.Default.ShortcutFileName;
+
+		/// <summary>
+		/// Application User Model ID (AUMID) of application
+		/// </summary>
+		public static string AppId { get; set; } = Properties.Settings.Default.AppId;
+
+		#endregion
+
 		#region Command-line
 
 		/// <summary>
