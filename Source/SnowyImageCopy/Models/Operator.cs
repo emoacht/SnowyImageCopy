@@ -50,6 +50,28 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
+		#region IDisposable
+
+		private bool _disposed = false;
+
+		protected override void Dispose(bool disposing)
+		{
+			if (_disposed)
+				return;
+
+			if (disposing)
+			{
+				_remoteTokenContainer.TryCancel();
+				_toastTokenContainer.TryCancel();
+				_localTokenContainer.TryCancel();
+			}
+
+			_disposed = true;
+			base.Dispose(disposing);
+		}
+
+		#endregion
+
 		#region Access to MainWindowViewModel
 
 		private string OperationStatus
@@ -422,7 +444,8 @@ namespace SnowyImageCopy.Models
 
 		internal CardState Card { get; } = new CardState();
 
-		private CancellationTokenSourcePlus _tokenSourceWorking;
+		private readonly CancellationTokenContainer _remoteTokenContainer = new CancellationTokenContainer();
+		private readonly CancellationTokenContainer _toastTokenContainer = new CancellationTokenContainer();
 
 		private DateTime LastCheckCopyTime { get; set; }
 
@@ -443,23 +466,31 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				if (NetworkChecker.IsNetworkConnected(Card))
+				if (!NetworkChecker.IsNetworkConnected(Card))
 				{
-					OperationStatus = Resources.OperationStatus_Checking;
+					OperationStatus = Resources.OperationStatus_ConnectionUnable;
+					return false;
+				}
 
-					_manager.Ensure(_settings.RemoteRootDescendant, _settings.TimeoutDuration);
+				OperationStatus = Resources.OperationStatus_Checking;
+				_manager.Ensure(_settings.RemoteRootDescendant, _settings.TimeoutDuration);
 
+				try
+				{
 					var isUpdated = Card.CanGetWriteTimeStamp
-						? (await _manager.GetWriteTimeStampAsync(CancellationToken.None) != Card.WriteTimeStamp)
-						: await _manager.CheckUpdateStatusAsync();
+						? (await _manager.GetWriteTimeStampAsync(_remoteTokenContainer.Token) != Card.WriteTimeStamp)
+						: await _manager.CheckUpdateStatusAsync(_remoteTokenContainer.Token);
 
 					OperationStatus = Resources.OperationStatus_Completed;
 					return isUpdated;
 				}
-				else
+				catch (OperationCanceledException)
 				{
-					OperationStatus = Resources.OperationStatus_ConnectionUnable;
-					return false;
+					// None. ResetAutoTimer will change OperationStatus.
+				}
+				finally
+				{
+					_remoteTokenContainer.Release();
 				}
 			}
 			catch (RemoteConnectionUnableException)
@@ -503,7 +534,7 @@ namespace SnowyImageCopy.Models
 					IsChecking = IsCopying = true;
 					UpdateProgress();
 
-					await CheckFileBaseAsync();
+					await CheckFileBaseAsync(_remoteTokenContainer.Token);
 
 					UpdateProgress();
 
@@ -511,22 +542,19 @@ namespace SnowyImageCopy.Models
 						? DateTime.MinValue
 						: DateTime.Now;
 
-					await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
+					await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress), _remoteTokenContainer.Token);
 
 					LastCheckCopyTime = DateTime.Now;
 
 					await Task.Delay(_copyWaitingDuration);
+
 					UpdateProgress();
-					IsChecking = IsCopying = false;
-
-					await ShowToastAsync();
-
-					return true;
 				}
 				catch (OperationCanceledException)
 				{
 					SoundManager.PlayInterrupted();
 					OperationStatus = Resources.OperationStatus_Stopped;
+					return false;
 				}
 				catch
 				{
@@ -539,8 +567,22 @@ namespace SnowyImageCopy.Models
 				}
 				finally
 				{
+					_remoteTokenContainer.Release();
 					IsChecking = IsCopying = false;
 				}
+
+				try
+				{
+					_toastTokenContainer.TryCancel(true);
+
+					await ShowToastAsync(_toastTokenContainer.Token);
+				}
+				finally
+				{
+					_toastTokenContainer.Release();
+				}
+
+				return true;
 			}
 			catch (RemoteConnectionUnableException)
 			{
@@ -603,7 +645,7 @@ namespace SnowyImageCopy.Models
 					IsChecking = true;
 					UpdateProgress();
 
-					await CheckFileBaseAsync();
+					await CheckFileBaseAsync(_remoteTokenContainer.Token);
 
 					UpdateProgress();
 
@@ -624,6 +666,7 @@ namespace SnowyImageCopy.Models
 				}
 				finally
 				{
+					_remoteTokenContainer.Release();
 					IsChecking = false;
 				}
 			}
@@ -665,18 +708,17 @@ namespace SnowyImageCopy.Models
 				{
 					IsCopying = true;
 
-					await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress));
+					await CopyFileBaseAsync(new Progress<ProgressInfo>(UpdateProgress), _remoteTokenContainer.Token);
 
 					await Task.Delay(_copyWaitingDuration);
-					UpdateProgress();
-					IsCopying = false;
 
-					await ShowToastAsync();
+					UpdateProgress();
 				}
 				catch (OperationCanceledException)
 				{
 					SoundManager.PlayInterrupted();
 					OperationStatus = Resources.OperationStatus_Stopped;
+					return;
 				}
 				catch
 				{
@@ -686,7 +728,19 @@ namespace SnowyImageCopy.Models
 				}
 				finally
 				{
+					_remoteTokenContainer.Release();
 					IsCopying = false;
+				}
+
+				try
+				{
+					_toastTokenContainer.TryCancel(true);
+
+					await ShowToastAsync(_toastTokenContainer.Token);
+				}
+				finally
+				{
+					_toastTokenContainer.Release();
 				}
 			}
 			catch (RemoteConnectionUnableException)
@@ -735,7 +789,7 @@ namespace SnowyImageCopy.Models
 		internal void Stop()
 		{
 			StopAutoTimer();
-			_tokenSourceWorking?.TryCancel(); // Canceling already canceled source will be simply ignored.
+			_remoteTokenContainer.TryCancel();
 		}
 
 		#endregion
@@ -773,46 +827,44 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Checks files in FlashAir card.
 		/// </summary>
-		private async Task CheckFileBaseAsync()
+		/// <param name="cancellationToken">Cancellation token</param>
+		private async Task CheckFileBaseAsync(CancellationToken cancellationToken)
 		{
 			OperationStatus = Resources.OperationStatus_Checking;
-
 			_manager.Ensure(_settings.RemoteRootDescendant, _settings.TimeoutDuration);
 
 			try
 			{
-				_tokenSourceWorking = new CancellationTokenSourcePlus();
-
 				var prepareTask = _settings.SkipsOnceCopiedFile
-					? Signatures.PrepareAsync(_settings.IndexString, _tokenSourceWorking.Token)
+					? Signatures.PrepareAsync(_settings.IndexString, cancellationToken)
 					: Task.FromResult(false); // Completed task
 
 				var checkTask = Task.Run(async () =>
 				{
 					// Check firmware version.
-					Card.FirmwareVersion = await _manager.GetFirmwareVersionAsync(_tokenSourceWorking.Token);
+					Card.FirmwareVersion = await _manager.GetFirmwareVersionAsync(cancellationToken);
 
 					// Check CID.
 					if (Card.CanGetCid)
-						Card.Cid = await _manager.GetCidAsync(_tokenSourceWorking.Token);
+						Card.Cid = await _manager.GetCidAsync(cancellationToken);
 
 					// Check SSID and check if PC is connected to FlashAir card by a wireless connection.
-					Card.Ssid = await _manager.GetSsidAsync(_tokenSourceWorking.Token);
+					Card.Ssid = await _manager.GetSsidAsync(cancellationToken);
 					Card.IsWirelessConnected = NetworkChecker.IsWirelessNetworkConnected(Card.Ssid);
 
 					// Check capacities.
 					if (Card.CanGetCapacity)
-						Card.Capacity = await _manager.GetCapacityAsync(_tokenSourceWorking.Token);
+						Card.Capacity = await _manager.GetCapacityAsync(cancellationToken);
 
 					// Get all items.
-					var fileListNew = (await _manager.GetFileListRootAsync(Card, _tokenSourceWorking.Token))
+					var fileListNew = (await _manager.GetFileListRootAsync(Card, cancellationToken))
 						.Select(fileItem => new FileItemViewModel(_settings, fileItem))
 						.ToList();
 					fileListNew.Sort();
 
 					// Record time stamp of write event.
 					if (Card.CanGetWriteTimeStamp)
-						Card.WriteTimeStamp = await _manager.GetWriteTimeStampAsync(_tokenSourceWorking.Token);
+						Card.WriteTimeStamp = await _manager.GetWriteTimeStampAsync(cancellationToken);
 
 					// Check if any sample is in old items.
 					var isSample = FileListCore.Any(x => x.Size == 0);
@@ -845,6 +897,8 @@ namespace SnowyImageCopy.Models
 
 					foreach (var itemNew in fileListNew)
 					{
+						cancellationToken.ThrowIfCancellationRequested();
+
 						if (isLeadoff)
 						{
 							isLeadoff = false;
@@ -855,7 +909,7 @@ namespace SnowyImageCopy.Models
 
 						FileListCore.Insert(itemNew); // Customized Insert method
 					}
-				}, _tokenSourceWorking.Token);
+				}, cancellationToken);
 
 				await Task.WhenAll(prepareTask, checkTask);
 
@@ -949,7 +1003,7 @@ namespace SnowyImageCopy.Models
 					{
 						foreach (var item in itemsDueLocal)
 						{
-							_tokenSourceWorking.Token.ThrowIfCancellationRequested();
+							cancellationToken.ThrowIfCancellationRequested();
 
 							try
 							{
@@ -988,38 +1042,37 @@ namespace SnowyImageCopy.Models
 							}
 						}
 						itemsDueRemote.CompleteAdding();
-					}, _tokenSourceWorking.Token);
+					}, cancellationToken);
 
 					// Get thumbnails from remote.
 					var getRemoteTask = Task.Run(async () =>
 					{
-						foreach (var item in itemsDueRemote.GetConsumingEnumerable(_tokenSourceWorking.Token))
+						foreach (var item in itemsDueRemote.GetConsumingEnumerable(cancellationToken))
 						{
-							_tokenSourceWorking.Token.ThrowIfCancellationRequested();
+							cancellationToken.ThrowIfCancellationRequested();
 
 							try
 							{
-								item.Thumbnail = await _manager.GetThumbnailAsync(item.FilePath, Card, _tokenSourceWorking.Token);
+								item.Thumbnail = await _manager.GetThumbnailAsync(item.FilePath, Card, cancellationToken);
 							}
 							catch (RemoteFileThumbnailFailedException)
 							{
 								item.CanGetThumbnailRemote = false;
 							}
 						}
-					}, _tokenSourceWorking.Token);
+					}, cancellationToken);
 
 					await Task.WhenAll(getLocalTask, getRemoteTask);
 				}
+
+				if (_settings.SkipsOnceCopiedFile)
+					await Signatures.FlushAsync(_settings.IndexString, cancellationToken);
 
 				OperationStatus = Resources.OperationStatus_CheckCompleted;
 			}
 			finally
 			{
 				FileListCoreViewIndex = -1; // No selection
-				_tokenSourceWorking?.Dispose();
-
-				if (_settings.SkipsOnceCopiedFile)
-					await Signatures.FlushAsync(_settings.IndexString, _tokenSourceWorking.Token);
 			}
 		}
 
@@ -1051,7 +1104,8 @@ namespace SnowyImageCopy.Models
 		/// Copies files from FlashAir card.
 		/// </summary>
 		/// <param name="progress">Progress</param>
-		private async Task CopyFileBaseAsync(IProgress<ProgressInfo> progress)
+		/// <param name="cancellationToken">Cancellation token</param>
+		private async Task CopyFileBaseAsync(IProgress<ProgressInfo> progress, CancellationToken cancellationToken)
 		{
 			CopyStartTime = DateTime.Now;
 			_copyFileCount = 0;
@@ -1063,24 +1117,21 @@ namespace SnowyImageCopy.Models
 			}
 
 			OperationStatus = Resources.OperationStatus_Copying;
-
 			_manager.Ensure(_settings.RemoteRootDescendant, _settings.TimeoutDuration);
 
 			try
 			{
-				_tokenSourceWorking = new CancellationTokenSourcePlus();
-
 				// Check CID.
 				if (Card.CanGetCid)
 				{
-					if (await _manager.GetCidAsync(_tokenSourceWorking.Token) != Card.Cid)
+					if (await _manager.GetCidAsync(cancellationToken) != Card.Cid)
 						throw new CardChangedException();
 				}
 
 				// Check if upload.cgi is disabled.
 				if (_settings.DeletesOnCopy && Card.CanGetUpload)
 				{
-					Card.Upload = await _manager.GetUploadAsync(_tokenSourceWorking.Token);
+					Card.Upload = await _manager.GetUploadAsync(cancellationToken);
 					if (Card.IsUploadDisabled)
 						throw new CardUploadDisabledException();
 				}
@@ -1103,7 +1154,7 @@ namespace SnowyImageCopy.Models
 						break; // Copy completed.
 					}
 
-					_tokenSourceWorking.Token.ThrowIfCancellationRequested();
+					cancellationToken.ThrowIfCancellationRequested();
 
 					try
 					{
@@ -1117,7 +1168,7 @@ namespace SnowyImageCopy.Models
 						if (!string.IsNullOrEmpty(localDirectory) && !Directory.Exists(localDirectory))
 							Directory.CreateDirectory(localDirectory);
 
-						var data = await _manager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, !_settings.LeavesExistingFile, item.CanReadExif, progress, Card, _tokenSourceWorking.Token);
+						var data = await _manager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, !_settings.LeavesExistingFile, item.CanReadExif, progress, Card, cancellationToken);
 
 						if (data?.Any() == true)
 						{
@@ -1176,28 +1227,31 @@ namespace SnowyImageCopy.Models
 					if (_settings.DeletesOnCopy &&
 						!item.IsReadOnly && IsAliveLocal(item))
 					{
-						await _manager.DeleteFileAsync(item.FilePath, _tokenSourceWorking.Token);
+						await _manager.DeleteFileAsync(item.FilePath, cancellationToken);
 					}
 				}
+
+				if (_settings.SkipsOnceCopiedFile)
+					await Signatures.FlushAsync(_settings.IndexString, cancellationToken);
 
 				OperationStatus = string.Format(Resources.OperationStatus_CopyCompleted, _copyFileCount, (int)(DateTime.Now - CopyStartTime).TotalSeconds);
 			}
 			finally
 			{
-				FileListCoreViewIndex = -1; // No selection
-				_tokenSourceWorking?.Dispose();
-
-				if (_settings.SkipsOnceCopiedFile)
-					await Signatures.FlushAsync(_settings.IndexString, _tokenSourceWorking.Token);
+				FileListCoreViewIndex = -1; // No selection				
 			}
 		}
 
 		/// <summary>
 		/// Shows a toast to notify completion of copying.
 		/// </summary>
-		private async Task ShowToastAsync()
+		/// <param name="cancellationToken">Cancellation token</param>
+		private async Task ShowToastAsync(CancellationToken cancellationToken)
 		{
 			if (!OsVersion.IsEightOrNewer || (_copyFileCount <= 0) || (DateTime.Now - CopyStartTime < _copyToastShortestDuration))
+				return;
+
+			if (cancellationToken.IsCancellationRequested)
 				return;
 
 			var request = new ToastRequest
@@ -1213,7 +1267,7 @@ namespace SnowyImageCopy.Models
 				AppId = Workspace.AppId
 			};
 
-			var result = await ToastManager.ShowAsync(request);
+			var result = await ToastManager.ShowAsync(request, cancellationToken);
 
 			if (result == ToastResult.Activated)
 				ActivateRequested?.Invoke(this, EventArgs.Empty);
@@ -1225,7 +1279,7 @@ namespace SnowyImageCopy.Models
 
 		#region Load & Save & Send
 
-		private CancellationTokenSourcePlus _tokenSourceLoading;
+		private readonly CancellationTokenContainer _localTokenContainer = new CancellationTokenContainer();
 
 		/// <summary>
 		/// Loads image data from a local file and set it to current image data.
@@ -1233,15 +1287,13 @@ namespace SnowyImageCopy.Models
 		/// <param name="item">Target item</param>
 		internal async Task LoadSetAsync(FileItemViewModel item)
 		{
-			_tokenSourceLoading?.TryCancel(); // Canceling already canceled source will be simply ignored.
-
 			try
 			{
-				_tokenSourceLoading = new CancellationTokenSourcePlus();
+				_localTokenContainer.TryCancel(true);
 
 				byte[] data = null;
 				if (item.CanLoadDataLocal)
-					data = await FileAddition.ReadAllBytesAsync(ComposeLocalPath(item), _tokenSourceLoading.Token);
+					data = await FileAddition.ReadAllBytesAsync(ComposeLocalPath(item), _localTokenContainer.Token);
 
 				CurrentItem = item;
 				CurrentImageData = data;
@@ -1262,11 +1314,10 @@ namespace SnowyImageCopy.Models
 			catch (Exception ex)
 			{
 				Debug.WriteLine($"Failed to load image data from local file.\r\n{ex}");
-				throw new UnexpectedException("Failed to load image data from local file.", ex);
 			}
 			finally
 			{
-				_tokenSourceLoading?.Dispose();
+				_localTokenContainer.Release();
 			}
 		}
 
