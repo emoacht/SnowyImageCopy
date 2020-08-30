@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models.Card;
 using SnowyImageCopy.Models.Exceptions;
+using SnowyImageCopy.Models.Network;
 
 namespace SnowyImageCopy.Models.ImageFile
 {

@@ -20,6 +20,7 @@ using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models.Card;
 using SnowyImageCopy.Models.Exceptions;
 using SnowyImageCopy.Models.ImageFile;
+using SnowyImageCopy.Models.Network;
 using SnowyImageCopy.Properties;
 using SnowyImageCopy.ViewModels;
 
@@ -783,7 +784,7 @@ namespace SnowyImageCopy.Models
 				_tokenSourceWorking = new CancellationTokenSourcePlus();
 
 				var prepareTask = _settings.SkipsOnceCopiedFile
-					? Signatures.PrepareAsync(_settings.IndexString)
+					? Signatures.PrepareAsync(_settings.IndexString, _tokenSourceWorking.Token)
 					: Task.FromResult(false); // Completed task
 
 				var checkTask = Task.Run(async () =>
@@ -1018,7 +1019,7 @@ namespace SnowyImageCopy.Models
 				_tokenSourceWorking?.Dispose();
 
 				if (_settings.SkipsOnceCopiedFile)
-					await Signatures.FlushAsync(_settings.IndexString);
+					await Signatures.FlushAsync(_settings.IndexString, _tokenSourceWorking.Token);
 			}
 		}
 
@@ -1187,7 +1188,7 @@ namespace SnowyImageCopy.Models
 				_tokenSourceWorking?.Dispose();
 
 				if (_settings.SkipsOnceCopiedFile)
-					await Signatures.FlushAsync(_settings.IndexString);
+					await Signatures.FlushAsync(_settings.IndexString, _tokenSourceWorking.Token);
 			}
 		}
 
