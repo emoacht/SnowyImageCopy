@@ -230,7 +230,7 @@ namespace SnowyImageCopy.ViewModels
 
 		#endregion
 
-		#region IComparable member
+		#region IComparable
 
 		public int CompareTo(FileItemViewModel other) => _fileItem.CompareTo(other?.FileItem);
 

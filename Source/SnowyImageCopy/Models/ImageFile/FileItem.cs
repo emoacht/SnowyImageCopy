@@ -253,7 +253,7 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		#endregion
 
-		#region IComparable member
+		#region IComparable
 
 		public int CompareTo(IFileItem other)
 		{

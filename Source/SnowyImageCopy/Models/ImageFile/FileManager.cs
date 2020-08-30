@@ -63,7 +63,7 @@ namespace SnowyImageCopy.Models.ImageFile
 			this._timeoutDuration = TimeSpan.FromSeconds(timeoutDuration);
 		}
 
-		#region IDisposable member
+		#region IDisposable
 
 		private bool _disposed = false;
 

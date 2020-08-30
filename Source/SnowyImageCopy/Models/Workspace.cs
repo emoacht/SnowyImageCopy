@@ -45,7 +45,7 @@ namespace SnowyImageCopy.Models
 			return TryCreateSemaphore(Properties.Settings.Default.AppId);
 		}
 
-		#region IDisposable member
+		#region IDisposable
 
 		private bool _disposed = false;
 

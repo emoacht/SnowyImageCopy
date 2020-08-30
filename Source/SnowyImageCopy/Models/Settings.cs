@@ -27,7 +27,7 @@ namespace SnowyImageCopy.Models
 	/// </summary>
 	public class Settings : NotificationObject, INotifyDataErrorInfo
 	{
-		#region INotifyDataErrorInfo member
+		#region INotifyDataErrorInfo
 
 		/// <summary>
 		/// Holder of property name (key) and validation error messages (value)

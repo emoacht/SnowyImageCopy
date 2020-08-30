@@ -64,7 +64,7 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		public override string ToString() => BitConverter.ToString(_value);
 
-		#region IComparable member
+		#region IComparable
 
 		public int CompareTo(HashItem other)
 		{
