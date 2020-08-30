@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ using SnowyImageCopy.Models.Network;
 namespace SnowyImageCopy.Models.ImageFile
 {
 	/// <summary>
-	/// Manages FlashAir card.
+	/// Manages FlashAir card and its content files.
 	/// </summary>
 	internal class FileManager : IDisposable
 	{
@@ -95,7 +96,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// Gets a list of all files recursively from root folder of FlashAir card.
 		/// </summary>
 		/// <param name="card">State of FlashAir card</param>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>File list</returns>
 		internal async Task<IEnumerable<IFileItem>> GetFileListRootAsync(ICardState card, CancellationToken cancellationToken)
 		{
@@ -115,7 +116,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// </summary>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
 		/// <param name="card">State of FlashAir card</param>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>File list</returns>
 		/// <remarks>This method is part of parent method.</remarks>
 		private async Task<List<IFileItem>> GetFileListAllAsync(string remoteDirectoryPath, ICardState card, CancellationToken cancellationToken)
@@ -154,7 +155,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// </summary>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
 		/// <param name="card">State of FlashAir card</param>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>File list</returns>
 		/// <remarks>This method is part of parent method.</remarks>
 		private async Task<List<IFileItem>> GetFileListEachAsync(string remoteDirectoryPath, ICardState card, CancellationToken cancellationToken)
@@ -174,7 +175,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// </summary>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
 		/// <param name="card">State of FlashAir card</param>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>File list</returns>
 		/// <remarks>This method is not actually used.</remarks>
 		internal async Task<IEnumerable<IFileItem>> GetFileListAsync(string remoteDirectoryPath, ICardState card, CancellationToken cancellationToken)
@@ -205,7 +206,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// </summary>
 		/// <param name="remoteDirectoryPath">Remote directory path</param>
 		/// <param name="card">State of FlashAir card</param>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>The number of files</returns>
 		/// <remarks>This method is not actually used.</remarks>
 		internal async Task<int> GetFileNumAsync(string remoteDirectoryPath, ICardState card, CancellationToken cancellationToken)
@@ -233,7 +234,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// </summary>
 		/// <param name="remoteFilePath">Remote file path</param>
 		/// <param name="card">State of FlashAir card</param>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>Thumbnail of image file</returns>
 		internal async Task<BitmapSource> GetThumbnailAsync(string remoteFilePath, ICardState card, CancellationToken cancellationToken)
 		{
@@ -282,7 +283,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// <param name="readExif">Whether to read Exif metadata from file</param>
 		/// <param name="progress">Progress</param>
 		/// <param name="card">State of FlashAir card</param>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>Byte array of file</returns>
 		internal async Task<byte[]> GetSaveFileAsync(string remoteFilePath, string localFilePath, int size, DateTime itemDate, bool overwrite, bool readExif, IProgress<ProgressInfo> progress, ICardState card, CancellationToken cancellationToken)
 		{
@@ -349,7 +350,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// Deletes a specified remote file in FlashAir card.
 		/// </summary>
 		/// <param name="remoteFilePath">Remote file path</param>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		internal async Task DeleteFileAsync(string remoteFilePath, CancellationToken cancellationToken)
 		{
 			if (string.IsNullOrWhiteSpace(remoteFilePath))
@@ -381,7 +382,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// <summary>
 		/// Gets firmware version of FlashAir card.
 		/// </summary>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <remarks>Firmware version</remarks>
 		internal async Task<string> GetFirmwareVersionAsync(CancellationToken cancellationToken)
 		{
@@ -401,7 +402,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// <summary>
 		/// Gets CID of FlashAir card.
 		/// </summary>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>If succeeded, CID. If failed, empty string.</returns>
 		internal async Task<string> GetCidAsync(CancellationToken cancellationToken)
 		{
@@ -425,7 +426,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// <summary>
 		/// Gets SSID of FlashAir card.
 		/// </summary>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>SSID</returns>
 		internal async Task<string> GetSsidAsync(CancellationToken cancellationToken)
 		{
@@ -445,7 +446,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// <summary>
 		/// Gets free/total capacities of FlashAir card.
 		/// </summary>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>
 		/// <para>Tuple.Item1: Free capacity (bytes)</para>
 		/// <para>Tuple.Item2: Total capacity (bytes)</para>
@@ -476,14 +477,15 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// <summary>
 		/// Checks update status of FlashAir card.
 		/// </summary>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>True if update status is set</returns>
-		internal async Task<bool> CheckUpdateStatusAsync()
+		internal async Task<bool> CheckUpdateStatusAsync(CancellationToken cancellationToken)
 		{
 			var remotePath = ComposeRemotePath(FileManagerCommand.GetUpdateStatus, string.Empty);
 
 			try
 			{
-				var status = await DownloadStringAsync(remotePath, null, CancellationToken.None).ConfigureAwait(false);
+				var status = await DownloadStringAsync(remotePath, null, cancellationToken).ConfigureAwait(false);
 
 				// 1: If memory has been updated.
 				// 0: If not.
@@ -499,7 +501,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// <summary>
 		/// Gets time stamp of write event in FlashAir card.
 		/// </summary>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>If succeeded, time stamp (msec). If failed, -1.</returns>
 		/// <remarks>If no write event occurred since FlashAir card started running, this value will be 0.</remarks>
 		internal async Task<int> GetWriteTimeStampAsync(CancellationToken cancellationToken)
@@ -527,7 +529,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		/// <summary>
 		/// Gets Upload parameter of FlashAir card.
 		/// </summary>
-		/// <param name="cancellationToken">CancellationToken</param>
+		/// <param name="cancellationToken">Cancellation token</param>
 		/// <returns>If succeeded, Upload parameter. If failed, -1.</returns>
 		internal async Task<int> GetUploadAsync(CancellationToken cancellationToken)
 		{
@@ -582,182 +584,200 @@ namespace SnowyImageCopy.Models.ImageFile
 		{
 			int retryCount = 0;
 
+			using var monitorTokenSource = new CancellationTokenSource();
+
+			// Start monitoring network connection.
+			using var monitor = new NetworkMonitor(() =>
+			{
+				try
+				{
+					monitorTokenSource.Cancel();
+				}
+				catch (ObjectDisposedException)
+				{ }
+			}, card, _monitorInterval);
+
+			bool isContentTimeout = false;
+
+			async Task ReadAsync(Task readTask, Action abort)
+			{
+				using var contentTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
+					cancellationToken,
+					monitorTokenSource.Token);
+
+				using var timeoutTask = Task.Delay(_timeoutDuration, contentTokenSource.Token);
+
+				if (await Task.WhenAny(readTask, timeoutTask) == timeoutTask)
+				{
+					isContentTimeout = timeoutTask.IsCompleted;
+
+					// Abort read task so that the task can be awaited in faulted status.
+					abort.Invoke();
+				}
+				else
+				{
+					// Cancel timeout task so that the task can be disposed.
+					contentTokenSource.Cancel();
+				}
+			}
+
 			while (true)
 			{
 				try
 				{
 					try
 					{
-						using (var response = await _client.GetAsync(path, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
-						{
-							// If HttpResponseMessage.EnsureSuccessStatusCode is set, an exception by this setting
-							// will be thrown in the scope of HttpClient and so cannot be caught in this method.
-							switch (response.StatusCode)
-							{
-								case HttpStatusCode.OK:
-									// None.
-									break;
-								case HttpStatusCode.Unauthorized:
-								case HttpStatusCode.InternalServerError:
-								case HttpStatusCode.BadRequest:
-								case HttpStatusCode.ServiceUnavailable:
-									throw new RemoteConnectionUnableException(response.StatusCode);
-								case HttpStatusCode.NotFound:
-									// This status code does not always mean that the specified file is missing.
-									throw new RemoteFileNotFoundException("File is missing or request cannot be handled!", path);
-								default:
-									throw new HttpRequestException($"StatusCode: {response.StatusCode}");
-							}
+						using var headerTimeoutTokenSource = new CancellationTokenSource(_timeoutDuration);
+						using var headerTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
+							cancellationToken,
+							monitorTokenSource.Token,
+							headerTimeoutTokenSource.Token);
 
-							if ((0 < size) &&
-								(response.Content.Headers.ContentLength != size))
+						using var response = await _client.GetAsync(path, HttpCompletionOption.ResponseHeadersRead, headerTokenSource.Token).ConfigureAwait(false);
+
+						// If HttpResponseMessage.EnsureSuccessStatusCode is set, an exception by this setting
+						// will be thrown in the scope of HttpClient and so cannot be caught in this method.
+						switch (response.StatusCode)
+						{
+							case HttpStatusCode.OK:
+								// None.
+								break;
+							case HttpStatusCode.Unauthorized:
+							case HttpStatusCode.InternalServerError:
+							case HttpStatusCode.BadRequest:
+							case HttpStatusCode.ServiceUnavailable:
+								throw new RemoteConnectionUnableException(response.StatusCode);
+							case HttpStatusCode.NotFound:
+								// This status code does not always mean that the specified file is missing.
+								throw new RemoteFileNotFoundException("File is missing or request cannot be handled!", path);
+							default:
+								throw new HttpRequestException($"StatusCode: {response.StatusCode}");
+						}
+
+						if ((0 < size) &&
+							(response.Content.Headers.ContentLength != size))
+							throw new RemoteFileInvalidException("Data length does not match!", path);
+
+						// Because of HttpCompletionOption.ResponseHeadersRead option, neither CancellationToken
+						// nor HttpClient.Timeout setting works for response content.
+
+						// Register delegate to CancellationToken because CancellationToken can no longer
+						// directly affect HttpClient. Disposing the HttpResponseMessage will make ReadAsStreamAsync
+						// method throw an ObjectDisposedException and so exit this operation.
+						using var ctr = cancellationToken.Register(() => response.Dispose());
+
+						if ((size == 0) || (progress is null))
+						{
+							// Route without progress reporting
+							var readTask = response.Content.ReadAsByteArrayAsync();
+
+							await ReadAsync(readTask, () => response.Dispose());
+
+							// Await read task to get the result or rethrow exceptions on this thread.
+							var bytes = await readTask;
+
+							if ((0 < size) && (bytes.Length != size))
 								throw new RemoteFileInvalidException("Data length does not match!", path);
 
-							// Because of HttpCompletionOption.ResponseHeadersRead option, neither CancellationToken
-							// nor HttpClient.Timeout setting works for response content.
+							return bytes;
+						}
+						else
+						{
+							// Route with progress reporting
+							int readLength;
+							int readLengthTotal = 0;
 
-							// Register delegate to CancellationToken because CancellationToken can no longer
-							// directly affect HttpClient. Disposing the HttpResponseMessage will make ReadAsStreamAsync
-							// method throw an ObjectDisposedException and so exit this operation.
-							var ctr = new CancellationTokenRegistration();
-							try
-							{
-								ctr = cancellationToken.Register(() => response.Dispose());
-							}
-							catch (ObjectDisposedException ode)
-							{
-								// If CancellationTokenSource has been disposed during operation (it unlikely happens),
-								// this exception will be thrown.
-								Debug.WriteLine($"CancellationTokenSource has been disposed when tried to register delegate.\r\n{ode}");
-							}
-							using (ctr)
-							{
-								var tcs = new TaskCompletionSource<bool>();
+							var buffer = new byte[65536]; // 64KiB
+							var bufferTotal = new byte[size];
 
-								// Start timer to monitor network connection.
-								using (var monitorTimer = new Timer(s =>
+							const double stepUint = 524288D; // 512KiB
+							double stepTotal = Math.Ceiling(size / stepUint); // The number of steps to report during downloading
+							if (stepTotal < 6)
+								stepTotal = 6; // The minimum number of steps
+
+							double stepCurrent = 1D;
+							var startTime = DateTime.Now;
+
+							using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+
+							while (readLengthTotal != size)
+							{
+								// CancellationToken in overload of ReadAsync method will not work for response content.
+								var readTask = stream.ReadAsync(buffer, 0, buffer.Length);
+
+								await ReadAsync(readTask, () => response.Dispose());
+
+								// Await read task to get the result or rethrow exceptions on this thread.
+								readLength = await readTask;
+
+								if ((readLength == 0) || (readLengthTotal + readLength > size))
+									throw new RemoteFileInvalidException("Data length does not match!", path);
+
+								Buffer.BlockCopy(buffer, 0, bufferTotal, readLengthTotal, readLength);
+
+								readLengthTotal += readLength;
+
+								// Restart monitoring as the connection is confirmed by successful reading.
+								monitor.Restart(_monitorInterval);
+
+								// Report if read length in total exceeds stepped length.
+								if (stepCurrent / stepTotal * size <= readLengthTotal)
 								{
-									if (!NetworkChecker.IsNetworkConnected(card))
-									{
-										((TaskCompletionSource<bool>)s).TrySetResult(true);
-									}
-								}, tcs, _monitorInterval, _monitorInterval))
-								{
-									var monitorTask = tcs.Task;
+									progress.Report(new ProgressInfo(
+										currentValue: readLengthTotal,
+										totalValue: size,
+										elapsedTime: DateTime.Now - startTime,
+										isFirst: stepCurrent == 1D));
 
-									if ((size == 0) || (progress is null))
-									{
-										// Route without progress reporting
-										var readTask = Task.Run(async () => await response.Content.ReadAsByteArrayAsync());
-										var timeoutTask = Task.Delay(_timeoutDuration);
-
-										var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
-										if (completedTask == timeoutTask)
-											throw new TimeoutException("Reading response content timed out!");
-										if (completedTask == monitorTask)
-											throw new RemoteConnectionLostException("Connection lost!");
-
-										var bytes = await readTask;
-
-										if ((0 < size) && (bytes.Length != size))
-											throw new RemoteFileInvalidException("Data length does not match!", path);
-
-										return bytes;
-									}
-									else
-									{
-										// Route with progress reporting
-										int readLength;
-										int readLengthTotal = 0;
-
-										var buffer = new byte[65536]; // 64KiB
-										var bufferTotal = new byte[size];
-
-										const double stepUint = 524288D; // 512KiB
-										double stepTotal = Math.Ceiling(size / stepUint); // The number of steps to report during downloading
-										if (stepTotal < 6)
-											stepTotal = 6; // The minimum number of steps
-
-										double stepCurrent = 1D;
-										var startTime = DateTime.Now;
-
-										using (var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
-										{
-											while (readLengthTotal != size)
-											{
-												// CancellationToken in overload of ReadAsync method will not work for response content.
-												var readTask = Task.Run(async () => await stream.ReadAsync(buffer, 0, buffer.Length));
-												var timeoutTask = Task.Delay(_timeoutDuration);
-
-												var completedTask = await Task.WhenAny(readTask, timeoutTask, monitorTask);
-												if (completedTask == timeoutTask)
-													throw new TimeoutException("Reading response content timed out!");
-												if (completedTask == monitorTask)
-													throw new RemoteConnectionLostException("Connection lost!");
-
-												readLength = await readTask;
-
-												if ((readLength == 0) || (readLengthTotal + readLength > size))
-													throw new RemoteFileInvalidException("Data length does not match!", path);
-
-												Buffer.BlockCopy(buffer, 0, bufferTotal, readLengthTotal, readLength);
-
-												readLengthTotal += readLength;
-
-												monitorTimer.Change(_monitorInterval, _monitorInterval);
-
-												// Report if read length in total exceeds stepped length.
-												if (stepCurrent / stepTotal * size <= readLengthTotal)
-												{
-													progress.Report(new ProgressInfo(
-														currentValue: readLengthTotal,
-														totalValue: size,
-														elapsedTime: DateTime.Now - startTime,
-														isFirst: stepCurrent == 1D));
-
-													stepCurrent++;
-												}
-											}
-										}
-										return bufferTotal;
-									}
+									stepCurrent++;
 								}
 							}
+							return bufferTotal;
 						}
 					}
-					catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+					catch (Exception ex) when (cancellationToken.IsCancellationRequested)
+					{
+						throw new OperationCanceledException("Reading canceled!", ex, cancellationToken);
+					}
+					catch (Exception ex) when (monitorTokenSource.IsCancellationRequested)
+					{
+						throw new RemoteConnectionLostException("Connection lost!", ex);
+					}
+					catch (Exception) when (isContentTimeout)
+					{
+						throw new TimeoutException("Reading response content timed out!");
+					}
+					catch (OperationCanceledException)
 					{
 						// OperationCanceledException includes the case of TaskCanceledException.
-						// If cancellation has not been requested, the reason of this exception must be timeout.
-						// This is for response header only.
+						// If this exception is not thrown by any other reason, the reason may be timeout
+						// while reading response header.
 						throw new TimeoutException("Reading response header timed out!");
 					}
-					catch (ObjectDisposedException ode) when (cancellationToken.IsCancellationRequested)
+					catch (ObjectDisposedException ode)
 					{
-						// If cancellation has been requested, the reason of this exception must be cancellation.
-						// This is for response content only.
-						throw new OperationCanceledException("Reading canceled!", ode);
+						// ObjectDisposedException can be thrown when essential objects, such as HttpClient,
+						// CancellationTokenSource, NetworkStream, is unexpectedly disposed.
+						// If this exception is not thrown by any other reason, the most possible reason
+						// will be a lost of the connection to FlashAir card.
+						throw new RemoteConnectionLostException("Connection lost!", ode);
 					}
-					catch (IOException ie) when (cancellationToken.IsCancellationRequested)
+					catch (IOException ie) when (ie.InnerException is SocketException)
 					{
-						// If cancellation has been requested while downloading, this exception may be thrown.
-						throw new OperationCanceledException("Reading canceled!", ie);
+						// If the connection to FlashAir card is changed, this exception may be thrown.
+						// Message: A socket operation was attempted to an unreachable network.
+						throw new RemoteConnectionLostException("Connection lost!", ie);
 					}
-					catch (HttpRequestException hre) when (cancellationToken.IsCancellationRequested)
+					catch (HttpRequestException hre) when (hre.InnerException is ObjectDisposedException ode)
 					{
-						// If cancellation has been requested while downloading, this exception may be thrown.
-						throw new OperationCanceledException("Reading canceled!", hre);
-					}
-					catch (HttpRequestException hre) when (hre.InnerException is ObjectDisposedException)
-					{
-						// If lost connection to FlashAir card, this exception may be thrown.
-						// Error message: Error while copying content to a stream.
-						throw new RemoteConnectionLostException("Connection lost!");
+						// If the connection to FlashAir card is lost, this exception may be thrown.
+						// Message: Error while copying content to a stream.
+						throw new RemoteConnectionLostException("Connection lost!", hre);
 					}
 					catch (HttpRequestException hre) when (hre.InnerException is WebException we)
 					{
 						// If unable to connect to FlashAir card, this exception will be thrown.
-						// The status may vary, such as WebExceptionStatus.NameResolutionFailure,
+						// The status of response may vary, such as WebExceptionStatus.NameResolutionFailure,
 						// WebExceptionStatus.ConnectFailure.
 						throw new RemoteConnectionUnableException(we.Status);
 					}
