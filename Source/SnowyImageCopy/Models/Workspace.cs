@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
+using SnowyImageCopy.Models.Network;
+
 namespace SnowyImageCopy.Models
 {
 	public class Workspace : IDisposable
@@ -62,6 +64,9 @@ namespace SnowyImageCopy.Models
 
 			if (disposing)
 			{
+				if (_wifi.IsValueCreated)
+					_wifi.Value.Dispose();
+
 				if (!Debugger.IsAttached)
 					UnsubscribeExceptions();
 
@@ -126,6 +131,13 @@ namespace SnowyImageCopy.Models
 		{
 			LogService.RecordException(sender, exception);
 		}
+
+		#endregion
+
+		#region Wifi
+
+		public static NativeWifi Wifi => _wifi.Value;
+		private static readonly Lazy<NativeWifi> _wifi = new Lazy<NativeWifi>(() => new NativeWifi());
 
 		#endregion
 
