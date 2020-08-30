@@ -35,18 +35,22 @@ namespace SnowyImageCopy.ViewModels
 					handler => mainWindowViewModel.Op.Card.PropertyChanged += handler,
 					handler => mainWindowViewModel.Op.Card.PropertyChanged -= handler
 				)
-				.Throttle(TimeSpan.FromMilliseconds(100))
-				.ObserveOn(SynchronizationContext.Current)
-				.Subscribe(e =>
+				.Where(e =>
 				{
 					switch (e.PropertyName)
 					{
 						case nameof(CardState.FirmwareVersion):
 						case nameof(CardState.Ssid):
 						case nameof(CardState.Cid):
-							RemoteCard = new CardStateViewModel(this._mainWindowViewModel.Op.Card);
-							break;
+							return true;
 					}
+					return false;
+				})
+				.Throttle(TimeSpan.FromMilliseconds(100))
+				.ObserveOn(SynchronizationContext.Current)
+				.Subscribe(_ =>
+				{
+					RemoteCard = new CardStateViewModel(this._mainWindowViewModel.Op.Card);
 				}));
 
 			Subscription.Add(Observable.FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>
