@@ -280,21 +280,171 @@ namespace SnowyImageCopy.Models.Network
 			wlan_intf_opcode_ihv_end = 0x3fffffff
 		}
 
+		[DllImport("Wlanapi.dll")]
+		public static extern uint WlanRegisterNotification(
+			IntPtr hClientHandle,
+			uint dwNotifSource,
+			[MarshalAs(UnmanagedType.Bool)] bool bIgnoreDuplicate,
+			WLAN_NOTIFICATION_CALLBACK funcCallback,
+			IntPtr pCallbackContext,
+			IntPtr pReserved,
+			uint pdwPrevNotifSource);
+
+		public delegate void WLAN_NOTIFICATION_CALLBACK(
+			IntPtr data, // Pointer to WLAN_NOTIFICATION_DATA
+			IntPtr context);
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct WLAN_NOTIFICATION_DATA
+		{
+			public uint NotificationSource;
+			public WLAN_NOTIFICATION_ACM NotificationCode;
+			public Guid InterfaceGuid;
+			public uint dwDataSize;
+			public IntPtr pData;
+		}
+
+		public enum WLAN_NOTIFICATION_ACM : uint
+		{
+			wlan_notification_acm_start = 0,
+			wlan_notification_acm_autoconf_enabled,
+			wlan_notification_acm_autoconf_disabled,
+			wlan_notification_acm_background_scan_enabled,
+			wlan_notification_acm_background_scan_disabled,
+			wlan_notification_acm_bss_type_change,
+			wlan_notification_acm_power_setting_change,
+			wlan_notification_acm_scan_complete,
+			wlan_notification_acm_scan_fail,
+			wlan_notification_acm_connection_start,
+			wlan_notification_acm_connection_complete,
+			wlan_notification_acm_connection_attempt_fail,
+			wlan_notification_acm_filter_list_change,
+			wlan_notification_acm_interface_arrival,
+			wlan_notification_acm_interface_removal,
+			wlan_notification_acm_profile_change,
+			wlan_notification_acm_profile_name_change,
+			wlan_notification_acm_profiles_exhausted,
+			wlan_notification_acm_network_not_available,
+			wlan_notification_acm_network_available,
+			wlan_notification_acm_disconnecting,
+			wlan_notification_acm_disconnected,
+			wlan_notification_acm_adhoc_network_state_change,
+			wlan_notification_acm_profile_unblocked,
+			wlan_notification_acm_screen_power_change,
+			wlan_notification_acm_profile_blocked,
+			wlan_notification_acm_scan_list_refresh,
+			wlan_notification_acm_end
+		}
+
+		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+		private struct WLAN_CONNECTION_NOTIFICATION_DATA
+		{
+			public WLAN_CONNECTION_MODE wlanConnectionMode;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+			public string strProfileName;
+
+			public DOT11_SSID dot11Ssid;
+			public DOT11_BSS_TYPE dot11BssType;
+
+			[MarshalAs(UnmanagedType.Bool)]
+			public bool bSecurityEnabled;
+
+			public uint wlanReasonCode; // WLAN_REASON_CODE
+			public uint dwFlags;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1)]
+			public string strProfileXml;
+		}
+
+		public const uint WLAN_NOTIFICATION_SOURCE_NONE = 0;
+		public const uint WLAN_NOTIFICATION_SOURCE_ALL = 0x0000FFFF;
+		public const uint WLAN_NOTIFICATION_SOURCE_ACM = 0x00000008;
+		public const uint WLAN_NOTIFICATION_SOURCE_HNWK = 0x00000080;
+		public const uint WLAN_NOTIFICATION_SOURCE_ONEX = 0x00000004;
+		public const uint WLAN_NOTIFICATION_SOURCE_MSM = 0x00000010;
+		public const uint WLAN_NOTIFICATION_SOURCE_SECURITY = 0x00000020;
+		public const uint WLAN_NOTIFICATION_SOURCE_IHV = 0x00000040;
+
 		private const uint ERROR_SUCCESS = 0;
 
 		#endregion
+
+		private readonly WlanClient _client;
+
+		public NativeWifi()
+		{
+			_client = new WlanClient();
+
+			RegisterNotification(_client.Handle, OnNotificationReceived);
+		}
+
+		#region IDisposable
+
+		private bool _disposed = false;
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (_disposed)
+				return;
+
+			if (disposing)
+			{
+				UnregisterNotification(_client.Handle);
+
+				_client.Dispose();
+			}
+
+			_disposed = true;
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Occurs when a wireless interface is connected to a wireless LAN.
+		/// </summary>
+		public event EventHandler<ConnectionEventArgs> Connected;
+
+		/// <summary>
+		/// Occurs when a wireless interface is disconnected from a wireless LAN.
+		/// </summary>
+		public event EventHandler<ConnectionEventArgs> Disconnected;
+
+		private void OnNotificationReceived(WLAN_NOTIFICATION_DATA e)
+		{
+			switch (e.NotificationCode)
+			{
+				case WLAN_NOTIFICATION_ACM.wlan_notification_acm_connection_complete:
+					{
+						var data = Marshal.PtrToStructure<WLAN_CONNECTION_NOTIFICATION_DATA>(e.pData);
+						Connected?.Invoke(this, new ConnectionEventArgs(data.dot11Ssid.ToString()));
+					}
+					break;
+
+				case WLAN_NOTIFICATION_ACM.wlan_notification_acm_disconnected:
+					{
+						var data = Marshal.PtrToStructure<WLAN_CONNECTION_NOTIFICATION_DATA>(e.pData);
+						Disconnected?.Invoke(this, new ConnectionEventArgs(data.dot11Ssid.ToString()));
+					}
+					break;
+			}
+		}
 
 		/// <summary>
 		/// Enumerates SSIDs of connected wireless LANs.
 		/// </summary>
 		/// <returns>SSIDs</returns>
-		public static IEnumerable<string> EnumerateConnectedNetworkSsids()
+		public IEnumerable<string> EnumerateConnectedNetworkSsids()
 		{
-			using var client = new WlanClient();
-
-			foreach (var interfaceInfo in GetInterfaceInfoList(client.Handle))
+			foreach (var interfaceInfo in GetInterfaceInfoList(_client.Handle))
 			{
-				var connection = GetConnectionAttributes(client.Handle, interfaceInfo.InterfaceGuid);
+				var connection = GetConnectionAttributes(_client.Handle, interfaceInfo.InterfaceGuid);
 				if (connection.isState != WLAN_INTERFACE_STATE.wlan_interface_state_connected)
 					continue;
 
@@ -324,7 +474,7 @@ namespace SnowyImageCopy.Models.Network
 					throw new Win32Exception((int)result);
 			}
 
-			#region Dispose
+			#region IDisposable
 
 			private bool _disposed = false;
 
@@ -351,6 +501,48 @@ namespace SnowyImageCopy.Models.Network
 			}
 
 			#endregion
+		}
+
+		private WLAN_NOTIFICATION_CALLBACK _notificationCallback;
+
+		private void RegisterNotification(IntPtr clientHandle, Action<WLAN_NOTIFICATION_DATA> notificationReceived)
+		{
+			// Storing a delegate in class field is necessary to prevent garbage collector from collecting
+			// the delegate before it is called. Otherwise, CallbackOnCollectedDelegate may occur.
+			_notificationCallback = new WLAN_NOTIFICATION_CALLBACK((data, context) =>
+			{
+				var notificationData = Marshal.PtrToStructure<WLAN_NOTIFICATION_DATA>(data);
+				if (notificationData.NotificationSource != WLAN_NOTIFICATION_SOURCE_ACM)
+					return;
+
+				notificationReceived?.Invoke(notificationData);
+			});
+
+			var result = WlanRegisterNotification(
+				clientHandle,
+				WLAN_NOTIFICATION_SOURCE_ACM,
+				false,
+				_notificationCallback,
+				IntPtr.Zero,
+				IntPtr.Zero,
+				0);
+
+			if (result != ERROR_SUCCESS)
+				throw new Win32Exception((int)result);
+		}
+
+		private void UnregisterNotification(IntPtr clientHandle)
+		{
+			_notificationCallback = new WLAN_NOTIFICATION_CALLBACK((data, context) => { });
+
+			var result = WlanRegisterNotification(
+				clientHandle,
+				WLAN_NOTIFICATION_SOURCE_NONE,
+				false,
+				_notificationCallback,
+				IntPtr.Zero,
+				IntPtr.Zero,
+				0);
 		}
 
 		private static WLAN_INTERFACE_INFO[] GetInterfaceInfoList(IntPtr clientHandle)
@@ -400,5 +592,12 @@ namespace SnowyImageCopy.Models.Network
 		}
 
 		#endregion
+	}
+
+	public class ConnectionEventArgs : EventArgs
+	{
+		public string Ssid { get; }
+
+		public ConnectionEventArgs(string ssid) : base() => this.Ssid = ssid;
 	}
 }
