@@ -105,6 +105,7 @@
     <Compile Include="Common\PropertyChangedEventListener.cs" />
     <Compile Include="Helper\BitmapExtension.cs" />
     <Compile Include="Helper\BitmapImageExtension.cs" />
+    <Compile Include="Helper\CancellationTokenContainer.cs" />
     <Compile Include="Helper\CancellationTokenSourcePlus.cs" />
     <Compile Include="Helper\Designer.cs" />
     <Compile Include="Helper\EnumerableExtension.cs" />

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SnowyImageCopy.Helper
 {
 	/// <summary>
-	/// <see cref="System.Threading.CancellationTokenSource"/> which can cancel without exception
+	/// Derived class of <see cref="System.Threading.CancellationTokenSource"/> which can cancel without exception
 	/// </summary>
 	public sealed class CancellationTokenSourcePlus : CancellationTokenSource
 	{
@@ -50,7 +50,7 @@ namespace SnowyImageCopy.Helper
 				if (_isDisposed)
 					return false;
 
-				base.Cancel();
+				Cancel();
 				return true;
 			}
 		}
@@ -67,7 +67,7 @@ namespace SnowyImageCopy.Helper
 				if (_isDisposed)
 					return false;
 
-				base.Cancel(throwOnFirstException);
+				Cancel(throwOnFirstException);
 				return true;
 			}
 		}
@@ -84,7 +84,7 @@ namespace SnowyImageCopy.Helper
 				if (_isDisposed)
 					return false;
 
-				base.CancelAfter(millisecondsDelay);
+				CancelAfter(millisecondsDelay);
 				return true;
 			}
 		}
@@ -101,7 +101,7 @@ namespace SnowyImageCopy.Helper
 				if (_isDisposed)
 					return false;
 
-				base.CancelAfter(delay);
+				CancelAfter(delay);
 				return true;
 			}
 		}
