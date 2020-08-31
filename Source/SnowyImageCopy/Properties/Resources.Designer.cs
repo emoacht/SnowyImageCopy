@@ -1142,7 +1142,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://emoacht.github.io/SnowyImageCopy/index.html.
+        ///   Looks up a localized string similar to https://github.com/emoacht/SnowyImageCopy.
         /// </summary>
         public static string SiteUrl {
             get {

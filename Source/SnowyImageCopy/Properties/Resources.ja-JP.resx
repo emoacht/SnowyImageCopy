@@ -462,9 +462,6 @@
   <data name="RecordException" xml:space="preserve">
     <value>予想外の問題が起きたため、このアプリを終了します。例外のログをデスクトップに残しますか?</value>
   </data>
-  <data name="SiteUrl" xml:space="preserve">
-    <value>https://emoacht.github.io/SnowyImageCopy/index_jp.html</value>
-  </data>
   <data name="ToastBodyFormat_CopyCompleted" xml:space="preserve">
     <value>({0} イメージ, {1} 秒)</value>
   </data>

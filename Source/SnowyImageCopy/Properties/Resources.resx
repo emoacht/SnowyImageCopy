@@ -479,7 +479,7 @@
     <value>Site</value>
   </data>
   <data name="SiteUrl" xml:space="preserve">
-    <value>https://emoacht.github.io/SnowyImageCopy/index.html</value>
+    <value>https://github.com/emoacht/SnowyImageCopy</value>
   </data>
   <data name="ToastBodyFormat_CopyCompleted" xml:space="preserve">
     <value>({0} images, {1} seconds)</value>
