@@ -15,6 +15,7 @@ namespace SnowyImageCopy.Models.Exceptions
 	{
 		public RemoteConnectionLostException() { }
 		public RemoteConnectionLostException(string message) : base(message) { }
+		public RemoteConnectionLostException(string message, Exception innerException) : base(message, innerException) { }
 		protected RemoteConnectionLostException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }

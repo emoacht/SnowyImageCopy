@@ -4,12 +4,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using SnowyImageCopy.Models.ImageFile;
 
 namespace SnowyImageCopy.Models
 {
+	/// <summary>
+	/// File signatures
+	/// </summary>
 	internal class Signatures
 	{
 		/// <summary>
@@ -33,10 +37,9 @@ namespace SnowyImageCopy.Models
 
 		private static HashSet<HashItem> _signatures;
 
-		public static async Task PrepareAsync(string indexString)
+		public static async Task PrepareAsync(string indexString, CancellationToken cancellationToken)
 		{
-			_signatures ??= await Task.Run(() => new HashSet<HashItem>(
-				Load(indexString, valueSize: HashItem.Size, maxCount: MaxCount)));
+			_signatures ??= new HashSet<HashItem>(await LoadAsync(indexString, valueSize: HashItem.Size, maxCount: MaxCount, cancellationToken));
 		}
 
 		public static bool Contains(HashItem value)
@@ -65,12 +68,12 @@ namespace SnowyImageCopy.Models
 				Append(value);
 		}
 
-		public static async Task FlushAsync(string indexString)
+		public static async Task FlushAsync(string indexString, CancellationToken cancellationToken)
 		{
 			if ((_appendValues?.Count ?? 0) == 0)
 				return;
 
-			await SaveAsync(indexString, _appendValues, _signatures, valueSize: HashItem.Size, maxCount: MaxCount);
+			await SaveAsync(indexString, _appendValues, _signatures, valueSize: HashItem.Size, maxCount: MaxCount, cancellationToken);
 
 			_appendValues.Clear();
 		}
@@ -86,26 +89,17 @@ namespace SnowyImageCopy.Models
 		private static string GetSignaturesFileName(in string value) => $"signatures{value}.bin";
 		private static string GetSignaturesFilePath(in string value) => FolderService.GetAppDataFilePath(GetSignaturesFileName(value));
 
+		private const int BufferSize = 81920;
 		private const float ExcessFactor = 1.2F;
 
-		private static HashItem[] Load(string indexString, int valueSize, int maxCount)
+		private static async Task<HashItem[]> LoadAsync(string indexString, int valueSize, int maxCount, CancellationToken cancellationToken)
 		{
 			var filePath = GetSignaturesFilePath(indexString);
 			var fileInfo = new FileInfo(filePath);
-			if (!(fileInfo.Exists && (0 < fileInfo.Length) && (fileInfo.Length % valueSize == 0)))
+			if (!fileInfo.Exists || (fileInfo.Length == 0) || (fileInfo.Length % valueSize != 0))
 				return new HashItem[0];
 
 			try
-			{
-				return Read().ToArray(); // To catch an exception, it must be consumed here.
-			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine($"Failed to load signatures.\r\n{ex}");
-				throw;
-			}
-
-			IEnumerable<HashItem> Read()
 			{
 				using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
 				{
@@ -115,19 +109,29 @@ namespace SnowyImageCopy.Models
 
 					using (var ms = new MemoryStream((int)(fs.Length - fs.Position)))
 					{
-						fs.CopyTo(ms); // Read the file at once.
+						await fs.CopyToAsync(ms, BufferSize, cancellationToken).ConfigureAwait(false); // Read the file at once.
 						ms.Seek(0, SeekOrigin.Begin);
 
-						var buffer = new byte[valueSize];
+						IEnumerable<HashItem> Enumerate()
+						{
+							var buffer = new byte[valueSize];
 
-						while (ms.Read(buffer, 0, valueSize) == valueSize)
-							yield return HashItem.Restore(buffer);
+							while (ms.Read(buffer, 0, valueSize) == valueSize)
+								yield return HashItem.Restore(buffer);
+						}
+
+						return Enumerate().ToArray(); // To catch an exception, it must be consumed here.
 					}
 				}
-			};
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Failed to load signatures.\r\n{ex}");
+				throw;
+			}
 		}
 
-		private static async Task SaveAsync(string indexString, IList<HashItem> appendValues, ISet<HashItem> wholeValues, int valueSize, int maxCount)
+		private static async Task SaveAsync(string indexString, IList<HashItem> appendValues, ISet<HashItem> wholeValues, int valueSize, int maxCount, CancellationToken cancellationToken)
 		{
 			var filePath = GetSignaturesFilePath(indexString);
 			var fileInfo = new FileInfo(filePath);
@@ -144,9 +148,9 @@ namespace SnowyImageCopy.Models
 				using (var fs = new FileStream(filePath, fileMode, FileAccess.Write))
 				{
 					foreach (var value in values)
-						await fs.WriteAsync(value.ToByteArray(), 0, valueSize);
+						await fs.WriteAsync(value.ToByteArray(), 0, valueSize, cancellationToken).ConfigureAwait(false);
 
-					await fs.FlushAsync();
+					await fs.FlushAsync(cancellationToken).ConfigureAwait(false);
 				}
 			}
 			catch (Exception ex)

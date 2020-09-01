@@ -27,7 +27,7 @@ namespace SnowyImageCopy.Models
 	/// </summary>
 	public class Settings : NotificationObject, INotifyDataErrorInfo
 	{
-		#region INotifyDataErrorInfo member
+		#region INotifyDataErrorInfo
 
 		/// <summary>
 		/// Holder of property name (key) and validation error messages (value)
@@ -340,8 +340,8 @@ namespace SnowyImageCopy.Models
 			get => _customDatedFolder;
 			set
 			{
-				SetPropertyValue(ref _customDatedFolder, value);
-				RaisePropertyChanged(nameof(DatedFolder));
+				if (SetPropertyValue(ref _customDatedFolder, value))
+					RaisePropertyChanged(nameof(DatedFolder));
 			}
 		}
 		private string _customDatedFolder;
@@ -572,13 +572,13 @@ namespace SnowyImageCopy.Models
 
 			var serializer = new XmlSerializer(typeof(Settings));
 
-			foreach (var filePath in Directory.EnumerateFiles(folderPath, GetSettingsFileName("?")))
+			foreach (var filePath in Directory.EnumerateFiles(folderPath, GetSettingsFileName("?"))) // Single digit
 			{
 				if (!TryLoad(filePath, serializer, out Settings instance))
 					continue;
 
-				if (int.TryParse(Path.GetFileNameWithoutExtension(filePath).LastOrDefault().ToString(), out int index))
-					instance.Index = index;
+				if (Regex.Match(filePath, @"(?<num>\d+).xml$") is Match { Success: true } match) // Multiple digits
+					instance.Index = int.Parse(match.Groups["num"].Value);
 
 				instance.LastWriteTime = GetLastWriteTime(filePath);
 

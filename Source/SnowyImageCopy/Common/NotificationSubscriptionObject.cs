@@ -12,7 +12,7 @@ namespace SnowyImageCopy.Common
 		protected CompositeDisposable Subscription => _subscription.Value;
 		private readonly Lazy<CompositeDisposable> _subscription = new Lazy<CompositeDisposable>(() => new CompositeDisposable());
 
-		#region IDisposable member
+		#region IDisposable
 
 		private bool _disposed = false;
 

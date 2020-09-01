@@ -10,7 +10,7 @@
 				xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
 				x:Name="WindowRoot"
 				Icon="/SnowyImageCopy;component/Resources/Feather.ico"
-				Title="{Binding Source={x:Static views:ProductInfo.ProductInfoShort}, Mode=OneWay}"
+				Title="{Binding Source={x:Static views:ProductInfo.Title}, Mode=OneWay}"
 				FontFamily="Segoe UI"
 				Width="720" Height="480" MinWidth="626" MinHeight="280"
 				ChromeBackground="{StaticResource Window.Background}">
@@ -40,7 +40,7 @@
 					   Margin="8,0,0,0"
 					   VerticalAlignment="Center"
 					   Foreground="{Binding ChromeForeground, ElementName=WindowRoot, Mode=OneWay}"
-					   Text="{Binding Source={x:Static views:ProductInfo.Title}, Mode=OneWay}"/>
+					   Text="{Binding Title, ElementName=WindowRoot, Mode=OneWay}"/>
 
 			<!-- Status -->
 			<TextBox Grid.Column="1"
@@ -89,15 +89,17 @@
 					<RowDefinition/>
 				</Grid.RowDefinitions>
 
-				<Grid x:Name="CommandsAndProgress">
+				<Grid x:Name="CommandAndProgress">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="Auto"/>
 						<ColumnDefinition Width="14"/>
 						<ColumnDefinition Width="Auto"/>
 					</Grid.ColumnDefinitions>
 
-					<!-- Commands -->
-					<Grid Width="264" Height="82" VerticalAlignment="Top"
+					<!-- Command -->
+					<Grid x:Name="CommandButtons"
+						  x:FieldModifier="public"
+						  Width="264" Height="82" VerticalAlignment="Top"
 						  TextElement.FontSize="15">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="102"/>
@@ -169,7 +171,9 @@
 
 				<Grid Grid.Column="2" Grid.Row="0"
 					  Width="256">
-					<StackPanel HorizontalAlignment="Left" VerticalAlignment="Top"
+					<StackPanel x:Name="QuickButtons"
+								x:FieldModifier="public"
+								HorizontalAlignment="Left" VerticalAlignment="Top"
 								Orientation="Horizontal">
 						<!-- Auto at start -->
 						<ToggleButton
@@ -201,7 +205,7 @@
 					<i:Interaction.Behaviors>
 						<behaviors:FrameworkElementIntersectionBehavior
 							x:Name="CardButtonIntersectionBehavior"
-							TargetElement ="{Binding ElementName=CommandsAndProgress}"
+							TargetElement ="{Binding ElementName=CommandAndProgress}"
 							ExpandedMargin="13,0,0,0"
 							WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}">
 							<behaviors:FrameworkElementIntersectionBehavior.TriggerObject>
@@ -308,7 +312,7 @@
 						<i:Interaction.Behaviors>
 							<behaviors:FrameworkElementIntersectionBehavior
 								x:Name="CurrentImageTabIntersectionBehavior"
-								TargetElement ="{Binding ElementName=CommandsAndProgress}"
+								TargetElement ="{Binding ElementName=CommandAndProgress}"
 								ExpandedMargin="-2,24,0,0"
 								WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}">
 								<behaviors:FrameworkElementIntersectionBehavior.TriggerObject>

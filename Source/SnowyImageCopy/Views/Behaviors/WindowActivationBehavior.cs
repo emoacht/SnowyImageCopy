@@ -55,7 +55,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		{
 			base.OnAttached();
 
-			AddHandler();
+			this.AssociatedObject.Loaded += OnLoaded;
 		}
 
 		protected override void OnDetaching()
@@ -63,6 +63,13 @@ namespace SnowyImageCopy.Views.Behaviors
 			base.OnDetaching();
 
 			RemoveHandler();
+		}
+
+		private void OnLoaded(object sender, RoutedEventArgs e)
+		{
+			this.AssociatedObject.Loaded -= OnLoaded;
+
+			AddHandler();
 		}
 
 		private EventInfo _eventInfo;

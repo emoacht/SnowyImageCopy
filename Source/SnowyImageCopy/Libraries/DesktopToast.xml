@@ -15,6 +15,12 @@
             </summary>
             <remarks>Windows 8 = version 6.2</remarks>
         </member>
+        <member name="P:DesktopToast.Helper.OsVersion.IsTenOrNewer">
+            <summary>
+            Whether OS is Windows 10 or newer
+            </summary>
+            <remarks>Windows 10 = version 10.0.10240.0 or higher</remarks>
+        </member>
         <member name="M:DesktopToast.Helper.OsVersion.GetOsVersionByWmi">
             <summary>
             Get OS version.
@@ -25,7 +31,7 @@
         </member>
         <member name="T:DesktopToast.Helper.ShellLink">
             <summary>
-            A wrapper class for IShellLink Interface added with AppUserModelID
+            A wrapper class for IShellLink Interface added with AppUserModelID and AppUserModelToastActivatorCLSID
             </summary>
             <remarks>
             Modified from http://smdn.jp/programming/tips/createlnk/
@@ -60,30 +66,23 @@
             Narrowed down from PropertyKey.cs of Windows API Code Pack 1.1
             </remarks>
         </member>
-        <member name="M:DesktopToast.Helper.ShellLink.PropertyKey.#ctor(System.Guid,System.Int32)">
-            <summary>
-            Constructor with Format ID as Guid value
-            </summary>
-            <param name="formatId">Format ID</param>
-            <param name="propertyId">Property ID</param>
-        </member>
         <member name="M:DesktopToast.Helper.ShellLink.PropertyKey.#ctor(System.String,System.Int32)">
             <summary>
-            Constructor with Format ID as string value
+            Constructor
             </summary>
             <param name="formatId">Format ID</param>
             <param name="propertyId">Property ID</param>
         </member>
         <member name="T:DesktopToast.Helper.ShellLink.PropVariant">
             <summary>
-            PropVariant Class (only for string value)
+            PropVariant Class (only for limited types)
             </summary>
             <remarks>
             Narrowed down from PropVariant.cs of Windows API Code Pack 1.1
-            Originally from http://blogs.msdn.com/b/adamroot/archive/2008/04/11/interop-with-propvariants-in-net.aspx
+            Originally from https://blogs.msdn.microsoft.com/adamroot/2008/04/11/interop-with-propvariants-in-net/
             </remarks>
         </member>
-        <member name="P:DesktopToast.Helper.ShellLink.PropVariant.VarType">
+        <member name="P:DesktopToast.Helper.ShellLink.PropVariant.ValueType">
             <summary>
             Value type (System.Runtime.InteropServices.VarEnum)
             </summary>
@@ -95,7 +94,7 @@
         </member>
         <member name="P:DesktopToast.Helper.ShellLink.PropVariant.Value">
             <summary>
-            Value (only for string value)
+            Value (only for limited types)
             </summary>
         </member>
         <member name="M:DesktopToast.Helper.ShellLink.PropVariant.#ctor(System.String)">
@@ -104,7 +103,13 @@
             </summary>
             <param name="value">String value</param>
         </member>
-        <member name="F:DesktopToast.Helper.ShellLink.ArgumentsKey">
+        <member name="M:DesktopToast.Helper.ShellLink.PropVariant.#ctor(System.Guid)">
+            <summary>
+            Constructor with CLSID value
+            </summary>
+            <param name="value">CLSID value</param>
+        </member>
+        <member name="F:DesktopToast.Helper.ShellLink.argumentsKey">
             <summary>
             Property key of Arguments
             </summary>
@@ -116,7 +121,7 @@
             Type = String (VT_LPWSTR)
             </remarks>
         </member>
-        <member name="F:DesktopToast.Helper.ShellLink.AppUserModelIDKey">
+        <member name="F:DesktopToast.Helper.ShellLink.appUserModelIDKey">
             <summary>
             Property key of AppUserModelID
             </summary>
@@ -126,6 +131,19 @@
             FormatID = 9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3
             PropID = 5
             Type = String (VT_LPWSTR)
+            </remarks>
+        </member>
+        <member name="F:DesktopToast.Helper.ShellLink.appUserModelToastActivatorCLSIDKey">
+            <summary>
+            Property key of AppUserModelToastActivatorCLSID
+            </summary>
+            <remarks>
+            Name = System.AppUserModel.ToastActivatorCLSID
+            ShellPKey = PKEY_AppUserModel_ToastActivatorCLSID
+            FormatID = 9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3
+            PropID = 26
+            Type = Guid (VT_CLSID)
+            Taken from propkey.h of Windows SDK
             </remarks>
         </member>
         <member name="T:DesktopToast.Helper.ShellLink.STGM">
@@ -208,7 +226,7 @@
         </member>
         <member name="P:DesktopToast.Helper.ShellLink.AppUserModelID">
             <summary>
-            AppUserModelID (to be used for Windows 7 or newer).
+            AppUserModelID (to be used for Windows 7 or newer)
             </summary>
             <remarks>
             <para>According to MSDN, an AppUserModelID must be in the following form:
@@ -219,6 +237,11 @@
             <para>The setter accepts Null while the getter never returns Null. This behavior is the same
             as other properties by IShellLink.</para>
             </remarks>
+        </member>
+        <member name="P:DesktopToast.Helper.ShellLink.AppUserModelToastActivatorCLSID">
+            <summary>
+            AppUserModelToastActivatorCLSID (to be used for Windows 10 or newer)
+            </summary>
         </member>
         <member name="M:DesktopToast.Helper.ShellLink.#ctor">
             <summary>
@@ -260,7 +283,7 @@
             Shortcut management
             </summary>
         </member>
-        <member name="M:DesktopToast.Helper.Shortcut.CheckShortcut(System.String,System.String,System.String,System.String,System.String,DesktopToast.ShortcutWindowState,System.String,System.String)">
+        <member name="M:DesktopToast.Helper.Shortcut.CheckShortcut(System.String,System.String,System.String,System.String,System.String,DesktopToast.ShortcutWindowState,System.String,System.String,System.Guid)">
             <summary>
             Check if a specified shortcut file exists.
             </summary>
@@ -272,9 +295,10 @@
             <param name="windowState">Window state of shortcut</param>
             <param name="iconPath">Icon file path of shortcut</param>
             <param name="appId">AppUserModelID of shortcut</param>
+            <param name="activatorId">AppUserModelToastActivatorCLSID of shortcut</param>
             <returns>True if exists</returns>
         </member>
-        <member name="M:DesktopToast.Helper.Shortcut.InstallShortcut(System.String,System.String,System.String,System.String,System.String,DesktopToast.ShortcutWindowState,System.String,System.String)">
+        <member name="M:DesktopToast.Helper.Shortcut.InstallShortcut(System.String,System.String,System.String,System.String,System.String,DesktopToast.ShortcutWindowState,System.String,System.String,System.Guid)">
             <summary>
             Install a specified shortcut file.
             </summary>
@@ -286,8 +310,9 @@
             <param name="windowState">Window state of shortcut</param>
             <param name="iconPath">Icon file path of shortcut</param>
             <param name="appId">AppUserModelID of shortcut</param>
+            <param name="activatorId">AppUserModelToastActivatorCLSID of shortcut</param>
         </member>
-        <member name="M:DesktopToast.Helper.Shortcut.DeleteShortcut(System.String,System.String,System.String,System.String,System.String,DesktopToast.ShortcutWindowState,System.String,System.String)">
+        <member name="M:DesktopToast.Helper.Shortcut.DeleteShortcut(System.String,System.String,System.String,System.String,System.String,DesktopToast.ShortcutWindowState,System.String,System.String,System.Guid)">
             <summary>
             Delete a specified shortcut file.
             </summary>
@@ -299,6 +324,7 @@
             <param name="windowState">Window state of shortcut</param>
             <param name="iconPath">Icon file path of shortcut</param>
             <param name="appId">AppUserModelID of shortcut</param>
+            <param name="activatorId">AppUserModelToastActivatorCLSID of shortcut</param>
             <remarks>If contents of shortcut do not match, the shortcut file will not be deleted.</remarks>
         </member>
         <member name="T:DesktopToast.Helper.StringExtension">
@@ -322,6 +348,83 @@
             <param name="b">String to compare</param>
             <param name="comparisonType">StringComparison</param>
             <returns>True if the strings are null or empty or the strings are equal</returns>
+        </member>
+        <member name="T:DesktopToast.NotificationActivatorBase">
+            <summary>
+            Base class of notification activator (for Action Center of Windows 10)
+            </summary>
+            <remarks>This class must not be used directly because the CLSID must be unique for each application.</remarks>
+        </member>
+        <member name="M:DesktopToast.NotificationActivatorBase.Activate(System.String,System.String,DesktopToast.NOTIFICATION_USER_INPUT_DATA[],System.UInt32)">
+            <summary>
+            Activate method to be called when a user interacts with a toast in Action Center
+            </summary>
+            <param name="appUserModelId">AppUserModelID of the application</param>
+            <param name="invokedArgs">Arguments from the invoked button</param>
+            <param name="data">Data from the input fields</param>
+            <param name="count">The number of data elements</param>
+        </member>
+        <member name="M:DesktopToast.NotificationActivatorBase.RegisterComType(System.Type,System.Action{System.String,System.Collections.Generic.Dictionary{System.String,System.String}})">
+            <summary>
+            Register COM class type.
+            </summary>
+            <param name="activatorType">Notification activator type</param>
+            <param name="action">Action to be invoked when Activate callback method is called</param>
+            <remarks>Notification activator must inherit from this class.</remarks>
+        </member>
+        <member name="M:DesktopToast.NotificationActivatorBase.UnregisterComType">
+            <summary>
+            Unregister COM class type.
+            </summary>
+        </member>
+        <member name="T:DesktopToast.INotificationActivationCallback">
+            <summary>
+            INotificationActivationCallback Interface
+            </summary>
+        </member>
+        <member name="M:DesktopToast.INotificationActivationCallback.Activate(System.String,System.String,DesktopToast.NOTIFICATION_USER_INPUT_DATA[],System.UInt32)">
+            <summary>
+            Activate method to be called when a user interacts with a toast in Action Center
+            </summary>
+            <param name="appUserModelId">AppUserModelID of the application</param>
+            <param name="invokedArgs">Arguments from the invoked button</param>
+            <param name="data">Data from the input fields</param>
+            <param name="count">The number of data elements</param>
+        </member>
+        <member name="T:DesktopToast.NOTIFICATION_USER_INPUT_DATA">
+            <summary>
+            NOTIFICATION_USER_INPUT_DATA Structure
+            </summary>
+        </member>
+        <member name="F:DesktopToast.NOTIFICATION_USER_INPUT_DATA.Key">
+            <summary>
+            ID of the user input field
+            </summary>
+        </member>
+        <member name="F:DesktopToast.NOTIFICATION_USER_INPUT_DATA.Value">
+            <summary>
+            Input value selected by a user for the given input field
+            </summary>
+        </member>
+        <member name="T:DesktopToast.NotificationHelper">
+            <summary>
+            Helper class for notification activator (for Action Center of Windows 10)
+            </summary>
+        </member>
+        <member name="M:DesktopToast.NotificationHelper.RegisterComServer(System.Type,System.String,System.String)">
+            <summary>
+            Register COM server in the registry.
+            </summary>
+            <param name="activatorType">Notification activator type</param>
+            <param name="executablePath">Executable file path</param>
+            <param name="arguments">Arguments</param>
+            <remarks>If the application is not running, this executable file will be started by COM.</remarks>
+        </member>
+        <member name="M:DesktopToast.NotificationHelper.UnregisterComServer(System.Type)">
+            <summary>
+            Unregister COM server in the registry.
+            </summary>
+            <param name="activatorType">Notification activator type</param>
         </member>
         <member name="T:DesktopToast.ShortcutWindowState">
             <summary>
@@ -499,19 +602,44 @@
             <param name="request">Toast request</param>
             <returns>Result of showing a toast</returns>
         </member>
+        <member name="M:DesktopToast.ToastManager.ShowAsync(DesktopToast.ToastRequest,System.Threading.CancellationToken)">
+            <summary>
+            Shows a toast.
+            </summary>
+            <param name="request">Toast request</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Result of showing a toast</returns>
+        </member>
         <member name="M:DesktopToast.ToastManager.ShowAsync(System.String)">
             <summary>
-            Shows a toast using JSON format.
+            Shows a toast by toast request in JSON format.
             </summary>
             <param name="requestJson">Toast request in JSON format</param>
             <returns>Result of showing a toast</returns>
         </member>
-        <member name="M:DesktopToast.ToastManager.ShowAsync(Windows.Data.Xml.Dom.XmlDocument,System.String)">
+        <member name="M:DesktopToast.ToastManager.ShowAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Shows a toast without toast request.
+            Shows a toast by toast request in JSON format.
             </summary>
-            <param name="document">Toast document</param>
+            <param name="requestJson">Toast request in JSON format</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Result of showing a toast</returns>
+        </member>
+        <member name="M:DesktopToast.ToastManager.ShowAsync(System.Object,System.String)">
+            <summary>
+            Shows a toast by toast request in <see cref="T:Windows.Data.Xml.Dom.XmlDocument"/>.
+            </summary>
+            <param name="requestXml">Toast request in XmlDocument</param>
             <param name="appId">AppUserModelID</param>
+            <returns>Result of showing a toast</returns>
+        </member>
+        <member name="M:DesktopToast.ToastManager.ShowAsync(System.Object,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Shows a toast by toast request in <see cref="T:Windows.Data.Xml.Dom.XmlDocument"/>.
+            </summary>
+            <param name="requestXml">Toast request in XmlDocument</param>
+            <param name="appId">AppUserModelID</param>
+            <param name="cancellationToken">Cancellation token</param>
             <returns>Result of showing a toast</returns>
         </member>
         <member name="M:DesktopToast.ToastManager.PrepareToastDocument(DesktopToast.ToastRequest)">
@@ -533,12 +661,13 @@
             </summary>
             <param name="request">Toast request</param>
         </member>
-        <member name="M:DesktopToast.ToastManager.ShowBaseAsync(Windows.Data.Xml.Dom.XmlDocument,System.String)">
+        <member name="M:DesktopToast.ToastManager.ShowBaseAsync(Windows.Data.Xml.Dom.XmlDocument,System.String,System.Threading.CancellationToken)">
             <summary>
             Shows a toast.
             </summary>
             <param name="document">Toast document</param>
             <param name="appId">AppUserModelID</param>
+            <param name="cancellationToken">Cancellation token</param>
             <returns>Result of showing a toast</returns>
         </member>
         <member name="T:DesktopToast.ToastRequest">
@@ -546,14 +675,9 @@
             Toast request container
             </summary>
         </member>
-        <member name="P:DesktopToast.ToastRequest.ToastHeadline">
+        <member name="P:DesktopToast.ToastRequest.ToastTitle">
             <summary>
-            Toast headline (optional)
-            </summary>
-        </member>
-        <member name="P:DesktopToast.ToastRequest.ToastHeadlineWrapsTwoLines">
-            <summary>
-            Whether toast headline wraps across two lines (optional)
+            Toast title (optional)
             </summary>
         </member>
         <member name="P:DesktopToast.ToastRequest.ToastBody">
@@ -561,26 +685,32 @@
             Toast body (required for toast)
             </summary>
         </member>
-        <member name="P:DesktopToast.ToastRequest.ToastBodyExtra">
+        <member name="P:DesktopToast.ToastRequest.ToastBodyList">
             <summary>
-            Toast body extra section (optional)
+            Toast body list (optional)
             </summary>
-            <remarks>This section will be reflected only when toast headline is specified and it does not
-            wraps across two lines.</remarks>
+            <remarks>If specified, toast body will be substituted by this list.</remarks>
         </member>
-        <member name="P:DesktopToast.ToastRequest.ToastImageFilePath">
+        <member name="P:DesktopToast.ToastRequest.ToastLogoFilePath">
             <summary>
-            Toast image file path (optional)
+            Logo image file path of toast (optional)
             </summary>
             <remarks>
-            The image file path must be in the following form:
+            This file path must be in the following form:
             "file:///" + full file path
             </remarks>
         </member>
         <member name="P:DesktopToast.ToastRequest.ToastAudio">
             <summary>
-            Toast audio type (optional)
+            Audio type of toast (optional)
             </summary>
+        </member>
+        <member name="P:DesktopToast.ToastRequest.ToastXml">
+            <summary>
+            XML representation of toast (optional)
+            </summary>
+            <remarks>If specified, this XML will be used for a toast as it is. The other toast elements
+            will be ignored.</remarks>
         </member>
         <member name="P:DesktopToast.ToastRequest.ShortcutFileName">
             <summary>
@@ -629,6 +759,12 @@
             camel-cased. CompanyName and ProductName should always be used, while SubProduct and
             VersionInformation are optional.
             </remarks>
+        </member>
+        <member name="P:DesktopToast.ToastRequest.ActivatorId">
+            <summary>
+            AppUserModelToastActivatorCLSID of application (optional, for Action Center of Windows 10)
+            </summary>
+            <remarks>This CLSID is necessary for an application to be started by COM.</remarks>
         </member>
         <member name="P:DesktopToast.ToastRequest.WaitingDuration">
             <summary>
