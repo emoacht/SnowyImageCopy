@@ -835,9 +835,9 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				var prepareTask = _settings.SkipsOnceCopiedFile
-					? Signatures.PrepareAsync(_settings.IndexString, cancellationToken)
-					: Task.FromResult(false); // Completed task
+				var getTask = _settings.SkipsOnceCopiedFile
+					? Signatures.GetAsync(_settings.IndexString, cancellationToken)
+					: Task.FromResult<Signatures>(null); // Completed task
 
 				var checkTask = Task.Run(async () =>
 				{
@@ -911,7 +911,9 @@ namespace SnowyImageCopy.Models
 					}
 				}, cancellationToken);
 
-				await Task.WhenAll(prepareTask, checkTask);
+				await Task.WhenAll(getTask, checkTask);
+
+				var signatures = await getTask;
 
 				await Task.Run(() =>
 				{
@@ -929,11 +931,11 @@ namespace SnowyImageCopy.Models
 								if (item.IsAliveLocal)
 								{
 									item.IsOnceCopied = true;
-									Signatures.Append(item.Signature);
+									signatures.Append(item.Signature);
 								}
 								else
 								{
-									item.IsOnceCopied = Signatures.Contains(item.Signature);
+									item.IsOnceCopied = signatures.Contains(item.Signature);
 								}
 							}
 							// Maintain current value.
@@ -1066,7 +1068,7 @@ namespace SnowyImageCopy.Models
 				}
 
 				if (_settings.SkipsOnceCopiedFile)
-					await Signatures.FlushAsync(_settings.IndexString, cancellationToken);
+					await signatures.FlushAsync(cancellationToken);
 
 				OperationStatus = Resources.OperationStatus_CheckCompleted;
 			}
@@ -1136,6 +1138,10 @@ namespace SnowyImageCopy.Models
 						throw new CardUploadDisabledException();
 				}
 
+				var signatures = _settings.SkipsOnceCopiedFile
+					? await Signatures.GetAsync(_settings.IndexString, cancellationToken)
+					: null;
+
 				while (true)
 				{
 					var item = FileListCore.FirstOrDefault(x => x.IsTarget && (x.Status == FileStatus.ToBeCopied));
@@ -1197,7 +1203,7 @@ namespace SnowyImageCopy.Models
 							if (_settings.SkipsOnceCopiedFile)
 							{
 								item.IsOnceCopied = true;
-								Signatures.Append(item.Signature);
+								signatures.Append(item.Signature);
 							}
 
 							item.Status = FileStatus.Copied;
@@ -1232,7 +1238,7 @@ namespace SnowyImageCopy.Models
 				}
 
 				if (_settings.SkipsOnceCopiedFile)
-					await Signatures.FlushAsync(_settings.IndexString, cancellationToken);
+					await signatures.FlushAsync(cancellationToken);
 
 				OperationStatus = string.Format(Resources.OperationStatus_CopyCompleted, _copyFileCount, (int)(DateTime.Now - CopyStartTime).TotalSeconds);
 			}
