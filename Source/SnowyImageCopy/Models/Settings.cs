@@ -382,7 +382,7 @@ namespace SnowyImageCopy.Models
 				SetPropertyValue(ref _skipsOnceCopiedFile, value);
 
 				if (!value)
-					Signatures.Clear();
+					Signatures.Close(IndexString);
 			}
 		}
 		private bool _skipsOnceCopiedFile;

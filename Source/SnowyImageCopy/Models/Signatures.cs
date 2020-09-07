@@ -30,26 +30,66 @@ namespace SnowyImageCopy.Models
 		}
 		private static int _maxCount = 10000;
 
+		private static List<Signatures> _instances;
+		private static readonly Lazy<SemaphoreSlim> _semaphore = new Lazy<SemaphoreSlim>(() => new SemaphoreSlim(1, 1));
+
+		public static async Task<Signatures> GetAsync(string indexString, CancellationToken cancellationToken)
+		{
+			try
+			{
+				await _semaphore.Value.WaitAsync(cancellationToken);
+
+				_instances ??= new List<Signatures>();
+
+				var instance = _instances.FirstOrDefault(x => x.IndexString == indexString);
+				if (instance is null)
+				{
+					var signatures = await LoadAsync(indexString, valueSize: HashItem.Size, maxCount: MaxCount, cancellationToken);
+					instance = new Signatures(indexString, signatures);
+					_instances.Add(instance);
+				}
+				return instance;
+			}
+			finally
+			{
+				_semaphore.Value.Release();
+			}
+		}
+
+		public static void Close(string indexString)
+		{
+			int index = _instances?.FindIndex(x => x.IndexString == indexString) ?? -1;
+			if (index >= 0)
+			{
+				_instances[index].Close();
+				_instances.RemoveAt(index);
+			}
+		}
+
+		#region Instance
+
+		private string IndexString { get; }
+		private HashSet<HashItem> _signatures;
+
+		private Signatures(string indexString, HashItem[] signatures)
+		{
+			this.IndexString = indexString;
+			this._signatures = new HashSet<HashItem>(signatures);
+		}
+
 		/// <summary>
 		/// The number of signatures currently handled
 		/// </summary>
-		public static int CurrentCount => _signatures?.Count ?? 0;
+		public int CurrentCount => _signatures?.Count ?? 0;
 
-		private static HashSet<HashItem> _signatures;
-
-		public static async Task PrepareAsync(string indexString, CancellationToken cancellationToken)
-		{
-			_signatures ??= new HashSet<HashItem>(await LoadAsync(indexString, valueSize: HashItem.Size, maxCount: MaxCount, cancellationToken));
-		}
-
-		public static bool Contains(HashItem value)
+		public bool Contains(HashItem value)
 		{
 			return (_signatures?.Contains(value) == true);
 		}
 
-		private static List<HashItem> _appendValues;
+		private List<HashItem> _appendValues;
 
-		public static bool Append(HashItem value)
+		public bool Append(HashItem value)
 		{
 			if (!(_signatures?.Add(value) == true))
 				return false;
@@ -59,7 +99,7 @@ namespace SnowyImageCopy.Models
 			return true;
 		}
 
-		public static void Append(IEnumerable<HashItem> values)
+		public void Append(IEnumerable<HashItem> values)
 		{
 			if (values is null)
 				return;
@@ -68,21 +108,23 @@ namespace SnowyImageCopy.Models
 				Append(value);
 		}
 
-		public static async Task FlushAsync(string indexString, CancellationToken cancellationToken)
+		public async Task FlushAsync(CancellationToken cancellationToken)
 		{
 			if ((_appendValues?.Count ?? 0) == 0)
 				return;
 
-			await SaveAsync(indexString, _appendValues, _signatures, valueSize: HashItem.Size, maxCount: MaxCount, cancellationToken);
+			await SaveAsync(IndexString, _appendValues, _signatures, valueSize: HashItem.Size, maxCount: MaxCount, cancellationToken);
 
 			_appendValues.Clear();
 		}
 
-		public static void Clear()
+		public void Close()
 		{
 			_signatures?.Clear();
 			_signatures = null;
 		}
+
+		#endregion
 
 		#region Load/Save/Delete
 
