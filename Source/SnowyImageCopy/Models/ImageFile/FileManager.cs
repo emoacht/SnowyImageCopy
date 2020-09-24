@@ -754,33 +754,35 @@ namespace SnowyImageCopy.Models.ImageFile
 						// while reading response header.
 						throw new TimeoutException("Reading response header timed out!");
 					}
-					catch (ObjectDisposedException ode)
-					{
-						// ObjectDisposedException can be thrown when essential objects, such as HttpClient,
-						// CancellationTokenSource, NetworkStream, is unexpectedly disposed.
-						// If this exception is not thrown by any other reason, the most possible reason
-						// will be a lost of the connection to FlashAir card.
-						throw new RemoteConnectionLostException("Connection lost!", ode);
-					}
-					catch (IOException ie) when (ie.InnerException is SocketException)
-					{
-						// If the connection to FlashAir card is changed, this exception may be thrown.
-						// Message: A socket operation was attempted to an unreachable network.
-						throw new RemoteConnectionLostException("Connection lost!", ie);
-					}
-					catch (HttpRequestException hre) when (hre.InnerException is ObjectDisposedException ode)
-					{
-						// If the connection to FlashAir card is lost, this exception may be thrown.
-						// Message: Error while copying content to a stream.
-						throw new RemoteConnectionLostException("Connection lost!", hre);
-					}
 					catch (HttpRequestException hre) when (hre.InnerException is WebException we)
 					{
-						// If unable to connect to FlashAir card, this exception will be thrown.
-						// The status of response may vary, such as WebExceptionStatus.NameResolutionFailure,
-						// WebExceptionStatus.ConnectFailure.
+						// HttpRequestException may be caused by WebException when the connection to
+						// FlashAir card is unable. The value of WebException.Status may vary, such as
+						// WebExceptionStatus.NameResolutionFailure, WebExceptionStatus.ConnectFailure.
 						throw new RemoteConnectionUnableException(we.Status);
 					}
+					catch (HttpRequestException hre) when (hre.InnerException != null)
+					{
+						// HttpRequestException may be caused by other exceptions such as
+						// ObjectDisposedException, IOException.
+						throw hre.InnerException;
+					}
+				}
+				catch (ObjectDisposedException ode)
+				{
+					// ObjectDisposedException may be thrown when essential objects, such as HttpClient,
+					// CancellationTokenSource, NetworkStream, is unexpectedly disposed.
+					// If this exception is not thrown by any other reason, the most possible reason is
+					// that connection to FlashAir card is lost.
+					// Possible message: Error while copying content to a stream.
+					throw new RemoteConnectionLostException("Connection lost!", ode);
+				}
+				catch (IOException ie) when (ie.InnerException is SocketException)
+				{
+					// IOException may be caused by SocketException when the connection to FlashAir card
+					// is changed or lost.
+					// Possible message: A socket operation was attempted to an unreachable network.
+					throw new RemoteConnectionLostException("Connection lost!", ie);
 				}
 				catch (RemoteConnectionUnableException) when (++retryCount < MaxRetryCount)
 				{
