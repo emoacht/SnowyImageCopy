@@ -142,12 +142,12 @@
     <Compile Include="Models\ImageFile\FileItem.cs" />
     <Compile Include="Models\ImageFile\FileManager.cs" />
     <Compile Include="Models\ImageFile\FileManagerCommand.cs" />
+    <Compile Include="Models\ImageFile\FilePeriod.cs" />
+    <Compile Include="Models\ImageFile\FileStatus.cs" />
     <Compile Include="Models\ImageFile\HashItem.cs" />
     <Compile Include="Models\ImageFile\IFileItem.cs" />
     <Compile Include="Models\Network\NativeWifi.cs" />
     <Compile Include="Models\Network\NetworkChecker.cs" />
-    <Compile Include="Models\FilePeriod.cs" />
-    <Compile Include="Models\FileStatus.cs" />
     <Compile Include="Models\FolderService.cs" />
     <Compile Include="Models\ImageManager.cs" />
     <Compile Include="Models\LogService.cs" />

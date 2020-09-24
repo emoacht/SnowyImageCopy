@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models;
+using SnowyImageCopy.Models.ImageFile;
 using SnowyImageCopy.Properties;
 
 namespace SnowyImageCopy.ViewModels
