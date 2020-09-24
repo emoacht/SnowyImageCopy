@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-using SnowyImageCopy.Models;
+using SnowyImageCopy.Models.ImageFile;
 
 namespace SnowyImageCopy.Views.Converters
 {

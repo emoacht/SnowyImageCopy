@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-using SnowyImageCopy.Models;
+using SnowyImageCopy.Models.ImageFile;
 using SnowyImageCopy.Properties;
 
 namespace SnowyImageCopy.Views.Converters

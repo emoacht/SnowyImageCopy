@@ -462,7 +462,7 @@ namespace SnowyImageCopy.Models
 		/// False: If completed and content found not updated.
 		/// Null:  If failed.
 		/// </returns>
-		private async Task<bool?> CheckUpdateAsync()
+		private async ValueTask<bool?> CheckUpdateAsync()
 		{
 			try
 			{
@@ -800,7 +800,7 @@ namespace SnowyImageCopy.Models
 		/// Checks if ready for operation.
 		/// </summary>
 		/// <returns>True if ready</returns>
-		private async Task<bool> CheckReadyAsync()
+		private async ValueTask<bool> CheckReadyAsync()
 		{
 			if ((_settings.TargetPeriod == FilePeriod.Select) &&
 				!_settings.TargetDates.Any())
