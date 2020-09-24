@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 2.2.2 2020-9-24
+
+ - Suppress exceptions when connection is lost
+
 Ver 2.2.1 2020-9-7
 
  - Fix bugs
