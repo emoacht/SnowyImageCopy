@@ -491,6 +491,11 @@ namespace SnowyImageCopy.Models.ImageFile
 				// 0: If not.
 				return (status == "1");
 			}
+			catch (RemoteFileNotFoundException)
+			{
+				// If the connection is unable, StatusCode can be HttpStatusCode.NotFound.
+				throw new RemoteConnectionUnableException();
+			}			
 			catch
 			{
 				Debug.WriteLine("Failed to check update status.");
@@ -514,7 +519,12 @@ namespace SnowyImageCopy.Models.ImageFile
 
 				return int.TryParse(timeStamp, out var num) ? num : -1;
 			}
-			catch (RemoteConnectionUnableException)
+			catch (RemoteFileNotFoundException)
+			{
+				// If the connection is unable, StatusCode can be HttpStatusCode.NotFound.
+				throw new RemoteConnectionUnableException();
+			}
+			catch (RemoteConnectionUnableException rcue) when (rcue.Code == HttpStatusCode.BadRequest)
 			{
 				// If request for time stamp of write event is not supported, StatusCode will be HttpStatusCode.BadRequest.
 				return -1;
@@ -541,7 +551,7 @@ namespace SnowyImageCopy.Models.ImageFile
 
 				return int.TryParse(upload, out var num) ? num : -1;
 			}
-			catch (RemoteConnectionUnableException)
+			catch (RemoteConnectionUnableException rcue) when (rcue.Code == HttpStatusCode.BadRequest)
 			{
 				// If request for Upload parameter is not supported, StatusCode will be HttpStatusCode.BadRequest.
 				return -1;
