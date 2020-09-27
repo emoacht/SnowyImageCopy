@@ -1,6 +1,6 @@
 ﻿## History
 
-Ver 2.2.2 2020-9-24
+Ver 2.2.4 2020-9-27
 
  - Suppress exceptions when connection is lost
 
