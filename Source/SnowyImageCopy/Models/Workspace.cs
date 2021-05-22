@@ -129,7 +129,7 @@ namespace SnowyImageCopy.Models
 
 		protected virtual void OnException(object sender, Exception exception, [CallerMemberName] string methodName = null)
 		{
-			LogService.RecordException(sender, exception);
+			Logger.RecordException(sender, exception);
 		}
 
 		#endregion

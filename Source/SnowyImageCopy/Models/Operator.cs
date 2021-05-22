@@ -1518,7 +1518,7 @@ namespace SnowyImageCopy.Models
 				.AppendLine("response -> ")
 				.AppendLine(response);
 
-			return LogService.RecordAsync(GetDownloadFileName(indexString), buffer.ToString());
+			return Logger.RecordAsync(GetDownloadFileName(indexString), buffer.ToString());
 		}
 
 		#endregion
