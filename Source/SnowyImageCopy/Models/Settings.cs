@@ -300,18 +300,13 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _createsDatedFolder = true; // Default;
 
-		[XmlIgnore]
 		public bool CustomizesDatedFolder
 		{
-			get => _customizesDatedFolder || (CustomDatedFolder != null);
+			get => _customizesDatedFolder;
 			set
 			{
-				if (_customizesDatedFolder == value)
-					return;
-
-				_customizesDatedFolder = value;
-				if (!value)
-					CustomDatedFolder = null;
+				if (SetPropertyValue(ref _customizesDatedFolder, value))
+					RaisePropertyChanged(nameof(DatedFolder));
 			}
 		}
 		private bool _customizesDatedFolder;
@@ -319,18 +314,19 @@ namespace SnowyImageCopy.Models
 		[XmlIgnore]
 		public string DatedFolder
 		{
-			get => CustomDatedFolder ?? DefaultDatedFolder;
+			get => (CustomizesDatedFolder ? CustomDatedFolder : null) ?? DefaultDatedFolder;
 			set
 			{
-				var buffer = value?.Trim();
-				if (string.IsNullOrEmpty(buffer) ||
-					string.Equals(buffer, DefaultDatedFolder, StringComparison.OrdinalIgnoreCase))
+				var buffer = value;
+				if (string.IsNullOrWhiteSpace(buffer))
 				{
 					CustomDatedFolder = null;
 				}
 				else if (IsValidDatedFolder(ref buffer))
 				{
-					CustomDatedFolder = buffer;
+					CustomDatedFolder = string.Equals(buffer, DefaultDatedFolder, StringComparison.Ordinal)
+						? null
+						: buffer;
 				}
 			}
 		}
