@@ -11,7 +11,7 @@ using SnowyImageCopy.Views;
 
 namespace SnowyImageCopy.Models
 {
-	internal class LogService
+	internal class Logger
 	{
 		#region General
 

@@ -60,58 +60,87 @@ namespace SnowyImageCopy.Test
 
 		#endregion
 
-		#region IsDatedFolderValid
+		#region IsValidDatedFolder
 
 		[TestMethod]
-		public void TestIsDatedFolderValidTrue()
+		public void TestIsValidDatedFolderTrue()
 		{
+			// YMD
 			TestTrue("yyyyMMdd");
+			TestTrue("YYYYmmDD");
 			TestTrue("yyyy-MM-dd");
 			TestTrue("yyyy_MM_dd");
-			TestTrue("ddMMyyyy");
-			TestTrue("dd-MM-yyyy");
-			TestTrue("dd_MM_yyyy");
 			TestTrue("yyMd");
-			TestTrue("ddMy");
+
+			// YM
 			TestTrue("yyyyMM");
 			TestTrue("yyy-MM");
 			TestTrue("yy_MM");
 			TestTrue("yM");
+
+			// DMY
+			TestTrue("ddMMyyyy");
+			TestTrue("DDMMyyyy");
+			TestTrue("dd-MM-yyyy");
+			TestTrue("dd_MM_yyyy");
+			TestTrue("ddMy");
+
+			// MY
 			TestTrue("MMyyyy");
 			TestTrue("MMMMyyy");
 			TestTrue("MM-yy");
 			TestTrue("M_y");
 			TestTrue("My");
 
-			void TestTrue(string source) => TestIsDatedFolderValidBase(source, true);
+			// MDY
+			TestTrue("MMddyyyy");
+			TestTrue("MMDDyyy");
+			TestTrue("M-dd-y");
+			TestTrue("MM_dd_yyy");
+			TestTrue("Mdy");
+
+			void TestTrue(string source) => TestIsValidDatedFolderBase(source, true);
 		}
 
 		[TestMethod]
-		public void TestIsDatedFolderValidFalse()
+		public void TestIsValidDatedFolderFalse()
 		{
+			// Empty
 			TestFalse(null);
 			TestFalse(string.Empty);
 			TestFalse(" ");
-			TestFalse("yyyymmdd");
-			TestFalse("yyyyMMDD");
-			TestFalse("YYYYMMdd");
+
+			// Essessive length
+			TestFalse("yyyyyMMdd");
+			TestFalse("yyMMMMMdd");
+			TestFalse("yMMddd");
+
+			// Invalid delimiter
 			TestFalse("yyyy/MM/dd");
 			TestFalse(@"yyyy\MM\dd");
 			TestFalse("yyyy.MM.dd");
 			TestFalse("yyyy MM dd");
-			TestFalse("ddmmyyyy");
+
+			// Wrong delimiter place
+			TestFalse("yy-yyMMdd");
+			TestFalse("yyyy-M-Mdd");
+			TestFalse("yyyy_MMd_d");
+
+			// MD, DM, YD, DY
 			TestFalse("MMdd");
 			TestFalse("ddMM");
+			TestFalse("yyyydd");
+			TestFalse("ddYY");
 
-			void TestFalse(string source) => TestIsDatedFolderValidBase(source, false);
+			void TestFalse(string source) => TestIsValidDatedFolderBase(source, false);
 		}
 
 		#region Base
 
-		private void TestIsDatedFolderValidBase(string source, bool isValid)
+		private void TestIsValidDatedFolderBase(string source, bool isValid)
 		{
 			var privateType = new PrivateType(typeof(Settings));
-			Assert.AreEqual((bool)privateType.InvokeStatic("IsDatedFolderValid", source), isValid);
+			Assert.AreEqual((bool)privateType.InvokeStatic("IsValidDatedFolder", source), isValid);
 		}
 
 		#endregion
