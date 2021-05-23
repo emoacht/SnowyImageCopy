@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 2.3.1 2021-5-23
+
+- Adapt month-day-year format as folder name for each date
+
 Ver 2.2.4 2020-9-27
 
  - Suppress exceptions when connection is lost
