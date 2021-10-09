@@ -166,7 +166,7 @@ namespace SnowyImageCopy.Models
 		private static bool TryLoad<T>(in string filePath, out T instance)
 		{
 			var fileInfo = new FileInfo(filePath);
-			if (!fileInfo.Exists || (fileInfo.Length == 0))
+			if (fileInfo is { Exists: false } or { Length: 0 })
 			{
 				instance = default;
 				return false;

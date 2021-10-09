@@ -18,7 +18,7 @@ namespace SnowyImageCopy.Views.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is string sourceValue))
+			if (value is not string sourceValue)
 				return DependencyProperty.UnsetValue;
 
 			try

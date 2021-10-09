@@ -10,23 +10,17 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Converts ulong to double divided by the power of 1024.
+	/// Converts ulong representing the number of bytes to double divided by the power of 1024.
 	/// </summary>
 	[ValueConversion(typeof(ulong), typeof(double))]
-	public class TripleDigitsConverter : IValueConverter
+	public class BytesUnitConverter : IValueConverter
 	{
-		private const double TripleDigitsFactor = 1024;
-
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is ulong sourceValue))
+			if ((value is not ulong sourceValue) || double.TryParse(parameter as string, out double factor))
 				return DependencyProperty.UnsetValue;
 
-			var factor = TripleDigitsFactor;
-			if (double.TryParse(parameter as string, out double buffer))
-				factor = Math.Pow(TripleDigitsFactor, buffer);
-
-			return sourceValue / factor;
+			return sourceValue / Math.Pow(1024, factor);
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -495,7 +495,7 @@ namespace SnowyImageCopy.Models.ImageFile
 			{
 				// If the connection is unable, StatusCode can be HttpStatusCode.NotFound.
 				throw new RemoteConnectionUnableException();
-			}			
+			}
 			catch
 			{
 				Debug.WriteLine("Failed to check update status.");
@@ -771,7 +771,7 @@ namespace SnowyImageCopy.Models.ImageFile
 						// WebExceptionStatus.NameResolutionFailure, WebExceptionStatus.ConnectFailure.
 						throw new RemoteConnectionUnableException(we.Status);
 					}
-					catch (HttpRequestException hre) when (hre.InnerException != null)
+					catch (HttpRequestException hre) when (hre.InnerException is not null)
 					{
 						// HttpRequestException may be caused by other exceptions such as
 						// ObjectDisposedException, IOException.

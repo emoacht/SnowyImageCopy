@@ -29,7 +29,7 @@ namespace SnowyImageCopy.Models.Network
 		/// <returns>True if connected</returns>
 		internal static bool IsNetworkConnected(ICardState card)
 		{
-			if ((card is null) || !card.IsWirelessConnected)
+			if (card is null or { IsWirelessConnected: false })
 				return IsNetworkConnected();
 
 			return IsWirelessNetworkConnected(card.Ssid);
@@ -76,12 +76,12 @@ namespace SnowyImageCopy.Models.Network
 		}
 
 		private Timer _timer;
-		private readonly object _locker = new object();
+		private readonly object _locker = new();
 		private IDisposable _isSubscription;
 
 		private void Subscribe(TimeSpan interval)
 		{
-			if ((_card is null) || !_card.IsWirelessConnected)
+			if (_card is null or { IsWirelessConnected: false })
 			{
 				// Timer mode
 				lock (_locker)

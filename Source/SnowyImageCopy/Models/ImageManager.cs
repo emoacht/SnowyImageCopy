@@ -427,7 +427,7 @@ namespace SnowyImageCopy.Models
 
 					return await Task.Run(() =>
 					{
-						if (willReadExif || (destinationProfile != null))
+						if (willReadExif || (destinationProfile is not null))
 							return ConvertStreamToBitmapSource(ms, targetSize, willReadExif, destinationProfile);
 						else
 							return ConvertStreamToBitmapImage(ms, targetSize);
@@ -467,7 +467,7 @@ namespace SnowyImageCopy.Models
 
 					return await Task.Run(() =>
 					{
-						if (willReadExif || (destinationProfile != null))
+						if (willReadExif || (destinationProfile is not null))
 							return ConvertStreamToBitmapSource(ms, outerSize, willReadExif, destinationProfile);
 						else
 							return ConvertStreamToBitmapImageUniform(ms, outerSize);
@@ -507,7 +507,7 @@ namespace SnowyImageCopy.Models
 
 			var bitmapSource = ResizeAndReflectExifOrientation(bitmapFrame, outerSize, orientation);
 
-			if (destinationProfile != null)
+			if (destinationProfile is not null)
 			{
 				var sourceProfile = GetColorProfile(bitmapFrame);
 				bitmapSource = ConvertColorProfile(bitmapSource, sourceProfile, destinationProfile);
@@ -538,7 +538,6 @@ namespace SnowyImageCopy.Models
 				case 0: // Invalid
 				case 1: // Horizontal (normal)
 					break;
-
 				case 2: // Mirror horizontal
 					transform.Children.Add(new ScaleTransform(-1, 1, centerX, centerY));
 					break;
@@ -569,12 +568,12 @@ namespace SnowyImageCopy.Models
 			}
 
 			// Resize.
-			if ((0 < bitmapSource.Width) && (0 < bitmapSource.Height)) // For just in case
+			if (bitmapSource is { Width: > 0 } and { Height: > 0 }) // For just in case
 			{
 				var factor = new[]
 					{
-						(outerSize.Width / (isRotatedRightAngle ? bitmapSource.Height : bitmapSource.Width)), // Scale factor of X
-						(outerSize.Height / (isRotatedRightAngle ? bitmapSource.Width : bitmapSource.Height)) // Scale factor of Y
+						outerSize.Width / (isRotatedRightAngle ? bitmapSource.Height : bitmapSource.Width), // Scale factor of X
+						outerSize.Height / (isRotatedRightAngle ? bitmapSource.Width : bitmapSource.Height) // Scale factor of Y
 					}
 					.Where(x => 0 < x)
 					.DefaultIfEmpty(1D)
@@ -823,7 +822,6 @@ namespace SnowyImageCopy.Models
 		private static double GetScaleFactorUniform(double originWidth, double originHeight, Size outerSize)
 		{
 			var targetSize = GetSizeUniform(originWidth, originHeight, outerSize);
-
 			if (targetSize == Size.Empty)
 				return 1D;
 
@@ -879,7 +877,7 @@ namespace SnowyImageCopy.Models
 
 		private static void ThrowIfCollectionNullOrEmpty<T>(ICollection<T> collection, string name)
 		{
-			if (!(collection?.Count > 0))
+			if (collection?.Count is not > 0)
 				throw new ArgumentNullException(name);
 		}
 

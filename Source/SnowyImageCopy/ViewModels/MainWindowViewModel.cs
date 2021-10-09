@@ -218,7 +218,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				_currentImage = value;
-				if (_currentImage != null)
+				if (_currentImage is not null)
 				{
 					// Width and PixelWidth of BitmapImage are almost the same except fractional part
 					// while those of BitmapSource are not always close and can be much different.
@@ -246,7 +246,7 @@ namespace SnowyImageCopy.ViewModels
 
 			BitmapSource image = null;
 
-			if ((data?.Any() == true) && (CurrentItem != null))
+			if ((data?.Any() is true) && (CurrentItem is not null))
 			{
 				try
 				{

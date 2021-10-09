@@ -206,7 +206,6 @@ namespace SnowyImageCopy.Models.ImageFile
 			FileExtension = Enum.GetValues(typeof(FileExtension))
 				.Cast<FileExtension>()
 				.FirstOrDefault(x => string.Equals(extension, $".{x}", StringComparison.OrdinalIgnoreCase));
-
 			if (FileExtension == FileExtension.other)
 				return;
 
@@ -281,7 +280,8 @@ namespace SnowyImageCopy.Models.ImageFile
 			if (object.ReferenceEquals(this, other))
 				return true;
 
-			if ((this.Signature != null) && (this.Signature == other.Signature))
+			if ((this.Signature is not null) &&
+				(this.Signature == other.Signature))
 				return true;
 
 			return (this.CompareTo(other) == 0);
@@ -289,7 +289,7 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		public override int GetHashCode()
 		{
-			return (this.Signature != null)
+			return (this.Signature is not null)
 				? this.Signature.GetHashCode()
 				: new { Date, FilePath, Size }.GetHashCode();
 		}

@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Models
 		private static int _maxCount = 10000;
 
 		private static List<Signatures> _instances;
-		private static readonly Lazy<SemaphoreSlim> _semaphore = new Lazy<SemaphoreSlim>(() => new SemaphoreSlim(1, 1));
+		private static readonly Lazy<SemaphoreSlim> _semaphore = new(() => new(1, 1));
 
 		public static async Task<Signatures> GetAsync(string indexString, CancellationToken cancellationToken)
 		{
@@ -84,14 +84,14 @@ namespace SnowyImageCopy.Models
 
 		public bool Contains(HashItem value)
 		{
-			return (_signatures?.Contains(value) == true);
+			return (_signatures?.Contains(value) is true);
 		}
 
 		private List<HashItem> _appendValues;
 
 		public bool Append(HashItem value)
 		{
-			if (!(_signatures?.Add(value) == true))
+			if (_signatures?.Add(value) is not true)
 				return false;
 
 			_appendValues ??= new List<HashItem>();
@@ -110,7 +110,7 @@ namespace SnowyImageCopy.Models
 
 		public async Task FlushAsync(CancellationToken cancellationToken)
 		{
-			if ((_appendValues?.Count ?? 0) == 0)
+			if (_appendValues is null or { Count: 0 })
 				return;
 
 			await SaveAsync(IndexString, _appendValues, _signatures, valueSize: HashItem.Size, maxCount: MaxCount, cancellationToken);
@@ -138,14 +138,15 @@ namespace SnowyImageCopy.Models
 		{
 			var filePath = GetSignaturesFilePath(indexString);
 			var fileInfo = new FileInfo(filePath);
-			if (!fileInfo.Exists || (fileInfo.Length == 0) || (fileInfo.Length % valueSize != 0))
+
+			if (!CanLoad(fileInfo, valueSize))
 				return new HashItem[0];
 
 			try
 			{
 				using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
 				{
-					var offset = fs.Length - valueSize * maxCount;
+					var offset = fs.Length - (valueSize * maxCount);
 					if (offset > 0)
 						fs.Seek(offset, SeekOrigin.Begin);
 
@@ -177,11 +178,17 @@ namespace SnowyImageCopy.Models
 		{
 			var filePath = GetSignaturesFilePath(indexString);
 			var fileInfo = new FileInfo(filePath);
-			var isAppend = fileInfo.Exists && (fileInfo.Length > 0) && (fileInfo.Length % valueSize == 0)
-				&& ((fileInfo.Length / valueSize + appendValues.Count) < (maxCount * ExcessFactor));
 
-			var fileMode = isAppend ? FileMode.Append : FileMode.Create;
-			var values = isAppend ? appendValues : wholeValues.Skip(Math.Max(0, wholeValues.Count - maxCount));
+			var canAppend = CanLoad(fileInfo, valueSize);
+			if (canAppend)
+			{
+				var existingValuesCount = fileInfo.Length / valueSize;
+				if (existingValuesCount + appendValues.Count > maxCount * ExcessFactor)
+					canAppend = false;
+			}
+
+			var fileMode = canAppend ? FileMode.Append : FileMode.Create;
+			var values = canAppend ? appendValues : wholeValues.Skip(Math.Max(0, wholeValues.Count - maxCount));
 
 			try
 			{
@@ -200,6 +207,13 @@ namespace SnowyImageCopy.Models
 				Debug.WriteLine($"Failed to save signatures.\r\n{ex}");
 				throw;
 			}
+		}
+
+		private static bool CanLoad(FileInfo fileInfo, int valueSize)
+		{
+			return fileInfo.Exists
+				&& (fileInfo.Length > 0)
+				&& (fileInfo.Length % valueSize == 0);
 		}
 
 		internal static void Delete(string indexString) => FolderService.Delete(GetSignaturesFilePath(indexString));

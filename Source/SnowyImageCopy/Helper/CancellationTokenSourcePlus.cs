@@ -16,7 +16,7 @@ namespace SnowyImageCopy.Helper
 		public CancellationTokenSourcePlus(int millisecondsDelay) : base(millisecondsDelay) { }
 		public CancellationTokenSourcePlus(TimeSpan delay) : base(delay) { }
 
-		private readonly object _locker = new object();
+		private readonly object _locker = new();
 
 		#region Dispose
 

@@ -16,7 +16,7 @@
 				ChromeBackground="{StaticResource Window.Background}">
 	<Window.TaskbarItemInfo>
 		<TaskbarItemInfo ProgressState="{Binding Op.ProgressState}"
-						 ProgressValue="{Binding Op.ProgressCopiedCurrent, Converter={StaticResource DoubleDigitsConverterKey}}"/>
+						 ProgressValue="{Binding Op.ProgressCopiedCurrent, Converter={StaticResource PercentUnitConverterKey}}"/>
 	</Window.TaskbarItemInfo>
 
 	<i:Interaction.Behaviors>

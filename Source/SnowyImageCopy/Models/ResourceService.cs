@@ -54,7 +54,7 @@ namespace SnowyImageCopy.Models
 						return null;
 					}
 				})
-				.Where(x => x != null)
+				.Where(x => x is not null)
 				.ToArray();
 		}
 		private CultureInfo[] _supportedCultures;

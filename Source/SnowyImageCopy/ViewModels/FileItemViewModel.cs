@@ -97,7 +97,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private BitmapSource _thumbnail;
 
-		public bool HasThumbnail => (_thumbnail != null);
+		public bool HasThumbnail => (_thumbnail is not null);
 
 		#endregion
 
@@ -135,7 +135,7 @@ namespace SnowyImageCopy.ViewModels
 				if (IsAliveLocal)
 					return FileStatus.Copied;
 
-				if (IsOnceCopied == true)
+				if (IsOnceCopied is true)
 					return FileStatus.OnceCopied;
 
 				return FileStatus.NotCopied;
@@ -157,7 +157,7 @@ namespace SnowyImageCopy.ViewModels
 		/// <remarks>FlashAir card can provide a thumbnail only from JPEG format file.</remarks>
 		internal bool CanGetThumbnailRemote
 		{
-			get => !(_canGetThumbnailRemote == false) && _fileItem.IsJpeg && IsAliveRemote;
+			get => (_canGetThumbnailRemote is not false) && _fileItem.IsJpeg && IsAliveRemote;
 			set => _canGetThumbnailRemote = value;
 		}
 		private bool? _canGetThumbnailRemote;
@@ -170,7 +170,7 @@ namespace SnowyImageCopy.ViewModels
 		/// </remarks>
 		internal bool CanLoadDataLocal
 		{
-			get => !(_canLoadDataLocal == false) && _fileItem.IsLoadable && IsAliveLocal && IsAvailableLocal;
+			get => (_canLoadDataLocal is not false) && _fileItem.IsLoadable && IsAliveLocal && IsAvailableLocal;
 			set => _canLoadDataLocal = value;
 		}
 		private bool? _canLoadDataLocal;
@@ -198,7 +198,7 @@ namespace SnowyImageCopy.ViewModels
 		internal IFileItem FileItem
 		{
 			get => _fileItem;
-			set { if (value != null) { _fileItem = value; } }
+			set { if (value is not null) { _fileItem = value; } }
 		}
 		private IFileItem _fileItem;
 

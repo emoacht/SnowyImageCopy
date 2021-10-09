@@ -122,7 +122,7 @@ namespace SnowyImageCopy.Views.Behaviors
 			if (!IsReliable)
 				return;
 
-			if ((0 < this.AssociatedObject.ActualWidth) && (0 < this.AssociatedObject.ActualHeight))
+			if (this.AssociatedObject is { ActualWidth: > 0 } and { ActualHeight: > 0 })
 			{
 				FrameSize = new Size(
 					Math.Min(this.AssociatedObject.ActualWidth, MaxWidth) - Padding.Left - Padding.Right,

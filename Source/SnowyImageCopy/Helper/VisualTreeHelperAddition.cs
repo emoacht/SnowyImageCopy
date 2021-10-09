@@ -64,8 +64,8 @@ namespace SnowyImageCopy.Helper
 					var child = VisualTreeHelper.GetChild(parent, i);
 					queue.Enqueue(child);
 
-					if (child is T)
-						yield return (T)child;
+					if (child is T buffer)
+						yield return buffer;
 				}
 			}
 			while (queue.Count > 0);
@@ -110,8 +110,8 @@ namespace SnowyImageCopy.Helper
 				if (parent is null)
 					yield break;
 
-				if (parent is T)
-					yield return (T)parent;
+				if (parent is T buffer)
+					yield return buffer;
 			}
 		}
 	}

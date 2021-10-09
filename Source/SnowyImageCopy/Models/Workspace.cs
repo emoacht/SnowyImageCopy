@@ -137,7 +137,7 @@ namespace SnowyImageCopy.Models
 		#region Wifi
 
 		public static NativeWifi Wifi => _wifi.Value;
-		private static readonly Lazy<NativeWifi> _wifi = new Lazy<NativeWifi>(() => new NativeWifi());
+		private static readonly Lazy<NativeWifi> _wifi = new(() => new());
 
 		#endregion
 
@@ -218,7 +218,7 @@ namespace SnowyImageCopy.Models
 				.Select(x => x.ToLower())
 				.ToArray();
 
-			return (options != null) && _args.Intersect(options).Any();
+			return (options is not null) && _args.Intersect(options).Any();
 		}
 
 		protected static string[] Propagate(string source) =>

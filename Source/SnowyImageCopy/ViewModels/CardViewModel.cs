@@ -76,12 +76,12 @@ namespace SnowyImageCopy.ViewModels
 			get => _remoteCard;
 			private set
 			{
-				if (_remoteCard != null)
+				if (_remoteCard is not null)
 					Subscription.Remove(_remoteCard);
 
 				_remoteCard = value;
 
-				if (_remoteCard != null)
+				if (_remoteCard is not null)
 					Subscription.Add(_remoteCard);
 
 				RaisePropertyChanged();
@@ -90,7 +90,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 		private CardStateViewModel _remoteCard;
 
-		public bool RemoteCardIsAvailable => (RemoteCard != null);
+		public bool RemoteCardIsAvailable => (RemoteCard is not null);
 
 		#endregion
 
@@ -107,12 +107,12 @@ namespace SnowyImageCopy.ViewModels
 			get => _localCard;
 			set
 			{
-				if (_localCard != null)
+				if (_localCard is not null)
 					_localCard.PropertyChanged -= OnLocalCardPropertyChanged;
 
 				_localCard = value;
 
-				if (_localCard != null)
+				if (_localCard is not null)
 					_localCard.PropertyChanged += OnLocalCardPropertyChanged;
 
 				RaisePropertyChanged();
@@ -157,7 +157,7 @@ namespace SnowyImageCopy.ViewModels
 		private DelegateCommand _applyCommand;
 
 		private async void ApplyExecute() => await ApplyConfigAsync(_mainWindowViewModel);
-		private bool CanApplyExecute() => !_isApplying && (LocalCard?.IsChanged == true);
+		private bool CanApplyExecute() => !_isApplying && (LocalCard?.IsChanged is true);
 
 		#endregion
 

@@ -134,7 +134,7 @@
 								<TextBlock
 									Grid.Column="2" Grid.Row="5"
 									Margin="0,2"
-									Text="{Binding RemoteCard.TotalCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB, ConverterParameter=3, Converter={StaticResource TripleDigitsConverterKey}}"/>
+									Text="{Binding RemoteCard.TotalCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB, ConverterParameter=3, Converter={StaticResource BytesUnitConverterKey}}"/>
 							</Grid>
 						</Border>
 
@@ -161,7 +161,7 @@
 									Style="{StaticResource VolumeBarStyle}"
 									Value="{Binding RemoteCard.UsedPercentage, Mode=OneWay}"/>
 								<TextBlock Foreground="{StaticResource SnowGray.Normal.Foreground}">
-									<Run Text="{Binding RemoteCard.FreeCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB , ConverterParameter=3, Converter={StaticResource TripleDigitsConverterKey}}"/>
+									<Run Text="{Binding RemoteCard.FreeCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB , ConverterParameter=3, Converter={StaticResource BytesUnitConverterKey}}"/>
 									<Run Text="{Binding Resources.Card_FreeSpace, Mode=OneWay, Source={x:Static models:ResourceService.Current}}"/>
 								</TextBlock>
 							</StackPanel>
@@ -290,7 +290,7 @@
 								<TextBlock
 									Grid.Column="2" Grid.Row="5"
 									Margin="0,2"
-									Text="{Binding LocalCard.TotalCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB, ConverterParameter=3, Converter={StaticResource TripleDigitsConverterKey}}"/>
+									Text="{Binding LocalCard.TotalCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB, ConverterParameter=3, Converter={StaticResource BytesUnitConverterKey}}"/>
 							</Grid>
 						</Border>
 
@@ -313,7 +313,7 @@
 									Style="{StaticResource VolumeBarStyle}"
 									Value="{Binding LocalCard.UsedPercentage, Mode=OneWay}"/>
 								<TextBlock Foreground="{StaticResource SnowGray.Normal.Foreground}">
-									<Run Text="{Binding LocalCard.FreeCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB , ConverterParameter=3, Converter={StaticResource TripleDigitsConverterKey}}"/>
+									<Run Text="{Binding LocalCard.FreeCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB , ConverterParameter=3, Converter={StaticResource BytesUnitConverterKey}}"/>
 									<Run Text="{Binding Resources.Card_FreeSpace, Mode=OneWay, Source={x:Static models:ResourceService.Current}}"/>
 								</TextBlock>
 							</StackPanel>

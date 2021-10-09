@@ -19,11 +19,11 @@
 			<converters:FileStatusToBrushConverter x:Key="FileStatusToBrushConverterKey"/>
 			<converters:FileStatusToStringConverter x:Key="FileStatusToStringConverterKey"/>
 
+			<converters:BytesUnitConverter x:Key="BytesUnitConverterKey"/>
 			<converters:DoubleAndVisibilityToDoubleConverter x:Key="DoubleAndVisibilityToDoubleConverterKey"/>
-			<converters:DoubleDigitsConverter x:Key="DoubleDigitsConverterKey"/>
-			<converters:TripleDigitsConverter x:Key="TripleDigitsConverterKey"/>
 			<converters:ObjectArrayConverter x:Key="ObjectArrayConverterKey"/>
 			<converters:PathFileNameConverter x:Key="PathFileNameConverterKey"/>
+			<converters:PercentUnitConverter x:Key="PercentUnitConverterKey"/>
 			<converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey"/>
 
 			<!-- Styles, Templates -->

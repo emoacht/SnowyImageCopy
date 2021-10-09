@@ -36,7 +36,7 @@ namespace SnowyImageCopy.Views.Converters
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is FileStatus status))
+			if (value is not FileStatus status)
 				return DependencyProperty.UnsetValue;
 
 			return StatusColorMap.TryGetValue(status, out Color statusColor)

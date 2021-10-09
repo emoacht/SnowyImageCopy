@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
 using Microsoft.Xaml.Behaviors;
 
 using MonitorAware.Models;
@@ -110,8 +109,8 @@ namespace SnowyImageCopy.Views.Behaviors
 			// Check if AssociatedElement and TargetElement have been already presented.
 			// If not, an InvalidOperationException ("This Visual is not connected to a PresentationSource")
 			// will be thrown when calling PointToScreen method.
-			if ((PresentationSource.FromVisual(AssociatedElement) != null) &&
-				(PresentationSource.FromVisual(TargetElement) != null))
+			if ((PresentationSource.FromVisual(AssociatedElement) is not null) &&
+				(PresentationSource.FromVisual(TargetElement) is not null))
 			{
 				var isIntersected = IsElementIntersected();
 				if (this.IsIntersected != isIntersected)
@@ -139,8 +138,8 @@ namespace SnowyImageCopy.Views.Behaviors
 
 			var associatedLocation = AssociatedElement.PointToScreen(default);
 			var expandedRect = new Rect(
-				associatedLocation.X - ExpandedMargin.Left * factor.X,
-				associatedLocation.Y - ExpandedMargin.Top * factor.Y,
+				associatedLocation.X - (ExpandedMargin.Left * factor.X),
+				associatedLocation.Y - (ExpandedMargin.Top * factor.Y),
 				(AssociatedElement.ActualWidth + ExpandedMargin.Left + ExpandedMargin.Right) * factor.X,
 				(AssociatedElement.ActualHeight + ExpandedMargin.Top + ExpandedMargin.Bottom) * factor.Y);
 

@@ -22,10 +22,10 @@ namespace SnowyImageCopy.Common
 			if (managerType != typeof(PropertyChangedEventManager))
 				return false;
 
-			if (!(e is PropertyChangedEventArgs pce))
+			if (e is not PropertyChangedEventArgs buffer)
 				return false;
 
-			this._propertyChangedAction(sender, pce);
+			_propertyChangedAction(sender, buffer);
 			return true;
 		}
 	}

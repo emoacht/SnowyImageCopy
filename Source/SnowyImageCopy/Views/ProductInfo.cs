@@ -40,8 +40,8 @@ namespace SnowyImageCopy.Views
 
 		#endregion
 
-		public static string ProductInfoLong => $"{Title} {ProductInfo.Version}";
-		public static string ProductInfoMiddle => $"{Title} {ProductInfo.Version.ToString(3)}";
-		public static string ProductInfoShort => $"{Title} {ProductInfo.Version.ToString(2)}";
+		public static string ProductInfoLong => $"{Title} {Version}";
+		public static string ProductInfoMiddle => $"{Title} {Version.ToString(3)}";
+		public static string ProductInfoShort => $"{Title} {Version.ToString(2)}";
 	}
 }

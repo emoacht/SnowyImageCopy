@@ -117,11 +117,7 @@ namespace SnowyImageCopy.Views.Controls
 				new PropertyMetadata(
 					60D, // Sample percentage
 					OnPercentageChanged),
-				value =>
-				{
-					var num = (double)value;
-					return (0D <= num) && (num <= 100D);
-				});
+				value => ((double)value is >= 0D and <= 100D));
 
 		public double Angle
 		{
@@ -136,11 +132,7 @@ namespace SnowyImageCopy.Views.Controls
 				new PropertyMetadata(
 					216D, // Sample angle
 					OnPropertyChanged),
-				value =>
-				{
-					var num = (double)value;
-					return (0D <= num) && (num <= 360D);
-				});
+				value => ((double)value is >= 0D and <= 360D));
 
 		#endregion
 
@@ -164,7 +156,7 @@ namespace SnowyImageCopy.Views.Controls
 		private static void OnPercentageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			var circle = (CircularProgressBar)d;
-			circle.Angle = (circle.Percentage * 360D) / 100D; // This will invoke OnPropertyChanged.
+			circle.Angle = circle.Percentage * 360D / 100D; // This will invoke OnPropertyChanged.
 		}
 
 		private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -209,7 +201,7 @@ namespace SnowyImageCopy.Views.Controls
 		private static Point GetCartesianCoordinate(double angle, double radius)
 		{
 			// Convert from degree to radian.
-			var angleRadian = (Math.PI / 180D) * (angle - 90D);
+			var angleRadian = Math.PI / 180D * (angle - 90D);
 
 			var x = radius * Math.Cos(angleRadian);
 			var y = radius * Math.Sin(angleRadian);

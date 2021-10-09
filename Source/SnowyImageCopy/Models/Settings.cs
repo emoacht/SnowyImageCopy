@@ -29,21 +29,16 @@ namespace SnowyImageCopy.Models
 	{
 		#region INotifyDataErrorInfo
 
-		/// <summary>
-		/// Holder of property name (key) and validation error messages (value)
-		/// </summary>
-		private readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
+		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+		private readonly Dictionary<string, List<string>> _errors = new();
 
 		public bool HasErrors => _errors.Any();
 
-		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
 		public IEnumerable GetErrors(string propertyName)
 		{
-			if (string.IsNullOrEmpty(propertyName) || !_errors.ContainsKey(propertyName))
-				return null;
-
-			return _errors[propertyName];
+			return !string.IsNullOrEmpty(propertyName)
+				&& _errors.TryGetValue(propertyName, out var values) ? values : null;
 		}
 
 		private bool ValidateProperty(object value, [CallerMemberName] string propertyName = null)
@@ -57,15 +52,14 @@ namespace SnowyImageCopy.Models
 
 			if (isValidated)
 			{
-				if (_errors.ContainsKey(propertyName))
-					_errors.Remove(propertyName);
+				_errors.Remove(propertyName);
 			}
 			else
 			{
 				if (_errors.ContainsKey(propertyName))
 					_errors[propertyName].Clear();
 				else
-					_errors[propertyName] = new List<string>();
+					_errors[propertyName] = new();
 
 				_errors[propertyName].AddRange(results.Select(x => x.ErrorMessage));
 			}
@@ -194,7 +188,7 @@ namespace SnowyImageCopy.Models
 			get => _targetDates ??= new ObservableCollection<DateTime>();
 			set
 			{
-				if ((_targetDates != null) && (_targetDates == value))
+				if ((_targetDates is not null) && (_targetDates == value))
 					return;
 
 				_targetDates = value;
@@ -605,7 +599,7 @@ namespace SnowyImageCopy.Models
 		private static void Load<T>(in string filePath, T instance)
 		{
 			var fileInfo = new FileInfo(filePath);
-			if (!fileInfo.Exists || (fileInfo.Length == 0))
+			if (fileInfo is { Exists: false } or { Length: 0 })
 				return;
 
 			var serializer = new XmlSerializer(typeof(T));

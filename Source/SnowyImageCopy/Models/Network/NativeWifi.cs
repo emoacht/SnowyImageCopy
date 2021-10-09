@@ -92,14 +92,14 @@ namespace SnowyImageCopy.Models.Network
 
 			public byte[] ToBytes() => ucSSID?.Take((int)uSSIDLength).ToArray();
 
-			private static Lazy<Encoding> _encoding = new Lazy<Encoding>(() =>
+			private static readonly Lazy<Encoding> _encoding = new(() =>
 				Encoding.GetEncoding(65001, // UTF-8 code page
 					EncoderFallback.ReplacementFallback,
 					DecoderFallback.ExceptionFallback));
 
 			public override string ToString()
 			{
-				if (ucSSID != null)
+				if (ucSSID is not null)
 				{
 					try
 					{
@@ -122,7 +122,7 @@ namespace SnowyImageCopy.Models.Network
 
 			public override string ToString()
 			{
-				return (ucDot11MacAddress != null)
+				return (ucDot11MacAddress is not null)
 					? BitConverter.ToString(ucDot11MacAddress).Replace('-', ':')
 					: null;
 			}

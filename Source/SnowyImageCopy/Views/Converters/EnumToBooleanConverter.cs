@@ -25,7 +25,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>True if Enum value matches condition Enum value. False if not.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Enum sourceValue) || !(parameter is string conditionString))
+			if ((value is not Enum sourceValue) || (parameter is not string conditionString))
 				return DependencyProperty.UnsetValue;
 
 			if (!TryParse(value.GetType(), conditionString, out Enum conditionValue))
@@ -44,7 +44,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>Condition Enum value if Boolean is true</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool sourceValue) || !sourceValue || !(parameter is string conditionString))
+			if ((value is not bool targetValue) || !targetValue || (parameter is not string conditionString))
 				return DependencyProperty.UnsetValue;
 
 			if (!TryParse(targetType, conditionString, out Enum conditionValue))
@@ -62,7 +62,7 @@ namespace SnowyImageCopy.Views.Converters
 					.FirstOrDefault(x => x.ToString().Equals(source.Trim(), StringComparison.OrdinalIgnoreCase))
 				: null;
 
-			return (value != null);
+			return (value is not null);
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace SnowyImageCopy.Helper
 			int endIndex = 0;
 			for (int i = source.Length - 1; i >= 0; i--)
 			{
-				if (IsWhiteSpaceOrQuotationChar(source[i]))
+				if (char.IsWhiteSpace(source[i]) || IsQuotationChar(source[i]))
 				{
 					if (i == 0)
 						return false;
@@ -48,7 +48,7 @@ namespace SnowyImageCopy.Helper
 			int startIndex = 0;
 			for (int i = 0; i <= endIndex; i++)
 			{
-				if (IsWhiteSpaceOrQuotationChar(source[i]))
+				if (char.IsWhiteSpace(source[i]) || IsQuotationChar(source[i]))
 					continue;
 
 				int length;
@@ -84,13 +84,10 @@ namespace SnowyImageCopy.Helper
 
 			normalized = buffer.ToString();
 			return true;
+
+			static bool IsQuotationChar(char value) => value is '\'' or '"';
+			static bool IsDriveChar(char value) => value is (>= 'A' and <= 'Z') or (>= 'a' and <= 'z');
 		}
-
-		private static bool IsWhiteSpaceOrQuotationChar(char value) =>
-			char.IsWhiteSpace(value) || (value == '\'') || (value == '"');
-
-		private static bool IsDriveChar(char value) =>
-			('A' <= value && value <= 'Z') || ('a' <= value && value <= 'z');
 
 		/// <summary>
 		/// Enumerates directory paths traversing up to a drive root.

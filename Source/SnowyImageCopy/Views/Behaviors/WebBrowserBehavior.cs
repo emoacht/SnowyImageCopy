@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-
 using Microsoft.Xaml.Behaviors;
 
 using MonitorAware.Models;
