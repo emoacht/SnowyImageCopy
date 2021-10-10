@@ -71,5 +71,31 @@ namespace SnowyImageCopy.Test
 		#endregion
 
 		#endregion
+
+		#region TryNormalizeExtensions
+
+		[TestMethod]
+		public void TestTryNormalizeExtensions()
+		{
+			TestTryNormalizeExtensionsBase(@" jpg;Jpeg; png .bmp;", "jpg;jpeg;png;bmp", ".jpg", ".jpeg", ".png", ".bmp");
+			TestTryNormalizeExtensionsBase(@"JPG,PNG TIFF", "jpg,png,tiff", ".jpg", ".png", ".tiff");
+			TestTryNormalizeExtensionsBase(@"MP4 MOV AVI", "mp4 mov avi", ".mp4", ".mov", ".avi");
+		}
+
+		#region base
+
+		private void TestTryNormalizeExtensionsBase(string source, string expectedNormalized, params string[] expectedExtensions)
+		{
+			Assert.IsTrue(PathAddition.TryNormalizeExtensions(source, out var actualNormalized, out var acturalExtensions));
+			Assert.AreEqual(expectedNormalized, actualNormalized);
+			Assert.AreEqual(expectedExtensions.Length, acturalExtensions.Length);
+
+			for (int i = 0; i < expectedExtensions.Length; i++)
+				Assert.AreEqual(expectedExtensions[i], acturalExtensions[i]);
+		}
+
+		#endregion
+
+		#endregion
 	}
 }
