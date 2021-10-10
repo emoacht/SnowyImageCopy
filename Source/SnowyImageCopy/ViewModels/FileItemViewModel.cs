@@ -105,7 +105,12 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				if (_settings.HandlesJpegFileOnly && !_fileItem.IsJpeg)
+				if (_settings.HandlesJpegFileOnly)
+				{
+					if (!_fileItem.IsJpeg)
+						return false;
+				}
+				else if (!_fileItem.IsImageFile)
 					return false;
 
 				return _settings.TargetPeriod switch

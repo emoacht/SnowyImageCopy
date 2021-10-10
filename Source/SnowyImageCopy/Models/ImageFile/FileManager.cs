@@ -135,13 +135,7 @@ namespace SnowyImageCopy.Models.ImageFile
 				}
 
 				if (!item.IsDirectory)
-				{
-					if (!item.IsImageFile)
-					{
-						itemList.RemoveAt(i);
-					}
 					continue;
-				}
 
 				var path = item.FilePath;
 				itemList.RemoveAt(i);

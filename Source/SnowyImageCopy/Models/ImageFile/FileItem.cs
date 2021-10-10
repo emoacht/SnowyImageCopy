@@ -41,7 +41,9 @@ namespace SnowyImageCopy.Models.ImageFile
 		public bool IsImported { get; private set; }
 
 		public string FilePath { get; private set; }
-		public HashItem Signature { get; private set; }
+
+		public HashItem Signature => _signature ??= GetSignature(Date, FilePath, Size);
+		private HashItem _signature;
 
 		public bool IsImageFile { get; private set; }
 		public bool IsJpeg { get; private set; }
@@ -182,9 +184,6 @@ namespace SnowyImageCopy.Models.ImageFile
 			{
 				SetFileExtension(FileName);
 			}
-
-			if (IsImageFile)
-				Signature = GetSignature(Date, FilePath, Size);
 
 			return true;
 		}
