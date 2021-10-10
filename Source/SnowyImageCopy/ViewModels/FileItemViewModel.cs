@@ -105,9 +105,9 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				if (_settings.HandlesJpegFileOnly)
+				if (_settings.LimitsFileExtensions)
 				{
-					if (!_fileItem.IsJpeg)
+					if (!_settings.FileExtensions.Contains(FileExtension.ToLower()))
 						return false;
 				}
 				else if (!_fileItem.IsImageFile)

@@ -356,17 +356,66 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		public bool HandlesJpegFileOnly
+		public bool LeavesExistingFile
 		{
-			get => _handlesJpegFileOnly;
-			set => SetPropertyValue(ref _handlesJpegFileOnly, value);
+			get => _leavesExistingFile;
+			set => SetPropertyValue(ref _leavesExistingFile, value);
 		}
-		private bool _handlesJpegFileOnly;
+		private bool _leavesExistingFile;
+
+		public bool MovesFileToRecycle
+		{
+			get => _movesFileToRecycle;
+			set => SetPropertyValue(ref _movesFileToRecycle, value);
+		}
+		private bool _movesFileToRecycle;
+
+		#region File extensions
+
+		public bool LimitsFileExtensions => SpecifiesFileExtensions && FileExtensions.Any();
+
+		public bool SpecifiesFileExtensions
+		{
+			get => _specifiesFileExtensions;
+			set
+			{
+				if (SetPropertyValue(ref _specifiesFileExtensions, _validateValue(value)))
+				{
+					if (FileExtensions.Any())
+						RaisePropertyChanged(nameof(LimitsFileExtensions));
+				}
+			}
+		}
+		private bool _specifiesFileExtensions;
+
+		public string FileExtensionsWithoutDot
+		{
+			get => _fileExtensionsWithoutDot;
+			set
+			{
+				if (!PathAddition.TryNormalizeExtensions(value, out string normalized, out string[] buffer)
+					|| FileExtensions.SequenceEqual(buffer))
+					return;
+
+				if (SetPropertyValue(ref _fileExtensionsWithoutDot, normalized))
+				{
+					_fileExtensions = new HashSet<string>(buffer);
+					RaisePropertyChanged(nameof(LimitsFileExtensions));
+				}
+			}
+		}
+		private string _fileExtensionsWithoutDot = "jpg,jpeg"; // Default
+
+		public HashSet<string> FileExtensions =>
+			_fileExtensions ??= new HashSet<string>(PathAddition.EnumerateExtensions(FileExtensionsWithoutDot));
+		private HashSet<string> _fileExtensions;
+
+		#endregion
 
 		public bool SelectsReadOnlyFile
 		{
 			get => _selectsReadOnlyFile;
-			set => SetPropertyValue(ref _selectsReadOnlyFile, value);
+			set => SetPropertyValue(ref _selectsReadOnlyFile, _validateValue(value));
 		}
 		private bool _selectsReadOnlyFile;
 
@@ -375,10 +424,11 @@ namespace SnowyImageCopy.Models
 			get => _skipsOnceCopiedFile;
 			set
 			{
-				SetPropertyValue(ref _skipsOnceCopiedFile, value);
-
-				if (!value)
-					Signatures.Close(IndexString);
+				if (SetPropertyValue(ref _skipsOnceCopiedFile, _validateValue(value)))
+				{
+					if (!value)
+						Signatures.Close(IndexString);
+				}
 			}
 		}
 		private bool _skipsOnceCopiedFile;
@@ -396,26 +446,14 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-		public bool LeavesExistingFile
-		{
-			get => _leavesExistingFile;
-			set => SetPropertyValue(ref _leavesExistingFile, value);
-		}
-		private bool _leavesExistingFile;
-
-		public bool MovesFileToRecycle
-		{
-			get => _movesFileToRecycle;
-			set => SetPropertyValue(ref _movesFileToRecycle, value);
-		}
-		private bool _movesFileToRecycle;
-
 		public bool DeletesOnCopy
 		{
 			get => _deletesOnCopy;
-			set => SetPropertyValue(ref _deletesOnCopy, value);
+			set => SetPropertyValue(ref _deletesOnCopy, _validateValue(value));
 		}
 		private bool _deletesOnCopy;
+
+		private static Func<bool, bool> _validateValue = x => false;
 
 		#endregion
 

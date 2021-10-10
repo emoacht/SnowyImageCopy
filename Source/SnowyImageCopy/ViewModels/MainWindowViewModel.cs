@@ -387,7 +387,7 @@ namespace SnowyImageCopy.ViewModels
 					{
 						case nameof(Settings.TargetPeriod):
 						case nameof(Settings.TargetDates):
-						case nameof(Settings.HandlesJpegFileOnly):
+						case nameof(Settings.LimitsFileExtensions):
 							return true;
 						default:
 							return false;

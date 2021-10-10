@@ -92,8 +92,8 @@ namespace SnowyImageCopy.Helper
 		/// <summary>
 		/// Enumerates directory paths traversing up to a drive root.
 		/// </summary>
-		/// <param name="source">Source path</param>
-		/// <returns>Directory paths</returns>
+		/// <param name="source">String representing directory path</param>
+		/// <returns>Enumerable collection of directory paths</returns>
 		public static IEnumerable<string> EnumerateDirectoryPaths(string source)
 		{
 			if (source is null)
@@ -112,6 +112,64 @@ namespace SnowyImageCopy.Helper
 				if (index > 0)
 					yield return buffer = buffer.Substring(0, index);
 			}
+		}
+
+		public static bool TryNormalizeExtensions(string source, out string normalized, out string[] extensions)
+		{
+			var buffer = EnumerateExtensionsWithoutDot(source).ToArray();
+
+			if (buffer.Length > 0)
+			{
+				normalized = buffer.Length switch
+				{
+					1 => buffer[0].extension,
+					> 1 => string.Join(buffer[0].separator, buffer.Select(x => x.extension)),
+					_ => null
+				};
+				extensions = buffer.Select(x => $".{x.extension}").ToArray();
+				return true;
+			}
+			normalized = default;
+			extensions = default;
+			return false;
+		}
+
+		/// <summary>
+		/// Enumerates file extensions from a specified string representing file extensions.
+		/// </summary>
+		/// <param name="source">String representing file extensions delimited by ' ' or ',' or ';'</param>
+		/// <returns>Enumerable collection of file extensions</returns>
+		public static IEnumerable<string> EnumerateExtensions(string source)
+		{
+			return EnumerateExtensionsWithoutDot(source).Select(x => $".{x.extension}");
+		}
+
+		private static IEnumerable<(string extension, string separator)> EnumerateExtensionsWithoutDot(string source)
+		{
+			if (source is null)
+				yield break;
+
+			var buffer = new StringBuilder();
+
+			foreach (char c in source.ToLower().Select(x => char.IsWhiteSpace(x) ? ' ' : x))
+			{
+				if (IsSeparator(c))
+				{
+					if (buffer.Length > 0)
+					{
+						yield return (extension: buffer.ToString(), separator: c.ToString());
+						buffer.Clear();
+					}
+				}
+				else if (IsAlphanumeric(c))
+					buffer.Append(c);
+			}
+
+			if (buffer.Length > 0)
+				yield return (extension: buffer.ToString(), separator: string.Empty);
+
+			static bool IsSeparator(char c) => c is (' ' or ',' or ';');
+			static bool IsAlphanumeric(char c) => c is (>= 'a' and <= 'z') or (>= '0' and <= '9');
 		}
 	}
 }

@@ -273,4 +273,8 @@
 		<Setter Property="VerticalContentAlignment" Value="Top"/>
 	</Style>
 
+	<Style x:Key="ItemMemberSealedStyle" TargetType="{x:Type GroupBox}" BasedOn="{StaticResource ItemMemberTopStyle}">
+		<Setter Property="Visibility" Value="Collapsed"/>
+	</Style>
+
 </ResourceDictionary>
