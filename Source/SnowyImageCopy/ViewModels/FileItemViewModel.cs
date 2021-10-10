@@ -21,6 +21,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public string Directory => _fileItem.Directory;
 		public string FileName => _fileItem.FileName;
+		public string FileExtension => _fileItem.FileExtension;
 		public int Size => _fileItem.Size; // In bytes
 
 		public bool IsReadOnly => _fileItem.IsReadOnly;
@@ -42,7 +43,6 @@ namespace SnowyImageCopy.ViewModels
 		internal ushort FileIndex { get; set; } = 0;
 
 		private string _fileNameWithoutExtension;
-		private string _fileExtension;
 
 		internal string FileNameWithCaseExtension
 		{
@@ -50,22 +50,20 @@ namespace SnowyImageCopy.ViewModels
 			{
 				if (!_settings.MakesFileExtensionLowercase &&
 					!_settings.LeavesExistingFile)
-					return this.FileName;
+					return FileName;
 
-				_fileNameWithoutExtension ??= Path.GetFileNameWithoutExtension(this.FileName);
-				_fileExtension ??= Path.GetExtension(this.FileName);
-
+				_fileNameWithoutExtension ??= Path.GetFileNameWithoutExtension(FileName);
 				var buffer = new StringBuilder(_fileNameWithoutExtension);
 
 				if (_settings.LeavesExistingFile && (0 < FileIndex))
 					buffer.AppendFormat(" ({0})", FileIndex);
 
-				if (!string.IsNullOrEmpty(_fileExtension))
+				if (!string.IsNullOrEmpty(FileExtension))
 				{
 					if (_settings.MakesFileExtensionLowercase)
-						buffer.Append(_fileExtension.ToLower());
+						buffer.Append(FileExtension.ToLower());
 					else
-						buffer.Append(_fileExtension);
+						buffer.Append(FileExtension);
 				}
 
 				return buffer.ToString();
@@ -77,7 +75,7 @@ namespace SnowyImageCopy.ViewModels
 		/// </summary>
 		internal bool CanReadExif => _fileItem.IsJpeg || _fileItem.IsTiff;
 
-		public override string ToString() => this.FileName; // For the case when being called for binding
+		public override string ToString() => FileName; // For the case when being called for binding
 
 		#endregion
 
@@ -113,15 +111,14 @@ namespace SnowyImageCopy.ViewModels
 				return _settings.TargetPeriod switch
 				{
 					FilePeriod.All => true,
-					FilePeriod.Today => (this.Date.Date == DateTime.Today),
-					FilePeriod.Select => _settings.TargetDates.Contains(this.Date.Date),
+					FilePeriod.Today => (Date.Date == DateTime.Today),
+					FilePeriod.Select => _settings.TargetDates.Contains(Date.Date),
 					_ => throw new InvalidOperationException(),
 				};
 			}
 		}
 
-		public bool IsDescendant =>
-			this.Directory.StartsWith(_settings.RemoteDescendant, StringComparison.OrdinalIgnoreCase);
+		public bool IsDescendant => Directory.StartsWith(_settings.RemoteDescendant, StringComparison.OrdinalIgnoreCase);
 
 		public bool IsAliveRemote { get; set; }
 		public bool IsAliveLocal { get; set; }
@@ -236,7 +233,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public override bool Equals(object obj) => _fileItem.Equals((obj as FileItemViewModel)?.FileItem);
 
-		public bool Equals(FileItemViewModel other) => _fileItem.Equals(other?.FileItem);
+		public virtual bool Equals(FileItemViewModel other) => _fileItem.Equals(other?.FileItem);
 
 		public override int GetHashCode() => _fileItem.GetHashCode();
 

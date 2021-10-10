@@ -10,6 +10,7 @@ namespace SnowyImageCopy.Models.ImageFile
 	{
 		string Directory { get; }
 		string FileName { get; }
+		string FileExtension { get; }
 		int Size { get; }
 
 		bool IsReadOnly { get; }
@@ -20,7 +21,6 @@ namespace SnowyImageCopy.Models.ImageFile
 		bool IsArchive { get; }
 
 		DateTime Date { get; }
-		FileExtension FileExtension { get; }
 
 		bool IsImported { get; }
 

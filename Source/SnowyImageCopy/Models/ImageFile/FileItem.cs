@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using SnowyImageCopy.Helper;
+using Extension = SnowyImageCopy.Models.ImageFile.FileExtension;
 
 namespace SnowyImageCopy.Models.ImageFile
 {
@@ -21,6 +22,7 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		public string Directory { get; private set; }
 		public string FileName { get; private set; }
+		public string FileExtension { get; private set; }
 		public int Size { get; private set; } // In bytes
 
 		public bool IsReadOnly { get; private set; }
@@ -31,7 +33,6 @@ namespace SnowyImageCopy.Models.ImageFile
 		public bool IsArchive { get; private set; }
 
 		public DateTime Date { get; private set; }
-		public FileExtension FileExtension { get; private set; }
 
 		#endregion
 
@@ -179,8 +180,7 @@ namespace SnowyImageCopy.Models.ImageFile
 			// Determine file extension.
 			if (!IsDirectory && !IsVolume)
 			{
-				var extension = Path.GetExtension(FileName);
-				SetFileExtension(extension);
+				SetFileExtension(FileName);
 			}
 
 			if (IsImageFile)
@@ -201,41 +201,43 @@ namespace SnowyImageCopy.Models.ImageFile
 			IsArchive = ba[5];   // Bit 5
 		}
 
-		private void SetFileExtension(string extension)
+		private static readonly Lazy<HashSet<Extension>> _extensions = new(() => new(Enum.GetValues(typeof(Extension)).Cast<Extension>()));
+
+		private void SetFileExtension(string fileName)
 		{
-			FileExtension = Enum.GetValues(typeof(FileExtension))
-				.Cast<FileExtension>()
-				.FirstOrDefault(x => string.Equals(extension, $".{x}", StringComparison.OrdinalIgnoreCase));
-			if (FileExtension == FileExtension.other)
+			FileExtension = Path.GetExtension(fileName);
+
+			var extension = _extensions.Value.FirstOrDefault(x => string.Equals(FileExtension, $".{x}", StringComparison.OrdinalIgnoreCase));
+			if (extension == Extension.other)
 				return;
 
 			IsImageFile = true;
 
-			switch (FileExtension)
+			switch (extension)
 			{
-				case FileExtension.jpg:
-				case FileExtension.jpeg:
+				case Extension.jpg:
+				case Extension.jpeg:
 					IsLoadable = IsJpeg = true;
 					break;
-				case FileExtension.tif:
-				case FileExtension.tiff:
+				case Extension.tif:
+				case Extension.tiff:
 					IsLoadable = IsTiff = true;
 					break;
-				case FileExtension.bmp:
-				case FileExtension.png:
-				case FileExtension.raw:
-				case FileExtension.dng:
-				case FileExtension.cr2:
-				case FileExtension.crw:
-				case FileExtension.erf:
-				case FileExtension.raf:
-				case FileExtension.kdc:
-				case FileExtension.nef:
-				case FileExtension.orf:
-				case FileExtension.rw2:
-				case FileExtension.pef:
-				case FileExtension.srw:
-				case FileExtension.arw:
+				case Extension.bmp:
+				case Extension.png:
+				case Extension.raw:
+				case Extension.dng:
+				case Extension.cr2:
+				case Extension.crw:
+				case Extension.erf:
+				case Extension.raf:
+				case Extension.kdc:
+				case Extension.nef:
+				case Extension.orf:
+				case Extension.rw2:
+				case Extension.pef:
+				case Extension.srw:
+				case Extension.arw:
 					IsLoadable = true;
 					break;
 			}
@@ -272,7 +274,7 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		public override bool Equals(object obj) => this.Equals(obj as IFileItem);
 
-		public bool Equals(IFileItem other)
+		public virtual bool Equals(IFileItem other)
 		{
 			if (other is null)
 				return false;
@@ -289,9 +291,7 @@ namespace SnowyImageCopy.Models.ImageFile
 
 		public override int GetHashCode()
 		{
-			return (this.Signature is not null)
-				? this.Signature.GetHashCode()
-				: new { Date, FilePath, Size }.GetHashCode();
+			return Signature?.GetHashCode() ?? (Date, FilePath, Size).GetHashCode();
 		}
 
 		#endregion
