@@ -8,17 +8,18 @@ Details: [English](https://emoacht.github.io/SnowyImageCopy/index.html) or [Japa
 
 ### Ver 2.x
 
- - Windows 10 Anniversary Update (1607) or newer
- - .NET Framework __4.7.2__
+ - Windows 10 (1607) or newer
+ - .NET Framework __4.8__
 
-Download: [Snowy Image Copy](https://www.microsoft.com/store/apps/9MTLPNGRW85L) (Microsoft Store)
+   Download: [Snowy Image Copy](https://www.microsoft.com/store/apps/9MTLPNGRW85L) (Microsoft Store)<br>
+   <a href='//www.microsoft.com/store/apps/9mtlpngrw85l?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='Snowy Image Copy' width='142px' height='52px'/></a>
 
 ### Ver 1.x
 
  - Windows 7 or 8.1
  - .NET Framework __4.5.2__
 
-Download: [the latest release](https://github.com/emoacht/SnowyImageCopy/releases/latest)
+   Download: [the latest release](https://github.com/emoacht/SnowyImageCopy/releases/latest)
 
 ## Development
 

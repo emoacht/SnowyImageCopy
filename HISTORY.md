@@ -1,8 +1,13 @@
 ﻿## History
 
+Ver 2.4.0 2021-10-14
+
+ - Add function to specify files extensions of target file
+ - Update projects
+
 Ver 2.3.1 2021-5-23
 
-- Adapt month-day-year format as folder name for each date
+ - Adapt month-day-year format as folder name for each date
 
 Ver 2.2.4 2020-9-27
 
@@ -27,7 +32,6 @@ Ver 2.0.0 2020-7-31
 Ver 1.9.0 2020-7-30
 
  - Modify some behaviors
-
 
 Ver 1.8.0 2020-3-8
 
@@ -98,7 +102,6 @@ Ver 1.2.0 2016-2-6
 Ver 1.1.0 2015-8-22
 
  - Fixed a bug in SnowyTool that writes unnecessary lines to CONFIG file
- - Changed target framework to 4.5.2
 
 Ver 1.0.1 2015-7-9
 
