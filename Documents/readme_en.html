@@ -62,7 +62,7 @@ a:active {color: black; background: rgb(194,224,255);}
 
 <ul>
   <li>Windows 7 or newer</li>
-  <li>.NET Framework 4.5.2</li>
+  <li>.NET Framework 4.8</li>
 </ul>
 <p>Tested on Windows 10 with SD-WB008G, SD-WC016G (W-02), SD-WE016G (W-03) and SD-UWA032G (W-04).</p>
 
@@ -81,19 +81,20 @@ a:active {color: black; background: rgb(194,224,255);}
   <li>A color profile of a monitor will be reflected to current image only.</li>
   <li>"Timeout duration" is the waiting time length for each request out of a number of requests sent from this app to FlashAir during check or copy. If timeout occurs frequently, try making it longer.</li>
   <li>When "Customize folder name for each date" is on, the string for date format will be shown in the textbox. You can specify <u>year-month-day (yyyyMMdd)</u>, <u>day-month-year (ddMMyyyy)</u>, <u>month-day-year (MMddyyyy)</u> formats and can insert "-" or "_" between them (e.g. yyyy-MM-dd).</li>
-  <li>When "Not select once copied image on check" is on, the maximum number of images to be recorded as copied will be shown in the textbox. You can change this number by clicking the texbox ranging from 10,000 to 100,000.</li>
-  <li>If you usually delete images in FlashAir after copied to PC, it is recommended not to use "Move to Recycle Bin if image in FlashAir is deleted" function.</li>
+  <li>If you usually delete files in FlashAir after copied to PC, it is recommended not to use "Move to Recycle Bin if file in FlashAir is deleted" function.</li>
+  <li>When "Specify file extensions of target file" is on, the file extensions (e.g. jpg, jpeg) of files to be targetted by this app will be shown in the textbox. You can specifly multiple file extensions delimiting by space, comma (,) or semicolon (;).</li>
+  <li>When "Do not select once copied file on check" is on, the maximum number of files to be recorded as copied will be shown in the textbox. You can change this number by clicking the texbox ranging from 10,000 to 100,000.</li>
 </ol>
 
-<a id="delete"></a><h2>Delete image in FlashAir</h2>
+<a id="delete"></a><h2>Delete file in FlashAir</h2>
 
 <ul>
-  <li>This function tries to delete an image in FlashAir after it is copied to PC.</li>
-  <li>It is essential to test this function with your camera before actual use. Since this function uses upload.cgi of FlashAir and it may cause inconsistency of data between FlashAir and camera, <span style="color:red">file system of FlashAir and stored images might be destroyed.</span> What will happen depends on each camera model.</li>
+  <li>This function tries to delete a file in FlashAir after it is copied to PC.</li>
+  <li>It is essential to test this function with your camera before actual use. Since this function uses upload.cgi of FlashAir and it may cause inconsistency of data between FlashAir and camera, <span style="color:red">file system of FlashAir and stored files might be destroyed.</span> What will happen depends on each camera model.</li>
   <li>If upload.cgi of FlashAir is disabled, this function will fail. To check or change this setting, insert FlashAir to PC and use Card function. Or open CONFIG file in FlashAir and directly check UPLOAD parameter (1 means enabled).</li>
   <li>In most cases, you need to reboot a camera to make it recognize the deletion by this function.</li>
-  <li>An image with Read-only attribute will not be deleted.</li>
-  <li>To use this function, turn on "Choose to delete image in FlashAir on copy" button and type "DELETE" (all uppercase) into the text box which appears next to "Delete image in FlashAir on copy". Then this function will be turned on.</li>
+  <li>A file with Read-only attribute will not be deleted.</li>
+  <li>To use this function, turn on "Choose to delete file in FlashAir on copy" button and type "DELETE" (all uppercase) into the text box which appears next to "Delete file in FlashAir on copy". Then this function will be turned on.</li>
 </ul>
 
 <h2>Card</h2>
