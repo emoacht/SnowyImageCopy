@@ -34,14 +34,14 @@ namespace SnowyImageCopy.Models.Card
 
 			foreach (ManagementObject diskDrive in searcher.Get()) // Casting to ManagementObject is for GetRelated method.
 			{
-				if (!(diskDrive["Index"] is uint index)) // Index represents index number of physical drive.
+				if (diskDrive["Index"] is not uint index) // Index represents index number of physical drive.
 					continue;
 
 				var mediaType = diskDrive["MediaType"] as string;
 
 				foreach (ManagementObject diskPartition in diskDrive.GetRelated("Win32_DiskPartition")) // Casting to ManagementObject is for GetRelated method.
 				{
-					if (!(diskPartition["DiskIndex"] is uint diskIndex) || // DiskIndex represents index number of physical drive.
+					if ((diskPartition["DiskIndex"] is not uint diskIndex) || // DiskIndex represents index number of physical drive.
 						(diskIndex != index))
 						continue;
 

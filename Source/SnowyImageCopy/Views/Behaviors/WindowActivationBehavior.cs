@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Xaml.Behaviors;
-
 using Expression = System.Linq.Expressions.Expression;
 
 namespace SnowyImageCopy.Views.Behaviors

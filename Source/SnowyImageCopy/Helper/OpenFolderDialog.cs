@@ -166,7 +166,7 @@ namespace SnowyImageCopy.Helper
 			}
 			finally
 			{
-				if (fod != null)
+				if (fod is not null)
 					Marshal.FinalReleaseComObject(fod);
 			}
 		}

@@ -73,11 +73,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				if (string.IsNullOrWhiteSpace(source))
 					return null;
 
-				var parent = Path.GetDirectoryName(source);
-				if (!string.IsNullOrEmpty(parent))
-					return parent;
-
-				return null;
+				return Path.GetDirectoryName(source);
 			}
 
 			var ofd = new OpenFileDialog
@@ -86,7 +82,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				Filter = this.Filter,
 				InitialDirectory = GetInitialPath(FilePath)
 			};
-			if (ofd.ShowDialog(Window.GetWindow(this.AssociatedObject)) == true)
+			if (ofd.ShowDialog(Window.GetWindow(this.AssociatedObject)) is true)
 			{
 				FilePath = ofd.FileName;
 			}

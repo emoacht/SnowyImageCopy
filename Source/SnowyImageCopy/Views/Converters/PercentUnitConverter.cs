@@ -10,35 +10,37 @@ using System.Windows.Data;
 namespace SnowyImageCopy.Views.Converters
 {
 	/// <summary>
-	/// Converts double representing percentage to double divided by 100.
+	/// Converts double representing percent to double divided by 100.
 	/// </summary>
 	[ValueConversion(typeof(double), typeof(double))]
-	public class DoubleDigitsConverter : IValueConverter
+	public class PercentUnitConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is double sourceValue))
+			if (value is not double sourceValue)
 				return DependencyProperty.UnsetValue;
 
-			if (sourceValue < 0D)
-				return 0D;
-			if (sourceValue < 100D)
-				return sourceValue / 100D;
-			else
-				return 1D;
+			var targetValue = sourceValue / 100D;
+			return targetValue switch
+			{
+				< 0D => 0D,
+				< 1D => targetValue,
+				_ => 1D
+			};
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is double sourceValue))
+			if (value is not double targetValue)
 				return DependencyProperty.UnsetValue;
 
-			if (sourceValue < 0D)
-				return 0D;
-			if (sourceValue < 100D)
-				return sourceValue * 100D;
-			else
-				return 100D;
+			var sourceValue = targetValue * 100D;
+			return sourceValue switch
+			{
+				< 0D => 0D,
+				< 100D => sourceValue,
+				_ => 100D
+			};
 		}
 	}
 }

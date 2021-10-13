@@ -199,15 +199,15 @@
     <Compile Include="Views\Converters\BooleanInverseToThicknessConverter.cs" />
     <Compile Include="Views\Converters\BooleanInverseToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\BooleanToBrushConverter.cs" />
+    <Compile Include="Views\Converters\BytesUnitConverter.cs" />
     <Compile Include="Views\Converters\DoubleAndVisibilityToDoubleConverter.cs" />
-    <Compile Include="Views\Converters\DoubleDigitsConverter.cs" />
     <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
     <Compile Include="Views\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\FileStatusToBrushConverter.cs" />
     <Compile Include="Views\Converters\FileStatusToStringConverter.cs" />
     <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
     <Compile Include="Views\Converters\PathFileNameConverter.cs" />
-    <Compile Include="Views\Converters\TripleDigitsConverter.cs" />
+    <Compile Include="Views\Converters\PercentUnitConverter.cs" />
     <Compile Include="Views\Converters\TimeSpanToStringConverter.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

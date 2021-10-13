@@ -13,7 +13,7 @@ namespace SnowyImageCopy.ViewModels
 	public class ItemObservableCollection<T> : ObservableCollection<T>
 		where T : class, INotifyPropertyChanged, IComparable<T>
 	{
-		private readonly object _locker = new object();
+		private readonly object _locker = new();
 
 		public ItemObservableCollection()
 		{

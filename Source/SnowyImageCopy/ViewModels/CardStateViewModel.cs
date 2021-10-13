@@ -51,7 +51,7 @@ namespace SnowyImageCopy.ViewModels
 			get => _cid.Source;
 			private set => _cid.Import(value);
 		}
-		private readonly CidInfo _cid = new CidInfo();
+		private readonly CidInfo _cid = new();
 
 		public string Ssid => _card.Ssid;
 

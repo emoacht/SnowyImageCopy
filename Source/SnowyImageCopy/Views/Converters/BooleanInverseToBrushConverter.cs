@@ -16,26 +16,38 @@ namespace SnowyImageCopy.Views.Converters
 	[ValueConversion(typeof(bool), typeof(Brush))]
 	public class BooleanInverseToBrushConverter : IValueConverter
 	{
-		private static readonly HashSet<string> _predefinedColorNames =
-			new HashSet<string>(typeof(Colors).GetProperties().Select(x => x.Name.ToLower()));
+		private static readonly Dictionary<string, Brush> _brushPairs = new();
 
 		/// <summary>
 		/// Inverses Boolean and converts it to Brush.
 		/// </summary>
 		/// <param name="value">Boolean</param>
 		/// <param name="targetType"></param>
-		/// <param name="parameter">Predefined color name string (case-insensitive)</param>
+		/// <param name="parameter">Color name string (case-insensitive)</param>
 		/// <param name="culture"></param>
 		/// <returns>SolidColorBrush of the predefined color if Boolean is false</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool sourceValue) || sourceValue || !(parameter is string colorString))
+			if ((value is not bool sourceValue) || sourceValue || (parameter is not string colorString))
 				return DependencyProperty.UnsetValue;
 
-			if (!_predefinedColorNames.Contains(colorString.ToLower()))
-				return DependencyProperty.UnsetValue;
+			if (!_brushPairs.TryGetValue(colorString, out Brush brush))
+			{
+				brush = _brushPairs[colorString] = GetBrush(colorString);
+			}
+			return brush ?? DependencyProperty.UnsetValue;
 
-			return (SolidColorBrush)new BrushConverter().ConvertFromInvariantString(colorString);
+			static Brush GetBrush(string colorString)
+			{
+				try
+				{
+					return (SolidColorBrush)new BrushConverter().ConvertFromInvariantString(colorString);
+				}
+				catch (FormatException)
+				{
+					return default;
+				}
+			};
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

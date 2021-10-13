@@ -140,6 +140,7 @@
 
 			<!-- File -->
 			<GroupBox x:Name="FileGroupBox"
+					  x:FieldModifier="public"
 					  Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_File, Source={x:Static models:ResourceService.Current}}">
 				<StackPanel Margin="4">
@@ -181,20 +182,44 @@
 					</GroupBox>
 
 					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
-							  Header="{Binding Resources.Options_HandleJpegOnly, Source={x:Static models:ResourceService.Current}}">
+							  Header="{Binding Resources.Options_LeaveExisting, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding Settings.HandlesJpegFileOnly, Mode=TwoWay}"/>
+							IsChecked="{Binding Settings.LeavesExistingFile, Mode=TwoWay}"/>
+					</GroupBox>
+				
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
+							  Header="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							x:Name="RecycleButton"
+							Style="{StaticResource SwitchButtonStyle}"
+							IsChecked="{Binding Settings.MovesFileToRecycle, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
+					<GroupBox Style="{StaticResource ItemMemberSealedStyle}"
+							  Header="{Binding Resources.Options_SpecifyFileExtensions, Source={x:Static models:ResourceService.Current}}">
+						<StackPanel>
+							<controls:SlidingToggleButton
+								x:Name="SpecifyFileExtensionsButton"
+								Style="{StaticResource SwitchButtonStyle}"
+								HorizontalAlignment="Right"
+								IsChecked="{Binding Settings.SpecifiesFileExtensions, Mode=TwoWay}"/>
+							<TextBox
+								Height="20" MaxWidth="100" Margin="0,4,0,0"
+								Padding="2,0" VerticalContentAlignment="Center"
+								Visibility="{Binding IsChecked, ElementName=SpecifyFileExtensionsButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
+								Text="{Binding Settings.FileExtensionsWithoutDot, Mode=TwoWay}"/>
+						</StackPanel>
+					</GroupBox>					
+
+					<GroupBox Style="{StaticResource ItemMemberSealedStyle}"
 							  Header="{Binding Resources.Options_SelectReadOnly, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							Style="{StaticResource SwitchButtonStyle}"
 							IsChecked="{Binding Settings.SelectsReadOnlyFile, Mode=TwoWay}"/>
 					</GroupBox>
 
-					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
+					<GroupBox Style="{StaticResource ItemMemberSealedStyle}"
 							  Header="{Binding Resources.Options_OnceCopied, Source={x:Static models:ResourceService.Current}}">
 						<StackPanel>
 							<controls:SlidingToggleButton
@@ -209,22 +234,7 @@
 						</StackPanel>
 					</GroupBox>
 
-					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
-							  Header="{Binding Resources.Options_LeaveExisting, Source={x:Static models:ResourceService.Current}}">
-						<controls:SlidingToggleButton
-							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding Settings.LeavesExistingFile, Mode=TwoWay}"/>
-					</GroupBox>
-
-					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
-							  Header="{Binding Resources.Options_Recycle, Source={x:Static models:ResourceService.Current}}">
-						<controls:SlidingToggleButton
-							x:Name="RecycleButton"
-							Style="{StaticResource SwitchButtonStyle}"
-							IsChecked="{Binding Settings.MovesFileToRecycle, Mode=TwoWay}"/>
-					</GroupBox>
-
-					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
+					<GroupBox Style="{StaticResource ItemMemberSealedStyle}"
 							  Header="{Binding Resources.Options_ChooseDeleteOnCopy, Source={x:Static models:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							x:Name="ChooseDeleteOnCopyButton"

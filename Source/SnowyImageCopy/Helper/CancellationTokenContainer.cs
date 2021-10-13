@@ -17,7 +17,7 @@ namespace SnowyImageCopy.Helper
 	{
 		private CancellationTokenSource _cancellationTokenSource;
 
-		private readonly object _locker = new object();
+		private readonly object _locker = new();
 
 		public CancellationToken Token
 		{
@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Helper
 			}
 		}
 
-		public bool IsCancellationRequested => (_cancellationTokenSource?.IsCancellationRequested == true);
+		public bool IsCancellationRequested => (_cancellationTokenSource?.IsCancellationRequested is true);
 		public bool IsReleased => (_cancellationTokenSource is null);
 
 		public bool TryCancel(bool release = false)

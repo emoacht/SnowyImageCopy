@@ -602,7 +602,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy completed. ({0} images, {1} seconds).
+        ///   Looks up a localized string similar to Copy completed. ({0} files, {1} seconds).
         /// </summary>
         public static string OperationStatus_CopyCompleted {
             get {
@@ -629,7 +629,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to delete image in FlashAir..
+        ///   Looks up a localized string similar to Failed to delete file in FlashAir..
         /// </summary>
         public static string OperationStatus_DeleteFailed {
             get {
@@ -791,7 +791,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose to delete image in FlashAir on copy.
+        ///   Looks up a localized string similar to Choose to delete file in FlashAir on copy.
         /// </summary>
         public static string Options_ChooseDeleteOnCopy {
             get {
@@ -872,7 +872,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete image in FlashAir on copy.
+        ///   Looks up a localized string similar to Delete file in FlashAir on copy.
         /// </summary>
         public static string Options_DeleteOnCopy {
             get {
@@ -899,15 +899,6 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Handle JPEG image only.
-        /// </summary>
-        public static string Options_HandleJpegOnly {
-            get {
-                return ResourceManager.GetString("Options_HandleJpegOnly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string Options_Info {
@@ -926,7 +917,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not overwrite existing image.
+        ///   Looks up a localized string similar to Do not overwrite existing file.
         /// </summary>
         public static string Options_LeaveExisting {
             get {
@@ -953,7 +944,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not select once copied image on check.
+        ///   Looks up a localized string similar to Do not select once copied file on check.
         /// </summary>
         public static string Options_OnceCopied {
             get {
@@ -971,7 +962,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Order from newer image.
+        ///   Looks up a localized string similar to Order from newer file.
         /// </summary>
         public static string Options_OrderFromNewer {
             get {
@@ -989,7 +980,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move to Recycle Bin if image in FlashAir is deleted.
+        ///   Looks up a localized string similar to Move to Recycle Bin if file in FlashAir is deleted.
         /// </summary>
         public static string Options_Recycle {
             get {
@@ -1007,7 +998,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select only Read-only image on check.
+        ///   Looks up a localized string similar to Select only Read-only file on check.
         /// </summary>
         public static string Options_SelectReadOnly {
             get {
@@ -1025,7 +1016,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All images copied.
+        ///   Looks up a localized string similar to All files copied.
         /// </summary>
         public static string Options_SoundAllCopied {
             get {
@@ -1052,7 +1043,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An image copied.
+        ///   Looks up a localized string similar to A file copied.
         /// </summary>
         public static string Options_SoundOneCopied {
             get {
@@ -1075,6 +1066,15 @@ namespace SnowyImageCopy.Properties {
         public static string Options_SoundTitle {
             get {
                 return ResourceManager.GetString("Options_SoundTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify file extensions of target file.
+        /// </summary>
+        public static string Options_SpecifyFileExtensions {
+            get {
+                return ResourceManager.GetString("Options_SpecifyFileExtensions", resourceCulture);
             }
         }
         
@@ -1160,7 +1160,7 @@ namespace SnowyImageCopy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ({0} images, {1} seconds).
+        ///   Looks up a localized string similar to ({0} files, {1} seconds).
         /// </summary>
         public static string ToastBodyFormat_CopyCompleted {
             get {

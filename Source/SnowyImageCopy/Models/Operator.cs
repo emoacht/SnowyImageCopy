@@ -242,7 +242,7 @@ namespace SnowyImageCopy.Models
 		}
 		private TaskbarItemProgressState _progressState;
 
-		private readonly object _updateLocker = new object();
+		private readonly object _updateLocker = new();
 		private long _sizeOverall;           // Total size of items
 		private long _sizeCopiedAll;         // Total size of items copied so far including current operation
 		private long _sizeCopiedCurrent;     // Total size of items copied during current operation
@@ -260,10 +260,10 @@ namespace SnowyImageCopy.Models
 
 		private void UpdateSize(ProgressInfo info)
 		{
-			if ((info != null) && !info.IsFirst)
+			if (info is not null and { IsFirst: false })
 				return;
 
-			var checksCopiedCurrent = (info != null);
+			var checksCopiedCurrent = (info is not null);
 
 			_sizeOverall = 0L;
 			_sizeCopiedAll = 0L;
@@ -276,6 +276,7 @@ namespace SnowyImageCopy.Models
 				{
 					case FileStatus.Recycled:
 						break;
+
 					default:
 						_sizeOverall += item.Size;
 
@@ -286,6 +287,7 @@ namespace SnowyImageCopy.Models
 
 								if (checksCopiedCurrent && (CopyStartTime < item.CopiedTime))
 									_sizeCopiedCurrent += item.Size;
+
 								break;
 
 							case FileStatus.ToBeCopied:
@@ -951,7 +953,7 @@ namespace SnowyImageCopy.Models
 					// Manage deleted items.
 					var itemDeletedPairs = FileListCore
 						.Select((x, Index) => !x.IsAliveRemote ? new { Item = x, Index } : null)
-						.Where(x => x != null)
+						.Where(x => x is not null)
 						.OrderByDescending(x => x.Index)
 						.ToArray();
 
@@ -1145,7 +1147,7 @@ namespace SnowyImageCopy.Models
 				while (true)
 				{
 					var item = FileListCore.FirstOrDefault(x => x.IsTarget && (x.Status == FileStatus.ToBeCopied));
-					if (item != null)
+					if (item is not null)
 					{
 						if (0 == _copyFileCount)
 							SoundManager.PlayCopyStarted();
@@ -1176,7 +1178,7 @@ namespace SnowyImageCopy.Models
 
 						var data = await _manager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, !_settings.LeavesExistingFile, item.CanReadExif, progress, Card, cancellationToken);
 
-						if (data?.Any() == true)
+						if (data?.Any() is true)
 						{
 							CurrentItem = item;
 							CurrentImageData = data;
@@ -1448,11 +1450,11 @@ namespace SnowyImageCopy.Models
 
 				if (File.Exists(localPath)) // File.Exists method is more robust than FileInfo constructor.
 				{
-					var info = new FileInfo(localPath);
-					if (info.Length == item.Size)
+					var fileInfo = new FileInfo(localPath);
+					if (fileInfo.Length == item.Size)
 					{
 						isAlive = true;
-						isAvailable = !info.Attributes.HasFlag(FileAttributes.Offline);
+						isAvailable = !fileInfo.Attributes.HasFlag(FileAttributes.Offline);
 						return;
 					}
 				}

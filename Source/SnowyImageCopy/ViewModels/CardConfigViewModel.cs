@@ -15,7 +15,7 @@ namespace SnowyImageCopy.ViewModels
 {
 	public class CardConfigViewModel : NotificationObject
 	{
-		#region Type
+		#region Attribute
 
 		/// <summary>
 		/// Attribute to indicate a persistent member of CONFIG file
@@ -348,7 +348,7 @@ namespace SnowyImageCopy.ViewModels
 				RaisePropertyChanged(nameof(IsAutomaticTimeoutEnabled));
 
 				var modeSet = _modeSetMap.SingleOrDefault(x => (x.LanMode == value) && (x.LanStartupMode == this.LanStartupMode));
-				if (modeSet != null)
+				if (modeSet is not null)
 					APPMODE = modeSet.AppMode;
 			}
 		}
@@ -368,7 +368,7 @@ namespace SnowyImageCopy.ViewModels
 				RaisePropertyChanged(nameof(IsAutomaticTimeoutEnabled));
 
 				var modeSet = _modeSetMap.SingleOrDefault(x => (x.LanStartupMode == value) && (x.LanMode == this.LanMode));
-				if (modeSet != null)
+				if (modeSet is not null)
 					APPMODE = modeSet.AppMode;
 			}
 		}
@@ -623,7 +623,7 @@ namespace SnowyImageCopy.ViewModels
 		}
 
 		private string ComposeConfigPath() =>
-			(AssociatedDisk != null) ? Path.Combine(AssociatedDisk.DriveLetter, "SD_WLAN", "CONFIG") : null;
+			(AssociatedDisk is not null) ? Path.Combine(AssociatedDisk.DriveLetter, "SD_WLAN", "CONFIG") : null;
 
 		#endregion
 
@@ -708,7 +708,7 @@ namespace SnowyImageCopy.ViewModels
 			// Turn empty string value to null.
 			foreach (var p in _persistentProperties)
 			{
-				if (!(p.GetValue(this) is string value))
+				if (p.GetValue(this) is not string value)
 					continue;
 
 				if (string.IsNullOrWhiteSpace(value))

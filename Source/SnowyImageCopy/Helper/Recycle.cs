@@ -96,7 +96,7 @@ namespace SnowyImageCopy.Helper
 		/// <param name="filePaths">File paths</param>
 		public static void MoveToRecycle(params string[] filePaths)
 		{
-			if (!(filePaths?.Length > 0))
+			if (filePaths?.Length is not > 0)
 				return;
 
 			var filePathCombined = string.Join("\0", filePaths) + '\0' + '\0';
@@ -115,7 +115,6 @@ namespace SnowyImageCopy.Helper
 			};
 
 			var result = SHFileOperation(ref sh);
-
 			if (result != 0) // 0 means success or user canceled operation (it will never happen in this application).
 				throw new Win32Exception($"Failed to move files to Recycle. Error code: {result} File paths: {string.Join(",", filePaths)}");
 		}

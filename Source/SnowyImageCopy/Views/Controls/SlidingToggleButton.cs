@@ -178,18 +178,18 @@ namespace SnowyImageCopy.Views.Controls
 			base.OnApplyTemplate();
 
 			_backgroundTextBox = this.GetTemplateChild("PART_BackgroundTextBox") as TextBox;
-			if (_backgroundTextBox != null)
+			if (_backgroundTextBox is not null)
 			{
 				_backgroundTextBox.PreviewMouseUp += new MouseButtonEventHandler(OnClick);
 				_backgroundTextBox.PreviewKeyUp += new KeyEventHandler(OnClick);
 			}
 
 			_foregroundButtonLeft = this.GetTemplateChild("PART_ForegroundButtonLeft") as Button;
-			if (_foregroundButtonLeft != null)
+			if (_foregroundButtonLeft is not null)
 				_foregroundButtonLeft.Click += new RoutedEventHandler(OnClick);
 
 			_foregroundButtonRight = this.GetTemplateChild("PART_ForegroundButtonRight") as Button;
-			if (_foregroundButtonRight != null)
+			if (_foregroundButtonRight is not null)
 				_foregroundButtonRight.Click += new RoutedEventHandler(OnClick);
 
 			_foregroundTextBlock = this.GetTemplateChild("PART_ForegroundTextBlock") as TextBlock;

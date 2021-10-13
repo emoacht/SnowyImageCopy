@@ -20,12 +20,12 @@ namespace SnowyImageCopy.Views.Controls
 			get => _upButton;
 			set
 			{
-				if (_upButton != null)
+				if (_upButton is not null)
 					_upButton.Click -= new RoutedEventHandler(OnButtonClick);
 
 				_upButton = value;
 
-				if (_upButton != null)
+				if (_upButton is not null)
 					_upButton.Click += new RoutedEventHandler(OnButtonClick);
 			}
 		}
@@ -36,12 +36,12 @@ namespace SnowyImageCopy.Views.Controls
 			get => _downButton;
 			set
 			{
-				if (_downButton != null)
+				if (_downButton is not null)
 					_downButton.Click -= new RoutedEventHandler(OnButtonClick);
 
 				_downButton = value;
 
-				if (_downButton != null)
+				if (_downButton is not null)
 					_downButton.Click += new RoutedEventHandler(OnButtonClick);
 			}
 		}

@@ -56,7 +56,7 @@ namespace SnowyImageCopy.Views.Behaviors
 				handler => _viewer.ScrollChanged -= handler)
 				.Subscribe(x => CheckItems(x.EventArgs)));
 
-			if (!(this.AssociatedObject.Items is INotifyCollectionChanged source)) // ItemsSource
+			if (this.AssociatedObject.Items is not INotifyCollectionChanged source) // ItemsSource
 				return;
 
 			_subscription.Add(Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
@@ -80,7 +80,7 @@ namespace SnowyImageCopy.Views.Behaviors
 		private int _firstOldDevience;
 		private int _lastOldDevience;
 
-		private readonly object _locker = new object();
+		private readonly object _locker = new();
 
 		private void CheckItems(ScrollChangedEventArgs args = null)
 		{
@@ -279,6 +279,7 @@ namespace SnowyImageCopy.Views.Behaviors
 							_lastOldDevience += args.NewItems.Count;
 						}
 						break;
+
 					case NotifyCollectionChangedAction.Reset:
 						_firstOldIndex = 0;
 						_lastOldIndex = 0;
@@ -312,6 +313,7 @@ namespace SnowyImageCopy.Views.Behaviors
 							}
 						}
 						break;
+
 					case NotifyCollectionChangedAction.Reset:
 						// This indicates that ListCollectionView.Refresh method is called.
 						CheckItems();

@@ -48,7 +48,7 @@ namespace SnowyImageCopy.Models
 
 				try
 				{
-					if (_player != null)
+					if (_player is not null)
 					{
 						_player.Stop();
 						_player.Dispose();

@@ -38,7 +38,7 @@ namespace SnowyImageCopy.Views.Controls
 
 			this.IsVisibleChanged += OnIsVisibleChanged;
 
-			if (!(base.Parent is Grid parent))
+			if (base.Parent is not Grid parent)
 				return;
 
 			switch (GetResizeDirection(this))
@@ -50,6 +50,7 @@ namespace SnowyImageCopy.Views.Controls
 						_rightColumnWidth = rightColumn.Width;
 					}
 					break;
+
 				case GridResizeDirection.Rows:
 					if (TryGetBottomRow(this, parent, out RowDefinition bottomRow))
 					{
@@ -62,7 +63,7 @@ namespace SnowyImageCopy.Views.Controls
 
 		private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
-			if (!(base.Parent is Grid parent))
+			if (base.Parent is not Grid parent)
 				return;
 
 			switch (GetResizeDirection(this))
@@ -87,6 +88,7 @@ namespace SnowyImageCopy.Views.Controls
 						}
 					}
 					break;
+
 				case GridResizeDirection.Rows:
 					if (TryGetBottomRow(this, parent, out RowDefinition bottomRow))
 					{

@@ -29,21 +29,16 @@ namespace SnowyImageCopy.Models
 	{
 		#region INotifyDataErrorInfo
 
-		/// <summary>
-		/// Holder of property name (key) and validation error messages (value)
-		/// </summary>
-		private readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
+		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+		private readonly Dictionary<string, List<string>> _errors = new();
 
 		public bool HasErrors => _errors.Any();
 
-		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
 		public IEnumerable GetErrors(string propertyName)
 		{
-			if (string.IsNullOrEmpty(propertyName) || !_errors.ContainsKey(propertyName))
-				return null;
-
-			return _errors[propertyName];
+			return !string.IsNullOrEmpty(propertyName)
+				&& _errors.TryGetValue(propertyName, out var values) ? values : null;
 		}
 
 		private bool ValidateProperty(object value, [CallerMemberName] string propertyName = null)
@@ -57,15 +52,14 @@ namespace SnowyImageCopy.Models
 
 			if (isValidated)
 			{
-				if (_errors.ContainsKey(propertyName))
-					_errors.Remove(propertyName);
+				_errors.Remove(propertyName);
 			}
 			else
 			{
 				if (_errors.ContainsKey(propertyName))
 					_errors[propertyName].Clear();
 				else
-					_errors[propertyName] = new List<string>();
+					_errors[propertyName] = new();
 
 				_errors[propertyName].AddRange(results.Select(x => x.ErrorMessage));
 			}
@@ -194,7 +188,7 @@ namespace SnowyImageCopy.Models
 			get => _targetDates ??= new ObservableCollection<DateTime>();
 			set
 			{
-				if ((_targetDates != null) && (_targetDates == value))
+				if ((_targetDates is not null) && (_targetDates == value))
 					return;
 
 				_targetDates = value;
@@ -362,17 +356,66 @@ namespace SnowyImageCopy.Models
 
 		#endregion
 
-		public bool HandlesJpegFileOnly
+		public bool LeavesExistingFile
 		{
-			get => _handlesJpegFileOnly;
-			set => SetPropertyValue(ref _handlesJpegFileOnly, value);
+			get => _leavesExistingFile;
+			set => SetPropertyValue(ref _leavesExistingFile, value);
 		}
-		private bool _handlesJpegFileOnly;
+		private bool _leavesExistingFile;
+
+		public bool MovesFileToRecycle
+		{
+			get => _movesFileToRecycle;
+			set => SetPropertyValue(ref _movesFileToRecycle, value);
+		}
+		private bool _movesFileToRecycle;
+
+		#region File extensions
+
+		public bool LimitsFileExtensions => SpecifiesFileExtensions && FileExtensions.Any();
+
+		public bool SpecifiesFileExtensions
+		{
+			get => _specifiesFileExtensions;
+			set
+			{
+				if (SetPropertyValue(ref _specifiesFileExtensions, _validateValue(value)))
+				{
+					if (FileExtensions.Any())
+						RaisePropertyChanged(nameof(LimitsFileExtensions));
+				}
+			}
+		}
+		private bool _specifiesFileExtensions;
+
+		public string FileExtensionsWithoutDot
+		{
+			get => _fileExtensionsWithoutDot;
+			set
+			{
+				if (!PathAddition.TryNormalizeExtensions(value, out string normalized, out string[] buffer)
+					|| FileExtensions.SequenceEqual(buffer))
+					return;
+
+				if (SetPropertyValue(ref _fileExtensionsWithoutDot, normalized))
+				{
+					_fileExtensions = new HashSet<string>(buffer);
+					RaisePropertyChanged(nameof(LimitsFileExtensions));
+				}
+			}
+		}
+		private string _fileExtensionsWithoutDot = "jpg,jpeg"; // Default
+
+		public HashSet<string> FileExtensions =>
+			_fileExtensions ??= new HashSet<string>(PathAddition.EnumerateExtensions(FileExtensionsWithoutDot));
+		private HashSet<string> _fileExtensions;
+
+		#endregion
 
 		public bool SelectsReadOnlyFile
 		{
 			get => _selectsReadOnlyFile;
-			set => SetPropertyValue(ref _selectsReadOnlyFile, value);
+			set => SetPropertyValue(ref _selectsReadOnlyFile, _validateValue(value));
 		}
 		private bool _selectsReadOnlyFile;
 
@@ -381,10 +424,11 @@ namespace SnowyImageCopy.Models
 			get => _skipsOnceCopiedFile;
 			set
 			{
-				SetPropertyValue(ref _skipsOnceCopiedFile, value);
-
-				if (!value)
-					Signatures.Close(IndexString);
+				if (SetPropertyValue(ref _skipsOnceCopiedFile, _validateValue(value)))
+				{
+					if (!value)
+						Signatures.Close(IndexString);
+				}
 			}
 		}
 		private bool _skipsOnceCopiedFile;
@@ -402,26 +446,14 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-		public bool LeavesExistingFile
-		{
-			get => _leavesExistingFile;
-			set => SetPropertyValue(ref _leavesExistingFile, value);
-		}
-		private bool _leavesExistingFile;
-
-		public bool MovesFileToRecycle
-		{
-			get => _movesFileToRecycle;
-			set => SetPropertyValue(ref _movesFileToRecycle, value);
-		}
-		private bool _movesFileToRecycle;
-
 		public bool DeletesOnCopy
 		{
 			get => _deletesOnCopy;
-			set => SetPropertyValue(ref _deletesOnCopy, value);
+			set => SetPropertyValue(ref _deletesOnCopy, _validateValue(value));
 		}
 		private bool _deletesOnCopy;
+
+		private static Func<bool, bool> _validateValue = x => false;
 
 		#endregion
 
@@ -605,7 +637,7 @@ namespace SnowyImageCopy.Models
 		private static void Load<T>(in string filePath, T instance)
 		{
 			var fileInfo = new FileInfo(filePath);
-			if (!fileInfo.Exists || (fileInfo.Length == 0))
+			if (fileInfo is { Exists: false } or { Length: 0 })
 				return;
 
 			var serializer = new XmlSerializer(typeof(T));

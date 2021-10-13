@@ -14,7 +14,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 using MonitorAware;
-
 using SlateElement;
 
 using SnowyImageCopy.Models;
@@ -65,18 +64,18 @@ namespace SnowyImageCopy.Views
 			WindowPlacement.Load(_mainWindowViewModel.Settings.IndexString, this);
 
 			var monitorProperty = MonitorAwareProperty.GetInstance(this);
-			if (monitorProperty != null)
+			if (monitorProperty is not null)
 			{
 				SetDestinationColorProfile(monitorProperty.WindowHandler.ColorProfilePath);
 				monitorProperty.WindowHandler.ColorProfileChanged += (_, e) => SetDestinationColorProfile(e.NewPath);
 			}
-		}
 
-		private void SetDestinationColorProfile(string colorProfilePath)
-		{
-			_mainWindowViewModel.DestinationColorProfile = File.Exists(colorProfilePath)
-				? new ColorContext(new Uri(colorProfilePath))
-				: null;
+			void SetDestinationColorProfile(string colorProfilePath)
+			{
+				_mainWindowViewModel.DestinationColorProfile = File.Exists(colorProfilePath)
+					? new ColorContext(new Uri(colorProfilePath))
+					: null;
+			}
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

@@ -17,7 +17,7 @@ namespace SnowyImageCopy.Views.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool sourceValue))
+			if (value is not bool sourceValue)
 				return DependencyProperty.UnsetValue;
 
 			var visibility = Visibility.Collapsed;
@@ -29,10 +29,10 @@ namespace SnowyImageCopy.Views.Converters
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Visibility sourceValue))
+			if (value is not Visibility targetValue)
 				return DependencyProperty.UnsetValue;
 
-			return (sourceValue != Visibility.Visible);
+			return (targetValue != Visibility.Visible);
 		}
 	}
 }

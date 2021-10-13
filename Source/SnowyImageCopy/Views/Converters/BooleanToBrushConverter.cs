@@ -26,7 +26,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>First Brush if Boolean is true. Second Brush if not.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool sourceValue) || !(parameter is Brush[] brushes) || (brushes.Length < 2))
+			if ((value is not bool sourceValue) || (parameter is not Brush[] brushes) || (brushes.Length < 2))
 				return DependencyProperty.UnsetValue;
 
 			return sourceValue ? brushes[0] : brushes[1];

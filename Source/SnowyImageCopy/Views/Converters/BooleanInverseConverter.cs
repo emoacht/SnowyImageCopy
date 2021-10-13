@@ -25,7 +25,7 @@ namespace SnowyImageCopy.Views.Converters
 		/// <returns>Inversed Boolean except if condition Boolean is given and does not match source Boolean.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool sourceValue))
+			if (value is not bool sourceValue)
 				return DependencyProperty.UnsetValue;
 
 			if (TryParse(parameter, out bool conditionValue) && (sourceValue != conditionValue))
@@ -41,9 +41,9 @@ namespace SnowyImageCopy.Views.Converters
 
 		private static bool TryParse(object source, out bool value)
 		{
-			if ((source is bool buff) || bool.TryParse(source as string, out buff))
+			if ((source is bool buffer) || bool.TryParse(source as string, out buffer))
 			{
-				value = buff;
+				value = buffer;
 				return true;
 			}
 			value = default;
