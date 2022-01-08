@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -94,7 +94,7 @@ namespace SnowyImageCopy.Models.Card
 			if (string.IsNullOrWhiteSpace(source) || !_asciiPattern.IsMatch(source))
 				return;
 
-			var bytes = SoapHexBinary.Parse(source).Value;
+			var bytes = ToByteArray(source);
 
 			ManufacturerID = bytes[0]; // Bytes 0
 			OemApplicationID = Encoding.ASCII.GetString(bytes.Skip(1).Take(2).ToArray()); // Bytes 1-2
@@ -123,6 +123,19 @@ namespace SnowyImageCopy.Models.Card
 			{
 				ManufacturingDate = new DateTime(year + 2000, month, 1);
 			}
+		}
+
+		private static byte[] ToByteArray(string value)
+		{
+			var input = value.ToCharArray();
+			var output = new byte[input.Length / 2];
+			for (int i = 0; i < output.Length; i++)
+			{
+				output[i] = (byte)(ToByte(input[i * 2]) << 4 | ToByte(input[i * 2 + 1]));
+			}
+			return output;
+
+			static byte ToByte(char c) => byte.Parse(c.ToString(), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
 		}
 
 		/// <summary>
