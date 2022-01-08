@@ -24,11 +24,11 @@ namespace SnowyImageCopy.Models.ImageFile
 		{
 			try
 			{
-				_algorithm = new MD5CryptoServiceProvider(); // MD5 is for less cost.
+				_algorithm = MD5.Create(); // MD5 is for less cost.
 			}
 			catch (InvalidOperationException)
 			{
-				_algorithm = new SHA1CryptoServiceProvider();
+				_algorithm = SHA1.Create();
 			}
 
 			Size = _algorithm.HashSize / 8;
