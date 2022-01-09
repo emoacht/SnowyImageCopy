@@ -161,6 +161,7 @@
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Signatures.cs" />
     <Compile Include="Models\SoundManager.cs" />
+    <Compile Include="Models\ToastManager.cs" />
     <Compile Include="Models\WindowPlacement.cs" />
     <Compile Include="Models\Workspace.cs" />
     <Compile Include="ViewModels\CardConfigViewModel.cs" />

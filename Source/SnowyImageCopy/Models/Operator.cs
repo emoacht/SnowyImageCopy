@@ -13,8 +13,6 @@ using System.Windows.Data;
 using System.Windows.Shell;
 using System.Windows.Threading;
 
-using DesktopToast;
-
 using SnowyImageCopy.Common;
 using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models.Card;
@@ -44,6 +42,8 @@ namespace SnowyImageCopy.Models
 			Subscription.Add(_manager);
 			RegisterDownloaded(_manager);
 
+			ToastManager.RegisterToastActivated(() => InvokeSafely(() => ActivateRequested?.Invoke(this, EventArgs.Empty)));
+
 			if (!Designer.IsInDesignMode) // ListCollectionView may be null in Design mode.
 			{
 				FileListCoreView.CurrentChanged += (sender, e) => CheckFileListCoreViewThumbnail();
@@ -64,6 +64,8 @@ namespace SnowyImageCopy.Models
 				_remoteTokenContainer.TryCancel();
 				_toastTokenContainer.TryCancel();
 				_localTokenContainer.TryCancel();
+
+				ToastManager.UnregisterToastActivated();
 			}
 
 			_disposed = true;
@@ -577,7 +579,7 @@ namespace SnowyImageCopy.Models
 				{
 					_toastTokenContainer.TryCancel(true);
 
-					await ShowToastAsync(_toastTokenContainer.Token);
+					ShowToast(_toastTokenContainer.Token);
 				}
 				finally
 				{
@@ -738,7 +740,7 @@ namespace SnowyImageCopy.Models
 				{
 					_toastTokenContainer.TryCancel(true);
 
-					await ShowToastAsync(_toastTokenContainer.Token);
+					ShowToast(_toastTokenContainer.Token);
 				}
 				finally
 				{
@@ -1254,7 +1256,7 @@ namespace SnowyImageCopy.Models
 		/// Shows a toast to notify completion of copying.
 		/// </summary>
 		/// <param name="cancellationToken">Cancellation token</param>
-		private async Task ShowToastAsync(CancellationToken cancellationToken)
+		private void ShowToast(CancellationToken cancellationToken)
 		{
 			if (!OsVersion.IsEightOrNewer || (_copyFileCount <= 0) || (DateTime.Now - CopyStartTime < _copyToastShortestDuration))
 				return;
@@ -1262,23 +1264,11 @@ namespace SnowyImageCopy.Models
 			if (cancellationToken.IsCancellationRequested)
 				return;
 
-			var request = new ToastRequest
-			{
-				ToastTitle = Resources.ToastTitle_CopyCompleted,
-				ToastBodyList = new[]
-				{
-					Resources.ToastBody_CopyCompleted,
-					string.Format(Resources.ToastBodyFormat_CopyCompleted, _copyFileCount, (int)(DateTime.Now - CopyStartTime).TotalSeconds)
-				},
-				ShortcutFileName = Workspace.ShortcutFileName,
-				ShortcutTargetFilePath = Assembly.GetEntryAssembly().Location,
-				AppId = Workspace.AppId
-			};
-
-			var result = await ToastManager.ShowAsync(request, cancellationToken);
-
-			if (result == ToastResult.Activated)
-				ActivateRequested?.Invoke(this, EventArgs.Empty);
+			ToastManager.Show(
+				title: Resources.ToastTitle_CopyCompleted,
+				body: Resources.ToastBody_CopyCompleted,
+				attribution: string.Format(Resources.ToastBodyFormat_CopyCompleted, _copyFileCount, (int)(DateTime.Now - CopyStartTime).TotalSeconds),
+				cancellationToken: cancellationToken);
 		}
 
 		#endregion
