@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace SnowyImageCopy.Models
 {
@@ -15,31 +15,27 @@ namespace SnowyImageCopy.Models
 		public static void RegisterToastActivated(Action action)
 		{
 			_action = action;
+			ToastNotificationManagerCompat.OnActivated += OnActivatedBase;
 		}
 
 		public static void UnregisterToastActivated()
 		{
 			_action = null;
+			ToastNotificationManagerCompat.OnActivated -= OnActivatedBase;
+		}
+
+		private static void OnActivatedBase(ToastNotificationActivatedEventArgsCompat e)
+		{
+			_action?.Invoke();
 		}
 
 		public static void Show(string title, string body, string attribution, CancellationToken cancellationToken)
 		{
-			var request = new DesktopToast.ToastRequest
-			{
-				ToastTitle = title,
-				ToastBodyList = new[] { body, attribution },
-				ShortcutFileName = Workspace.ShortcutFileName,
-				ShortcutTargetFilePath = Assembly.GetEntryAssembly().Location,
-				AppId = Workspace.AppId
-			};
-
-			DesktopToast.ToastManager.ShowAsync(request, cancellationToken)
-				.ContinueWith(task =>
-				{
-					if (task.Result == DesktopToast.ToastResult.Activated)
-						_action?.Invoke();
-				},
-				cancellationToken);
+			new ToastContentBuilder()
+				.AddText(title)
+				.AddText(body)
+				.AddAttributionText(attribution)
+				.Show();
 		}
 	}
 }
