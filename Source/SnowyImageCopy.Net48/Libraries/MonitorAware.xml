@@ -1,0 +1,624 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MonitorAware</name>
+    </assembly>
+    <members>
+        <member name="T:MonitorAware.Helper.OsVersion">
+            <summary>
+            OS version information
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Helper.OsVersion.IsVistaOrNewer">
+            <summary>
+            Whether OS is Windows Vista or newer
+            </summary>
+            <remarks>Windows Vista = version 6.0</remarks>
+        </member>
+        <member name="P:MonitorAware.Helper.OsVersion.IsEightOneOrNewer">
+            <summary>
+            Whether OS is Windows 8.1 or newer
+            </summary>
+            <remarks>Windows 8.1 = version 6.3</remarks>
+        </member>
+        <member name="P:MonitorAware.Helper.OsVersion.IsRedstoneOneOrNewer">
+            <summary>
+            Whether OS is Windows 10 Anniversary Update (Redstone 1) or newer
+            </summary>
+            <remarks>Windows 10 Anniversary Update (1607) = version 10.0.14393</remarks>
+        </member>
+        <member name="P:MonitorAware.Helper.OsVersion.IsRedstoneTwoOrNewer">
+            <summary>
+            Whether OS is Windows 10 Creators Update (Redstone 2) or newer
+            </summary>
+            <remarks>Windows 10 Creators Update (1703) = version 10.0.15063</remarks>
+        </member>
+        <member name="T:MonitorAware.Models.ColorProfileChangedEventArgs">
+            <summary>
+            Color profile changed event args
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.ColorProfileChangedEventArgs.OldPath">
+            <summary>
+            Old color profile path
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.ColorProfileChangedEventArgs.NewPath">
+            <summary>
+            New color profile path
+            </summary>
+        </member>
+        <member name="M:MonitorAware.Models.ColorProfileChangedEventArgs.#ctor(System.String,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="oldPath">Old color profile path</param>
+            <param name="newPath">New color profile path</param>
+        </member>
+        <member name="T:MonitorAware.Models.ColorProfileHelper">
+            <summary>
+            Utility methods for color profile.
+            </summary>
+        </member>
+        <member name="M:MonitorAware.Models.ColorProfileHelper.TryGetColorProfilePath(System.Windows.Media.Visual,System.String@)">
+            <summary>
+            Attemps to get color profile file path used by the monitor to which a specified Window belongs.
+            </summary>
+            <param name="window">Source Window</param>
+            <param name="profilePath">Color profile file path</param>
+            <returns>True if successfully gets. False otherwise.</returns>
+        </member>
+        <member name="M:MonitorAware.Models.ColorProfileHelper.GetColorProfilePath(System.Windows.Media.Visual)">
+            <summary>
+            Gets color profile file path used by the monitor to which a specified Window belongs.
+            </summary>
+            <param name="window">Source Window</param>
+            <returns>Color profile file path</returns>
+        </member>
+        <member name="T:MonitorAware.Models.DpiChangedEventHelper">
+            <summary>
+            Utility methods for DPI changed event
+            </summary>
+        </member>
+        <member name="M:MonitorAware.Models.DpiChangedEventHelper.ConvertPointerToDpi(System.IntPtr)">
+            <summary>
+            Converts WM_DPICHANGED message's wParam value to DPI.
+            </summary>
+            <param name="wParam">wParam value</param>
+            <returns>DPI scale information</returns>
+        </member>
+        <member name="M:MonitorAware.Models.DpiChangedEventHelper.ConvertPointerToRect(System.IntPtr)">
+            <summary>
+            Converts WM_DPICHANGED message's lParam value to Rect.
+            </summary>
+            <param name="lParam">lParam value</param>
+            <returns>Rect</returns>
+        </member>
+        <member name="M:MonitorAware.Models.DpiChangedEventHelper.Create(System.Windows.Window,System.Windows.DpiScale,System.Windows.DpiScale)">
+            <summary>
+            Creates DpiChangedEventArgs with specified information.
+            </summary>
+            <param name="window">Source Window</param>
+            <param name="oldDpi">Old DPI scale information</param>
+            <param name="newDpi">New DPI scale information</param>
+            <returns>DpiChangedEventArgs</returns>
+        </member>
+        <member name="T:MonitorAware.Models.DpiHelper">
+            <summary>
+            Utility methods for <see cref="T:System.Windows.DpiScale"/>
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.DpiHelper.DefaultPixelsPerInch">
+            <summary>
+            Default pixels per inch
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.DpiHelper.Identity">
+            <summary>
+            Identity DPI
+            </summary>
+        </member>
+        <member name="M:MonitorAware.Models.DpiHelper.IsIdentity(System.Windows.DpiScale)">
+            <summary>
+            Determines whether a specified DPI indicates identity scaling.
+            </summary>
+            <param name="dpi">DPI scale information</param>
+            <returns>True if identity scaling. False otherwise.</returns>
+        </member>
+        <member name="M:MonitorAware.Models.DpiHelper.IsPerMonitorDpiAware">
+            <summary>
+            Determines whether the current process is Per-Monitor DPI aware.
+            </summary>
+            <returns>True if Per-Monitor DPI aware. False otherwise.</returns>
+        </member>
+        <member name="M:MonitorAware.Models.DpiHelper.GetDpiAwareness">
+            <summary>
+            Gets DPI awareness of the current process.
+            </summary>
+            <returns>If successfully gets, PROCESS_DPI_AWARENESS. Otherwise, null.</returns>
+        </member>
+        <member name="P:MonitorAware.Models.DpiHelper.SystemDpi">
+            <summary>
+            System DPI
+            </summary>
+            <remarks>System DPI will not change during run time.</remarks>
+        </member>
+        <member name="M:MonitorAware.Models.DpiHelper.GetSystemDpi">
+            <summary>
+            Gets system DPI.
+            </summary>
+            <returns>DPI scale information</returns>
+        </member>
+        <member name="M:MonitorAware.Models.DpiHelper.GetSystemDpi(System.Windows.Media.Visual)">
+            <summary>
+            Gets system DPI.
+            </summary>
+            <param name="visual">Source Visual</param>
+            <returns>DPI scale information</returns>
+        </member>
+        <member name="M:MonitorAware.Models.DpiHelper.GetDpiFromVisual(System.Windows.Media.Visual)">
+            <summary>
+            Gets Per-Monitor DPI of the monitor to which a specified Visual belongs.
+            </summary>
+            <param name="visual">Source Visual</param>
+            <returns>DPI scale information</returns>
+            <remarks>This method is equivalent to VisualTreeHelper.GetDpi method.</remarks>
+        </member>
+        <member name="M:MonitorAware.Models.DpiHelper.GetDpiFromPoint(System.Windows.Point)">
+            <summary>
+            Gets Per-Monitor DPI of the monitor to which a specified Point belongs.
+            </summary>
+            <param name="point">Source Point</param>
+            <returns>DPI scale information</returns>
+        </member>
+        <member name="M:MonitorAware.Models.DpiHelper.GetDpiFromRect(System.Windows.Rect)">
+            <summary>
+            Gets Per-Monitor DPI of the monitor to which a specified Rect belongs.
+            </summary>
+            <param name="rect">Source Rect</param>
+            <returns>DPI scale information</returns>
+        </member>
+        <member name="M:MonitorAware.Models.DpiHelper.GetNotificationAreaDpi">
+            <summary>
+            Gets Per-Monitor DPI of the monitor in which the notification area is contained.
+            </summary>
+            <returns>DPI scale information</returns>
+        </member>
+        <member name="T:MonitorAware.Models.VisualTreeHelperAddition">
+            <summary>
+            Additional methods for <see cref="T:System.Windows.Media.VisualTreeHelper"/>
+            </summary>
+        </member>
+        <member name="M:MonitorAware.Models.VisualTreeHelperAddition.GetDescendant``1(System.Windows.DependencyObject)">
+            <summary>
+            Gets the first descendant visual of a specified visual.
+            </summary>
+            <typeparam name="T">Type of descendant visual</typeparam>
+            <param name="reference">Ancestor visual</param>
+            <returns>Descendant visual if successfully gets. Null otherwise.</returns>
+        </member>
+        <member name="M:MonitorAware.Models.VisualTreeHelperAddition.TryGetDescendant``1(System.Windows.DependencyObject,``0@)">
+            <summary>
+            Attempts to get the first descendant visual of a specified visual.
+            </summary>
+            <typeparam name="T">Type of descendant visual</typeparam>
+            <param name="reference">Ancestor visual</param>
+            <param name="descendant">Descendant visual</param>
+            <returns>True if successfully gets. False otherwise.</returns>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONULL">
+            <summary>
+            If no display monitor intersects, returns null.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTOPRIMARY">
+            <summary>
+            If no display monitor intersects, returns a handle to the primary display monitor.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONEAREST">
+            <summary>
+            If no display monitor intersects, returns a handle to the display monitor that is nearest to the rectangle.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_DPI_Unaware">
+            <summary>
+            Not DPI aware
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_System_DPI_Aware">
+            <summary>
+            System DPI aware
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware">
+            <summary>
+            Per-Monitor DPI aware
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Effective_DPI">
+            <summary>
+            Effective DPI that incorporates accessibility overrides and matches what Desktop Window Manage (DWM) uses to scale desktop applications
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Angular_DPI">
+            <summary>
+            DPI that ensures rendering at a compliant angular resolution on the screen, without incorporating accessibility overrides
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Raw_DPI">
+            <summary>
+            Linear DPI of the screen as measured on the screen itself
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Default">
+            <summary>
+            Default DPI
+            </summary>
+        </member>
+        <member name="T:MonitorAware.Models.WindowHandler">
+            <summary>
+            Handler for <see cref="T:System.Windows.Window"/>
+            </summary>
+        </member>
+        <member name="T:MonitorAware.Models.WindowHandler.WindowStatus">
+            <summary>
+            Status of a Window
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.WindowStatus.None">
+            <summary>
+            A Window stands still.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.WindowStatus.LocationChanged">
+            <summary>
+            A Window's location is being changed.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.WindowStatus.SizeChanged">
+            <summary>
+            A Window's size is being changed.
+            </summary>
+        </member>
+        <member name="T:MonitorAware.Models.WindowHandler.WindowInfo">
+            <summary>
+            DPI and other information on a Window
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.WindowHandler.IsPerMonitorDpiAware">
+            <summary>
+            Whether target Window is Per-Monitor DPI aware (readonly)
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.WindowHandler.SystemDpi">
+            <summary>
+            System DPI (readonly)
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.WindowHandler.MonitorDpi">
+            <summary>
+            Per-Monitor DPI of current monitor (public readonly)
+            </summary>
+            <remarks>This property cannot become a binding target because it has no public setter.</remarks>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.MonitorDpiPropertyKey">
+            <summary>
+            Dependency property key for <see cref="P:MonitorAware.Models.WindowHandler.MonitorDpi"/>
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.MonitorDpiProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Models.WindowHandler.MonitorDpi"/>
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.WindowHandler.WindowDpi">
+            <summary>
+            Per-Monitor DPI of target Window (public readonly)
+            </summary>
+            <remarks>This property cannot become a binding target because it has no public setter.</remarks>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.WindowDpiPropertyKey">
+            <summary>
+            Dependency property key for <see cref="P:MonitorAware.Models.WindowHandler.WindowDpi"/>
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.WindowDpiProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Models.WindowHandler.WindowDpi"/>
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.WindowHandler.InitialDpi">
+            <summary>
+            Per-Monitor DPI of target Window when it is initialized
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.IdentityFactor">
+            <summary>
+            Scaling factor for <see cref="P:System.Windows.Media.Transform.Identity"/>
+            </summary>
+            <remarks>This must locate before <see cref="P:MonitorAware.Models.WindowHandler.ScaleFactor"/> property.</remarks>
+        </member>
+        <member name="P:MonitorAware.Models.WindowHandler.ScaleFactor">
+            <summary>
+            Scaling factor of target Window (public readonly)
+            </summary>
+            <remarks>This property cannot become a binding target because it has no public setter.</remarks>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.ScaleFactorPropertyKey">
+            <summary>
+            Dependency property key for <see cref="P:MonitorAware.Models.WindowHandler.ScaleFactor"/>
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.ScaleFactorProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Models.WindowHandler.ScaleFactor"/>
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.WindowHandler.ScaleMode">
+            <summary>
+            Scaling mode of target Window
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.ScaleModeProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Models.WindowHandler.ScaleMode"/>
+            </summary>
+        </member>
+        <member name="P:MonitorAware.Models.WindowHandler.ColorProfilePath">
+            <summary>
+            Color profile path of target Window (public readonly)
+            </summary>
+            <remarks>This property cannot become a binding target because it has no public setter.</remarks>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.ColorProfilePathPropertyKey">
+            <summary>
+            Dependency property key for <see cref="P:MonitorAware.Models.WindowHandler.ColorProfilePath"/>
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler.ColorProfilePathProperty">
+            <summary>
+            Dependency property for <see cref="P:MonitorAware.Models.WindowHandler.ColorProfilePath"/>
+            </summary>
+        </member>
+        <member name="E:MonitorAware.Models.WindowHandler.DpiChanged">
+            <summary>
+            Occurs when target Window's DPI is changed.
+            </summary>
+            <remarks>
+            This event is fired when DPI of target Window is changed. It is not necessarily the same timing
+            when DPI of the monitor to which target Window belongs is changed.
+            </remarks>
+        </member>
+        <member name="E:MonitorAware.Models.WindowHandler.ColorProfileChanged">
+            <summary>
+            Occurs when color profile path has changed.
+            </summary>
+            <remarks>
+            This event is fired when color profile path of the monitor to which target Window belongs has changed
+            and Window's move/resize which caused the change has exited.
+            </remarks>
+        </member>
+        <member name="M:MonitorAware.Models.WindowHandler.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:MonitorAware.Models.WindowHandler.#ctor(System.Windows.Window,System.Windows.FrameworkElement)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="window">Target Window</param>
+            <param name="element">Target FrameworkElement</param>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler._targetWindow">
+            <summary>
+            Target Window
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler._targetElement">
+            <summary>
+            Target FrameworkElement which will be transformed when DPI is changed
+            </summary>
+            <remarks>If this FrameworkElement is null, Window.Content will be transformed.</remarks>
+        </member>
+        <member name="M:MonitorAware.Models.WindowHandler.Initialize(System.Windows.Window,System.Windows.FrameworkElement)">
+            <summary>
+            Initializes.
+            </summary>
+            <param name="window">Target Window</param>
+            <param name="element">Target FrameworkElement</param>
+        </member>
+        <member name="M:MonitorAware.Models.WindowHandler.Close">
+            <summary>
+            Closes.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler._dueInfo">
+            <summary>
+            Information that target Window due to be
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler._currentStatus">
+            <summary>
+            Current status of target Window
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler._isEnteredSizeMove">
+            <summary>
+            Whether target Window's location or size has started to be changed
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler._isDpiChanged">
+            <summary>
+            Whether DPI has changed after target Window's location or size has started to be changed
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler._baseSize">
+            <summary>
+            Target Window's size to be the base for calculating due size when DPI changed
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler._countLocationChanged">
+            <summary>
+            Count of WM_MOVE messages
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler._countSizeChanged">
+            <summary>
+            Count of WM_SIZE messages
+            </summary>
+        </member>
+        <member name="M:MonitorAware.Models.WindowHandler.WndProc(System.IntPtr,System.Int32,System.IntPtr,System.IntPtr,System.Boolean@)">
+            <summary>
+            Handles window messages.
+            </summary>
+            <param name="hwnd">The window handle</param>
+            <param name="msg">The message ID</param>
+            <param name="wParam">The message's wParam value</param>
+            <param name="lParam">The message's lParam value</param>
+            <param name="handled">Whether the message was handled</param>
+            <returns>Return value depending on the particular message</returns>
+            <remarks>This is an implementation of System.Windows.Interop.HwndSourceHook.</remarks>
+        </member>
+        <member name="F:MonitorAware.Models.WindowHandler._blocker">
+            <summary>
+            Object to block entering into change DPI process
+            </summary>
+            <remarks>
+            Null:   Don't block.
+            Object: Block.
+            </remarks>
+        </member>
+        <member name="T:MonitorAware.Models.WindowHelper">
+            <summary>
+            Utility methods for <see cref="T:System.Windows.Window"/>
+            </summary>
+        </member>
+        <member name="M:MonitorAware.Models.WindowHelper.TryGetWindowRect(System.IntPtr,System.Windows.Rect@)">
+            <summary>
+            Attemps to get a specified Window's rectangle.
+            </summary>
+            <param name="windowHandle">Window's handle</param>
+            <param name="windowRect">Window's rectangle</param>
+            <returns>True if successfully gets. False otherwise.</returns>
+        </member>
+        <member name="M:MonitorAware.Models.WindowHelper.SetWindowRect(System.IntPtr,System.Windows.Rect)">
+            <summary>
+            Sets a specified Window's rectangle.
+            </summary>
+            <param name="windowHandle">Window's handle</param>
+            <param name="windowRect">Window's rectangle</param>
+            <returns>True if successfully sets. False otherwise.</returns>
+        </member>
+        <member name="M:MonitorAware.Models.WindowHelper.SetWindowLocation(System.IntPtr,System.Double,System.Double)">
+            <summary>
+            Sets a specified Window's location.
+            </summary>
+            <param name="windowHandle">Window's handle</param>
+            <param name="X">Window's X coordinate</param>
+            <param name="Y">Window's Y coordinate</param>
+            <returns>True if successfully sets. False otherwise.</returns>
+        </member>
+        <member name="M:MonitorAware.Models.WindowHelper.SetWindowSize(System.IntPtr,System.Windows.Size)">
+            <summary>
+            Sets a specified Window's size.
+            </summary>
+            <param name="windowHandle">Window's handle</param>
+            <param name="size">Window's size</param>
+            <returns>True if successfully sets. False otherwise.</returns>
+        </member>
+        <member name="T:MonitorAware.MonitorAwareBehavior">
+            <summary>
+            Behavior to make a <see cref="T:System.Windows.Window"/> Per-Monitor DPI aware
+            </summary>
+        </member>
+        <member name="M:MonitorAware.MonitorAwareBehavior.OnAttached">
+            <summary>
+            OnAttached
+            </summary>
+        </member>
+        <member name="M:MonitorAware.MonitorAwareBehavior.OnDetaching">
+            <summary>
+            OnDetaching
+            </summary>
+        </member>
+        <member name="P:MonitorAware.MonitorAwareBehavior.WindowHandler">
+            <summary>
+            Handler for Window
+            </summary>
+        </member>
+        <member name="P:MonitorAware.MonitorAwareBehavior.ScaleMode">
+            <summary>
+            Scaling mode
+            </summary>
+        </member>
+        <member name="T:MonitorAware.MonitorAwareProperty">
+            <summary>
+            Attached property to make a <see cref="T:System.Windows.Window"/> Per-Monitor DPI aware
+            </summary>
+        </member>
+        <member name="M:MonitorAware.MonitorAwareProperty.CreateInstanceCore">
+            <summary>
+            Implements <see cref="M:System.Windows.Freezable.CreateInstanceCore">Freezable.CreateInstanceCore</see>.
+            </summary>
+            <returns>New Freezable</returns>
+        </member>
+        <member name="M:MonitorAware.MonitorAwareProperty.GetInstance(System.Windows.Window)">
+            <summary>
+            Gets MonitorAwareProperty instance.
+            </summary>
+            <param name="window">Owner Window</param>
+            <returns>MonitorAwareProperty</returns>
+        </member>
+        <member name="M:MonitorAware.MonitorAwareProperty.SetInstance(System.Windows.Window,MonitorAware.MonitorAwareProperty)">
+            <summary>
+            Sets MonitorAwareProperty instance.
+            </summary>
+            <param name="window">Owner Window</param>
+            <param name="instance">MonitorAwareProperty</param>
+        </member>
+        <member name="F:MonitorAware.MonitorAwareProperty.InstanceProperty">
+            <summary>
+            Attached property for Instance
+            </summary>
+        </member>
+        <member name="M:MonitorAware.MonitorAwareProperty.GetMonitorAwareProperty(System.Windows.Window)">
+            <summary>
+            Gets the instance of MonitorAwareProperty attached property from a specified Window.
+            </summary>
+            <param name="window">Window</param>
+            <returns>MonitorAwareProperty</returns>
+        </member>
+        <member name="P:MonitorAware.MonitorAwareProperty.WindowHandler">
+            <summary>
+            Handler for Window
+            </summary>
+        </member>
+        <member name="P:MonitorAware.MonitorAwareProperty.ScaleMode">
+            <summary>
+            Scaling mode
+            </summary>
+        </member>
+        <member name="T:MonitorAware.ScaleMode">
+            <summary>
+            Scaling mode of handler for <see cref="T:System.Windows.Window"/>
+            </summary>
+        </member>
+        <member name="F:MonitorAware.ScaleMode.Forbear">
+            <summary>
+            Forbear scaling and leave it to the built-in functionality.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.ScaleMode.InvokeWhileMoving">
+            <summary>
+            Invoke scaling while target Window is still moving.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.ScaleMode.ResolveAfterMoved">
+            <summary>
+            Resolve scaling after target Window has moved.
+            </summary>
+        </member>
+    </members>
+</doc>

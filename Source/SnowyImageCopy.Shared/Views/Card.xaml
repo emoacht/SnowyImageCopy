@@ -1,0 +1,456 @@
+﻿<UserControl x:Class="SnowyImageCopy.Views.Card"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:lexicon="clr-namespace:SnowyImageCopy.Lexicon;assembly=SnowyImageCopy.Lexicon"
+			 xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
+			 mc:Ignorable="d"
+			 d:DesignHeight="1200" d:DesignWidth="250">
+	<UserControl.Resources>
+		<Style x:Key="EnclosureStyle" TargetType="{x:Type Border}">
+			<Setter Property="BorderBrush" Value="{StaticResource BorderLine.Strong}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="SnapsToDevicePixels" Value="True"/>
+			<Setter Property="UseLayoutRounding" Value="True"/>
+		</Style>
+
+		<Style TargetType="{x:Type RadioButton}">
+			<Setter Property="Margin" Value="0,4,8,4"/>
+		</Style>
+
+		<!-- ProgressBar -->
+		<SolidColorBrush x:Key="Volume.Progress" Color="#FF26a0da"/>
+		<SolidColorBrush x:Key="Volume.Background" Color="#FFe6e6e6"/>
+		<SolidColorBrush x:Key="Volume.Border" Color="#FFbcbcbc"/>
+
+		<Style x:Key="VolumeBarStyle" TargetType="{x:Type ProgressBar}">
+			<Setter Property="Foreground" Value="{StaticResource Volume.Progress}"/>
+			<Setter Property="Background" Value="{StaticResource Volume.Background}"/>
+			<Setter Property="BorderBrush" Value="{StaticResource Volume.Border}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type ProgressBar}">
+						<Grid x:Name="TemplateRoot">
+							<Border BorderBrush="{TemplateBinding BorderBrush}"
+									BorderThickness="{TemplateBinding BorderThickness}"
+									Background="{TemplateBinding Background}"
+									SnapsToDevicePixels="True"
+									UseLayoutRounding="True">
+								<Grid>
+									<Rectangle x:Name="PART_Track"/>
+									<Grid x:Name="PART_Indicator"
+										  HorizontalAlignment="Left"
+										  ClipToBounds="True">
+										<Rectangle Fill="{TemplateBinding Foreground}"/>
+									</Grid>
+								</Grid>
+							</Border>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</UserControl.Resources>
+
+	<Grid x:Name="PaneRoot"
+		  Background="{StaticResource Window.Background}">
+		<StackPanel Width="233"
+					Margin="8,2,8,0">
+			<!-- Remote -->
+			<GroupBox Style="{StaticResource ItemGroupStyle}"
+					  Header="{Binding Resources.Card_RemoteCard, Source={x:Static lexicon:ResourceService.Current}}">
+				<StackPanel>
+					<StackPanel Margin="4"
+								Visibility="{Binding RemoteCardIsAvailable, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+						<!-- FlashAir Card Information -->
+						<Border Margin="0,4"
+								Style="{StaticResource EnclosureStyle}">
+							<Grid Margin="8,4">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto"/>
+									<ColumnDefinition Width="8"/>
+									<ColumnDefinition/>
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition/>
+									<RowDefinition/>
+									<RowDefinition/>
+									<RowDefinition/>
+									<RowDefinition/>
+									<RowDefinition/>
+								</Grid.RowDefinitions>
+
+								<TextBlock
+									Grid.Row="0"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_Firmware, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="0"
+									Margin="0,2"
+									Text="{Binding RemoteCard.FirmwareVersion, Mode=OneWay}"/>
+
+								<TextBlock
+									Grid.Row="1"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_ModelName, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="1"
+									Margin="0,2"
+									Text="{Binding RemoteCard.ProductName, Mode=OneWay}"/>
+
+								<TextBlock
+									Grid.Row="2"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_Revision, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="2"
+									Margin="0,2"
+									Text="{Binding RemoteCard.ProductRevision, Mode=OneWay}"/>
+
+								<TextBlock
+									Grid.Row="3"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_SerialNumber, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="3"
+									Margin="0,2"
+									Text="{Binding RemoteCard.ProductSerialNumber, Mode=OneWay}"/>
+
+								<TextBlock
+									Grid.Row="4"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_Manufactured, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="4"
+									Margin="0,2"
+									Text="{Binding RemoteCard.ManufacturingDate, Mode=OneWay, StringFormat=yyyy/MM}"/>
+
+								<TextBlock
+									Grid.Row="5"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_Capacity, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="5"
+									Margin="0,2"
+									Text="{Binding RemoteCard.TotalCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB, ConverterParameter=3, Converter={StaticResource BytesUnitConverterKey}}"/>
+							</Grid>
+						</Border>
+
+						<Grid Margin="0,6">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+							</Grid.RowDefinitions>
+
+							<!-- Capacity -->
+							<TextBlock
+								Grid.Row="0"
+								VerticalAlignment="Center"
+								Text="{Binding Resources.Card_UsedCapacity, Source={x:Static lexicon:ResourceService.Current}}"/>
+							<StackPanel
+								Grid.Column="1" Grid.Row="0"
+								Margin="8,0">
+								<ProgressBar
+									Height="12"
+									Style="{StaticResource VolumeBarStyle}"
+									Value="{Binding RemoteCard.UsedPercentage, Mode=OneWay}"/>
+								<TextBlock Foreground="{StaticResource SnowGray.Normal.Foreground}">
+									<Run Text="{Binding RemoteCard.FreeCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB , ConverterParameter=3, Converter={StaticResource BytesUnitConverterKey}}"/>
+									<Run Text="{Binding Resources.Card_FreeSpace, Mode=OneWay, Source={x:Static lexicon:ResourceService.Current}}"/>
+								</TextBlock>
+							</StackPanel>
+
+							<!-- SSID -->
+							<TextBlock
+								Grid.Row="1"
+								VerticalAlignment="Center"
+								Text="{Binding Resources.Card_Ssid, Source={x:Static lexicon:ResourceService.Current}}"/>
+							<TextBox
+								Grid.Column="1" Grid.Row="1"
+								Height="24" Margin="8,4"
+								Padding="2,0" VerticalContentAlignment="Center"
+								IsReadOnly="True"
+								Text="{Binding RemoteCard.Ssid, Mode=OneWay}"/>
+						</Grid>
+					</StackPanel>
+
+					<Border Margin="4,8"
+							Style="{StaticResource EnclosureStyle}"
+							Visibility="{Binding RemoteCardIsAvailable, Mode=OneWay, Converter={StaticResource BooleanInverseToVisibilityConverterKey}}">
+						<TextBlock Margin="8,6"
+								   Text="{Binding Resources.Card_Unconnected, Source={x:Static lexicon:ResourceService.Current}}"/>
+					</Border>
+				</StackPanel>
+			</GroupBox>
+
+			<!-- Local -->
+			<GroupBox Style="{StaticResource ItemGroupStyle}"
+					  Header="{Binding Resources.Card_LocalCard, Source={x:Static lexicon:ResourceService.Current}}">
+				<StackPanel>
+					<StackPanel Margin="4,8,4,0">
+						<!-- Search -->
+						<Button x:Name="SearchButton"
+								Height="24"
+								Style="{StaticResource ButtonBaseStyle}"
+								VerticalContentAlignment="Center"
+								Content="{Binding Resources.Card_Search, Source={x:Static lexicon:ResourceService.Current}}"
+								Command="{Binding SearchCommand}"/>
+
+						<!-- Drive -->
+						<StackPanel Margin="0,8,0,0" HorizontalAlignment="Left"
+									Orientation="Horizontal">
+							<TextBlock
+								VerticalAlignment="Center"
+								Text="{Binding Resources.Card_Drive, Source={x:Static lexicon:ResourceService.Current}}"/>
+							<ComboBox
+								Width="50" Height="24" Margin="6,0"
+								VerticalContentAlignment="Center"
+								IsEnabled="{Binding ElementName=SearchButton, Path=IsEnabled, Mode=OneWay}"
+								ItemsSource="{Binding LocalCards}"
+								DisplayMemberPath="DriveLetter"
+								SelectedItem="{Binding LocalCard, Mode=TwoWay}"/>
+						</StackPanel>
+					</StackPanel>
+
+					<StackPanel Margin="4"
+								Visibility="{Binding LocalCardIsAvailable, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+						<!-- FlashAir Card Information -->
+						<Border Margin="0,4"
+								Style="{StaticResource EnclosureStyle}">
+							<Grid Margin="8,4">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto"/>
+									<ColumnDefinition Width="8"/>
+									<ColumnDefinition/>
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition/>
+									<RowDefinition/>
+									<RowDefinition/>
+									<RowDefinition/>
+									<RowDefinition/>
+									<RowDefinition/>
+								</Grid.RowDefinitions>
+
+								<TextBlock
+									Grid.Row="0"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_Firmware, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="0"
+									Margin="0,2"
+									Text="{Binding LocalCard.VERSION, Mode=OneWay}"/>
+
+								<TextBlock
+									Grid.Row="1"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_ModelName, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="1"
+									Margin="0,2"
+									Text="{Binding LocalCard.ProductName, Mode=OneWay}"/>
+
+								<TextBlock
+									Grid.Row="2"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_Revision, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="2"
+									Margin="0,2"
+									Text="{Binding LocalCard.ProductRevision, Mode=OneWay}"/>
+
+								<TextBlock
+									Grid.Row="3"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_SerialNumber, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="3"
+									Margin="0,2"
+									Text="{Binding LocalCard.ProductSerialNumber, Mode=OneWay}"/>
+
+								<TextBlock
+									Grid.Row="4"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_Manufactured, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="4"
+									Margin="0,2"
+									Text="{Binding LocalCard.ManufacturingDate, Mode=OneWay, StringFormat=yyyy/MM}"/>
+
+								<TextBlock
+									Grid.Row="5"
+									VerticalAlignment="Center"
+									Text="{Binding Resources.Card_Capacity, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBlock
+									Grid.Column="2" Grid.Row="5"
+									Margin="0,2"
+									Text="{Binding LocalCard.TotalCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB, ConverterParameter=3, Converter={StaticResource BytesUnitConverterKey}}"/>
+							</Grid>
+						</Border>
+
+						<Grid Margin="0,6">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition/>
+							</Grid.ColumnDefinitions>
+
+							<!-- Capacity -->
+							<TextBlock
+								Grid.Row="0"
+								VerticalAlignment="Center"
+								Text="{Binding Resources.Card_UsedCapacity, Source={x:Static lexicon:ResourceService.Current}}"/>
+							<StackPanel
+								Grid.Column="1" Grid.Row="0"
+								Margin="8,0">
+								<ProgressBar
+									Height="12"
+									Style="{StaticResource VolumeBarStyle}"
+									Value="{Binding LocalCard.UsedPercentage, Mode=OneWay}"/>
+								<TextBlock Foreground="{StaticResource SnowGray.Normal.Foreground}">
+									<Run Text="{Binding LocalCard.FreeCapacity, Mode=OneWay, StringFormat={}{0:F1} GiB , ConverterParameter=3, Converter={StaticResource BytesUnitConverterKey}}"/>
+									<Run Text="{Binding Resources.Card_FreeSpace, Mode=OneWay, Source={x:Static lexicon:ResourceService.Current}}"/>
+								</TextBlock>
+							</StackPanel>
+						</Grid>
+
+						<!-- Wireless LAN startup -->
+						<GroupBox Margin="0,6,0,0"
+								  Header="{Binding Resources.Card_LanStartup, Source={x:Static lexicon:ResourceService.Current}}">
+							<WrapPanel Margin="4,4,0,0">
+								<RadioButton
+									Content="{Binding Resources.Card_LanStartupAutomatic, Source={x:Static lexicon:ResourceService.Current}}"
+									IsChecked="{Binding LocalCard.LanStartupMode, ConverterParameter=Automatic, Converter={StaticResource EnumToBooleanConverterKey}}"/>
+								<RadioButton
+									Content="{Binding Resources.Card_LanStartupManual, Source={x:Static lexicon:ResourceService.Current}}"
+									IsChecked="{Binding LocalCard.LanStartupMode, ConverterParameter=Manual, Converter={StaticResource EnumToBooleanConverterKey}}"/>
+							</WrapPanel>
+						</GroupBox>
+
+						<!-- Wireless LAN mode -->
+						<GroupBox Margin="0,6,0,0"
+								  Header="{Binding Resources.Card_LanMode, Source={x:Static lexicon:ResourceService.Current}}">
+							<WrapPanel Margin="4,4,0,0">
+								<RadioButton
+									Content="{Binding Resources.Card_LanModeAP, Source={x:Static lexicon:ResourceService.Current}}"
+									IsChecked="{Binding LocalCard.LanMode, ConverterParameter=AccessPoint, Converter={StaticResource EnumToBooleanConverterKey}}"/>
+								<RadioButton
+									Content="{Binding Resources.Card_LanModeSTA, Source={x:Static lexicon:ResourceService.Current}}"
+									IsChecked="{Binding LocalCard.LanMode, ConverterParameter=Station, Converter={StaticResource EnumToBooleanConverterKey}}"/>
+								<RadioButton
+									Foreground="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, ConverterParameter=Gray, Converter={StaticResource BooleanInverseToBrushConverterKey}}"
+									Content="{Binding Resources.Card_LanModeIPT, Source={x:Static lexicon:ResourceService.Current}}"
+									IsEnabled="{Binding LocalCard.IsInternetPassThruReady}"
+									IsChecked="{Binding LocalCard.LanMode, ConverterParameter=InternetPassThru, Converter={StaticResource EnumToBooleanConverterKey}}"/>
+							</WrapPanel>
+						</GroupBox>
+
+						<!-- SSID & Network security key -->
+						<GroupBox Margin="0,6,0,0"
+								  Foreground="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, ConverterParameter=Gray, Converter={StaticResource BooleanInverseToBrushConverterKey}}"
+								  IsEnabled="{Binding LocalCard.IsBuiltinUsable, Mode=OneWay}">
+							<GroupBox.Header>
+								<TextBlock TextWrapping="Wrap"
+										   Text="{Binding Resources.Card_ToBuiltinAP, Source={x:Static lexicon:ResourceService.Current}}"/>
+							</GroupBox.Header>
+							<StackPanel Margin="4,6,4,0">
+								<TextBlock Text="{Binding Resources.Card_Ssid, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBox Margin="0,4,0,6"
+										 Padding="2" VerticalContentAlignment="Center"
+										 MaxLength="32"
+										 Text="{Binding LocalCard.BuiltinSsid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+
+								<TextBlock Text="{Binding Resources.Card_SecurityKey, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBox Margin="0,4"
+										 Padding="2" VerticalContentAlignment="Center"
+										 MaxLength="64"
+										 Text="{Binding LocalCard.BuiltinNetworkKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+							</StackPanel>
+						</GroupBox>
+
+						<GroupBox Margin="0,6,0,0"
+								  Foreground="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, ConverterParameter=Gray, Converter={StaticResource BooleanInverseToBrushConverterKey}}"
+								  IsEnabled="{Binding LocalCard.IsRouterUsable, Mode=OneWay}">
+							<GroupBox.Header>
+								<TextBlock TextWrapping="Wrap"
+										   Text="{Binding Resources.Card_ToRouterAP, Source={x:Static lexicon:ResourceService.Current}}"/>
+							</GroupBox.Header>
+							<StackPanel Margin="4,6,4,0">
+								<TextBlock Text="{Binding Resources.Card_Ssid, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBox Margin="0,4,0,6"
+										 Padding="2" VerticalContentAlignment="Center"
+										 MaxLength="32"
+										 Text="{Binding LocalCard.RouterSsid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+
+								<TextBlock Text="{Binding Resources.Card_SecurityKey, Source={x:Static lexicon:ResourceService.Current}}"/>
+								<TextBox Margin="0,4"
+										 Padding="2" VerticalContentAlignment="Center"
+										 MaxLength="64"
+										 Text="{Binding LocalCard.RouterNetworkKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+							</StackPanel>
+						</GroupBox>
+
+						<!-- Automatic timeout -->
+						<GroupBox Margin="0,6,0,0"
+								  Foreground="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, ConverterParameter=Gray, Converter={StaticResource BooleanInverseToBrushConverterKey}}"
+								  IsEnabled="{Binding LocalCard.IsAutomaticTimeoutReady, Mode=OneWay}">
+							<GroupBox.Header>
+								<TextBlock TextWrapping="Wrap"
+										   Text="{Binding Resources.Card_AutomaticTimeout, Source={x:Static lexicon:ResourceService.Current}}"/>
+							</GroupBox.Header>
+							<StackPanel Margin="4,6,4,4"
+										Orientation="Horizontal">
+								<controls:SlidingToggleButton
+									x:Name="AutomaticTimeoutButton"
+									Style="{StaticResource SwitchButtonStyle}"
+									IsChecked="{Binding LocalCard.IsAutomaticTimeoutEnabled, Mode=TwoWay}"/>
+								<controls:NumericUpDown
+									Width="90" Height="24" Margin="8,0,0,0"
+									Minimum="1" Maximum="30" Frequency="1"
+									Value="{Binding LocalCard.AutomaticTimeout, Mode=TwoWay}"
+									Visibility="{Binding IsChecked, ElementName=AutomaticTimeoutButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"/>
+							</StackPanel>
+						</GroupBox>
+
+						<!-- Address name -->
+						<GroupBox Margin="0,6,0,0"
+								  Header="{Binding Resources.Card_AddressName, Source={x:Static lexicon:ResourceService.Current}}">
+							<TextBox Margin="4,6,4,4"
+									 Padding="2" VerticalContentAlignment="Center"
+									 MaxLength="15"
+									 Text="{Binding LocalCard.APPNAME, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+						</GroupBox>
+
+						<!-- upload.cgi -->
+						<GroupBox Margin="0,6,0,0"
+								  Header="{Binding Resources.Card_Upload, Source={x:Static lexicon:ResourceService.Current}}">
+							<controls:SlidingToggleButton
+								Margin="4,6,4,4" HorizontalAlignment="Left"
+								Style="{StaticResource SwitchButtonStyle}"
+								IsChecked="{Binding LocalCard.IsUploadEnabled, Mode=TwoWay}"/>
+						</GroupBox>
+
+						<!-- Apply -->
+						<Button Height="24" Margin="0,10,0,8"
+								Style="{StaticResource ButtonBaseStyle}"
+								VerticalContentAlignment="Center"
+								Content="{Binding Resources.Card_Apply, Source={x:Static lexicon:ResourceService.Current}}"
+								Command="{Binding ApplyCommand}"/>
+					</StackPanel>
+
+					<Border Margin="4,8"
+							Style="{StaticResource EnclosureStyle}"
+							Visibility="{Binding LocalCardIsAvailable, Mode=OneWay, Converter={StaticResource BooleanInverseToVisibilityConverterKey}}">
+						<TextBlock Margin="8,6"
+								   Text="{Binding Resources.Card_Unretrieved, Source={x:Static lexicon:ResourceService.Current}}"/>
+					</Border>
+				</StackPanel>
+			</GroupBox>
+		</StackPanel>
+	</Grid>
+</UserControl>
