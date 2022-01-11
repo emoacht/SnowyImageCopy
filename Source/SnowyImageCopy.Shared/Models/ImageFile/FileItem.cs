@@ -48,7 +48,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		public bool IsImageFile { get; private set; }
 		public bool IsJpeg { get; private set; }
 		public bool IsTiff { get; private set; }
-		public bool IsLoadable { get; private set; }
+		public bool IsVideoFile { get; private set; }
 
 		public bool IsFlashAirSystem =>
 			string.Equals(FileName, "GUPIXINF", StringComparison.OrdinalIgnoreCase)
@@ -207,20 +207,16 @@ namespace SnowyImageCopy.Models.ImageFile
 			FileExtension = Path.GetExtension(fileName);
 
 			var extension = _extensions.Value.FirstOrDefault(x => string.Equals(FileExtension, $".{x}", StringComparison.OrdinalIgnoreCase));
-			if (extension == Extension.other)
-				return;
-
-			IsImageFile = true;
 
 			switch (extension)
 			{
 				case Extension.jpg:
 				case Extension.jpeg:
-					IsLoadable = IsJpeg = true;
+					IsImageFile = IsJpeg = true;
 					break;
 				case Extension.tif:
 				case Extension.tiff:
-					IsLoadable = IsTiff = true;
+					IsImageFile = IsTiff = true;
 					break;
 				case Extension.bmp:
 				case Extension.png:
@@ -237,7 +233,12 @@ namespace SnowyImageCopy.Models.ImageFile
 				case Extension.pef:
 				case Extension.srw:
 				case Extension.arw:
-					IsLoadable = true;
+					IsImageFile = true;
+					break;
+				case Extension.mp4:
+				case Extension.mov:
+				case Extension.avi:
+					IsVideoFile = true;
 					break;
 			}
 		}

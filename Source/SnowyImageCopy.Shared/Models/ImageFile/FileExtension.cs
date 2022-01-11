@@ -28,5 +28,8 @@ namespace SnowyImageCopy.Models.ImageFile
 		srw, // Samsung raw (Microsoft Camera Codec Pack supports some models)
 		x3f, // Sigma raw
 		arw, // Sony raw (Microsoft Camera Codec Pack supports some models)
+		mp4,
+		mov,
+		avi,
 	}
 }

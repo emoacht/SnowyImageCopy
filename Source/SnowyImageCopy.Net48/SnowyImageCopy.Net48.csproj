@@ -108,6 +108,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ToastManager.cs" />
+    <Compile Include="Models\VideoManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

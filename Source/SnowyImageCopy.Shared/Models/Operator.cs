@@ -107,6 +107,12 @@ namespace SnowyImageCopy.Models
 			set => _mainWindowViewModel.CurrentImageData = value;
 		}
 
+		private string CurrentImagePath
+		{
+			get => _mainWindowViewModel.CurrentImagePath;
+			set => _mainWindowViewModel.CurrentImagePath = value;
+		}
+
 		public event EventHandler ActivateRequested;
 
 		private void InvokeSafely(Action action)
@@ -1016,8 +1022,10 @@ namespace SnowyImageCopy.Models
 								{
 									if (item.CanReadExif)
 										item.Thumbnail = await ImageManager.ReadThumbnailAsync(ComposeLocalPath(item));
-									else if (item.CanLoadDataLocal)
+									else if (item.IsImageFile)
 										item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
+									else if (item.IsVideoFile)
+										item.Thumbnail = await VideoManager.GetSnapshotImageAsync(ComposeLocalPath(item), TimeSpan.Zero, ImageManager.ThumbnailSize);
 								}
 								catch
 								{
@@ -1183,9 +1191,13 @@ namespace SnowyImageCopy.Models
 						{
 							CurrentItem = item;
 
-							if (item.IsImageFile)
+							if (item.IsImageOrVideoFile)
 							{
+								if (item.IsVideoFile)
+									data = await VideoManager.GetSnapshotBytesAsync(localPath, TimeSpan.Zero);
+
 								CurrentImageData = data;
+								CurrentImagePath = localPath;
 
 								if (!item.HasThumbnail)
 								{
@@ -1193,7 +1205,7 @@ namespace SnowyImageCopy.Models
 									{
 										if (item.CanReadExif)
 											item.Thumbnail = await ImageManager.ReadThumbnailAsync(data);
-										else if (item.CanLoadDataLocal)
+										else
 											item.Thumbnail = await ImageManager.CreateThumbnailAsync(data);
 									}
 									catch (ImageNotSupportedException)
@@ -1205,6 +1217,7 @@ namespace SnowyImageCopy.Models
 							else
 							{
 								CurrentImageData = null;
+								CurrentImagePath = null;
 							}
 
 							item.CopiedTime = DateTime.Now;
@@ -1300,11 +1313,19 @@ namespace SnowyImageCopy.Models
 
 				if (item.CanLoadDataLocal)
 				{
-					CurrentImageData = await FileAddition.ReadAllBytesAsync(ComposeLocalPath(item), _localTokenContainer.Token);
+					var localPath = ComposeLocalPath(item);
+
+					if (item.IsImageFile)
+						CurrentImageData = await FileAddition.ReadAllBytesAsync(localPath, _localTokenContainer.Token);
+					else if (item.IsVideoFile)
+						CurrentImageData = await VideoManager.GetSnapshotBytesAsync(localPath, TimeSpan.Zero);
+
+					CurrentImagePath = localPath;
 				}
 				else
 				{
 					CurrentImageData = null;
+					CurrentImagePath = null;
 				}
 			}
 			catch (OperationCanceledException)
@@ -1335,18 +1356,23 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		internal async Task SaveDesktopAsync()
 		{
-			if ((CurrentImageData is null) || (CurrentItem is null))
+			if ((CurrentItem is null) || (CurrentImageData is null))
 				return;
 
 			try
 			{
 				IsSavingDesktop = true;
 
-				var filePath = ComposeDesktopPath(CurrentItem);
+				var desktopPath = ComposeDesktopPath(CurrentItem);
 
-				using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+				if (CurrentItem.IsImageFile)
 				{
+					using var fs = new FileStream(desktopPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
 					await fs.WriteAsync(CurrentImageData, 0, CurrentImageData.Length);
+				}
+				else if (CurrentItem.IsVideoFile)
+				{
+					await Task.Run(() => File.Copy(ComposeLocalPath(CurrentItem), desktopPath, true));
 				}
 			}
 			catch (Exception ex)
@@ -1364,7 +1390,7 @@ namespace SnowyImageCopy.Models
 		/// </summary>
 		internal async Task SendClipboardAsync()
 		{
-			if (CurrentImageData is null)
+			if ((CurrentItem is not { IsImageFile: true }) || (CurrentImageData is null))
 				return;
 
 			try

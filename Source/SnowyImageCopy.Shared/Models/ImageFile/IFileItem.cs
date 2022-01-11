@@ -30,7 +30,7 @@ namespace SnowyImageCopy.Models.ImageFile
 		bool IsImageFile { get; }
 		bool IsJpeg { get; }
 		bool IsTiff { get; }
-		bool IsLoadable { get; }
+		bool IsVideoFile { get; }
 		bool IsFlashAirSystem { get; }
 
 		bool Equals(IFileItem other);

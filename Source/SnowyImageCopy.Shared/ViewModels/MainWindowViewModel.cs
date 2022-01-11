@@ -150,7 +150,7 @@ namespace SnowyImageCopy.ViewModels
 		private DelegateCommand _sendClipboardCommand;
 
 		private async void SendClipboardExecute() => await Op.SendClipboardAsync();
-		private bool CanSendClipboardExecute() => IsCurrentImageDataGiven && !Op.IsSendingClipboard;
+		private bool CanSendClipboardExecute() => IsCurrentImageDataGiven && !IsCurrentImageVideo && !Op.IsSendingClipboard;
 
 		#endregion
 
@@ -192,11 +192,19 @@ namespace SnowyImageCopy.ViewModels
 					_dataLocker.ExitWriteLock();
 				}
 
-				SetCurrentImage(value);
+				SetCurrentImage(CurrentItem, value);
 				IsCurrentImageDataGiven = (value is { Length: > 0 });
+				IsCurrentImageVideo = CurrentItem.IsVideoFile;
 			}
 		}
 		private byte[] _currentImageData;
+
+		public string CurrentImagePath
+		{
+			get => _currentImagePath;
+			set => SetPropertyValue(ref _currentImagePath, value);
+		}
+		private string _currentImagePath;
 
 		private bool IsCurrentImageDataGiven
 		{
@@ -211,6 +219,46 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 		private bool _isCurrentImageDataGiven;
+
+		public bool IsCurrentImageVideo
+		{
+			get => _isCurrentImageVideo;
+			set => SetPropertyValue(ref _isCurrentImageVideo, value);
+		}
+		private bool _isCurrentImageVideo;
+
+		/// <summary>
+		/// Sets current image.
+		/// </summary>
+		private async void SetCurrentImage(FileItemViewModel item, byte[] data)
+		{
+			if (Designer.IsInDesignMode) // To avoid NullReferenceException in Design mode.
+				return;
+
+			if (!IsCurrentImageVisible)
+			{
+				CurrentImage = null;
+				return;
+			}
+
+			BitmapSource image = null;
+
+			if (data is { Length: > 0 } && item is { IsImageOrVideoFile: true })
+			{
+				try
+				{
+					image = !CurrentFrameSize.IsEmpty
+						? await ImageManager.ConvertBytesToBitmapSourceUniformAsync(data, CurrentFrameSize, item.CanReadExif, DestinationColorProfile)
+						: await ImageManager.ConvertBytesToBitmapSourceAsync(data, CurrentImageWidth, item.CanReadExif, DestinationColorProfile);
+				}
+				catch (ImageNotSupportedException)
+				{
+					item.CanLoadDataLocal = false;
+				}
+			}
+
+			CurrentImage = image ?? GetDefaultCurrentImage();
+		}
 
 		public BitmapSource CurrentImage
 		{
@@ -229,39 +277,6 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 		private BitmapSource _currentImage;
-
-		/// <summary>
-		/// Sets current image.
-		/// </summary>
-		private async void SetCurrentImage(byte[] data)
-		{
-			if (Designer.IsInDesignMode) // To avoid NullReferenceException in Design mode.
-				return;
-
-			if (!IsCurrentImageVisible)
-			{
-				CurrentImage = null;
-				return;
-			}
-
-			BitmapSource image = null;
-
-			if (data is { Length: > 0 } && (CurrentItem is not null))
-			{
-				try
-				{
-					image = !CurrentFrameSize.IsEmpty
-						? await ImageManager.ConvertBytesToBitmapSourceUniformAsync(data, CurrentFrameSize, CurrentItem.CanReadExif, DestinationColorProfile)
-						: await ImageManager.ConvertBytesToBitmapSourceAsync(data, CurrentImageWidth, CurrentItem.CanReadExif, DestinationColorProfile);
-				}
-				catch (ImageNotSupportedException)
-				{
-					CurrentItem.CanLoadDataLocal = false;
-				}
-			}
-
-			CurrentImage = image ?? GetDefaultCurrentImage();
-		}
 
 		private BitmapImage GetDefaultCurrentImage()
 		{
@@ -356,7 +371,7 @@ namespace SnowyImageCopy.ViewModels
 				})
 				.Throttle(TimeSpan.FromMilliseconds(50))
 				.ObserveOn(SynchronizationContext.Current)
-				.Subscribe(_ => SetCurrentImage(CurrentImageData)));
+				.Subscribe(_ => SetCurrentImage(CurrentItem, CurrentImageData)));
 
 			var settingsPropertyChanged = Observable.FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>
 				(

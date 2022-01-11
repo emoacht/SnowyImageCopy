@@ -364,6 +364,13 @@ namespace SnowyImageCopy.Models
 		}
 		private bool _leavesExistingFile;
 
+		public bool HandlesVideoFile
+		{
+			get => _handlesVideoFile;
+			set => SetPropertyValue(ref _handlesVideoFile, value);
+		}
+		private bool _handlesVideoFile;
+
 		public bool MovesFileToRecycle
 		{
 			get => _movesFileToRecycle;
