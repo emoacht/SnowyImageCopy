@@ -71,6 +71,10 @@ namespace SnowyImageCopy.ViewModels
 			}
 		}
 
+		internal bool IsImageFile => _fileItem.IsImageFile;
+		internal bool IsVideoFile => _fileItem.IsVideoFile;
+		internal bool IsImageOrVideoFile => IsImageFile || IsVideoFile;
+
 		/// <summary>
 		/// Whether can read Exif metadata
 		/// </summary>
@@ -106,12 +110,21 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				if (_settings.LimitsFileExtensions)
+				bool IsTargetable()
 				{
-					if (!_settings.FileExtensions.Contains(FileExtension.ToLower()))
-						return false;
+					if (_settings.LimitsFileExtensions)
+						return _settings.FileExtensions.Contains(FileExtension.ToLower());
+
+					if (IsImageFile)
+						return true;
+
+					if (_settings.HandlesVideoFile && IsVideoFile)
+						return true;
+
+					return false;
 				}
-				else if (!_fileItem.IsImageFile)
+
+				if (!IsTargetable())
 					return false;
 
 				return _settings.TargetPeriod switch
@@ -173,7 +186,7 @@ namespace SnowyImageCopy.ViewModels
 		/// </remarks>
 		internal bool CanLoadDataLocal
 		{
-			get => (_canLoadDataLocal is not false) && _fileItem.IsLoadable && IsAliveLocal && IsAvailableLocal;
+			get => (_canLoadDataLocal is not false) && IsImageOrVideoFile && IsAliveLocal && IsAvailableLocal;
 			set => _canLoadDataLocal = value;
 		}
 		private bool? _canLoadDataLocal;
