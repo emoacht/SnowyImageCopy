@@ -162,7 +162,7 @@ namespace SnowyImageCopy.ViewModels
 
 		public FileItemViewModel CurrentItem { get; set; }
 
-		private readonly ReaderWriterLockSlim _dataLocker = new ReaderWriterLockSlim();
+		private readonly ReaderWriterLockSlim _dataLocker = new();
 
 		public byte[] CurrentImageData
 		{
@@ -193,7 +193,7 @@ namespace SnowyImageCopy.ViewModels
 				}
 
 				SetCurrentImage(value);
-				IsCurrentImageDataGiven = (value?.Length > 0);
+				IsCurrentImageDataGiven = (value is { Length: > 0 });
 			}
 		}
 		private byte[] _currentImageData;
@@ -246,7 +246,7 @@ namespace SnowyImageCopy.ViewModels
 
 			BitmapSource image = null;
 
-			if ((data?.Any() is true) && (CurrentItem is not null))
+			if (data is { Length: > 0 } && (CurrentItem is not null))
 			{
 				try
 				{

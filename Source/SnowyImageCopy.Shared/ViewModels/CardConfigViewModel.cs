@@ -241,7 +241,7 @@ namespace SnowyImageCopy.ViewModels
 			get => _CID.Source;
 			set => _CID.Import(value);
 		}
-		private readonly CidInfo _CID = new CidInfo();
+		private readonly CidInfo _CID = new();
 
 		/// <summary>
 		/// Product code
@@ -393,7 +393,7 @@ namespace SnowyImageCopy.ViewModels
 		/// Remaining parameters in CONFIG file
 		/// </summary>
 		/// <remarks>This is to hold unused parameters (LOCK, APPINFO).</remarks>
-		private readonly Dictionary<string, string> _remaining = new Dictionary<string, string>();
+		private readonly Dictionary<string, string> _remaining = new();
 
 		public bool IsChanged => !_isImporting && !GetMonitoredValues().SequenceEqual(_monitoredValues);
 

@@ -97,11 +97,11 @@ namespace SnowyImageCopy.ViewModels
 		protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
 		{
 			// Add/Remove event handlers for PropertyChanged event of items.
-			if (e.OldItems?.Count > 0)
+			if (e.OldItems is { Count: > 0 })
 				foreach (T item in e.OldItems)
 					item.PropertyChanged -= OnItemPropertyChanged;
 
-			if (e.NewItems?.Count > 0)
+			if (e.NewItems is { Count: > 0 })
 				foreach (T item in e.NewItems)
 					item.PropertyChanged += OnItemPropertyChanged;
 

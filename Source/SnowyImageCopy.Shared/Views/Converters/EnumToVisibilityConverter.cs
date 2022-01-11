@@ -38,7 +38,7 @@ namespace SnowyImageCopy.Views.Converters
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		private static bool TryParse(Type enumType, string source, out Enum value)
