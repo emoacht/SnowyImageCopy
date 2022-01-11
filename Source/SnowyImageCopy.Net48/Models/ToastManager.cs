@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SnowyImageCopy.Models
 {
-	internal class ToastManager
+	internal static class ToastManager
 	{
 		public static void RegisterToastActivated(Action action)
 		{

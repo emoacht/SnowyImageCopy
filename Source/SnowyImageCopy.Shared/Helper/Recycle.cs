@@ -96,7 +96,7 @@ namespace SnowyImageCopy.Helper
 		/// <param name="filePaths">File paths</param>
 		public static void MoveToRecycle(params string[] filePaths)
 		{
-			if (filePaths?.Length is not > 0)
+			if (filePaths is not { Length: > 0 })
 				return;
 
 			var filePathCombined = string.Join("\0", filePaths) + '\0' + '\0';

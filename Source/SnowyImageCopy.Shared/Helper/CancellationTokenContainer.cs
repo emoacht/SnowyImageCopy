@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Helper
 			}
 		}
 
-		public bool IsCancellationRequested => (_cancellationTokenSource?.IsCancellationRequested is true);
+		public bool IsCancellationRequested => (_cancellationTokenSource is { IsCancellationRequested: true });
 		public bool IsReleased => (_cancellationTokenSource is null);
 
 		public bool TryCancel(bool release = false)

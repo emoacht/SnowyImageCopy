@@ -74,12 +74,12 @@ namespace SnowyImageCopy.Views.Behaviors
 
 		private void OnSelectedDatesChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (e.AddedItems?.Count > 0)
+			if (e.AddedItems is { Count: > 0 })
 			{
 				foreach (var date in e.AddedItems.OfType<DateTime>())
 					SelectedDates.Add(date);
 			}
-			if (e.RemovedItems?.Count > 0)
+			if (e.RemovedItems is { Count: > 0 })
 			{
 				foreach (var date in e.RemovedItems.OfType<DateTime>())
 					SelectedDates.Remove(date);

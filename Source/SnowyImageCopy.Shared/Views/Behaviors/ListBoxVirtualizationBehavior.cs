@@ -270,11 +270,11 @@ namespace SnowyImageCopy.Views.Behaviors
 					case NotifyCollectionChangedAction.Add:
 					case NotifyCollectionChangedAction.Move:
 					case NotifyCollectionChangedAction.Remove:
-						if (args.OldItems?.Count > 0)
+						if (args.OldItems is { Count: > 0 })
 						{
 							_firstOldDevience += args.OldItems.Count;
 						}
-						if (args.NewItems?.Count > 0)
+						if (args.NewItems is { Count: > 0 })
 						{
 							_lastOldDevience += args.NewItems.Count;
 						}
@@ -297,7 +297,7 @@ namespace SnowyImageCopy.Views.Behaviors
 					case NotifyCollectionChangedAction.Add:
 					case NotifyCollectionChangedAction.Move:
 					case NotifyCollectionChangedAction.Replace:
-						if (args.NewItems?.Count > 0)
+						if (args.NewItems is { Count: > 0 })
 						{
 							var viewportRect = new Rect(0, -ViewportMargin, _viewer.ViewportWidth, _viewer.ViewportHeight + ViewportMargin * 2);
 

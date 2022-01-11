@@ -157,7 +157,7 @@ namespace SnowyImageCopy.ViewModels
 		private DelegateCommand _applyCommand;
 
 		private async void ApplyExecute() => await ApplyConfigAsync(_mainWindowViewModel);
-		private bool CanApplyExecute() => !_isApplying && (LocalCard?.IsChanged is true);
+		private bool CanApplyExecute() => !_isApplying && (LocalCard is { IsChanged: true });
 
 		#endregion
 

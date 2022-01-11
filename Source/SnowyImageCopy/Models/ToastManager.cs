@@ -8,7 +8,7 @@ using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace SnowyImageCopy.Models
 {
-	internal class ToastManager
+	internal static class ToastManager
 	{
 		private static Action _action;
 

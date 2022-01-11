@@ -24,7 +24,7 @@ namespace SnowyImageCopy.Models
 		/// <summary>
 		/// Size of Exif thumbnail
 		/// </summary>
-		public static readonly Size ThumbnailSize = new Size(160D, 120D);
+		public static readonly Size ThumbnailSize = new(160D, 120D);
 
 		#endregion
 
@@ -598,7 +598,7 @@ namespace SnowyImageCopy.Models
 		/// <returns>Color profile</returns>
 		private static ColorContext GetColorProfile(BitmapFrame bitmapFrame)
 		{
-			return (bitmapFrame.ColorContexts?.Count > 0)
+			return (bitmapFrame.ColorContexts is { Count: > 0 })
 				? bitmapFrame.ColorContexts.First()
 				: new ColorContext(PixelFormats.Bgra32);
 		}
@@ -877,7 +877,7 @@ namespace SnowyImageCopy.Models
 
 		private static void ThrowIfCollectionNullOrEmpty<T>(ICollection<T> collection, string name)
 		{
-			if (collection?.Count is not > 0)
+			if (collection is not { Count: > 0 })
 				throw new ArgumentNullException(name);
 		}
 

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -448,8 +447,8 @@ namespace SnowyImageCopy.Models
 
 		internal CardState Card { get; } = new CardState();
 
-		private readonly CancellationTokenContainer _remoteTokenContainer = new CancellationTokenContainer();
-		private readonly CancellationTokenContainer _toastTokenContainer = new CancellationTokenContainer();
+		private readonly CancellationTokenContainer _remoteTokenContainer = new();
+		private readonly CancellationTokenContainer _toastTokenContainer = new();
 
 		private DateTime LastCheckCopyTime { get; set; }
 
@@ -1180,24 +1179,32 @@ namespace SnowyImageCopy.Models
 
 						var data = await _manager.GetSaveFileAsync(item.FilePath, localPath, item.Size, item.Date, !_settings.LeavesExistingFile, item.CanReadExif, progress, Card, cancellationToken);
 
-						if (data?.Any() is true)
+						if (data is { Length: > 0 })
 						{
 							CurrentItem = item;
-							CurrentImageData = data;
 
-							if (!item.HasThumbnail)
+							if (item.IsImageFile)
 							{
-								try
+								CurrentImageData = data;
+
+								if (!item.HasThumbnail)
 								{
-									if (item.CanReadExif)
-										item.Thumbnail = await ImageManager.ReadThumbnailAsync(data);
-									else if (item.CanLoadDataLocal)
-										item.Thumbnail = await ImageManager.CreateThumbnailAsync(data);
+									try
+									{
+										if (item.CanReadExif)
+											item.Thumbnail = await ImageManager.ReadThumbnailAsync(data);
+										else if (item.CanLoadDataLocal)
+											item.Thumbnail = await ImageManager.CreateThumbnailAsync(data);
+									}
+									catch (ImageNotSupportedException)
+									{
+										item.CanLoadDataLocal = false;
+									}
 								}
-								catch (ImageNotSupportedException)
-								{
-									item.CanLoadDataLocal = false;
-								}
+							}
+							else
+							{
+								CurrentImageData = null;
 							}
 
 							item.CopiedTime = DateTime.Now;
@@ -1277,7 +1284,7 @@ namespace SnowyImageCopy.Models
 
 		#region Load & Save & Send
 
-		private readonly CancellationTokenContainer _localTokenContainer = new CancellationTokenContainer();
+		private readonly CancellationTokenContainer _localTokenContainer = new();
 
 		/// <summary>
 		/// Loads image data from a local file and set it to current image data.
@@ -1289,12 +1296,16 @@ namespace SnowyImageCopy.Models
 			{
 				_localTokenContainer.TryCancel(true);
 
-				byte[] data = null;
-				if (item.CanLoadDataLocal)
-					data = await FileAddition.ReadAllBytesAsync(ComposeLocalPath(item), _localTokenContainer.Token);
-
 				CurrentItem = item;
-				CurrentImageData = data;
+
+				if (item.CanLoadDataLocal)
+				{
+					CurrentImageData = await FileAddition.ReadAllBytesAsync(ComposeLocalPath(item), _localTokenContainer.Token);
+				}
+				else
+				{
+					CurrentImageData = null;
+				}
 			}
 			catch (OperationCanceledException)
 			{
