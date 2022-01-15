@@ -96,6 +96,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\ThumbnailBox.xaml.cs">
       <DependentUpon>ThumbnailBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\VideoBox.xaml.cs">
+      <DependentUpon>VideoBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\BooleanInverseConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\BooleanInverseToBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\BooleanInverseToThicknessConverter.cs" />
@@ -126,6 +129,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)Views\Controls\ThumbnailBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Controls\VideoBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

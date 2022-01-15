@@ -479,11 +479,33 @@
 						x:Name="CurrentImageGrid"
 						Visibility="{Binding IsCurrentImageVisible, Converter={StaticResource BooleanToVisibilityConverterKey}}">
 						<Grid VerticalAlignment="Top">
-							<Image x:Name="CurrentImageImage"
-								   Width="{Binding CurrentImageWidth, Mode=OneWay}"
-								   Margin="0,4,8,30" HorizontalAlignment="Left" VerticalAlignment="Top"
-								   Stretch="None"
-								   Source="{Binding CurrentImage, Mode=OneWay}"/>
+							<Image
+								x:Name="CurrentImageImage"
+								Width="{Binding CurrentImageWidth, Mode=OneWay}"
+								Margin="0,4,8,30" HorizontalAlignment="Left" VerticalAlignment="Top"
+								Stretch="None"
+								Source="{Binding CurrentImage, Mode=OneWay}"/>
+
+							<controls:VideoBox
+								Width="{Binding ElementName=CurrentImageImage, Path=ActualWidth, Mode=OneWay}"
+								Height="{Binding ElementName=CurrentImageImage, Path=ActualHeight, Mode=OneWay}"
+								Margin="0,4,8,30" HorizontalAlignment="Left" VerticalAlignment="Top"
+								SourcePath="{Binding CurrentImagePath, Mode=OneWay}">
+								<controls:VideoBox.Style>
+									<Style TargetType="{x:Type controls:VideoBox}">
+										<Setter Property="Visibility" Value="Collapsed"/>
+										<Style.Triggers>
+											<MultiDataTrigger>
+												<MultiDataTrigger.Conditions>
+													<Condition Binding="{Binding IsCurrentImageVisible}" Value="True"/>
+													<Condition Binding="{Binding IsCurrentImageVideo}" Value="True"/>
+												</MultiDataTrigger.Conditions>
+												<Setter Property="Visibility" Value="Visible"/>
+											</MultiDataTrigger>
+										</Style.Triggers>
+									</Style>
+								</controls:VideoBox.Style>
+							</controls:VideoBox>
 
 							<StackPanel Margin="0,0,0,4" VerticalAlignment="Bottom"
 										Orientation="Horizontal">
