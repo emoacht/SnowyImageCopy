@@ -391,6 +391,9 @@
   <data name="Options_File" xml:space="preserve">
     <value>File</value>
   </data>
+  <data name="Options_HandleVideo" xml:space="preserve">
+    <value>Handle video file</value>
+  </data>
   <data name="Options_Info" xml:space="preserve">
     <value>Info</value>
   </data>
