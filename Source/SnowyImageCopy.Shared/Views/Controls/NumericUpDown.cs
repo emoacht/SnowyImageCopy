@@ -64,7 +64,7 @@ namespace SnowyImageCopy.Views.Controls
 				new FrameworkPropertyMetadata(
 					0D,
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-					OnPropertyChanged,
+					OnValueChanged,
 					(d, baseValue) =>
 					{
 						var numeric = (NumericUpDown)d;
@@ -81,7 +81,7 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(NumericUpDown),
 				new PropertyMetadata(
 					0D,
-					OnPropertyChanged));
+					OnValueChanged));
 
 		public double Maximum
 		{
@@ -93,7 +93,7 @@ namespace SnowyImageCopy.Views.Controls
 				typeof(NumericUpDown),
 				new PropertyMetadata(
 					10D,
-					OnPropertyChanged));
+					OnValueChanged));
 
 		public double Frequency
 		{
@@ -200,9 +200,9 @@ namespace SnowyImageCopy.Views.Controls
 			ChangeCanChangeValue(); // For the case where Value is already at Minimum or Maximum
 		}
 
-		private static void OnPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+		private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			((NumericUpDown)sender).ChangeCanChangeValue();
+			((NumericUpDown)d).ChangeCanChangeValue();
 		}
 
 		private void OnButtonClick(object sender, RoutedEventArgs e)
@@ -249,7 +249,10 @@ namespace SnowyImageCopy.Views.Controls
 				}
 			}
 
-			Value = Change(Value);
+			double buffer = Change(Value);
+
+			// Round off to one decimal place to solve an error caused by calculation of doubles.
+			Value = Math.Round(buffer * 10D) / 10D;
 
 			ChangeCanChangeValue();
 		}
