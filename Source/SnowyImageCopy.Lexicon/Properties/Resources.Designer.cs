@@ -881,6 +881,15 @@ namespace SnowyImageCopy.Lexicon.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Handle video file.
+        /// </summary>
+        public static string Options_HandleVideo {
+            get {
+                return ResourceManager.GetString("Options_HandleVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string Options_Info {

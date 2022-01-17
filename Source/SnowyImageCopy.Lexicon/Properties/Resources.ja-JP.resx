@@ -387,6 +387,9 @@
   <data name="Options_File" xml:space="preserve">
     <value>ファイル</value>
   </data>
+  <data name="Options_HandleVideo" xml:space="preserve">
+    <value>動画ファイルを扱う</value>
+  </data>
   <data name="Options_Info" xml:space="preserve">
     <value>情報</value>
   </data>

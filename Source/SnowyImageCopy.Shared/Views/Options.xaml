@@ -187,6 +187,13 @@
 					</GroupBox>
 
 					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
+							  Header="{Binding Resources.Options_HandleVideo, Source={x:Static lexicon:ResourceService.Current}}">
+						<controls:SlidingToggleButton
+							Style="{StaticResource SwitchButtonStyle}"
+							IsChecked="{Binding Settings.HandlesVideoFile, Mode=TwoWay}"/>
+					</GroupBox>
+
+					<GroupBox Style="{StaticResource ItemMemberTopStyle}"
 							  Header="{Binding Resources.Options_Recycle, Source={x:Static lexicon:ResourceService.Current}}">
 						<controls:SlidingToggleButton
 							x:Name="RecycleButton"
