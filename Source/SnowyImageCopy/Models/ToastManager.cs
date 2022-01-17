@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Uwp.Notifications;
 
+using SnowyImageCopy.Helper;
+
 namespace SnowyImageCopy.Models
 {
 	internal static class ToastManager
@@ -14,12 +16,18 @@ namespace SnowyImageCopy.Models
 
 		public static void RegisterToastActivated(Action action)
 		{
+			if (!OsVersion.Is10OrGreater)
+				return;
+
 			_action = action;
 			ToastNotificationManagerCompat.OnActivated += OnActivatedBase;
 		}
 
 		public static void UnregisterToastActivated()
 		{
+			if (!OsVersion.Is10OrGreater)
+				return;
+
 			_action = null;
 			ToastNotificationManagerCompat.OnActivated -= OnActivatedBase;
 		}
@@ -31,6 +39,9 @@ namespace SnowyImageCopy.Models
 
 		public static void Show(string title, string body, string attribution, CancellationToken cancellationToken)
 		{
+			if (!OsVersion.Is10OrGreater)
+				return;
+
 			new ToastContentBuilder()
 				.AddText(title)
 				.AddText(body)

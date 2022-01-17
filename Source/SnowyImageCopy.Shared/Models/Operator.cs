@@ -1278,7 +1278,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="cancellationToken">Cancellation token</param>
 		private void ShowToast(CancellationToken cancellationToken)
 		{
-			if (!OsVersion.IsEightOrNewer || (_copyFileCount <= 0) || (DateTime.Now - CopyStartTime < _copyToastShortestDuration))
+			if ((_copyFileCount <= 0) || (DateTime.Now - CopyStartTime < _copyToastShortestDuration))
 				return;
 
 			if (cancellationToken.IsCancellationRequested)

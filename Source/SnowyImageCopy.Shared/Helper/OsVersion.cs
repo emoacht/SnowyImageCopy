@@ -12,10 +12,17 @@ namespace SnowyImageCopy.Helper
 	public static class OsVersion
 	{
 		/// <summary>
-		/// Whether OS is Windows 8 or newer
+		/// Whether OS is Windows 8 or greater
 		/// </summary>
 		/// <remarks>Windows 8 = version 6.2</remarks>
-		public static bool IsEightOrNewer => _isEightOrNewer ??= (new Version(6, 2) <= Environment.OSVersion.Version);
-		private static bool? _isEightOrNewer;
+		public static bool Is8OrGreater => _is8OrGreater ??= (new Version(6, 2) <= Environment.OSVersion.Version);
+		private static bool? _is8OrGreater;
+
+		/// <summary>
+		/// Whether OS is Windows 10 or greater
+		/// </summary>
+		/// <remarks>Windows 10 = version 10.0.10240.0</remarks>
+		public static bool Is10OrGreater => _is10OrGreater ??= (new Version(10, 0, 10240, 0) <= Environment.OSVersion.Version);
+		private static bool? _is10OrGreater;
 	}
 }
