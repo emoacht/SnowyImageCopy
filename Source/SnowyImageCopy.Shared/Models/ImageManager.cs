@@ -39,15 +39,13 @@ namespace SnowyImageCopy.Models
 		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
 		internal static async Task<BitmapImage> ReadThumbnailAsync(string localPath)
 		{
-			if (!File.Exists(localPath))
-				throw new FileNotFoundException("File path is invalid or file is missing.", localPath);
+			ThrowIfFileNotFound(localPath);
 
 			try
 			{
-				using (var fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-				{
-					return await Task.Run(() => ReadThumbnailFromExifByImaging(fs));
-				}
+				using var fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+				return await Task.Run(() => ReadThumbnailFromExifByImaging(fs));
 			}
 			catch (Exception ex) when (IsImageNotSupported(ex))
 			{
@@ -73,13 +71,11 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var ms = new MemoryStream())
-				{
-					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+				using var ms = new MemoryStream();
+				await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
-					// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
-					return ReadThumbnailFromExifByImaging(ms);
-				}
+				// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
+				return ReadThumbnailFromExifByImaging(ms);
 			}
 			catch (Exception ex) when (IsImageNotSupported(ex))
 			{
@@ -101,19 +97,18 @@ namespace SnowyImageCopy.Models
 		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
 		internal static async Task<BitmapImage> CreateThumbnailAsync(string localPath)
 		{
-			if (!File.Exists(localPath))
-				throw new FileNotFoundException("File path is invalid or file is missing.", localPath);
+			ThrowIfFileNotFound(localPath);
 
 			try
 			{
-				using (var fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-				using (var ms = new MemoryStream())
-				{
-					await fs.CopyToAsync(ms).ConfigureAwait(false);
+				using var fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+				using var ms = new MemoryStream();
+				await fs.CopyToAsync(ms).ConfigureAwait(false);
 
-					// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
-					return CreateThumbnailFromImageUniform(ms);
-				}
+				// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
+				var image = ConvertStreamToBitmapImageUniform(ms, ThumbnailSize);
+
+				return CreateThumbnailFromImageUniform(image, ThumbnailSize, Brushes.Black);
 			}
 			catch (Exception ex) when (IsImageNotSupported(ex))
 			{
@@ -139,13 +134,13 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var ms = new MemoryStream())
-				{
-					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+				using var ms = new MemoryStream();
+				await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
-					// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
-					return CreateThumbnailFromImageUniform(ms);
-				}
+				// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
+				var image = ConvertStreamToBitmapImageUniform(ms, ThumbnailSize);
+
+				return CreateThumbnailFromImageUniform(image, ThumbnailSize, Brushes.Black);
 			}
 			catch (Exception ex) when (IsImageNotSupported(ex))
 			{
@@ -156,6 +151,44 @@ namespace SnowyImageCopy.Models
 				Debug.WriteLine($"Failed to create a thumbnail.\r\n{ex}");
 				throw;
 			}
+		}
+
+		/// <summary>
+		/// Creates a thumbnail from image applying Uniform transformation.
+		/// </summary>
+		/// <param name="image">BitmapImage</param>
+		/// <param name="thumbnailSize">Thumbnail size</param>
+		/// <param name="backgroundBrush">Brush for background of image</param>
+		/// <param name="qualityLevel">Quality level of JPEG format (0 means default)</param>
+		/// <returns>BitmapImage of thumbnail</returns>
+		internal static BitmapImage CreateThumbnailFromImageUniform(BitmapImage image, Size thumbnailSize, Brush backgroundBrush, int qualityLevel = 0)
+		{
+			var dv = new DrawingVisual();
+			using (var dc = dv.RenderOpen())
+			{
+				dc.DrawRectangle(backgroundBrush, null, new Rect(thumbnailSize));
+				dc.DrawImage(
+					image,
+					new Rect(
+						(thumbnailSize.Width - image.Width) / 2,
+						(thumbnailSize.Height - image.Height) / 2,
+						image.Width,
+						image.Height));
+			}
+
+			var rtb = new RenderTargetBitmap(
+				(int)thumbnailSize.Width, (int)thumbnailSize.Height,
+				96, 96,
+				PixelFormats.Pbgra32);
+
+			rtb.Render(dv);
+
+			using var ms = new MemoryStream();
+			var encoder = GetJpegBitmapEncoder(qualityLevel);
+			encoder.Frames.Add(BitmapFrame.Create(rtb));
+			encoder.Save(ms);
+
+			return ConvertStreamToBitmapImage(ms);
 		}
 
 		#endregion
@@ -174,95 +207,50 @@ namespace SnowyImageCopy.Models
 			if (0 < stream.Position)
 				stream.Seek(0, SeekOrigin.Begin);
 
+			using var ms = new MemoryStream();
 			using (var drawingImage = System.Drawing.Image.FromStream(stream, false, false))
 			{
 				if (!drawingImage.PropertyIdList.Any(propertyId => propertyId == thumbnailDataId))
 					return null;
 
 				var propItem = drawingImage.GetPropertyItem(thumbnailDataId);
-
-				using (var ms = new MemoryStream())
-				{
-					ms.Write(propItem.Value, 0, propItem.Value.Length);
-					return ConvertStreamToBitmapImage(ms);
-				}
+				ms.Write(propItem.Value, 0, propItem.Value.Length);
 			}
+
+			return ConvertStreamToBitmapImage(ms);
 		}
 
 		/// <summary>
 		/// Reads a thumbnail in metadata by System.Windows.Media.Imaging.
 		/// </summary>
 		/// <param name="stream">Stream</param>
+		/// <param name="qualityLevel">Quality level of JPEG format (0 means default)</param>
 		/// <returns>BitmapImage of thumbnail</returns>
-		private static BitmapImage ReadThumbnailFromExifByImaging(Stream stream)
+		private static BitmapImage ReadThumbnailFromExifByImaging(Stream stream, int qualityLevel = 0)
 		{
 			if (0 < stream.Position)
 				stream.Seek(0, SeekOrigin.Begin);
 
 			var bitmapFrame = BitmapFrame.Create(stream, BitmapCreateOptions.DelayCreation, BitmapCacheOption.OnDemand);
 			var bitmapSource = bitmapFrame.Thumbnail;
-
 			if (bitmapSource is null)
 				return null;
 
-			using (var ms = new MemoryStream())
-			{
-				var encoder = new JpegBitmapEncoder(); // Codec is to be considered.
-				encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-				encoder.Save(ms);
+			using var ms = new MemoryStream();
+			var encoder = GetJpegBitmapEncoder(qualityLevel);
+			encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+			encoder.Save(ms);
 
-				return ConvertStreamToBitmapImage(ms);
-			}
-		}
-
-		/// <summary>
-		/// Creates a thumbnail from image applying Uniform transformation.
-		/// </summary>
-		/// <param name="stream">Stream</param>
-		/// <returns>BitmapImage of thumbnail</returns>
-		private static BitmapImage CreateThumbnailFromImageUniform(Stream stream)
-		{
-			if (0 < stream.Position)
-				stream.Seek(0, SeekOrigin.Begin);
-
-			var image = ConvertStreamToBitmapImageUniform(stream, ThumbnailSize);
-
-			var dv = new DrawingVisual();
-			using (var dc = dv.RenderOpen())
-			{
-				dc.DrawRectangle(Brushes.Black, null, new Rect(ThumbnailSize));
-				dc.DrawImage(
-					image,
-					new Rect(
-						(ThumbnailSize.Width - image.Width) / 2,
-						(ThumbnailSize.Height - image.Height) / 2,
-						image.Width,
-						image.Height));
-			}
-
-			var rtb = new RenderTargetBitmap(
-				(int)ThumbnailSize.Width, (int)ThumbnailSize.Height,
-				96, 96,
-				PixelFormats.Pbgra32);
-
-			rtb.Render(dv);
-
-			using (var ms = new MemoryStream())
-			{
-				var encoder = new JpegBitmapEncoder(); // Codec is to be considered.
-				encoder.Frames.Add(BitmapFrame.Create(rtb));
-				encoder.Save(ms);
-
-				return ConvertStreamToBitmapImage(ms);
-			}
+			return ConvertStreamToBitmapImage(ms);
 		}
 
 		/// <summary>
 		/// Creates a thumbnail from image applying UniformToFill transformation.
 		/// </summary>
 		/// <param name="stream">Stream</param>
+		/// <param name="qualityLevel">Quality level of JPEG format (0 means default)</param>
 		/// <returns>BitmapImage of thumbnail</returns>
-		private static BitmapImage CreateThumbnailFromImageUniformToFill(Stream stream)
+		private static BitmapImage CreateThumbnailFromImageUniformToFill(Stream stream, int qualityLevel = 0)
 		{
 			if (0 < stream.Position)
 				stream.Seek(0, SeekOrigin.Begin);
@@ -270,14 +258,12 @@ namespace SnowyImageCopy.Models
 			var bitmapSource = (BitmapSource)BitmapFrame.Create(stream);
 			CropBitmapSource(ref bitmapSource, ThumbnailSize);
 
-			using (var ms = new MemoryStream())
-			{
-				var encoder = new JpegBitmapEncoder(); // Codec is to be considered.
-				encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-				encoder.Save(ms);
+			using var ms = new MemoryStream();
+			var encoder = GetJpegBitmapEncoder(qualityLevel);
+			encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+			encoder.Save(ms);
 
-				return ConvertStreamToBitmapImage(ms, ThumbnailSize);
-			}
+			return ConvertStreamToBitmapImage(ms, ThumbnailSize);
 		}
 
 		#endregion
@@ -355,14 +341,12 @@ namespace SnowyImageCopy.Models
 
 				rtb.Render(target);
 
-				using (var ms = new MemoryStream())
-				{
-					var encoder = new PngBitmapEncoder(); // PNG format is for transparent color.
-					encoder.Frames.Add(BitmapFrame.Create(rtb));
-					encoder.Save(ms);
+				using var ms = new MemoryStream();
+				var encoder = new PngBitmapEncoder(); // PNG format is for transparent color.
+				encoder.Frames.Add(BitmapFrame.Create(rtb));
+				encoder.Save(ms);
 
-					return ConvertStreamToBitmapImage(ms);
-				}
+				return ConvertStreamToBitmapImage(ms);
 			}
 			catch (Exception ex)
 			{
@@ -421,18 +405,16 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var ms = new MemoryStream())
-				{
-					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+				using var ms = new MemoryStream();
+				await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
-					return await Task.Run(() =>
-					{
-						if (willReadExif || (destinationProfile is not null))
-							return ConvertStreamToBitmapSource(ms, targetSize, willReadExif, destinationProfile);
-						else
-							return ConvertStreamToBitmapImage(ms, targetSize);
-					});
-				}
+				return await Task.Run(() =>
+				{
+					if (willReadExif || (destinationProfile is not null))
+						return ConvertStreamToBitmapSource(ms, targetSize, willReadExif, destinationProfile);
+					else
+						return ConvertStreamToBitmapImage(ms, targetSize);
+				});
 			}
 			catch (Exception ex) when (IsImageNotSupported(ex))
 			{
@@ -461,18 +443,16 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var ms = new MemoryStream())
-				{
-					await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+				using var ms = new MemoryStream();
+				await ms.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
 
-					return await Task.Run(() =>
-					{
-						if (willReadExif || (destinationProfile is not null))
-							return ConvertStreamToBitmapSource(ms, outerSize, willReadExif, destinationProfile);
-						else
-							return ConvertStreamToBitmapImageUniform(ms, outerSize);
-					});
-				}
+				return await Task.Run(() =>
+				{
+					if (willReadExif || (destinationProfile is not null))
+						return ConvertStreamToBitmapSource(ms, outerSize, willReadExif, destinationProfile);
+					else
+						return ConvertStreamToBitmapImageUniform(ms, outerSize);
+				});
 			}
 			catch (Exception ex) when (IsImageNotSupported(ex))
 			{
@@ -642,21 +622,20 @@ namespace SnowyImageCopy.Models
 		{
 			ThrowIfCollectionNullOrEmpty(bytes, nameof(bytes));
 
-			using (var ms = new MemoryStream(bytes)) // This MemoryStream will not be changed.
+			using var ms = new MemoryStream(bytes); // This MemoryStream will not be changed.
+
+			try
 			{
-				try
-				{
-					return await Task.Run(() => GetExifDateTaken(BitmapFrame.Create(ms), kind));
-				}
-				catch (Exception ex) when (IsImageNotSupported(ex))
-				{
-					return default;
-				}
-				catch (Exception ex)
-				{
-					Debug.WriteLine($"Failed to get DateTaken from metadata.\r\n{ex}");
-					throw;
-				}
+				return await Task.Run(() => GetExifDateTaken(BitmapFrame.Create(ms), kind));
+			}
+			catch (Exception ex) when (IsImageNotSupported(ex))
+			{
+				return default;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Failed to get DateTaken from metadata.\r\n{ex}");
+				throw;
 			}
 		}
 
@@ -670,21 +649,20 @@ namespace SnowyImageCopy.Models
 		{
 			ThrowIfCollectionNullOrEmpty(bytes, nameof(bytes));
 
-			using (var ms = new MemoryStream(bytes)) // This MemoryStream will not be changed.
+			using var ms = new MemoryStream(bytes); // This MemoryStream will not be changed.
+
+			try
 			{
-				try
-				{
-					return await Task.Run(() => GetExifOrientation(BitmapFrame.Create(ms)));
-				}
-				catch (Exception ex) when (IsImageNotSupported(ex))
-				{
-					return 0;
-				}
-				catch (Exception ex)
-				{
-					Debug.WriteLine($"Failed to get Orientation from metadata.\r\n{ex}");
-					throw;
-				}
+				return await Task.Run(() => GetExifOrientation(BitmapFrame.Create(ms)));
+			}
+			catch (Exception ex) when (IsImageNotSupported(ex))
+			{
+				return 0;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Failed to get Orientation from metadata.\r\n{ex}");
+				throw;
 			}
 		}
 
@@ -744,7 +722,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="stream">Stream</param>
 		/// <param name="targetSize">Target size</param>
 		/// <returns>BitmapImage</returns>
-		private static BitmapImage ConvertStreamToBitmapImage(Stream stream, Size targetSize)
+		internal static BitmapImage ConvertStreamToBitmapImage(Stream stream, Size targetSize)
 		{
 			if (0 < stream.Position)
 				stream.Seek(0, SeekOrigin.Begin);
@@ -785,6 +763,26 @@ namespace SnowyImageCopy.Models
 			}
 
 			return ConvertStreamToBitmapImage(stream, targetSize);
+		}
+
+		/// <summary>
+		/// Converts stream to byte array.
+		/// </summary>
+		/// <param name="stream">Stream</param>
+		/// <param name="qualityLevel">Quality level of JPEG format (0 means default)</param>
+		/// <returns>Byte array</returns>
+		internal static byte[] ConvertStreamToBytes(Stream stream, int qualityLevel = 0)
+		{
+			if (0 < stream.Position)
+				stream.Seek(0, SeekOrigin.Begin);
+
+			var encoder = GetJpegBitmapEncoder(qualityLevel);
+			encoder.Frames.Add(BitmapFrame.Create(stream));
+
+			using var ms = new MemoryStream();
+			encoder.Save(ms);
+
+			return ms.ToArray();
 		}
 
 		/// <summary>
@@ -875,6 +873,12 @@ namespace SnowyImageCopy.Models
 
 		#region Helper
 
+		private static void ThrowIfFileNotFound(string localPath)
+		{
+			if (!File.Exists(localPath))
+				throw new FileNotFoundException("File path is invalid or file is missing.", localPath);
+		}
+
 		private static void ThrowIfCollectionNullOrEmpty<T>(ICollection<T> collection, string name)
 		{
 			if (collection is not { Count: > 0 })
@@ -906,6 +910,16 @@ namespace SnowyImageCopy.Models
 				return true;
 
 			return false;
+		}
+
+		private static JpegBitmapEncoder GetJpegBitmapEncoder(int qualityLevel)
+		{
+			var encoder = new JpegBitmapEncoder();
+
+			if (qualityLevel > 0)
+				encoder.QualityLevel = qualityLevel;
+
+			return encoder;
 		}
 
 		#endregion

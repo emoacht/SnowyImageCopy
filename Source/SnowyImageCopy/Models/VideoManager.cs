@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Windows.Media.Editing;
 using Windows.Storage;
@@ -53,7 +54,39 @@ namespace SnowyImageCopy.Models
 				(actualWidth, actualHeight) = ((int)(actualWidth * ratio), (int)(actualHeight * ratio));
 			}
 
-			return ConvertStreamToBitmapImage(stream, actualWidth, actualHeight);
+			return ImageManager.ConvertStreamToBitmapImage(stream, new Size(actualWidth, actualHeight));
+		}
+
+		/// <summary>
+		/// Creates the thumbnail iamge at a specified time from start of playback.
+		/// </summary>
+		/// <param name="filePath">File path of video file</param>
+		/// <param name="timeFromStart">Time from start of playback</param>
+		/// <returns>BitmapImage</returns>
+		public static async ValueTask<BitmapImage> CreateThumbnailImageAsync(string filePath, TimeSpan timeFromStart)
+		{
+			if (!OsVersion.Is10OrGreater)
+				return null;
+
+			if (string.IsNullOrEmpty(filePath))
+				throw new ArgumentNullException(nameof(filePath));
+
+			if (timeFromStart < TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException(nameof(timeFromStart));
+
+			var (stream, actualWidth, actualHeight) = await GetSnapshotStreamAsync(filePath, timeFromStart).ConfigureAwait(false);
+
+			var thumbnailSize = ImageManager.ThumbnailSize;
+
+			var ratio = Math.Min(thumbnailSize.Width / actualWidth, thumbnailSize.Height / actualHeight);
+			if (ratio > 0)
+			{
+				(actualWidth, actualHeight) = ((int)(actualWidth * ratio), (int)(actualHeight * ratio));
+			}
+
+			var image = ImageManager.ConvertStreamToBitmapImage(stream, new Size(actualWidth, actualHeight));
+
+			return ImageManager.CreateThumbnailFromImageUniform(image, thumbnailSize, StripeBrush.Value);
 		}
 
 		/// <summary>
@@ -76,7 +109,7 @@ namespace SnowyImageCopy.Models
 
 			var (stream, _, _) = await GetSnapshotStreamAsync(filePath, timeFromStart).ConfigureAwait(false);
 
-			return ConvertStreamToBytes(stream, qualityLevel);
+			return ImageManager.ConvertStreamToBytes(stream, qualityLevel);
 		}
 
 		private static async Task<(Stream stream, int width, int height)> GetThumbnailStreamAsync(string filePath)
@@ -125,38 +158,61 @@ namespace SnowyImageCopy.Models
 			return ((int)frameWidth, (int)frameHeight);
 		}
 
-		private static BitmapImage ConvertStreamToBitmapImage(Stream stream, int width, int height)
+		#region Brush
+
+		private static Lazy<Brush> StripeBrush => new(() => CreateStripeBrush(Brushes.Gray, Brushes.Black));
+
+		/// <summary>
+		/// Creates stripe Brush for rectangle { Width: 160, Height: 120 }.
+		/// </summary>
+		/// <param name="backgroundStripe">Brush for background stripe</param>
+		/// <param name="foregroundStripe">Brush for foreground stripe</param>
+		/// <returns>DrawingBrush</returns>
+		/// <remarks>
+		/// This stripe fits only to rectangle whose width is 160 and height is 120 in DPI.
+		/// </remarks>
+		private static Brush CreateStripeBrush(Brush backgroundStripe, Brush foregroundStripe)
 		{
-			if (0 < stream.Position)
-				stream.Seek(0, SeekOrigin.Begin);
+			var backgroundDrawing = new GeometryDrawing(backgroundStripe, default,
+				new RectangleGeometry(new Rect(0, 0, 10, 12)));
 
-			var image = new BitmapImage();
-			image.BeginInit();
-			image.CacheOption = BitmapCacheOption.OnLoad;
-			image.StreamSource = stream;
-			image.DecodePixelWidth = width;
-			image.DecodePixelHeight = height;
-			image.EndInit();
-			image.Freeze();
+			var foregroundDrawing = new GeometryDrawing(foregroundStripe, default,
+				new PathGeometry(new[]
+				{
+					new PathFigure(
+						new Point(0, 0),
+						new[]
+						{
+							new LineSegment(new Point(0, 6), true),
+							new LineSegment(new Point(5, 12), true),
+							new LineSegment(new Point(10, 12), true),
+						},
+						true),
+					new PathFigure(
+						new Point(5, 0),
+						new[]
+						{
+							new LineSegment(new Point(10, 6), true),
+							new LineSegment(new Point(10, 0), true),
+						},
+						true),
+				}));
 
-			return image;
+			var drawingGroup = new DrawingGroup();
+			drawingGroup.Children.Add(backgroundDrawing);
+			drawingGroup.Children.Add(foregroundDrawing);
+
+			var drawingBrush = new DrawingBrush(drawingGroup)
+			{
+				Stretch = Stretch.UniformToFill,
+				TileMode = TileMode.Tile,
+				Viewport = new Rect(0, 0, 40, 48),
+				ViewportUnits = BrushMappingMode.Absolute,
+			};
+			drawingBrush.Freeze(); // To be considered.
+			return drawingBrush;
 		}
 
-		private static byte[] ConvertStreamToBytes(Stream stream, int qualityLevel = 0)
-		{
-			if (0 < stream.Position)
-				stream.Seek(0, SeekOrigin.Begin);
-
-			var encoder = new JpegBitmapEncoder();
-
-			if (qualityLevel > 0)
-				encoder.QualityLevel = qualityLevel;
-
-			encoder.Frames.Add(BitmapFrame.Create(stream));
-
-			using var ms = new MemoryStream();
-			encoder.Save(ms);
-			return ms.ToArray();
-		}
+		#endregion
 	}
 }
