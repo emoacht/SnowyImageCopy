@@ -437,9 +437,6 @@
 							</i:Interaction.Triggers>
 						</Run>
 					</TextBlock>
-					<TextBlock Margin="0,2">
-						<Run Text="{Binding Path=(ma:MonitorAwareProperty.Instance).WindowHandler.MonitorDpi.PixelsPerInchX, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
-					</TextBlock>
 				</StackPanel>
 			</GroupBox>
 		</StackPanel>
