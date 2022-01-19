@@ -1,16 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29613.14
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowyImageCopy", "SnowyImageCopy\SnowyImageCopy.csproj", "{55DF0585-A26E-489E-BD94-4E6A50A83E23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnowyImageCopy", "SnowyImageCopy\SnowyImageCopy.csproj", "{55DF0585-A26E-489E-BD94-4E6A50A83E23}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnowyImageCopy.Lexicon", "SnowyImageCopy.Lexicon\SnowyImageCopy.Lexicon.csproj", "{5E960D65-2402-4A13-A30E-AC5FC3E95A17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowyImageCopy.Net48", "SnowyImageCopy.Net48\SnowyImageCopy.Net48.csproj", "{D845A3D0-EA93-4281-87D9-622B0328F5AE}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SnowyImageCopy.Shared", "SnowyImageCopy.Shared\SnowyImageCopy.Shared.shproj", "{60953793-F14F-4B1B-8B3F-BAD44F11D9E9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowyImageCopy.Test", "SnowyImageCopy.Test\SnowyImageCopy.Test.csproj", "{FBFE3C9C-8D09-4ABF-82C6-C9B6D0B27AEB}"
 	ProjectSection(ProjectDependencies) = postProject
-		{55DF0585-A26E-489E-BD94-4E6A50A83E23} = {55DF0585-A26E-489E-BD94-4E6A50A83E23}
+		{D845A3D0-EA93-4281-87D9-622B0328F5AE} = {D845A3D0-EA93-4281-87D9-622B0328F5AE}
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SnowyImageCopy.Shared\SnowyImageCopy.Shared.projitems*{55df0585-a26e-489e-bd94-4e6a50a83e23}*SharedItemsImports = 5
+		SnowyImageCopy.Shared\SnowyImageCopy.Shared.projitems*{d845a3d0-ea93-4281-87d9-622b0328f5ae}*SharedItemsImports = 4
+		SnowyImageCopy.Shared\SnowyImageCopy.Shared.projitems*{60953793-f14f-4b1b-8b3f-bad44f11d9e9}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -20,6 +31,14 @@ Global
 		{55DF0585-A26E-489E-BD94-4E6A50A83E23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55DF0585-A26E-489E-BD94-4E6A50A83E23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55DF0585-A26E-489E-BD94-4E6A50A83E23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E960D65-2402-4A13-A30E-AC5FC3E95A17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E960D65-2402-4A13-A30E-AC5FC3E95A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E960D65-2402-4A13-A30E-AC5FC3E95A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E960D65-2402-4A13-A30E-AC5FC3E95A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D845A3D0-EA93-4281-87D9-622B0328F5AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D845A3D0-EA93-4281-87D9-622B0328F5AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D845A3D0-EA93-4281-87D9-622B0328F5AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D845A3D0-EA93-4281-87D9-622B0328F5AE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FBFE3C9C-8D09-4ABF-82C6-C9B6D0B27AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FBFE3C9C-8D09-4ABF-82C6-C9B6D0B27AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBFE3C9C-8D09-4ABF-82C6-C9B6D0B27AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU

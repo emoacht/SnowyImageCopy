@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>60953793-f14f-4b1b-8b3f-bad44f11d9e9</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>SnowyImageCopy.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Common\DelegateCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\NotificationObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\NotificationSubscriptionObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\PropertyChangedEventListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\BitmapExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\BitmapImageExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\CancellationTokenContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\CancellationTokenSourcePlus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\EnumerableExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\FatDateTime.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\FileAddition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\FileTime.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\OpenFolderDialog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\OsVersion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\PathAddition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\Recycle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\VersionAddition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\VisualTreeHelperAddition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Card\CardState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Card\CidInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Card\DiskInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Card\DiskSearcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Card\ICardState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Card\LanModeOption.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Card\LanStartupModeOption.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\CardChangedException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\CardUploadDisabledException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\ImageNotSupportedException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\RemoteConnectionLostException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\RemoteConnectionUnableException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\RemoteFileException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\UnexpectedException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\FolderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\FileExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\FileItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\FileManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\FileManagerCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\FilePeriod.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\FileStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\HashItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\IFileItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Logger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Network\NativeWifi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Network\NetworkChecker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Operator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ProgressInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Signatures.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SoundManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\WindowPlacement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Workspace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\CardConfigViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\CardStateViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\CardViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DocumentViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\FileItemViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\FilePeriodViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ItemObservableCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\OptionsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\CalendarSelectedDatesBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\ExplorerAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\FileDialogAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\FolderDialogAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\FrameworkElementIntersectionBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\GridSizeBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\ListBoxVirtualizationBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\SelectorSelectedItemBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\WebBrowserBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\WindowActivationBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\WindowSizeBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Card.xaml.cs">
+      <DependentUpon>Card.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\BusyButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\CheckTextBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\CircularProgressBar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\HideableGridSplitter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\NumericTextBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\NumericUpDown.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\SlidingToggleButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\ThumbnailBox.xaml.cs">
+      <DependentUpon>ThumbnailBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\VideoBox.xaml.cs">
+      <DependentUpon>VideoBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\BooleanInverseConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\BooleanInverseToBrushConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\BooleanInverseToThicknessConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\BooleanInverseToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\BooleanToBrushConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\BytesUnitConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\DoubleAndVisibilityToDoubleConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\EnumToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\FileStatusToBrushConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\FileStatusToStringConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\ObjectArrayConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\PathFileNameConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\PercentUnitConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\TimeSpanToStringConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\MainWindow.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Options.xaml.cs">
+      <DependentUpon>Options.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ProductInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Card.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Controls\ThumbnailBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Controls\VideoBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Options.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Styles\CommonControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Styles\CustomControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Styles\CustomTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Styles\DefaultTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>
