@@ -33,6 +33,56 @@
             </summary>
             <remarks>Windows 10 Creators Update (1703) = version 10.0.15063</remarks>
         </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONULL">
+            <summary>
+            If no display monitor intersects, returns null.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTOPRIMARY">
+            <summary>
+            If no display monitor intersects, returns a handle to the primary display monitor.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONEAREST">
+            <summary>
+            If no display monitor intersects, returns a handle to the display monitor that is nearest to the rectangle.
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_DPI_Unaware">
+            <summary>
+            Not DPI aware
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_System_DPI_Aware">
+            <summary>
+            System DPI aware
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware">
+            <summary>
+            Per-Monitor DPI aware
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Effective_DPI">
+            <summary>
+            Effective DPI that incorporates accessibility overrides and matches what Desktop Window Manage (DWM) uses to scale desktop applications
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Angular_DPI">
+            <summary>
+            DPI that ensures rendering at a compliant angular resolution on the screen, without incorporating accessibility overrides
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Raw_DPI">
+            <summary>
+            Linear DPI of the screen as measured on the screen itself
+            </summary>
+        </member>
+        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Default">
+            <summary>
+            Default DPI
+            </summary>
+        </member>
         <member name="T:MonitorAware.Models.ColorProfileChangedEventArgs">
             <summary>
             Color profile changed event args
@@ -205,56 +255,6 @@
             <param name="reference">Ancestor visual</param>
             <param name="descendant">Descendant visual</param>
             <returns>True if successfully gets. False otherwise.</returns>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONULL">
-            <summary>
-            If no display monitor intersects, returns null.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTOPRIMARY">
-            <summary>
-            If no display monitor intersects, returns a handle to the primary display monitor.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONEAREST">
-            <summary>
-            If no display monitor intersects, returns a handle to the display monitor that is nearest to the rectangle.
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_DPI_Unaware">
-            <summary>
-            Not DPI aware
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_System_DPI_Aware">
-            <summary>
-            System DPI aware
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware">
-            <summary>
-            Per-Monitor DPI aware
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Effective_DPI">
-            <summary>
-            Effective DPI that incorporates accessibility overrides and matches what Desktop Window Manage (DWM) uses to scale desktop applications
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Angular_DPI">
-            <summary>
-            DPI that ensures rendering at a compliant angular resolution on the screen, without incorporating accessibility overrides
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Raw_DPI">
-            <summary>
-            Linear DPI of the screen as measured on the screen itself
-            </summary>
-        </member>
-        <member name="F:MonitorAware.Models.Win32.NativeMethod.MONITOR_DPI_TYPE.MDT_Default">
-            <summary>
-            Default DPI
-            </summary>
         </member>
         <member name="T:MonitorAware.Models.WindowHandler">
             <summary>

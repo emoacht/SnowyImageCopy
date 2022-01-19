@@ -61,8 +61,8 @@ a:active {color: black; background: rgb(194,224,255);}
 <h2>Requirements</h2>
 
 <ul>
-  <li>Windows 10 or newer</li>
-  <li>.NET 6.0</li>
+  <li>Windows 7 or newer</li>
+  <li>.NET Framework 4.8</li>
 </ul>
 <p>Tested on Windows 10 with SD-WB008G, SD-WC016G (W-02), SD-WE016G (W-03) and SD-UWA032G (W-04).</p>
 
@@ -81,9 +81,21 @@ a:active {color: black; background: rgb(194,224,255);}
   <li>A color profile of a monitor will be reflected to current image only.</li>
   <li>"Timeout duration" is the waiting time length for each request out of a number of requests sent from this app to FlashAir during check or copy. If timeout occurs frequently, try making it longer.</li>
   <li>When "Customize folder name for each date" is on, the string for date format will be shown in the textbox. You can specify <u>year-month-day (yyyyMMdd)</u>, <u>day-month-year (ddMMyyyy)</u>, <u>month-day-year (MMddyyyy)</u> formats and can insert "-" or "_" between them (e.g. yyyy-MM-dd).</li>
-  <li>When "Handle video files" is on, you will be able to handle video files (mp4, mov, avi). The thumbnails will be shown after copied to PC.</li>
   <li>If you usually delete files in FlashAir after copied to PC, it is recommended not to use "Move to Recycle Bin if file in FlashAir is deleted" function.</li>
- </ol>
+  <li>When "Specify file extensions of target file" is on, the file extensions (e.g. jpg, jpeg) of files to be targetted by this app will be shown in the textbox. You can specifly multiple file extensions delimiting by space, comma (,) or semicolon (;).</li>
+  <li>When "Do not select once copied file on check" is on, the maximum number of files to be recorded as copied will be shown in the textbox. You can change this number by clicking the texbox ranging from 10,000 to 100,000.</li>
+</ol>
+
+<a id="delete"></a><h2>Delete file in FlashAir</h2>
+
+<ul>
+  <li>This function tries to delete a file in FlashAir after it is copied to PC.</li>
+  <li>It is essential to test this function with your camera before actual use. Since this function uses upload.cgi of FlashAir and it may cause inconsistency of data between FlashAir and camera, <span style="color:red">file system of FlashAir and stored files might be destroyed.</span> What will happen depends on each camera model.</li>
+  <li>If upload.cgi of FlashAir is disabled, this function will fail. To check or change this setting, insert FlashAir to PC and use Card function. Or open CONFIG file in FlashAir and directly check UPLOAD parameter (1 means enabled).</li>
+  <li>In most cases, you need to reboot a camera to make it recognize the deletion by this function.</li>
+  <li>A file with Read-only attribute will not be deleted.</li>
+  <li>To use this function, turn on "Choose to delete file in FlashAir on copy" button and type "DELETE" (all uppercase) into the text box which appears next to "Delete file in FlashAir on copy". Then this function will be turned on.</li>
+</ul>
 
 <h2>Card</h2>
 
@@ -99,43 +111,6 @@ a:active {color: black; background: rgb(194,224,255);}
   <li>The information on FlashAir which is inserted to PC will be shown. In addition, you can change commonly used settings of CONFIG file such as wireless modes.</li>
   <li>To reflect changed settings, you need to reboot FlashAir. Once rebooted, the network security key will be saved in the protected area and the value in CONFIG file will be replaced with symbols and so you will no longer able to see it. If you lose the key, you will need to set again.</li>
   <li><u>Internet pass-thru mode</u> is a function which enables the connection from PC to the Internet via FlashAir by connecting PC to the access point built into FlashAir and simultaneously connecting FlashAir to another access point provided that such another access point is connected to the Internet. Therefore, settings for both access points are required.</li>
-</ul>
-
-<h2>Functions available on Microsoft Store version</h2>
-
-<h3>Switch</h3>
-
-<ul>
-  <li>You can access multiple FlashAir cards simultaneously. The settings for each card can be switched freely.</li>
-</ul>
-
-<h3>Specify file extensions of target file</h3>
-
-<ul>
-  <li>You can specify the file extensions (e.g. jpg, jpeg) of files to be targetted by this app. When this is on, the file extensions wil be shown in the textbox. You can specifly multiple file extensions delimiting by space, comma (,) or semicolon (;).</li>
-</ul>
-
-<h3>Select only Read-only file on check</h3>
-
-<ul>
-  <li>Only Read-only files will be automatically selected after checking images in FlashAir.</li>
-</ul>
-
-<h3>Do not select once copied file on check</h3>
-
-<ul>
-  <li>Once copied files will not be automatically selected after checking images in FlashAir. When this is on, the maximum number of files to be recorded as copied will be shown in the textbox. You can change this number by clicking the texbox ranging from 10,000 to 100,000.</li>
-</ul>
-
-<a id="delete"></a><h3>Delete file in FlashAir</h3>
-
-<ul>
-  <li>This function tries to delete a file in FlashAir after it is copied to PC.</li>
-  <li>It is essential to test this function with your camera before actual use. Since this function uses upload.cgi of FlashAir and it may cause inconsistency of data between FlashAir and camera, <span style="color:red">file system of FlashAir and stored files might be destroyed.</span> What will happen depends on each camera model.</li>
-  <li>If upload.cgi of FlashAir is disabled, this function will fail. To check or change this setting, insert FlashAir to PC and use Card function. Or open CONFIG file in FlashAir and directly check UPLOAD parameter (1 means enabled).</li>
-  <li>In most cases, you need to reboot a camera to make it recognize the deletion by this function.</li>
-  <li>A file with Read-only attribute will not be deleted.</li>
-  <li>To use this function, turn on "Choose to delete file in FlashAir on copy" button and type "DELETE" (all uppercase) into the text box which appears next to "Delete file in FlashAir on copy". Then this function will be turned on.</li>
 </ul>
 
 <h2>Command Line</h2>
@@ -172,8 +147,8 @@ a:active {color: black; background: rgb(194,224,255);}
 <ul>
   <li><a href="https://github.com/dotnet/reactive">Reactive Extensions</a></li>
   <li><a href="https://github.com/microsoft/XamlBehaviorsWpf">XAML Behaviors for WPF</a></li>
-  <li><a href="https://github.com/CommunityToolkit/WindowsCommunityToolkit">Windows Community Toolkit</a></li>
   <li><a href="https://github.com/emoacht/WpfMonitorAware">WPF Monitor Aware Window</a></li>
+  <li><a href="https://github.com/emoacht/DesktopToast">Desktop Toast</a></li>
 </ul>
 
 <h2>Developer</h2>

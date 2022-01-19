@@ -88,18 +88,6 @@
             <returns>If successfully gets, window chrome Color. If not, null.</returns>
             <remarks>This method is intended to get window chrome Color of Windows 8 or newer.</remarks>
         </member>
-        <member name="T:SlateElement.Models.DpiHelper">
-            <summary>
-            Utility methods for <see cref="T:System.Windows.DpiScale"/>
-            </summary>
-        </member>
-        <member name="M:SlateElement.Models.DpiHelper.GetSystemDpi(System.Windows.Media.Visual)">
-            <summary>
-            Gets system DPI.
-            </summary>
-            <param name="visual">Source Visual</param>
-            <returns>DPI scale information</returns>
-        </member>
         <member name="F:SlateElement.Models.Win32.NativeMethod.MONITOR_DEFAULTTO.MONITOR_DEFAULTTONULL">
             <summary>
             If no display monitor intersects, returns null.
@@ -114,6 +102,18 @@
             <summary>
             If no display monitor intersects, returns a handle to the display monitor that is nearest to the rectangle.
             </summary>
+        </member>
+        <member name="T:SlateElement.Models.DpiHelper">
+            <summary>
+            Utility methods for <see cref="T:System.Windows.DpiScale"/>
+            </summary>
+        </member>
+        <member name="M:SlateElement.Models.DpiHelper.GetSystemDpi(System.Windows.Media.Visual)">
+            <summary>
+            Gets system DPI.
+            </summary>
+            <param name="visual">Source Visual</param>
+            <returns>DPI scale information</returns>
         </member>
         <member name="T:SlateElement.Models.WindowHelper">
             <summary>

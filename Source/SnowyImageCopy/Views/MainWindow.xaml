@@ -1,0 +1,518 @@
+﻿<se:SlateWindow x:Class="SnowyImageCopy.Views.MainWindow"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+				xmlns:ma="clr-namespace:MonitorAware;assembly=MonitorAware"
+				xmlns:se="clr-namespace:SlateElement;assembly=SlateElement"
+				xmlns:models="clr-namespace:SnowyImageCopy.Models"
+				xmlns:views="clr-namespace:SnowyImageCopy.Views"
+				xmlns:behaviors="clr-namespace:SnowyImageCopy.Views.Behaviors"
+				xmlns:controls="clr-namespace:SnowyImageCopy.Views.Controls"
+				x:Name="WindowRoot"
+				Icon="/SnowyImageCopy;component/Resources/Feather.ico"
+				Title="{Binding Source={x:Static views:ProductInfo.Title}, Mode=OneWay}"
+				FontFamily="Segoe UI"
+				Width="720" Height="480" MinWidth="626" MinHeight="280"
+				ChromeBackground="{StaticResource Window.Background}">
+	<Window.TaskbarItemInfo>
+		<TaskbarItemInfo ProgressState="{Binding Op.ProgressState}"
+						 ProgressValue="{Binding Op.ProgressCopiedCurrent, Converter={StaticResource PercentUnitConverterKey}}"/>
+	</Window.TaskbarItemInfo>
+
+	<i:Interaction.Behaviors>
+		<behaviors:WindowActivationBehavior SenderObject="{Binding Op}" EventName="ActivateRequested"/>
+		<behaviors:WindowSizeBehavior ScaleFactor="{Binding WindowHandler.ScaleFactor, ElementName=MonitorProperty, Mode=OneWay}"/>
+	</i:Interaction.Behaviors>
+
+	<ma:MonitorAwareProperty.Instance>
+		<ma:MonitorAwareProperty x:Name="MonitorProperty"/>
+	</ma:MonitorAwareProperty.Instance>
+
+	<se:SlateWindow.TitleBarContent>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+
+			<!-- Title -->
+			<TextBlock Grid.Column="0"
+					   Margin="8,0,0,0"
+					   VerticalAlignment="Center"
+					   Foreground="{Binding ChromeForeground, ElementName=WindowRoot, Mode=OneWay}"
+					   Text="{Binding Title, ElementName=WindowRoot, Mode=OneWay}"/>
+
+			<!-- Status -->
+			<TextBox Grid.Column="1"
+					 MaxWidth="300" Height="24" Margin="4,4,4,0"
+					 Padding="2,0" VerticalContentAlignment="Center"
+					 FontSize="13" IsReadOnly="True" IsUndoEnabled="False"
+					 Text="{Binding OperationStatus, Mode=OneWay}"/>
+		</Grid>
+	</se:SlateWindow.TitleBarContent>
+
+	<Grid x:Name="GroundRoot"
+		  Margin="0,6,0,0"
+		  Background="{StaticResource Window.Background}">
+		<!-- Options switch (Closed) -->
+		<ToggleButton
+			Panel.ZIndex="1"
+			x:Name="OptionsButtonClosed"
+			Height="24" Margin="-2,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+			Style="{StaticResource DrawButtonStyle}"
+			BorderThickness="2,0,0,0"
+			Padding="8,0"
+			Content="{Binding Resources.Options, Source={x:Static models:ResourceService.Current}}"
+			Visibility="{Binding IsChecked, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanInverseToVisibilityConverterKey}}"/>
+
+		<Grid x:Name="LayoutRoot">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+
+			<!-- Dashboard area -->
+			<Grid Grid.ColumnSpan="2"
+				  Margin="0,0,0,8">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="14"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+
+				<Grid x:Name="CommandAndProgress">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="14"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
+
+					<!-- Command -->
+					<Grid x:Name="CommandButtons"
+						  x:FieldModifier="public"
+						  Width="264" Height="82" VerticalAlignment="Top"
+						  TextElement.FontSize="15">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="102"/>
+							<ColumnDefinition Width="40"/>
+							<ColumnDefinition Width="62"/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+
+						<controls:BusyButton
+							Grid.ColumnSpan="2"
+							Width="140" Height="40" Margin="0,0,2,2"
+							Content="{Binding Resources.Command_CheckCopy, Source={x:Static models:ResourceService.Current}}"
+							Command="{Binding CheckAndCopyCommand}"
+							IsBusy="{Binding IsCheckAndCopyOngoing, Mode=OneWay}">
+						</controls:BusyButton>
+						<controls:BusyButton
+							Grid.Column="2" Grid.Row="0"
+							Width="60" Height="40" Margin="0,0,2,2"
+							Content="{Binding Resources.Command_CheckCopyAuto, Source={x:Static models:ResourceService.Current}}"
+							Command="{Binding CheckAndCopyAutoCommand}"
+							IsBusy="{Binding IsCheckAndCopyAutoOngoing, Mode=OneWay}"/>
+						<controls:BusyButton
+							Grid.Column="0" Grid.Row="1"
+							Width="100" Height="40" Margin="0,0,2,0"
+							Content="{Binding Resources.Command_Check, Source={x:Static models:ResourceService.Current}}"
+							Command="{Binding CheckCommand}"
+							IsBusy="{Binding IsCheckOngoing, Mode=OneWay}">
+						</controls:BusyButton>
+						<controls:BusyButton
+							Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"
+							Width="100" Height="40" Margin="0,0,2,0"
+							Content="{Binding Resources.Command_Copy, Source={x:Static models:ResourceService.Current}}"
+							Command="{Binding CopyCommand}"
+							IsBusy="{Binding IsCopyOngoing, Mode=OneWay}"/>
+						<controls:BusyButton
+							Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
+							Width="60" Height="82"
+							Content="{Binding Resources.Command_Stop, Source={x:Static models:ResourceService.Current}}"
+							Command="{Binding StopCommand}">
+						</controls:BusyButton>
+					</Grid>
+
+					<!-- Progress -->
+					<Grid Grid.Column="2"
+						  Width="82" Height="82" VerticalAlignment="Top">
+						<controls:CircularProgressBar
+							Width="82" HorizontalAlignment="Center" VerticalAlignment="Center"
+							StrokeThickness="7"
+							ArcSegmentColor="{StaticResource Progress.ArcSegment.Current}"
+							RingSegmentColor="{StaticResource Progress.RingSegment}"
+							RingSegmentOpacity="0.11"
+							Percentage="{Binding Op.ProgressCopiedCurrent}"/>
+						<controls:CircularProgressBar
+							Width="68.4" HorizontalAlignment="Center" VerticalAlignment="Center"
+							StrokeThickness="14"
+							ArcSegmentColor="{StaticResource Progress.ArcSegment.All}"
+							RingSegmentColor="{StaticResource Progress.RingSegment}"
+							RingSegmentOpacity="0.11"
+							Percentage="{Binding Op.ProgressCopiedAll}"/>
+						<TextBlock
+							HorizontalAlignment="Center" VerticalAlignment="Center"
+							Text="{Binding Op.RemainingTime, Converter={StaticResource TimeSpanToStringConverterKey}}"/>
+					</Grid>
+				</Grid>
+
+				<Grid Grid.Column="2" Grid.Row="0"
+					  Width="256">
+					<StackPanel x:Name="QuickButtons"
+								x:FieldModifier="public"
+								HorizontalAlignment="Left" VerticalAlignment="Top"
+								Orientation="Horizontal">
+						<!-- Auto at start -->
+						<ToggleButton
+							Width="90" 
+							Style="{StaticResource QuickButtonStyle}"
+							Content="{Binding Resources.Options_AutoAtStart, Source={x:Static models:ResourceService.Current}}"
+							IsChecked="{Binding Settings.AutoCheckAtStart, Mode=TwoWay}"/>
+
+						<!-- Copy on select -->
+						<ToggleButton
+							Width="90" Margin="2,0,0,0"
+							Style="{StaticResource QuickButtonStyle}"
+							Content="{Binding Resources.Options_CopyOnSelect, Source={x:Static models:ResourceService.Current}}"
+							IsChecked="{Binding Settings.CopyOnSelect, Mode=TwoWay}"/>
+					</StackPanel>
+				</Grid>
+			</Grid>
+
+			<!-- Card switch (Closed) -->
+			<Grid Visibility="{Binding IsIntersected, ElementName=CardButtonIntersectionBehavior, Mode=OneWay, Converter={StaticResource BooleanInverseToVisibilityConverterKey}, ConverterParameter=Hidden}">
+				<ToggleButton
+					x:Name="CardButtonClosed"
+					Height="24" Margin="0,32,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+					Style="{StaticResource DrawButtonStyle}"
+					Padding="8,0"
+					Content="{Binding Resources.Card, Source={x:Static models:ResourceService.Current}}"
+					Visibility="{Binding IsChecked, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanInverseToVisibilityConverterKey}}"
+					IsChecked="{Binding IsChecked, ElementName=OptionsButtonClosed, Mode=TwoWay, ConverterParameter=True, Converter={StaticResource BooleanInverseConverterKey}}">
+					<i:Interaction.Behaviors>
+						<behaviors:FrameworkElementIntersectionBehavior
+							x:Name="CardButtonIntersectionBehavior"
+							TargetElement ="{Binding ElementName=CommandAndProgress}"
+							ExpandedMargin="13,0,0,0"
+							WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}">
+							<behaviors:FrameworkElementIntersectionBehavior.TriggerObject>
+								<MultiBinding Converter="{StaticResource ObjectArrayConverterKey}">
+									<Binding ElementName="ImageListView" Path="ActualWidth"/>
+									<Binding ElementName="OptionsButtonOpen" Path="Visibility"/>
+								</MultiBinding>
+							</behaviors:FrameworkElementIntersectionBehavior.TriggerObject>
+						</behaviors:FrameworkElementIntersectionBehavior>
+					</i:Interaction.Behaviors>
+				</ToggleButton>
+			</Grid>
+
+			<!-- Options/Card pain -->
+			<Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+				  x:Name="SidePane">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+
+				<!-- Options switch (Open) -->
+				<ToggleButton
+					x:Name="OptionsButtonOpen"
+					Height="24" Margin="-2,0,0,0"
+					Style="{StaticResource DrawButtonStyle}"
+					BorderThickness="2,0,0,0"
+					Padding="8,0"
+					Content="{Binding Resources.Options, Source={x:Static models:ResourceService.Current}}"
+					Visibility="{Binding IsChecked, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverterKey}}"
+					IsChecked="{Binding IsChecked, ElementName=OptionsButtonClosed, Mode=TwoWay}"/>
+				<ScrollViewer
+					Grid.Row="1"
+					VerticalScrollBarVisibility="Auto"
+					Visibility="{Binding Visibility, ElementName=OptionsButtonOpen}">
+					<Border x:Name="OptionsBorder"
+							x:FieldModifier="public"
+							BorderThickness="1,0,0,0"
+							BorderBrush="{StaticResource BorderLine.Weak}">
+						<!-- Placeholder for Options -->
+					</Border>
+				</ScrollViewer>
+
+				<!-- Card switch (Open) -->
+				<ToggleButton
+					x:Name="CardButtonOpen"
+					Height="24"	Margin="0,32,0,0"
+					Style="{StaticResource DrawButtonStyle}"
+					Padding="8,0"
+					Content="{Binding Resources.Card, Source={x:Static models:ResourceService.Current}}"
+					Visibility="{Binding IsChecked, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverterKey}}"
+					IsChecked="{Binding IsChecked, ElementName=CardButtonClosed, Mode=TwoWay}"/>
+				<ScrollViewer
+					Grid.Row="1"
+					VerticalScrollBarVisibility="Auto"
+					Visibility="{Binding Visibility, ElementName=CardButtonOpen}">
+					<Border BorderThickness="1,0,0,0"
+							BorderBrush="{StaticResource BorderLine.Weak}">
+						<views:Card/>
+					</Border>
+				</ScrollViewer>
+			</Grid>
+
+			<!-- Image area -->
+			<Grid Grid.Column="0" Grid.Row="1">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+
+				<!-- Current image switch -->
+				<Grid>
+					<ToggleButton
+						x:Name="CurrentImageTab"
+						Height="24" HorizontalAlignment="Right"
+						Style="{StaticResource DrawButtonStyle}"
+						Padding="8,0"
+						Content="{Binding Resources.CurrentImage, Source={x:Static models:ResourceService.Current}}"
+						IsChecked="{Binding IsCurrentImageVisible, Mode=TwoWay}">
+						<ToggleButton.Width>
+							<MultiBinding Converter="{StaticResource DoubleAndVisibilityToDoubleConverterKey}">
+								<Binding ElementName="CurrentImageGridSplitter" Path="ActualWidth"/>
+								<Binding ElementName="CurrentImageGridSplitter" Path="Visibility"/>
+								<Binding ElementName="CurrentImageGrid" Path="ActualWidth"/>
+								<Binding ElementName="CurrentImageGrid" Path="Visibility"/>
+							</MultiBinding>
+						</ToggleButton.Width>
+						<ToggleButton.MaxWidth>
+							<MultiBinding Converter="{StaticResource DoubleAndVisibilityToDoubleConverterKey}" ConverterParameter="Subtract">
+								<Binding ElementName="LayoutRoot" Path="ActualWidth"/>
+								<Binding ElementName="LayoutRoot" Path="Visibility"/>
+								<Binding ElementName="SidePane" Path="ActualWidth"/>
+								<Binding ElementName="SidePane" Path="Visibility"/>
+							</MultiBinding>
+						</ToggleButton.MaxWidth>
+						<ToggleButton.Margin>
+							<Binding Path="IsIntersected" ElementName="CurrentImageTabIntersectionBehavior" Converter="{StaticResource BooleanInverseToThicknessConverterKey}">
+								<Binding.ConverterParameter>
+									<Thickness>0,-24,0,0</Thickness>
+								</Binding.ConverterParameter>
+							</Binding>
+						</ToggleButton.Margin>
+
+						<i:Interaction.Behaviors>
+							<behaviors:FrameworkElementIntersectionBehavior
+								x:Name="CurrentImageTabIntersectionBehavior"
+								TargetElement ="{Binding ElementName=CommandAndProgress}"
+								ExpandedMargin="-2,24,0,0"
+								WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}">
+								<behaviors:FrameworkElementIntersectionBehavior.TriggerObject>
+									<MultiBinding Converter="{StaticResource ObjectArrayConverterKey}">
+										<Binding ElementName="LayoutRoot" Path="ActualWidth" Mode="OneTime"/>
+										<Binding ElementName="ImageListView" Path="ActualWidth"/>
+									</MultiBinding>
+								</behaviors:FrameworkElementIntersectionBehavior.TriggerObject>
+							</behaviors:FrameworkElementIntersectionBehavior>
+						</i:Interaction.Behaviors>
+					</ToggleButton>
+				</Grid>
+
+				<Grid Grid.Row="1">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
+
+					<!-- Image list view -->
+					<ListView
+						x:Name="ImageListView"
+						SelectionMode="Single"
+						ItemsSource="{Binding FileListCoreView}"
+						SelectedIndex="{Binding FileListCoreViewIndex, Mode=OneWay}">
+						<ListView.Resources>
+							<DataTemplate x:Key="RealizedThumbnail">
+								<Border	Margin="4"
+										Background="{Binding Status, Converter={StaticResource FileStatusToBrushConverterKey}}">
+									<Grid>
+										<Grid Background="{StaticResource FileItemStatus.Foreground}"
+											  Opacity="{Binding Opacity, ElementName=ListViewItemShadow}"/>
+										<Grid Margin="4">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="*"/>
+												<ColumnDefinition Width="Auto"/>
+											</Grid.ColumnDefinitions>
+											<Grid.RowDefinitions>
+												<RowDefinition Height="Auto"/>
+												<RowDefinition/>
+											</Grid.RowDefinitions>
+											<TextBlock>
+											<Run Text="{Binding Directory, Mode=OneTime}"/>
+											<LineBreak/>
+											<Run Text="{Binding FileName, Mode=OneTime}"/>
+											<LineBreak/>
+											<Run Text="{Binding Date, Mode=OneTime, StringFormat=yyyy/MM/dd}"/>
+											<LineBreak/>
+											<Run Text="{Binding Date, Mode=OneTime, StringFormat=HH\\:mm\\:ss}"/>
+											</TextBlock>
+											<TextBlock
+												Grid.Column="0" Grid.Row="1"
+												VerticalAlignment="Center"
+												FontSize="14"
+												Text="{Binding Status, Converter={StaticResource FileStatusToStringConverterKey}}"
+												Foreground="{StaticResource FileItemStatus.Foreground}"/>
+											<Image
+												Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+												Width="120" Height="90" Margin="4,0,0,0"
+												Source="{Binding Thumbnail}"/>
+										</Grid>
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ListView.Resources>
+
+						<ListView.Template>
+							<ControlTemplate TargetType="{x:Type ListView}">
+								<Border BorderThickness="0"
+										Background="{StaticResource ImageListView.Background}">
+									<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+										<WrapPanel Margin="4,0,4,4"
+												   IsItemsHost="True"/>
+									</ScrollViewer>
+								</Border>
+							</ControlTemplate>
+						</ListView.Template>
+
+						<ListView.ItemTemplate>
+							<DataTemplate>
+								<ContentControl x:Name="Thumbnail"
+												MinWidth="228" Height="108" Margin="0"
+												Content="{Binding}"
+												ContentTemplate="{x:Null}"/>
+								<DataTemplate.Triggers>
+									<DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}" Value="True">
+										<Setter TargetName="Thumbnail" Property="ContentTemplate" Value="{StaticResource RealizedThumbnail}"/>
+									</DataTrigger>
+								</DataTemplate.Triggers>
+							</DataTemplate>
+						</ListView.ItemTemplate>
+
+						<ListView.ItemContainerStyle>
+							<Style TargetType="{x:Type ListViewItem}">
+								<Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+								<Setter Property="Margin" Value="0"/>
+								<Setter Property="OverridesDefaultStyle" Value="True"/>
+								<Setter Property="Template">
+									<Setter.Value>
+										<ControlTemplate TargetType="{x:Type ContentControl}">
+											<Grid>
+												<Grid x:Name="ListViewItemShadow"
+													  Opacity="0"/>
+												<Border Background="{TemplateBinding Background}">
+													<ContentPresenter/>
+												</Border>
+
+												<VisualStateManager.VisualStateGroups>
+													<VisualStateGroup x:Name="CommonStates">
+														<VisualState x:Name="Normal"/>
+														<VisualState x:Name="MouseOver">
+															<Storyboard>
+																<DoubleAnimation
+																	Storyboard.TargetName="ListViewItemShadow"
+																	Storyboard.TargetProperty="Opacity"
+																	Duration="0:0:0.1"
+																	To="0.2"/>
+															</Storyboard>
+														</VisualState>
+													</VisualStateGroup>
+												</VisualStateManager.VisualStateGroups>
+											</Grid>
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+							</Style>
+						</ListView.ItemContainerStyle>
+
+						<i:Interaction.Behaviors>
+							<behaviors:ListBoxVirtualizationBehavior/>
+							<behaviors:SelectorSelectedItemBehavior/>
+						</i:Interaction.Behaviors>
+					</ListView>
+
+					<!-- Browser -->
+					<Border
+						Grid.Column="0"
+						BorderThickness="0,1,0,0"
+						BorderBrush="{StaticResource BorderLine.Weak}"
+						Visibility="{Binding Document.IsOpen, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+						<WebBrowser Visibility="{Binding Visibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Border}}">
+							<i:Interaction.Behaviors>
+								<behaviors:WebBrowserBehavior
+									SourcePath="{Binding Document.SourcePath, Mode=OneWay}"
+									SourceText="{Binding Document.SourceText, Mode=OneWay}"
+									WindowDpi="{Binding WindowHandler.WindowDpi, ElementName=MonitorProperty, Mode=OneWay}"/>
+							</i:Interaction.Behaviors>
+						</WebBrowser>
+					</Border>
+
+					<!-- Splitter -->
+					<controls:HideableGridSplitter
+						Grid.Column="1"
+						x:Name="CurrentImageGridSplitter"
+						Width="8" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+						Background="{StaticResource Window.Background}"
+						ShowsPreview="False" ResizeDirection="Columns"
+						MinLength="168"
+						BorderBrush="{StaticResource BorderLine.Weak}"
+						BorderThickness="1,0,0,0"
+						Visibility="{Binding IsCurrentImageVisible, Converter={StaticResource BooleanToVisibilityConverterKey}}"/>
+
+					<!-- Current image -->
+					<Grid
+						Grid.Column="2"
+						x:Name="CurrentImageGrid"
+						Visibility="{Binding IsCurrentImageVisible, Converter={StaticResource BooleanToVisibilityConverterKey}}">
+						<Grid VerticalAlignment="Top">
+							<Image x:Name="CurrentImageImage"
+								   Width="{Binding CurrentImageWidth, Mode=OneWay}"
+								   Margin="0,4,8,30" HorizontalAlignment="Left" VerticalAlignment="Top"
+								   Stretch="None"
+								   Source="{Binding CurrentImage, Mode=OneWay}"/>
+
+							<StackPanel Margin="0,0,0,4" VerticalAlignment="Bottom"
+										Orientation="Horizontal">
+								<Button Height="22" Margin="0,0,2,0"
+										Style="{StaticResource SendButtonStyle}"
+										Padding="7,0"
+										Content="{Binding Resources.Command_Save, Source={x:Static models:ResourceService.Current}}"
+										Command="{Binding SendDesktopCommand}"/>
+								<Button Height="22"
+										Style="{StaticResource SendButtonStyle}"
+										Padding="7,0"
+										Content="{Binding Resources.Command_Send, Source={x:Static models:ResourceService.Current}}"
+										Command="{Binding SendClipboardCommand}"/>
+							</StackPanel>
+						</Grid>
+
+						<i:Interaction.Behaviors>
+							<behaviors:GridSizeBehavior
+								IsReliable="{Binding IsWindowPlacementReliable, ElementName=WindowRoot}"
+								MaxWidth="{Binding ActualWidth, ElementName=LayoutRoot, Mode=OneWay}"
+								Padding="{Binding Margin, ElementName=CurrentImageImage}"
+								FrameSize="{Binding CurrentFrameSize, Mode=OneWayToSource}"/>
+						</i:Interaction.Behaviors>
+					</Grid>
+				</Grid>
+			</Grid>
+		</Grid>
+	</Grid>
+</se:SlateWindow>

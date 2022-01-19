@@ -1,78 +1,376 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{55DF0585-A26E-489E-BD94-4E6A50A83E23}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <AssemblyTitle>Snowy</AssemblyTitle>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SnowyImageCopy</RootNamespace>
+    <AssemblyName>SnowyImageCopy</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetPlatformVersion>8.0</TargetPlatformVersion>
     <ApplicationIcon>Resources\Feather.ico</ApplicationIcon>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-    <Version>2.4.0.0</Version>
-    <Authors>emoacht</Authors>
-    <Copyright>Copyright © 2014 emoacht</Copyright>
-    <PackageProjectUrl>https://github.com/emoacht/SnowyImageCopy</PackageProjectUrl>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
-    <None Remove="Resources\Feather.ico" />
+    <Reference Include="DesktopToast, Version=0.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\DesktopToast.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.37\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
+    <Reference Include="MonitorAware, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\MonitorAware.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="SlateElement, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\SlateElement.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Reactive, Version=5.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.5.0.0\lib\net472\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Core, Version=3.0.6000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Core.5.0.0\lib\net472\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=3.0.6000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Interfaces.5.0.0\lib\net472\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.6000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Linq.5.0.0\lib\net472\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=3.0.6000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.PlatformServices.5.0.0\lib\net472\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=3.0.6000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Windows.Threading.5.0.0\lib\net472\System.Reactive.Windows.Threading.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
-
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Common\DelegateCommand.cs" />
+    <Compile Include="Common\NotificationObject.cs" />
+    <Compile Include="Common\NotificationSubscriptionObject.cs" />
+    <Compile Include="Common\PropertyChangedEventListener.cs" />
+    <Compile Include="Helper\BitmapExtension.cs" />
+    <Compile Include="Helper\BitmapImageExtension.cs" />
+    <Compile Include="Helper\CancellationTokenContainer.cs" />
+    <Compile Include="Helper\CancellationTokenSourcePlus.cs" />
+    <Compile Include="Helper\Designer.cs" />
+    <Compile Include="Helper\EnumerableExtension.cs" />
+    <Compile Include="Helper\FatDateTime.cs" />
+    <Compile Include="Helper\FileAddition.cs" />
+    <Compile Include="Helper\FileTime.cs" />
+    <Compile Include="Helper\OpenFolderDialog.cs" />
+    <Compile Include="Helper\OsVersion.cs" />
+    <Compile Include="Helper\PathAddition.cs" />
+    <Compile Include="Helper\Recycle.cs" />
+    <Compile Include="Helper\VersionAddition.cs" />
+    <Compile Include="Helper\VisualTreeHelperAddition.cs" />
+    <Compile Include="Models\Card\CardState.cs" />
+    <Compile Include="Models\Card\CidInfo.cs" />
+    <Compile Include="Models\Card\DiskInfo.cs" />
+    <Compile Include="Models\Card\DiskSearcher.cs" />
+    <Compile Include="Models\Card\ICardState.cs" />
+    <Compile Include="Models\Card\LanModeOption.cs" />
+    <Compile Include="Models\Card\LanStartupModeOption.cs" />
+    <Compile Include="Models\Exceptions\CardChangedException.cs" />
+    <Compile Include="Models\Exceptions\CardUploadDisabledException.cs" />
+    <Compile Include="Models\Exceptions\ImageNotSupportedException.cs" />
+    <Compile Include="Models\Exceptions\RemoteConnectionLostException.cs" />
+    <Compile Include="Models\Exceptions\RemoteConnectionUnableException.cs" />
+    <Compile Include="Models\Exceptions\RemoteFileException.cs" />
+    <Compile Include="Models\Exceptions\UnexpectedException.cs" />
+    <Compile Include="Models\ImageFile\FileExtension.cs" />
+    <Compile Include="Models\ImageFile\FileItem.cs" />
+    <Compile Include="Models\ImageFile\FileManager.cs" />
+    <Compile Include="Models\ImageFile\FileManagerCommand.cs" />
+    <Compile Include="Models\ImageFile\FilePeriod.cs" />
+    <Compile Include="Models\ImageFile\FileStatus.cs" />
+    <Compile Include="Models\ImageFile\HashItem.cs" />
+    <Compile Include="Models\ImageFile\IFileItem.cs" />
+    <Compile Include="Models\Network\NativeWifi.cs" />
+    <Compile Include="Models\Network\NetworkChecker.cs" />
+    <Compile Include="Models\FolderService.cs" />
+    <Compile Include="Models\ImageManager.cs" />
+    <Compile Include="Models\Logger.cs" />
+    <Compile Include="Models\Operator.cs" />
+    <Compile Include="Models\ProgressInfo.cs" />
+    <Compile Include="Models\ResourceService.cs" />
+    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\Signatures.cs" />
+    <Compile Include="Models\SoundManager.cs" />
+    <Compile Include="Models\WindowPlacement.cs" />
+    <Compile Include="Models\Workspace.cs" />
+    <Compile Include="ViewModels\CardConfigViewModel.cs" />
+    <Compile Include="ViewModels\CardStateViewModel.cs" />
+    <Compile Include="ViewModels\CardViewModel.cs" />
+    <Compile Include="ViewModels\DocumentViewModel.cs" />
+    <Compile Include="ViewModels\FileItemViewModel.cs" />
+    <Compile Include="ViewModels\FilePeriodViewModel.cs" />
+    <Compile Include="ViewModels\ItemObservableCollection.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\OptionsViewModel.cs" />
+    <Compile Include="Views\Behaviors\CalendarSelectedDatesBehavior.cs" />
+    <Compile Include="Views\Behaviors\ExplorerAction.cs" />
+    <Compile Include="Views\Behaviors\FileDialogAction.cs" />
+    <Compile Include="Views\Behaviors\FolderDialogAction.cs" />
+    <Compile Include="Views\Behaviors\FrameworkElementIntersectionBehavior.cs" />
+    <Compile Include="Views\Behaviors\FrameworkElementLanguageBehavior.cs" />
+    <Compile Include="Views\Behaviors\GridSizeBehavior.cs" />
+    <Compile Include="Views\Behaviors\ListBoxVirtualizationBehavior.cs" />
+    <Compile Include="Views\Behaviors\SelectorSelectedItemBehavior.cs" />
+    <Compile Include="Views\Behaviors\WebBrowserBehavior.cs" />
+    <Compile Include="Views\Behaviors\WindowActivationBehavior.cs" />
+    <Compile Include="Views\Behaviors\WindowSizeBehavior.cs" />
+    <Compile Include="Views\Controls\BusyButton.cs" />
+    <Compile Include="Views\Controls\CheckTextBox.cs" />
+    <Compile Include="Views\Controls\CircularProgressBar.cs" />
+    <Compile Include="Views\Controls\HideableGridSplitter.cs" />
+    <Compile Include="Views\Controls\NumericTextBox.cs" />
+    <Compile Include="Views\Controls\NumericUpDown.cs" />
+    <Compile Include="Views\Controls\SlidingToggleButton.cs" />
+    <Compile Include="Views\Controls\ThumbnailBox.xaml.cs">
+      <DependentUpon>ThumbnailBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Converters\BooleanInverseConverter.cs" />
+    <Compile Include="Views\Converters\BooleanInverseToBrushConverter.cs" />
+    <Compile Include="Views\Converters\BooleanInverseToThicknessConverter.cs" />
+    <Compile Include="Views\Converters\BooleanInverseToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\BooleanToBrushConverter.cs" />
+    <Compile Include="Views\Converters\BytesUnitConverter.cs" />
+    <Compile Include="Views\Converters\DoubleAndVisibilityToDoubleConverter.cs" />
+    <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="Views\Converters\EnumToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\FileStatusToBrushConverter.cs" />
+    <Compile Include="Views\Converters\FileStatusToStringConverter.cs" />
+    <Compile Include="Views\Converters\ObjectArrayConverter.cs" />
+    <Compile Include="Views\Converters\PathFileNameConverter.cs" />
+    <Compile Include="Views\Converters\PercentUnitConverter.cs" />
+    <Compile Include="Views\Converters\TimeSpanToStringConverter.cs" />
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Card.xaml.cs">
+      <DependentUpon>Card.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Options.xaml.cs">
+      <DependentUpon>Options.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProductInfo.cs" />
+    <Page Include="Views\Styles\CommonControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Styles\CustomControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Styles\CustomTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Styles\DefaultTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\ThumbnailBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Card.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Options.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.ja-JP.Designer.cs">
+      <DependentUpon>Resources.ja-JP.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <None Include="Properties\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Application.ico">
+      <Visible>false</Visible>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ja-JP.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ja-JP.Designer.cs</LastGenOutput>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Feather.ico" />
   </ItemGroup>
-
   <ItemGroup>
-    <COMReference Include="Shell32">
-      <WrapperTool>tlbimp</WrapperTool>
-      <VersionMinor>0</VersionMinor>
-      <VersionMajor>1</VersionMajor>
-      <Guid>50a7e9b0-70ef-11d1-b75a-00a0c90564fe</Guid>
-      <Lcid>0</Lcid>
-      <Isolated>false</Isolated>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
-    </COMReference>
+    <None Include="SnowyImageCopy.VisualElementsManifest.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.2" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-    <PackageReference Include="System.Management" Version="6.0.0" />
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
-    <PackageReference Include="System.Reactive.Core" Version="5.0.0" />
-    <PackageReference Include="System.Reactive.Interfaces" Version="5.0.0" />
-    <PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
-    <PackageReference Include="System.Reactive.PlatformServices" Version="5.0.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="5.0.0" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="MonitorAware">
-      <HintPath>Libraries\MonitorAware.dll</HintPath>
-    </Reference>
-    <Reference Include="SlateElement">
-      <HintPath>Libraries\SlateElement.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <Import Project="..\SnowyImageCopy.Shared\SnowyImageCopy.Shared.projitems" Label="Shared" />
-
-  <ItemGroup>
-    <ProjectReference Include="..\SnowyImageCopy.Lexicon\SnowyImageCopy.Lexicon.csproj" />
-    <!--<InternalsVisibleTo Include="SnowyImageCopy.Test"/>-->
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="..\..\Documents\license.html" Link="Resources\license.html" />
-    <Content Include="..\..\Documents\readme_en.html" Link="Resources\readme_en.html">
+    <Content Include="Libraries\SlateElement.dll" />
+    <Resource Include="Libraries\SlateElement.xml" />
+    <ContentWithTargetPath Include="..\..\Documents\readme_en.html">
+      <Link>Resources\readme_en.html</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>readme_en.html</TargetPath>
-    </Content>
-    <Content Include="..\..\Documents\readme_jp.html" Link="Resources\readme_jp.html">
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="..\..\Documents\readme_jp.html">
+      <Link>Resources\readme_jp.html</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>readme_jp.html</TargetPath>
-    </Content>
+    </ContentWithTargetPath>
+    <EmbeddedResource Include="..\..\Documents\license.html">
+      <Link>Resources\license.html</Link>
+    </EmbeddedResource>
+    <Content Include="Libraries\DesktopToast.dll" />
+    <Resource Include="Libraries\DesktopToast.xml">
+      <SubType>Designer</SubType>
+    </Resource>
+    <Content Include="Libraries\MonitorAware.dll" />
+    <Resource Include="Libraries\MonitorAware.xml">
+      <SubType>Designer</SubType>
+    </Resource>
   </ItemGroup>
-
+  <ItemGroup>
+    <COMReference Include="SHDocVw">
+      <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Shell32">
+      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
 </Project>
