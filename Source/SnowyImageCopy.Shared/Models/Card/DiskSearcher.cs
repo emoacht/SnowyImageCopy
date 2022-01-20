@@ -75,7 +75,7 @@ namespace SnowyImageCopy.Models.Card
 		/// <remarks>Windows Storage Management API is only available for Windows 8 or newer.</remarks>
 		private static IEnumerable<DiskInfo> SupplementByPhysicalDisk(this IEnumerable<DiskInfo> source)
 		{
-			return OsVersion.IsEightOrNewer ? Enumerate() : source;
+			return OsVersion.Is8OrGreater ? Enumerate() : source;
 
 			IEnumerable<DiskInfo> Enumerate()
 			{

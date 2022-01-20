@@ -10,6 +10,8 @@ using Windows.Media.Editing;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 
+using SnowyImageCopy.Helper;
+
 namespace SnowyImageCopy.Models
 {
 	public static class VideoManager
@@ -20,7 +22,7 @@ namespace SnowyImageCopy.Models
 		/// <param name="filePath">File path of video file</param>
 		/// <param name="timeFromStart">Time from start of playback</param>
 		/// <returns>BitmapImage</returns>
-		public static Task<BitmapImage> GetSnapshotImageAsync(string filePath, TimeSpan timeFromStart)
+		public static ValueTask<BitmapImage> GetSnapshotImageAsync(string filePath, TimeSpan timeFromStart)
 		{
 			return GetSnapshotImageAsync(filePath, timeFromStart, new Size(0, 0));
 		}
@@ -32,8 +34,11 @@ namespace SnowyImageCopy.Models
 		/// <param name="timeFromStart">Time from start of playback</param>
 		/// <param name="size">Size of snapshot image</param>
 		/// <returns>BitmapImage</returns>
-		public static async Task<BitmapImage> GetSnapshotImageAsync(string filePath, TimeSpan timeFromStart, Size size)
+		public static async ValueTask<BitmapImage> GetSnapshotImageAsync(string filePath, TimeSpan timeFromStart, Size size)
 		{
+			if (!OsVersion.Is10OrGreater)
+				return null;
+
 			if (string.IsNullOrEmpty(filePath))
 				throw new ArgumentNullException(nameof(filePath));
 
@@ -58,8 +63,11 @@ namespace SnowyImageCopy.Models
 		/// <param name="timeFromStart">Time from start of playback</param>
 		/// <param name="qualityLevel">Quality level of snapshot image in JPEG format</param>
 		/// <returns>Byte array</returns>		
-		public static async Task<byte[]> GetSnapshotBytesAsync(string filePath, TimeSpan timeFromStart, int qualityLevel = 0)
+		public static async ValueTask<byte[]> GetSnapshotBytesAsync(string filePath, TimeSpan timeFromStart, int qualityLevel = 0)
 		{
+			if (!OsVersion.Is10OrGreater)
+				return null;
+
 			if (string.IsNullOrEmpty(filePath))
 				throw new ArgumentNullException(nameof(filePath));
 
