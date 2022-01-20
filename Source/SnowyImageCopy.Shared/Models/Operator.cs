@@ -1025,7 +1025,7 @@ namespace SnowyImageCopy.Models
 									else if (item.IsImageFile)
 										item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
 									else if (item.IsVideoFile)
-										item.Thumbnail = await VideoManager.GetSnapshotImageAsync(ComposeLocalPath(item), TimeSpan.Zero, ImageManager.ThumbnailSize);
+										item.Thumbnail = await VideoManager.CreateThumbnailImageAsync(ComposeLocalPath(item), TimeSpan.Zero);
 								}
 								catch
 								{

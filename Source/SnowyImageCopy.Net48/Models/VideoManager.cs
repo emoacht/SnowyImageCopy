@@ -10,14 +10,14 @@ namespace SnowyImageCopy.Models
 {
 	internal static class VideoManager
 	{
-		public static Task<BitmapImage> GetSnapshotImageAsync(string filePath, TimeSpan timeFromStart, Size size)
+		public static Task<BitmapImage> CreateThumbnailImageAsync(string filePath, TimeSpan timeFromStart)
 		{
-			return Task.FromResult((BitmapImage)null);
+			return Task.FromResult<BitmapImage>(null);
 		}
 
 		public static Task<byte[]> GetSnapshotBytesAsync(string filePath, TimeSpan timeFromStart, int qualityLevel = 0)
 		{
-			return Task.FromResult((byte[])null);
+			return Task.FromResult<byte[]>(null);
 		}
 	}
 }
