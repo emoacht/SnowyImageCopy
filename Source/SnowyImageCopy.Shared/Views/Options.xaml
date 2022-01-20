@@ -139,7 +139,6 @@
 
 			<!-- File -->
 			<GroupBox x:Name="FileGroupBox"
-					  x:FieldModifier="public"
 					  Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_File, Source={x:Static lexicon:ResourceService.Current}}">
 				<StackPanel Margin="4">
@@ -402,7 +401,6 @@
 
 			<!-- Info -->
 			<GroupBox x:Name="InfoGroupBox"
-					  x:FieldModifier="public"
 					  Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_Info, Source={x:Static lexicon:ResourceService.Current}}">
 				<StackPanel Margin="4">

@@ -98,7 +98,6 @@
 
 					<!-- Command -->
 					<Grid x:Name="CommandButtons"
-						  x:FieldModifier="public"
 						  Width="264" Height="82" VerticalAlignment="Top"
 						  TextElement.FontSize="15">
 						<Grid.ColumnDefinitions>
@@ -172,7 +171,6 @@
 				<Grid Grid.Column="2" Grid.Row="0"
 					  Width="256">
 					<StackPanel x:Name="QuickButtons"
-								x:FieldModifier="public"
 								HorizontalAlignment="Left" VerticalAlignment="Top"
 								Orientation="Horizontal">
 						<!-- Auto at start -->
@@ -242,7 +240,6 @@
 					VerticalScrollBarVisibility="Auto"
 					Visibility="{Binding Visibility, ElementName=OptionsButtonOpen}">
 					<Border x:Name="OptionsBorder"
-							x:FieldModifier="public"
 							BorderThickness="1,0,0,0"
 							BorderBrush="{StaticResource BorderLine.Weak}">
 						<!-- Placeholder for Options -->
