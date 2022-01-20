@@ -405,7 +405,7 @@
 					  Header="{Binding Resources.Options_Info, Source={x:Static lexicon:ResourceService.Current}}">
 				<StackPanel Margin="4">
 					<TextBlock Text="{Binding Title, Mode=OneWay}"/>
-					<TextBlock Margin="0,2,0,0">
+					<TextBlock Margin="0,2">
 						<Run Text="{Binding Version, Mode=OneWay}"/>
 						<Run Text="|"/>
 						<Run TextDecorations="Underline" Cursor="Hand"
@@ -436,9 +436,6 @@
 								</i:EventTrigger>
 							</i:Interaction.Triggers>
 						</Run>
-					</TextBlock>
-					<TextBlock Margin="0,2">
-						<Run Text="{Binding Path=(ma:MonitorAwareProperty.Instance).WindowHandler.MonitorDpi.PixelsPerInchX, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=OneWay, StringFormat=Monitor DPI: {0}}"/>
 					</TextBlock>
 				</StackPanel>
 			</GroupBox>
