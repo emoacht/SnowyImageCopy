@@ -8,7 +8,9 @@ Snowy is a Windows desktop app to copy images from FlashAir by a wireless connec
 ## Requirements
 
  - Windows 10 or newer
- - .NET __6.0__ (Installation of .NET 6.0 runtime is required.)
+ - .NET __6.0__
+
+Tested on Windows 10 with SD-WB008G, SD-WC016G (W-02), SD-WE016G (W-03) and SD-UWA032G (W-04).
 
 ## Download
 
@@ -23,7 +25,7 @@ Snowy is a Windows desktop app to copy images from FlashAir by a wireless connec
 
 ## Development
 
-This app is a WPF app developed in C#. It is tested with 4 generations of FlashAir: SD-WB008G, SD-WC016G (W-02), SD-WE016G (W-03) and SD-UWA032G (W-04).
+This app is a WPF app developed in C#.
 
 As for FlashAir's API used in this app, refer to [FlashAir Developers](https://www.flashair-developers.com/)
  ([copy](https://flashair-developers.github.io/website/)).

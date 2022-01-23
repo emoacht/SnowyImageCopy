@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 3.0.1 2022-1-23
+
+- Suppress exception
+
 Ver 3.0.0 2022-1-20
 
 - Add support for video file
