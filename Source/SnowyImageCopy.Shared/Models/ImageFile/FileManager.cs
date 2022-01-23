@@ -765,6 +765,13 @@ namespace SnowyImageCopy.Models.ImageFile
 						// WebExceptionStatus.NameResolutionFailure, WebExceptionStatus.ConnectFailure.
 						throw new RemoteConnectionUnableException(we.Status);
 					}
+					catch (HttpRequestException hre) when (hre.InnerException is SocketException se)
+					{
+						// HttpRequestException may be caused by SocketException when the connection to
+						// FlashAir card is unable. The value of SocketException.SocketErrorCode may be
+						// SocketError.HostNotFound.
+						throw new RemoteConnectionUnableException(se.SocketErrorCode);
+					}
 					catch (HttpRequestException hre) when (hre.InnerException is not null)
 					{
 						// HttpRequestException may be caused by other exceptions such as
