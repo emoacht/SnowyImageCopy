@@ -4,6 +4,7 @@
 			 x:Name="ControlRoot"
 			 Width="160" Height="120">
 	<UserControl.Resources>
+		<SolidColorBrush x:Key="Control.Translucent">#01FFFFFF</SolidColorBrush>
 		<SolidColorBrush x:Key="Control.Background">#88EEEEEE</SolidColorBrush>
 		<SolidColorBrush x:Key="Control.Foreground.Normal">#AAFFFFFF</SolidColorBrush>
 		<SolidColorBrush x:Key="Control.Foreground.MouseOver">White</SolidColorBrush>
@@ -15,7 +16,7 @@
 				<Setter.Value>
 					<ControlTemplate TargetType="{x:Type Slider}">
 						<Grid Height="{TemplateBinding Height}"
-							  Background="Transparent"
+							  Background="{StaticResource Control.Translucent}"
 							  SnapsToDevicePixels="True"
 							  UseLayoutRounding="True">
 							<Grid Margin="{TemplateBinding Padding}">
@@ -71,7 +72,7 @@
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="{x:Type Button}">
-						<Grid Background="Transparent"
+						<Grid Background="{StaticResource Control.Translucent}"
 							  SnapsToDevicePixels="true"
 							  UseLayoutRounding="True">
 							<ContentPresenter Focusable="False"/>
