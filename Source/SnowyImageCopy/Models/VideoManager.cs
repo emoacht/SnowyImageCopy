@@ -18,24 +18,24 @@ namespace SnowyImageCopy.Models
 	public static class VideoManager
 	{
 		/// <summary>
-		/// Gets the snapshot image at a specified time from start of playback.
+		/// Gets a snapshot image at a specified time from start of playback.
 		/// </summary>
 		/// <param name="filePath">File path of video file</param>
 		/// <param name="timeFromStart">Time from start of playback</param>
-		/// <returns>BitmapImage</returns>
-		public static ValueTask<BitmapImage> GetSnapshotImageAsync(string filePath, TimeSpan timeFromStart)
+		/// <returns>BitmapImage of snapshot</returns>
+		public static ValueTask<BitmapImage> GetSnapshotAsync(string filePath, TimeSpan timeFromStart)
 		{
-			return GetSnapshotImageAsync(filePath, timeFromStart, new Size(0, 0));
+			return GetSnapshotAsync(filePath, timeFromStart, new Size(0, 0));
 		}
 
 		/// <summary>
-		/// Gets the snapshot image at a specified time from start of playback.
+		/// Gets a snapshot image at a specified time from start of playback.
 		/// </summary>
 		/// <param name="filePath">File path of video file</param>
 		/// <param name="timeFromStart">Time from start of playback</param>
 		/// <param name="targetSize">Target size of image</param>
-		/// <returns>BitmapImage</returns>
-		public static async ValueTask<BitmapImage> GetSnapshotImageAsync(string filePath, TimeSpan timeFromStart, Size targetSize)
+		/// <returns>BitmapImage of snapshot</returns>
+		public static async ValueTask<BitmapImage> GetSnapshotAsync(string filePath, TimeSpan timeFromStart, Size targetSize)
 		{
 			if (!OsVersion.Is10OrGreater)
 				return null;
@@ -58,12 +58,12 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Creates the thumbnail iamge at a specified time from start of playback.
+		/// Creates a thumbnail image at a specified time from start of playback.
 		/// </summary>
 		/// <param name="filePath">File path of video file</param>
 		/// <param name="timeFromStart">Time from start of playback</param>
-		/// <returns>BitmapImage</returns>
-		public static async ValueTask<BitmapImage> CreateThumbnailImageAsync(string filePath, TimeSpan timeFromStart)
+		/// <returns>BitmapImage of thumbnail</returns>
+		public static async ValueTask<BitmapImage> CreateThumbnailAsync(string filePath, TimeSpan timeFromStart)
 		{
 			if (!OsVersion.Is10OrGreater)
 				return null;
@@ -90,12 +90,22 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Gets the byte array of snapshot image at a specified time from start of playback.
+		/// Creates a thumbnail image from byte array.
+		/// </summary>
+		/// <param name="bytes">Byte array</param>
+		/// <returns>BitmapImage of thumbnail</returns>
+		public static Task<BitmapImage> CreateThumbnailAsync(byte[] bytes)
+		{
+			return ImageManager.CreateThumbnailAsync(bytes, StripeBrush.Value);
+		}
+
+		/// <summary>
+		/// Gets a byte array of snapshot image at a specified time from start of playback.
 		/// </summary>
 		/// <param name="filePath">File path of video file</param>
 		/// <param name="timeFromStart">Time from start of playback</param>
 		/// <param name="qualityLevel">Quality level of snapshot image in JPEG format</param>
-		/// <returns>Byte array</returns>		
+		/// <returns>Byte array of snapshot</returns>		
 		public static async ValueTask<byte[]> GetSnapshotBytesAsync(string filePath, TimeSpan timeFromStart, int qualityLevel = 0)
 		{
 			if (!OsVersion.Is10OrGreater)
