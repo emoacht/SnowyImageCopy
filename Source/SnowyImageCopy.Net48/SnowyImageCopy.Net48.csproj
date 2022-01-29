@@ -96,12 +96,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="..\SnowyImageCopy\Models\ToastManager.cs">
-      <Link>Models\ToastManager.cs</Link>
-    </Compile>
-    <Compile Include="..\SnowyImageCopy\Models\VideoManager.cs">
-      <Link>Models\VideoManager.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SnowyImageCopy.VisualElementsManifest.xml">
