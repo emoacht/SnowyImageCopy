@@ -7,7 +7,7 @@
     <AssemblyTitle>Snowy</AssemblyTitle>
     <ApplicationIcon>Resources\Feather.ico</ApplicationIcon>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-    <Version>3.0.1</Version>
+    <Version>3.1.0</Version>
     <Authors>emoacht</Authors>
     <Copyright>Copyright © 2014 emoacht</Copyright>
     <PackageProjectUrl>https://github.com/emoacht/SnowyImageCopy</PackageProjectUrl>
