@@ -1,13 +1,17 @@
 ﻿## History
 
+Ver 3.1.0 2022-1-30
+
+ - Fix thumbnail of video file
+
 Ver 3.0.1 2022-1-23
 
-- Suppress exception
+ - Suppress exception
 
 Ver 3.0.0 2022-1-20
 
-- Add support for video file
-- Migrate to .NET 6.0
+ - Add support for video file
+ - Migrate to .NET 6.0
 
 Ver 2.4.0 2021-10-14
 
