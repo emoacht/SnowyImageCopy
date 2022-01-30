@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 using SnowyImageCopy.Common;
+using SnowyImageCopy.Helper;
 using SnowyImageCopy.Lexicon;
 using SnowyImageCopy.Models;
 using SnowyImageCopy.Models.ImageFile;
@@ -103,12 +105,9 @@ namespace SnowyImageCopy.ViewModels
 		}
 		public string _title;
 
-		public Version Version
-		{
-			get => _version ?? ProductInfo.Version;
-			set => SetPropertyValue(ref _version, value);
-		}
-		public Version _version;
+		public string Platform => VersionAddition.Replace(RuntimeInformation.FrameworkDescription, 2);
+
+		public Version Version => ProductInfo.Version;
 
 		#endregion
 	}

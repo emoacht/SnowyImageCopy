@@ -404,9 +404,12 @@
 					  Style="{StaticResource ItemGroupStyle}"
 					  Header="{Binding Resources.Options_Info, Source={x:Static lexicon:ResourceService.Current}}">
 				<StackPanel Margin="4">
-					<TextBlock Text="{Binding Title, Mode=OneWay}"/>
+					<TextBlock>
+						<Run Text="{Binding Title, Mode=OneWay}"/>
+						<Run Text="{Binding Platform, Mode=OneTime, StringFormat={}({0})}"/>
+					</TextBlock>
 					<TextBlock Margin="0,2">
-						<Run Text="{Binding Version, Mode=OneWay}"/>
+						<Run Text="{Binding Version, Mode=OneTime}"/>
 						<Run Text="|"/>
 						<Run TextDecorations="Underline" Cursor="Hand"
 							 Text="{x:Static lexicon:Invariant.Site}">
