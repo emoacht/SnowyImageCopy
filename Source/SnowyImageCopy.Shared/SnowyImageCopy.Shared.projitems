@@ -60,6 +60,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Signatures.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SoundManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ToastManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\VideoManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WindowPlacement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Workspace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\CardConfigViewModel.cs" />

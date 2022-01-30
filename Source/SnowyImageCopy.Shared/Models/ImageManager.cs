@@ -31,7 +31,7 @@ namespace SnowyImageCopy.Models
 		#region Read/Create Thumbnail (Internal)
 
 		/// <summary>
-		/// Reads a thumbnail in metadata from a specified file.
+		/// Reads a thumbnail image in metadata from a specified file.
 		/// </summary>
 		/// <param name="localPath">Local file path</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -59,7 +59,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Reads a thumbnail in metadata from byte array.
+		/// Reads a thumbnail image in metadata from byte array.
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -89,7 +89,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Creates a thumbnail from a specified file.
+		/// Creates a thumbnail image from a specified file.
 		/// </summary>
 		/// <param name="localPath">Local file path</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -122,13 +122,25 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Creates a thumbnail from byte array.
+		/// Creates a thumbnail image from byte array.
 		/// </summary>
 		/// <param name="bytes">Byte array</param>
 		/// <returns>BitmapImage of thumbnail</returns>
 		/// <exception cref="ArgumentNullException">When byte array is null or has no element.</exception>
 		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
-		internal static async Task<BitmapImage> CreateThumbnailAsync(byte[] bytes)
+		internal static Task<BitmapImage> CreateThumbnailAsync(byte[] bytes)
+		{
+			return CreateThumbnailAsync(bytes, Brushes.Black);
+		}
+
+		/// <summary>
+		/// Creates a thumbnail image from byte array with a specified background.
+		/// </summary>
+		/// <param name="bytes">Byte array</param>
+		/// <param name="backgroundBrush">Brush for background of image</param>
+		/// <returns>BitmapImage of thumbnail</returns>
+		/// <exception cref="ImageNotSupportedException">When image format is not supported by PC.</exception>
+		internal static async Task<BitmapImage> CreateThumbnailAsync(byte[] bytes, Brush backgroundBrush)
 		{
 			ThrowIfCollectionNullOrEmpty(bytes, nameof(bytes));
 
@@ -140,7 +152,7 @@ namespace SnowyImageCopy.Models
 				// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.
 				var image = ConvertStreamToBitmapImageUniform(ms, ThumbnailSize);
 
-				return CreateThumbnailFromImageUniform(image, ThumbnailSize, Brushes.Black);
+				return CreateThumbnailFromImageUniform(image, ThumbnailSize, backgroundBrush);
 			}
 			catch (Exception ex) when (IsImageNotSupported(ex))
 			{
@@ -154,7 +166,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Creates a thumbnail from image applying Uniform transformation.
+		/// Creates a thumbnail image from a specified image applying Uniform transformation.
 		/// </summary>
 		/// <param name="image">BitmapImage</param>
 		/// <param name="thumbnailSize">Thumbnail size</param>
@@ -196,7 +208,7 @@ namespace SnowyImageCopy.Models
 		#region Read/Create Thumbnail (Private)
 
 		/// <summary>
-		/// Reads a thumbnail in metadata by System.Drawing.
+		/// Reads a thumbnail image in metadata by System.Drawing.
 		/// </summary>
 		/// <param name="stream">Stream</param>
 		/// <returns>BitmapImage of thumbnail</returns>
@@ -221,7 +233,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Reads a thumbnail in metadata by System.Windows.Media.Imaging.
+		/// Reads a thumbnail image in metadata by System.Windows.Media.Imaging.
 		/// </summary>
 		/// <param name="stream">Stream</param>
 		/// <param name="qualityLevel">Quality level of JPEG format (0 means default)</param>
@@ -245,7 +257,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Creates a thumbnail from image applying UniformToFill transformation.
+		/// Creates a thumbnail image from a specified image applying UniformToFill transformation.
 		/// </summary>
 		/// <param name="stream">Stream</param>
 		/// <param name="qualityLevel">Quality level of JPEG format (0 means default)</param>
@@ -271,7 +283,7 @@ namespace SnowyImageCopy.Models
 		#region Convert FrameworkElement to BitmapImage
 
 		/// <summary>
-		/// Converts a FrameworkElement to BitmapImage.
+		/// Converts FrameworkElement to BitmapImage.
 		/// </summary>
 		/// <param name="element">FrameworkElement</param>
 		/// <returns>BitmapImage of FrameworkElement</returns>
@@ -281,7 +293,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Converts a FrameworkElement to BitmapImage.
+		/// Converts FrameworkElement to BitmapImage.
 		/// </summary>
 		/// <param name="element">FrameworkElement</param>
 		/// <param name="targetWidth">Target width</param>
@@ -292,7 +304,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Converts a FrameworkElement to BitmapImage.
+		/// Converts FrameworkElement to BitmapImage.
 		/// </summary>
 		/// <param name="element">FrameworkElement</param>
 		/// <param name="outerSize">Target outer size</param>
@@ -499,7 +511,7 @@ namespace SnowyImageCopy.Models
 		}
 
 		/// <summary>
-		/// Resizes BitmapSource and reflect Exif orientation to BitmapSource.
+		/// Resizes BitmapSource and reflect Exif orientation.
 		/// </summary>
 		/// <param name="bitmapSource">Source BitmapSource</param>
 		/// <param name="outerSize">Target outer size</param>

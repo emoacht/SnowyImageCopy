@@ -1025,7 +1025,7 @@ namespace SnowyImageCopy.Models
 									else if (item.IsImageFile)
 										item.Thumbnail = await ImageManager.CreateThumbnailAsync(ComposeLocalPath(item));
 									else if (item.IsVideoFile)
-										item.Thumbnail = await VideoManager.CreateThumbnailImageAsync(ComposeLocalPath(item), TimeSpan.Zero);
+										item.Thumbnail = await VideoManager.CreateThumbnailAsync(ComposeLocalPath(item), TimeSpan.Zero);
 								}
 								catch
 								{
@@ -1205,8 +1205,10 @@ namespace SnowyImageCopy.Models
 									{
 										if (item.CanReadExif)
 											item.Thumbnail = await ImageManager.ReadThumbnailAsync(data);
-										else
+										else if (item.IsImageFile)
 											item.Thumbnail = await ImageManager.CreateThumbnailAsync(data);
+										else if (item.IsVideoFile)
+											item.Thumbnail = await VideoManager.CreateThumbnailAsync(data);
 									}
 									catch (ImageNotSupportedException)
 									{
