@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 3.2.0 2022-1-31
+
+ - Enable to specify most recent days
+
 Ver 3.1.0 2022-1-30
 
  - Fix thumbnail of video file
