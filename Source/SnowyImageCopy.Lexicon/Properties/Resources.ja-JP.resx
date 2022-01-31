@@ -372,6 +372,9 @@
   <data name="Options_DateAll" xml:space="preserve">
     <value>全部</value>
   </data>
+  <data name="Options_DateRecent" xml:space="preserve">
+    <value>直近の日</value>
+  </data>
   <data name="Options_DateSelect" xml:space="preserve">
     <value>カレンダーから選択</value>
   </data>

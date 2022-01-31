@@ -184,6 +184,22 @@ namespace SnowyImageCopy.Models
 		}
 		private FilePeriod _targetPeriod = FilePeriod.All; // Default
 
+		public int TargetLength
+		{
+			get => _targetLength;
+			set
+			{
+				if (value is >= 1 and <= 990)
+				{
+					if (SetPropertyValue(ref _targetLength, value))
+						TargetBackLength = TimeSpan.FromDays(value - 1);
+				}
+			}
+		}
+		private int _targetLength = 1; // Default
+
+		internal TimeSpan TargetBackLength = TimeSpan.Zero;
+
 		public ObservableCollection<DateTime> TargetDates
 		{
 			get => _targetDates ??= new ObservableCollection<DateTime>();

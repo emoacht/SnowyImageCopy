@@ -376,6 +376,9 @@
   <data name="Options_DateAll" xml:space="preserve">
     <value>All</value>
   </data>
+  <data name="Options_DateRecent" xml:space="preserve">
+    <value>Most recent days</value>
+  </data>
   <data name="Options_DateSelect" xml:space="preserve">
     <value>Select from calendar</value>
   </data>

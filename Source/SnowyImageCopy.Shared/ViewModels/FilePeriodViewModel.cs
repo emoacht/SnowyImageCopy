@@ -57,9 +57,11 @@ namespace SnowyImageCopy.ViewModels
 		{
 			Description = period switch
 			{
+				FilePeriod.All => Resources.Options_DateAll,
 				FilePeriod.Today => Resources.Options_DateToday,
+				FilePeriod.Recent => Resources.Options_DateRecent,
 				FilePeriod.Select => Resources.Options_DateSelect,
-				_ => Resources.Options_DateAll,
+				_ => throw new InvalidOperationException()
 			};
 		}
 	}

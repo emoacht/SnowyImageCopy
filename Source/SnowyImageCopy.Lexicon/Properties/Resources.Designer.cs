@@ -836,6 +836,15 @@ namespace SnowyImageCopy.Lexicon.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Most recent days.
+        /// </summary>
+        public static string Options_DateRecent {
+            get {
+                return ResourceManager.GetString("Options_DateRecent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select from calendar.
         /// </summary>
         public static string Options_DateSelect {

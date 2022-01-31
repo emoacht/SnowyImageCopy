@@ -401,6 +401,7 @@ namespace SnowyImageCopy.ViewModels
 					switch (e.PropertyName)
 					{
 						case nameof(Settings.TargetPeriod):
+						case nameof(Settings.TargetLength):
 						case nameof(Settings.TargetDates):
 						case nameof(Settings.LimitsFileExtensions):
 							return true;
