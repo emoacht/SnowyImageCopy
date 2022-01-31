@@ -50,7 +50,13 @@ namespace SnowyImageCopy.Models.ImageFile
 		{
 			var buffer = source as byte[] ?? source?.ToArray() ?? throw new ArgumentNullException(nameof(source));
 
-			return new HashItem(_algorithm.ComputeHash(buffer));
+			byte[] value;
+			lock (_algorithm)
+			{
+				// ComputeHash method is not thread-safe.
+				value = _algorithm.ComputeHash(buffer);
+			}
+			return new HashItem(value);
 		}
 
 		public static HashItem Restore(byte[] source)
