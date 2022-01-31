@@ -12,12 +12,17 @@ namespace SnowyImageCopy.Models.ImageFile
 		All,
 
 		/// <summary>
-		/// Files dated today
+		/// Files that date is today
 		/// </summary>
 		Today,
 
 		/// <summary>
-		/// Files dated on selected dates
+		/// Files that dates are recent dates
+		/// </summary>
+		Recent,
+
+		/// <summary>
+		/// Files that dates are selected dates
 		/// </summary>
 		Select,
 	}

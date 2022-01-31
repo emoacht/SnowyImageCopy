@@ -75,19 +75,42 @@
 					  Header="{Binding Resources.Options_Date, Source={x:Static lexicon:ResourceService.Current}}">
 				<StackPanel Margin="4">
 					<ListBox HorizontalAlignment="Left"
-							 BorderThickness="0"
 							 Background="{x:Null}"
 							 ItemsSource="{Binding FilePeriodList, Mode=OneWay}"
 							 SelectedItem="{Binding FilePeriodSelected, Mode=TwoWay}">
+						<ListBox.Template>
+							<ControlTemplate TargetType="{x:Type ListBox}">
+								<Border>
+									<ScrollViewer Focusable="false">
+										<ItemsPresenter/>
+									</ScrollViewer>
+								</Border>
+							</ControlTemplate>
+						</ListBox.Template>
 						<ListBox.Resources>
-							<Style TargetType="{x:Type ListBoxItem}" >
+							<Style TargetType="{x:Type ListBoxItem}">
 								<Setter Property="Template">
 									<Setter.Value>
 										<ControlTemplate>
-											<RadioButton
-												Margin="0,4"
-												Content="{Binding Description, Mode=OneWay}"
-												IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
+											<Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type StackPanel}}}">
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="*"/>
+													<ColumnDefinition Width="Auto"/>
+												</Grid.ColumnDefinitions>
+
+												<RadioButton Grid.Column="0"
+															 Margin="0,4"
+															 Content="{Binding Description, Mode=OneWay}"
+															 IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
+												<Grid Grid.Column="1"
+													  Visibility="{Binding Period, Mode=OneWay, Converter={StaticResource EnumToVisibilityConverterKey}, ConverterParameter=Recent}">
+													<controls:NumericUpDown
+														Width="90" Height="24" Margin="0,-1"
+														Minimum="1" Medium="30" Maximum="990" MediumFrequency="1" Frequency="10"
+														Visibility="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
+														Value="{Binding Settings.TargetLength}"	DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type views:Options}}}"/>
+												</Grid>
+											</Grid>
 										</ControlTemplate>
 									</Setter.Value>
 								</Setter>
@@ -215,7 +238,7 @@
 								Visibility="{Binding IsChecked, ElementName=SpecifyFileExtensionsButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverterKey}}"
 								Text="{Binding Settings.FileExtensionsWithoutDot, Mode=TwoWay}"/>
 						</StackPanel>
-					</GroupBox>					
+					</GroupBox>
 
 					<GroupBox Style="{StaticResource ItemMemberSealedStyle}"
 							  Header="{Binding Resources.Options_SelectReadOnly, Source={x:Static lexicon:ResourceService.Current}}">

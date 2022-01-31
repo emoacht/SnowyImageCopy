@@ -110,7 +110,7 @@ namespace SnowyImageCopy.ViewModels
 		{
 			get
 			{
-				bool IsTargetable()
+				bool IsTargetFile()
 				{
 					if (_settings.LimitsFileExtensions)
 						return _settings.FileExtensions.Contains(FileExtension.ToLower());
@@ -124,16 +124,20 @@ namespace SnowyImageCopy.ViewModels
 					return false;
 				}
 
-				if (!IsTargetable())
-					return false;
-
-				return _settings.TargetPeriod switch
+				bool IsTargetDate(DateTime date)
 				{
-					FilePeriod.All => true,
-					FilePeriod.Today => (Date.Date == DateTime.Today),
-					FilePeriod.Select => _settings.TargetDates.Contains(Date.Date),
-					_ => throw new InvalidOperationException(),
-				};
+					return _settings.TargetPeriod switch
+					{
+						FilePeriod.All => true,
+						FilePeriod.Today => (date.Date == DateTime.Today),
+						FilePeriod.Recent => (date.Date >= (DateTime.Today - _settings.TargetBackLength)),
+						FilePeriod.Select => _settings.TargetDates.Contains(date.Date),
+						_ => throw new InvalidOperationException()
+					};
+				}
+
+				return IsTargetFile()
+					&& IsTargetDate(Date);
 			}
 		}
 
