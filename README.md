@@ -21,7 +21,7 @@ Tested on Windows 10 with SD-WB008G, SD-WC016G (W-02), SD-WE016G (W-03) and SD-U
 
 ### Standard version
 
-:floppy_disk: <a href="https://github.com/emoacht/SnowyImageCopy/releases/download/3.2.0-Net48/Snowy320.Net48.zip">Latest release for .NET Framework 4.8</a>
+:floppy_disk: <a href="https://github.com/emoacht/SnowyImageCopy/releases/download/3.3.0-Net48/Snowy330.Net48.zip">Latest release for .NET Framework 4.8</a>
 
 ## Development
 

@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 3.3.0 2022-2-23
+
+ - Change the way to check if a file exists in local folder
+
 Ver 3.2.0 2022-1-31
 
  - Enable to specify most recent days
