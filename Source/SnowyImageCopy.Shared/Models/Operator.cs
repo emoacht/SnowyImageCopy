@@ -1480,8 +1480,7 @@ namespace SnowyImageCopy.Models
 				if (File.Exists(localPath)) // File.Exists method is more robust than FileInfo constructor.
 				{
 					var fileInfo = new FileInfo(localPath);
-					if ((fileInfo.Length == item.Size) ||
-						(fileInfo.CreationTime == item.Date))
+					if (fileInfo.Length == item.Size)
 					{
 						isAlive = true;
 						isAvailable = !fileInfo.Attributes.HasFlag(FileAttributes.Offline);
