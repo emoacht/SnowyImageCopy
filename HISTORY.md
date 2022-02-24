@@ -1,8 +1,8 @@
 ﻿## History
 
-Ver 3.3.0 2022-2-23
+Ver 3.3.2 2022-2-24
 
- - Change the way to check if a file exists in local folder
+ - Add explanation to readme
 
 Ver 3.2.0 2022-1-31
 
