@@ -5,6 +5,9 @@ Snowy is a Windows desktop app to copy images from FlashAir by a wireless connec
 ![Screenshot](Images/Snowy20_en_01.png)
 ![Screenshot](Images/Snowy20_en_02.png)
 
+:book: [English](https://emoacht.github.io/SnowyImageCopy/readme_en.html) | :book: [Japanese](https://emoacht.github.io/SnowyImageCopy/readme_jp.html)
+-|-
+
 ## Requirements
 
  - Windows 10 or newer
@@ -21,7 +24,7 @@ Tested on Windows 10 with SD-WB008G, SD-WC016G (W-02), SD-WE016G (W-03) and SD-U
 
 ### Standard version
 
-:floppy_disk: <a href="https://github.com/emoacht/SnowyImageCopy/releases/download/3.3.2-Net48/Snowy332.Net48.zip">Latest release for .NET Framework 4.8</a>
+:floppy_disk: <a href="https://github.com/emoacht/SnowyImageCopy/releases/latest">Latest release</a>
 
 ## Development
 
