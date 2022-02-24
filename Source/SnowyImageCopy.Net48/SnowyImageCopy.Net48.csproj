@@ -107,15 +107,15 @@
     <Resource Include="Libraries\MonitorAware.xml" />
     <Content Include="Libraries\SlateElement.dll" />
     <Resource Include="Libraries\SlateElement.xml" />
-    <EmbeddedResource Include="..\..\Documents\license.html">
+    <EmbeddedResource Include="..\..\docs\license.html">
       <Link>Resources\license.html</Link>
     </EmbeddedResource>
-    <ContentWithTargetPath Include="..\..\Documents\readme_en.html">
+    <ContentWithTargetPath Include="..\..\docs\readme_en.html">
       <Link>Resources\readme_en.html</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>readme_en.html</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="..\..\Documents\readme_jp.html">
+    <ContentWithTargetPath Include="..\..\docs\readme_jp.html">
       <Link>Resources\readme_jp.html</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>readme_jp.html</TargetPath>

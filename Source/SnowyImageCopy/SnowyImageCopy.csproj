@@ -64,12 +64,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="..\..\Documents\license.html" Link="Resources\license.html" />
-    <Content Include="..\..\Documents\readme_en.html" Link="Resources\readme_en.html">
+    <EmbeddedResource Include="..\..\docs\license.html" Link="Resources\license.html" />
+    <Content Include="..\..\docs\readme_en.html" Link="Resources\readme_en.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>readme_en.html</TargetPath>
     </Content>
-    <Content Include="..\..\Documents\readme_jp.html" Link="Resources\readme_jp.html">
+    <Content Include="..\..\docs\readme_jp.html" Link="Resources\readme_jp.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>readme_jp.html</TargetPath>
     </Content>
