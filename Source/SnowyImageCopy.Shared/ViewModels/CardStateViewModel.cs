@@ -34,9 +34,9 @@ namespace SnowyImageCopy.ViewModels
 					switch (e.PropertyName)
 					{
 						case nameof(CardState.Capacity):
-							RaisePropertyChanged(nameof(FreeCapacity));
-							RaisePropertyChanged(nameof(TotalCapacity));
-							RaisePropertyChanged(nameof(UsedPercentage));
+							OnPropertyChanged(nameof(FreeCapacity));
+							OnPropertyChanged(nameof(TotalCapacity));
+							OnPropertyChanged(nameof(UsedPercentage));
 							break;
 					}
 				}));

@@ -21,14 +21,14 @@ namespace SnowyImageCopy.ViewModels
 		public string SourcePath
 		{
 			get => _sourcePath;
-			private set => SetPropertyValue(ref _sourcePath, value);
+			private set => SetProperty(ref _sourcePath, value);
 		}
 		private string _sourcePath;
 
 		public string SourceText
 		{
 			get => _sourceText;
-			private set => SetPropertyValue(ref _sourceText, value);
+			private set => SetProperty(ref _sourceText, value);
 		}
 		private string _sourceText;
 
@@ -37,7 +37,7 @@ namespace SnowyImageCopy.ViewModels
 		public bool IsOpen
 		{
 			get => _isOpen;
-			private set => SetPropertyValue(ref _isOpen, value);
+			private set => SetProperty(ref _isOpen, value);
 		}
 		private bool _isOpen;
 

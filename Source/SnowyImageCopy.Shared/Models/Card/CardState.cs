@@ -55,7 +55,7 @@ namespace SnowyImageCopy.Models.Card
 					return;
 
 				_firmwareVersion = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 
 				if (!VersionAddition.TryFind(value, out Version version))
 					return;
@@ -91,7 +91,7 @@ namespace SnowyImageCopy.Models.Card
 					return;
 
 				_cid = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 		private string _cid;
@@ -110,7 +110,7 @@ namespace SnowyImageCopy.Models.Card
 					return;
 
 				_ssid = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 		private string _ssid;
@@ -150,7 +150,7 @@ namespace SnowyImageCopy.Models.Card
 				}
 
 				_capacity = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 		private Tuple<ulong, ulong> _capacity;
@@ -170,7 +170,7 @@ namespace SnowyImageCopy.Models.Card
 		public int WriteTimeStamp
 		{
 			get => _writeTimeStamp;
-			set => SetPropertyValue(ref _writeTimeStamp, value);
+			set => SetProperty(ref _writeTimeStamp, value);
 		}
 		private int _writeTimeStamp = -1;
 
@@ -186,7 +186,7 @@ namespace SnowyImageCopy.Models.Card
 		public int Upload
 		{
 			get => _upload;
-			set => SetPropertyValue(ref _upload, value);
+			set => SetProperty(ref _upload, value);
 		}
 		private int _upload = -1;
 

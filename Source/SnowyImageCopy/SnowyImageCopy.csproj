@@ -7,7 +7,7 @@
     <AssemblyTitle>Snowy</AssemblyTitle>
     <ApplicationIcon>Resources\Feather.ico</ApplicationIcon>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-    <Version>3.3.2</Version>
+    <Version>3.3.3</Version>
     <Authors>emoacht</Authors>
     <Copyright>Copyright © 2014 emoacht</Copyright>
     <PackageProjectUrl>https://github.com/emoacht/SnowyImageCopy</PackageProjectUrl>
@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.2" />
+    <PackageReference Include="CommunityToolkit.WinUI.Notifications" Version="7.1.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="System.Management" Version="6.0.0" />

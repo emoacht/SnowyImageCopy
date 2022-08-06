@@ -63,7 +63,7 @@ namespace SnowyImageCopy.ViewModels
 				.Subscribe(_ =>
 				{
 					LocalCard ??= LocalCards.FirstOrDefault();
-					RaisePropertyChanged(StaticPropertyChanged, nameof(LocalCardIsAvailable));
+					OnPropertyChanged(StaticPropertyChanged, nameof(LocalCardIsAvailable));
 				}));
 
 			LocalCard ??= LocalCards.FirstOrDefault();
@@ -84,8 +84,8 @@ namespace SnowyImageCopy.ViewModels
 				if (_remoteCard is not null)
 					Subscription.Add(_remoteCard);
 
-				RaisePropertyChanged();
-				RaisePropertyChanged(nameof(RemoteCardIsAvailable));
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(RemoteCardIsAvailable));
 			}
 		}
 		private CardStateViewModel _remoteCard;
@@ -115,7 +115,7 @@ namespace SnowyImageCopy.ViewModels
 				if (_localCard is not null)
 					_localCard.PropertyChanged += OnLocalCardPropertyChanged;
 
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 		private CardConfigViewModel _localCard;

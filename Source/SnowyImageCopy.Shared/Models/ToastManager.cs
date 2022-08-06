@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Toolkit.Uwp.Notifications;
+using CommunityToolkit.WinUI.Notifications;
 
 using SnowyImageCopy.Helper;
 

@@ -12,30 +12,30 @@ namespace SnowyImageCopy.Common
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected bool SetPropertyValue<T>(ref T storage, in T value, [CallerMemberName] string propertyName = null)
+		protected bool SetProperty<T>(ref T storage, in T value, [CallerMemberName] string propertyName = null)
 		{
 			if (EqualityComparer<T>.Default.Equals(storage, value))
 				return false;
 
 			storage = value;
-			RaisePropertyChanged(propertyName);
+			OnPropertyChanged(propertyName);
 			return true;
 		}
 
-		protected void RaisePropertyChanged([CallerMemberName] string propertyName = null) =>
+		protected void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-		protected static bool SetPropertyValue<T>(ref T storage, in T value, EventHandler<PropertyChangedEventArgs> handler, [CallerMemberName] string propertyName = null)
+		protected static bool SetProperty<T>(ref T storage, in T value, EventHandler<PropertyChangedEventArgs> handler, [CallerMemberName] string propertyName = null)
 		{
 			if (EqualityComparer<T>.Default.Equals(storage, value))
 				return false;
 
 			storage = value;
-			RaisePropertyChanged(handler, propertyName);
+			OnPropertyChanged(handler, propertyName);
 			return true;
 		}
 
-		protected static void RaisePropertyChanged(EventHandler<PropertyChangedEventArgs> handler, [CallerMemberName] string propertyName = null) =>
+		protected static void OnPropertyChanged(EventHandler<PropertyChangedEventArgs> handler, [CallerMemberName] string propertyName = null) =>
 			handler?.Invoke(null, new PropertyChangedEventArgs(propertyName));
 	}
 }
