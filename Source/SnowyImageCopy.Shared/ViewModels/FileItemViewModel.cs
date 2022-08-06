@@ -95,7 +95,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				_thumbnail = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 		private BitmapSource _thumbnail;
@@ -167,7 +167,7 @@ namespace SnowyImageCopy.ViewModels
 		public FileStatus Status
 		{
 			get => _status;
-			set => SetPropertyValue(ref _status, value);
+			set => SetProperty(ref _status, value);
 		}
 		private FileStatus _status = FileStatus.Unknown;
 
@@ -203,7 +203,7 @@ namespace SnowyImageCopy.ViewModels
 				if (!value)
 					return;
 
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -245,7 +245,7 @@ namespace SnowyImageCopy.ViewModels
 
 		private void OnResourcesPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			RaisePropertyChanged(nameof(Status));
+			OnPropertyChanged(nameof(Status));
 		}
 
 		#endregion

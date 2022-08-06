@@ -41,7 +41,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				Settings.TargetPeriod = value.Period;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -88,7 +88,7 @@ namespace SnowyImageCopy.ViewModels
 				{
 					_selectedIndex = value;
 					Settings.CommonCultureName = CultureMap.Keys.ToList()[value];
-					RaisePropertyChanged();
+					OnPropertyChanged();
 				}
 			}
 			private int? _selectedIndex;
@@ -101,7 +101,7 @@ namespace SnowyImageCopy.ViewModels
 		public string Title
 		{
 			get => _title ?? ProductInfo.Title;
-			set => SetPropertyValue(ref _title, value);
+			set => SetProperty(ref _title, value);
 		}
 		public string _title;
 

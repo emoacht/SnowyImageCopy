@@ -161,7 +161,7 @@ namespace SnowyImageCopy.Models
 		public bool IsChecking
 		{
 			get => _isChecking;
-			set => SetPropertyValue(ref _isChecking, value);
+			set => SetProperty(ref _isChecking, value);
 		}
 		private bool _isChecking;
 
@@ -171,7 +171,7 @@ namespace SnowyImageCopy.Models
 		public bool IsCopying
 		{
 			get => _isCopying;
-			set => SetPropertyValue(ref _isCopying, value);
+			set => SetProperty(ref _isCopying, value);
 		}
 		private bool _isCopying;
 
@@ -181,7 +181,7 @@ namespace SnowyImageCopy.Models
 		internal bool IsAutoRunning
 		{
 			get => _isAutoRunning;
-			set => SetPropertyValue(ref _isAutoRunning, value);
+			set => SetProperty(ref _isAutoRunning, value);
 		}
 		private bool _isAutoRunning;
 
@@ -191,7 +191,7 @@ namespace SnowyImageCopy.Models
 		internal bool IsSavingDesktop
 		{
 			get => _isSavingDesktop;
-			set => SetPropertyValue(ref _isSavingDesktop, value);
+			set => SetProperty(ref _isSavingDesktop, value);
 		}
 		private bool _isSavingDesktop;
 
@@ -201,7 +201,7 @@ namespace SnowyImageCopy.Models
 		internal bool IsSendingClipboard
 		{
 			get => _isSendingClipboard;
-			set => SetPropertyValue(ref _isSendingClipboard, value);
+			set => SetProperty(ref _isSendingClipboard, value);
 		}
 		private bool _isSendingClipboard;
 
@@ -215,7 +215,7 @@ namespace SnowyImageCopy.Models
 		public double ProgressCopiedAll
 		{
 			get => _progressCopiedAll;
-			set => SetPropertyValue(ref _progressCopiedAll, value);
+			set => SetProperty(ref _progressCopiedAll, value);
 		}
 		private double _progressCopiedAll = 40; // Sample percentage
 
@@ -225,7 +225,7 @@ namespace SnowyImageCopy.Models
 		public double ProgressCopiedCurrent
 		{
 			get => _progressCopiedCurrent;
-			set => SetPropertyValue(ref _progressCopiedCurrent, value);
+			set => SetProperty(ref _progressCopiedCurrent, value);
 		}
 		private double _progressCopiedCurrent = 60; // Sample percentage
 
@@ -235,7 +235,7 @@ namespace SnowyImageCopy.Models
 		public TimeSpan RemainingTime
 		{
 			get => _remainingTime;
-			set => SetPropertyValue(ref _remainingTime, value);
+			set => SetProperty(ref _remainingTime, value);
 		}
 		private TimeSpan _remainingTime;
 
@@ -245,7 +245,7 @@ namespace SnowyImageCopy.Models
 		public TaskbarItemProgressState ProgressState
 		{
 			get => _progressState;
-			set => SetPropertyValue(ref _progressState, value);
+			set => SetProperty(ref _progressState, value);
 		}
 		private TaskbarItemProgressState _progressState;
 

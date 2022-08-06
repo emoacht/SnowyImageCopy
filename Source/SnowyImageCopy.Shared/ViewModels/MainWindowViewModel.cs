@@ -28,7 +28,7 @@ namespace SnowyImageCopy.ViewModels
 		public string OperationStatus
 		{
 			get => _operationStatus;
-			set => SetPropertyValue(ref _operationStatus, value);
+			set => SetProperty(ref _operationStatus, value);
 		}
 		private string _operationStatus;
 
@@ -49,7 +49,7 @@ namespace SnowyImageCopy.ViewModels
 		public int FileListCoreViewIndex
 		{
 			get => _fileListCoreViewIndex;
-			set => SetPropertyValue(ref _fileListCoreViewIndex, value);
+			set => SetProperty(ref _fileListCoreViewIndex, value);
 		}
 		private int _fileListCoreViewIndex = -1; // No selection
 
@@ -64,11 +64,11 @@ namespace SnowyImageCopy.ViewModels
 
 		private void ManageOperationState()
 		{
-			RaisePropertyChanged(nameof(IsCheckAndCopyOngoing));
-			RaisePropertyChanged(nameof(IsCheckAndCopyAutoOngoing));
-			RaisePropertyChanged(nameof(IsCheckOrCopyOngoing));
-			RaisePropertyChanged(nameof(IsCheckOngoing));
-			RaisePropertyChanged(nameof(IsCopyOngoing));
+			OnPropertyChanged(nameof(IsCheckAndCopyOngoing));
+			OnPropertyChanged(nameof(IsCheckAndCopyAutoOngoing));
+			OnPropertyChanged(nameof(IsCheckOrCopyOngoing));
+			OnPropertyChanged(nameof(IsCheckOngoing));
+			OnPropertyChanged(nameof(IsCopyOngoing));
 
 			RaiseCanExecuteChanged();
 		}
@@ -202,7 +202,7 @@ namespace SnowyImageCopy.ViewModels
 		public string CurrentImagePath
 		{
 			get => _currentImagePath;
-			set => SetPropertyValue(ref _currentImagePath, value);
+			set => SetProperty(ref _currentImagePath, value);
 		}
 		private string _currentImagePath;
 
@@ -223,7 +223,7 @@ namespace SnowyImageCopy.ViewModels
 		public bool IsCurrentImageVideo
 		{
 			get => _isCurrentImageVideo;
-			set => SetPropertyValue(ref _isCurrentImageVideo, value);
+			set => SetProperty(ref _isCurrentImageVideo, value);
 		}
 		private bool _isCurrentImageVideo;
 
@@ -273,7 +273,7 @@ namespace SnowyImageCopy.ViewModels
 					CurrentImageWidth = Math.Round(_currentImage.Width);
 				}
 
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 		private BitmapSource _currentImage;
@@ -291,7 +291,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				Settings.IsCurrentImageVisible = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -301,7 +301,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				Settings.CurrentImageWidth = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -314,7 +314,7 @@ namespace SnowyImageCopy.ViewModels
 					return;
 
 				_currentFrameSize = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 		private Size _currentFrameSize = Size.Empty;
@@ -325,7 +325,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				_destinationColorProfile = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 		private ColorContext _destinationColorProfile;

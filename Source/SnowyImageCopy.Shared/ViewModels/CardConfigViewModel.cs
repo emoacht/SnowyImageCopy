@@ -51,7 +51,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				_APPMODE = value;
-				RaisePropertyChanged(nameof(IsChanged));
+				OnPropertyChanged(nameof(IsChanged));
 			}
 		}
 		private int _APPMODE = 4; // Default
@@ -70,7 +70,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				_APPNAME = GetNullOrLimited(value, 15);
-				RaisePropertyChanged(nameof(IsChanged));
+				OnPropertyChanged(nameof(IsChanged));
 			}
 		}
 		private string _APPNAME;
@@ -91,7 +91,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				_APPSSID = GetNullOrLimited(value, 32);
-				RaisePropertyChanged(nameof(IsChanged));
+				OnPropertyChanged(nameof(IsChanged));
 			}
 		}
 		private string _APPSSID;
@@ -110,7 +110,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				_APPNETWORKKEY = GetNullOrLimited(value, 64);
-				RaisePropertyChanged(nameof(IsChanged));
+				OnPropertyChanged(nameof(IsChanged));
 			}
 		}
 		private string _APPNETWORKKEY;
@@ -128,7 +128,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				_BRGSSID = GetNullOrLimited(value, 32);
-				RaisePropertyChanged(nameof(IsChanged));
+				OnPropertyChanged(nameof(IsChanged));
 			}
 		}
 		private string _BRGSSID;
@@ -146,7 +146,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				_BRGNETWORKKEY = GetNullOrLimited(value, 64);
-				RaisePropertyChanged(nameof(IsChanged));
+				OnPropertyChanged(nameof(IsChanged));
 			}
 		}
 		private string _BRGNETWORKKEY;
@@ -169,7 +169,7 @@ namespace SnowyImageCopy.ViewModels
 					return;
 
 				_APPAUTOTIME = value;
-				RaisePropertyChanged(nameof(IsChanged));
+				OnPropertyChanged(nameof(IsChanged));
 			}
 		}
 		private uint _APPAUTOTIME = 300_000; // Default
@@ -199,7 +199,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				_UPLOAD = value;
-				RaisePropertyChanged(nameof(IsChanged));
+				OnPropertyChanged(nameof(IsChanged));
 			}
 		}
 		private int _UPLOAD = 0; // Disabled
@@ -337,15 +337,15 @@ namespace SnowyImageCopy.ViewModels
 					return;
 
 				_lanMode = value;
-				RaisePropertyChanged();
-				RaisePropertyChanged(nameof(IsBuiltinUsable));
-				RaisePropertyChanged(nameof(BuiltinSsid));
-				RaisePropertyChanged(nameof(BuiltinNetworkKey));
-				RaisePropertyChanged(nameof(IsRouterUsable));
-				RaisePropertyChanged(nameof(RouterSsid));
-				RaisePropertyChanged(nameof(RouterNetworkKey));
-				RaisePropertyChanged(nameof(IsAutomaticTimeoutReady));
-				RaisePropertyChanged(nameof(IsAutomaticTimeoutEnabled));
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsBuiltinUsable));
+				OnPropertyChanged(nameof(BuiltinSsid));
+				OnPropertyChanged(nameof(BuiltinNetworkKey));
+				OnPropertyChanged(nameof(IsRouterUsable));
+				OnPropertyChanged(nameof(RouterSsid));
+				OnPropertyChanged(nameof(RouterNetworkKey));
+				OnPropertyChanged(nameof(IsAutomaticTimeoutReady));
+				OnPropertyChanged(nameof(IsAutomaticTimeoutEnabled));
 
 				var modeSet = _modeSetMap.SingleOrDefault(x => (x.LanMode == value) && (x.LanStartupMode == this.LanStartupMode));
 				if (modeSet is not null)
@@ -363,9 +363,9 @@ namespace SnowyImageCopy.ViewModels
 					return;
 
 				_lanStartupMode = value;
-				RaisePropertyChanged();
-				RaisePropertyChanged(nameof(IsAutomaticTimeoutReady));
-				RaisePropertyChanged(nameof(IsAutomaticTimeoutEnabled));
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsAutomaticTimeoutReady));
+				OnPropertyChanged(nameof(IsAutomaticTimeoutEnabled));
 
 				var modeSet = _modeSetMap.SingleOrDefault(x => (x.LanStartupMode == value) && (x.LanMode == this.LanMode));
 				if (modeSet is not null)
@@ -528,7 +528,7 @@ namespace SnowyImageCopy.ViewModels
 
 				// If true, set 5 (default) so as to make it other than 0 (disabled). If false, set 0. 
 				AutomaticTimeout = value ? 5 : 0;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -541,7 +541,7 @@ namespace SnowyImageCopy.ViewModels
 			set
 			{
 				APPAUTOTIME = (uint)(value * 60_000);
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -554,7 +554,7 @@ namespace SnowyImageCopy.ViewModels
 			{
 				// If true, set 1. If false, set any number other than 1.
 				UPLOAD = value ? 1 : 0;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 

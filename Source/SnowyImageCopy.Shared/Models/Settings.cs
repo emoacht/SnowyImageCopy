@@ -93,8 +93,8 @@ namespace SnowyImageCopy.Models
 				_remoteRoot = root;
 				_remoteDescendant = string.IsNullOrEmpty(descendant) ? null : "/" + descendant.TrimEnd('/');
 				_remoteName = name;
-				RaisePropertyChanged();
-				RaisePropertyChanged(nameof(RemoteName));
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(RemoteName));
 			}
 		}
 		private string _remoteAddress = @"http://flashair/"; // Default FlashAir address
@@ -154,7 +154,7 @@ namespace SnowyImageCopy.Models
 				else if (!PathAddition.TryNormalizePath(value, out buffer))
 					return;
 
-				SetPropertyValue(ref _localFolder, buffer);
+				SetProperty(ref _localFolder, buffer);
 				CheckLocalFolderValid();
 			}
 		}
@@ -164,7 +164,7 @@ namespace SnowyImageCopy.Models
 		public bool IsLocalFolderValid
 		{
 			get => _isLocalFolderValid;
-			private set => SetPropertyValue(ref _isLocalFolderValid, value);
+			private set => SetProperty(ref _isLocalFolderValid, value);
 		}
 		private bool _isLocalFolderValid = true;
 
@@ -180,7 +180,7 @@ namespace SnowyImageCopy.Models
 		public FilePeriod TargetPeriod
 		{
 			get => _targetPeriod;
-			set => SetPropertyValue(ref _targetPeriod, value);
+			set => SetProperty(ref _targetPeriod, value);
 		}
 		private FilePeriod _targetPeriod = FilePeriod.All; // Default
 
@@ -191,7 +191,7 @@ namespace SnowyImageCopy.Models
 			{
 				if (value is >= 1 and <= 990)
 				{
-					if (SetPropertyValue(ref _targetLength, value))
+					if (SetProperty(ref _targetLength, value))
 						TargetBackLength = TimeSpan.FromDays(value - 1);
 				}
 			}
@@ -211,7 +211,7 @@ namespace SnowyImageCopy.Models
 				_targetDates = value;
 
 				if (TargetPeriod == FilePeriod.Select) // To prevent loading settings from firing event unnecessarily
-					RaisePropertyChanged();
+					OnPropertyChanged();
 			}
 		}
 		private ObservableCollection<DateTime> _targetDates;
@@ -223,7 +223,7 @@ namespace SnowyImageCopy.Models
 		public bool IsCurrentImageVisible
 		{
 			get => _isCurrentImageVisible;
-			set => SetPropertyValue(ref _isCurrentImageVisible, value);
+			set => SetProperty(ref _isCurrentImageVisible, value);
 		}
 		private bool _isCurrentImageVisible;
 
@@ -236,7 +236,7 @@ namespace SnowyImageCopy.Models
 					return;
 
 				_currentImageWidth = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 		private double _currentImageWidth = ImageManager.ThumbnailSize.Width;
@@ -248,14 +248,14 @@ namespace SnowyImageCopy.Models
 		public bool CopyOnSelect
 		{
 			get => _copyOnSelect;
-			set => SetPropertyValue(ref _copyOnSelect, value);
+			set => SetProperty(ref _copyOnSelect, value);
 		}
 		private bool _copyOnSelect = true; // Default
 
 		public bool AutoCheckAtStart
 		{
 			get => _autoCheckAtStart;
-			set => SetPropertyValue(ref _autoCheckAtStart, value);
+			set => SetProperty(ref _autoCheckAtStart, value);
 		}
 		private bool _autoCheckAtStart;
 
@@ -267,14 +267,14 @@ namespace SnowyImageCopy.Models
 		public double AutoCheckInterval
 		{
 			get => _autoCheckInterval;
-			set => SetPropertyValue(ref _autoCheckInterval, value);
+			set => SetProperty(ref _autoCheckInterval, value);
 		}
 		private double _autoCheckInterval = 30D; // Default
 
 		public int TimeoutDuration
 		{
 			get => _timeoutDuration;
-			set => SetPropertyValue(ref _timeoutDuration, value);
+			set => SetProperty(ref _timeoutDuration, value);
 		}
 		private int _timeoutDuration = 10; // Default
 
@@ -291,14 +291,14 @@ namespace SnowyImageCopy.Models
 					return;
 
 				FileItem.OrderByAscendingDate = !value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
 		public bool MakesFileExtensionLowercase
 		{
 			get => _makesFileExtensionLowercase;
-			set => SetPropertyValue(ref _makesFileExtensionLowercase, value);
+			set => SetProperty(ref _makesFileExtensionLowercase, value);
 		}
 		private bool _makesFileExtensionLowercase = true; // Default
 
@@ -307,7 +307,7 @@ namespace SnowyImageCopy.Models
 		public bool CreatesDatedFolder
 		{
 			get => _createsDatedFolder;
-			set => SetPropertyValue(ref _createsDatedFolder, value);
+			set => SetProperty(ref _createsDatedFolder, value);
 		}
 		private bool _createsDatedFolder = true; // Default;
 
@@ -316,8 +316,8 @@ namespace SnowyImageCopy.Models
 			get => _customizesDatedFolder;
 			set
 			{
-				if (SetPropertyValue(ref _customizesDatedFolder, value))
-					RaisePropertyChanged(nameof(DatedFolder));
+				if (SetProperty(ref _customizesDatedFolder, value))
+					OnPropertyChanged(nameof(DatedFolder));
 			}
 		}
 		private bool _customizesDatedFolder;
@@ -347,8 +347,8 @@ namespace SnowyImageCopy.Models
 			get => _customDatedFolder;
 			set
 			{
-				if (SetPropertyValue(ref _customDatedFolder, value))
-					RaisePropertyChanged(nameof(DatedFolder));
+				if (SetProperty(ref _customDatedFolder, value))
+					OnPropertyChanged(nameof(DatedFolder));
 			}
 		}
 		private string _customDatedFolder;
@@ -376,21 +376,21 @@ namespace SnowyImageCopy.Models
 		public bool LeavesExistingFile
 		{
 			get => _leavesExistingFile;
-			set => SetPropertyValue(ref _leavesExistingFile, value);
+			set => SetProperty(ref _leavesExistingFile, value);
 		}
 		private bool _leavesExistingFile;
 
 		public bool HandlesVideoFile
 		{
 			get => _handlesVideoFile;
-			set => SetPropertyValue(ref _handlesVideoFile, value);
+			set => SetProperty(ref _handlesVideoFile, value);
 		}
 		private bool _handlesVideoFile;
 
 		public bool MovesFileToRecycle
 		{
 			get => _movesFileToRecycle;
-			set => SetPropertyValue(ref _movesFileToRecycle, value);
+			set => SetProperty(ref _movesFileToRecycle, value);
 		}
 		private bool _movesFileToRecycle;
 
@@ -403,10 +403,10 @@ namespace SnowyImageCopy.Models
 			get => _specifiesFileExtensions;
 			set
 			{
-				if (SetPropertyValue(ref _specifiesFileExtensions, _validateValue(value)))
+				if (SetProperty(ref _specifiesFileExtensions, _validateValue(value)))
 				{
 					if (FileExtensions.Any())
-						RaisePropertyChanged(nameof(LimitsFileExtensions));
+						OnPropertyChanged(nameof(LimitsFileExtensions));
 				}
 			}
 		}
@@ -421,10 +421,10 @@ namespace SnowyImageCopy.Models
 					|| FileExtensions.SequenceEqual(buffer))
 					return;
 
-				if (SetPropertyValue(ref _fileExtensionsWithoutDot, normalized))
+				if (SetProperty(ref _fileExtensionsWithoutDot, normalized))
 				{
 					_fileExtensions = new HashSet<string>(buffer);
-					RaisePropertyChanged(nameof(LimitsFileExtensions));
+					OnPropertyChanged(nameof(LimitsFileExtensions));
 				}
 			}
 		}
@@ -439,7 +439,7 @@ namespace SnowyImageCopy.Models
 		public bool SelectsReadOnlyFile
 		{
 			get => _selectsReadOnlyFile;
-			set => SetPropertyValue(ref _selectsReadOnlyFile, _validateValue(value));
+			set => SetProperty(ref _selectsReadOnlyFile, _validateValue(value));
 		}
 		private bool _selectsReadOnlyFile;
 
@@ -448,7 +448,7 @@ namespace SnowyImageCopy.Models
 			get => _skipsOnceCopiedFile;
 			set
 			{
-				if (SetPropertyValue(ref _skipsOnceCopiedFile, _validateValue(value)))
+				if (SetProperty(ref _skipsOnceCopiedFile, _validateValue(value)))
 				{
 					if (!value)
 						Signatures.Close(IndexString);
@@ -466,14 +466,14 @@ namespace SnowyImageCopy.Models
 					return;
 
 				Signatures.MaxCount = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
 		public bool DeletesOnCopy
 		{
 			get => _deletesOnCopy;
-			set => SetPropertyValue(ref _deletesOnCopy, _validateValue(value));
+			set => SetProperty(ref _deletesOnCopy, _validateValue(value));
 		}
 		private bool _deletesOnCopy;
 
@@ -492,7 +492,7 @@ namespace SnowyImageCopy.Models
 					return;
 
 				SoundManager.PlaysSound = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -502,7 +502,7 @@ namespace SnowyImageCopy.Models
 			set
 			{
 				SoundManager.CopyStarted.Path = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -514,7 +514,7 @@ namespace SnowyImageCopy.Models
 			set
 			{
 				SoundManager.OneCopied.Path = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -526,7 +526,7 @@ namespace SnowyImageCopy.Models
 			set
 			{
 				SoundManager.AllCopied.Path = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -555,7 +555,7 @@ namespace SnowyImageCopy.Models
 		public string CultureName
 		{
 			get => _cultureName;
-			set => SetPropertyValue(ref _cultureName, value);
+			set => SetProperty(ref _cultureName, value);
 		}
 		private string _cultureName;
 
@@ -571,7 +571,7 @@ namespace SnowyImageCopy.Models
 		public DateTime LastWriteTime
 		{
 			get => _lastWriteTime;
-			private set => SetPropertyValue(ref _lastWriteTime, value);
+			private set => SetProperty(ref _lastWriteTime, value);
 		}
 		private DateTime _lastWriteTime;
 
