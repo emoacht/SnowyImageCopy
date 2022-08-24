@@ -34,20 +34,19 @@ namespace SnowyImageCopy.Helper
 			if (source is null)
 				throw new ArgumentNullException(nameof(source));
 
-			using (var ms = new MemoryStream())
-			{
-				source.Save(ms, source.RawFormat); // Bitmap.RawFormat is for formats other than default (PNG).
-				ms.Seek(0, SeekOrigin.Begin);
+			using var ms = new MemoryStream();
 
-				var image = new BitmapImage();
-				image.BeginInit();
-				image.CacheOption = BitmapCacheOption.OnLoad;
-				image.StreamSource = ms;
-				image.EndInit();
-				image.Freeze();
+			source.Save(ms, source.RawFormat); // Bitmap.RawFormat is for formats other than default (PNG).
+			ms.Seek(0, SeekOrigin.Begin);
 
-				return image;
-			}
+			var image = new BitmapImage();
+			image.BeginInit();
+			image.CacheOption = BitmapCacheOption.OnLoad;
+			image.StreamSource = ms;
+			image.EndInit();
+			image.Freeze();
+
+			return image;
 		}
 
 		/// <summary>
