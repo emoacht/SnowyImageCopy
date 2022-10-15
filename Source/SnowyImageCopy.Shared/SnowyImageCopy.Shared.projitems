@@ -42,7 +42,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\RemoteConnectionUnableException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\RemoteFileException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\UnexpectedException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\FolderService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\FileExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\FileItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\FileManager.cs" />
@@ -51,10 +50,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\FileStatus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\HashItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ImageFile\IFileItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Logger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Network\NativeWifi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Network\NetworkChecker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\AppDataService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Logger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Operator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProgressInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Settings.cs" />
@@ -85,9 +85,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\WebBrowserBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\WindowActivationBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\WindowSizeBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\Card.xaml.cs">
-      <DependentUpon>Card.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\BusyButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\CheckTextBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\CircularProgressBar.cs" />
@@ -116,6 +113,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\PathFileNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\PercentUnitConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\TimeSpanToStringConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Card.xaml.cs">
+      <DependentUpon>Card.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>MainWindow.xaml</DependentUpon>

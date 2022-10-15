@@ -129,7 +129,7 @@ namespace SnowyImageCopy.Models
 		#region Load/Save/Delete
 
 		private static string GetSignaturesFileName(in string value) => $"signatures{value}.bin";
-		private static string GetSignaturesFilePath(in string value) => FolderService.GetAppDataFilePath(GetSignaturesFileName(value));
+		private static string GetSignaturesFilePath(in string value) => AppDataService.GetFilePath(GetSignaturesFileName(value));
 
 		private const int BufferSize = 81920;
 		private const float ExcessFactor = 1.2F;
@@ -192,7 +192,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				FolderService.AssureAppDataFolder();
+				AppDataService.EnsureFolderPath();
 
 				using (var fs = new FileStream(filePath, fileMode, FileAccess.Write))
 				{
@@ -216,7 +216,7 @@ namespace SnowyImageCopy.Models
 				&& (fileInfo.Length % valueSize == 0);
 		}
 
-		internal static void Delete(string indexString) => FolderService.Delete(GetSignaturesFilePath(indexString));
+		internal static void Delete(string indexString) => AppDataService.Delete(GetSignaturesFilePath(indexString));
 
 		#endregion
 	}

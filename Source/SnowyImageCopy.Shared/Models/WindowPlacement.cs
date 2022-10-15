@@ -123,7 +123,7 @@ namespace SnowyImageCopy.Models
 		#region Load/Save/Delete
 
 		private static string GetPlacementFileName(in string value) => $"placement{value}.xml";
-		private static string GetPlacementFilePath(in string value) => FolderService.GetAppDataFilePath(GetPlacementFileName(value));
+		private static string GetPlacementFilePath(in string value) => AppDataService.GetFilePath(GetPlacementFileName(value));
 
 		internal static void Load(in string indexString, Window window)
 		{
@@ -194,7 +194,7 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				FolderService.AssureAppDataFolder();
+				AppDataService.EnsureFolderPath();
 
 				using (var sw = new StreamWriter(filePath, false, Encoding.UTF8)) // BOM will be emitted.
 				using (var xw = XmlWriter.Create(sw, new XmlWriterSettings { Indent = true }))
@@ -210,7 +210,7 @@ namespace SnowyImageCopy.Models
 			}
 		}
 
-		internal static void Delete(in string indexString) => FolderService.Delete(GetPlacementFilePath(indexString));
+		internal static void Delete(in string indexString) => AppDataService.Delete(GetPlacementFilePath(indexString));
 
 		#endregion
 	}

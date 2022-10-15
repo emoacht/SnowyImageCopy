@@ -11,15 +11,12 @@ namespace SnowyImageCopy.Models
 	/// <summary>
 	/// This application's AppData folder
 	/// </summary>
-	internal static class FolderService
+	internal static class AppDataService
 	{
-		public static string GetAppDataFilePath(in string fileName) =>
-			Path.Combine(AppDataFolderPath, fileName);
+		public static string FolderPath => _folderPath ??= GetFolderPath();
+		private static string _folderPath;
 
-		public static string AppDataFolderPath => _appDataFolderPath ??= GetAppDataFolderPath();
-		private static string _appDataFolderPath;
-
-		private static string GetAppDataFolderPath()
+		private static string GetFolderPath()
 		{
 			var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 			if (string.IsNullOrEmpty(appDataPath)) // This should not happen.
@@ -28,10 +25,15 @@ namespace SnowyImageCopy.Models
 			return Path.Combine(appDataPath, Assembly.GetExecutingAssembly().GetName().Name);
 		}
 
-		public static void AssureAppDataFolder()
+		public static string GetFilePath(in string fileName) =>
+			Path.Combine(FolderPath, fileName);
+
+		public static string EnsureFolderPath()
 		{
-			if (!Directory.Exists(AppDataFolderPath))
-				Directory.CreateDirectory(AppDataFolderPath);
+			if (!Directory.Exists(FolderPath))
+				Directory.CreateDirectory(FolderPath);
+
+			return FolderPath;
 		}
 
 		public static void Delete(in string filePath)

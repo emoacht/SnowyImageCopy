@@ -23,12 +23,12 @@ namespace SnowyImageCopy.Models
 				var content = $"[Date: {DateTime.Now:HH:mm:ss fff}]" + Environment.NewLine
 					+ result.TrimEnd() + Environment.NewLine + Environment.NewLine;
 
-				FolderService.AssureAppDataFolder();
+				AppDataService.EnsureFolderPath();
 
-				var filePath = FolderService.GetAppDataFilePath(fileName);
+				var filePath = AppDataService.GetFilePath(fileName);
 
 				if (File.Exists(filePath) && (File.GetLastWriteTime(filePath) < DateTime.Now.AddHours(-1)))
-					FolderService.Delete(filePath);
+					AppDataService.Delete(filePath);
 
 				using (var sw = new StreamWriter(filePath, true, Encoding.UTF8)) // BOM will be emitted.
 					await sw.WriteAsync(content);
@@ -58,11 +58,11 @@ namespace SnowyImageCopy.Models
 		{
 			try
 			{
-				FolderService.AssureAppDataFolder();
+				AppDataService.EnsureFolderPath();
 
-				var appDataFilePath = FolderService.GetAppDataFilePath(fileName);
+				var filePath = AppDataService.GetFilePath(fileName);
 
-				UpdateText(appDataFilePath, content);
+				UpdateText(filePath, content);
 			}
 			catch (Exception ex)
 			{
