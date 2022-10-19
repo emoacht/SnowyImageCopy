@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SnowyImageCopy.Helper
 {
 	/// <summary>
-	/// Additional method for <see cref="System.IO.File"/>
+	/// Additional methods for <see cref="System.IO.File"/>
 	/// </summary>
 	public static class FileAddition
 	{

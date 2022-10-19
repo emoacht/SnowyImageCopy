@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 namespace SnowyImageCopy.Helper
 {
 	/// <summary>
-	/// Extension method for <see cref="System.Windows.Media.Imaging.BitmapImage"/>
+	/// Extension methods for <see cref="System.Windows.Media.Imaging.BitmapImage"/>
 	/// </summary>
 	public static class BitmapImageExtension
 	{

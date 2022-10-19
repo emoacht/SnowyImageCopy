@@ -38,7 +38,7 @@ namespace SnowyImageCopy.Helper
 		private static readonly Regex _longVersionPattern = new Regex(@"\d{1,2}\.\d{1,2}(\.\d{1,4}(\.\d{1,4}|)|)$");
 
 		/// <summary>
-		/// Replace part of version number at the end.
+		/// Replaces part of version number at the end.
 		/// </summary>
 		/// <param name="source">Source string</param>
 		/// <param name="fieldCount">Version field count</param>
@@ -59,7 +59,7 @@ namespace SnowyImageCopy.Helper
 
 			fieldCount = (fieldCount, version) switch
 			{
-				( >= 3, { Build: < 0 }) => 2,
+				(>= 3, { Build: < 0 }) => 2,
 				(4, { Revision: < 0 }) => 3,
 				_ => fieldCount
 			};

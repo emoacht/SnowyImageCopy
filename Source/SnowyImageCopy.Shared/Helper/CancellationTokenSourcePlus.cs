@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SnowyImageCopy.Helper
 {
 	/// <summary>
-	/// Derived class of <see cref="System.Threading.CancellationTokenSource"/> which can cancel without exception
+	/// Derived class of <see cref="System.Threading.CancellationTokenSource"/> which can cancel safely
 	/// </summary>
 	public sealed class CancellationTokenSourcePlus : CancellationTokenSource
 	{

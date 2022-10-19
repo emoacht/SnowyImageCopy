@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SnowyImageCopy.Helper
 {
 	/// <summary>
-	/// Additional method for <see cref="System.IO.Path"/> 
+	/// Additional methods for <see cref="System.IO.Path"/> 
 	/// </summary>
 	public static class PathAddition
 	{

@@ -12,7 +12,7 @@ using SnowyImageCopy.Lexicon.Properties;
 namespace SnowyImageCopy.Lexicon
 {
 	/// <summary>
-	/// Switches this application's Resources (languages).
+	/// Switches this application's language Resources.
 	/// </summary>
 	/// <remarks>
 	/// This logic is based on http://grabacr.net/archives/1647
@@ -23,7 +23,7 @@ namespace SnowyImageCopy.Lexicon
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected void RaisePropertyChanged([CallerMemberName] string propertyName = null) =>
+		protected void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
 		#endregion
@@ -69,14 +69,13 @@ namespace SnowyImageCopy.Lexicon
 		}
 		private CultureInfo[] _supportedCultures;
 
-
 		/// <summary>
 		/// Culture name currently used by this application's Resources
 		/// </summary>
 		public string CultureName => Resources.Culture?.Name;
 
 		/// <summary>
-		/// Changes Culture of this application's Resources by Culture name
+		/// Changes Culture of this application's Resources by Culture name.
 		/// </summary>
 		/// <param name="cultureName">Culture name</param>
 		public void ChangeCulture(string cultureName)
@@ -88,7 +87,7 @@ namespace SnowyImageCopy.Lexicon
 			Resources.Culture = culture;
 
 			// Notify this application's Resources is changed.
-			RaisePropertyChanged(nameof(Resources));
+			OnPropertyChanged(nameof(Resources));
 		}
 	}
 }

@@ -171,7 +171,7 @@ namespace SnowyImageCopy.Test
 		[TestMethod]
 		public void TestImportInvalidSize()
 		{
-			var size = (long)Int32.MaxValue * 2;
+			var size = (long)int.MaxValue * 2;
 
 			TestImportBase(
 				fileEntry: $"/DCIM/150___03,IMG_3862.CR2,{size},32,17519,31985",
