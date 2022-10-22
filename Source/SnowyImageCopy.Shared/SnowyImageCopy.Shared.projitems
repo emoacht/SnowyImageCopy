@@ -56,6 +56,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\ImageManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Logger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Operator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ProductInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProgressInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Signatures.cs" />
@@ -123,7 +124,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\ProductInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Views\Card.xaml">

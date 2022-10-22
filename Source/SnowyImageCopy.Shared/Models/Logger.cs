@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows;
 
 using SnowyImageCopy.Lexicon.Properties;
-using SnowyImageCopy.Views;
 
 namespace SnowyImageCopy.Models
 {
