@@ -11,7 +11,6 @@ using SnowyImageCopy.Helper;
 using SnowyImageCopy.Lexicon;
 using SnowyImageCopy.Models;
 using SnowyImageCopy.Models.ImageFile;
-using SnowyImageCopy.Views;
 
 namespace SnowyImageCopy.ViewModels
 {
@@ -103,7 +102,7 @@ namespace SnowyImageCopy.ViewModels
 			get => _title ?? ProductInfo.Title;
 			set => SetProperty(ref _title, value);
 		}
-		public string _title;
+		private string _title;
 
 		public string Platform => VersionAddition.Replace(RuntimeInformation.FrameworkDescription, 2);
 

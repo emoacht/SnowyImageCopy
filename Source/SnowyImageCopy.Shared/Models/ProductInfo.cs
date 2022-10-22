@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SnowyImageCopy.Views
+namespace SnowyImageCopy.Models
 {
 	/// <summary>
 	/// This application's product information
