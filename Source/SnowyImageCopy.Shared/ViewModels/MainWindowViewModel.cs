@@ -488,13 +488,12 @@ namespace SnowyImageCopy.ViewModels
 
 		private async void OnFileListPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName != nameof(ItemObservableCollection<FileItemViewModel>.ItemPropertyChangedSender))
+			if (e is not ItemPropertyChangedEventArgs<FileItemViewModel> buffer)
 				return;
 
-			var item = ((ItemObservableCollection<FileItemViewModel>)sender).ItemPropertyChangedSender;
-			var propertyName = ((ItemObservableCollection<FileItemViewModel>)sender).ItemPropertyChangedEventArgs.PropertyName;
+			var item = buffer.Item;
 
-			switch (propertyName)
+			switch (buffer.PropertyName)
 			{
 				case nameof(FileItemViewModel.IsSelected):
 					switch (item.Status)
