@@ -307,7 +307,7 @@ namespace SnowyImageCopy.Models.ImageFile
 			{
 				try
 				{
-					using (var fs = new FileStream(localFilePath, mode, FileAccess.Write, FileShare.ReadWrite))
+					using (var fs = new FileStream(localFilePath, mode, FileAccess.Write, FileShare.ReadWrite, FileAddition.DefaultBufferSize, true))
 					{
 						var creationTime = itemDate;
 						var lastWriteTime = itemDate;

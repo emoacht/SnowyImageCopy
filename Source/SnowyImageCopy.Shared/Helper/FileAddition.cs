@@ -13,6 +13,7 @@ namespace SnowyImageCopy.Helper
 	/// </summary>
 	public static class FileAddition
 	{
+		public const int DefaultBufferSize = 4096;
 		private const int DefaultCopyBufferSize = 81920;
 
 		/// <summary>
