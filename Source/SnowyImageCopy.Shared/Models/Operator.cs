@@ -1369,8 +1369,7 @@ namespace SnowyImageCopy.Models
 
 				if (CurrentItem.IsImageFile)
 				{
-					using var fs = new FileStream(desktopPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-					await fs.WriteAsync(CurrentImageData, 0, CurrentImageData.Length);
+					await FileAddition.WriteAllBytesAsync(desktopPath, CurrentImageData);
 				}
 				else if (CurrentItem.IsVideoFile)
 				{
