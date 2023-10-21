@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
+using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models.Exceptions;
 
 namespace SnowyImageCopy.Models
@@ -43,7 +44,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using var fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+				using var fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, FileAddition.DefaultBufferSize, true);
 
 				return await Task.Run(() => ReadThumbnailFromExifByImaging(fs));
 			}
@@ -101,8 +102,9 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using var fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+				using var fs = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, FileAddition.DefaultBufferSize, true);
 				using var ms = new MemoryStream();
+
 				await fs.CopyToAsync(ms).ConfigureAwait(false);
 
 				// If continued by ContinueWith, an exception will not be caught by try-catch block in debug mode.

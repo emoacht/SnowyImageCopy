@@ -115,22 +115,19 @@ namespace SnowyImageCopy.ViewModels
 
 		private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			ItemPropertyChangedSender = sender as T;
-			ItemPropertyChangedEventArgs = e;
-
-			base.OnPropertyChanged(new PropertyChangedEventArgs(nameof(ItemPropertyChangedSender)));
+			base.OnPropertyChanged(new ItemPropertyChangedEventArgs<T>((T)sender, e.PropertyName));
 		}
 
-		/// <summary>
-		/// Item which fired a PropertyChanged event
-		/// </summary>
-		public T ItemPropertyChangedSender { get; private set; }
-
-		/// <summary>
-		/// PropertyChangedEventArgs of the PropertyChanged event
-		/// </summary>
-		public PropertyChangedEventArgs ItemPropertyChangedEventArgs { get; private set; }
-
 		#endregion
+	}
+
+	public class ItemPropertyChangedEventArgs<T> : PropertyChangedEventArgs
+	{
+		public T Item { get; }
+
+		public ItemPropertyChangedEventArgs(T item, string peopertyName) : base(peopertyName)
+		{
+			this.Item = item;
+		}
 	}
 }

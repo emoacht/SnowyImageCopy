@@ -13,44 +13,42 @@ namespace SnowyImageCopy.Helper
 	/// </summary>
 	public static class FileAddition
 	{
-		private const int DefaultCopyBufferSize = 81920; // 80KiB is actual default buffer size in System.IO.File class.
+		public const int DefaultBufferSize = 4096;
+		private const int DefaultCopyBufferSize = 81920;
 
 		/// <summary>
-		/// Reads all bytes from a specified file asynchronously.
-		/// </summary>
-		/// <param name="filePath">File path</param>
-		/// <returns>Byte array of file</returns>
-		public static Task<byte[]> ReadAllBytesAsync(string filePath)
-		{
-			return ReadAllBytesAsync(filePath, DefaultCopyBufferSize, CancellationToken.None);
-		}
-
-		/// <summary>
-		/// Reads all bytes from a specified file asynchronously.
+		/// Asynchronously opens a specified file, reads the contents of the file into a byte array.
 		/// </summary>
 		/// <param name="filePath">File path</param>
 		/// <param name="cancellationToken">CancellationToken</param>
-		/// <returns>Byte array of file</returns>
-		public static Task<byte[]> ReadAllBytesAsync(string filePath, CancellationToken cancellationToken)
+		/// <returns>Byte array</returns>
+		public static async Task<byte[]> ReadAllBytesAsync(string filePath, CancellationToken cancellationToken = default)
 		{
-			return ReadAllBytesAsync(filePath, DefaultCopyBufferSize, cancellationToken);
+#if NETCOREAPP3_0_OR_GREATER
+			return await File.ReadAllBytesAsync(filePath, cancellationToken).ConfigureAwait(false);
+#else
+			using var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			using var ms = new MemoryStream();
+			await fs.CopyToAsync(ms, DefaultCopyBufferSize, cancellationToken).ConfigureAwait(false);
+			return ms.ToArray();
+#endif
 		}
 
 		/// <summary>
-		/// Reads all bytes from a specified file asynchronously.
+		/// Asynchronously creates a specified file, writes a specified byte array to the file.
 		/// </summary>
 		/// <param name="filePath">File path</param>
-		/// <param name="bufferSize">Buffer size</param>
+		/// <param name="bytes">Byte array</param>
 		/// <param name="cancellationToken">CancellationToken</param>
-		/// <returns>Byte array of file</returns>
-		public static async Task<byte[]> ReadAllBytesAsync(string filePath, int bufferSize, CancellationToken cancellationToken)
+		/// <remarks>If the file already exists, it will be overwritten.</remarks>
+		public static async Task WriteAllBytesAsync(string filePath, byte[] bytes, CancellationToken cancellationToken = default)
 		{
-			using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-			using (var ms = new MemoryStream())
-			{
-				await fs.CopyToAsync(ms, bufferSize, cancellationToken).ConfigureAwait(false);
-				return ms.ToArray();
-			}
+#if NETCOREAPP3_0_OR_GREATER
+			await File.WriteAllBytesAsync(filePath, bytes, cancellationToken).ConfigureAwait(false);
+#else
+			using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read);
+			await fs.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
+#endif
 		}
 	}
 }

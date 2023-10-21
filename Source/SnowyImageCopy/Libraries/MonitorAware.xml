@@ -62,7 +62,7 @@
         </member>
         <member name="M:MonitorAware.Models.ColorProfileHelper.TryGetColorProfilePath(System.Windows.Media.Visual,System.String@)">
             <summary>
-            Attemps to get color profile file path used by the monitor to which a specified Window belongs.
+            Attempts to get color profile file path used by the monitor to which a specified Window belongs.
             </summary>
             <param name="window">Source Window</param>
             <param name="profilePath">Color profile file path</param>
@@ -497,7 +497,7 @@
         </member>
         <member name="M:MonitorAware.Models.WindowHelper.TryGetWindowRect(System.IntPtr,System.Windows.Rect@)">
             <summary>
-            Attemps to get a specified Window's rectangle.
+            Attempts to get a specified Window's rectangle.
             </summary>
             <param name="windowHandle">Window's handle</param>
             <param name="windowRect">Window's rectangle</param>

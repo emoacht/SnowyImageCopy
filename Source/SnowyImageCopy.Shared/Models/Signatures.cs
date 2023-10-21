@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+using SnowyImageCopy.Helper;
 using SnowyImageCopy.Models.ImageFile;
 
 namespace SnowyImageCopy.Models
@@ -144,7 +145,7 @@ namespace SnowyImageCopy.Models
 
 			try
 			{
-				using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+				using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, FileAddition.DefaultBufferSize, true))
 				{
 					var offset = fs.Length - (valueSize * maxCount);
 					if (offset > 0)
@@ -194,7 +195,7 @@ namespace SnowyImageCopy.Models
 			{
 				AppDataService.EnsureFolderPath();
 
-				using (var fs = new FileStream(filePath, fileMode, FileAccess.Write))
+				using (var fs = new FileStream(filePath, fileMode, FileAccess.Write, FileShare.Read, FileAddition.DefaultBufferSize, true))
 				{
 					foreach (var value in values)
 						await fs.WriteAsync(value.ToByteArray(), 0, valueSize, cancellationToken).ConfigureAwait(false);
