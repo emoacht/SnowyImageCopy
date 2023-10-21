@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 3.5.0 2023-10-22
+
+ - Improve internal codes
+
 Ver 3.4.0 2022-10-23
 
  - Improve internal codes
