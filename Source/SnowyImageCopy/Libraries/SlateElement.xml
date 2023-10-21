@@ -76,7 +76,7 @@
         </member>
         <member name="M:SlateElement.Helper.WindowChromeColor.TryGetChromeColor(System.Windows.Media.Color@)">
             <summary>
-            Attemps to get OS's window chrome Color.
+            Attempts to get OS's window chrome Color.
             </summary>
             <param name="chromeColor">Window chrome Color</param>
             <returns>True if successfully gets. False otherwise.</returns>		
@@ -122,14 +122,14 @@
         </member>
         <member name="M:SlateElement.Models.WindowHelper.TryGetMousePoint(System.Windows.Point@)">
             <summary>
-            Attemps to get the mouse cursor point in screen.
+            Attempts to get the mouse cursor point in screen.
             </summary>
             <param name="point">Mouse cursor point</param>
             <returns>True if successfully gets. False otherwise.</returns>
         </member>
         <member name="M:SlateElement.Models.WindowHelper.TryGetWindowRect(System.IntPtr,System.Windows.Rect@)">
             <summary>
-            Attemps to get a specified Window's current rectangle.
+            Attempts to get a specified Window's current rectangle.
             </summary>
             <param name="windowHandle">Window's handle</param>
             <param name="rect">Window's rectangle</param>
@@ -137,7 +137,7 @@
         </member>
         <member name="M:SlateElement.Models.WindowHelper.TryGetWindowNormalRect(System.IntPtr,System.Windows.Rect@)">
             <summary>
-            Attemps to get a specified Window's normal (restore) rectangle.
+            Attempts to get a specified Window's normal (restore) rectangle.
             </summary>
             <param name="windowHandle">Window's handle</param>
             <param name="rect">Window's rectangle</param>
@@ -153,7 +153,7 @@
         </member>
         <member name="M:SlateElement.Models.WindowHelper.TryGetMonitorRect(System.IntPtr,System.Windows.Rect@,System.Windows.Rect@,System.Boolean@)">
             <summary>
-            Attemps to get the monitor's rectangles to which a specified Window belongs.
+            Attempts to get the monitor's rectangles to which a specified Window belongs.
             </summary>
             <param name="windowHandle">Window's handle</param>
             <param name="monitorRect">Monitor's (full) rectangle</param>
@@ -163,12 +163,20 @@
         </member>
         <member name="M:SlateElement.Models.WindowHelper.TryGetMonitorRect(System.Windows.Point,System.Windows.Rect@,System.Windows.Rect@,System.Boolean@)">
             <summary>
-            Attemps to get the monitor's rectangles to which a specified point belongs.
+            Attempts to get the monitor's rectangles to which a specified point belongs.
             </summary>
             <param name="point">Point</param>
             <param name="monitorRect">Monitor's (full) rectangle</param>
             <param name="workRect">Work area's rectangle inside monitor's rectangle</param>
             <param name="isPrimary">Whether the monitor is the primary monitor</param>
+            <returns>True if successfully gets. False otherwise.</returns>
+        </member>
+        <member name="M:SlateElement.Models.WindowHelper.TryGetPrimaryMonitorRect(System.Windows.Rect@,System.Windows.Rect@)">
+            <summary>
+            Attempts to get the primary monitor's rectangles.
+            </summary>
+            <param name="monitorRect">Monitor's (full) rectangle</param>
+            <param name="workRect">Work area's rectangle inside monitor's rectangle</param>
             <returns>True if successfully gets. False otherwise.</returns>
         </member>
         <member name="T:SlateElement.SlateCaptionButtonType">
