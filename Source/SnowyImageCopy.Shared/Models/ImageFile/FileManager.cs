@@ -644,6 +644,7 @@ namespace SnowyImageCopy.Models.ImageFile
 						switch (response.StatusCode)
 						{
 							case HttpStatusCode.OK:
+							case HttpStatusCode.TemporaryRedirect:
 								// None.
 								break;
 							case HttpStatusCode.Unauthorized:
