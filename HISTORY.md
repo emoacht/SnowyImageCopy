@@ -1,5 +1,9 @@
 ﻿## History
 
+Ver 3.6.0 2024-4-25
+
+ - Widen range of timeout duration
+
 Ver 3.5.0 2023-10-22
 
  - Improve internal codes
