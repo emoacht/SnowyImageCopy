@@ -154,7 +154,7 @@
 							  Header="{Binding Resources.Options_TimeoutDuration, Source={x:Static lexicon:ResourceService.Current}}">
 						<controls:NumericUpDown
 							Width="90" Height="24"
-							Minimum="10" Maximum="60" Frequency="10"
+							Minimum="5" Medium="10" Maximum="60" MediumFrequency="1" Frequency="10"
 							Value="{Binding Settings.TimeoutDuration}"/>
 					</GroupBox>
 				</StackPanel>
